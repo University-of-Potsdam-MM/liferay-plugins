@@ -1,0 +1,3 @@
+[submodule "hooks/OwncloudHook"]
+	path = hooks/OwncloudHook
+	url = https://github.com/University-of-Potsdam-MM/OwncloudHook
