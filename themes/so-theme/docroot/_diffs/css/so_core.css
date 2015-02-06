@@ -522,11 +522,21 @@ html.aui {
 .aui .row-fluid {
 	.span4 {
 		margin-left: 0;
-		width: 34%;
+		width: 33.33%;
+	}
+
+	.span6 {
+		margin-left: 0;
+		width: 50%;
 	}
 
 	.span8 {
-		width: 66%;
+		margin-left: 0;
+		width: 66.66%;
+	}
+
+	.span12 {
+		width: 100%;
 	}
 }
 
@@ -1551,6 +1561,33 @@ html.aui {
 	padding-bottom: 0;
 }
 
+/* ---------- Portlet: notifications ---------- */
+
+.dockbar-user-notifications {
+	.hashtag {
+		color: #999;
+	}
+
+	.hashtag-link {
+		&, &:active, &:hover {
+			color: inherit;
+		}
+	}
+}
+
+/* ---------- Portlet: powwow ---------- */
+
+.powwow-portlet {
+	.taglib-header {
+		margin-top: 0;
+		padding: 0 10px;
+	}
+
+	.view-meetings {
+		padding: 20px 20px 10px;
+	}
+}
+
 /* ---------- Portlet: private messaging ---------- */
 
 .private-messaging-portlet {
@@ -2318,6 +2355,12 @@ html.aui {
 			.microblogs-status-container {
 				display: none;
 			}
+		}
+
+		/* ---------- Portlet: powwow ---------- */
+
+		.powwow-portlet .view-meetings {
+			padding: 0 10px;
 		}
 
 		/* ---------- Taglib: discussion ---------- */

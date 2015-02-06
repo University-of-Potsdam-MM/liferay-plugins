@@ -18,16 +18,23 @@ import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.messageboards.model.MBCategory;
+import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
+import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lin Cui
@@ -49,6 +56,12 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 		MBMessage mbMessage = super.updateStatus(
 			userId, messageId, status, serviceContext);
 
+		if (mbMessage.getCategoryId() ==
+				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
+
+			return mbMessage;
+		}
+
 		int notificationType =
 			UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY;
 
@@ -60,19 +73,63 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 		AssetRenderer assetRenderer = _assetRendererFactory.getAssetRenderer(
 			mbMessage.getMessageId());
 
-		String entryURL = NotificationsUtil.getEntryURL(
-			assetRenderer, PortletKeys.MESSAGE_BOARDS, serviceContext);
+		String entryURL = (String)serviceContext.getAttribute("entryURL");
 
-		if (Validator.isNotNull(entryURL)) {
+		if (Validator.isNull(entryURL)) {
+			entryURL = NotificationsUtil.getEntryURL(
+				assetRenderer, PortletKeys.MESSAGE_BOARDS, serviceContext);
+		}
+
+		if ((status == WorkflowConstants.STATUS_APPROVED) &&
+			Validator.isNotNull(entryURL)) {
+
 			NotificationsUtil.sendNotificationEvent(
-				mbMessage.getCompanyId(), _MB_CATEGORY_CLASS_NAME,
-				mbMessage.getCategoryId(), PortletKeys.MESSAGE_BOARDS,
+				mbMessage.getCompanyId(), PortletKeys.MESSAGE_BOARDS,
 				_MB_MESSAGE_CLASS_NAME, mbMessage.getMessageId(),
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				notificationType, userId);
+				notificationType, getSubscribersOVPs(mbMessage), userId);
+		}
+		else {
+			serviceContext.setAttribute("entryURL", entryURL);
 		}
 
 		return mbMessage;
+	}
+
+	protected List<ObjectValuePair<String, Long>> getSubscribersOVPs(
+			MBMessage mbMessage)
+		throws PortalException, SystemException {
+
+		List<ObjectValuePair<String, Long>> subscribersOVPs =
+			new ArrayList<ObjectValuePair<String, Long>>();
+
+		subscribersOVPs.add(
+			new ObjectValuePair<String, Long>(
+				_MB_THREAD_CLASS_NAME, mbMessage.getThreadId()));
+
+		long categoryId = mbMessage.getCategoryId();
+
+		if (categoryId <= 0) {
+			categoryId = mbMessage.getGroupId();
+		}
+
+		List<Long> categoryIds = new ArrayList<Long>();
+
+		categoryIds.add(categoryId);
+
+		MBCategory category = mbMessage.getCategory();
+
+		if (categoryId != MBCategoryConstants.DEFAULT_PARENT_CATEGORY_ID) {
+			categoryIds.addAll(category.getAncestorCategoryIds());
+		}
+
+		for (long curCategoryId : categoryIds) {
+			subscribersOVPs.add(
+				new ObjectValuePair<String, Long>(
+					_MB_CATEGORY_CLASS_NAME, curCategoryId));
+		}
+
+		return subscribersOVPs;
 	}
 
 	protected AssetRendererFactory _assetRendererFactory =
@@ -84,5 +141,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 
 	private static final String _MB_MESSAGE_CLASS_NAME =
 		MBMessage.class.getName();
+
+	private static final String _MB_THREAD_CLASS_NAME =
+		MBThread.class.getName();
 
 }

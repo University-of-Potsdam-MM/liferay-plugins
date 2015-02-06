@@ -14,14 +14,8 @@
 
 package com.liferay.notifications.util;
 
-import com.liferay.compat.portal.util.PortalUtil;
-import com.liferay.portal.kernel.dao.orm.Conjunction;
-import com.liferay.portal.kernel.dao.orm.Disjunction;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.notifications.model.UserNotificationEvent;
+import com.liferay.notifications.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -34,105 +28,69 @@ import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
-import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
-import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 
 import java.io.Serializable;
 
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Lin Cui
  */
 public class NotificationsUtil {
 
-	public static List<UserNotificationEvent> getArchivedUserNotificationEvents(
-			long userId, boolean actionable, boolean archived, int start,
+	public static List<UserNotificationEvent>
+		getArchivedUserNotificationEvents(
+			long userId, boolean actionRequired, boolean archived, int start,
 			int end)
-		throws SystemException {
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("archived", archived));
-
-		dynamicQuery.addOrder(OrderFactoryUtil.desc("timestamp"));
-
-		return UserNotificationEventLocalServiceUtil.dynamicQuery(
-			dynamicQuery, start, end);
+		return
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEvents(
+					userId, actionRequired, archived, start, end);
 	}
 
 	public static int getArchivedUserNotificationEventsCount(
-			long userId, boolean actionable, boolean archived)
-		throws SystemException {
+			long userId, boolean actionRequired, boolean archived)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("archived", archived));
-
-		dynamicQuery.setProjection(ProjectionFactoryUtil.rowCount());
-
-		Iterator<Long> iterator =
-			UserNotificationEventLocalServiceUtil.dynamicQuery(
-				dynamicQuery).iterator();
-
-		if (iterator.hasNext()) {
-			Long count = iterator.next();
-
-			if (count != null) {
-				return count.intValue();
-			}
-		}
-
-		return 0;
+		return
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEventsCount(
+					userId, actionRequired, archived);
 	}
 
 	public static List<UserNotificationEvent>
 			getDeliveredUserNotificationEvents(
-				long userId, boolean actionable, boolean delivered, int start,
-				int end)
-		throws SystemException {
+				long userId, boolean delivered, boolean actionRequired,
+				int start, int end)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("delivered", delivered));
-
-		dynamicQuery.addOrder(OrderFactoryUtil.desc("timestamp"));
-
-		return UserNotificationEventLocalServiceUtil.dynamicQuery(
-			dynamicQuery, start, end);
+		return
+			UserNotificationEventLocalServiceUtil.
+				getDeliveredUserNotificationEvents(
+					userId, delivered, actionRequired, start, end);
 	}
 
 	public static int getDeliveredUserNotificationEventsCount(
-			long userId, boolean actionable, boolean delivered)
-		throws SystemException {
+			long userId, boolean delivered, boolean actionRequired)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("delivered", delivered));
-
-		dynamicQuery.setProjection(ProjectionFactoryUtil.rowCount());
-
-		Iterator<Long> iterator =
-			UserNotificationEventLocalServiceUtil.dynamicQuery(
-				dynamicQuery).iterator();
-
-		if (iterator.hasNext()) {
-			Long count = iterator.next();
-
-			if (count != null) {
-				return count.intValue();
-			}
-		}
-
-		return 0;
+		return
+			UserNotificationEventLocalServiceUtil.
+				getDeliveredUserNotificationEventsCount(
+					userId, delivered, actionRequired);
 	}
 
 	public static String getEntryURL(
@@ -166,46 +124,28 @@ public class NotificationsUtil {
 		}
 	}
 
-	public static List<UserNotificationEvent> getUserNotificationEvents(
-			long userId, boolean actionable, int start, int end)
-		throws SystemException {
+	public static List<UserNotificationEvent>
+		getUserNotificationEvents(
+			long userId, boolean actionRequired, int start, int end)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.addOrder(OrderFactoryUtil.desc("timestamp"));
-
-		return UserNotificationEventLocalServiceUtil.dynamicQuery(
-			dynamicQuery, start, end);
+		return UserNotificationEventLocalServiceUtil.getUserNotificationEvents(
+			userId, actionRequired, start, end);
 	}
 
 	public static int getUserNotificationEventsCount(
-			long userId, boolean actionable)
-		throws SystemException {
+			long userId, boolean actionRequired)
+		throws PortalException, SystemException {
 
-		DynamicQuery dynamicQuery = getDynamicQuery(userId, actionable);
-
-		dynamicQuery.setProjection(ProjectionFactoryUtil.rowCount());
-
-		Iterator<Long> iterator =
-			UserNotificationEventLocalServiceUtil.dynamicQuery(
-				dynamicQuery).iterator();
-
-		if (iterator.hasNext()) {
-			Long count = iterator.next();
-
-			if (count != null) {
-				return count.intValue();
-			}
-		}
-
-		return 0;
+		return
+			UserNotificationEventLocalServiceUtil.
+				getUserNotificationEventsCount(userId, actionRequired);
 	}
 
 	public static void sendNotificationEvent(
-			long companyId, String subscriptionClassName,
-			long subscriptionClassPK, String portletKey, String className,
-			long classPK, String entryTitle, String entryURL,
-			int notificationType, long userId)
+			long companyId, String portletKey, String className, long classPK,
+			String entryTitle, String entryURL, int notificationType,
+			List<ObjectValuePair<String, Long>> subscribersOVPs, long userId)
 		throws PortalException, SystemException {
 
 		JSONObject notificationEventJSONObject =
@@ -221,64 +161,30 @@ public class NotificationsUtil {
 		MessageBusUtil.sendMessage(
 			DestinationNames.ASYNC_SERVICE,
 			new NotificationProcessCallable(
-				companyId, subscriptionClassName, subscriptionClassPK,
-				portletKey, notificationEventJSONObject));
-	}
-
-	protected static DynamicQuery getDynamicQuery(
-			long userId, boolean actionable)
-		throws SystemException {
-
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
-			UserNotificationEvent.class);
-
-		dynamicQuery.add(RestrictionsFactoryUtil.eq("userId", userId));
-
-		if (actionable) {
-			Disjunction disjuncton = RestrictionsFactoryUtil.disjunction();
-
-			disjuncton.add(
-				RestrictionsFactoryUtil.in(
-					"type", NotificationsConstants.ACTIONABLE_TYPES));
-
-			dynamicQuery.add(disjuncton);
-		}
-		else {
-			Conjunction conjunction = RestrictionsFactoryUtil.conjunction();
-
-			for (String actionableType :
-					NotificationsConstants.ACTIONABLE_TYPES) {
-
-				conjunction.add(
-					RestrictionsFactoryUtil.ne("type", actionableType));
-			}
-
-			dynamicQuery.add(conjunction);
-		}
-
-		return dynamicQuery;
+				companyId, portletKey, notificationEventJSONObject,
+				subscribersOVPs));
 	}
 
 	private static class NotificationProcessCallable
 		implements ProcessCallable<Serializable> {
 
 		public NotificationProcessCallable(
-			long companyId, String className, long classPK, String portletKey,
-			JSONObject notificationEventJSONObject) {
+			long companyId, String portletKey,
+			JSONObject notificationEventJSONObject,
+			List<ObjectValuePair<String, Long>> subscribersOVPs) {
 
 			_companyId = companyId;
-			_className = className;
-			_classPK = classPK;
 			_notificationEventJSONObject = notificationEventJSONObject;
 			_portletKey = portletKey;
+			_subscribersOVPs = subscribersOVPs;
 		}
 
 		@Override
 		public Serializable call() throws ProcessException {
 			try {
 				sendUserNotifications(
-					_companyId, _className, _classPK, _portletKey,
-					_notificationEventJSONObject);
+					_companyId, _portletKey, _notificationEventJSONObject,
+					_subscribersOVPs);
 			}
 			catch (Exception e) {
 				throw new ProcessException(e);
@@ -288,8 +194,9 @@ public class NotificationsUtil {
 		}
 
 		protected void sendUserNotifications(
-				long companyId, String className, long classPK,
-				String portletKey, JSONObject notificationEventJSONObject)
+				long companyId, String portletKey,
+				JSONObject notificationEventJSONObject,
+				List<ObjectValuePair<String, Long>> subscribersOVPs)
 			throws PortalException, SystemException {
 
 			int notificationType = notificationEventJSONObject.getInt(
@@ -297,40 +204,55 @@ public class NotificationsUtil {
 
 			long userId = notificationEventJSONObject.getLong("userId");
 
-			List<Subscription> subscriptions =
-				SubscriptionLocalServiceUtil.getSubscriptions(
-					companyId, className, classPK);
+			Set<Long> subscriberUserIds = new HashSet<Long>();
 
-			for (Subscription subscription : subscriptions) {
-				long subscriberUserId = subscription.getUserId();
+			for (ObjectValuePair<String, Long> ovp : subscribersOVPs) {
+				String className = ovp.getKey();
+				long classPK = ovp.getValue();
 
-				if (subscriberUserId == userId) {
-					continue;
-				}
+				List<Subscription> subscriptions =
+					SubscriptionLocalServiceUtil.getSubscriptions(
+						companyId, className, classPK);
 
-				if (UserNotificationManagerUtil.isDeliver(
-						subscriberUserId, portletKey, 0, notificationType,
-						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+				for (Subscription subscription : subscriptions) {
+					long subscriberUserId = subscription.getUserId();
 
-					NotificationEvent notificationEvent =
-						NotificationEventFactoryUtil.createNotificationEvent(
-							System.currentTimeMillis(), portletKey,
-							notificationEventJSONObject);
+					if (subscriberUserId == userId) {
+						continue;
+					}
 
-					UserNotificationEventLocalServiceUtil.
-						addUserNotificationEvent(
-							subscriberUserId, notificationEvent);
+					if (subscriberUserIds.contains(subscriberUserId)) {
+						continue;
+					}
+
+					subscriberUserIds.add(subscriberUserId);
+
+					if (UserNotificationManagerUtil.isDeliver(
+							subscriberUserId, portletKey, 0, notificationType,
+							UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+
+						NotificationEvent notificationEvent =
+							NotificationEventFactoryUtil.
+								createNotificationEvent(
+									System.currentTimeMillis(), portletKey,
+									notificationEventJSONObject);
+
+						com.liferay.portal.service.
+							UserNotificationEventLocalServiceUtil.
+								addUserNotificationEvent(
+									subscriberUserId, notificationEvent);
+					}
 				}
 			}
 		}
 
 		private static final long serialVersionUID = 1L;
 
-		private String _className;
-		private long _classPK;
 		private long _companyId;
 		private JSONObject _notificationEventJSONObject;
 		private String _portletKey;
+		private List<ObjectValuePair<String, Long>> _subscribersOVPs;
+
 	}
 
 }

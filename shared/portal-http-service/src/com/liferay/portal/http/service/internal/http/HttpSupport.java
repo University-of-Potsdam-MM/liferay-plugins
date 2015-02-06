@@ -16,15 +16,14 @@ package com.liferay.portal.http.service.internal.http;
 
 import com.liferay.portal.http.service.internal.servlet.BundleServletContext;
 import com.liferay.portal.http.service.internal.servlet.WebExtenderServlet;
-import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.xml.DocumentException;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
-
-import javax.servlet.ServletContext;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -51,7 +50,7 @@ public class HttpSupport {
 	}
 
 	public BundleServletContext getBundleServletContext(Bundle bundle)
-		throws InvalidSyntaxException {
+		throws DocumentException, InvalidSyntaxException {
 
 		BundleServletContext bundleServletContext = getWABBundleServletContext(
 			bundle);
@@ -107,34 +106,19 @@ public class HttpSupport {
 		return null;
 	}
 
-	public BundleServletContext getNonWABBundleServletContext(Bundle bundle) {
-		String servletContextName = BundleServletContext.getServletContextName(
-			bundle, true);
+	public HttpServiceWrapper getHttpService(Bundle bundle) {
+		HttpServiceWrapper httpServiceWrapper = _httpServiceWrappers.get(
+			bundle);
 
-		ServletContext servletContext = ServletContextPool.get(
-			servletContextName);
-
-		if (servletContext == null) {
-			BundleServletContext bundleServletContext =
-				new BundleServletContext(
-					bundle, servletContextName,
-					_webExtenderServlet.getServletContext());
-
-			bundleServletContext.setServletContextName(servletContextName);
-
-			ServletContextPool.put(servletContextName, bundleServletContext);
-
-			try {
-				bundleServletContext.open();
-			}
-			catch (DocumentException de) {
-				throw new RuntimeException(de);
-			}
-
-			servletContext = bundleServletContext;
+		if (httpServiceWrapper != null) {
+			return httpServiceWrapper;
 		}
 
-		return (BundleServletContext)servletContext;
+		httpServiceWrapper = doGetService(bundle);
+
+		_httpServiceWrappers.put(bundle, httpServiceWrapper);
+
+		return httpServiceWrapper;
 	}
 
 	public BundleServletContext getWABBundleServletContext(Bundle bundle)
@@ -163,7 +147,54 @@ public class HttpSupport {
 		return _webExtenderServlet;
 	}
 
+	public void ungetHttpService(Bundle bundle) {
+		HttpServiceWrapper httpServiceWrapper = _httpServiceWrappers.get(
+			bundle);
+
+		if (httpServiceWrapper == null) {
+			return;
+		}
+
+		BundleServletContext bundleServletContext =
+			httpServiceWrapper.getBundleServletContext();
+
+		bundleServletContext.close();
+
+		_httpServiceWrappers.remove(bundle);
+	}
+
+	protected HttpServiceWrapper doGetService(Bundle bundle) {
+		try {
+			BundleServletContext bundleServletContext = getBundleServletContext(
+				bundle);
+
+			if (bundleServletContext != null) {
+				return new HttpServiceWrapper(bundleServletContext);
+			}
+
+			bundleServletContext = getNonWABBundleServletContext(bundle);
+
+			return new NonWABHttpServiceWrapper(bundleServletContext);
+		}
+		catch (Exception ise) {
+			throw new IllegalStateException(ise);
+		}
+	}
+
+	protected BundleServletContext getNonWABBundleServletContext(Bundle bundle)
+		throws DocumentException {
+
+		BundleServletContext bundleServletContext = new BundleServletContext(
+			bundle, null, _webExtenderServlet.getServletContext());
+
+		bundleServletContext.open();
+
+		return bundleServletContext;
+	}
+
 	private BundleContext _bundleContext;
+	private Map<Bundle, HttpServiceWrapper> _httpServiceWrappers =
+		new HashMap<Bundle, HttpServiceWrapper>();
 	private WebExtenderServlet _webExtenderServlet;
 
 }

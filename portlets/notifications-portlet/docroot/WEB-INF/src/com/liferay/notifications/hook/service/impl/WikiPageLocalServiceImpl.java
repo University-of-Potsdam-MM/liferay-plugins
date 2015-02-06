@@ -18,7 +18,9 @@ import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
@@ -28,6 +30,9 @@ import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.model.WikiPage;
 import com.liferay.portlet.wiki.service.WikiPageLocalService;
 import com.liferay.portlet.wiki.service.WikiPageLocalServiceWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lin Cui
@@ -64,19 +69,45 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceWrapper {
 		AssetRenderer assetRenderer = _assetRendererFactory.getAssetRenderer(
 			wikiPage.getPageId());
 
-		String entryURL = NotificationsUtil.getEntryURL(
-			assetRenderer, PortletKeys.WIKI, serviceContext);
+		String entryURL = (String)serviceContext.getAttribute("entryURL");
 
-		if (Validator.isNotNull(entryURL)) {
+		if (Validator.isNull(entryURL)) {
+			entryURL = NotificationsUtil.getEntryURL(
+				assetRenderer, PortletKeys.WIKI, serviceContext);
+		}
+
+		if ((status == WorkflowConstants.STATUS_APPROVED) &&
+			Validator.isNotNull(entryURL)) {
+
 			NotificationsUtil.sendNotificationEvent(
-				wikiPage.getCompanyId(), subscriptionClassName,
-				subscriptionClassPK, PortletKeys.WIKI, _WIKI_PAGE_CLASS_NAME,
-				wikiPage.getPageId(),
+				wikiPage.getCompanyId(), PortletKeys.WIKI,
+				_WIKI_PAGE_CLASS_NAME, wikiPage.getPageId(),
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				notificationType, userId);
+				notificationType,
+				getSubscribersOVPs(
+					wikiPage, subscriptionClassName, subscriptionClassPK),
+				userId);
+		}
+		else {
+			serviceContext.setAttribute("entryURL", entryURL);
 		}
 
 		return wikiPage;
+	}
+
+	protected List<ObjectValuePair<String, Long>> getSubscribersOVPs(
+			WikiPage wikiPage, String subscriptionClassName,
+			long subscriptionClassPK)
+		throws SystemException {
+
+		List<ObjectValuePair<String, Long>> subscribersOVPs =
+			new ArrayList<ObjectValuePair<String, Long>>();
+
+		subscribersOVPs.add(
+			new ObjectValuePair<String, Long>(
+				subscriptionClassName, subscriptionClassPK));
+
+		return subscribersOVPs;
 	}
 
 	protected AssetRendererFactory _assetRendererFactory =

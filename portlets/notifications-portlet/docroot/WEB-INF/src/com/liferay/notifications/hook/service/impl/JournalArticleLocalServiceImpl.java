@@ -18,7 +18,9 @@ import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
@@ -30,6 +32,8 @@ import com.liferay.portlet.journal.service.JournalArticleLocalServiceWrapper;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,19 +70,41 @@ public class JournalArticleLocalServiceImpl
 		AssetRenderer assetRenderer = _assetRendererFactory.getAssetRenderer(
 			article.getId());
 
-		String entryURL = NotificationsUtil.getEntryURL(
-			assetRenderer, PortletKeys.JOURNAL, serviceContext);
+		String entryURL = (String)serviceContext.getAttribute("entryURL");
 
-		if (Validator.isNotNull(entryURL)) {
+		if (Validator.isNull(entryURL)) {
+			entryURL = NotificationsUtil.getEntryURL(
+				assetRenderer, PortletKeys.JOURNAL, serviceContext);
+		}
+
+		if ((status == WorkflowConstants.STATUS_APPROVED) &&
+			Validator.isNotNull(entryURL)) {
+
 			NotificationsUtil.sendNotificationEvent(
-				article.getCompanyId(), _JOURNAL_ARTICLE_CLASS_NAME,
-				article.getGroupId(), PortletKeys.JOURNAL,
+				article.getCompanyId(), PortletKeys.JOURNAL,
 				_JOURNAL_ARTICLE_CLASS_NAME, article.getId(),
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				notificationType, userId);
+				notificationType, getSubscribersOVPs(article), userId);
+		}
+		else {
+			serviceContext.setAttribute("entryURL", entryURL);
 		}
 
 		return journalArticle;
+	}
+
+	protected List<ObjectValuePair<String, Long>> getSubscribersOVPs(
+			JournalArticle article)
+		throws SystemException {
+
+		List<ObjectValuePair<String, Long>> subscribersOVPs =
+			new ArrayList<ObjectValuePair<String, Long>>();
+
+		subscribersOVPs.add(
+			new ObjectValuePair<String, Long>(
+				_JOURNAL_ARTICLE_CLASS_NAME, article.getGroupId()));
+
+		return subscribersOVPs;
 	}
 
 	protected AssetRendererFactory _assetRendererFactory =
