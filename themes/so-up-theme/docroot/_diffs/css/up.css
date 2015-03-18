@@ -1,0 +1,107 @@
+@import "up";
+
+body{
+	background: $upBgColor;
+	
+	
+	#line
+	{
+		width: 100%;
+		height: 20px;
+		background: $upGray;
+		.blue
+		{
+			width: 50%;
+			background: $upDarkBlue;
+			height: 20px;
+		}
+		
+		.lineimg
+		{
+			display: none;
+		}
+	}		
+
+	header#mobile-menu {
+		display: none;
+	}
+		
+	header#banner{
+	
+		background: $upGray;
+	
+		ul#up-general {
+			display: block;
+			overflow: hidden;
+			list-style-type: none;
+			float:right;
+			color: $upDarkBlue;
+			
+			li
+			{
+				float: left;
+				margin-left: 20px;
+				background: $upLightBlue;
+				height: 40px;
+				minwidth: 100px;
+			}
+		}
+		
+		#logo {
+			display: block;
+			width: 160px;
+			height: 172px;
+			background-image: url(../images/up/up_logo_university_2.png);
+			margin-left:100px;
+		}
+		
+		#editbox
+		{
+			width: 200px;
+			float: left;
+		}	
+		
+		.portlet-dockbar{
+			padding-top: 20px;
+		}
+	}
+	
+	#sidebar {
+		width: 0px;
+		left: 0px;
+		top: 0px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100%;
+		border-right: 1px solid $upBorderColor;
+		margin-right: 0px;
+		z-index: 1401;
+		
+		.title{
+			overflow: hidden;
+			background: $upMenuColor;
+			
+			-moz-transform: rotate(-90deg);
+			-ms-transform: rotate(-90deg);
+			-o-transform: rotate(-90deg);
+			-webkit-transform: rotate(-90deg);
+			transform:rotate(-90deg);
+			
+			width:120px;
+			height:20px;
+			padding:10px;
+			left:-50px;
+			top:120px;
+			position: absolute;
+			z-index:1401;
+		}
+		.content
+		{
+			position: absolute;
+			overflow: hidden;
+			position: absolute;
+			width: 100%;
+		}
+	}
+}
