@@ -107,41 +107,45 @@
 		text-align: center;
 	}
 
-	@include respond-to(tablet) {
-		.calendar-portlet-column-parent {
+	.calendar-portlet-column-parent {
+		@include respond-to(tablet) {
 			.calendar-portlet-column-grid, .calendar-portlet-column-options {
 				float: none;
 				margin: 0;
 				width: 100%;
 			}
 		}
-	}
 
-	.calendar-portlet-column-grid {
-		position: relative;
+		.calendar-portlet-column-grid {
+			position: relative;
 
-		.calendar-portlet-column-toggler {
-			bottom: 0;
-			margin-left: -10px;
-			position: absolute;
-			top: 0;
-			width: 10px;
-
-			&:hover {
-				background: #E9E9E9;
-				cursor: pointer;
+			&.span12 {
+				margin-left: 0;
 			}
 
-			.icon-caret-right, .icon-caret-left {
-				left: 50%;
-				margin: -14px 0 0 -1px;
+			.calendar-portlet-column-toggler {
+				bottom: 0;
+				margin-left: -10px;
 				position: absolute;
-				top: 50%;
-			}
-		}
+				top: 0;
+				width: 10px;
 
-		.scheduler-event {
-			z-index: 300;
+				&:hover {
+					background: #E9E9E9;
+					cursor: pointer;
+				}
+
+				.icon-caret-right, .icon-caret-left {
+					left: 50%;
+					margin: -14px 0 0 -1px;
+					position: absolute;
+					top: 50%;
+				}
+			}
+
+			.scheduler-event {
+				z-index: 300;
+			}
 		}
 	}
 
@@ -163,10 +167,6 @@
 	.scheduler-view-agenda-info-container {
 		.scheduler-view-agenda-info {
 			line-height: 1.2;
-
-			.scheduler-view-agenda-info-biggie {
-				line-height: 30px;
-			}
 		}
 	}
 }
@@ -347,10 +347,6 @@
 	.scheduler-event-disabled {
 		@include opacity(0.8);
 	}
-}
-
-.calendar-subscribe-link {
-	background: url(@theme_image_path@/common/rss.png) 8px center no-repeat;
 }
 
 .dialog-iframe-popup .calendar-portlet .fieldset {
@@ -586,7 +582,35 @@
 }
 
 @include respond-to(phone, tablet) {
+	.scheduler-base-hd .btn {
+		padding: 10px 12px;
+	}
+
 	.scheduler-view-table-header-day div {
 		overflow: hidden
+	}
+}
+
+@include respond-to(phone) {
+	.scheduler-base-content .scheduler-base-controls .btn-group {
+		margin: 5px 0 0 0;
+
+		button {
+			display: inline-block;
+			width: 100%;
+		}
+
+		.scheduler-base-icon-next, .scheduler-base-icon-prev {
+			width: 25%;
+		}
+
+		.scheduler-base-today {
+			width: 50%;
+		}
+	}
+
+	.scheduler-base-views select {
+		margin-top: 10px;
+		width: 100%;
 	}
 }

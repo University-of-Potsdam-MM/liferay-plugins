@@ -82,7 +82,7 @@ public class UpgradeSyncDLObject extends UpgradeProcess {
 
 				try {
 					SyncDLObject fileEntrySyncDLObject =
-						SyncUtil.toSyncDLObject(dlFileEntry, event);
+						SyncUtil.toSyncDLObject(dlFileEntry, event, true);
 
 					syncDLObjects.add(fileEntrySyncDLObject);
 
@@ -149,14 +149,15 @@ public class UpgradeSyncDLObject extends UpgradeProcess {
 
 			for (SyncDLObject syncDLObject : syncDLObjects) {
 				SyncDLObjectLocalServiceUtil.addSyncDLObject(
-					syncDLObject.getCompanyId(), syncDLObject.getModifiedTime(),
+					syncDLObject.getCompanyId(), syncDLObject.getUserId(),
+					syncDLObject.getUserName(), syncDLObject.getModifiedTime(),
 					syncDLObject.getRepositoryId(),
 					syncDLObject.getParentFolderId(), syncDLObject.getName(),
 					syncDLObject.getExtension(), syncDLObject.getMimeType(),
 					syncDLObject.getDescription(), syncDLObject.getChangeLog(),
 					syncDLObject.getExtraSettings(), syncDLObject.getVersion(),
-					syncDLObject.getSize(), syncDLObject.getChecksum(),
-					syncDLObject.getEvent(),
+					syncDLObject.getVersionId(), syncDLObject.getSize(),
+					syncDLObject.getChecksum(), syncDLObject.getEvent(),
 					syncDLObject.getLockExpirationDate(),
 					syncDLObject.getLockUserId(),
 					syncDLObject.getLockUserName(), syncDLObject.getType(),

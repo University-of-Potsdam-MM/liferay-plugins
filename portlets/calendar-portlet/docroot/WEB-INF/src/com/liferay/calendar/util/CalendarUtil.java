@@ -51,6 +51,16 @@ import java.util.TimeZone;
  */
 public class CalendarUtil {
 
+	public static TimeZone getCalendarBookingDisplayTimeZone(
+		CalendarBooking calendarBooking, TimeZone defaultTimeZone) {
+
+		if ((calendarBooking != null) && calendarBooking.isAllDay()) {
+			return TimeZone.getTimeZone(StringPool.UTC);
+		}
+
+		return defaultTimeZone;
+	}
+
 	public static JSONObject getCalendarRenderingRules(
 			ThemeDisplay themeDisplay, long[] calendarIds, int[] statuses,
 			long startTime, long endTime, String ruleName, TimeZone timeZone)

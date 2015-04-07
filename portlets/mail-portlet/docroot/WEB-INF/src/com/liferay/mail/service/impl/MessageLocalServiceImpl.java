@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.IndexerRegistryUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
@@ -45,7 +46,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 	public Message addMessage(
 			long userId, long folderId, String sender, String to, String cc,
 			String bcc, Date sentDate, String subject, String body,
-			String flags, long remoteMessageId)
+			String flags, long remoteMessageId, String contentType)
 		throws PortalException, SystemException {
 
 		// Message
@@ -76,6 +77,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setFlags(flags);
 		message.setSize(getSize(messageId, body));
 		message.setRemoteMessageId(remoteMessageId);
+		message.setContentType(removeBoundaryMarker(contentType));
 
 		messagePersistence.update(message);
 
@@ -360,6 +362,16 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		}
 
 		return size;
+	}
+
+	protected String removeBoundaryMarker(String contentType) {
+		int i = contentType.indexOf(CharPool.SEMICOLON);
+
+		if (i == -1) {
+			return contentType;
+		}
+
+		return contentType.substring(0, i);
 	}
 
 }

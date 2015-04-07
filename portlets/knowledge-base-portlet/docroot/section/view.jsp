@@ -16,8 +16,12 @@
 
 <%@ include file="/section/init.jsp" %>
 
+<%
+KBArticleURLHelper kbArticleURLHelper = new KBArticleURLHelper(renderRequest, renderResponse, templatePath);
+%>
+
 <c:choose>
-	<c:when test="<%= Validator.isNotNull(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) %>">
+	<c:when test="<%= ArrayUtil.isNotEmpty(PortletPropsValues.ADMIN_KB_ARTICLE_SECTIONS) %>">
 		<liferay-portlet:renderURL varImpl="iteratorURL">
 			<portlet:param name="mvcPath" value="/section/view.jsp" />
 		</liferay-portlet:renderURL>
@@ -59,17 +63,17 @@
 				%>
 
 					<div class="<%= (i == 0) ? "kb-article-title kb-article-title-first" : "kb-article-title" %>">
-						<portlet:renderURL var="viewKBArticleURL" windowState="<%= kbArticleWindowState %>">
-							<portlet:param name="mvcPath" value="/section/view_article.jsp" />
-							<portlet:param name="resourcePrimKey" value="<%= String.valueOf(kbArticle.getResourcePrimKey()) %>" />
-						</portlet:renderURL>
+
+						<%
+						PortletURL viewKBArticleURL = kbArticleURLHelper.createViewURL(kbArticle);
+						%>
 
 						<liferay-ui:icon
 							image="../trees/page"
 							label="<%= true %>"
 							message="<%= kbArticle.getTitle() %>"
 							method="get"
-							url="<%= viewKBArticleURL %>"
+							url="<%= viewKBArticleURL.toString() %>"
 						/>
 					</div>
 

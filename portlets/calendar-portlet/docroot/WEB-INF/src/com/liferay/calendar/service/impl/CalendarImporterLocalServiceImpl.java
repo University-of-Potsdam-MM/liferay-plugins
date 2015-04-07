@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
@@ -611,7 +612,7 @@ public class CalendarImporterLocalServiceImpl
 				List<Integer> monthsList = new ArrayList<Integer>();
 
 				for (int month : months) {
-					monthsList.add(month + 1);
+					monthsList.add(month);
 				}
 
 				recurrence.setMonths(monthsList);
@@ -740,10 +741,12 @@ public class CalendarImporterLocalServiceImpl
 
 		assetCategories.addAll(assetEntry.getCategories());
 
-		assetCategories.add(
-			getAssetCategory(
-				calEvent.getUserId(), calEvent.getCompanyId(),
-				calEvent.getGroupId(), calEvent.getType()));
+		if (Validator.isNotNull(calEvent.getType())) {
+			assetCategories.add(
+				getAssetCategory(
+					calEvent.getUserId(), calEvent.getCompanyId(),
+					calEvent.getGroupId(), calEvent.getType()));
+		}
 
 		for (AssetCategory assetCategory : assetCategories) {
 			assetEntryLocalService.addAssetCategoryAssetEntry(

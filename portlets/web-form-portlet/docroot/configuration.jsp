@@ -17,8 +17,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String titleXml = LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "title");
-String descriptionXml = LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "description");
+String titleXml = GetterUtil.getString(LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "title"), StringPool.BLANK);
+String descriptionXml = GetterUtil.getString(LocalizationUtil.getLocalizationXmlFromPreferences(portletPreferences, renderRequest, "description"), StringPool.BLANK);
 boolean requireCaptcha = GetterUtil.getBoolean(portletPreferences.getValue("requireCaptcha", StringPool.BLANK));
 String successURL = portletPreferences.getValue("successURL", StringPool.BLANK);
 
@@ -64,7 +64,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 
 				<aui:input name="preferences--requireCaptcha--" type="checkbox" value="<%= requireCaptcha %>" />
 
-				<aui:input cssClass="lfr-input-text-container" label="redirect-url-on-success" name="preferences--successURL--" value="<%= HtmlUtil.toInputSafe(successURL) %>" />
+				<aui:input label="redirect-url-on-success" name="preferences--successURL--" value="<%= HtmlUtil.toInputSafe(successURL) %>" wrapperCssClass="lfr-input-text-container" />
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -79,14 +79,14 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 				<aui:input label="send-as-email" name="preferences--sendAsEmail--" type="checkbox" value="<%= sendAsEmail %>" />
 
 				<aui:fieldset>
-					<aui:input cssClass="lfr-input-text-container" label="name-from" name="preferences--emailFromName--" value="<%= emailFromName %>" />
+					<aui:input label="name-from" name="preferences--emailFromName--" value="<%= emailFromName %>" wrapperCssClass="lfr-input-text-container" />
 
-					<aui:input cssClass="lfr-input-text-container" label="address-from" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" />
+					<aui:input label="address-from" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" wrapperCssClass="lfr-input-text-container" />
 				</aui:fieldset>
 
-				<aui:input cssClass="lfr-input-text-container" helpMessage="add-email-addresses-separated-by-commas" label="addresses-to" name="preferences--emailAddress--" value="<%= emailAddress %>" />
+				<aui:input helpMessage="add-email-addresses-separated-by-commas" label="addresses-to" name="preferences--emailAddress--" value="<%= emailAddress %>" wrapperCssClass="lfr-input-text-container" />
 
-				<aui:input cssClass="lfr-input-text-container" name="preferences--subject--" value="<%= subject %>" />
+				<aui:input name="preferences--subject--" value="<%= subject %>" wrapperCssClass="lfr-input-text-container" />
 
 			</aui:fieldset>
 
@@ -97,7 +97,14 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			<aui:fieldset cssClass="handle-data" label="file">
 				<aui:input name="preferences--saveToFile--" type="checkbox" value="<%= saveToFile %>" />
 
-				<aui:input cssClass="lfr-input-text-container" label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" />
+				<c:choose>
+					<c:when test="<%= PortletPropsValues.DATA_FILE_PATH_CHANGEABLE %>">
+						<aui:input label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" wrapperCssClass="lfr-input-text-container" />
+					</c:when>
+					<c:otherwise>
+						<liferay-ui:message arguments="<%= HtmlUtil.escape(WebFormUtil.getFileName(themeDisplay, portletResource)) %>" key="form-data-will-be-saved-to-x" />
+					</c:otherwise>
+				</c:choose>
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -193,49 +200,44 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 <c:if test="<%= !fieldsEditingDisabled %>">
 	<aui:script use="aui-base,liferay-auto-fields">
 		var toggleOptions = function(event) {
-			var select = this;
+			var instance = this;
 
-			var formRow = select.ancestor('.lfr-form-row');
-			var value = select.val();
+			var formRow = instance.ancestor('.lfr-form-row');
+			var value = instance.val();
 
 			var optionsDiv = formRow.one('.options');
 
-			if ((value == 'options') || (value == 'radio')) {
+			if ((value === 'options') || (value === 'radio')) {
 				optionsDiv.all('label').show();
-				optionsDiv.show();
-			}
-			else if (value == 'paragraph') {
-
-				// Show just the text field and not the labels since there
-				// are multiple choice inputs
-
-				optionsDiv.all('label').hide();
 				optionsDiv.show();
 			}
 			else {
 				optionsDiv.hide();
 			}
 
-			var optionalControl = formRow.one('.optional-control').ancestor();
 			var labelName = formRow.one('.label-name');
+			var optionalControl = formRow.one('.optional-control').ancestor();
+			var paragraphDiv = formRow.one('.paragraph');
 
-			if (value == 'paragraph') {
+			if (value === 'paragraph') {
 				var inputName = labelName.one('input.field');
 
-				var formFieldsIndex = select.attr('id').match(/\d+$/);
+				var formFieldsIndex = instance.attr('id').match(/\d+$/);
 
 				inputName.val('<liferay-ui:message key="paragraph" />' + formFieldsIndex);
 				inputName.fire('change');
 
 				labelName.hide();
 				optionalControl.hide();
+				paragraphDiv.show();
 
 				optionalControl.all('input[type="checkbox"]').attr('checked', 'true');
 				optionalControl.all('input[type="hidden"]').attr('value', 'true');
 			}
 			else {
-				optionalControl.show();
 				labelName.show();
+				optionalControl.show();
+				paragraphDiv.hide();
 			}
 		};
 

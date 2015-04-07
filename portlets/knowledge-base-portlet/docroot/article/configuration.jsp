@@ -50,13 +50,7 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 					<aui:field-wrapper label="article">
 
 						<%
-						KBArticle kbArticle = null;
-
-						try {
-							kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(resourcePrimKey, WorkflowConstants.STATUS_APPROVED);
-						}
-						catch (NoSuchArticleException nsae) {
-						}
+						KBArticle kbArticle = KBArticleLocalServiceUtil.fetchLatestKBArticle(resourcePrimKey, WorkflowConstants.STATUS_APPROVED);
 						%>
 
 						<liferay-ui:input-resource id="configurationKBArticle" url="<%= (kbArticle != null) ? kbArticle.getTitle() : StringPool.BLANK %>" />
@@ -95,7 +89,46 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 
 				<aui:input label="enable-print" name="preferences--enableKBArticlePrint--" type="checkbox" value="<%= enableKBArticlePrint %>" />
 
-				<aui:input label="enable-social-bookmarks" name="preferences--enableSocialBookmarks--" type="checkbox" value="<%= enableSocialBookmarks %>" />
+				<aui:fieldset>
+					<aui:input label="enable-social-bookmarks" name="preferences--enableSocialBookmarks--" type="checkbox" value="<%= enableSocialBookmarks %>" />
+
+					<div class="social-boomarks-options" id="<portlet:namespace />socialBookmarksOptions">
+						<aui:select label="display-style" name="preferences--socialBookmarksDisplayStyle--">
+							<aui:option label="simple" selected='<%= socialBookmarksDisplayStyle.equals("simple") %>' />
+							<aui:option label="vertical" selected='<%= socialBookmarksDisplayStyle.equals("vertical") %>' />
+							<aui:option label="horizontal" selected='<%= socialBookmarksDisplayStyle.equals("horizontal") %>' />
+						</aui:select>
+
+						<aui:select label="display-position" name="preferences--socialBookmarksDisplayPosition--">
+							<aui:option label="top" selected='<%= socialBookmarksDisplayPosition.equals("top") %>' />
+							<aui:option label="bottom" selected='<%= socialBookmarksDisplayPosition.equals("bottom") %>' />
+						</aui:select>
+
+						<aui:field-wrapper label="social-bookmarks">
+
+							<%
+							String[] socialBookmarksTypesArray = StringUtil.split(socialBookmarksTypes);
+
+							for (String type : PropsUtil.getArray(PropsKeys.SOCIAL_BOOKMARK_TYPES)) {
+							%>
+
+								<aui:input
+									checked="<%= ArrayUtil.contains(socialBookmarksTypesArray, type) %>"
+									id='<%= "socialBookmarksTypes" + type %>'
+									inlineLabel="right"
+									label="<%= type %>"
+									name="preferences--socialBookmarksTypes--"
+									type="checkbox"
+									value="<%= type %>"
+								/>
+
+							<%
+							}
+							%>
+
+						</aui:field-wrapper>
+					</div>
+				</aui:fieldset>
 			</c:when>
 			<c:when test='<%= tabs2.equals("rss") %>'>
 				<liferay-ui:rss-settings
@@ -125,6 +158,7 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 	<c:when test='<%= tabs2.equals("display-settings") %>'>
 		<aui:script>
 			Liferay.Util.toggleBoxes('<portlet:namespace />enableKBArticleRatingsCheckbox', '<portlet:namespace />ratingsType');
+			Liferay.Util.toggleBoxes('<portlet:namespace />enableSocialBookmarksCheckbox','<portlet:namespace />socialBookmarksOptions');
 		</aui:script>
 	</c:when>
 </c:choose>

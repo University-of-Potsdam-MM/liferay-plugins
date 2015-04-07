@@ -250,15 +250,17 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
-	public void addKBArticlesMarkdown(
+	public int addKBArticlesMarkdown(
 			long userId, long groupId, long parentKbFolderId, String fileName,
-			InputStream inputStream, ServiceContext serviceContext)
+			boolean prioritizeByNumericalPrefix, InputStream inputStream,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		KBArticleImporter kbArticleImporter = new KBArticleImporter();
 
-		kbArticleImporter.processZipFile(
-			userId, groupId, parentKbFolderId, inputStream, serviceContext);
+		return kbArticleImporter.processZipFile(
+			userId, groupId, parentKbFolderId, prioritizeByNumericalPrefix,
+			inputStream, serviceContext);
 	}
 
 	@Override
@@ -396,6 +398,16 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		throws PortalException, SystemException {
 
 		TempFileUtil.deleteTempFile(groupId, userId, fileName, tempFolderName);
+	}
+
+	@Override
+	public KBArticle fetchFirstChildKBArticle(
+			long groupId, long parentResourcePrimKey)
+		throws SystemException {
+
+		return kbArticlePersistence.fetchByG_P_L_First(
+			groupId, parentResourcePrimKey, true,
+			new KBArticlePriorityComparator(true));
 	}
 
 	@Override
@@ -736,6 +748,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	@Override
+	public int getKBFolderKBArticlesCount(
+			long groupId, long kbFolderId, int status)
+		throws SystemException {
+
+		return kbArticlePersistence.countByG_KBFI_S(
+			groupId, kbFolderId, status);
+	}
+
+	@Override
 	public KBArticle getLatestKBArticle(long resourcePrimKey, int status)
 		throws PortalException, SystemException {
 
@@ -776,16 +797,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		KBArticle kbArticle = kbArticlePersistence.findByPrimaryKey(
 			kbArticleId);
 
-		KBArticle[] previousAndNextKBArticles =
-			kbArticlePersistence.findByG_P_L_PrevAndNext(
-				kbArticleId, kbArticle.getGroupId(),
-				kbArticle.getParentResourcePrimKey(), true,
-				new KBArticlePriorityComparator(true));
+		KBArticle[] previousAndNextKBArticles = getPreviousAndNextKBArticles(
+			kbArticle);
 
 		KBArticle previousKBArticle = getPreviousKBArticle(
-			kbArticle, previousAndNextKBArticles);
+			kbArticle, previousAndNextKBArticles[0]);
 		KBArticle nextKBArticle = getNextKBArticle(
-			kbArticle, previousAndNextKBArticles);
+			kbArticle, previousAndNextKBArticles[2]);
 
 		return new KBArticle[] {previousKBArticle, kbArticle, nextKBArticle};
 	}
@@ -918,10 +936,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 				parentResourceClassNameId);
 			curKBArticle.setParentResourcePrimKey(parentResourcePrimKey);
 
-			if (parentResourceClassNameId == kbFolderClassNameId) {
-				curKBArticle.setKbFolderId(kbFolderId);
-			}
-
+			curKBArticle.setKbFolderId(kbFolderId);
 			curKBArticle.setPriority(priority);
 
 			kbArticlePersistence.update(curKBArticle);
@@ -1552,17 +1567,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	}
 
 	protected KBArticle getNextAncestorKBArticle(
-			long kbArticleId, KBArticle[] previousAndNextKBArticles)
+			long kbArticleId, KBArticle nextKBArticle)
 		throws PortalException, SystemException {
-
-		KBArticle kbArticle = kbArticlePersistence.findByPrimaryKey(
-			kbArticleId);
-
-		KBArticle nextKBArticle = previousAndNextKBArticles[2];
 
 		if (nextKBArticle != null) {
 			return nextKBArticle;
 		}
+
+		KBArticle kbArticle = kbArticlePersistence.findByPrimaryKey(
+			kbArticleId);
 
 		KBArticle parentKBArticle = kbArticle.getParentKBArticle();
 
@@ -1570,18 +1583,15 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			return null;
 		}
 
-		previousAndNextKBArticles =
-			kbArticlePersistence.findByG_P_L_PrevAndNext(
-				parentKBArticle.getKbArticleId(), kbArticle.getGroupId(),
-				parentKBArticle.getParentResourcePrimKey(), true,
-				new KBArticlePriorityComparator(true));
+		KBArticle[] previousAndNextKBArticles = getPreviousAndNextKBArticles(
+			parentKBArticle);
 
 		return getNextAncestorKBArticle(
-			parentKBArticle.getKbArticleId(), previousAndNextKBArticles);
+			parentKBArticle.getKbArticleId(), previousAndNextKBArticles[2]);
 	}
 
 	protected KBArticle getNextKBArticle(
-			KBArticle kbArticle, KBArticle[] previousAndNextKBArticles)
+			KBArticle kbArticle, KBArticle nextKBArticle)
 		throws PortalException, SystemException {
 
 		KBArticle firstChildKBArticle = kbArticlePersistence.fetchByG_P_L_First(
@@ -1593,31 +1603,50 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		}
 
 		return getNextAncestorKBArticle(
-			kbArticle.getKbArticleId(), previousAndNextKBArticles);
+			kbArticle.getKbArticleId(), nextKBArticle);
+	}
+
+	protected KBArticle[] getPreviousAndNextKBArticles(KBArticle kbArticle)
+		throws SystemException {
+
+		List<KBArticle> kbArticles = kbArticlePersistence.findByG_P_L(
+			kbArticle.getGroupId(), kbArticle.getParentResourcePrimKey(), true,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			new KBArticlePriorityComparator(true));
+
+		int index = kbArticles.indexOf(kbArticle);
+
+		KBArticle[] previousAndNextKBArticles = {null, kbArticle, null};
+
+		if (index > 0) {
+			previousAndNextKBArticles[0] = kbArticles.get(index - 1);
+		}
+
+		if (index < (kbArticles.size() - 1)) {
+			previousAndNextKBArticles[2] = kbArticles.get(index + 1);
+		}
+
+		return previousAndNextKBArticles;
 	}
 
 	protected KBArticle getPreviousKBArticle(
-			KBArticle kbArticle, KBArticle[] previousAndNextKBArticles)
+			KBArticle kbArticle, KBArticle previousKBArticle)
 		throws PortalException, SystemException {
 
-		KBArticle previousKBArticle = previousAndNextKBArticles[0];
-
-		if (previousKBArticle != null) {
-			KBArticle lastSiblingChildKBArticle =
-				kbArticlePersistence.fetchByG_P_L_Last(
-					kbArticle.getGroupId(),
-					previousKBArticle.getResourcePrimKey(), true,
-					new KBArticlePriorityComparator(true));
-
-			if (lastSiblingChildKBArticle != null) {
-				previousKBArticle = lastSiblingChildKBArticle;
-			}
-		}
-		else {
-			previousKBArticle = kbArticle.getParentKBArticle();
+		if (previousKBArticle == null) {
+			return kbArticle.getParentKBArticle();
 		}
 
-		return previousKBArticle;
+		KBArticle lastSiblingChildKBArticle =
+			kbArticlePersistence.fetchByG_P_L_Last(
+				kbArticle.getGroupId(), previousKBArticle.getResourcePrimKey(),
+				true, new KBArticlePriorityComparator(true));
+
+		if (lastSiblingChildKBArticle == null) {
+			return previousKBArticle;
+		}
+
+		return lastSiblingChildKBArticle;
 	}
 
 	protected double getPriority(long groupId, long parentResourcePrimKey)
@@ -1677,13 +1706,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		String uniqueUrlTitle = urlTitle;
 
 		if (kbFolderId == KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-			int kbArticleCount = kbArticlePersistence.countByG_KBFI_UT_ST(
+			int kbArticlesCount = kbArticlePersistence.countByG_KBFI_UT_ST(
 				groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
 
-			for (int i = 1; kbArticleCount > 0; i++) {
+			for (int i = 1; kbArticlesCount > 0; i++) {
 				uniqueUrlTitle = urlTitle + StringPool.DASH + i;
 
-				kbArticleCount = kbArticlePersistence.countByG_KBFI_UT_ST(
+				kbArticlesCount = kbArticlePersistence.countByG_KBFI_UT_ST(
 					groupId, kbFolderId, uniqueUrlTitle, _STATUSES);
 			}
 
@@ -1692,13 +1721,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		KBFolder kbFolder = kbFolderPersistence.findByPrimaryKey(kbFolderId);
 
-		int kbArticleCount = kbArticleFinder.countByUrlTitle(
+		int kbArticlesCount = kbArticleFinder.countByUrlTitle(
 			groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
 
-		for (int i = 1; kbArticleCount > 0; i++) {
+		for (int i = 1; kbArticlesCount > 0; i++) {
 			uniqueUrlTitle = urlTitle + StringPool.DASH + i;
 
-			kbArticleCount = kbArticleFinder.countByUrlTitle(
+			kbArticlesCount = kbArticleFinder.countByUrlTitle(
 				groupId, kbFolder.getUrlTitle(), uniqueUrlTitle, _STATUSES);
 		}
 

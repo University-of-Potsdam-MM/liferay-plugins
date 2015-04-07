@@ -14,13 +14,22 @@
 
 package com.liferay.pushnotifications.service.impl;
 
+import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.pushnotifications.PushNotificationsException;
 import com.liferay.pushnotifications.model.PushNotificationsDevice;
+import com.liferay.pushnotifications.sender.PushNotificationsSender;
 import com.liferay.pushnotifications.service.base.PushNotificationsDeviceLocalServiceBaseImpl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Silvio Santos
@@ -63,17 +72,74 @@ public class PushNotificationsDeviceLocalServiceImpl
 	}
 
 	@Override
-	public List<PushNotificationsDevice> getPushNotificationsDevices(
-			long toUserId, String platform, int start, int end)
-		throws SystemException {
+	public void resetPushNotificationSenders() {
+		for (Map.Entry<String, PushNotificationsSender> entry :
+				_pushNotificationsSenders.entrySet()) {
 
-		if (toUserId == 0) {
-			return pushNotificationsDevicePersistence.findByPlatform(
-				platform, start, end);
+			PushNotificationsSender pushNotificationsSender = entry.getValue();
+
+			pushNotificationsSender.reset();
+		}
+	}
+
+	@Override
+	public void sendPushNotification(
+			long[] toUserIds, JSONObject payloadJSONObject)
+		throws PortalException, SystemException {
+
+		for (String platform : _pushNotificationsSenders.keySet()) {
+			List<String> tokens = new ArrayList<String>();
+
+			List<PushNotificationsDevice> pushNotificationsDevices =
+				pushNotificationsDevicePersistence.findByU_P(
+					toUserIds, platform, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			for (PushNotificationsDevice pushNotificationsDevice :
+					pushNotificationsDevices) {
+
+				tokens.add(pushNotificationsDevice.getToken());
+			}
+
+			if (tokens.isEmpty()) {
+				continue;
+			}
+
+			sendPushNotification(platform, tokens, payloadJSONObject);
+		}
+	}
+
+	@Override
+	public void sendPushNotification(
+			String platform, List<String> tokens, JSONObject payloadJSONObject)
+		throws PortalException {
+
+		PushNotificationsSender pushNotificationsSender =
+			_pushNotificationsSenders.get(platform);
+
+		if (pushNotificationsSender == null) {
+			return;
 		}
 
-		return pushNotificationsDevicePersistence.findByU_P(
-			toUserId, platform, start, end);
+		try {
+			pushNotificationsSender.send(platform, tokens, payloadJSONObject);
+		}
+		catch (PushNotificationsException pne) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(pne.getMessage());
+			}
+		}
+		catch (PortalException pe) {
+			throw pe;
+		}
+		catch (Exception e) {
+			throw new PortalException(e);
+		}
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		PushNotificationsDeviceLocalServiceImpl.class);
+
+	@BeanReference(name = "pushNotificationsSenders")
+	private Map<String, PushNotificationsSender> _pushNotificationsSenders;
 
 }

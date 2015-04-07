@@ -410,14 +410,15 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 	}
 
 	@Override
-	public void addKBArticlesMarkdown(long userId, long groupId,
+	public int addKBArticlesMarkdown(long userId, long groupId,
 		long parentKbFolderId, java.lang.String fileName,
-		java.io.InputStream inputStream,
+		boolean prioritizeByNumericalPrefix, java.io.InputStream inputStream,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		_kbArticleLocalService.addKBArticlesMarkdown(userId, groupId,
-			parentKbFolderId, fileName, inputStream, serviceContext);
+		return _kbArticleLocalService.addKBArticlesMarkdown(userId, groupId,
+			parentKbFolderId, fileName, prioritizeByNumericalPrefix,
+			inputStream, serviceContext);
 	}
 
 	@Override
@@ -458,6 +459,14 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		_kbArticleLocalService.deleteTempAttachment(groupId, userId, fileName,
 			tempFolderName);
+	}
+
+	@Override
+	public com.liferay.knowledgebase.model.KBArticle fetchFirstChildKBArticle(
+		long groupId, long parentResourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _kbArticleLocalService.fetchFirstChildKBArticle(groupId,
+			parentResourcePrimKey);
 	}
 
 	@Override
@@ -622,6 +631,13 @@ public class KBArticleLocalServiceWrapper implements KBArticleLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _kbArticleLocalService.getKBArticleVersionsCount(resourcePrimKey,
 			status);
+	}
+
+	@Override
+	public int getKBFolderKBArticlesCount(long groupId, long kbFolderId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return _kbArticleLocalService.getKBFolderKBArticlesCount(groupId,
+			kbFolderId, status);
 	}
 
 	@Override

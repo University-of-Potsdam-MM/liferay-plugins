@@ -3,6 +3,12 @@
 <schema name="liferay" version="1.1">
 	<types>
 		<fieldType class="solr.StrField" name="string" omitNorms="true" sortMissingLast="true" />
+		<fieldType class="solr.TextField" name="string_keyword_lowercase" omitNorms="true" sortMissingLast="true">
+			<analyzer>
+				<tokenizer class="solr.KeywordTokenizerFactory" />
+				<filter class="solr.LowerCaseFilterFactory" />
+			</analyzer>
+		</fieldType>
 		<fieldType class="solr.TextField" name="string_lowercase" omitNorms="true" sortMissingLast="true">
 			<analyzer>
 				<tokenizer class="solr.WhitespaceTokenizerFactory" />
@@ -447,7 +453,7 @@
 	</types>
 	<fields>
 		<field indexed="true" multiValued="true" name="ancestorOrganizationIds" stored="true" type="string" />
-		<field indexed="true" name="articleId" stored="true" type="string" />
+		<field indexed="true" name="articleId" stored="true" type="string_keyword_lowercase" />
 		<field indexed="true" name="assetCategoryId" stored="true" type="string" />
 		<field indexed="true" multiValued="true" name="assetCategoryIds" stored="true" type="string" />
 		<field indexed="true" name="assetTagId" stored="true" type="string" />
@@ -524,8 +530,8 @@
 		<field indexed="true" multiValued="false" name="_version_" stored="true" type="long" />
 		<dynamicField indexed="true" multiValued="false" name="*_sortable" stored="true" type="string" />
 		<dynamicField indexed="true" multiValued="true" name="assetCategoryTitles*" stored="true" termPositions="true" termVectors="true" type="text" />
-		<dynamicField indexed="true" multiValued="true" name="expando__*" stored="true" type="text" />
-		<dynamicField indexed="true" multiValued="true" name="ddm__*" stored="true" type="string" />
+		<dynamicField indexed="true" multiValued="true" name="expando/*" stored="true" type="text" />
+		<dynamicField indexed="true" multiValued="true" name="ddm/*" stored="true" type="string" />
 		<dynamicField indexed="true" multiValued="true" name="*_ar" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_ar" />
 		<dynamicField indexed="true" multiValued="true" name="*_ar_BH" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_ar" />
 		<dynamicField indexed="true" multiValued="true" name="*_ar_DZ" stored="true" termPositions="true" termOffsets="true" termVectors="true" type="text_ar" />

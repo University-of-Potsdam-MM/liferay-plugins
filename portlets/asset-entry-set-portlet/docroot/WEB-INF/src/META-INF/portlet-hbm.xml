@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="com.liferay.asset.entry.set.model.AssetEntrySet" />
+	<import class="com.liferay.asset.entry.set.model.AssetEntrySetLike" />
+	<class name="com.liferay.asset.entry.set.model.impl.AssetEntrySetImpl" table="AssetEntrySet">
+		<cache usage="read-write" />
+		<id name="assetEntrySetId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="companyId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="createTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="modifiedTime" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="assetEntryId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="parentAssetEntrySetId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="creatorClassNameId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="creatorClassPK" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="payload" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="childAssetEntrySetsCount" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="assetEntrySetLikesCount" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="privateAssetEntrySet" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+	</class>
+	<class name="com.liferay.asset.entry.set.model.impl.AssetEntrySetLikeImpl" table="AssetEntrySetLike">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="com.liferay.asset.entry.set.service.persistence.AssetEntrySetLikePK">
+			<key-property name="assetEntrySetId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="classNameId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="classPK" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		</composite-id>
+	</class>
+</hibernate-mapping>

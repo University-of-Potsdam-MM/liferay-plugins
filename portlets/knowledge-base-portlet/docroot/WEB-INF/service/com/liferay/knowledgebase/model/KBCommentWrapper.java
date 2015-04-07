@@ -61,7 +61,7 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
 		attributes.put("content", getContent());
-		attributes.put("helpful", getHelpful());
+		attributes.put("userRating", getUserRating());
 		attributes.put("status", getStatus());
 
 		return attributes;
@@ -135,10 +135,10 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 			setContent(content);
 		}
 
-		Boolean helpful = (Boolean)attributes.get("helpful");
+		Integer userRating = (Integer)attributes.get("userRating");
 
-		if (helpful != null) {
-			setHelpful(helpful);
+		if (userRating != null) {
+			setUserRating(userRating);
 		}
 
 		Integer status = (Integer)attributes.get("status");
@@ -426,33 +426,23 @@ public class KBCommentWrapper implements KBComment, ModelWrapper<KBComment> {
 	}
 
 	/**
-	* Returns the helpful of this k b comment.
+	* Returns the user rating of this k b comment.
 	*
-	* @return the helpful of this k b comment
+	* @return the user rating of this k b comment
 	*/
 	@Override
-	public boolean getHelpful() {
-		return _kbComment.getHelpful();
+	public int getUserRating() {
+		return _kbComment.getUserRating();
 	}
 
 	/**
-	* Returns <code>true</code> if this k b comment is helpful.
+	* Sets the user rating of this k b comment.
 	*
-	* @return <code>true</code> if this k b comment is helpful; <code>false</code> otherwise
+	* @param userRating the user rating of this k b comment
 	*/
 	@Override
-	public boolean isHelpful() {
-		return _kbComment.isHelpful();
-	}
-
-	/**
-	* Sets whether this k b comment is helpful.
-	*
-	* @param helpful the helpful of this k b comment
-	*/
-	@Override
-	public void setHelpful(boolean helpful) {
-		_kbComment.setHelpful(helpful);
+	public void setUserRating(int userRating) {
+		_kbComment.setUserRating(userRating);
 	}
 
 	/**
