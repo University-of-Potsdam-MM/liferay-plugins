@@ -24,6 +24,37 @@ AUI().ready(
 				}
 			);
 		}
+		
+		var sidebar = A.one('#sidebar');
+		
+		if(sidebar) {
+			var title = sidebar.one('.title');
+			
+			if(title){
+				title.on('click', function(event){
+					event.preventDefault();
+					sidebar.toggleClass('show-sidebar');
+					title.one('.arrow').toggleClass('down');
+				});
+			}
+		}
+		
+		var filterBox = A.one('#grouproom-filter');
+		
+		if(filterBox){
+			filterBox.on('keyup', function(event){
+				event.preventDefault();
+				var val = filterBox.val().toLowerCase();
+				
+				var list = A.one('#sidebar-my-sites');
+				list.all('li').each(function(){
+					if(this.text().toLowerCase().contains(val))
+						this.removeClass("hidden")
+					else
+						this.addClass("hidden");
+				})
+			})
+		}		
 
 		var messageBoard = A.one('.portlet-message-boards');
 

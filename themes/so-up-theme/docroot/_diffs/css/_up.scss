@@ -9,9 +9,24 @@ $upDarkBlue: #014260;
 $upWhite: #ffffff;
 $upBlack: #000000;
 $upGray: #EEEEEE;
+$upDarkGray: #999999;
 
 $upTextColor: $upBlack;
 $upBgColor: #fff;
 $upHeadBgColor: #ff00ff;
 $upMenuColor: $upLightBlue;
 $upBorderColor: #000000;
+
+@mixin up-grafic {
+	width: 20px;
+	height: 20px;
+	background-image: url(../images/up/up_icons.png);
+	display: block;
+}
+
+@mixin ple-grafic {
+	width: 20px;
+	height: 20px;
+	background-image: url(../images/up/ple-icons.png);
+	display: block;
+}

@@ -2,8 +2,49 @@
 
 body{
 	background: $upBgColor;
+	font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
 	
+	#up_section_indicator{
+		width: 33.3333%;
+		background-color: $upDarkBlue;
+		height: 20px;
+	}
 	
+	#up_logo {
+		width: 100%;
+		height: 60px;
+		top: 0px;
+		margin-left: 60px;
+		
+		#up_logo_indicator
+		{
+			height: 20px;
+		}
+		
+		#up_logo_image{
+			padding: 0px 15px;
+			float: left;
+					
+			img{
+				width: 80px;
+				height: 80px;
+			}
+		}
+		
+		#up_logo_title{
+			float: left;
+			padding-top: 20px;
+			font-size: 14pt;
+			
+			a{
+				color: $upDarkBlue;
+			}
+		}
+		
+		#up_logo_footer{
+			height: 40px;
+		}
+	}
 	#line
 	{
 		width: 100%;
@@ -29,6 +70,10 @@ body{
 	header#banner{
 	
 		background: $upGray;
+		padding: 0;
+		margin: 0;
+		overflow: visible;
+		
 	
 		ul#up-general {
 			display: block;
@@ -36,14 +81,52 @@ body{
 			list-style-type: none;
 			float:right;
 			color: $upDarkBlue;
+			position: absolute;
+			top: 0px;
+			right: 60px;
 			
 			li
 			{
 				float: left;
-				margin-left: 20px;
+				margin-left: 2px;
 				background: $upLightBlue;
 				height: 40px;
 				minwidth: 100px;
+				color: $upDarkBlue;
+				font-size: 0.86667em;
+				
+				
+				.lang-img
+				{
+					@include up-grafic;
+					background-position: -7px -46px;
+					width: 40px;
+					height:40px;
+				}
+				
+				.search-img
+				{
+					@include up-grafic;
+					background-position: -7px 0px;
+					width: 40px;
+					height:40px;
+				}
+			}
+
+			li.unipage
+			{
+				font-weight: bold;
+			}
+			
+			li.lang
+			{
+				background: $upWhite;
+				width: 60px;
+				
+				select
+				{
+					background: $upWhite;
+				}
 			}
 		}
 		
@@ -55,15 +138,39 @@ body{
 			margin-left:100px;
 		}
 		
-		#editbox
+		#up_services
 		{
-			width: 200px;
-			float: left;
+			overflow:hidden;
+			display: block;
+			list-style: none;
+			background: $upLightBlue;
+			position: absolute;
+			right: 60px;
+			top: 60px;
+			
+			li{
+				float: left;
+			}
+					
+			#editbox
+			{
+				width: 200px;
+				float: left;
+			}
 		}	
 		
 		.portlet-dockbar{
 			padding-top: 20px;
 		}
+		
+		#heading{
+			padding-left: 50px;
+		}
+	}
+	
+	#content{
+		padding-left: 50px;
+		background: $upWhite;
 	}
 	
 	#sidebar {
@@ -74,12 +181,16 @@ body{
 		top: 0;
 		left: 0;
 		height: 100%;
-		border-right: 1px solid $upBorderColor;
 		margin-right: 0px;
 		z-index: 1401;
+
 		
-		.title{
+		div
+		{
 			overflow: hidden;
+		}
+		
+		.title {
 			background: $upMenuColor;
 			
 			-moz-transform: rotate(-90deg);
@@ -88,20 +199,115 @@ body{
 			-webkit-transform: rotate(-90deg);
 			transform:rotate(-90deg);
 			
-			width:120px;
+			width:140px;
 			height:20px;
 			padding:10px;
-			left:-50px;
-			top:120px;
+			right:-100px;
+			top:190px;
 			position: absolute;
 			z-index:1401;
+			cursor: pointer;
+			font-weight: bold;
 		}
-		.content
-		{
-			position: absolute;
-			overflow: hidden;
+		
+		.content {
 			position: absolute;
 			width: 100%;
+			background: $upMenuColor;
+			height: 100%;
+									
+			.add, .search
+			{
+				width: 145px;
+				background: $upDarkGray;
+				color: $upWhite;
+				display: inline-block;
+				
+				
+				.icon
+				{
+					@include up-grafic;
+					width: 20px;
+					height: 20px;
+					background-position: -9px -2184px;
+					display: inline-block;
+				}
+			}
+			
+			.search .icon
+			{
+					background-position: -9px -126px;
+			}
+			
+			#sidebar-my-sites{
+			
+				list-style: none;
+				margin: 0px;
+				padding: 0px;
+				overflow: scoll-x;
+				
+				li {
+					border-bottom: 1px solid $upDarkGray;
+					padding: 10px;
+					margin-bottom: 10px;
+					
+					a {
+						color: $upDarkGray;
+					}
+				}		
+			}
+			
+		}
+		
+		h2
+		{
+			font-size: 14pt;
+			color: $upDarkBlue;
+			overflow: hidden;
+			
+			.search
+			{
+				background-position: -8px -1878px;
+			}
+
+			.add
+			{
+				background-position: -8px -1878px;
+			}
+
+			.close
+			{
+				background-position: -11px -312px;
+			}
+
 		}
 	}
+		
+	#sidebar.show-sidebar {
+		width: 300px;
+		
+		.content
+		{
+			padding: 5px;
+		}
+	}
+	
+	.arrow {
+		@include up-grafic;
+		background-position: -15px -126px;
+		display: inline-block;
+	}
+	
+	.arrow.down {
+		background-position: -99px -126px;
+	}
+	
+	.icon {
+		@include up-grafic;
+		width: 20px;
+		height: 20px;
+		display: inline-block;
+	}
+	
+	
 }

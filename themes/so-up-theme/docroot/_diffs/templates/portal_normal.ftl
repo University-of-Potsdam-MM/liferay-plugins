@@ -20,17 +20,25 @@
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Gruppenr&auml;ume</div>
+			<div class="title">Gruppenr&auml;ume <span class="arrow"></span></div>
 			<div class="content">
-				Hier muss die Liste der Gruppenräume rein
+				<h2>Gruppenr&auml;ume</h2>
+				 
+				<div class="search"><span class="icon search"></span>Suchen</div>
+				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
+				<div class="filter"><span class="icon filter"></span><input name="filter" class="filter" id="grouproom-filter"></div>
+				<ul id="sidebar-my-sites">
+					<#list user_my_sites as user_site>
+						<#if user_site.hasPrivateLayouts()>
+							<li><a href="/group${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
+						<#elseif user_site.hasPublicLayouts()>
+							<li><a href="/web${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
+						</#if>
+					</#list>
+	        	</ul>
 			</div>
 		</div>
 	</#if>
-	<div id="line">
-		<div class="blue"></div>
-		<img class="lineimg" src="logout.png" />
-		<img class="lineimg" src="config.png" />
-	</div>
 	<header id="mobile-menu">
 		<div id="up-menu">
 			<a href="#grouproom-trigger" aria-owns="grouproom" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger ">
@@ -50,12 +58,13 @@
 		</div>
 		<div id="grouproom" class="aui-style-default aui-dropdown2">
 			<ul class="aui-list-truncate">
-				<li>Gruppenraum 1</li>
-				<li>Gruppenraum 2</li>
-				<li>Gruppenraum 3</li>
-				<li>Gruppenraum 4</li>
-				<li>Gruppenraum 5</li>
-				<li>Gruppenraum 6</li>
+				<#list user_my_sites as user_site>
+					<#if user_site.hasPrivateLayouts()>
+						<li><a href="/group${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
+					<#elseif user_site.hasPublicLayouts()>
+						<li><a href="/web${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
+					</#if>
+				</#list>
 			</ul>
 		</div>
 		<div id="personal" class="aui-style-default aui-dropdown2">
@@ -85,7 +94,19 @@
 		</div>
 	</header>
 	<header id="banner" role="banner">
-		<div id="colorbar" />
+		<div class="" id="up_section_indicator"></div>
+		<div id="up_logo">
+            <div id="up_logo_indicator"></div>
+            <div id="up_logo_image">
+                <a title="Zur Startseite" href="/">
+                <img alt="Logo Universit&auml;t Potsdam" src="so-up-theme/images/up/up_logo_university_2.png"></a>
+            </div>
+	        <div id="up_logo_title">
+	            <a title="Zur Startseite" href="/">Learn.UP</a>
+	        </div>
+            <div id="up_logo_footer">
+            </div>
+        </div>
 		<ul id="up-general">
 			<li><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
 			<#if is_signed_in>
@@ -93,25 +114,36 @@
 			<#else>
 				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
 			</#if>
-			<li><select>
-				<option>Deutsch</option>
-			</select></li>
-			<li>Suche</li>
+			<li class="lang"><span class="lang-img"></span>
+				<select name="language_id">
+					<option value="de_DE" selected>Deutsch</option>
+					<option value="en_US">English</option>
+				</select>
+				
+			</li>
+			<li><span class="search-img"></li>
 		</ul>
-		<div id="logo" ></div>
+		<ul id="up_services">
 		<#if is_signed_in>
-		<div id="editbox">
-			<input type="checkbox" id="editToggle">Bearbeitung Ein</input>
-			<select >
-				<option></option>
-			</select >
-		</div>
+			<li>
+				<div id="editbox">
+					<input type="checkbox" id="editToggle">Bearbeitung Ein</input>
+				</div>
+			<li>
 		</#if>
+			<li> UP Dienste
+				<ul class="service_list">
+					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
+					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
+					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
+					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
+					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
+				</ul> 
+			</li>
+		</ul>
 		
-		${theme.include(body_top_include)}
+		<!--${theme.include(body_top_include)}-->
 		
-		<@liferay.dockbar />
-
 		<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">

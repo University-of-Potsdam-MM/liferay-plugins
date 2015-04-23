@@ -1,0 +1,1 @@
+<#assign user_my_sites = user.getMySites() />
