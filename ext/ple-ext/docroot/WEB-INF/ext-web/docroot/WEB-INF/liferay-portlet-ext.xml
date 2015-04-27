@@ -141,7 +141,6 @@
                 <css-class-wrapper>portlet-journal</css-class-wrapper>
                 <add-default-resource>true</add-default-resource>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>16</portlet-name>
                 <icon>/html/icons/currency_converter.png</icon>
@@ -153,8 +152,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>0</render-weight>
                 <css-class-wrapper>portlet-currency-converter</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>19</portlet-name>
                 <icon>/html/icons/message_boards.png</icon>
@@ -257,7 +256,6 @@
                 <css-class-wrapper>portlet-document-library</css-class-wrapper>
                 <add-default-resource>true</add-default-resource>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>23</portlet-name>
                 <icon>/html/icons/dictionary.png</icon>
@@ -267,8 +265,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-dictionary</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>25</portlet-name>
                 <icon>/html/icons/polls.png</icon>
@@ -288,7 +286,6 @@
                 <header-portlet-css>/html/portlet/polls/css/main.css</header-portlet-css>
                 <css-class-wrapper>portlet-polls</css-class-wrapper>
         </portlet>
-        <!--
         <portlet>
                 <portlet-name>26</portlet-name>
                 <icon>/html/icons/translator.png</icon>
@@ -298,6 +295,7 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-translator</css-class-wrapper>
+                <include>false</include>
         </portlet>
         <portlet>
                 <portlet-name>27</portlet-name>
@@ -308,8 +306,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-unit-converter</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>28</portlet-name>
                 <icon>/html/icons/bookmarks.png</icon>
@@ -360,7 +358,6 @@
                 <header-portlet-css>/html/portlet/layouts_admin/css/main.css</header-portlet-css>
                 <css-class-wrapper>portlet-communities</css-class-wrapper>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>30</portlet-name>
                 <icon>/html/icons/default.png</icon>
@@ -371,8 +368,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-network</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>31</portlet-name>
                 <icon>/html/icons/image_gallery.png</icon>
@@ -447,7 +444,6 @@
                 <css-class-wrapper>portlet-blogs</css-class-wrapper>
                 <add-default-resource>true</add-default-resource>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>34</portlet-name>
                 <icon>/html/icons/shopping.png</icon>
@@ -461,8 +457,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-shopping</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>36</portlet-name>
                 <icon>/html/icons/wiki.png</icon>
@@ -634,7 +630,6 @@
                 <header-portlet-css>/html/portlet/polls_display/css/main.css</header-portlet-css>
                 <css-class-wrapper>portlet-polls-display</css-class-wrapper>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>61</portlet-name>
                 <icon>/html/icons/loan_calculator.png</icon>
@@ -644,8 +639,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-loan-calculator</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>62</portlet-name>
                 <icon>/html/icons/journal_articles.png</icon>
@@ -693,7 +688,6 @@
                 <render-weight>50</render-weight>
                 <css-class-wrapper>portlet-web-proxy</css-class-wrapper>
         </portlet>
-        <!-- 
         <portlet>
                 <portlet-name>67</portlet-name>
                 <icon>/html/icons/default.png</icon>
@@ -706,8 +700,8 @@
                 <private-session-attributes>false</private-session-attributes>
                 <render-weight>0</render-weight>
                 <css-class-wrapper>portlet-amazon-rankings</css-class-wrapper>
+                <include>false</include>
         </portlet>
-         -->
         <portlet>
                 <portlet-name>70</portlet-name>
                 <icon>/html/icons/default.png</icon>
