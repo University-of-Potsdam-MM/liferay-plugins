@@ -56,7 +56,7 @@
 				<fileset dir="${service.base.dir}/src" excludes="**/*.java" />
 			</copy>
 
-			<path id="service.classpath">
+			<path id="service.builder.classpath">
 				<path refid="lib.classpath" />
 				<path refid="portal.classpath" />
 				<fileset dir="${app.server.lib.portal.dir}" includes="commons-digester.jar,commons-lang.jar,easyconf.jar" />
@@ -70,8 +70,8 @@
 				<os family="windows" />
 				<then>
 					<classpath-to-jar
-						classpathref="service.classpath"
-						jarfile="build-service-classpath.jar"
+						classpathref="service.builder.classpath"
+						jarfile="service-builder-classpath.jar"
 					/>
 				</then>
 			</if>
@@ -87,7 +87,7 @@
 
 			<java
 				classname="com.liferay.portal.tools.servicebuilder.ServiceBuilder"
-				classpathref="service.classpath"
+				classpathref="service.builder.classpath"
 				fork="true"
 				newenvironment="true"
 				outputproperty="build-service.output"
@@ -133,7 +133,7 @@
 			<if>
 				<os family="windows" />
 				<then>
-					<delete file="build-service-classpath.jar" />
+					<delete file="service-builder-classpath.jar" />
 				</then>
 			</if>
 
@@ -202,10 +202,9 @@
 
 	<macrodef name="compile-jsp">
 		<attribute name="compile.jsp.docroot.dir" />
+		<attribute name="compile.jsp.temp.dir" default="" />
 
 		<sequential>
-			<antcall target="compile" />
-
 			<if>
 				<not>
 					<equals arg1="${app.server.type}" arg2="tomcat" />
@@ -215,78 +214,110 @@
 				</then>
 			</if>
 
-			<property name="jspc.classes.dir" value="classes/${app.server.type}" />
-
 			<if>
-				<and>
-					<equals arg1="${app.server.type}" arg2="tomcat" />
-					<equals arg1="${ant.java.version}" arg2="1.5" />
-				</and>
+				<available file="@{compile.jsp.docroot.dir}" />
 				<then>
-					<var name="jspc.java.home" value="${jdk.windows.home}" />
-				</then>
-				<else>
-					<var name="jspc.java.home" value="${env.JAVA_HOME}" />
-				</else>
-			</if>
+					<path id="jspc.classpath.common">
+						<pathelement location="${env.JAVA_HOME}/jre/lib/rt.jar" />
+						<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+						<fileset dir="${sdk.dir}/dependencies/com.liferay.jasper.jspc/lib" includes="*.jar" />
+						<pathelement location="${app.server.lib.portal.dir}/ant.jar" />
+						<fileset dir="${basedir}" includes="lib/*.jar" />
+						<fileset dir="${basedir}" includes="docroot/WEB-INF/lib/*.jar" />
+						<fileset dir="@{compile.jsp.docroot.dir}" includes="WEB-INF/lib/*.jar" />
+					</path>
 
-			<path id="jspc.classpath">
-				<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
-				<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
-				<fileset dir="${sdk.dir}/dependencies/com.liferay.jasper.jspc/lib" includes="*.jar" />
-				<pathelement location="${app.server.lib.portal.dir}/ant.jar" />
-				<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
-				<fileset dir="@{compile.jsp.docroot.dir}/WEB-INF/lib" includes="*.jar" />
-			</path>
+					<local name="jspc.module.web" />
 
-			<delete dir="${jspc.classes.dir}" quiet="true" />
+					<if>
+						<equals arg1="@{compile.jsp.temp.dir}" arg2="" />
+						<then>
+							<path id="jspc.classpath">
+								<path refid="jspc.classpath.common" />
+								<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
+							</path>
 
-			<java
-				classname="com.liferay.jasper.jspc.JspC"
-				classpathref="jspc.classpath"
-				fork="true"
-				jvm="${jspc.java.home}/bin/java"
-				newenvironment="true"
-				outputproperty="jspc.output"
-			>
-				<arg line="-d ${jspc.classes.dir} -webapp @{compile.jsp.docroot.dir}" />
-			</java>
+							<property name="jspc.module.web" value="false" />
+						</then>
+						<else>
+							<path id="jspc.classpath.module.common">
+								<path refid="jspc.classpath.common" />
+								<fileset dir="${app.server.lib.portal.dir}" includes="*.jar" />
+								<fileset dir="${module.framework.base.dir}/modules" includes="*.jar" />
+								<pathelement location="@{compile.jsp.temp.dir}" />
+							</path>
 
-			<echo>${jspc.output}</echo>
+							<if>
+								<available file="@{compile.jsp.docroot.dir}/WEB-INF" type="dir" />
+								<then>
+									<path id="jspc.classpath">
+										<path refid="jspc.classpath.module.common" />
+										<pathelement location="@{compile.jsp.docroot.dir}/WEB-INF/classes" />
+									</path>
+								</then>
+								<else>
+									<path id="jspc.classpath">
+										<path refid="jspc.classpath.module.common" />
+									</path>
+								</else>
+							</if>
 
-			<if>
-				<contains string="${jspc.output}" substring="JasperException" />
-				<then>
-					<delete dir="${jspc.classes.dir}" quiet="true" />
+							<property name="jspc.module.web" value="true" />
+						</else>
+					</if>
 
-					<fail>JSPs failed to compile.</fail>
-				</then>
-			</if>
+					<delete dir="classes/tomcat" quiet="true" />
 
-			<if>
-				<available file="${jspc.classes.dir}" type="dir" />
-				<then>
-					<javac
+					<java
+						classname="com.liferay.jasper.jspc.JspC"
 						classpathref="jspc.classpath"
-						compiler="${javac.compiler}"
-						deprecation="${javac.deprecation}"
-						destdir="${jspc.classes.dir}"
-						encoding="${javac.encoding}"
-						errorProperty="jspc.javac.fail"
-						failonerror="false"
-						includeAntRuntime="false"
-						nowarn="on"
-						srcdir="${jspc.classes.dir}"
-					/>
+						fork="true"
+						jvm="${env.JAVA_HOME}/bin/java"
+						newenvironment="true"
+						outputproperty="jspc.output"
+					>
+						<sysproperty key="jspc.module.web" value="${jspc.module.web}" />
+						<sysproperty key="jspc.portal.dir" value="${app.server.portal.dir}" />
+						<arg line="-d classes/tomcat -webapp @{compile.jsp.docroot.dir}" />
+					</java>
 
-					<delete dir="${jspc.classes.dir}" quiet="true" />
-				</then>
-			</if>
+					<echo>${jspc.output}</echo>
 
-			<if>
-				<istrue value="${jspc.javac.fail}" />
-				<then>
-					<fail>JSPs failed to compile.</fail>
+					<if>
+						<contains string="${jspc.output}" substring="JasperException" />
+						<then>
+							<delete dir="classes/tomcat" quiet="true" />
+
+							<fail>JSPs failed to compile.</fail>
+						</then>
+					</if>
+
+					<if>
+						<available file="classes/tomcat" type="dir" />
+						<then>
+							<javac
+								classpathref="jspc.classpath"
+								compiler="${javac.compiler}"
+								deprecation="${javac.deprecation}"
+								destdir="classes/tomcat"
+								encoding="${javac.encoding}"
+								errorProperty="jspc.javac.fail"
+								failonerror="false"
+								includeAntRuntime="false"
+								nowarn="on"
+								srcdir="classes/tomcat"
+							/>
+
+							<delete dir="classes/tomcat" quiet="true" />
+						</then>
+					</if>
+
+					<if>
+						<istrue value="${jspc.javac.fail}" />
+						<then>
+							<fail>JSPs failed to compile.</fail>
+						</then>
+					</if>
 				</then>
 			</if>
 		</sequential>
@@ -334,23 +365,6 @@
 
 		<delete dir="docroot/WEB-INF/client/classes" />
 		<delete dir="docroot/WEB-INF/client/src" />
-	</target>
-
-	<target name="build-db">
-		<java
-			classname="com.liferay.portal.tools.DBBuilder"
-			classpathref="portal.classpath"
-			fork="true"
-			maxmemory="384m"
-			newenvironment="true"
-		>
-			<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<arg value="db.database.name=${database.name}" />
-			<arg value="db.database.types=${database.types}" />
-			<arg value="db.sql.dir=docroot/WEB-INF/sql" />
-		</java>
-
-		<delete file="velocity.log" quiet="true" />
 	</target>
 
 	<target name="build-lang">
@@ -443,7 +457,7 @@
 			target.name="compile"
 		/>
 
-		<path id="wsdd.classpath">
+		<path id="wsdd.builder.classpath">
 			<path refid="lib.classpath" />
 			<path refid="portal.classpath" />
 			<fileset dir="${plugin.lib.dir}" includes="*.jar" />
@@ -454,15 +468,15 @@
 			<os family="windows" />
 			<then>
 				<classpath-to-jar
-					classpathref="wsdd.classpath"
-					jarfile="build-wsdd-classpath.jar"
+					classpathref="wsdd.builder.classpath"
+					jarfile="wsdd-builder-classpath.jar"
 				/>
 			</then>
 		</if>
 
 		<java
 			classname="com.liferay.portal.tools.WSDDBuilder"
-			classpathref="wsdd.classpath"
+			classpathref="wsdd.builder.classpath"
 			fork="true"
 			maxmemory="256m"
 			newenvironment="true"
@@ -479,7 +493,7 @@
 		<if>
 			<os family="windows" />
 			<then>
-				<delete file="build-wsdd-classpath.jar" />
+				<delete file="wsdd-builder-classpath.jar" />
 			</then>
 		</if>
 
@@ -532,9 +546,64 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 	</target>
 
 	<target name="compile-jsp">
-		<compile-jsp
-			compile.jsp.docroot.dir="docroot"
+		<set-module-properties
+			module.dir="${basedir}"
 		/>
+
+		<if>
+			<isset property="compile.jsp.docroot.dir" />
+			<then>
+				<compile
+					module.dir="${basedir}"
+				/>
+
+				<compile-jsp
+					compile.jsp.docroot.dir="${compile.jsp.docroot.dir}"
+				/>
+			</then>
+			<elseif>
+				<available file="bnd.bnd" type="file" />
+				<then>
+					<antcall target="jar">
+						<param name="plugins.includes.path" value="${basedir}" />
+					</antcall>
+
+					<tstamp>
+						<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+					</tstamp>
+
+					<unzip dest="${tstamp.value}" src="${plugin.file}" />
+
+					<if>
+						<available file="${tstamp.value}/META-INF/resources" type="dir" />
+						<then>
+							<compile-jsp
+								compile.jsp.docroot.dir="${tstamp.value}/META-INF/resources"
+								compile.jsp.temp.dir="${tstamp.value}"
+							/>
+						</then>
+						<else>
+							<compile-jsp
+								compile.jsp.docroot.dir="${tstamp.value}"
+								compile.jsp.temp.dir="${tstamp.value}"
+							/>
+						</else>
+					</if>
+
+					<delete dir="${tstamp.value}" />
+				</then>
+			</elseif>
+			<else>
+				<loop-macrodef-or-target
+					module.dirs="${basedir}"
+					target.name="compile"
+				/>
+
+				<compile-jsp
+					compile.jsp.docroot.dir="docroot"
+				/>
+			</else>
+		</if>
 	</target>
 
 	<target name="compile-test">
@@ -788,12 +857,13 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 					test.type="integration"
 				/>
 			</then>
-			<elseif>
-				<equals arg1="${test.class.group.index}" arg2="0" />
-				<then>
-					<antcall target="compile" />
-				</then>
-			</elseif>
+		</if>
+
+		<if>
+			<equals arg1="${test.class.group.index}" arg2="0" />
+			<then>
+				<antcall target="compile-jsp" />
+			</then>
 		</if>
 	</target>
 </project>

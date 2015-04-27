@@ -184,6 +184,27 @@ Error-Prone was automatically installed. Please rerun your task.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="build-db">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<java
+				classname="com.liferay.portal.tools.DBBuilder"
+				classpathref="portal.classpath"
+				fork="true"
+				maxmemory="384m"
+				newenvironment="true"
+			>
+				<arg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+				<arg value="db.database.name=${database.name}" />
+				<arg value="db.database.types=${database.types}" />
+				<arg value="db.sql.dir=@{module.dir}/docroot/WEB-INF/sql" />
+			</java>
+
+			<delete file="velocity.log" quiet="true" />
+		</sequential>
+	</macrodef>
+
 	<macrodef name="build-wsdl">
 		<attribute name="module.dir" />
 
@@ -310,80 +331,6 @@ Error-Prone was automatically installed. Please rerun your task.
 					<delete dir="${tstamp.value}" />
 				</then>
 			</if>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="gradle-execute">
-		<attribute name="task" />
-		<element implicit="true" name="args" optional="true" />
-
-		<sequential>
-			<if>
-				<os family="unix" />
-				<then>
-					<property name="gradlew.suffix" value="" />
-
-					<chmod file="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" perm="a+x" />
-				</then>
-				<else>
-					<property name="gradlew.suffix" value=".bat" />
-				</else>
-			</if>
-
-			<exec executable="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" failonerror="true">
-				<arg value="-PpluginsExcludes=${plugins.excludes}" />
-				<arg value="-PpluginsIncludes=${plugins.includes}" />
-				<args />
-				<arg value="@{task}" />
-			</exec>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="loop-macrodef-or-target">
-		<attribute name="module.dirs" />
-		<attribute name="target.name" />
-
-		<sequential>
-			<var name="module.dirs" value="@{module.dirs}" />
-			<var name="target.name" value="@{target.name}" />
-
-			<groovy>
-				<![CDATA[
-					targetName = properties["target.name"]
-
-					if ((properties["target.name"] == "jar") ||
-						(properties["target.name"] == "javadoc") ||
-						(properties["target.name"] == "war")) {
-
-						macrodefName = properties["target.name"] + "-macro"
-					}
-					else {
-						macrodefName = properties["target.name"]
-					}
-
-					moduleDirs = "${properties["module.dirs"]}".split(",")
-
-					for (moduleDir in moduleDirs) {
-						File buildXml = new File(moduleDir + "/build.xml")
-
-						if (buildXml.exists()) {
-							String buildXmlContent = buildXml.text
-
-							ant."set-module-properties"("module.dir": moduleDir)
-
-							if (buildXmlContent =~ "<target name=\"" + targetName + "\"") {
-								ant.ant(dir: moduleDir, target: targetName)
-							}
-							else {
-								ant."${macrodefName}"("module.dir": moduleDir)
-							}
-						}
-						else {
-							println "Skipping " + moduleDir + " because it does not have a build.xml file."
-						}
-					}
-				]]>
-			</groovy>
 		</sequential>
 	</macrodef>
 
@@ -1704,6 +1651,32 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="gradle-execute">
+		<attribute name="task" />
+		<element implicit="true" name="args" optional="true" />
+
+		<sequential>
+			<if>
+				<os family="unix" />
+				<then>
+					<property name="gradlew.suffix" value="" />
+
+					<chmod file="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" perm="a+x" />
+				</then>
+				<else>
+					<property name="gradlew.suffix" value=".bat" />
+				</else>
+			</if>
+
+			<exec executable="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" failonerror="true">
+				<arg value="-PpluginsExcludes=${plugins.excludes}" />
+				<arg value="-PpluginsIncludes=${plugins.includes}" />
+				<args />
+				<arg value="@{task}" />
+			</exec>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="jar-javadoc">
 		<attribute name="module.dir" />
 
@@ -1888,7 +1861,6 @@ Please find a solution that does not require portal-impl.jar.
 
 									<direct-deploy-portlet-cmd
 										direct.deploy.dir="${tstamp.value}"
-										module.dir="@{module.dir}"
 									/>
 
 									<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}-${plugin.full.version}" />
@@ -2001,6 +1973,54 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
+	<macrodef name="loop-macrodef-or-target">
+		<attribute name="module.dirs" />
+		<attribute name="target.name" />
+
+		<sequential>
+			<var name="module.dirs" value="@{module.dirs}" />
+			<var name="target.name" value="@{target.name}" />
+
+			<groovy>
+				<![CDATA[
+					targetName = properties["target.name"]
+
+					if ((properties["target.name"] == "jar") ||
+						(properties["target.name"] == "javadoc") ||
+						(properties["target.name"] == "war")) {
+
+						macrodefName = properties["target.name"] + "-macro"
+					}
+					else {
+						macrodefName = properties["target.name"]
+					}
+
+					moduleDirs = "${properties["module.dirs"]}".split(",")
+
+					for (moduleDir in moduleDirs) {
+						File buildXml = new File(moduleDir + "/build.xml")
+
+						if (buildXml.exists()) {
+							String buildXmlContent = buildXml.text
+
+							ant."set-module-properties"("module.dir": moduleDir)
+
+							if (buildXmlContent =~ "<target name=\"" + targetName + "\"") {
+								ant.ant(dir: moduleDir, target: targetName)
+							}
+							else {
+								ant."${macrodefName}"("module.dir": moduleDir)
+							}
+						}
+						else {
+							println "Skipping " + moduleDir + " because it does not have a build.xml file."
+						}
+					}
+				]]>
+			</groovy>
+		</sequential>
+	</macrodef>
+
 	<macrodef name="manifest-helper">
 		<attribute name="analyze" default="false" />
 
@@ -2081,6 +2101,30 @@ Please find a solution that does not require portal-impl.jar.
 			/>
 
 			<var name="merge-unzip.original.war.file" unset="true" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="multiroot-subant">
+		<attribute name="build.file" />
+		<attribute name="excludes" />
+		<attribute name="includes" />
+		<attribute name="root.dir" />
+		<attribute name="target" />
+
+		<sequential>
+			<path id="includes.path">
+				<dirset dir="@{root.dir}" excludes="@{excludes}" includes="@{includes}" />
+			</path>
+
+			<local name="includes.path" />
+
+			<pathconvert pathsep="," property="includes.path" refid="includes.path" targetos="unix" />
+
+			<subant target="@{target}">
+				<multirootfileset basedirs="${includes.path}">
+					<include name="@{build.file}" />
+				</multirootfileset>
+			</subant>
 		</sequential>
 	</macrodef>
 
@@ -2808,6 +2852,13 @@ for (String path : paths) {
 		/>
 	</target>
 
+	<target name="build-db">
+		<loop-macrodef-or-target
+			module.dirs="${plugins.includes.path}"
+			target.name="build-db"
+		/>
+	</target>
+
 	<target name="build-wsdl">
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
@@ -2834,6 +2885,26 @@ for (String path : paths) {
 			module.dirs="${plugins.includes.path}"
 			target.name="compile"
 		/>
+	</target>
+
+	<target name="compile-jsp">
+		<for param="module.web.dir">
+			<dirset dir="." excludes="**/templates/**" />
+			<sequential>
+				<if>
+					<resourcecount count="0" when="gt">
+						<fileset
+							dir="@{module.web.dir}"
+							excludes="**/custom_jsps/**/*"
+							includes="docroot/**/*.jsp,src/META-INF/resources/**/*.jsp,tmp/**/*.jsp"
+						/>
+					</resourcecount>
+					<then>
+						<ant antfile="@{module.web.dir}/build.xml" dir="@{module.web.dir}" target="compile-jsp" />
+					</then>
+				</if>
+			</sequential>
+		</for>
 	</target>
 
 	<target name="compile-test">

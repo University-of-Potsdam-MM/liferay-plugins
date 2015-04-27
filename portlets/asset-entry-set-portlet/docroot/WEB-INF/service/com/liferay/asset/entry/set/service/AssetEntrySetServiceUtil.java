@@ -88,6 +88,16 @@ public class AssetEntrySetServiceUtil {
 		return getService().deleteAssetEntrySet(assetEntrySetId);
 	}
 
+	public static com.liferay.asset.entry.set.model.AssetEntrySet fetchAssetEntrySet(
+		long assetEntrySetId, int childAssetEntrySetsLimit,
+		int likedParticipantsLimit)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .fetchAssetEntrySet(assetEntrySetId,
+			childAssetEntrySetsLimit, likedParticipantsLimit);
+	}
+
 	public static com.liferay.asset.entry.set.model.AssetEntrySet getAssetEntrySet(
 		long assetEntrySetId, int childAssetEntrySetsLimit,
 		int likedParticipantsLimit)
@@ -110,6 +120,16 @@ public class AssetEntrySetServiceUtil {
 			likedParticipantsLimit, start, end);
 	}
 
+	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getNewChildAssetEntrySets(
+		long createTime, long parentAssetEntrySetId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getNewChildAssetEntrySets(createTime,
+			parentAssetEntrySetId, start, end, orderByComparator);
+	}
+
 	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getOldAssetEntrySets(
 		long createTime, long parentAssetEntrySetId, java.lang.String sharedTo,
 		java.lang.String[] assetTagNames, int childAssetEntrySetsLimit,
@@ -120,6 +140,16 @@ public class AssetEntrySetServiceUtil {
 				   .getOldAssetEntrySets(createTime, parentAssetEntrySetId,
 			sharedTo, assetTagNames, childAssetEntrySetsLimit,
 			likedParticipantsLimit, start, end);
+	}
+
+	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getOldChildAssetEntrySets(
+		long createTime, long parentAssetEntrySetId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getOldChildAssetEntrySets(createTime,
+			parentAssetEntrySetId, start, end, orderByComparator);
 	}
 
 	public static com.liferay.asset.entry.set.model.AssetEntrySet likeAssetEntrySet(

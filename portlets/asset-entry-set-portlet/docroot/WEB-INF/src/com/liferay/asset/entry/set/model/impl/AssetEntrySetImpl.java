@@ -38,7 +38,7 @@ public class AssetEntrySetImpl extends AssetEntrySetBaseImpl {
 
 	@Override
 	public void setChildAssetEntrySets(
-			long userId, int childAssetEntrySetsLimit)
+			long userId, long createTime, int childAssetEntrySetsLimit)
 		throws PortalException, SystemException {
 
 		if (childAssetEntrySetsLimit <= 0) {
@@ -46,9 +46,9 @@ public class AssetEntrySetImpl extends AssetEntrySetBaseImpl {
 		}
 
 		_childAssetEntrySets =
-			AssetEntrySetLocalServiceUtil.getChildAssetEntrySets(
-				userId, getAssetEntrySetId(), 0, childAssetEntrySetsLimit,
-				null);
+			AssetEntrySetLocalServiceUtil.getOldChildAssetEntrySets(
+				userId, createTime, getAssetEntrySetId(), 0,
+				childAssetEntrySetsLimit, null);
 	}
 
 	private List<AssetEntrySet> _childAssetEntrySets;

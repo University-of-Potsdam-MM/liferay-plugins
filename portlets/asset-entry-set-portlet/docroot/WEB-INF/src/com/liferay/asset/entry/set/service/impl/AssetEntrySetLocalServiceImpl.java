@@ -172,6 +172,26 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	@Override
+	public AssetEntrySet fetchAssetEntrySet(
+			long userId, long assetEntrySetId, int childAssetEntrySetsLimit,
+			int likedParticipantsLimit)
+		throws PortalException, SystemException {
+
+		AssetEntrySet assetEntrySet =
+			assetEntrySetPersistence.fetchByPrimaryKey(assetEntrySetId);
+
+		if (assetEntrySet == null) {
+			return null;
+		}
+
+		setDisplayFields(
+			userId, System.currentTimeMillis(), assetEntrySet,
+			childAssetEntrySetsLimit, likedParticipantsLimit);
+
+		return assetEntrySet;
+	}
+
+	@Override
 	public AssetEntrySet getAssetEntrySet(
 			long userId, long assetEntrySetId, int childAssetEntrySetsLimit,
 			int likedParticipantsLimit)
@@ -181,27 +201,10 @@ public class AssetEntrySetLocalServiceImpl
 			assetEntrySetId);
 
 		setDisplayFields(
-			userId, assetEntrySet, childAssetEntrySetsLimit,
-			likedParticipantsLimit);
+			userId, System.currentTimeMillis(), assetEntrySet,
+			childAssetEntrySetsLimit, likedParticipantsLimit);
 
 		return assetEntrySet;
-	}
-
-	@Override
-	public List<AssetEntrySet> getChildAssetEntrySets(
-			long userId, long parentAssetEntrySetId, int start, int end,
-			OrderByComparator orderByComparator)
-		throws PortalException, SystemException {
-
-		List<AssetEntrySet> assetEntrySets =
-			assetEntrySetPersistence.findByParentAssetEntrySetId(
-				parentAssetEntrySetId, start, end, orderByComparator);
-
-		setLikedParticipants(userId, assetEntrySets, 0);
-
-		setSharedToParticipants(assetEntrySets);
-
-		return assetEntrySets;
 	}
 
 	@Override
@@ -219,6 +222,22 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	@Override
+	public List<AssetEntrySet> getNewChildAssetEntrySets(
+			long userId, long createTime, long parentAssetEntrySetId, int start,
+			int end, OrderByComparator orderByComparator)
+		throws PortalException, SystemException {
+
+		List<AssetEntrySet> assetEntrySets =
+			assetEntrySetPersistence.findByGtCT_PAESI(
+				createTime, parentAssetEntrySetId, start, end,
+				orderByComparator);
+
+		setDisplayFields(userId, createTime, assetEntrySets, 0, 0);
+
+		return assetEntrySets;
+	}
+
+	@Override
 	public List<AssetEntrySet> getOldAssetEntrySets(
 			long userId, long createTime, long parentAssetEntrySetId,
 			JSONArray sharedToJSONArray, String[] assetTagNames,
@@ -230,6 +249,22 @@ public class AssetEntrySetLocalServiceImpl
 			userId, createTime, false, parentAssetEntrySetId, sharedToJSONArray,
 			assetTagNames, childAssetEntrySetsLimit, likedParticipantsLimit,
 			start, end);
+	}
+
+	@Override
+	public List<AssetEntrySet> getOldChildAssetEntrySets(
+			long userId, long createTime, long parentAssetEntrySetId, int start,
+			int end, OrderByComparator orderByComparator)
+		throws PortalException, SystemException {
+
+		List<AssetEntrySet> assetEntrySets =
+			assetEntrySetPersistence.findByLtCT_PAESI(
+				createTime, parentAssetEntrySetId, start, end,
+				orderByComparator);
+
+		setDisplayFields(userId, createTime, assetEntrySets, 0, 0);
+
+		return assetEntrySets;
 	}
 
 	@Override
@@ -464,7 +499,7 @@ public class AssetEntrySetLocalServiceImpl
 				end);
 
 		setDisplayFields(
-			userId, assetEntrySets, childAssetEntrySetsLimit,
+			userId, createTime, assetEntrySets, childAssetEntrySetsLimit,
 			likedParticipantsLimit);
 
 		return assetEntrySets;
@@ -549,11 +584,12 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected void setDisplayFields(
-			long userId, AssetEntrySet assetEntrySet,
+			long userId, long createTime, AssetEntrySet assetEntrySet,
 			int childAssetEntrySetsLimit, int likedParticipantsLimit)
 		throws PortalException, SystemException {
 
-		assetEntrySet.setChildAssetEntrySets(userId, childAssetEntrySetsLimit);
+		assetEntrySet.setChildAssetEntrySets(
+			userId, createTime, childAssetEntrySetsLimit);
 
 		assetEntrySet.setPayload(
 			AssetEntrySetPayloadProcessorUtil.process(
@@ -565,13 +601,13 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected void setDisplayFields(
-		long userId, List<AssetEntrySet> assetEntrySets,
+		long userId, long createTime, List<AssetEntrySet> assetEntrySets,
 		int childAssetEntrySetsLimit, int likedParticipantsLimit)
 	throws PortalException, SystemException {
 
 	for (AssetEntrySet assetEntrySet : assetEntrySets) {
 		setDisplayFields(
-			userId, assetEntrySet, childAssetEntrySetsLimit,
+			userId, createTime, assetEntrySet, childAssetEntrySetsLimit,
 			likedParticipantsLimit);
 	}
 }
@@ -735,8 +771,8 @@ public class AssetEntrySetLocalServiceImpl
 		assetEntrySetPersistence.update(assetEntrySet);
 
 		setDisplayFields(
-			userId, assetEntrySet, childAssetEntrySetsLimit,
-			likedParticipantsLimit);
+			userId, System.currentTimeMillis(), assetEntrySet,
+			childAssetEntrySetsLimit, likedParticipantsLimit);
 
 		return assetEntrySet;
 	}
