@@ -208,6 +208,28 @@ body{
 			z-index:1401;
 			cursor: pointer;
 			font-weight: bold;
+			font-variant: small-caps;
+			
+			.arrow
+			{
+				@include up-grafic;
+				background-position: -18px -505px;
+				display: inline-block;
+				
+				-moz-transform: rotate(90deg);
+				-ms-transform: rotate(90deg);
+				-o-transform: rotate(90deg);
+				-webkit-transform: rotate(90deg);
+				transform:rotate(90deg);				
+			}
+			
+			.arrow.down {
+				-moz-transform: rotate(-90deg);
+				-ms-transform: rotate(-90deg);
+				-o-transform: rotate(-90deg);
+				-webkit-transform: rotate(-90deg);
+				transform:rotate(-90deg);
+			}			
 		}
 		
 		.content {
@@ -215,29 +237,60 @@ body{
 			width: 100%;
 			background: $upMenuColor;
 			height: 100%;
+			
+			h2
+			{
+				font-variant: small-caps;
+			}
 									
 			.add, .search
 			{
 				width: 145px;
-				background: $upDarkGray;
+				background: $upBlueGray;
 				color: $upWhite;
 				display: inline-block;
-				
+				vertical-align: middle;
 				
 				.icon
 				{
-					@include up-grafic;
+					@include ple-grafic;
 					width: 20px;
 					height: 20px;
-					background-position: -9px -2184px;
+					background-position: -30px -313px;
 					display: inline-block;
+					margin-top: -8px;
 				}
 			}
 			
 			.search .icon
 			{
-					background-position: -9px -126px;
+					background-position: 0px -313px;
 			}
+			
+			.filter
+			{
+				border: 1px solid $upBlueGray;
+				padding: 2px;
+				height: 20px;
+				overflow: hidden;
+				margin: 10px 8px 0 0;
+				
+				.icon
+				{
+					@include ple-grafic;
+					background-position: 0px -97px;
+					float: left;
+				}
+				
+				input
+				{
+					border:0px;
+					background: $upMenuColor;
+					width: 260px;
+				}
+			}
+			
+			
 			
 			#sidebar-my-sites{
 			
@@ -247,7 +300,7 @@ body{
 				overflow: scoll-x;
 				
 				li {
-					border-bottom: 1px solid $upDarkGray;
+					border-bottom: 1px solid $upBlueGray;
 					padding: 10px;
 					margin-bottom: 10px;
 					
@@ -309,5 +362,111 @@ body{
 		display: inline-block;
 	}
 	
+	#admin
+	{
+		list-style: none;
+		position: absolute;
+		right: 60px;
+		top: 30px;
+		background: $upLightBlue;
+		color: $upDarkBlue;
+		
+		li
+		{
+			float: left;
+			width: 300px;
+			padding: 5px;
+			
+			#toggleDockbar
+			{
+				height: auto;
+				width: auto;
+				overflow: hidden;
+				margin: 0;
+			}
+
+			.workspace
+			{
+				@include up-grafic;
+				background-position: 0px -200px;
+			}
+			
+			.admin
+			{
+				@include up-grafic;
+				background-position: 0px -200px;
+			}
+		} 
+	}
+	
+	
+	#main-menu
+	{
+		margin: 60px;
+		list-style: none;
+		display: block;
+		overflow: hidden;
+		padding: 0px;
+		
+		li
+		{
+			width: 24%;
+			float: left;
+			background: $upWhite;
+			color: $upDarkBlue;
+			padding: 10px 10px 10px 0px;
+			display: block;
+			Overflow: hidden;
+			text-align: center;
+			
+			ul
+			{
+				height: 165px;
+				list-style: none;
+				overflow: hidden;
+				padding: 0px;
+				
+				li
+				{
+					float: none;
+					border-bottom: 1px solid $upDarkBlue;
+					width: 100%;
+					padding: 3px;
+					text-align: left;
+				}
+			}
+		}
+		
+		li:hover
+		{
+			background: $upDarkBlue;
+			color: $upWhite;
+			
+			.icon.arrow
+			{
+				background-position: -136px -126px;
+			}
+			
+			ul
+			{
+				background: $upDarkBlue;
+				
+				li
+				{
+					background: $upDarkBlue;
+					color: $upWhite;
+					border-color: $upWhite;
+				}	
+			}
+		}
+		
+		span.close
+		{
+			padding-left: 20px;
+			@include up-grafic;
+			
+		}
+
+	}
 	
 }

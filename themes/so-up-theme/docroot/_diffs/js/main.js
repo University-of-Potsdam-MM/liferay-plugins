@@ -55,6 +55,17 @@ AUI().ready(
 				})
 			})
 		}		
+		
+		var mainMenu = A.one('#main-menu');
+		
+		if(mainMenu){
+			mainMenu.on('click', function(event){
+				console.log(event.target);
+				mainMenu.all('li ul, span.close').each(function(){
+					this.toggleClass("hidden");
+				})
+			})
+		}
 
 		var messageBoard = A.one('.portlet-message-boards');
 

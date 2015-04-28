@@ -20,13 +20,17 @@
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Gruppenr&auml;ume <span class="arrow"></span></div>
+			<div class="title">Workspaces <span class="arrow"></span></div>
 			<div class="content">
-				<h2>Gruppenr&auml;ume</h2>
+				<h2>Workspaces</h2>
 				 
 				<div class="search"><span class="icon search"></span>Suchen</div>
 				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
-				<div class="filter"><span class="icon filter"></span><input name="filter" class="filter" id="grouproom-filter"></div>
+				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
+				<div class="switch">
+					<input type="radio" name="select-type" id="own">Eigene</input>
+					<input type="radio" name="select-type" id="public">&Ouml;ffentliche</input>
+				</div>
 				<ul id="sidebar-my-sites">
 					<#list user_my_sites as user_site>
 						<#if user_site.hasPrivateLayouts()>
@@ -109,39 +113,86 @@
         </div>
 		<ul id="up-general">
 			<li><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<#if is_signed_in>
-				<li><a href="${sign_out_url}" id="sign-out" rel="nofollow">${sign_out_text}</a></li>
-			<#else>
-				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
-			</#if>
-			<li class="lang"><span class="lang-img"></span>
-				<select name="language_id">
-					<option value="de_DE" selected>Deutsch</option>
-					<option value="en_US">English</option>
-				</select>
-				
-			</li>
-			<li><span class="search-img"></li>
-		</ul>
-		<ul id="up_services">
-		<#if is_signed_in>
-			<li>
-				<div id="editbox">
-					<input type="checkbox" id="editToggle">Bearbeitung Ein</input>
-				</div>
-			<li>
-		</#if>
 			<li> UP Dienste
-				<ul class="service_list">
+				<ul class="service_list hidden">
 					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
 					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
 					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
 					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
 					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
 				</ul> 
+			</li>			
+			<li class="lang"><span class="lang-img"></span>
+				<select name="language_id">
+					<option value="de_DE" selected>Deutsch</option>
+					<option value="en_US">English</option>
+				</select>
 			</li>
+			<li><span class="search-img"></li>
+			<#if is_signed_in>
+				<li><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
+			<#else>
+				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
+			</#if>
 		</ul>
+		<#if is_signed_in>
+		<ul id="admin">
+			<li>
+				<div id="toggleDockbar">
+					<span class="icon workspace"></span>Workspace konfigurieren
+				</div>
+			</li>
+			<#if show_control_panel>
+			<li>
+				<a href="${control_panel_url}">
+				<div id="adminbox">
+					<span class="icon admin"></span>Administration
+				</div>
+				</a>
+			</li>
+			</#if>
+		</ul>
+		</#if>
 		
+		
+		<ul id="main-menu">
+			<li>
+				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
+				<ul class="hidden">
+					<li><a href="/user/${user_sname}/dashboard/">&Uumlbersicht</a></li>
+					<li><a href="/user/${user_sname}/calendar/">Kalender</a></li>
+					<li><a href="/user/${user_sname}/e-mail/">Webmail</a></li>
+					<li>Box.Up</li>
+					<li>Poodle</li>
+					<li>Pad.Up</li>
+				</ul>
+			</li>
+			<li>
+				Mein Profil <span class="icon arrow"></span>
+				<ul class="hidden">
+					<li><a href="${my_account_url}">Profilansicht</a></li>
+					<li>Bearbeitungsmodus</li>
+				</ul>
+			</li>
+			<li>
+				Meine Kontakte <span class="icon arrow"></span>
+				<ul class="hidden">
+					<li><a href="/user/${user_id}/contacts/">Kontaktliste</a></li>
+					<li>Personen suchen</li>
+				</ul>
+			</li>
+			<li>
+				Portfolio <span class="icon arrow"></span>
+				<ul class="hidden">
+					<li>Kategorien</li>
+					<li>Portfolioseiten</li>
+					<li>Portfolioaufgaben</li>
+				</ul>
+			</li>
+			<span class="icon close hidden">Schlieﬂen</span>
+		</ul>		
+		
+		<@liferay.dockbar />
 		<!--${theme.include(body_top_include)}-->
 		
 		<div id="heading">
