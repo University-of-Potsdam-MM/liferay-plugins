@@ -253,6 +253,11 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	@Override
+	public String translate(String pattern, Object... arguments) {
+		return LanguageUtil.format(pageContext, pattern, arguments);
+	}
+
+	@Override
 	public void updateModel(BaseModel<?> baseModel, Object... properties)
 		throws Exception {
 
@@ -353,7 +358,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			else if (data instanceof JSONObject) {
 				jsonObject.put("data", (JSONObject)data);
 			}
-			else {
+			else if (data != null) {
 				jsonObject.put(
 					"data",
 					JSONFactoryUtil.createJSONObject(String.valueOf(data)));
@@ -957,7 +962,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		renderError(HttpServletResponse.SC_BAD_REQUEST, pattern, arguments);
 	}
 
-	protected boolean respondWith(int status, String key, Object object)
+	protected boolean respondWith(int status, String message, Object object)
 		throws Exception {
 
 		Object data = null;
@@ -979,25 +984,12 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			else if (object instanceof JSONArray) {
 				data = object;
 			}
-			else {
+			else if (object != null) {
 				data = toJSONObject(object);
-			}
-
-			if (Validator.isNotNull(key)) {
-				JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-				if (data instanceof JSONArray) {
-					jsonObject.put(key, (JSONArray)data);
-				}
-				else {
-					jsonObject.put(key, (JSONObject)data);
-				}
-
-				data = jsonObject;
 			}
 		}
 
-		responseContent = buildResponseContent(data, StringPool.BLANK, status);
+		responseContent = buildResponseContent(data, message, status);
 
 		return true;
 	}
@@ -1007,8 +999,14 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return respondWith(HttpServletResponse.SC_OK, null, object);
 	}
 
-	protected boolean respondWith(String key, Object object) throws Exception {
-		return respondWith(HttpServletResponse.SC_OK, key, object);
+	protected boolean respondWith(String message) throws Exception {
+		return respondWith(message, null);
+	}
+
+	protected boolean respondWith(String message, Object object)
+		throws Exception {
+
+		return respondWith(HttpServletResponse.SC_OK, message, object);
 	}
 
 	protected AlloySearchResult search(
@@ -1262,7 +1260,27 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		for (String key : modelAttributes.keySet()) {
 			Object value = modelAttributes.get(key);
 
-			jsonObject.put(String.valueOf(key), String.valueOf(value));
+			if (value instanceof Boolean) {
+				jsonObject.put(String.valueOf(key), (Boolean)value);
+			}
+			else if (value instanceof Date) {
+				jsonObject.put(String.valueOf(key), (Date)value);
+			}
+			else if (value instanceof Double) {
+				jsonObject.put(String.valueOf(key), (Double)value);
+			}
+			else if (value instanceof Integer) {
+				jsonObject.put(String.valueOf(key), (Integer)value);
+			}
+			else if (value instanceof Long) {
+				jsonObject.put(String.valueOf(key), (Long)value);
+			}
+			else if (value instanceof Short) {
+				jsonObject.put(String.valueOf(key), (Short)value);
+			}
+			else {
+				jsonObject.put(String.valueOf(key), String.valueOf(value));
+			}
 		}
 
 		return jsonObject;
@@ -1319,10 +1337,6 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			TOUCH + portlet.getRootPortletId(), Boolean.FALSE);
 
 		include(touchPath);
-	}
-
-	protected String translate(String pattern, Object... arguments) {
-		return LanguageUtil.format(locale, pattern, arguments);
 	}
 
 	protected void writeResponse(Object content, String contentType)

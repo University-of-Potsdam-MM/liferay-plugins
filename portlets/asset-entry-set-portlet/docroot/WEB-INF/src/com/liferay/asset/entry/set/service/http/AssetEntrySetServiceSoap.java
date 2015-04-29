@@ -94,6 +94,22 @@ public class AssetEntrySetServiceSoap {
 		}
 	}
 
+	public static com.liferay.asset.entry.set.model.AssetEntrySetSoap fetchAssetEntrySet(
+		long assetEntrySetId, int childAssetEntrySetsLimit,
+		int likedParticipantsLimit) throws RemoteException {
+		try {
+			com.liferay.asset.entry.set.model.AssetEntrySet returnValue = AssetEntrySetServiceUtil.fetchAssetEntrySet(assetEntrySetId,
+					childAssetEntrySetsLimit, likedParticipantsLimit);
+
+			return com.liferay.asset.entry.set.model.AssetEntrySetSoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.asset.entry.set.model.AssetEntrySetSoap getAssetEntrySet(
 		long assetEntrySetId, int childAssetEntrySetsLimit,
 		int likedParticipantsLimit) throws RemoteException {
@@ -130,6 +146,24 @@ public class AssetEntrySetServiceSoap {
 		}
 	}
 
+	public static com.liferay.asset.entry.set.model.AssetEntrySetSoap[] getNewChildAssetEntrySets(
+		long createTime, long parentAssetEntrySetId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> returnValue =
+				AssetEntrySetServiceUtil.getNewChildAssetEntrySets(createTime,
+					parentAssetEntrySetId, start, end, orderByComparator);
+
+			return com.liferay.asset.entry.set.model.AssetEntrySetSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.asset.entry.set.model.AssetEntrySetSoap[] getOldAssetEntrySets(
 		long createTime, long parentAssetEntrySetId, java.lang.String sharedTo,
 		java.lang.String[] assetTagNames, int childAssetEntrySetsLimit,
@@ -140,6 +174,24 @@ public class AssetEntrySetServiceSoap {
 				AssetEntrySetServiceUtil.getOldAssetEntrySets(createTime,
 					parentAssetEntrySetId, sharedTo, assetTagNames,
 					childAssetEntrySetsLimit, likedParticipantsLimit, start, end);
+
+			return com.liferay.asset.entry.set.model.AssetEntrySetSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.asset.entry.set.model.AssetEntrySetSoap[] getOldChildAssetEntrySets(
+		long createTime, long parentAssetEntrySetId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> returnValue =
+				AssetEntrySetServiceUtil.getOldChildAssetEntrySets(createTime,
+					parentAssetEntrySetId, start, end, orderByComparator);
 
 			return com.liferay.asset.entry.set.model.AssetEntrySetSoap.toSoapModels(returnValue);
 		}
