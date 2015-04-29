@@ -11,6 +11,7 @@
 }
 
 #navigation ul li a, #navigation ul li ul li a {
+	font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
 	display:block;
 	min-height:22px;
 	border-bottom:1px solid #CFDAE3;
@@ -66,8 +67,8 @@
 #navigation ul li.selected ul li.selected a{
 	background-color:#014260;
 	color:#fff;
-	
-	
+
+
 }
 
 /* ---------- Add/remove page ---------- */
@@ -79,16 +80,16 @@
 		&.lfr-nav-hover {
 			.delete-tab {
 				@include opacity(1);
-				
-				
+
+
 			}
 		}
 	}
 
 	.add-page-editor-input {
 		width: 150px;
-		
-		
+
+
 	}
 
 	.delete-tab {

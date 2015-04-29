@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$the_title</title>
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,300italic; 400,700,400italic,700italic" media="all" rel="stylesheet" type="text/css">
+	$theme.include($top_head_include)
+</head>
+
+<body class="portal-popup $css_class">
+
+$theme.include($content_include)
+
+$theme.include($bottom_ext_include)
+
+</body>
+
+</html>

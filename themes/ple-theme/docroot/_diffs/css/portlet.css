@@ -1,8 +1,5 @@
 @import "compass";
 /*custom*/
-.portlet-boundary {
-	border:1px solid #ccc;
-}
 
 /* ---------- Portlet wrapper and icons ---------- */
 
@@ -66,8 +63,9 @@ body.portlet {
 	display: block;
 	margin-top:0 !important;
 	padding-left:.3em !important;
-	background-color:#ededed;
-	
+	background-color:#fff;
+	border-bottom: 1px solid #D0DAE3;
+
 
 
 	img {
@@ -87,9 +85,11 @@ body.portlet {
 	text-overflow: ellipsis;
 	vertical-align: top;
 	white-space: nowrap;
-	color:#666;
-	text-transform:uppercase;
-	font-size:12px;
+	text-transform:normal;
+	font-family:"Source Sans Pro", Helvetica, Arial, sans-serif;
+	font-weight:300;
+	font-size:.8em;
+	color:#014260;
 }
 
 .panel-page-content, .panel-page-body {

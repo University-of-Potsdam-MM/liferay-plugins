@@ -1,0 +1,25 @@
+#portlet_116 {
+	  font-family: "source sans pro", Arial, Helvetica, serif;
+}
+
+.taglib-social-activities .day-separator {
+	font-size:.5em;
+	color:#666;	
+ 	font-size: 1.3em;
+    font-weight: normal;
+    border-bottom:0px;
+}
+
+#portlet_116 .activity-title {
+	  font-size: .9em;
+}
+
+#portlet_116 .activity-title a, #portlet_116 .activity-body a {
+	font-weight:bold;
+}
+
+#portlet_116 .activity-body {
+	font-style:italic;
+	font-weight:300;
+}
+

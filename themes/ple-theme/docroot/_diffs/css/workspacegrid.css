@@ -18,7 +18,7 @@ height: auto;
 }
 
 section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay .v-label-undef-w {
-	white-space:normal;	
+	white-space:normal;
 }
 
 section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay div.v-layout.v-horizontal.v-widget {
@@ -29,18 +29,18 @@ section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay div.v-layout.v-h
 }
 
 section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay div.v-layout.v-horizontal.v-widget:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -0.25em; /* Adjusts for spacing */
+content: '';
+display: inline-block;
+height: 100%;
+vertical-align: middle;
+margin-right: -0.25em; /* Adjusts for spacing */
 }
 
 section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay .v-slot, .liferay .v-spacing {
 	display: inline-block;
- 	 vertical-align: middle;
-  	width: 100px;
-  	font-size: 12px;
+	 vertical-align: middle;
+	width: 100px;
+	font-size: 12px;
 }
 
 section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay .v-slot div.v-label {
