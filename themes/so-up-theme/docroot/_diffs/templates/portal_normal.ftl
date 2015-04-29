@@ -10,10 +10,10 @@
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 
 	${theme.include(top_head_include)}
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<!--   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
 	<script src="//aui-cdn.atlassian.com/aui-adg/5.8.10/js/aui.js"></script>
-	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>	
+	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
 </head>
 <body class="${css_class}">
 
@@ -103,7 +103,7 @@
             <div id="up_logo_indicator"></div>
             <div id="up_logo_image">
                 <a title="Zur Startseite" href="/">
-                <img alt="Logo Universit&auml;t Potsdam" src="so-up-theme/images/up/up_logo_university_2.png"></a>
+                <img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png"></a>
             </div>
 	        <div id="up_logo_title">
 	            <a title="Zur Startseite" href="/">Learn.UP</a>
@@ -113,7 +113,7 @@
         </div>
 		<ul id="up-general">
 			<li><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<li> UP Dienste
+			<li><a class="up_services" href="">UP Dienste</a>
 				<ul class="service_list hidden">
 					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
 					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
@@ -122,7 +122,8 @@
 					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
 				</ul> 
 			</li>			
-			<li class="lang"><span class="lang-img"></span>
+			<li class="lang">
+				<span class="lang-img"></span>
 				<select name="language_id">
 					<option value="de_DE" selected>Deutsch</option>
 					<option value="en_US">English</option>
@@ -154,8 +155,8 @@
 		</ul>
 		</#if>
 		
-		
-		<ul id="main-menu">
+		<#if is_signed_in>
+		<ul id="main-menu" class="enabled">
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
@@ -190,10 +191,29 @@
 				</ul>
 			</li>
 			<span class="icon close hidden">Schlieﬂen</span>
-		</ul>		
+		</ul>
+		<#else>	
+		<ul id="main-menu" class="disabled">
+			<li>
+				Pers&ouml;nlicher Bereich <span class="icon arrow disabled"></span>
+			</li>
+			<li>
+				Mein Profil <span class="icon arrow disabled"></span>
+			</li>
+			<li>
+				Meine Kontakte <span class="icon arrow disabled"></span>
+			</li>
+			<li>
+				Portfolio <span class="icon arrow disabled"></span>
+			</li>
+		</ul>
+		</#if>	
 		
-		<@liferay.dockbar />
-		<!--${theme.include(body_top_include)}-->
+		<!-- Ausblenden damit es keine Probleme beim JS gibt -->
+		<div class="hidden">
+			<@liferay.dockbar />
+		</div>
+		${theme.include(body_top_include)}
 		
 		<div id="heading">
 			<h1 class="site-title">

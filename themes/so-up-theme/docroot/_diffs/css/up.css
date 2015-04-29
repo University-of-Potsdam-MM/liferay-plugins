@@ -77,7 +77,7 @@ body{
 	
 		ul#up-general {
 			display: block;
-			overflow: hidden;
+			overflow: visible;
 			list-style-type: none;
 			float:right;
 			color: $upDarkBlue;
@@ -94,7 +94,14 @@ body{
 				minwidth: 100px;
 				color: $upDarkBlue;
 				font-size: 0.86667em;
+				padding: 3px 10px;
 				
+				a
+				{
+					color: $upDarkBlue;
+					padding-top: 15px;
+					display: inline-block;
+				}
 				
 				.lang-img
 				{
@@ -102,6 +109,7 @@ body{
 					background-position: -7px -46px;
 					width: 40px;
 					height:40px;
+					display: inline-block;
 				}
 				
 				.search-img
@@ -110,6 +118,30 @@ body{
 					background-position: -7px 0px;
 					width: 40px;
 					height:40px;
+					display: inline-block;
+				}
+				
+				.logout
+				{
+					@include ple-grafic;
+					background-position: 0px -25px;
+					display: inline-block;
+					width: 30px;
+					height:40px;
+					padding-left: 10px;
+					padding-top: 0px;
+				}
+				
+				ul
+				{
+					list-style: none;
+					position: relative;
+					z-index: 2000;
+					
+					li
+					{
+						float: none;
+					}
 				}
 			}
 
@@ -138,27 +170,7 @@ body{
 			margin-left:100px;
 		}
 		
-		#up_services
-		{
-			overflow:hidden;
-			display: block;
-			list-style: none;
-			background: $upLightBlue;
-			position: absolute;
-			right: 60px;
-			top: 60px;
-			
-			li{
-				float: left;
-			}
-					
-			#editbox
-			{
-				width: 200px;
-				float: left;
-			}
-		}	
-		
+	
 		.portlet-dockbar{
 			padding-top: 20px;
 		}
@@ -357,9 +369,7 @@ body{
 	
 	.icon {
 		@include up-grafic;
-		width: 20px;
-		height: 20px;
-		display: inline-block;
+		float: left;
 	}
 	
 	#admin
@@ -367,15 +377,15 @@ body{
 		list-style: none;
 		position: absolute;
 		right: 60px;
-		top: 30px;
+		top: 60px;
 		background: $upLightBlue;
 		color: $upDarkBlue;
 		
 		li
 		{
 			float: left;
-			width: 300px;
 			padding: 5px;
+			padding-right: 20px;
 			
 			#toggleDockbar
 			{
@@ -387,14 +397,16 @@ body{
 
 			.workspace
 			{
-				@include up-grafic;
-				background-position: 0px -200px;
+				@include ple-grafic;
+				background-position: 0px -334px;
+				display: inline-block;
 			}
 			
 			.admin
 			{
-				@include up-grafic;
-				background-position: 0px -200px;
+				@include ple-grafic;
+				background-position: 0px -401px;
+				display: inline-block;
 			}
 		} 
 	}
@@ -410,7 +422,8 @@ body{
 		
 		li
 		{
-			width: 24%;
+			width: 25%;
+			margin-right:-10px;
 			float: left;
 			background: $upWhite;
 			color: $upDarkBlue;
@@ -421,22 +434,53 @@ body{
 			
 			ul
 			{
-				height: 165px;
+				height: 205px;
 				list-style: none;
 				overflow: hidden;
-				padding: 0px;
+				padding: 10px 0px;
+				margin: 10px;
 				
 				li
 				{
 					float: none;
-					border-bottom: 1px solid $upDarkBlue;
+					border-bottom: 1px solid $upLightBlue;
 					width: 100%;
 					padding: 3px;
 					text-align: left;
+					
+					a
+					{
+						color: $upDarkBlue;
+					}
 				}
 			}
 		}
 		
+	
+		span.close
+		{
+			position: absolute;
+			right: 0px;
+			bottom: 0px;
+			padding-left: 20px;
+			@include up-grafic;
+			
+		}
+
+	}
+	
+	#main-menu.disabled
+	{
+		background: $upGray;
+	
+		li
+		{
+			color: $upDarkGray;
+		}
+	}
+	
+	#main-menu.open
+	{
 		li:hover
 		{
 			background: $upDarkBlue;
@@ -455,18 +499,144 @@ body{
 				{
 					background: $upDarkBlue;
 					color: $upWhite;
-					border-color: $upWhite;
+					
+					a
+					{
+						color: $upWhite;
+					}
 				}	
 			}
 		}
+	}
+}
+
+body.smallhead
+{
+	background: $upBgColor;
+	
+	#line
+	{
+		display: none;
+	}
+	
+	#sidebar .title
+	{
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		transform:rotate(0deg);
+		position: fixed;
+		top: 0px;
+		left: 0px;	
+		width: 120px;
+		height: 30px;
+		z-index: 1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
 		
-		span.close
+		.arrow
 		{
-			padding-left: 20px;
-			@include up-grafic;
-			
+			-moz-transform: rotate(0deg);
+			-ms-transform: rotate(0deg);
+			-o-transform: rotate(0deg);
+			-webkit-transform: rotate(0deg);
+			transform:rotate(0deg);			
+		}
+
+		.arrow.down
+		{
+			-moz-transform: rotate(180deg);
+			-ms-transform: rotate(180deg);
+			-o-transform: rotate(180deg);
+			-webkit-transform: rotate(180deg);
+			transform:rotate(180deg);			
 		}
 
 	}
 	
+	#sidebar.show-sidebar .title
+	{
+		left: 310px;
+	}
+	
+	#banner #up-general
+	{
+		position: fixed;
+		top: 0px;
+		right: 0px;
+		height: 50px;		
+		z-index:1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		
+		li
+		{
+			width: 40px;
+			border-right: 2px solid $upWhite;			
+		}
+		
+	}
+	
+	#admin
+	{
+		position: fixed;
+		top:0px;
+		right: 300px;
+		width: 100px;
+		z-index:1001;
+		height: 50px;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		overflow: hidden;
+	
+		
+		li
+		{
+			width: 44px;
+			height: 46px;
+			overflow: hidden;
+			color: $upLightBlue;
+			border-right: 2px solid $upWhite;
+			padding: 2px;
+			
+			a
+			{
+				color: $upLightBlue;
+			}
+			
+			#toggleDockbar, #adminbox
+			{
+				width: 44px;
+				overflow: hidden;
+				
+				.icon
+				{
+					margin: 10px;
+				}
+			}
+			
+			
+		}
+	}
+	
+	#main-menu
+	{
+		position: fixed;
+		top: 0px;
+		left: 140px;
+		right: 400px;
+		z-index:1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		min-height: 50px;
+		background: $upWhite;
+		
+		li
+		{
+			border-right: 2px solid $upGray;
+			margin-right: -12px;
+		}
+		
+	}
 }
