@@ -53,6 +53,7 @@ AUI().ready(
 					title.one('.arrow').toggleClass('down');
 				});
 			}
+
 		}
 		
 		var filterBox = A.one('#grouproom-filter');

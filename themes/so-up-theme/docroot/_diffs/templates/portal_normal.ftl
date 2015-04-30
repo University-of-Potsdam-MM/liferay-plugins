@@ -28,8 +28,8 @@
 				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
 				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
 				<div class="switch">
-					<input type="radio" name="select-type" id="own">Eigene</input>
-					<input type="radio" name="select-type" id="public">&Ouml;ffentliche</input>
+					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" selected="selected">Eigene</input>
+					<input type="radio" name="select-type" id="public" value="sidebar-all-sites">&Ouml;ffentliche</input>
 				</div>
 				<ul id="sidebar-my-sites">
 					<#list user_my_sites as user_site>
@@ -40,7 +40,7 @@
 						</#if>
 					</#list>
 	        	</ul>
-	        	<ul id="sidebar-all-sites">
+	        	<ul id="sidebar-all-sites hidden">
 	        		<#list theme.sitesDirectory() as all_site>
 	        			<li></li>
 	        		</#list>
