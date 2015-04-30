@@ -42,10 +42,10 @@ public class KBNavigationDisplayContext {
 		PortletRequest portletRequest, PortalPreferences portalPreferences,
 		PortletPreferences portletPreferences, KBArticle kbArticle) {
 
-		_kbArticle = kbArticle;
+		_portletRequest = portletRequest;
 		_portalPreferences = portalPreferences;
 		_portletPreferences = portletPreferences;
-		_portletRequest = portletRequest;
+		_kbArticle = kbArticle;
 	}
 
 	public List<Long> getAncestorResourcePrimaryKeys()
@@ -75,8 +75,9 @@ public class KBNavigationDisplayContext {
 	public String getCurrentKBFolderURLTitle()
 		throws PortalException, SystemException {
 
-		String currentKBFolderURLTitle = _portalPreferences.getValue(
-			PortletKeys.KNOWLEDGE_BASE_DISPLAY, "preferredKBFolderURLTitle");
+		String currentKBFolderURLTitle =
+			KnowledgeBaseUtil.getPreferredKBFolderURLTitle(
+				_portalPreferences, getContentRootPrefix());
 
 		long rootResourcePrimKey = getRootResourcePrimKey();
 
@@ -139,39 +140,29 @@ public class KBNavigationDisplayContext {
 		return _rootResourcePrimKey;
 	}
 
-	public boolean isShowNavigation() throws PortalException, SystemException {
-		boolean showNavigation = true;
+	public boolean isLeftNavigationVisible()
+		throws PortalException, SystemException {
 
-		long scopeGroupId = PortalUtil.getScopeGroupId(_portletRequest);
-
-		long rootResourcePrimKey = getRootResourcePrimKey();
-
-		int kbArticleCount = KBArticleLocalServiceUtil.getKBArticlesCount(
-			scopeGroupId, rootResourcePrimKey,
-			WorkflowConstants.STATUS_APPROVED);
-
-		if (kbArticleCount == 0) {
-			showNavigation = false;
-		}
-		else if (kbArticleCount == 1) {
-			List<KBArticle> kbArticles =
-				KBArticleLocalServiceUtil.getKBArticles(
-					scopeGroupId, rootResourcePrimKey,
-					WorkflowConstants.STATUS_APPROVED, 0, 1, null);
-
-			KBArticle navigationKBArticle = kbArticles.get(0);
-
-			int navigationKBArticleChildCount =
-				KBArticleLocalServiceUtil.getKBArticlesCount(
-					scopeGroupId, navigationKBArticle.getResourcePrimKey(),
-					WorkflowConstants.STATUS_APPROVED);
-
-			if (navigationKBArticleChildCount == 0) {
-				showNavigation = false;
-			}
+		if (_leftNavigationVisible == null) {
+			_leftNavigationVisible = hasMultipleDescendantKBArticles();
 		}
 
-		return showNavigation;
+		return _leftNavigationVisible;
+	}
+
+	public boolean isTopNavigationVisible()
+		throws PortalException, SystemException {
+
+		long kbFolderClassNameId = PortalUtil.getClassNameId(
+			KBFolderConstants.getClassName());
+
+		if ((getResourceClassNameId() == kbFolderClassNameId) &&
+			!isLeftNavigationVisible()) {
+
+			return true;
+		}
+
+		return false;
 	}
 
 	protected String getContentRootPrefix() {
@@ -198,7 +189,75 @@ public class KBNavigationDisplayContext {
 		return _resourcePrimKey;
 	}
 
+	protected boolean hasMultipleDescendantKBArticles()
+		throws PortalException, SystemException {
+
+		long scopeGroupId = PortalUtil.getScopeGroupId(_portletRequest);
+
+		long kbFolderClassNameId = PortalUtil.getClassNameId(
+			KBFolderConstants.getClassName());
+
+		if (getResourceClassNameId() == kbFolderClassNameId) {
+			List<KBFolder> kbFolders =
+				KnowledgeBaseUtil.getAlternateRootKBFolders(
+					scopeGroupId, getResourcePrimKey());
+
+			if (kbFolders.size() > 1) {
+				int maxKBArticlesCount = 0;
+
+				for (KBFolder kbFolder : kbFolders) {
+					int kbArticlesCount =
+						KBArticleLocalServiceUtil.getKBFolderKBArticlesCount(
+							scopeGroupId, kbFolder.getKbFolderId(),
+							WorkflowConstants.STATUS_APPROVED);
+
+					if (kbArticlesCount > maxKBArticlesCount) {
+						maxKBArticlesCount = kbArticlesCount;
+					}
+				}
+
+				if (maxKBArticlesCount > 1) {
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		boolean showNavigation = true;
+
+		long rootResourcePrimKey = getRootResourcePrimKey();
+
+		int kbArticlesCount = KBArticleLocalServiceUtil.getKBArticlesCount(
+			scopeGroupId, rootResourcePrimKey,
+			WorkflowConstants.STATUS_APPROVED);
+
+		if (kbArticlesCount == 0) {
+			showNavigation = false;
+		}
+		else if (kbArticlesCount == 1) {
+			List<KBArticle> kbArticles =
+				KBArticleLocalServiceUtil.getKBArticles(
+					scopeGroupId, rootResourcePrimKey,
+					WorkflowConstants.STATUS_APPROVED, 0, 1, null);
+
+			KBArticle navigationKBArticle = kbArticles.get(0);
+
+			int navigationKBArticleChildCount =
+				KBArticleLocalServiceUtil.getKBArticlesCount(
+					scopeGroupId, navigationKBArticle.getResourcePrimKey(),
+					WorkflowConstants.STATUS_APPROVED);
+
+			if (navigationKBArticleChildCount == 0) {
+				showNavigation = false;
+			}
+		}
+
+		return showNavigation;
+	}
+
 	private final KBArticle _kbArticle;
+	private Boolean _leftNavigationVisible;
 	private final PortalPreferences _portalPreferences;
 	private final PortletPreferences _portletPreferences;
 	private final PortletRequest _portletRequest;

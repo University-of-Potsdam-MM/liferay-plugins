@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -48,7 +47,6 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -197,20 +195,6 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 		}
 	}
 
-	public void serveAttachment(
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-		throws Exception {
-
-		long fileEntryId = ParamUtil.getLong(resourceRequest, "fileEntryId");
-
-		FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
-			fileEntryId);
-
-		PortletResponseUtil.sendFile(
-			resourceRequest, resourceResponse, fileEntry.getTitle(),
-			fileEntry.getContentStream(), fileEntry.getMimeType());
-	}
-
 	public void serveKBArticleRSS(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
@@ -250,10 +234,7 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 		try {
 			String resourceID = resourceRequest.getResourceID();
 
-			if (resourceID.equals("attachment")) {
-				serveAttachment(resourceRequest, resourceResponse);
-			}
-			else if (resourceID.equals("kbArticleRSS")) {
+			if (resourceID.equals("kbArticleRSS")) {
 				serveKBArticleRSS(resourceRequest, resourceResponse);
 			}
 		}
@@ -370,7 +351,6 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 		long classNameId = ParamUtil.getLong(actionRequest, "classNameId");
 		long classPK = ParamUtil.getLong(actionRequest, "classPK");
 		String content = ParamUtil.getString(actionRequest, "content");
-		boolean helpful = ParamUtil.getBoolean(actionRequest, "helpful");
 		int status = ParamUtil.getInteger(
 			actionRequest, "status", KBCommentConstants.STATUS_ANY);
 
@@ -380,7 +360,7 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 		if (cmd.equals(Constants.ADD)) {
 			KBCommentLocalServiceUtil.addKBComment(
 				themeDisplay.getUserId(), classNameId, classPK, content,
-				helpful, serviceContext);
+				serviceContext);
 		}
 		else if (cmd.equals(Constants.UPDATE)) {
 			if (status == KBCommentConstants.STATUS_ANY) {
@@ -391,7 +371,7 @@ public abstract class BaseKBPortlet extends MVCPortlet {
 			}
 
 			KBCommentServiceUtil.updateKBComment(
-				kbCommentId, classNameId, classPK, content, helpful, status,
+				kbCommentId, classNameId, classPK, content, status,
 				serviceContext);
 		}
 

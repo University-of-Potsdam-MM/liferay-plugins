@@ -15,6 +15,7 @@
 package com.liferay.mobilewidgets.service.impl;
 
 import com.liferay.mobilewidgets.service.base.MobileWidgetsAssetEntryServiceBaseImpl;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -34,7 +35,7 @@ public class MobileWidgetsAssetEntryServiceImpl
 	@Override
 	public JSONArray getAssetEntries(
 			AssetEntryQuery assetEntryQuery, Locale locale)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		JSONArray assetEntriesJSONArray = JSONFactoryUtil.createJSONArray();
 
@@ -42,9 +43,12 @@ public class MobileWidgetsAssetEntryServiceImpl
 			assetEntryQuery);
 
 		for (AssetEntry assetEntry : assetEntries) {
-			JSONObject assetEntryJSONObject =
-				JSONFactoryUtil.createJSONObject();
+			JSONObject assetEntryJSONObject = JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(assetEntry));
 
+			assetEntryJSONObject.put(
+				"description", assetEntry.getDescription(locale));
+			assetEntryJSONObject.put("summary", assetEntry.getSummary(locale));
 			assetEntryJSONObject.put("title", assetEntry.getTitle(locale));
 
 			assetEntriesJSONArray.put(assetEntryJSONObject);

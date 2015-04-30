@@ -19,6 +19,7 @@ import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
 import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
+import com.liferay.compat.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
@@ -27,9 +28,14 @@ import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.StagedModelDataHandlerUtil;
 import com.liferay.portal.kernel.trash.TrashHandler;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.messageboards.model.MBMessage;
+import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -200,6 +206,21 @@ public class CalendarBookingStagedModelDataHandler
 					calendarBooking.getSecondReminderType(), serviceContext);
 		}
 
+		// The root discussion message is not automatically imported when
+		// importing a calendar booking
+
+		List<MBMessage> mbMessageElements = getMBMessageElements(
+			portletDataContext, calendarBooking.getCalendarBookingId());
+
+		if (ListUtil.isNotEmpty(mbMessageElements)) {
+			MBMessageLocalServiceUtil.addDiscussionMessage(
+				userId, importedCalendarBooking.getUserName(),
+				importedCalendarBooking.getGroupId(),
+				CalendarBooking.class.getName(),
+				importedCalendarBooking.getCalendarBookingId(),
+				WorkflowConstants.ACTION_PUBLISH);
+		}
+
 		portletDataContext.importClassedModel(
 			calendarBooking, importedCalendarBooking);
 	}
@@ -228,6 +249,17 @@ public class CalendarBookingStagedModelDataHandler
 			trashHandler.restoreTrashEntry(
 				userId, existingBooking.getCalendarBookingId());
 		}
+	}
+
+	protected List<MBMessage> getMBMessageElements(
+		PortletDataContext portletDataContext, long calendarBookingId) {
+
+		Map<String, List<MBMessage>> comments =
+			portletDataContext.getComments();
+
+		return comments.get(
+			CalendarBooking.class.getName() + StringPool.POUND +
+				calendarBookingId);
 	}
 
 	private static final int[] _EXPORTABLE_STATUSES = {

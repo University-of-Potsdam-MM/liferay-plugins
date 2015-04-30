@@ -193,6 +193,15 @@ public class SyncDLObjectServiceUtil {
 		return getService().getPortletPreferences();
 	}
 
+	public static com.liferay.sync.model.SyncContext getSyncContext()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().getSyncContext();
+	}
+
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
+	*/
 	public static com.liferay.sync.model.SyncContext getSyncContext(
 		java.lang.String uuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -257,7 +266,7 @@ public class SyncDLObjectServiceUtil {
 	}
 
 	public static com.liferay.sync.model.SyncDLObject patchFileEntry(
-		long fileEntryId, java.lang.String sourceVersion,
+		long fileEntryId, long sourceVersionId,
 		java.lang.String sourceFileName, java.lang.String mimeType,
 		java.lang.String title, java.lang.String description,
 		java.lang.String changeLog, boolean majorVersion,
@@ -266,9 +275,9 @@ public class SyncDLObjectServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .patchFileEntry(fileEntryId, sourceVersion, sourceFileName,
-			mimeType, title, description, changeLog, majorVersion, deltaFile,
-			checksum, serviceContext);
+				   .patchFileEntry(fileEntryId, sourceVersionId,
+			sourceFileName, mimeType, title, description, changeLog,
+			majorVersion, deltaFile, checksum, serviceContext);
 	}
 
 	public static com.liferay.sync.model.SyncDLObject restoreFileEntryFromTrash(
@@ -283,6 +292,13 @@ public class SyncDLObjectServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().restoreFolderFromTrash(folderId);
+	}
+
+	public static java.util.Map<java.lang.String, java.lang.Object> updateFileEntries(
+		java.io.File zipFile)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService().updateFileEntries(zipFile);
 	}
 
 	public static com.liferay.sync.model.SyncDLObject updateFileEntry(

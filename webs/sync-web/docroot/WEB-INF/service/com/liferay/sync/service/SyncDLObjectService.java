@@ -165,6 +165,15 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 
 	@com.liferay.portal.security.ac.AccessControlled(guestAccessEnabled = true)
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.sync.model.SyncContext getSyncContext()
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
+	*/
+	@java.lang.Deprecated
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.sync.model.SyncContext getSyncContext(
 		java.lang.String uuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -210,7 +219,7 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.sync.model.SyncDLObject patchFileEntry(
-		long fileEntryId, java.lang.String sourceVersion,
+		long fileEntryId, long sourceVersionId,
 		java.lang.String sourceFileName, java.lang.String mimeType,
 		java.lang.String title, java.lang.String description,
 		java.lang.String changeLog, boolean majorVersion,
@@ -226,6 +235,12 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 
 	public com.liferay.sync.model.SyncDLObject restoreFolderFromTrash(
 		long folderId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	@com.liferay.portal.kernel.transaction.Transactional(enabled = false)
+	public java.util.Map<java.lang.String, java.lang.Object> updateFileEntries(
+		java.io.File zipFile)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 

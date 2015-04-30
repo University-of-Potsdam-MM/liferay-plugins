@@ -255,11 +255,12 @@ public interface SyncDLObjectLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	public com.liferay.sync.model.SyncDLObject addSyncDLObject(long companyId,
-		long modifiedTime, long repositoryId, long parentFolderId,
-		java.lang.String name, java.lang.String extension,
-		java.lang.String mimeType, java.lang.String description,
-		java.lang.String changeLog, java.lang.String extraSettings,
-		java.lang.String version, long size, java.lang.String checksum,
+		long userId, java.lang.String userName, long modifiedTime,
+		long repositoryId, long parentFolderId, java.lang.String name,
+		java.lang.String extension, java.lang.String mimeType,
+		java.lang.String description, java.lang.String changeLog,
+		java.lang.String extraSettings, java.lang.String version,
+		long versionId, long size, java.lang.String checksum,
 		java.lang.String event, java.util.Date lockExpirationDate,
 		long lockUserId, java.lang.String lockUserName, java.lang.String type,
 		long typePK, java.lang.String typeUuid)
@@ -268,6 +269,11 @@ public interface SyncDLObjectLocalService extends BaseLocalService,
 
 	public void deleteSyncDLObjects(java.lang.String version,
 		java.lang.String type)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.sync.model.SyncDLObject fetchSyncDLObject(
+		java.lang.String type, long typePK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

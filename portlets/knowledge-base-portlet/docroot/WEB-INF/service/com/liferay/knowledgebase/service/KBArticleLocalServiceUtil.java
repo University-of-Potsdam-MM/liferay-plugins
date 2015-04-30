@@ -389,15 +389,15 @@ public class KBArticleLocalServiceUtil {
 			guestPermissions);
 	}
 
-	public static void addKBArticlesMarkdown(long userId, long groupId,
+	public static int addKBArticlesMarkdown(long userId, long groupId,
 		long parentKbFolderId, java.lang.String fileName,
-		java.io.InputStream inputStream,
+		boolean prioritizeByNumericalPrefix, java.io.InputStream inputStream,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.addKBArticlesMarkdown(userId, groupId, parentKbFolderId, fileName,
-			inputStream, serviceContext);
+		return getService()
+				   .addKBArticlesMarkdown(userId, groupId, parentKbFolderId,
+			fileName, prioritizeByNumericalPrefix, inputStream, serviceContext);
 	}
 
 	public static void addTempAttachment(long groupId, long userId,
@@ -434,6 +434,13 @@ public class KBArticleLocalServiceUtil {
 			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.deleteTempAttachment(groupId, userId, fileName, tempFolderName);
+	}
+
+	public static com.liferay.knowledgebase.model.KBArticle fetchFirstChildKBArticle(
+		long groupId, long parentResourcePrimKey)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .fetchFirstChildKBArticle(groupId, parentResourcePrimKey);
 	}
 
 	public static com.liferay.knowledgebase.model.KBArticle fetchKBArticleByUrlTitle(
@@ -584,6 +591,12 @@ public class KBArticleLocalServiceUtil {
 	public static int getKBArticleVersionsCount(long resourcePrimKey, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getKBArticleVersionsCount(resourcePrimKey, status);
+	}
+
+	public static int getKBFolderKBArticlesCount(long groupId, long kbFolderId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getKBFolderKBArticlesCount(groupId, kbFolderId, status);
 	}
 
 	public static com.liferay.knowledgebase.model.KBArticle getLatestKBArticle(

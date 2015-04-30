@@ -263,8 +263,15 @@ public interface PushNotificationsDeviceLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.pushnotifications.model.PushNotificationsDevice> getPushNotificationsDevices(
-		long toUserId, java.lang.String platform, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	public void resetPushNotificationSenders();
+
+	public void sendPushNotification(long[] toUserIds,
+		com.liferay.portal.kernel.json.JSONObject payloadJSONObject)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public void sendPushNotification(java.lang.String platform,
+		java.util.List<java.lang.String> tokens,
+		com.liferay.portal.kernel.json.JSONObject payloadJSONObject)
+		throws com.liferay.portal.kernel.exception.PortalException;
 }
