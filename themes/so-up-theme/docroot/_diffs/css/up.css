@@ -1,0 +1,742 @@
+@import "up";
+
+body{
+	background: $upBgColor;
+	font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
+	
+	#up_section_indicator{
+		width: 33.3333%;
+		background-color: $upDarkBlue;
+		height: 20px;
+	}
+	
+	#up_logo {
+		width: 100%;
+		height: 60px;
+		top: 0px;
+		margin-left: 60px;
+		
+		#up_logo_indicator
+		{
+			height: 20px;
+		}
+		
+		#up_logo_image{
+			padding: 0px 15px;
+			float: left;
+					
+			img{
+				width: 80px;
+				height: 80px;
+			}
+		}
+		
+		#up_logo_title{
+			float: left;
+			padding-top: 20px;
+			font-size: 14pt;
+			
+			a{
+				color: $upDarkBlue;
+			}
+		}
+		
+		#up_logo_footer{
+			height: 40px;
+		}
+	}
+	#line
+	{
+		width: 100%;
+		height: 20px;
+		background: $upGray;
+		.blue
+		{
+			width: 50%;
+			background: $upDarkBlue;
+			height: 20px;
+		}
+		
+		.lineimg
+		{
+			display: none;
+		}
+	}		
+
+	header#mobile-menu {
+		display: none;
+	}
+		
+	header#banner{
+	
+		background: $upGray;
+		padding: 0;
+		margin: 0;
+		overflow: visible;
+		
+	
+		ul#up-general {
+			display: block;
+			overflow: visible;
+			list-style-type: none;
+			float:right;
+			color: $upDarkBlue;
+			position: absolute;
+			top: 0px;
+			right: 60px;
+			
+			li
+			{
+				float: left;
+				margin-left: 2px;
+				background: $upLightBlue;
+				height: 40px;
+				minwidth: 100px;
+				color: $upDarkBlue;
+				font-size: 0.86667em;
+				padding: 3px 10px;
+				
+				a
+				{
+					color: $upDarkBlue;
+					padding-top: 10px;
+					display: inline-block;
+				}
+				
+				.lang-img
+				{
+					@include up-grafic;
+					background-position: -7px -46px;
+					width: 40px;
+					height:40px;
+					display: inline-block;
+				}
+				
+				span.search-img
+				{
+					@include up-grafic;
+					background-position: -7px 0px;
+					width: 40px;
+					height:40px;
+					display: inline-block;
+				}
+				
+				span.logout
+				{
+					@include ple-grafic;
+					background-position: 0px -33px;
+					display: inline-block;
+					width: 12px;
+					height:26px;
+					padding-left: 10px;
+					padding-top: 0px;
+				}
+				
+				ul
+				{
+					list-style: none;
+					position: relative;
+					z-index: 2000;
+					margin-left: 0px;
+					
+					li
+					{
+						float: none;
+					}
+				}
+			}
+
+			li.unipage
+			{
+				font-weight: bold;
+				background: $upGray;
+			}
+			
+			li.lang
+			{
+				background: $upWhite;
+				width: 110px;
+				
+				select
+				{
+					background: $upWhite;
+					width: 60px;
+				}
+			}
+			
+			li.search
+			{
+				width: 50px;
+				overflow: visible;
+				
+				.icon
+				{
+					float: none;
+				}
+				
+				div
+				{
+					display: block;
+					z-index: 1002;
+					background: $upLightBlue;
+					overflow: hidden;
+					position: relative;
+					top: -50px;
+					left: -250px;
+					width: 374px;
+					height: 50px;
+					
+					form{
+						margin: 0px;
+						float: right;
+					}
+					
+					input
+					{
+						border: 1px solid $upDarkBlue;
+						background: $upLightBlue;
+						margin: 10px;
+						width: 305px;
+						border-radius: 0px;
+						padding: 0px;
+					}
+					
+					select
+					{
+						display: none;
+					}
+					
+					input[type="image"] 
+					{
+						display: none;
+					}
+				}
+			}
+		}
+		
+		#logo {
+			display: block;
+			width: 160px;
+			height: 172px;
+			background-image: url(../images/up/up_logo_university_2.png);
+			margin-left:100px;
+		}
+		
+	
+		.portlet-dockbar{
+			padding-top: 20px;
+		}
+		
+		#heading{
+			padding-left: 50px;
+			
+			img
+			{
+				display: none;
+			}
+		}
+	}
+	
+	#content{
+		padding-left: 50px;
+		background: $upWhite;
+	}
+	
+	#sidebar {
+		width: 0px;
+		left: 0px;
+		top: 0px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100%;
+		margin-right: 0px;
+		z-index: 1401;
+
+		
+		div
+		{
+			overflow: hidden;
+		}
+		
+		.title {
+			background: $upMenuColor;
+			
+			-moz-transform: rotate(-90deg);
+			-ms-transform: rotate(-90deg);
+			-o-transform: rotate(-90deg);
+			-webkit-transform: rotate(-90deg);
+			transform:rotate(-90deg);
+			
+			width:140px;
+			height:20px;
+			padding:10px;
+			right:-100px;
+			top:190px;
+			position: absolute;
+			z-index:1401;
+			cursor: pointer;
+			font-weight: bold;
+			font-variant: small-caps;
+			
+			.arrow
+			{
+				@include up-grafic;
+				background-position: -18px -505px;
+				display: inline-block;
+				
+				-moz-transform: rotate(90deg);
+				-ms-transform: rotate(90deg);
+				-o-transform: rotate(90deg);
+				-webkit-transform: rotate(90deg);
+				transform:rotate(90deg);				
+			}
+			
+			.arrow.down {
+				-moz-transform: rotate(-90deg);
+				-ms-transform: rotate(-90deg);
+				-o-transform: rotate(-90deg);
+				-webkit-transform: rotate(-90deg);
+				transform:rotate(-90deg);
+			}			
+		}
+		
+		.content {
+			position: absolute;
+			width: 100%;
+			background: $upMenuColor;
+			height: 100%;
+			
+			h2
+			{
+				font-variant: small-caps;
+			}
+									
+			.add, .search
+			{
+				width: 140px;
+				height: 28px;
+				padding-top: 3px;
+				padding-left: 5px;
+				background: $upBlueGray;
+				color: $upWhite;
+				display: inline-block;
+				vertical-align: middle;
+				
+				.icon
+				{
+					@include ple-grafic;
+					width: 20px;
+					height: 20px;
+					background-position: -30px -313px;
+					display: inline-block;
+					margin-top: -2px;
+				}
+			}
+			
+			.search .icon
+			{
+					background-position: 0px -313px;
+			}
+			
+			.filter
+			{
+				border: 1px solid $upBlueGray;
+				padding: 2px;
+				height: 20px;
+				overflow: hidden;
+				margin: 10px 8px 0 0;
+				
+				.icon
+				{
+					@include ple-grafic;
+					background-position: 0px -97px;
+					float: left;
+				}
+				
+				input
+				{
+					border:0px;
+					background: $upMenuColor;
+					width: 260px;
+				}
+			}
+			
+			
+			
+			#sidebar-my-sites{
+			
+				list-style: none;
+				margin: 0px;
+				padding: 0px;
+				overflow: scoll-x;
+				
+				li {
+					border-bottom: 1px solid $upBlueGray;
+					padding: 10px;
+					margin-bottom: 10px;
+					
+					a {
+						color: $upDarkGray;
+					}
+				}		
+			}
+			
+		}
+		
+		h2
+		{
+			font-size: 14pt;
+			color: $upDarkBlue;
+			overflow: hidden;
+			
+			.search
+			{
+				background-position: -8px -1878px;
+			}
+
+			.add
+			{
+				background-position: -8px -1878px;
+			}
+
+			.close
+			{
+				background-position: -11px -312px;
+			}
+
+		}
+	}
+		
+	#sidebar.show-sidebar {
+		width: 300px;
+		
+		.content
+		{
+			padding: 5px;
+		}
+	}
+	
+	.arrow {
+		@include up-grafic;
+		background-position: -15px -126px;
+		display: inline-block;
+		float: none;
+	}
+	
+	.arrow.down {
+		background-position: -99px -126px;
+	}
+	
+	.icon {
+		@include up-grafic;
+		float: left;
+	}
+	
+	#admin
+	{
+		list-style: none;
+		position: absolute;
+		right: 60px;
+		top: 90px;
+		background: $upLightBlue;
+		color: $upDarkBlue;
+		
+		li
+		{
+			float: left;
+			padding: 5px;
+			padding-right: 20px;
+			
+			#toggleDockbar
+			{
+				height: auto;
+				width: auto;
+				overflow: hidden;
+				margin: 0;
+			}
+
+			.workspace
+			{
+				@include ple-grafic;
+				background-position: 0px -334px;
+				display: inline-block;
+			}
+			
+			.admin
+			{
+				@include ple-grafic;
+				background-position: 0px -401px;
+				display: inline-block;
+			}
+		} 
+	}
+	
+	
+	#main-menu
+	{
+		margin: 60px;
+		list-style: none;
+		display: block;
+		overflow: hidden;
+		padding: 0px;
+		
+		li
+		{
+			width: 25%;
+			margin-right:-10px;
+			float: left;
+			background: $upWhite;
+			color: $upDarkBlue;
+			padding: 10px 10px 10px 0px;
+			display: block;
+			Overflow: hidden;
+			text-align: center;
+			
+			.icon{
+				float: none;
+				display: inline-block;
+			}
+			
+			ul
+			{
+				height: 205px;
+				list-style: none;
+				overflow: hidden;
+				padding: 10px 0px;
+				margin: 10px;
+				
+				li
+				{
+					float: none;
+					border-bottom: 1px solid $upLightBlue;
+					width: 100%;
+					padding: 3px;
+					text-align: left;
+					
+					a
+					{
+						color: $upDarkBlue;
+					}
+		
+				}
+			}
+		}
+		
+	
+		span.close
+		{
+			position: absolute;
+			right: 0px;
+			bottom: 0px;
+			padding-left: 20px;
+			@include up-grafic;
+			
+		}
+
+	}
+	
+	#main-menu.disabled
+	{
+		background: $upGray;
+	
+		li
+		{
+			color: $upDarkGray;
+		}
+	}
+	
+	#main-menu.open
+	{
+		li:hover
+		{
+			background: $upDarkBlue;
+			color: $upWhite;
+			
+			.icon.arrow
+			{
+				background-position: -136px -126px;
+			}
+			
+			ul
+			{
+				background: $upDarkBlue;
+				
+				li
+				{
+					background: $upDarkBlue;
+					color: $upWhite;
+					
+					a
+					{
+						color: $upWhite;
+					}
+				}	
+			}
+		}
+	}
+}
+
+body.smallhead
+{
+	background: $upBgColor;
+	
+	#line
+	{
+		display: none;
+	}
+	
+	#sidebar .title
+	{
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		-webkit-transform: rotate(0deg);
+		transform:rotate(0deg);
+		position: fixed;
+		top: 0px;
+		left: 0px;	
+		width: 120px;
+		height: 30px;
+		z-index: 1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		
+		.arrow
+		{
+			-moz-transform: rotate(0deg);
+			-ms-transform: rotate(0deg);
+			-o-transform: rotate(0deg);
+			-webkit-transform: rotate(0deg);
+			transform:rotate(0deg);			
+		}
+
+		.arrow.down
+		{
+			-moz-transform: rotate(180deg);
+			-ms-transform: rotate(180deg);
+			-o-transform: rotate(180deg);
+			-webkit-transform: rotate(180deg);
+			transform:rotate(180deg);			
+		}
+
+	}
+	
+	#sidebar.show-sidebar .title
+	{
+		left: 310px;
+	}
+	
+	#banner #up-general
+	{
+		position: fixed;
+		top: 0px;
+		right: 0px;
+		height: 50px;		
+		z-index:1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		
+		li
+		{
+			width: 40px;
+			border-right: 2px solid $upWhite;			
+		}
+		
+		li.unipage
+		{
+			display: none;
+		}
+		
+		li.lang
+		{
+			width: 40px;
+			overflow: hidden;
+		}
+		
+		li.services
+		{
+			display: none;
+		}
+		
+		li.logout
+		{
+			width: 40px;
+			position: relative;
+			
+			a
+			{
+				color: $upLightBlue;
+			}
+			
+			span.icon
+			{
+				position: absolute;
+				left: 23px;
+			}
+		}
+		
+	}
+	
+	#admin
+	{
+		position: fixed;
+		top:0px;
+		right: 180px;
+		width: 100px;
+		z-index:1001;
+		height: 50px;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		overflow: hidden;
+	
+		
+		li
+		{
+			width: 44px;
+			height: 46px;
+			overflow: hidden;
+			color: $upLightBlue;
+			border-right: 2px solid $upWhite;
+			padding: 2px;
+			
+			a
+			{
+				color: $upLightBlue;
+			}
+			
+			#toggleDockbar, #adminbox
+			{
+				width: 44px;
+				overflow: hidden;
+				
+				.icon
+				{
+					margin: 10px;
+				}
+			}
+			
+			
+		}
+	}
+	
+	#main-menu
+	{
+		position: fixed;
+		top: 0px;
+		left: 140px;
+		right: 280px;
+		z-index:1001;
+		margin: 0px;
+		border-bottom: 2px solid $upGray;
+		min-height: 50px;
+		background: $upWhite;
+		
+		li
+		{
+			border-right: 2px solid $upGray;
+			margin-right: -12px;
+		}
+		
+	}
+}
