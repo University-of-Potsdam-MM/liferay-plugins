@@ -30,7 +30,7 @@ AUI().ready(
 		if(body)
 		{
 			A.on('scroll', function(e) {
-				if(window.scrollY > 200)
+				if(window.scrollY > 150)
 				{
 					body.addClass("smallhead");
 				}
@@ -76,13 +76,23 @@ AUI().ready(
 		
 		if(up_services)
 		{
-			console.log('hier');
 			up_services.on('click', function(event){
 				event.preventDefault();
 				up_services.siblings('ul').toggleClass('hidden');
 			})
 		}
 		
+		var search = A.all('#up-general .search-img');
+		var searchfield = A.one('#up-general #searchfield')
+		if(search && searchfield)
+		{
+			search.on('click', function(event){
+				event.preventDefault();
+				searchfield.toggleClass('hidden');
+			})
+		}
+		
+	
 		var mainMenu = A.one('#main-menu.enabled');
 		
 		if(mainMenu){

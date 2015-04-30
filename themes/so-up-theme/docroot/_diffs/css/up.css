@@ -99,7 +99,7 @@ body{
 				a
 				{
 					color: $upDarkBlue;
-					padding-top: 15px;
+					padding-top: 10px;
 					display: inline-block;
 				}
 				
@@ -112,7 +112,7 @@ body{
 					display: inline-block;
 				}
 				
-				.search-img
+				span.search-img
 				{
 					@include up-grafic;
 					background-position: -7px 0px;
@@ -121,13 +121,13 @@ body{
 					display: inline-block;
 				}
 				
-				.logout
+				span.logout
 				{
 					@include ple-grafic;
-					background-position: 0px -25px;
+					background-position: 0px -33px;
 					display: inline-block;
-					width: 30px;
-					height:40px;
+					width: 12px;
+					height:26px;
 					padding-left: 10px;
 					padding-top: 0px;
 				}
@@ -137,6 +137,7 @@ body{
 					list-style: none;
 					position: relative;
 					z-index: 2000;
+					margin-left: 0px;
 					
 					li
 					{
@@ -148,16 +149,67 @@ body{
 			li.unipage
 			{
 				font-weight: bold;
+				background: $upGray;
 			}
 			
 			li.lang
 			{
 				background: $upWhite;
-				width: 60px;
+				width: 110px;
 				
 				select
 				{
 					background: $upWhite;
+					width: 60px;
+				}
+			}
+			
+			li.search
+			{
+				width: 50px;
+				overflow: visible;
+				
+				.icon
+				{
+					float: none;
+				}
+				
+				div
+				{
+					display: block;
+					z-index: 1002;
+					background: $upLightBlue;
+					overflow: hidden;
+					position: relative;
+					top: -50px;
+					left: -250px;
+					width: 374px;
+					height: 50px;
+					
+					form{
+						margin: 0px;
+						float: right;
+					}
+					
+					input
+					{
+						border: 1px solid $upDarkBlue;
+						background: $upLightBlue;
+						margin: 10px;
+						width: 305px;
+						border-radius: 0px;
+						padding: 0px;
+					}
+					
+					select
+					{
+						display: none;
+					}
+					
+					input[type="image"] 
+					{
+						display: none;
+					}
 				}
 			}
 		}
@@ -177,6 +229,11 @@ body{
 		
 		#heading{
 			padding-left: 50px;
+			
+			img
+			{
+				display: none;
+			}
 		}
 	}
 	
@@ -361,6 +418,7 @@ body{
 		@include up-grafic;
 		background-position: -15px -126px;
 		display: inline-block;
+		float: none;
 	}
 	
 	.arrow.down {
@@ -377,7 +435,7 @@ body{
 		list-style: none;
 		position: absolute;
 		right: 60px;
-		top: 60px;
+		top: 90px;
 		background: $upLightBlue;
 		color: $upDarkBlue;
 		
@@ -432,6 +490,11 @@ body{
 			Overflow: hidden;
 			text-align: center;
 			
+			.icon{
+				float: none;
+				display: inline-block;
+			}
+			
 			ul
 			{
 				height: 205px;
@@ -452,6 +515,7 @@ body{
 					{
 						color: $upDarkBlue;
 					}
+		
 				}
 			}
 		}
@@ -576,13 +640,46 @@ body.smallhead
 			border-right: 2px solid $upWhite;			
 		}
 		
+		li.unipage
+		{
+			display: none;
+		}
+		
+		li.lang
+		{
+			width: 40px;
+			overflow: hidden;
+		}
+		
+		li.services
+		{
+			display: none;
+		}
+		
+		li.logout
+		{
+			width: 40px;
+			position: relative;
+			
+			a
+			{
+				color: $upLightBlue;
+			}
+			
+			span.icon
+			{
+				position: absolute;
+				left: 23px;
+			}
+		}
+		
 	}
 	
 	#admin
 	{
 		position: fixed;
 		top:0px;
-		right: 300px;
+		right: 180px;
 		width: 100px;
 		z-index:1001;
 		height: 50px;
@@ -625,7 +722,7 @@ body.smallhead
 		position: fixed;
 		top: 0px;
 		left: 140px;
-		right: 400px;
+		right: 280px;
 		z-index:1001;
 		margin: 0px;
 		border-bottom: 2px solid $upGray;

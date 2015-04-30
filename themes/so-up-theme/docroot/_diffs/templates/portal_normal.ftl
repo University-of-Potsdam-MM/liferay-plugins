@@ -40,6 +40,11 @@
 						</#if>
 					</#list>
 	        	</ul>
+	        	<ul id="sidebar-all-sites">
+	        		<#list theme.sitesDirectory() as all_site>
+	        			<li></li>
+	        		</#list>
+	        	</ul>
 			</div>
 		</div>
 	</#if>
@@ -112,8 +117,8 @@
             </div>
         </div>
 		<ul id="up-general">
-			<li><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<li><a class="up_services" href="">UP Dienste</a>
+			<li class="unipage"><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
+			<li class="services"><a class="up_services" href="">UP Dienste</a><span class="icon arrow"></span>
 				<ul class="service_list hidden">
 					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
 					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
@@ -129,9 +134,16 @@
 					<option value="en_US">English</option>
 				</select>
 			</li>
-			<li><span class="search-img"></li>
+			<li class="search">
+				<span class="search-img"></span>
+				<div id="searchfield" class="hidden searchfield">
+					<span class="search-img"></span>
+					${theme.search()}
+				</div>
+			</li>
+			
 			<#if is_signed_in>
-				<li><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
+				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
 			<#else>
 				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
 			</#if>
@@ -212,8 +224,9 @@
 		<!-- Ausblenden damit es keine Probleme beim JS gibt -->
 		<div class="hidden">
 			<@liferay.dockbar />
+			${theme.include(body_top_include)}
 		</div>
-		${theme.include(body_top_include)}
+
 		
 		<div id="heading">
 			<h1 class="site-title">
