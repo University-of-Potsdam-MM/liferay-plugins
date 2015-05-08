@@ -48,10 +48,12 @@ $theme.include($body_top_include)
 			<a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
 		#end
 
-		#if ($has_navigation || $is_signed_in)
+		
+	</header>
+	
+	#if ($has_navigation || $is_signed_in)
 			#parse ("$full_templates_path/navigation.vm")
 		#end
-	</header>
 
 	<div id="content">
 	
@@ -66,7 +68,7 @@ $theme.include($body_top_include)
 			$theme.wrapPortlet("portlet.vm", $content_include)
 		#end
 	</div>
-
+	<div style="clear:all"></div>
 	<footer id="footer" role="contentinfo">
 		<p class="powered-by">
 			#language ("powered-by") <a href="http://www.liferay.com" rel="external">Liferay</a>

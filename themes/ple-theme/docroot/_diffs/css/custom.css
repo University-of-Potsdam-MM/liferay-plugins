@@ -11,6 +11,14 @@
 
 @import url(microblog.css);
 
+@import url(contacts.css);
+
+@import url(messages.css);
+
+@import url(tasks.css);
+
+
+
 /* Seitenüberschriften und Titel*/
 #heading h1.site-title span.site-name {
 	font-style: italic;
@@ -80,6 +88,10 @@
 	background-color: #D0DAE3
 }
 
+.aui .nav-list>.active>a, .aui .nav-list>.active>a:hover, .aui .nav-list>.active>a:focus {
+	background-color:#014260;
+}
+
 /*Tabs */
 .aui portlet-body .nav-tabs>.active>a,.aui portlet-body .nav-tabs>.active>a:hover,.aui portlet-body .nav-tabs>.active>a:focus
 	{
@@ -95,12 +107,17 @@
 	background-color: #014260 !important;
 	background-image: none;
 	border: none;
+	 text-shadow: 0 0px 0 rgba(0, 0, 0, 0.25);
 }
+
 
 .aui .btn {
 	background-color: #d0dae3;
 	background-image: none;
 	border: none;
+	-webkit-border-radius: 0px;
+ 	-moz-border-radius: 0px;
+ 	border-radius: 0px;
 }
 
 .aui .btn-group>.btn:last-child,.aui .btn-group>.dropdown-toggle {
@@ -121,6 +138,16 @@
 	border-bottom-left-radius: 0px;
 }
 
+aui .btn.disabled, .aui .btn[disabled] {
+
+  opacity: 0.25; 
+  }
+  
+  .aui .pager .disabled>a, .aui .pager .disabled>a:hover, .aui .pager .disabled>a:focus, .aui .pager .disabled>span {
+  color: #E8E8E8;
+  background-color: #F5F5F5;
+  }
+
 /* Suchfelder */
 .aui .form-search .input-append .search-query {
 	webkit-border-radius: 0px 0 0 0px;
@@ -135,9 +162,42 @@
 	border: 1px solid #D0DAE3;
 }
 
-/* Alterts */
+/* Alerts */
 .aui .alert-info,.aui .portlet-msg-help,.aui .portlet-msg-info,.aui .portlet-msg-progress
 	{
 	background-color: #fff091;
 	border: 0px;
+}
+
+/*.aui links, farben*/
+
+.aui a:hover, .aui a:focus {
+  color: #026694;
+  text-decoration: none;
+}
+
+.aui .well {
+	background-color:#fff;
+}
+
+/*dropdown*/
+
+.aui .dropdown-menu {
+ -moz-border-radius: 0px;
+  border-radius: 0px; 
+  webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
+  -moz-box-shadow: 0 0px 0px rgba(0,0,0,0.2);
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
+ 
+}
+
+.aui .dropdown-menu>li>a:hover, .aui .dropdown-menu>li>a:focus, .aui .dropdown-submenu:hover>a, .aui .dropdown-submenu:focus>a { {
+	background-color:#d0dae3;
+}
+
+.aui .dropdown-menu {
+  display: block;
+  background-color: #D0DAE3 !important;
+  border-color: #FFF  !important;;
+  border-width: 2px  !important;;
 }

@@ -1,3 +1,4 @@
+/**Liferay Activities**/
 #portlet_116 {
 	  font-family: "source sans pro", Arial, Helvetica, serif;
 }
@@ -23,3 +24,48 @@
 	font-weight:300;
 }
 
+
+/***Social Office Activities ***/
+
+.so-portlet-activities .activity-footer-toolbar, 
+.so-portlet-activities .comment-entry, 
+.so-portlet-activities .comments-container .form  {
+	background: #D0DAE3;
+	border:0px;
+}
+
+.so-announcements-portlet .entry-footer-toolbar {
+	background: #D0DAE3;
+
+}
+
+.so-portlet-activities .activity-item .control-group input {
+	border-color:#d0dae3;
+}
+
+.so-announcements-portlet .entry-body {
+  border: 1px solid #d0dae3;
+}
+  
+.so-announcements-portlet .entry-body   .entry-content-container {
+  	font-family: georgia, serif;
+  	font-style:italic;
+  	letter-spacing:1px;
+  	 padding: .0em .2em .9em .9em;
+  }
+  
+.so-announcements-portlet .entry-body   .title {
+ 	 padding: .4em 0em .0em .9em;
+ 	 color:#014260;
+  }
+  
+.so-announcements-portlet .read-entries-container .entries .header {
+	border:none;
+	font-family: georgia,serif;
+  font-weight: bold;
+  font-style: italic;
+  color: #014260;
+  text-align: right;
+  padding-right: 30px;
+}
+}

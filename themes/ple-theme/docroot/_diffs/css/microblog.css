@@ -1,0 +1,154 @@
+.microblogs-portlet .microblogs-entry-form {
+	background: #d0dae3;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	margin-left: 20%;
+}
+
+.microblogs-portlet .microblogs-entry-form:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 12px 17px 12px 0;
+	border-color: transparent #d0dae3;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-top: -12px;
+	left: -17px;
+	top: 41%;
+}
+
+.microblogs-portlet .autocomplete, .microblogs-portlet .autocomplete:focus,
+	.microblogs-portlet .autocomplete {
+	border: 0px;
+	background-color: #d0dae3;
+	min-height: 60px;
+	margin-left: 8px;
+}
+
+.microblogs-portlet .autocomplete, .microblogs-portlet .autocomplete:focus, .microblogs-portlet .autocomplete.inactive {
+	margin-left:0px;
+	border: none;
+}
+
+.microblogs-portlet .thumbnail {
+	display: none;
+}
+
+.microblogs-portlet .microblogs-entry {
+	border: 2px solid #D0DAE3;
+	border-radius: 0px;
+	margin: 5px 0px 15px;
+	padding: .5em 0 .5em;
+	background-color: #FFF;
+}
+
+.microblogs-portlet .microblogs-entry .entry-bubble {
+	margin-left: 7px;
+}
+
+.microblogs-portlet .microblogs-entry-form .field-text textarea {
+	margin:0 auto;
+	font-size: 1.2em;
+}
+
+.microblogs-portlet .field-input-text {
+	min-width: 94% !important;
+	margin-top: 8px !important;
+	background-color: #E2EDF7;
+}
+
+.microblogs-portlet .microblogs-entry .entry-bubble .content {
+	font-family: georgia, serif;
+	font-style: italic;
+	font-style: italic;
+	letter-spacing: 1px;
+	color: #5E5E5E;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px
+}
+
+.microblogs-portlet .microblogs-entry .entry-bubble .user-name {
+	font-size: .9em;
+	font-family: "Source Sans Pro", Arial, sans-serif;
+	text-decoration: underline;
+}
+
+.microblogs-portlet .microblogs-entry-form .button-holder {
+	margin-top: 0px;
+	padding-left: 10px;
+	background-color: #D0DAE3;
+	border-radius: 0;
+}
+
+.microblogs-portlet .microblogs-entry-form .button-holder button.microblogs-post
+	{
+	font-size: .9em;
+	height: 2.3em;
+	line-height: .8em;
+}
+
+.microblogs-portlet .microblogs-entry-form .button-holder .control-group select
+	{
+	font-size: .9em;
+	line-height: .8em;
+	border: none;
+	height: 2.3em;
+}
+
+.microblogs-portlet .microblogs-entry .footer {
+	font-size: .8em;
+	border-top: 1px solid #DDD;
+	margin-right: 5px;
+}
+
+.microblogs-portlet .autocomplete {
+	margin-left: 0px;
+}
+
+/* Kommentare */
+.microblogs-portlet .comments-container-content .thumbnail {
+	display: block;
+}
+
+.microblogs-portlet .comments-container-content .autocomplete.inactive {
+	border: 0;
+	background-color: #D0DAE3;
+	min-height: 60px;
+	margin-left: 8px;
+	border-radius: 0;
+	margin-left: 45px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.microblogs-portlet .comments-container-content .autocomplete {
+	margin-right: 8px;
+}
+
+.microblogs-portlet .comments-container-content .button-holder {
+	margin-right: 8px;
+	 padding-bottom: 10px;
+}
+
+.microblogs-portlet .reply .thumbnail {
+	margin-top: 10px;
+}
+
+.microblogs-portlet .comments-container-content .microblogs-entry {
+	border-left: none;
+	border-right: none;
+}
+
+.microblogs-portlet .comments-container-content .entry-bubble {
+	margin-left: 46px;
+}
+
+.microblogs-portlet .comments-container-content  .microblogs-entry-form:after,
+	.microblogs-portlet .edit-container .microblogs-entry-form:after {
+	display: none;
+}
+
