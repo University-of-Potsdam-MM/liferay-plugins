@@ -670,6 +670,8 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 		</for>
 	</target>
 
+	<target name="install" depends="publish-local-m2-release" />
+
 	<target name="jar-javadoc" depends="javadoc">
 		<jar-javadoc
 			module.dir="${basedir}"
@@ -792,6 +794,22 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 			<param name="ivy.publish.resolver" value="sonatype-m2-snapshot" />
 			<param name="plugin.release.qualifier" value="-SNAPSHOT" />
 		</antcall>
+
+		<property file="bnd.bnd" prefix="bnd." />
+
+		<exec dir="${basedir}" executable="git" outputproperty="git.commit.module.rev.parse">
+			<arg line="rev-parse HEAD" />
+		</exec>
+
+		<propertyregex
+			input="${sonatype.snapshot.url}"
+			property="cdn.sonatype.snapshot.url"
+			regexp="https://"
+			replace="https://cdn."
+		/>
+
+		<echo file="snapshot.properties">snapshot.git.id=${git.commit.module.rev.parse}
+snapshot.url=${cdn.sonatype.snapshot.url}/com/liferay/${bnd.Bundle-SymbolicName}/${bnd.Bundle-Version}-SNAPSHOT/${bnd.Bundle-SymbolicName}-${bnd.Bundle-Version}-SNAPSHOT.jar</echo>
 	</target>
 
 	<target name="shrink-zip-cmd">
@@ -865,5 +883,38 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 				<antcall target="compile-jsp" />
 			</then>
 		</if>
+	</target>
+
+	<target name="test-package">
+		<if>
+			<not>
+				<isset property="test.package" />
+			</not>
+			<then>
+				<fail>Use "ant test-package -Dtest.package=com.liferay.portal.kernel.util".</fail>
+			</then>
+		</if>
+
+		<propertyregex
+			global="true"
+			input="${test.package}"
+			property="test.package.dir"
+			regexp="\."
+			replace="/"
+		/>
+
+		<test-cmd
+			module.dir="${basedir}"
+			junit.forkmode="once"
+			test.class="**/${test.package.dir}/*Test.class"
+			test.type="integration"
+		/>
+
+		<test-cmd
+			module.dir="${basedir}"
+			junit.forkmode="perTest"
+			test.class="**/${test.package.dir}/*Test.class"
+			test.type="unit"
+		/>
 	</target>
 </project>

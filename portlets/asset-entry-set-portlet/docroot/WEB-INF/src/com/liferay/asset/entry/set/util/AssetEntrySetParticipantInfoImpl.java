@@ -16,6 +16,8 @@ package com.liferay.asset.entry.set.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -27,12 +29,47 @@ import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.model.AssetTag;
+import com.liferay.portlet.asset.service.AssetTagLocalServiceUtil;
 
 /**
  * @author Matthew Kong
  */
 public class AssetEntrySetParticipantInfoImpl
 	implements AssetEntrySetParticipantInfo {
+
+	public JSONArray getAssetTagsJSONArray(long userId, String[] assetTagNames)
+		throws PortalException, SystemException {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		User user = UserLocalServiceUtil.getUser(userId);
+
+		Group group = GroupLocalServiceUtil.getCompanyGroup(
+			user.getCompanyId());
+
+		AssetTagLocalServiceUtil.checkTags(userId, group, assetTagNames);
+
+		for (String assetTagName : assetTagNames) {
+			AssetTag assetTag = AssetTagLocalServiceUtil.getTag(
+				group.getGroupId(), assetTagName);
+
+			if (assetTag == null) {
+				throw new SystemException(
+					"Asset tag does not exist for name " + assetTagName);
+			}
+
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+			jsonObject.put("classNameId", _ASSET_TAG_CLASS_NAME_ID);
+			jsonObject.put("classPK", assetTag.getTagId());
+			jsonObject.put("name", assetTagName);
+
+			jsonArray.put(jsonObject);
+		}
+
+		return jsonArray;
+	}
 
 	public ObjectValuePair<Long, Long> getClassNameIdAndClassPKOVP(long userId)
 		throws SystemException {
@@ -101,6 +138,9 @@ public class AssetEntrySetParticipantInfoImpl
 
 		return false;
 	}
+
+	private static final long _ASSET_TAG_CLASS_NAME_ID =
+		ClassNameLocalServiceUtil.getClassNameId(AssetTag.class);
 
 	private static final long _GROUP_CLASS_NAME_ID =
 		ClassNameLocalServiceUtil.getClassNameId(Group.class);
