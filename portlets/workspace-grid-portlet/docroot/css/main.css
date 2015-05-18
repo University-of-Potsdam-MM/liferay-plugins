@@ -1,25 +1,95 @@
 .workspaceBox {
-	border: 1px solid;
-	margin:0;
-	padding: 0;;
+	position: relative; float : left;
+	width: 110px; height : 100px;
+	margin: 5px;
+	background-color: #d0dae3;
+	text-align: center;
+	display: inline-block;
+	float: left; width : 110px; height : 100px; margin : 5px;
+	background-color : #d0dae3; text-align : center; display : inline-block;
+	font-size: .9em;
+	line-height: 1.1em;
+	height: 100px;
 }
 
-.workspaceBox a {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 20px;
+.workspaceBox:hover {
+	background-color: #014260;
+	text-decoration:none !important;
+}
+
+.workspaceBox:hover span.linkName {
+	color: #fff;
+}
+
+.workspaceBox:hover span.numberOfActivities {
+	color: #014260;
+	background-color: #fff;
+}
+
+.workspaceBox:before {
+	content: '';
 	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+span.linkName {
+	margin-top: 5px;
+	color: #014260;
+	font-weight: 300;
+	
+	font-family: "Source Sans Pro", Arial, sans-serif;
+	vertical-align: middle;
+	display: inline-block;
+	width: 100px;
+}
+
+span.linkName:hover {
+	color: #fff;
+	text-decoration: none;
 }
 
 .template1 {
-	background-color: #334562;
+	border-left: 4px inset #334562;
 }
 
 .template2 {
-	background-color: red;	
+	border-left: 4px inset red;
 }
 
-.template3{
-	background-color: green;
+.template3 {
+	border-left: 4px inset green;
+}
+
+span.numberOfActivities {
+	position: absolute;
+	display: inline-block;
+	background-color: #014260;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	margin-left: -20px; margin-top : 5px;
+	color: #FFF;
+	line-height: 20px;
+	margin-top: 5px;
+}
+
+/* Notifications */
+section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay .v-horizontal>.v-slot+.v-slot
+	{
+	position: absolute;
+	background-color: #014260;
+	width: 20px;
+	height: 20px;
+	color: #FFF;
+	border-radius: 50%;
+	top: 5px;
+}
+
+section#portlet_workspacesoverview_WAR_workspacegrid10 .liferay .v-horizontal>.v-slot+.v-slot div.v-label
+	{
+	text-align: center;
+	line-height: 18px;
+	font-size: 1em;
 }

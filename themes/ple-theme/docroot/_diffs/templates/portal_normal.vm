@@ -8,6 +8,7 @@
 	<title>$the_title - $company_name</title>
 
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,300italic; 400,700,400italic,700italic" media="all" rel="stylesheet" type="text/css">
 
 	$theme.include($top_head_include)
 </head>
@@ -41,18 +42,21 @@ $theme.include($body_top_include)
 				<span>$the_title</span>
 			</h2>
 		</div>
+			<nav id="breadcrumbs">#breadcrumbs()</nav>
 
 		#if (!$is_signed_in)
 			<a data-redirect="$is_login_redirect_required" href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
 		#end
 
-		#if ($has_navigation || $is_signed_in)
+		
+	</header>
+	
+	#if ($has_navigation || $is_signed_in)
 			#parse ("$full_templates_path/navigation.vm")
 		#end
-	</header>
 
 	<div id="content">
-		<nav id="breadcrumbs">#breadcrumbs()</nav>
+	
 
 		#if ($selectable)
 			$theme.include($content_include)
@@ -64,7 +68,7 @@ $theme.include($body_top_include)
 			$theme.wrapPortlet("portlet.vm", $content_include)
 		#end
 	</div>
-
+	<div style="clear:all"></div>
 	<footer id="footer" role="contentinfo">
 		<p class="powered-by">
 			#language ("powered-by") <a href="http://www.liferay.com" rel="external">Liferay</a>

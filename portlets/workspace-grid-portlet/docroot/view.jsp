@@ -73,14 +73,37 @@ This is the <b>Test1</b> portlet.
 	System.out.println(courses);		
 	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, courses, template3Name);
 	
+	List<Group> other = null;		
+	
+	try {
+		other = WorkspaceUtilService.getOtherSites();
+	} catch (PortalException e1) {
+		e1.printStackTrace();
+	} catch (SystemException e1) {
+		e1.printStackTrace();
+	}
+	
+	System.out.println(other);		
+	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, other, template3Name);
+	
+	
 	%>
-	<div class="container-fluid">
+	<div id="workspacegrid">
 		<%
 		for (WorkspaceSlide workspaceSlide: workspaceSlides){
+			
 			System.out.println(workspaceSlide);
 		%>
-		<div class="workspaceBox <%= workspaceSlide.getTemplateName() %>"><a href="<%= workspaceSlide.getWebLink() %>"><%= workspaceSlide.getName() %> (<%= workspaceSlide.getNumberOfNewActivities() %>)</a></div>
+		
+		
+			
+			<a class="workspaceBox <%= workspaceSlide.getTemplateName() %>" href="<%= workspaceSlide.getWebLink() %>">
+				<span class="linkName"><%= workspaceSlide.getName() %></span>
+				<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span> 
+			</a>
+		
 		<%
 		}
 		%>
+		<div style="clear:left;">
 	</div>	
