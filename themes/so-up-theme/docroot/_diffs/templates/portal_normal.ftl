@@ -20,7 +20,7 @@
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Workspaces <span class="arrow"></span></div>
+			<div class="title">Workspaces<span class="arrow"></span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
 				 

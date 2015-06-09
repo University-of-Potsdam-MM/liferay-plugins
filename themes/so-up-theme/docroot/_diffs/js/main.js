@@ -73,6 +73,24 @@ AUI().ready(
 			})
 		}	
 		
+		var workspacePageSelectOwn = A.one('.switch #own');
+		var workspacePageSelectPublic = A.one('.switch #public');
+		
+		if(workspacePageSelectOwn)
+		{
+			workspacePageSelectOwn.on('change', function(event){
+				A.one('#sidebar-my-sites').removeClass('hidden');
+				A.one('#sidebar-all-sites').addClass('hidden');
+			});
+		}
+		if(workspacePageSelectPublic)
+		{
+			workspacePageSelectPublic.on('change', function(event){
+				A.one('#sidebar-my-sites').addClass('hidden');
+				A.one('#sidebar-all-sites').removeClass('hidden');
+			});
+		}		
+		
 		var up_services = A.one('#up-general .up_services');
 		
 		if(up_services)
