@@ -6,17 +6,16 @@
 
 <head>
 	<title>${the_title} - ${company_name}</title>
-
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
-
 	${theme.include(top_head_include)}
-<!--   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
-	<script src="//aui-cdn.atlassian.com/aui-adg/5.8.10/js/aui.js"></script>
-	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
 </head>
 <body class="${css_class}">
-
+	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste für die Seiten unter all sites-->
+	<div class="">
+		<@liferay.dockbar />
+		${theme.include(body_top_include)}
+		${theme.search()}
+	</div>
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
@@ -28,7 +27,7 @@
 				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
 				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
 				<div class="switch">
-					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" selected="selected">Eigene</input>
+					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" checked="checked">Eigene</input>
 					<input type="radio" name="select-type" id="public" value="sidebar-all-sites">&Ouml;ffentliche</input>
 				</div>
 				<ul id="sidebar-my-sites">
@@ -41,9 +40,7 @@
 					</#list>
 	        	</ul>
 	        	<ul id="sidebar-all-sites hidden">
-	        		<#list theme.sitesDirectory() as all_site>
-	        			<li></li>
-	        		</#list>
+
 	        	</ul>
 			</div>
 		</div>
@@ -150,9 +147,11 @@
 		</ul>
 		<#if is_signed_in>
 		<ul id="admin">
-			<li>
+			<li id="_145_toggleControls">
 				<div id="toggleDockbar">
-					<span class="icon workspace"></span>Workspace konfigurieren
+					<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">
+						<span class="icon workspace"></span>Workspace konfigurieren
+					</a>
 				</div>
 			</li>
 			<#if show_control_panel>
@@ -221,11 +220,7 @@
 		</ul>
 		</#if>	
 		
-		<!-- Ausblenden damit es keine Probleme beim JS gibt -->
-		<div class="hidden">
-			<@liferay.dockbar />
-			${theme.include(body_top_include)}
-		</div>
+
 
 		
 		<div id="heading">
