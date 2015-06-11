@@ -16,11 +16,10 @@
 	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
 </head>
 <body class="${css_class}">
-
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Workspaces <span class="arrow"></span></div>
+			<div class="title">Workspaces<span class="arrow"></span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
 				 
@@ -228,14 +227,18 @@
 		</div>
 
 		
-		<div id="heading">
+	
+		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
+	</header>
+	<div class="wrapper-portlet-area">
+	<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
 				</a>
 
 				<#if show_site_name>
-					<span class="site-name" title="<@liferay.language_format objects="${site_name}" key="go-to-x" />">
+					<span class="site-name" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 						${site_name}
 					</span>
 				</#if>
@@ -245,21 +248,25 @@
 				<span>${the_title}</span>
 			</h2>
 		</div>
-	</header>
-
-	<div id="content">
-		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
-
-		<#if selectable>
-			${theme.include(content_include)}
-		<#else>
-			${portletDisplay.recycle()}
-
-			${portletDisplay.setTitle(the_title)}
-
-			${theme.wrapPortlet("portlet.ftl", content_include)}
+	
+		<#if has_navigation>
+				<#include "${full_templates_path}/navigation.ftl" />
 		</#if>
-	</div>
+
+		<div id="content">
+		
+
+			<#if selectable>
+				${theme.include(content_include)}
+			<#else>
+				${portletDisplay.recycle()}
+
+				${portletDisplay.setTitle(the_title)}
+
+				${theme.wrapPortlet("portlet.ftl", content_include)}
+			</#if>
+		</div><!-- end content -->
+	</div><!-- end portlet area wrapper -->
 
 	<footer id="footer" role="contentinfo">
 	</footer>

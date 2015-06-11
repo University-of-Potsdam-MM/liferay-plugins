@@ -1,0 +1,48 @@
+/*custom media queries */
+
+@media (max-width: 979px)
+html.aui #navigation {
+  display: block;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+	#wrapper {
+  		padding: 0.1em;
+	}
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-width : 321px) {
+	#wrapper {
+	  		padding: 0.1em;
+		}
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+	#wrapper {
+	  		padding: 0.1em;
+		}
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+	#wrapper {
+		  		padding: 0.1em;
+			}
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+	#wrapper {
+		  		padding: 0.1em;
+			}
+}
+
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+	#wrapper {
+		  		padding: 0.1em;
+			}
+}
