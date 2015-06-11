@@ -1,8 +1,9 @@
 /*custom media queries */
 
 @media (max-width: 979px) {
-html.aui #navigation {
-  display: block;
+	html.aui #navigation {
+	  display: block;
+	}
 }
 
 /* Smartphones (portrait and landscape) ----------- */
