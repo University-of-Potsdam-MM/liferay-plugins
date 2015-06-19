@@ -1,0 +1,75 @@
+@import "compass";
+/*custom styles*/
+
+#navigation {
+	  width: 20%;
+ 
+  float: left;
+}
+
+#navigation ul, #navigation ul li ul {
+	list-style-type:none;
+	margin-left:0;
+}
+
+#navigation ul li a, #navigation ul li ul li a {
+	font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
+	display:block;
+	min-height:22px;
+	border-bottom:1px solid #CFDAE3;
+	color:#014260;
+	padding:10px 15px 10px 15px;
+	font-weight:bold;
+
+}
+
+#navigation ul li a:hover, #navigation ul li ul li a:hover {
+	background-color:#d0dae3;
+	text-decoration:none;
+
+}
+
+#navigation ul li.selected ul li a:hover {
+	background-color:#d0dae3;
+	text-decoration:none;
+
+}
+
+#navigation ul li ul li a {
+	margin-left:1em;
+	}
+
+#navigation ul li a span {
+	margin-left:.5em;
+
+}
+
+#navigation ul li ul {
+	display:none;
+}
+
+#navigation ul li.selected ul {
+	display:block;
+}
+
+#navigation ul li.selected a{
+	background-color:#014260;
+	color:#fff;
+	font-weight:bold;
+}
+
+#navigation ul li.selected ul li a{
+	background-color:#E9E9E9;
+	color:#014260;
+	font-weight:normal;
+	padding-left:.5em;
+	transition: background-color 0.2s ease-out;
+}
+
+#navigation ul li.selected ul li.selected a{
+	background-color:#014260;
+	color:#fff;
+
+
+}
+
