@@ -12,7 +12,7 @@ public class GroupToSlideConverter {
 	public static void convertGroupsToSlides(List<WorkspaceSlide> workspaceSlides, List<Group> courses, String filterLabel) {
 		for (Group course : courses) {								
 			try {
-				String courseUrL2 = PortalUtil.getPortalURL(CompanyLocalServiceUtil.getCompany(CompanyLocalServiceUtil.getCompanyIdByUserId(PrincipalThreadLocal.getUserId())).getVirtualHostname(), PortalUtil.getPortalPort(), true);								
+				String courseUrL2 = PortalUtil.getPortalURL(CompanyLocalServiceUtil.getCompany(CompanyLocalServiceUtil.getCompanyIdByUserId(PrincipalThreadLocal.getUserId())).getVirtualHostname(), PortalUtil.getPortalPort(true), true);								
 				String courseUrL = courseUrL2 + "/web/" + course.getName();								
 				workspaceSlides.add(new WorkspaceSlide(course.getName(), filterLabel, new URL(courseUrL), WorkspaceUtilService.getNumberOfActivitiesForSite(course)));
 			} catch (Exception e) {
