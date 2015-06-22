@@ -15,7 +15,12 @@
 	<script src="//aui-cdn.atlassian.com/aui-adg/5.8.10/js/aui.js"></script>
 	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
 </head>
-<body class="${css_class}">
+<body class="dockbar-split ${css_class}">
+
+<#if is_signed_in>
+	<@liferay.dockbar />
+</#if>
+
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
@@ -149,11 +154,13 @@
 		</ul>
 		<#if is_signed_in>
 		<ul id="admin">
+			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
-				<div id="toggleDockbar">
+				<a href="javascript:;" id="toggleDockbar">
 					<span class="icon workspace"></span>Workspace konfigurieren
-				</div>
+				</a>
 			</li>
+			</#if>
 			<#if show_control_panel>
 			<li>
 				<a href="${control_panel_url}">
