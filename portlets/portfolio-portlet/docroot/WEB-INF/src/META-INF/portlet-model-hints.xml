@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="de.unipotsdam.elis.portfolio.model.PortfolioPermission">
+		<field name="plid" type="long" />
+		<field name="userId" type="long" />
+	</model>
+</model-hints>
