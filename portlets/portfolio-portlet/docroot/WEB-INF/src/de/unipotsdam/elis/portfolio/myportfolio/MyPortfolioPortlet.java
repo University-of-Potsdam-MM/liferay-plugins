@@ -191,7 +191,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		if (portfolioPage != null) {
 			long userId = themeDisplay.getUserId();
 			long groupId = portfolioPage.getGroupId();
-			boolean privateLayout = false;// private page or public page
+			boolean privateLayout = false;
 			long parentLayoutId = portfolioPage.getLayoutId();
 			String name = portfolioName;
 			String title = portfolioName;
@@ -199,7 +199,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			String type = LayoutConstants.TYPE_PORTLET;
 			boolean hidden = false;
 			String friendlyURL = "/" + portfolioName;
-			ServiceContext serviceContext = new ServiceContext();
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
 			Layout newLayout = LayoutLocalServiceUtil.addLayout(userId, groupId, privateLayout, parentLayoutId, name,
 					title, description, type, hidden, friendlyURL, serviceContext);
 			LayoutPrototype portfolioPrototype = PortfolioPermissionManager.getPortfolioPrototype();

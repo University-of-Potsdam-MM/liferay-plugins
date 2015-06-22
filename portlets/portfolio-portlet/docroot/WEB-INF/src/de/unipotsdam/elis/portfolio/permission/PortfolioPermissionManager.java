@@ -103,7 +103,7 @@ public class PortfolioPermissionManager {
 			List<Layout> portfolios = LayoutLocalServiceUtil.getLayoutsByLayoutPrototypeUuid(layoutPrototype.getUuid());
 			PermissionChecker permissionChecker = PermissionThreadLocal.getPermissionChecker();
 			for (Layout layout : portfolios) {
-				if (permissionChecker.isGroupOwner(layout.getGroupId())) {
+				if (layout.getUserId() == permissionChecker.getUserId()) {
 					result.add(layout);
 				}
 			}
