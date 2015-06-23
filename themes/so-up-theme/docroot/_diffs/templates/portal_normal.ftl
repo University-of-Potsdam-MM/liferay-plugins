@@ -181,9 +181,12 @@
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myLayouts as myLayout>
-					<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-					<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-					</#if>
+						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage?string("true", "false") = "false">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
+						</#if>
 					</#list>
 				</ul>
 			</li>
@@ -204,9 +207,14 @@
 			<li>
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li>Kategorien</li>
-					<li>Portfolioseiten</li>
-					<li>Portfolioaufgaben</li>
+					<#list myLayouts as myLayout>
+						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage?string("true", "false") = "true">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
+						</#if>
+					</#list>
 				</ul>
 			</li>
 			<span class="icon close hidden">Schlieﬂen</span>
