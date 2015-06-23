@@ -133,10 +133,12 @@
 			</li>			
 			<li class="lang">
 				<span class="lang-img"></span>
+				<!--
 				<select name="language_id">
 					<option value="de_DE" selected>Deutsch</option>
 					<option value="en_US">English</option>
 				</select>
+				-->
 			</li>
 			<li class="search">
 				<span class="search-img"></span>
@@ -178,12 +180,11 @@
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_sname}/dashboard/">&Uumlbersicht</a></li>
-					<li><a href="/user/${user_sname}/calendar/">Kalender</a></li>
-					<li><a href="/user/${user_sname}/e-mail/">Webmail</a></li>
-					<li>Box.Up</li>
-					<li>Poodle</li>
-					<li>Pad.Up</li>
+					<#list myLayouts as myLayout>
+					<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+					<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+					</#if>
+					</#list>
 				</ul>
 			</li>
 			<li>
