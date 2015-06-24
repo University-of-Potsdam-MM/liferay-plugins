@@ -227,7 +227,7 @@ body {
 
 	@include box-shadow(-4px 0 15px -7px rgba(0, 0, 0, 0.6));
 
-	float: left;
+	/*float: left;*/ /*braucht es das?*/
 	min-height: 500px;
 	position: relative;
 	width: 100%;

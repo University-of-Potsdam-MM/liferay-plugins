@@ -144,13 +144,17 @@ public class PortfolioPermissionLocalServiceClp
 
 		_methodParameterTypes23 = new String[] { "long", "long" };
 
-		_methodName24 = "getPortfolioPermissionByPlid";
+		_methodName24 = "fetchPortfolioPermission";
 
-		_methodParameterTypes24 = new String[] { "long" };
+		_methodParameterTypes24 = new String[] { "long", "long" };
 
-		_methodName25 = "getPortfolioPermissionByUserId";
+		_methodName25 = "getPortfolioPermissionByPlid";
 
 		_methodParameterTypes25 = new String[] { "long" };
+
+		_methodName26 = "getPortfolioPermissionByUserId";
+
+		_methodParameterTypes26 = new String[] { "long" };
 	}
 
 	@Override
@@ -867,13 +871,42 @@ public class PortfolioPermissionLocalServiceClp
 	}
 
 	@Override
+	public de.unipotsdam.elis.portfolio.model.PortfolioPermission fetchPortfolioPermission(
+		long plid, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { plid, userId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (de.unipotsdam.elis.portfolio.model.PortfolioPermission)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioPermission> getPortfolioPermissionByPlid(
 		long plid) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24, new Object[] { plid });
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25, new Object[] { plid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -900,8 +933,8 @@ public class PortfolioPermissionLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -973,4 +1006,6 @@ public class PortfolioPermissionLocalServiceClp
 	private String[] _methodParameterTypes24;
 	private String _methodName25;
 	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
 }

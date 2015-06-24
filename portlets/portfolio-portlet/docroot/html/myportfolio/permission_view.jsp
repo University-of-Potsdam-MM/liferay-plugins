@@ -6,7 +6,7 @@
 <%
 	String portfolioPlid = renderRequest.getParameter("plid");
 	Layout portfolio = LayoutLocalServiceUtil.getLayout(Long.valueOf(portfolioPlid));
-	List<String> users = PortfolioPermissionManager.getUserOfPortfolio(portfolio.getPlid()); 
+	List<String> users = PortfolioManager.getUserOfPortfolio(portfolio.getPlid()); 
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
 %>
 

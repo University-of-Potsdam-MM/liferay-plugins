@@ -305,6 +305,12 @@ public class PortfolioPermissionLocalServiceUtil {
 		return getService().getPortfolioPermission(plid, userId);
 	}
 
+	public static de.unipotsdam.elis.portfolio.model.PortfolioPermission fetchPortfolioPermission(
+		long plid, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().fetchPortfolioPermission(plid, userId);
+	}
+
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioPermission> getPortfolioPermissionByPlid(
 		long plid) throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPortfolioPermissionByPlid(plid);
