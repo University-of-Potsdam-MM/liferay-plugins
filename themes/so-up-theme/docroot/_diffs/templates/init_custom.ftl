@@ -2,6 +2,7 @@
 	<#assign user_my_sites = user.getMySiteGroups() />
 	<#assign user_sname = user.getScreenName() />
 	<#assign user_account_url = themeDisplay.getURLMyAccount() />
+	<#assign sign_out_url = htmlUtil.escape(theme_display.getURLSignOut()) />
 	
 	<#assign has_layout_add_permission = 0 />
 	
