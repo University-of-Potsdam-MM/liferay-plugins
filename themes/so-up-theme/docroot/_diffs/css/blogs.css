@@ -1,0 +1,48 @@
+.portlet-blogs .edit-actions .lfr-table td {
+  display: inline-block;
+  background-color: #d0dae3;
+
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.portlet-blogs .edit-actions a {
+  color: #014260;
+  display: inline-block;
+  /* font-weight: bold; */
+  margin: 5px 5px 5px 0;
+  text-transform: uppercase;
+  font-size: .8em;
+  /* line-height: 1; */
+}
+
+.portlet-blogs .edit-actions a:hover {
+  text-decoration: none !important;
+  color:#fff;
+
+}
+
+.portlet-blogs .edit-actions .lfr-table td:hover {
+	 background-color: #014260;
+}
+
+.portlet-blogs .entry-body .lfr-editable {
+ 
+  margin-top: 15px;
+  
+  
+}
+
+.lfr-editable:hover:after {
+	background-color:#fff091;
+}
+
+.portlet-blogs .comments a:hover^, .portlet-blogs .taglib-flags  a:hover {
+	color:#014260;
+	text-decoration:underline;
+}
+
+.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited{
+	color:#014260;
+	text-decoration:underline;
+}
