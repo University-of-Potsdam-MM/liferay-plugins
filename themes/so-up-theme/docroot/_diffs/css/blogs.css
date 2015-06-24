@@ -37,7 +37,7 @@
 	background-color:#fff091;
 }
 
-.portlet-blogs .comments a:hover^, .portlet-blogs .taglib-flags  a:hover {
+.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover {
 	color:#014260;
 	text-decoration:underline;
 }
