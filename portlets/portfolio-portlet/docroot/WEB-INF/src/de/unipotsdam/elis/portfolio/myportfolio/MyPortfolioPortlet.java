@@ -40,7 +40,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-import de.unipotsdam.elis.portfolio.permission.PortfolioPermissionManager;
+import de.unipotsdam.elis.portfolio.PortfolioManager;
 import de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalServiceUtil;
 
 public class MyPortfolioPortlet extends MVCPortlet {
@@ -67,7 +67,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			addErrorMessage(actionRequest, actionResponse, "error-not-a-user");
 		} else {
 			long plid = ParamUtil.getLong(actionRequest, "plid");
-			boolean success = PortfolioPermissionManager.publishPortfolioToUser(plid, user.getUserId());
+			boolean success = PortfolioManager.publishPortfolioToUser(plid, user.getUserId());
 			if (!success) {
 				addErrorMessage(actionRequest, actionResponse, "error");
 			}
@@ -117,7 +117,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			throw new SystemException("User unknown");
 		} else {
 			long plid = ParamUtil.getLong(actionRequest, "plid");
-			PortfolioPermissionManager.removeUserFromPortfolio(plid, user.getUserId());
+			PortfolioManager.removeUserFromPortfolio(plid, user.getUserId());
 		}
 	}
 
@@ -202,7 +202,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
 			Layout newLayout = LayoutLocalServiceUtil.addLayout(userId, groupId, privateLayout, parentLayoutId, name,
 					title, description, type, hidden, friendlyURL, serviceContext);
-			LayoutPrototype portfolioPrototype = PortfolioPermissionManager.getPortfolioPrototype();
+			LayoutPrototype portfolioPrototype = PortfolioManager.getPortfolioPrototype();
 			newLayout.setLayoutPrototypeUuid(portfolioPrototype.getUuid());
 			LayoutLocalServiceUtil.updateLayout(newLayout);
 		}

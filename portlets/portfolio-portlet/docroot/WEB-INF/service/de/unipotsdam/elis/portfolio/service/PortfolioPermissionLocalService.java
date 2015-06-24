@@ -276,6 +276,11 @@ public interface PortfolioPermissionLocalService extends BaseLocalService,
 			de.unipotsdam.elis.portfolio.NoSuchPermissionException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public de.unipotsdam.elis.portfolio.model.PortfolioPermission fetchPortfolioPermission(
+		long plid, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioPermission> getPortfolioPermissionByPlid(
 		long plid) throws com.liferay.portal.kernel.exception.SystemException;
 
