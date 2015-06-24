@@ -15,6 +15,15 @@
 			</#if>
 			
 			<#-- Custom Logic to seperate portfolio sites in users private site -->
+			<#if nav_item.getLayout().getExpandoBridge().hasAttribute("Portfolio")??>
+				<#assign portfoliopage = nav_item.getLayout().getExpandoBridge().getAttribute("Portfolio") />
+			</#if>
+			<#if layout.getExpandoBridge().hasAttribute("Portfolio")??>
+				<#assign currentportfoliopage = layout.getExpandoBridge().getAttribute("Portfolio") />
+			</#if>
+			<#if currentportfoliopage?? && portfoliopage??>
+				<#if (currentportfoliopage?string("true", "false") = "false" && portfoliopage?string("true", "false") = "false") || (currentportfoliopage?string("true", "false") = "true" && portfoliopage?string("true", "false") = "true")>
+			
 					<li class="${nav_item_css_class}" id="layout_${nav_item.getLayoutId()}" ${nav_item_attr_selected} role="presentation">
 						<a aria-labelledby="layout_${nav_item.getLayoutId()}" href="${nav_item.getURL()}" ${nav_item_attr_has_popup} ${nav_item.getTarget()} role="menuitem"><span>${nav_item.icon()} ${nav_item.getName()}</span></a>
 					
@@ -36,6 +45,8 @@
 							</ul>
 						</#if>
 					</li>
+				</#if>
+			</#if>
 		</#list>
 	</ul>
 </nav>
