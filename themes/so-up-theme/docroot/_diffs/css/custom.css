@@ -164,7 +164,8 @@ h2.page-title {
 	webkit-border-radius: 0 0px 0px 0;
 	-moz-border-radius: 0 0px 0px 0;
 	border-radius: 0 0px 0px 0;
-	border: 1px solid #D0DAE3;
+	border: 0px solid #D0DAE3;
+	margin-top:1px;
 }
 
 .aui .btn-group>.btn:last-child,.aui .btn-group>.dropdown-toggle {

@@ -26,10 +26,15 @@ body.portlet {
 	
 }
 
+.portlet .portlet-title {
+	font-size: 2em;
+}
+
 .portlet-title {
-	background-color: #EDEDED;
-	margin-top:0 !important;
-	padding-left: 5px;
+	border-bottom: 1px solid #ededed;
+  margin-top: 0!important;
+  padding-left: 5px;
+  padding-bottom: 5px;
 }
 
 .portlet-title img {
@@ -64,9 +69,9 @@ body.portlet {
   margin: 0;
   padding: 2px;
   position: absolute;
-  right: 3px;
+  right: 20px;
   text-align: right;
-  top: 3px;
+  top: 16px;
   z-index: 300;
 }
 
