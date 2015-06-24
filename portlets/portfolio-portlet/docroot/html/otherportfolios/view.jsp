@@ -4,7 +4,7 @@
 <liferay-theme:defineObjects />
 
 <%
-	List<Layout> portfolios = PortfolioPermissionManager.getPortfoliosPublishedToCurrentUser(); 
+	List<Layout> portfolios = PortfolioManager.getPortfoliosPublishedToCurrentUser(); 
 %>
 
 <liferay-ui:search-container delta="10" emptyResultsMessage="portfolio-no-other-portfolios">

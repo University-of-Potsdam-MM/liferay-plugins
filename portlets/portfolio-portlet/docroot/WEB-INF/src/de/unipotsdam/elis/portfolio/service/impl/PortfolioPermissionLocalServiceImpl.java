@@ -67,12 +67,12 @@ public class PortfolioPermissionLocalServiceImpl extends PortfolioPermissionLoca
 
 		return deletePortfolioPermission(portfolioPermission);
 	}
-	
-	public void deletePortfolioPermissionByPlid(long plid) throws SystemException{
+
+	public void deletePortfolioPermissionByPlid(long plid) throws SystemException {
 		portfolioPermissionPersistence.removeByPlid(plid);
 	}
-	
-	public void deletePortfolioPermissionByUserId(long userId) throws SystemException{
+
+	public void deletePortfolioPermissionByUserId(long userId) throws SystemException {
 		portfolioPermissionPersistence.removeByUserId(userId);
 	}
 
@@ -81,16 +81,19 @@ public class PortfolioPermissionLocalServiceImpl extends PortfolioPermissionLoca
 
 		return portfolioPermissionPersistence.findByPrimaryKey(new PortfolioPermissionPK(plid, userId));
 	}
-	
+
+	public PortfolioPermission fetchPortfolioPermission(long plid, long userId) throws SystemException {
+		return portfolioPermissionPersistence.fetchByPrimaryKey(new PortfolioPermissionPK(plid, userId));
+	}
+
 	public List<PortfolioPermission> getPortfolioPermissionByPlid(long plid) throws SystemException {
 
-	    return portfolioPermissionPersistence.findByPlid(plid);
+		return portfolioPermissionPersistence.findByPlid(plid);
 	}
-	
+
 	public List<PortfolioPermission> getPortfolioPermissionByUserId(long userId) throws SystemException {
 
-	    return portfolioPermissionPersistence.findByUserId(userId);
+		return portfolioPermissionPersistence.findByUserId(userId);
 	}
-
 
 }

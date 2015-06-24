@@ -148,13 +148,17 @@ public class PortfolioPermissionLocalServiceClpInvoker {
 
 		_methodParameterTypes45 = new String[] { "long", "long" };
 
-		_methodName46 = "getPortfolioPermissionByPlid";
+		_methodName46 = "fetchPortfolioPermission";
 
-		_methodParameterTypes46 = new String[] { "long" };
+		_methodParameterTypes46 = new String[] { "long", "long" };
 
-		_methodName47 = "getPortfolioPermissionByUserId";
+		_methodName47 = "getPortfolioPermissionByPlid";
 
 		_methodParameterTypes47 = new String[] { "long" };
+
+		_methodName48 = "getPortfolioPermissionByUserId";
+
+		_methodParameterTypes48 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -297,11 +301,17 @@ public class PortfolioPermissionLocalServiceClpInvoker {
 
 		if (_methodName46.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
-			return PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByPlid(((Long)arguments[0]).longValue());
+			return PortfolioPermissionLocalServiceUtil.fetchPortfolioPermission(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName47.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			return PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByPlid(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByUserId(((Long)arguments[0]).longValue());
 		}
 
@@ -360,4 +370,6 @@ public class PortfolioPermissionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes46;
 	private String _methodName47;
 	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
 }

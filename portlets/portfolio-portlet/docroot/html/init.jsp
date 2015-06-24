@@ -15,7 +15,7 @@
 <%@ page import="com.liferay.portal.util.PortalUtil"%>
 
 <%@ page
-	import="de.unipotsdam.elis.portfolio.permission.PortfolioPermissionManager"%>
+	import="de.unipotsdam.elis.portfolio.PortfolioManager"%>
 <%@ page import="de.unipotsdam.elis.portfolio.util.jsp.JspHelper"%>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>

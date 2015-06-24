@@ -1,11 +1,13 @@
-package de.unipotsdam.elis.portfolio.permission;
+package de.unipotsdam.elis.portfolio;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.User;
@@ -15,7 +17,6 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
-import de.unipotsdam.elis.portfolio.NoSuchPermissionException;
 import de.unipotsdam.elis.portfolio.model.PortfolioPermission;
 import de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalServiceUtil;
 
@@ -25,10 +26,8 @@ import de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalServiceUtil;
  * @author Matthias
  *
  */
-public class PortfolioPermissionManager {
+public class PortfolioManager {
 
-	private static String userIdsString = "userIds";
-	private static String plidsString = "plids";
 	private static String portfolioString = "Portfolio";
 
 	/**
@@ -55,10 +54,11 @@ public class PortfolioPermissionManager {
 	 *            plid of the portfolio
 	 * @param userId
 	 *            id of the user
-	 * @throws NoSuchPermissionException 
+	 * @throws NoSuchPermissionException
 	 * @throws SystemException
 	 */
-	public static void removeUserFromPortfolio(long plid, long userId) throws NoSuchPermissionException, SystemException {
+	public static void removeUserFromPortfolio(long plid, long userId) throws NoSuchPermissionException,
+			SystemException {
 		PortfolioPermissionLocalServiceUtil.deletePortfolioPermission(plid, userId);
 	}
 
@@ -73,10 +73,10 @@ public class PortfolioPermissionManager {
 	 * @throws SystemException
 	 */
 	public static List<String> getUserOfPortfolio(long plid) throws PortalException, SystemException {
-		//TODO: Nutzer existiert nicht abfangen
+		// TODO: Nutzer existiert nicht abfangen
 		List<String> result = new ArrayList<String>();
 		List<PortfolioPermission> pps = PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByPlid(plid);
-		for (PortfolioPermission pp : pps){
+		for (PortfolioPermission pp : pps) {
 			result.add(UserLocalServiceUtil.getUser(pp.getUserId()).getScreenName());
 		}
 		return result;
@@ -91,9 +91,9 @@ public class PortfolioPermissionManager {
 	public static List<Layout> getPortfoliosOfCurrentUser() throws SystemException {
 		// TODO: vielleicht portfolios der Nutzer an den Nutzer hängen damit man
 		// nicht so umständlich alle Portfolios suchen muss
-		
+
 		List<Layout> result = new ArrayList<Layout>();
-		
+
 		// get all page templates
 		LayoutPrototype layoutPrototype = getPortfolioPrototype();
 
@@ -110,8 +110,8 @@ public class PortfolioPermissionManager {
 		}
 		return result;
 	}
-	
-	public static LayoutPrototype getPortfolioPrototype() throws SystemException{
+
+	public static LayoutPrototype getPortfolioPrototype() throws SystemException {
 		List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(0,
 				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
 		LayoutPrototype layoutPrototype = null;
@@ -138,13 +138,36 @@ public class PortfolioPermissionManager {
 		PermissionChecker permissionChecker = PermissionThreadLocal.getPermissionChecker();
 		User user = permissionChecker.getUser();
 		List<Layout> result = new ArrayList<Layout>();
-		List<PortfolioPermission> pps = PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByUserId(user.getUserId());
+		List<PortfolioPermission> pps = PortfolioPermissionLocalServiceUtil.getPortfolioPermissionByUserId(user
+				.getUserId());
 		for (PortfolioPermission pp : pps) {
 			Layout layout = LayoutLocalServiceUtil.getLayout(pp.getPlid());
 			if (layout != null)
 				result.add(layout);
 		}
 		return result;
+	}
+
+	public static boolean pageIsPortfolio(Layout layout) throws PortalException, SystemException {
+		if (!isUUID(layout.getLayoutPrototypeUuid()))
+			return false;
+		LayoutPrototype layoutPrototype = LayoutPrototypeLocalServiceUtil.getLayoutPrototypeByUuidAndCompanyId(
+				layout.getLayoutPrototypeUuid(), layout.getCompanyId());
+		return layoutPrototype.getName(LocaleUtil.ENGLISH).equals(portfolioString);
+	}
+
+	private static boolean isUUID(String string) {
+		try {
+			UUID.fromString(string);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	public static boolean userHasPermission(long userId, long plid) throws NoSuchPermissionException, SystemException {
+		PortfolioPermission pp = PortfolioPermissionLocalServiceUtil.fetchPortfolioPermission(plid, userId);
+		return pp != null;
 	}
 
 }

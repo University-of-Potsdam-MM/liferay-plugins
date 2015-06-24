@@ -4,7 +4,7 @@
 <liferay-theme:defineObjects /> 
 
 <%
-	List<Layout> userPortfolios = PortfolioPermissionManager.getPortfoliosOfCurrentUser();
+	List<Layout> userPortfolios = PortfolioManager.getPortfoliosOfCurrentUser();
 	String popUpLink = "<a href=\"#\" class=\"popUpLink\" id=\"test\">" + 
 		LanguageUtil.get(pageContext, "portfolio-choose-people") +"</a>";
 %>

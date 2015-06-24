@@ -3,4 +3,15 @@
 
 <project name="portfolio-portlet" basedir="." default="deploy">
 	<import file="../build-common-portlet.xml" />
+	
+	<target name="build-service" depends="build-common-plugin.build-service" >
+		<echo>${plugin.lib.dir}</echo>
+			<copy file="${plugin.lib.dir}\portfolio-portlet-service.jar" 
+				todir="${app.server.lib.global.dir}"/>
+	</target>
+	
+	<target name="all" depends="build-common-plugin.all" >
+				<move file="${app.server.deploy.dir}\${plugin.name}\WEB-INF\lib\portfolio-portlet-service.jar" 
+					todir="${app.server.lib.global.dir}"/>
+		</target>
 </project>

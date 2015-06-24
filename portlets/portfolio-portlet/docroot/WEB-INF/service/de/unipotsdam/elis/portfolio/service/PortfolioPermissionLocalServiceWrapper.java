@@ -329,6 +329,14 @@ public class PortfolioPermissionLocalServiceWrapper
 	}
 
 	@Override
+	public de.unipotsdam.elis.portfolio.model.PortfolioPermission fetchPortfolioPermission(
+		long plid, long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _portfolioPermissionLocalService.fetchPortfolioPermission(plid,
+			userId);
+	}
+
+	@Override
 	public java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioPermission> getPortfolioPermissionByPlid(
 		long plid) throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioPermissionLocalService.getPortfolioPermissionByPlid(plid);
