@@ -31,7 +31,7 @@
 		<#assign liferay_toggle_controls = "hidden" />
 		<#assign css_class = $css_class.replaceAll("controls-visible", "controls-hidden") />
 		
-	</#if>
+	</#if>	
 	<#-- get private sites -->
 	<#assign group = user.getGroup() />
 	<#assign PortalUtil = staticUtil["com.liferay.portal.util.PortalUtil"] />
