@@ -53,3 +53,59 @@
 	color:#014260;
 	text-decoration:underline;
 }
+
+.portlet-blogs .entry-navigation {
+	background-color:#fff;
+	border-top:0px;
+	color:#014260;
+	
+}
+
+
+.portlet-blogs #blogsCommentsPanelContainer {
+  border-width: 0;
+  margin: 0 0px;
+  background-color: #ededed;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-group {
+	border: 0px solid #e5e5e5;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-heading {
+  border-bottom: 0;
+  font-weight: bold;
+  font-family: georgia;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-inner {
+  padding: 9px 10px;
+  border-top: 0px solid #e5e5e5;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input {
+	  width: 98%;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input + br {
+	display:none;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .fieldset.add-comment a {
+	background-color: #014260;
+  padding: 5px;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: .9em;
+  line-height: .9em;
+	
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .row-fluid {
+	margin-top:25px;
+	
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .lfr-discussion-details {
+	padding-left:0;
+}
