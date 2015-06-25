@@ -26,14 +26,21 @@
 	 background-color: #014260;
 }
 
-.portlet-blogs .entry-body .lfr-editable {
+.portlet-boundary_33_.portlet-blogs .entry-body .lfr-editable {
  
   margin-top: 15px;
   
   
 }
 
-.lfr-editable:hover:after {
+.portlet-blogs .entry-author {
+	
+	  font-family: georgia;
+  font-style: italic;
+  color: #014260;
+}
+
+.portlet-blogs .entry-body .lfr-editable:hover:after {
 	background-color:#fff091;
 }
 
