@@ -13,9 +13,13 @@ public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 	@Override
 	public boolean contains(PermissionChecker permissionChecker, Layout layout, boolean checkViewableGroup,
 			String actionId) throws PortalException, SystemException {
+		System.out.println("check Portfolio!");
 		if (PortfolioManager.pageIsPortfolio(layout)) {
+			System.out.println("is Portfolio");
 			if (permissionChecker.getUserId() != layout.getUserId()) {
-				return PortfolioManager.userHasPermission(permissionChecker.getUserId(),layout.getPlid());
+				boolean test = PortfolioManager.userHasPermission(permissionChecker.getUserId(),layout.getPlid());
+				System.out.println(test);
+				return test;
 			}
 		}
 		return super.contains(permissionChecker, layout, checkViewableGroup, actionId);
