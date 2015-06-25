@@ -2,6 +2,7 @@
 	<#assign user_my_sites = user.getMySiteGroups() />
 	<#assign user_sname = user.getScreenName() />
 	<#assign user_account_url = themeDisplay.getURLMyAccount() />
+	<#assign sign_out_url = htmlUtil.escape(theme_display.getURLSignOut()) />
 	
 	<#assign has_layout_add_permission = 0 />
 	
@@ -30,7 +31,7 @@
 		<#assign liferay_toggle_controls = "hidden" />
 		<#assign css_class = $css_class.replaceAll("controls-visible", "controls-hidden") />
 		
-	</#if>
+	</#if>	
 	<#-- get private sites -->
 	<#assign group = user.getGroup() />
 	<#assign PortalUtil = staticUtil["com.liferay.portal.util.PortalUtil"] />

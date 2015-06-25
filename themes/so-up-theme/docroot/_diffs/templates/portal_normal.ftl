@@ -10,12 +10,11 @@
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 
 	${theme.include(top_head_include)}
-<!--   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
-	<script src="//aui-cdn.atlassian.com/aui-adg/5.8.10/js/aui.js"></script>
-	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
+
 </head>
-<body class="dockbar-split ${css_class}">
+<body class="dockbar-split so-strata-theme ${css_class}">
+
+${theme.include(body_top_include)}
 
 <#if is_signed_in>
 	<@liferay.dockbar />
@@ -181,11 +180,15 @@
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myLayouts as myLayout>
-						
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							
-								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-							
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "false">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>	
 						</#if>
 					</#list>
 				</ul>
@@ -193,7 +196,7 @@
 			<li>
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${my_account_url}">Profilansicht</a></li>
+					<li><a href="${user_account_url}">Profilansicht</a></li>
 					<li>Bearbeitungsmodus</li>
 				</ul>
 			</li>
@@ -208,11 +211,15 @@
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myLayouts as myLayout>
-						
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							
-								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-							
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "true">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>
 						</#if>
 					</#list>
 				</ul>
@@ -234,15 +241,7 @@
 				Portfolio <span class="icon arrow disabled"></span>
 			</li>
 		</ul>
-		</#if>	
-		
-		<!-- Ausblenden damit es keine Probleme beim JS gibt -->
-		<div class="hidden">
-			<@liferay.dockbar />
-			${theme.include(body_top_include)}
-		</div>
-
-		
+		</#if>		
 	
 		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
 	</header>
@@ -290,8 +289,8 @@
 
 ${theme.include(body_bottom_include)}
 
-${theme.include(bottom_include)}
-
 </body>
+
+${theme.include(bottom_include)}
 
 </html>
