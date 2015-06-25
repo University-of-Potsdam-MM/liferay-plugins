@@ -66,7 +66,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		if (user == null) {
 			addErrorMessage(actionRequest, actionResponse, "error-not-a-user");
 		} else {
-			long plid = ParamUtil.getLong(actionRequest, "plid");
+			long plid = ParamUtil.getLong(actionRequest, "portfolioPlid");
 			boolean success = PortfolioManager.publishPortfolioToUser(plid, user.getUserId());
 			if (!success) {
 				addErrorMessage(actionRequest, actionResponse, "error");
@@ -116,7 +116,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		if (user == null) {
 			throw new SystemException("User unknown");
 		} else {
-			long plid = ParamUtil.getLong(actionRequest, "plid");
+			long plid = ParamUtil.getLong(actionRequest, "portfolioPlid");
 			PortfolioManager.removeUserFromPortfolio(plid, user.getUserId());
 		}
 	}
@@ -133,7 +133,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			throws PortalException, SystemException {
 		// TODO: Sollte nicht löschbar sein, wenn es sich im Feedbackprozess
 		// befindet.
-		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "plid"));
+		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
 		PortfolioPermissionLocalServiceUtil.deletePortfolioPermissionByPlid(plid);
 		LayoutLocalServiceUtil.deleteLayout(plid, ServiceContextFactory.getInstance(actionRequest));
 	}

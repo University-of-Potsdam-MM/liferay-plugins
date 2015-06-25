@@ -4,7 +4,7 @@
 <liferay-theme:defineObjects />
 
 <%
-	String portfolioPlid = renderRequest.getParameter("plid");
+	String portfolioPlid = renderRequest.getParameter("portfolioPlid");
 	Layout portfolio = LayoutLocalServiceUtil.getLayout(Long.valueOf(portfolioPlid));
 	List<String> users = PortfolioManager.getUserOfPortfolio(portfolio.getPlid()); 
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
@@ -12,7 +12,7 @@
 
 <portlet:actionURL name="publishPortfolioToUser" var="publishPortfolioToUserURL">
 	<portlet:param name="mvcPath" value="/html/myportfolio/permission_view.jsp" />
-	<portlet:param name="plid" value="<%=portfolioPlid%>" />
+	<portlet:param name="portfolioPlid" value="<%=portfolioPlid%>" />
 	<portlet:param name="redirect" value="<%=redirect%>" />
 </portlet:actionURL>
 
@@ -40,8 +40,6 @@
 </liferay-ui:search-container>
 
 <aui:script>
-
-
 AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters', function (A) {
 	var contactSearchFormatter = function (query, results) {
 		return A.Array.map(results, function (result) {
