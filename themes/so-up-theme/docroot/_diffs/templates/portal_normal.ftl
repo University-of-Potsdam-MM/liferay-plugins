@@ -196,7 +196,7 @@ ${theme.include(body_top_include)}
 			<li>
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${my_account_url}">Profilansicht</a></li>
+					<li><a href="${user_account_url}">Profilansicht</a></li>
 					<li>Bearbeitungsmodus</li>
 				</ul>
 			</li>
