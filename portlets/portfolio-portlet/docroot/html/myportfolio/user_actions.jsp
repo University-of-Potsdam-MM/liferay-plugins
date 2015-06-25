@@ -3,7 +3,7 @@
 <portlet:defineObjects />
 
 <%
-	String plid = renderRequest.getParameter("plid");
+	String portfolioPlid = renderRequest.getParameter("portfolioPlid");
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 	String userName = (String) row.getObject();
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
@@ -13,7 +13,7 @@
 
 	<portlet:actionURL name="removeUser" var="removeUserURL">
 		<portlet:param name="userName" value="<%=userName%>" />
-		<portlet:param name="plid" value="<%=plid%>" />
+		<portlet:param name="portfolioPlid" value="<%=portfolioPlid%>" />
 		<portlet:param name="redirect" value="<%=redirect%>" />
 	</portlet:actionURL>
 
