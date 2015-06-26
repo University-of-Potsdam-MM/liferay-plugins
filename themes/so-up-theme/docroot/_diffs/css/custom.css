@@ -98,6 +98,8 @@ h2.page-title {
 	color: #8a8a8a;
 }
 
+
+
 .aui #breadcrumbs .breadcrumb .active a {
 	color: #014260;
 	font-weight: bold;
@@ -105,10 +107,11 @@ h2.page-title {
 
 /* Navbar */
 .aui .navbar-inner {
-	background-color: #ededed;
+	
 	background-image: none;
 	border: 0px;
 	border-radius: 0;
+	padding:0;
 }
 
 .aui .navbar .nav>li>a {
