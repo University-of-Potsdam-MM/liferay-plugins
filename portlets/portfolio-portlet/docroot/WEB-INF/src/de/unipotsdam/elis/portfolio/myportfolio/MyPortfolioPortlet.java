@@ -61,7 +61,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		User user;
 		// TODO: ScreenName eindeutig?
-		user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
+		user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName); 
 
 		if (user == null) {
 			addErrorMessage(actionRequest, actionResponse, "error-not-a-user");
@@ -131,7 +131,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 */
 	public static void deletePortfolio(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws PortalException, SystemException {
-		// TODO: Sollte nicht löschbar sein, wenn es sich im Feedbackprozess
+		// TODO: Sollte nicht lÃ¶schbar sein, wenn es sich im Feedbackprozess
 		// befindet.
 		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
 		PortfolioPermissionLocalServiceUtil.deletePortfolioPermissionByPlid(plid);
