@@ -131,7 +131,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 */
 	public static void deletePortfolio(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws PortalException, SystemException {
-		// TODO: Sollte nicht löschbar sein, wenn es sich im Feedbackprozess
+		// TODO: Sollte nicht lÃ¶schbar sein, wenn es sich im Feedbackprozess
 		// befindet.
 		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
 		PortfolioPermissionLocalServiceUtil.deletePortfolioPermissionByPlid(plid);
@@ -183,28 +183,25 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		// Get Portfolio page
 		// TODO: eindeutigeren weg vielleicht?
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
-		Layout portfolioPage = null;
+		Layout portfolioParentPage = null;
 		for (Layout layout : layouts) {
 			if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
-				portfolioPage = layout;
+				portfolioParentPage = layout;
 		}
-		if (portfolioPage != null) {
-			long userId = themeDisplay.getUserId();
-			long groupId = portfolioPage.getGroupId();
-			boolean privateLayout = false;
-			long parentLayoutId = portfolioPage.getLayoutId();
-			String name = portfolioName;
-			String title = portfolioName;
-			String description = "";
-			String type = LayoutConstants.TYPE_PORTLET;
-			boolean hidden = false;
-			String friendlyURL = "/" + portfolioName;
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
-			Layout newLayout = LayoutLocalServiceUtil.addLayout(userId, groupId, privateLayout, parentLayoutId, name,
-					title, description, type, hidden, friendlyURL, serviceContext);
-			LayoutPrototype portfolioPrototype = PortfolioManager.getPortfolioPrototype();
-			newLayout.setLayoutPrototypeUuid(portfolioPrototype.getUuid());
-			LayoutLocalServiceUtil.updateLayout(newLayout);
+
+		// preparations
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
+
+		if (portfolioParentPage == null) {
+			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
+					.getGroupId(), false, 0, "Portfolio", "Portfolio", "", LayoutConstants.TYPE_PORTLET, false,
+					"/Portfolio", serviceContext);
 		}
+		Layout newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
+				portfolioParentPage.getGroupId(), false, portfolioParentPage.getLayoutId(), portfolioName,
+				portfolioName, "", LayoutConstants.TYPE_PORTLET, false, "/" + portfolioName, serviceContext);
+		LayoutPrototype portfolioPrototype = PortfolioManager.getPortfolioPrototype();
+		newPortfolio.setLayoutPrototypeUuid(portfolioPrototype.getUuid());
+		LayoutLocalServiceUtil.updateLayout(newPortfolio);
 	}
 }

@@ -42,7 +42,7 @@ public class PortfolioManager {
 	 * @throws SystemException
 	 */
 	public static boolean publishPortfolioToUser(long plid, long userId) throws SystemException {
-		// TODO: verhindern, dass man sich selbst hinzuf¸gen kann
+		// TODO: verhindern, dass man sich selbst hinzuf√ºgen kann
 		PortfolioPermission pp = PortfolioPermissionLocalServiceUtil.addPortfolioPermission(plid, userId);
 		return pp != null;
 	}
@@ -89,8 +89,8 @@ public class PortfolioManager {
 	 * @throws SystemException
 	 */
 	public static List<Layout> getPortfoliosOfCurrentUser() throws SystemException {
-		// TODO: vielleicht portfolios der Nutzer an den Nutzer h‰ngen damit man
-		// nicht so umst‰ndlich alle Portfolios suchen muss
+		// TODO: vielleicht portfolios der Nutzer an den Nutzer h√§ngen damit man
+		// nicht so umst√§ndlich alle Portfolios suchen muss
 
 		List<Layout> result = new ArrayList<Layout>();
 
@@ -165,7 +165,7 @@ public class PortfolioManager {
 		}
 	}
 
-	public static boolean userHasPermission(long userId, long plid) throws NoSuchPermissionException, SystemException {
+	public static boolean userHasPermission(long userId, long plid) throws SystemException {
 		PortfolioPermission pp = PortfolioPermissionLocalServiceUtil.fetchPortfolioPermission(plid, userId);
 		return pp != null;
 	}
