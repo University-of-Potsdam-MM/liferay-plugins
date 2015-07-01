@@ -103,6 +103,13 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public com.liferay.sync.model.SyncDLObject copyFileEntry(
+		long sourceFileEntryId, long repositoryId, long folderId,
+		java.lang.String sourceFileName, java.lang.String title,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.sync.model.SyncDLObject> getAllFolderSyncDLObjects(
 		long companyId, long repositoryId)
@@ -112,7 +119,6 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 	/**
 	* @deprecated As of 7.0.0, with no direct replacement
 	*/
-	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.sync.model.SyncDLObjectUpdate getAllSyncDLObjects(
 		long repositoryId, long folderId)
@@ -158,7 +164,6 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 	public long getLatestModifiedTime()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
-	@com.liferay.portal.security.ac.AccessControlled(guestAccessEnabled = true)
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.sync.model.SyncContext getSyncContext()
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -167,7 +172,6 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
 	*/
-	@java.lang.Deprecated
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.sync.model.SyncContext getSyncContext(
 		java.lang.String uuid)
@@ -233,7 +237,6 @@ public interface SyncDLObjectService extends BaseService, InvokableService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
-	@com.liferay.portal.kernel.transaction.Transactional(enabled = false)
 	public java.util.Map<java.lang.String, java.lang.Object> updateFileEntries(
 		java.io.File zipFile)
 		throws com.liferay.portal.kernel.exception.PortalException,

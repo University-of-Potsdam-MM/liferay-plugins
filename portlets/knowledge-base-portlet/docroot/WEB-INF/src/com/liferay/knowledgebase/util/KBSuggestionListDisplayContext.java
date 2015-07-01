@@ -26,11 +26,15 @@ import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.theme.PortletDisplay;
+import com.liferay.portal.theme.ThemeDisplay;
 
 import java.util.List;
 
 import javax.portlet.PortletURL;
 import javax.portlet.RenderResponse;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Adolfo Pérez
@@ -38,15 +42,21 @@ import javax.portlet.RenderResponse;
 public class KBSuggestionListDisplayContext {
 
 	public KBSuggestionListDisplayContext(
-		KBArticle kbArticle, String selectedNavItem) {
+		HttpServletRequest request, String templatePath, KBArticle kbArticle,
+		String selectedNavItem) {
 
+		_request = request;
+		_templatePath = templatePath;
 		_kbArticle = kbArticle;
 		_selectedNavItem = selectedNavItem;
 	}
 
 	public KBSuggestionListDisplayContext(
-		long groupId, String selectedNavItem) {
+		HttpServletRequest request, String templatePath, long groupId,
+		String selectedNavItem) {
 
+		_request = request;
+		_templatePath = templatePath;
 		_groupId = groupId;
 		_selectedNavItem = selectedNavItem;
 	}
@@ -104,13 +114,27 @@ public class KBSuggestionListDisplayContext {
 	public String getViewSuggestionURL(PortletURL portletURL, String navItem)
 		throws PortalException, SystemException {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)_request.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+
+		String portletId = portletDisplay.getId();
+
 		portletURL.setParameter("navItem", navItem);
 		portletURL.setParameter("expanded", Boolean.TRUE.toString());
 
 		if (_kbArticle == null) {
 			portletURL.setParameter("mvcPath", "/admin/view_suggestions.jsp");
 		}
-		else if (Validator.isNull(_kbArticle.getUrlTitle())) {
+		else if (Validator.isNull(_kbArticle.getUrlTitle()) ||
+				 portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
+
+			if (portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
+				portletURL.setParameter(
+					"mvcPath", _templatePath + "/view_article.jsp");
+			}
+
 			portletURL.setParameter(
 				"resourceClassNameId",
 				String.valueOf(_kbArticle.getClassNameId()));
@@ -148,6 +172,8 @@ public class KBSuggestionListDisplayContext {
 
 	private long _groupId;
 	private KBArticle _kbArticle;
-	private String _selectedNavItem;
+	private final HttpServletRequest _request;
+	private final String _selectedNavItem;
+	private final String _templatePath;
 
 }
