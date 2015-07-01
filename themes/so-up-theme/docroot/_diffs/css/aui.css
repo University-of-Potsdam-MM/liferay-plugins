@@ -51,8 +51,18 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 .aui .alert-success, .aui .portlet-msg-success {
 	
-	  background-color: #f91;
+	  background-color: #ff9;
  	 border-color: #bce830;
   color: #ddd;
 	
 }
+
+.aui input[type="text"], .aui input[type="password"], .aui input[type="file"], .aui input[type="submit"], .aui input[type="button"], .aui input[type="reset"], .aui select, .aui textarea, .aui .textarea, .aui button {
+		border-radius:0;
+		-webkit-border-radius:0;
+		-ms-border-radius:0;
+		-o-border-radius:0;
+		-moz-border-radius:0;
+	
+}
+

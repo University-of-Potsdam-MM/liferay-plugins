@@ -211,6 +211,7 @@ body .portlet-blogs .edit-actions a:hover {
 
 .taglib-user-display {
 	padding:0;
+	margin-bottom:15px;
 }
 
 .taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image {
@@ -277,6 +278,7 @@ content: '';
   padding-bottom: 10px;
   padding-top: 8px;
   margin-right: 1px;
+  line-height: 10px;
 	
 }
 
@@ -295,6 +297,15 @@ content: '';
 	
 }
 
+.portlet-blogs .add-comment .control-group {
+	margin-top: 10px;
+}
+
+
+.portlet-blogs .add-comment textarea {
+	width:100%;
+}
+
 @media (min-width: 1200px) {
 	.portlet-blogs #blogsCommentsPanelContainer .row-fluid {
 		margin-left:0px;
@@ -305,11 +316,23 @@ content: '';
 	padding-left: 0;
 }
 
-.portlet-blogs .row-fluid.lfr-discussion-form-container, .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form.lfr-discussion-form-edit {
-	margin-left: 25%;
-  width: 75%;
+.portlet-blogs .row-fluid.lfr-discussion-form-container {
+	margin-left: 25% !important;
+  width: auto;
   margin-top: 10px;
 }
+
+.portlet-blogs .row-fluid.lfr-discussion-form-container .control-group {
+	
+  margin-top: 10px;
+}
+
+.portlet-blogs .lfr-discussion-form.lfr-discussion-form-edit {
+	  
+  width: 100%;
+   margin-top: 10px;
+}
+
 
 .portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image {
 	position:relative;
@@ -318,4 +341,23 @@ content: '';
 
 .portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image .avatar {
 	float:left;
+}
+
+.portlet-blogs .app-view-search-entry-taglib {
+	margin:10px 0 0 0;
+	padding:5px;
+	
+}
+
+.portlet-blogs .app-view-search-entry-taglib .entry-discussion {
+	margin:0;
+	
+}
+
+.portlet-blogs  .rating-input-container label{
+	display:inline
+}
+
+.portlet-blogs .thumbrating-content {
+	margin-bottom:5px;
 }
