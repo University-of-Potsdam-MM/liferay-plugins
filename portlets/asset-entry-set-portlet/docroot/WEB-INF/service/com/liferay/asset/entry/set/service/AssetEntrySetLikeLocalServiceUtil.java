@@ -275,6 +275,21 @@ public class AssetEntrySetLikeLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static com.liferay.asset.entry.set.model.AssetEntrySetLike fetchAssetEntrySetLike(
+		long assetEntrySetId, long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .fetchAssetEntrySetLike(assetEntrySetId, classNameId, classPK);
+	}
+
+	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySetLike> getAssetEntrySetLikes(
+		long assetEntrySetId, long classNameId, long classPK, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getAssetEntrySetLikes(assetEntrySetId, classNameId,
+			classPK, start, end);
+	}
+
 	public static com.liferay.portal.kernel.json.JSONArray getLikedParticipantFullNames(
 		long userId, long assetEntrySetId, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,

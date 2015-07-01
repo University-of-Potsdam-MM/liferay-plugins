@@ -160,6 +160,8 @@ Error-Prone was automatically installed. Please rerun your task.
 		<attribute default="${module.dir.unix}/docroot" name="sass.docroot.dir" />
 
 		<sequential>
+			<local name="build-css.output" />
+
 			<java
 				classname="com.liferay.portal.tools.SassToCssBuilder"
 				classpathref="portal.classpath"
@@ -202,6 +204,32 @@ Error-Prone was automatically installed. Please rerun your task.
 			</java>
 
 			<delete file="velocity.log" quiet="true" />
+		</sequential>
+	</macrodef>
+
+	<macrodef name="build-upgrade-table">
+		<attribute name="module.dir" />
+
+		<sequential>
+			<set-build-xml-var
+				build.xml.var.name="module.name"
+				module.dir="@{module.dir}"
+			/>
+
+			<if>
+				<isset property="set-build-xml-var.return" />
+				<then>
+					<java
+						classname="com.liferay.portal.tools.UpgradeTableBuilder"
+						classpathref="portal.classpath"
+						fork="true"
+						newenvironment="true"
+					>
+						<arg value="${upgrade.table.dir}" />
+						<arg value="${set-build-xml-var.return}" />
+					</java>
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -741,7 +769,7 @@ Error-Prone was automatically installed. Please rerun your task.
 
 					<for param="import.shared.full.path">
 						<path>
-							<fileset dir="${sdk.dir}/dist" includes="${import.shared.current.plugin.name}-${import.shared.current.plugin.full.version}*.jar" />
+							<fileset dir="${sdk.dir}/dist" excludes="**-sources.jar" includes="${import.shared.current.plugin.name}-${import.shared.current.plugin.full.version}*.jar" />
 						</path>
 						<sequential>
 							<copy
@@ -1730,11 +1758,21 @@ Please find a solution that does not require portal-impl.jar.
 				/>
 				<then>
 					<if>
-						<not>
-							<uptodate targetfile="${plugin.file}">
-								<srcfiles dir="${plugin.classes.dir}" includes="**/*.*" />
-							</uptodate>
-						</not>
+						<or>
+							<not>
+								<uptodate targetfile="${plugin.file}">
+									<srcfiles dir="${plugin.classes.dir}" includes="**/*.*" />
+								</uptodate>
+							</not>
+							<and>
+								<available file="@{module.dir}/tmp" />
+								<not>
+									<uptodate targetfile="${plugin.file}">
+										<srcfiles dir="@{module.dir}/tmp" includes="**/*.*" />
+									</uptodate>
+								</not>
+							</and>
+						</or>
 						<then>
 							<if>
 								<and>
@@ -1831,77 +1869,77 @@ Please find a solution that does not require portal-impl.jar.
 								bndRootFile="${sdk.dir}/common.bnd"
 								newJarFile="${plugin.file}"
 							/>
-						</then>
-					</if>
-
-					<if>
-						<available file="@{module.dir}/docroot/WEB-INF/portlet.xml" />
-						<then>
-							<set-build-xml-var
-								build.xml.var.name="osgi.auto.update.xml"
-								module.dir="@{module.dir}"
-							/>
 
 							<if>
-								<or>
-									<not>
-										<isset property="set-build-xml-var.return" />
-									</not>
-									<and>
-										<isset property="set-build-xml-var.return" />
-										<equals arg1="${set-build-xml-var.return}" arg2="true" />
-									</and>
-								</or>
+								<available file="@{module.dir}/docroot/WEB-INF/portlet.xml" />
 								<then>
-									<tstamp>
-										<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
-									</tstamp>
-
-									<move file="${plugin.file}" tofile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" />
-
-									<direct-deploy-portlet-cmd
-										direct.deploy.dir="${tstamp.value}"
+									<set-build-xml-var
+										build.xml.var.name="osgi.auto.update.xml"
+										module.dir="@{module.dir}"
 									/>
 
-									<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}-${plugin.full.version}" />
-
 									<if>
-										<not>
-											<available file="${temp.deployed.plugin.dir}" />
-										</not>
+										<or>
+											<not>
+												<isset property="set-build-xml-var.return" />
+											</not>
+											<and>
+												<isset property="set-build-xml-var.return" />
+												<equals arg1="${set-build-xml-var.return}" arg2="true" />
+											</and>
+										</or>
 										<then>
-											<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}" />
+											<tstamp>
+												<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+											</tstamp>
+
+											<move file="${plugin.file}" tofile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" />
+
+											<direct-deploy-portlet-cmd
+												direct.deploy.dir="${tstamp.value}"
+											/>
+
+											<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}-${plugin.full.version}" />
+
+											<if>
+												<not>
+													<available file="${temp.deployed.plugin.dir}" />
+												</not>
+												<then>
+													<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}" />
+												</then>
+											</if>
+
+											<if>
+												<available file="${temp.deployed.plugin.dir}" />
+												<then>
+													<jar destfile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" duplicate="preserve" update="true">
+														<fileset
+															dir="${app.server.portal.dir}"
+															includes="WEB-INF/tld/c.tld"
+														/>
+														<fileset
+															dir="${temp.deployed.plugin.dir}"
+															includes="WEB-INF/liferay-web.xml,WEB-INF/web.xml"
+														/>
+														<fileset
+															dir="${temp.deployed.plugin.dir}"
+															includes="WEB-INF/tld/*"
+														/>
+													</jar>
+												</then>
+												<else>
+													<echo>Unable to automatically update web.xml in ${plugin.file}.</echo>
+												</else>
+											</if>
+
+											<var name="temp.deployed.plugin.dir" unset="true" />
+
+											<move file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" tofile="${plugin.file}" />
+
+											<delete dir="${tstamp.value}" />
 										</then>
 									</if>
-
-									<if>
-										<available file="${temp.deployed.plugin.dir}" />
-										<then>
-											<jar destfile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" duplicate="preserve" update="true">
-												<fileset
-													dir="${app.server.portal.dir}"
-													includes="WEB-INF/tld/c.tld"
-												/>
-												<fileset
-													dir="${temp.deployed.plugin.dir}"
-													includes="WEB-INF/liferay-web.xml,WEB-INF/web.xml"
-												/>
-												<fileset
-													dir="${temp.deployed.plugin.dir}"
-													includes="WEB-INF/tld/*"
-												/>
-											</jar>
-										</then>
-										<else>
-											<echo>Unable to automatically update web.xml in ${plugin.file}.</echo>
-										</else>
-									</if>
-
-									<var name="temp.deployed.plugin.dir" unset="true" />
-
-									<move file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" tofile="${plugin.file}" />
-
-									<delete dir="${tstamp.value}" />
 								</then>
 							</if>
 						</then>
@@ -1936,6 +1974,15 @@ Please find a solution that does not require portal-impl.jar.
 						/>
 					</jar>
 				</then>
+				<elseif>
+					<available file="docroot" />
+					<then>
+						<jar
+							basedir="docroot"
+							jarfile="${plugin.sources.file}"
+						/>
+					</then>
+				</elseif>
 				<else>
 					<jar
 						basedir="src"
@@ -2859,6 +2906,21 @@ for (String path : paths) {
 		/>
 	</target>
 
+	<target name="build-upgrade-table" depends="prepare-upgrade-table">
+		<if>
+			<isset property="upgrade.table.dir" />
+			<then>
+				<loop-macrodef-or-target
+					module.dirs="${plugins.includes.path}"
+					target.name="build-upgrade-table"
+				/>
+			</then>
+			<else>
+				<fail>Please set the property "upgrade.table.dir" before running this task.</fail>
+			</else>
+		</if>
+	</target>
+
 	<target name="build-wsdl">
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
@@ -3022,6 +3084,66 @@ for (String path : paths) {
 			module.dirs="${plugins.includes.path}"
 			target.name="jar"
 		/>
+	</target>
+
+	<target name="prepare-upgrade-table">
+		<for param="zip.file">
+			<path>
+				<fileset
+					dir="${upgrade.table.dir}"
+					includes="*.zip"
+				/>
+			</path>
+			<sequential>
+				<antelope:stringutil string="@{zip.file}" property="zip.version.beginindex">
+					<indexof string="src-" fromindex="0" />
+				</antelope:stringutil>
+
+				<math
+					datatype="int"
+					operand1="${zip.version.beginindex}"
+					operand2="4"
+					operation="+"
+					result="zip.version.beginindex"
+				/>
+
+				<antelope:stringutil string="@{zip.file}" property="zip.version.endindex">
+					<indexof string=".zip" fromindex="0" />
+				</antelope:stringutil>
+
+				<antelope:stringutil string="@{zip.file}" property="zip.version">
+					<substring beginindex="${zip.version.beginindex}" endindex="${zip.version.endindex}" />
+				</antelope:stringutil>
+
+				<if>
+					<or>
+						<not>
+							<uptodate
+								srcfile="@{zip.file}"
+								targetfile="${upgrade.table.dir}/${zip.version}"
+							/>
+						</not>
+						<not>
+							<available file="${upgrade.table.dir}/${zip.version}/indexes.sql" />
+						</not>
+					</or>
+					<then>
+						<mkdir dir="${upgrade.table.dir}/${zip.version}" />
+
+						<unzip
+							dest="${upgrade.table.dir}/${zip.version}"
+							src="@{zip.file}"
+						>
+							<patternset>
+								<include name="**/*ModelImpl.java" />
+								<include name="**/sql/indexes.sql" />
+							</patternset>
+							<mapper type="flatten" />
+						</unzip>
+					</then>
+				</if>
+			</sequential>
+		</for>
 	</target>
 
 	<target name="print-current-time">

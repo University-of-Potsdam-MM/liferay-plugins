@@ -1,0 +1,68 @@
+$FontAwesomePath: "aui/alloy-font-awesome/font" !default;
+
+@import "aui/alloy-font-awesome/scss/variables";
+@import "aui/alloy-font-awesome/scss/mixins-alloy";
+@import "aui/alloy-font-awesome/scss/path-alloy";
+
+.aui {
+	@import "aui_variables";
+
+	$iconSpritePath: '../images/aui/glyphicons-halflings.png' !default;
+	$iconWhiteSpritePath: '../images/aui/glyphicons-halflings-white.png' !default;
+
+	@import "aui/bootstrap";
+	@import "aui_custom";
+	@import "aui/responsive";
+	@import "liferay_custom";
+
+	@import "aui/alloy-font-awesome/scss/core";
+	@import "aui/alloy-font-awesome/scss/bootstrap";
+	@import "aui/alloy-font-awesome/scss/extras";
+	@import "aui/alloy-font-awesome/scss/icons-alloy";
+	@import "aui/alloy-font-awesome/scss/icons-alloy-extra";
+
+	background-color: $bodyBackground;
+	color: $textColor;
+	font-family: $baseFontFamily;
+	font-size: $baseFontSize;
+	line-height: $baseLineHeight;
+	margin: 0;
+}
+
+.aui a {
+	color:#014260;;
+}
+
+.aui h1, .aui h2, .aui h3, .aui h4, .aui h5, .aui h6 {
+	font-family:georgia, serif;
+}
+
+.aui h2 {
+	font-size:1.5em;
+}
+
+.aui .navbar-inner {
+	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,0.065);
+  	-moz-box-shadow: 0 0px 0px rgba(0,0,0,0.065);
+ 	 box-shadow: 0 0px 0px rgba(0,0,0,0.065);
+ 	 background-color:#fff;
+	
+}
+
+.aui .alert-success, .aui .portlet-msg-success {
+	
+	  background-color: #ff9;
+ 	 border-color: #bce830;
+  color: #ddd;
+	
+}
+
+.aui input[type="text"], .aui input[type="password"], .aui input[type="file"], .aui input[type="submit"], .aui input[type="button"], .aui input[type="reset"], .aui select, .aui textarea, .aui .textarea, .aui button {
+		border-radius:0;
+		-webkit-border-radius:0;
+		-ms-border-radius:0;
+		-o-border-radius:0;
+		-moz-border-radius:0;
+	
+}
+

@@ -8,14 +8,21 @@
 	<title>${the_title} - ${company_name}</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	${theme.include(top_head_include)}
+
 </head>
-<body class="${css_class}">
+<body class="dockbar-split so-strata-theme ${css_class}">
 	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste f¸r die Seiten unter all sites-->
 	<div class="">
 		<@liferay.dockbar />
 		${theme.include(body_top_include)}
 		${theme.search()}
 	</div>
+${theme.include(body_top_include)}
+
+<#if is_signed_in>
+	<@liferay.dockbar />
+</#if>
+
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
@@ -126,10 +133,12 @@
 			</li>			
 			<li class="lang">
 				<span class="lang-img"></span>
+				<!--
 				<select name="language_id">
 					<option value="de_DE" selected>Deutsch</option>
 					<option value="en_US">English</option>
 				</select>
+				-->
 			</li>
 			<li class="search">
 				<span class="search-img"></span>
@@ -147,13 +156,15 @@
 		</ul>
 		<#if is_signed_in>
 		<ul id="admin">
-			<li id="_145_toggleControls">
-				<div id="toggleDockbar">
+			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
+			<li>
+				<a href="javascript:;" id="toggleDockbar">
 					<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">
 						<span class="icon workspace"></span>Workspace konfigurieren
 					</a>
-				</div>
+				</a>
 			</li>
+			</#if>
 			<#if show_control_panel>
 			<li>
 				<a href="${control_panel_url}">
@@ -171,18 +182,24 @@
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_sname}/dashboard/">&Uumlbersicht</a></li>
-					<li><a href="/user/${user_sname}/calendar/">Kalender</a></li>
-					<li><a href="/user/${user_sname}/e-mail/">Webmail</a></li>
-					<li>Box.Up</li>
-					<li>Poodle</li>
-					<li>Pad.Up</li>
+					<#list myLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "false">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>	
+						</#if>
+					</#list>
 				</ul>
 			</li>
 			<li>
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${my_account_url}">Profilansicht</a></li>
+					<li><a href="${user_account_url}">Profilansicht</a></li>
 					<li>Bearbeitungsmodus</li>
 				</ul>
 			</li>
@@ -196,9 +213,18 @@
 			<li>
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li>Kategorien</li>
-					<li>Portfolioseiten</li>
-					<li>Portfolioaufgaben</li>
+					<#list myLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "true">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>
+						</#if>
+					</#list>
 				</ul>
 			</li>
 			<span class="icon close hidden">Schlieﬂen</span>
@@ -218,12 +244,12 @@
 				Portfolio <span class="icon arrow disabled"></span>
 			</li>
 		</ul>
-		</#if>	
-		
-
-
-		
-		<div id="heading">
+		</#if>		
+	
+		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
+	</header>
+	<div class="wrapper-portlet-area">
+	<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
@@ -240,21 +266,25 @@
 				<span>${the_title}</span>
 			</h2>
 		</div>
-	</header>
-
-	<div id="content">
-		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
-
-		<#if selectable>
-			${theme.include(content_include)}
-		<#else>
-			${portletDisplay.recycle()}
-
-			${portletDisplay.setTitle(the_title)}
-
-			${theme.wrapPortlet("portlet.ftl", content_include)}
+	
+		<#if has_navigation>
+				<#include "${full_templates_path}/navigation.ftl" />
 		</#if>
-	</div>
+
+		<div id="content">
+		
+
+			<#if selectable>
+				${theme.include(content_include)}
+			<#else>
+				${portletDisplay.recycle()}
+
+				${portletDisplay.setTitle(the_title)}
+
+				${theme.wrapPortlet("portlet.ftl", content_include)}
+			</#if>
+		</div><!-- end content -->
+	</div><!-- end portlet area wrapper -->
 
 	<footer id="footer" role="contentinfo">
 	</footer>
@@ -262,8 +292,8 @@
 
 ${theme.include(body_bottom_include)}
 
-${theme.include(bottom_include)}
-
 </body>
+
+${theme.include(bottom_include)}
 
 </html>

@@ -1,0 +1,17 @@
+.tasks-portlet .control-wrapper, .tasks-portlet .filter-wrapper {
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	-ms-border-radius: 0px;
+	-o-border-radius: 0px;
+	border-radius: 0px;
+	background-color: #014260;
+	border: none;
+}
+
+.tasks-portlet .control-wrapper a {
+	color: #fff;
+}
+
+.tasks-portlet .control-wrapper a:hover {
+	color: #d0dae3;
+}

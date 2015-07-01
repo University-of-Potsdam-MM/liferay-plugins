@@ -1,6 +1,3 @@
-/* This file allows you to override default styles in one central location for easier upgrade and maintenance. */
-@import url(workspacegrid.css);
-
 @import url(calendar.css);
 
 @import url(activities.css);
@@ -17,6 +14,7 @@
 
 @import url(tasks.css);
 
+@import url(media_queries.css);
 
 
 /* Seitenüberschriften und Titel*/
@@ -48,7 +46,7 @@
 	display: block;
 	position: absolute;
 	content: ".";
-	/* background-color: #F00; */
+	
 	width: 40px;
 	height: 40px;
 	background-image: url(../images/up_icons.png);
@@ -101,7 +99,6 @@
 .aui .nav-tabs>li>a {
 	border-radius: 0;
 }
-
 /*buttons*/
 .aui .btn-primary {
 	background-color: #014260 !important;
@@ -118,6 +115,20 @@
 	-webkit-border-radius: 0px;
  	-moz-border-radius: 0px;
  	border-radius: 0px;
+}
+
+/* Suchfelder */ 
+.aui .form-search .input-append .search-query {
+	webkit-border-radius: 0px 0 0 0px;
+	-moz-border-radius: 0px 0 0 0px;
+	border-radius: 0px 0 0 0px;
+}
+
+.aui .form-search .input-append .btn {
+	webkit-border-radius: 0 0px 0px 0;
+	-moz-border-radius: 0 0px 0px 0;
+	border-radius: 0 0px 0px 0;
+	border: 1px solid #D0DAE3;
 }
 
 .aui .btn-group>.btn:last-child,.aui .btn-group>.dropdown-toggle {
@@ -148,21 +159,7 @@ aui .btn.disabled, .aui .btn[disabled] {
   background-color: #F5F5F5;
   }
 
-/* Suchfelder */
-.aui .form-search .input-append .search-query {
-	webkit-border-radius: 0px 0 0 0px;
-	-moz-border-radius: 0px 0 0 0px;
-	border-radius: 0px 0 0 0px;
-}
-
-.aui .form-search .input-append .btn {
-	webkit-border-radius: 0 0px 0px 0;
-	-moz-border-radius: 0 0px 0px 0;
-	border-radius: 0 0px 0px 0;
-	border: 1px solid #D0DAE3;
-}
-
-/* Alerts */
+/* Alerts */ 
 .aui .alert-info,.aui .portlet-msg-help,.aui .portlet-msg-info,.aui .portlet-msg-progress
 	{
 	background-color: #fff091;
@@ -179,8 +176,8 @@ aui .btn.disabled, .aui .btn[disabled] {
 .aui .well {
 	background-color:#fff;
 }
-
 /*dropdown*/
+
 
 .aui .dropdown-menu {
  -moz-border-radius: 0px;
@@ -191,13 +188,15 @@ aui .btn.disabled, .aui .btn[disabled] {
  
 }
 
-.aui .dropdown-menu>li>a:hover, .aui .dropdown-menu>li>a:focus, .aui .dropdown-submenu:hover>a, .aui .dropdown-submenu:focus>a { {
+
+
+.aui .dropdown-menu>li>a:hover, .aui .dropdown-menu>li>a:focus, .aui .dropdown-submenu:hover>a, .aui .dropdown-submenu:focus>a {
 	background-color:#d0dae3;
 }
 
 .aui .dropdown-menu {
-  display: block;
+ 
   background-color: #D0DAE3 !important;
-  border-color: #FFF  !important;;
-  border-width: 2px  !important;;
+  border-color: #FFF  !important;
+  border-width: 2px  !important;
 }
