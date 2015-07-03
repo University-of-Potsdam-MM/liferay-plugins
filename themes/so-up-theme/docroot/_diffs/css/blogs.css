@@ -39,7 +39,7 @@
 	font-size: 12px;
 }
 
-}
+
 .portlet-blogs .navbar-inner .collapse .nav li a:hover {
 	background-color: #ededed;
 }
@@ -101,7 +101,7 @@ body .portlet-blogs .edit-actions a {
 	height: 30px;
 	line-height: 2;
 	background-color: #d0dae3;
-	padding: 0px 10px
+	padding: 0px 10px;
 }
 
 body .portlet-blogs .edit-actions a span {

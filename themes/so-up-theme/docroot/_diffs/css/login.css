@@ -1,0 +1,114 @@
+section #portlet_58 {
+	width:600px;
+}
+
+.portlet-login .portlet-topper {
+	  border-bottom: 1px solid #ededed;
+  margin-bottom: 10px;
+	
+}
+.portlet-login .portlet-title {
+	text-transform:uppercase;
+	display: inline-block;
+	color:#d0dae3;
+	border-bottom:0px;
+	line-height: 3em;
+	overflow: visible;
+}
+
+.portlet-login .portlet-title-text {
+  font-size: 3em;
+  color: #d0dae3;
+    text-overflow: clip;
+      max-width: 100%;
+}
+
+.portlet-login fieldset.fieldset {
+	max-width:300px;
+}
+
+.portlet-login .login-image {
+	width:120px;
+	height:100px;
+	float:left;
+	background-image:url(../images/up/00-index.jpg);
+	background-repeat:no-repeat;
+}
+
+
+/* .portlet-login .navigation {
+	background-color:#fff;
+	  border-top: 0px solid #bfbfbf;
+  padding: 10px;
+}
+
+.portlet-login .navigation .taglib-icon-list li:first-child{
+	display:none;
+	visibility:hidden;
+	
+}
+
+.portlet-login .navigation .taglib-icon-list li:first-child + li{
+	display:none;
+	visibility:hidden;
+	
+	
+}
+
+
+.portlet-login .navigation .taglib-icon-list li:first-child + li +li a{
+	
+  display: inline-block;
+   line-height: 3.5em;
+  margin-left: 10px;
+}
+
+.portlet-login .navigation .taglib-icon-list li:first-child + li +li a span{
+	width: 80px;
+	line-height: 1;
+	  display: inline-block;
+	
+  
+	
+}
+
+.portlet-login .navigation .taglib-icon-list li:first-child + li +li a img {
+	display:none;
+} */
+.portlet-login .control-group {
+  margin-bottom: 5px;
+}
+
+.aui .portlet-login  input[type="text"], .aui .portlet-login input[type="password"] {
+	
+	width:300px;
+	background-color:#d0dae3;
+	color:#000;
+	webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+  -moz-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+  box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius:0px;
+  border-radius: 0px;
+  border: none;
+}
+
+.portlet-login .control-group .control-label {
+	display:none;
+}
+
+.portlet-login label.checkbox {
+	display:inline;
+	  padding-left: 0px;
+	  color: #014260;
+}
+
+.aui .portlet-login .checkbox input[type="checkbox"] {
+	margin-left: 0px;
+}
+
+.portlet-login .control-group .checkbox input[type="checkbox"] {
+	margin-left:-4px;
+}

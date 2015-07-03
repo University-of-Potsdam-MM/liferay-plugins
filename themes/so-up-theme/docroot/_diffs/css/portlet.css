@@ -1,4 +1,4 @@
-@import "compass";
+ @import "compass"; 
 /*custom*/
 .container-fluid#wrapper div#content  {
 	width: 78%;
@@ -15,12 +15,25 @@
 
 
 /* ---------- Portlet wrapper and icons ---------- */
-body.portlet {
-	border: none;
+body .portlet {
+	border: 2px solid #fff;
 }
 
+body .portlet:hover {
+	border:2px solid #014260;
+}
+
+.portlet-topper .portlet-topper-toolbar a i {
+	display:none;
+}
+
+portlet:hover .portlet-topper .portlet-topper-toolbar a i {
+	display:inline;
+}
+
+
 .portlet-boundary {
-	border-bottom: 1px dotted #D0DAE3;
+	
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 	
@@ -28,6 +41,10 @@ body.portlet {
 
 .portlet .portlet-title {
 	font-size: 2em;
+}
+
+.portlet .portlet-content, .portlet .portlet-topper {
+	padding-top: .5em;
 }
 
 .portlet-title {
