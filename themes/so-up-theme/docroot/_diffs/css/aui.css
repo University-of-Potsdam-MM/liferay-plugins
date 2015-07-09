@@ -29,6 +29,10 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	margin: 0;
 }
 
+.aui body {
+	background:#fff !important;
+}
+
 .aui a {
 	color:#014260;;
 }
@@ -83,6 +87,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 .aui .navbar .nav>.active>a, .aui .navbar .nav>.active>a:hover, .aui .navbar .nav>.active>a:focus {
 	color:#014260;
 }
+
 
 /* mal gucken ob das bleiben kann */
 .aui label {

@@ -62,7 +62,8 @@
   .aui select, 
   .aui textarea, 
   .aui .textarea, 
-  .aui button{
+  .aui button,
+  .aui .modal{
  
  -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
   -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
@@ -110,6 +111,17 @@
 
 h2.page-title {
 	display: none;
+}
+
+.aui .modal h3 {
+	color:#014260;
+}
+
+.aui .modal-header {
+	background:#d0dae3;
+	borde-bottom:none;
+	font-style:italic;
+	font-family:"Source Sans Pro",Helvetica, Arial, sans-serif;
 }
 
 /* Breadcrumbs*/
