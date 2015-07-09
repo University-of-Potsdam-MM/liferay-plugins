@@ -12,7 +12,7 @@ section #portlet_58 {
 	display: inline-block;
 	color:#d0dae3;
 	border-bottom:0px;
-	line-height: 3em;
+	line-height: 3em !important;
 	overflow: visible;
 }
 
@@ -112,3 +112,14 @@ section #portlet_58 {
 .portlet-login .control-group .checkbox input[type="checkbox"] {
 	margin-left:-4px;
 }
+
+/* Layout loginpage */
+
+.guest-site.signed-out.public-page #navigation {
+	display:none;
+}
+
+.guest-site.signed-out.public-page #content {
+	margin-left: 0;
+}
+	

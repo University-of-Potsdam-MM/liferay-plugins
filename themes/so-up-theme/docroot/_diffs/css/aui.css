@@ -102,3 +102,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	border:none;
 	
 }
+
+.aui .badge-info {
+	background-color:#014260;
+}

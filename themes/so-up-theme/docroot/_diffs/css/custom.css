@@ -30,6 +30,8 @@
 
 @import url(./editor-form.css);
 
+@import url(./search.css);
+
 /*@import url(media_queries.css);*/
 
 /* no radius, no shadow, no background-image */
