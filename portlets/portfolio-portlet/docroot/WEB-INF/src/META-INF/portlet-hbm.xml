@@ -2,12 +2,23 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-lazy="false" auto-import="false">
-	<import class="de.unipotsdam.elis.portfolio.model.PortfolioPermission" />
-	<class name="de.unipotsdam.elis.portfolio.model.impl.PortfolioPermissionImpl" table="Portfolio_PortfolioPermission">
+	<import class="de.unipotsdam.elis.portfolio.model.Portfolio" />
+	<import class="de.unipotsdam.elis.portfolio.model.PortfolioFeedback" />
+	<class name="de.unipotsdam.elis.portfolio.model.impl.PortfolioImpl" table="Portfolio_Portfolio">
 		<cache usage="read-write" />
-		<composite-id name="primaryKey" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPermissionPK">
+		<id name="plid" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="publishmentType" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+	</class>
+	<class name="de.unipotsdam.elis.portfolio.model.impl.PortfolioFeedbackImpl" table="Portfolio_PortfolioFeedback">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK">
 			<key-property name="plid" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		</composite-id>
+		<property name="feedbackStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="createDate" type="org.hibernate.type.TimestampType" />
+		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
 	</class>
 </hibernate-mapping>

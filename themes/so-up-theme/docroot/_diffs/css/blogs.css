@@ -1,55 +1,363 @@
-.portlet-blogs .edit-actions .lfr-table td {
-  display: inline-block;
-  background-color: #d0dae3;
-
-  margin-right: 5px;
-  padding: 5px;
+.portlet-blogs .navbar-inner .collapse .nav li a {
+	color: #014260;
+	text-transform: uppercase;
+	background-color: #d0dae3;
+	font-size: 12px;
+	font-weight: bold;
+	margin-right: 1px;
+	display: inline-block;
+	text-indent: 10px;
+	height: 20px;
+	  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
-.portlet-blogs .edit-actions a {
+.portlet-blogs .navbar-inner .collapse .nav li a:before {
+	content: '+';
+	font-weight: bold;
+	font-size: 2em;
+	position: absolute;
+	text-indent: -15px;
+}
+
+.portlet-blogs .navbar-inner .collapse .nav li+li a:before {
+	content: '';
+	background-image: url(../images/common/permissions.png);
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+	display: block;
+	margin-left: -8px;
+}
+
+.portlet-blogs .navbar-inner .collapse .nav li+li a span {
+	font-size: 0;
+	transition: font-size .2s ease-in-out;
+}
+
+.portlet-blogs .navbar-inner .collapse .nav li+li a:hover span {
+	font-size: 12px;
+}
+
+
+.portlet-blogs .navbar-inner .collapse .nav li a:hover {
+	background-color: #ededed;
+}
+
+.portlet-blogs .aui .navbar .navbar-search pull-right {
+	margin-top: 0;
+}
+
+.portlet-blogs .portlet .portlet-content .portlet-body form .navbar-search .search-query {
+	width: 150px;
+	height: 30px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+}
+
+.portlet-blogs .portlet .portlet-content .portlet-body form .navbar-search .form-search .input-append .btn {
+	margin-top: 0px;
+  padding-bottom: 4px;
+  padding-top: 5px;
   color: #014260;
-  display: inline-block;
-  /* font-weight: bold; */
-  margin: 5px 5px 5px 0;
+  text-shadow: 0 0px 0px;
   text-transform: uppercase;
-  font-size: .8em;
-  /* line-height: 1; */
+  font-size: 12px;
+  font-weight: bold;
+    border-top: 1px solid #d0dae3;
 }
 
-.portlet-blogs .edit-actions a:hover {
-  text-decoration: none !important;
-  color:#fff;
 
+
+.portlet-blogs .aui .form-search .input-append .btn {
+	padding-bottom: 10px;
+	padding-top: 10px;
 }
 
-.portlet-blogs .edit-actions .lfr-table td:hover {
-	 background-color: #014260;
+.portlet-blogs .aui .navbar .nav ul {
+	margin-right: 0;
+}
+
+.portlet-blogs li#tknq_ a:before {
+	content: '+';
+}
+
+.portlet-blogs .edit-actions .lfr-table td {
+	display: inline-block;
+	padding: 0px;
+}
+
+.portlet-blogs .navbar-search {
+	margin-top:0;
+}
+
+body .portlet-blogs .edit-actions a {
+	color: #014260;
+	display: inline-block;
+	/* font-weight: bold; */
+	margin: 0px 1px 0px 0;
+	text-transform: uppercase;
+	height: 30px;
+	line-height: 2;
+	background-color: #d0dae3;
+	padding: 0px 10px;
+}
+
+body .portlet-blogs .edit-actions a span {
+	font-size: 0em;
+	display: inline-block;
+	transition: font-size .2s ease-in-out;
+	-webkit-transitions: font-size .2s ease-in-out;
+	-moz-transitions: font-size .2s ease-in-out;
+	-o-transitions: font-size .2s ease-in-out;
+	-ms-transitions: font-size .2s ease-in-out;
+}
+
+body .portlet-blogs .edit-actions a:hover span {
+	font-size: 12px;
+	text-decoration: none;
+}
+
+body .portlet-blogs .edit-actions a:hover {
+	text-decoration: none !important;
 }
 
 .portlet-boundary_33_.portlet-blogs .entry-body .lfr-editable {
- 
-  margin-top: 15px;
-  
-  
+	margin-top: 15px;
+}
+
+.portlet-blogs .entry {
+	margin:0 0;
 }
 
 .portlet-blogs .entry-author {
-	
-	  font-family: georgia;
-  font-style: italic;
-  color: #014260;
+	font-family: georgia;
+	font-style: italic;
+	color: #014260;
 }
 
 .portlet-blogs .entry-body .lfr-editable:hover:after {
-	background-color:#fff091;
+	background-color: #fff091;
 }
 
-.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover {
-	color:#014260;
-	text-decoration:underline;
+.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover
+	{
+	color: #014260;
+	text-decoration: underline;
 }
 
-.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited{
-	color:#014260;
-	text-decoration:underline;
+.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited
+	{
+	color: #014260;
+	text-decoration: underline;
+}
+
+.portlet-blogs .entry-navigation {
+	background-color: #fff;
+	border-top: 0px;
+	color: #014260;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer {
+	border-width: 0;
+	margin: 0 0px;
+	background-color: #ededed;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-group {
+	border: 0px solid #e5e5e5;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-heading {
+	border-bottom: 0;
+	font-weight: bold;
+	font-family: georgia;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .aui .accordion-inner {
+	padding: 9px 10px;
+	border-top: 0px solid #e5e5e5;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input
+	{
+	width: 98%;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input+br
+	{
+	display: none;
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .fieldset.add-comment a {
+	background-color: #d0dae3;
+  padding: 5px;
+  color: #014260;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  height: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin-right: 1px;
+}
+
+.portlet-blogs .taglib-discussion .lfr-discussion {
+	margin-top: 25px;
+}
+
+/*user picture */
+
+.taglib-user-display {
+	padding:0;
+	margin-bottom:15px;
+}
+
+.taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image {
+	text-align:left;
+}
+
+.taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image img {
+	  width: 70px;
+  /* text-align: left; */
+  border: 2px solid #d0dae3;
+}
+
+.taglib-user-display.display-style-2 .user-name {
+	  text-align: center;
+  font-family: georgia,serif;
+  font-style: italic;
+  color: #014260;
+  font-size: .9em;
+  max-width: 60px;
+  text-decoration: none;
+  line-height: 1.2em;
+  font-weight: normal;
+  display:inline-block;
+}
+
+/*ende user picture */
+
+.portlet-blogs .taglib-discussion .lfr-discussion-message {
+	background-color:#fff;
+	padding:5px;
+	  border-radius: 3px;
+  min-height: 60px;
+
+}
+
+.portlet-blogs .taglib-discussion .lfr-discussion-message:after {
+content: '';
+	
+	border-style: solid;
+	border-width: 12px 17px 12px 0;
+	border-color: transparent #fff;
+	display: block;
+	width: 0;
+	z-index: 1;
+	  margin-top: -20px;
+ 
+  top: 41%;
+  margin-left: -17px;
+}
+
+.taglib-ratings.thumbs, .taglib-discussion .lfr-discussion-actions  {
+	float:none;
+}
+
+
+.lfr-discussion-controls ul.lfr-discussion-actions li a {
+	background-color:#d0dae3;
+	 padding: 5px;
+  color: #014260;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  height: 10px;
+  padding-bottom: 10px;
+  padding-top: 8px;
+  margin-right: 1px;
+  line-height: 10px;
+	
+}
+
+.lfr-discussion-controls ul.lfr-discussion-actions li a span {
+	font-size:0;
+	display: inline-block;
+	transition: font-size .2s ease-in-out;
+	-webkit-transitions: font-size .2s ease-in-out;
+	-moz-transitions: font-size .2s ease-in-out;
+	-o-transitions: font-size .2s ease-in-out;
+	-ms-transitions: font-size .2s ease-in-out;
+}
+
+.lfr-discussion-controls ul.lfr-discussion-actions li a:hover span {
+	font-size:12px;
+	
+}
+
+.portlet-blogs .add-comment .control-group {
+	margin-top: 10px;
+}
+
+
+.portlet-blogs .add-comment textarea {
+	width:100%;
+}
+
+@media (min-width: 1200px) {
+	.portlet-blogs #blogsCommentsPanelContainer .row-fluid {
+		margin-left:0px;
+	}
+}
+
+.portlet-blogs #blogsCommentsPanelContainer .lfr-discussion-details {
+	padding-left: 0;
+}
+
+.portlet-blogs .row-fluid.lfr-discussion-form-container {
+	margin-left: 25% !important;
+  width: auto;
+  margin-top: 10px;
+}
+
+.portlet-blogs .row-fluid.lfr-discussion-form-container .control-group {
+	
+  margin-top: 10px;
+}
+
+.portlet-blogs .lfr-discussion-form.lfr-discussion-form-edit {
+	  
+  width: 100%;
+   margin-top: 10px;
+}
+
+
+.portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image {
+	position:relative;
+	width:50px;
+}
+
+.portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image .avatar {
+	float:left;
+}
+
+.portlet-blogs .app-view-search-entry-taglib {
+	margin:10px 0 0 0;
+	padding:5px;
+	
+}
+
+.portlet-blogs .app-view-search-entry-taglib .entry-discussion {
+	margin:0;
+	
+}
+
+.portlet-blogs  .rating-input-container label{
+	display:inline
+}
+
+.portlet-blogs .thumbrating-content {
+	margin-bottom:5px;
 }

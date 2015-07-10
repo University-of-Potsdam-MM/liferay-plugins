@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -20,18 +19,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.portlet.LiferayPortletConfig;
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
-import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -41,59 +35,13 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import de.unipotsdam.elis.portfolio.PortfolioManager;
-import de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.PortfolioStatics;
+import de.unipotsdam.elis.portfolio.model.Portfolio;
+import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
+import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 
 public class MyPortfolioPortlet extends MVCPortlet {
-
-	/**
-	 * Publishes the portfolio to a user.
-	 * 
-	 * @param actionRequest
-	 * @param actionResponse
-	 * @throws IOException
-	 * @throws PortletException
-	 * @throws SystemException
-	 * @throws PortalException
-	 */
-	public void publishPortfolioToUser(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException,
-			PortletException, SystemException, PortalException {
-		String userName = ParamUtil.getString(actionRequest, "userName");
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		User user;
-		// TODO: ScreenName eindeutig?
-		user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
-
-		if (user == null) {
-			addErrorMessage(actionRequest, actionResponse, "error-not-a-user");
-		} else {
-			long plid = ParamUtil.getLong(actionRequest, "portfolioPlid");
-			boolean success = PortfolioManager.publishPortfolioToUser(plid, user.getUserId());
-			if (!success) {
-				addErrorMessage(actionRequest, actionResponse, "error");
-			}
-		}
-	}
-
-	/**
-	 * Adds a error message, hides the default error message and redirects to
-	 * the current page.
-	 * 
-	 * @param actionRequest
-	 * @param actionResponse
-	 * @param errorKey
-	 * @throws IOException
-	 */
-	private void addErrorMessage(ActionRequest actionRequest, ActionResponse actionResponse, String errorKey)
-			throws IOException {
-		SessionErrors.add(actionRequest, errorKey);
-		// hide default error message
-		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-		SessionMessages.add(actionRequest, ((LiferayPortletConfig) portletConfig).getPortletId()
-				+ SessionMessages.KEY_SUFFIX_HIDE_DEFAULT_ERROR_MESSAGE);
-		// redirect to current page
-		String redirect = getRedirect(actionRequest, actionResponse);
-		actionResponse.sendRedirect(redirect);
-	}
 
 	/**
 	 * Retracts the publishment of a portfolio to a user.
@@ -110,14 +58,16 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		String userName = ParamUtil.getString(actionRequest, "userName");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		User user;
-		// TODO: ScreenName eindeutig?
+
 		user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
 
+		// TODO: fehler wenn nutzer unbekannt
 		if (user == null) {
 			throw new SystemException("User unknown");
 		} else {
 			long plid = ParamUtil.getLong(actionRequest, "portfolioPlid");
-			PortfolioManager.removeUserFromPortfolio(plid, user.getUserId());
+			Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+			portfolio.removeUser(user.getUserId());
 		}
 	}
 
@@ -131,11 +81,31 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 */
 	public static void deletePortfolio(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws PortalException, SystemException {
-		// TODO: Sollte nicht löschbar sein, wenn es sich im Feedbackprozess
+		// TODO: Sollte nicht lÃ¶schbar sein, wenn es sich im Feedbackprozess
 		// befindet.
 		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
-		PortfolioPermissionLocalServiceUtil.deletePortfolioPermissionByPlid(plid);
-		LayoutLocalServiceUtil.deleteLayout(plid, ServiceContextFactory.getInstance(actionRequest));
+		PortfolioLocalServiceUtil.deletePortfolio(plid);
+	}
+
+	public static void deletePublishment(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortalException, SystemException {
+		// TODO: Sollte nicht lÃ¶schbar sein, wenn es sich im Feedbackprozess
+		// befindet.
+		// TODO: was ist wenn nutzer mitlerweile gelöscht?
+		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
+		String userName = ParamUtil.getString(actionRequest, "userName");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long userId = UserLocalServiceUtil.getUserIdByScreenName(themeDisplay.getCompanyId(), userName);
+		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback(plid, userId);
+	}
+
+	public static void deleteGlobalPublishment(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortalException, SystemException {
+		// TODO: Sollte nicht lÃ¶schbar sein, wenn es sich im Feedbackprozess
+		// befindet.
+		long plid = Long.valueOf(ParamUtil.getString(actionRequest, "portfolioPlid"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		portfolio.setPrivate();
 	}
 
 	@Override
@@ -143,8 +113,22 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			PortletException {
 		String cmd = ParamUtil.getString(resourceRequest, Constants.CMD);
 
-		if (cmd.equals("get_users")) {
+		if (cmd.equals("getUsers")) {
 			getUsers(resourceRequest, resourceResponse);
+		} else if (cmd.equals("userExists")) {
+			try {
+				userExists(resourceRequest, resourceResponse);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		} else if (cmd.equals("userHasPermission")) {
+			try {
+				userHasPermission(resourceRequest, resourceResponse);
+			} catch (SystemException e) {
+				e.printStackTrace();
+			} catch (PortalException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -179,32 +163,112 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			PortletException, SystemException, PortalException {
 		String portfolioName = ParamUtil.getString(actionRequest, "portfolioName");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		try {
+			// Get Portfolio page
+			// TODO: eindeutigeren weg vielleicht?
+			List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
+			Layout portfolioParentPage = null;
+			for (Layout layout : layouts) {
+				if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
+					portfolioParentPage = layout;
+			}
 
-		// Get Portfolio page
-		// TODO: eindeutigeren weg vielleicht?
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
-		Layout portfolioPage = null;
-		for (Layout layout : layouts) {
-			if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
-				portfolioPage = layout;
-		}
-		if (portfolioPage != null) {
-			long userId = themeDisplay.getUserId();
-			long groupId = portfolioPage.getGroupId();
-			boolean privateLayout = false;
-			long parentLayoutId = portfolioPage.getLayoutId();
-			String name = portfolioName;
-			String title = portfolioName;
-			String description = "";
-			String type = LayoutConstants.TYPE_PORTLET;
-			boolean hidden = false;
-			String friendlyURL = "/" + portfolioName;
+			// preparations
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
-			Layout newLayout = LayoutLocalServiceUtil.addLayout(userId, groupId, privateLayout, parentLayoutId, name,
-					title, description, type, hidden, friendlyURL, serviceContext);
-			LayoutPrototype portfolioPrototype = PortfolioManager.getPortfolioPrototype();
-			newLayout.setLayoutPrototypeUuid(portfolioPrototype.getUuid());
-			LayoutLocalServiceUtil.updateLayout(newLayout);
+
+			if (portfolioParentPage == null) {
+				portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
+						.getGroupId(), false, 0, "Portfolio", "Portfolio", "", LayoutConstants.TYPE_PORTLET, false,
+						"/Portfolio", serviceContext);
+			}
+
+			Layout newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
+					portfolioParentPage.getGroupId(), false, portfolioParentPage.getLayoutId(), portfolioName,
+					portfolioName, "", LayoutConstants.TYPE_PORTLET, false, "/" + portfolioName, serviceContext);
+			newPortfolio.setLayoutPrototypeUuid(PortfolioManager.getPortfolioPrototypes().get(0).getUuid());
+			LayoutLocalServiceUtil.updateLayout(newPortfolio);
+			PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
+
+	public void userExists(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
+			SystemException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String name = ParamUtil.getString(resourceRequest, "name");
+		User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), name);
+		PrintWriter out = resourceResponse.getWriter();
+		out.print(user != null && themeDisplay.getUserId() != user.getUserId());
+	}
+
+	public void userHasPermission(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws IOException, SystemException, PortalException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String name = ParamUtil.getString(resourceRequest, "name");
+		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), name);
+		PrintWriter out = resourceResponse.getWriter();
+		if (user != null)
+			out.print(portfolio.userHasPermission(user.getUserId()));
+		else
+			out.print(false);
+	}
+
+	public void publishPortfolioToUsers(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortletException, SystemException, NumberFormatException, PortalException {
+		String userNames = ParamUtil.getString(actionRequest, "userNames");
+		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
+		String[] userNameList = userNames.split(",");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		for (String userName : userNameList) {
+			User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
+			if (user != null) {
+				Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(Long.parseLong(portfolioPlid));
+				portfolio.publishToUser(user.getUserId(),
+						ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
+			}
+		}
+	}
+
+	public void publishPortfolioGlobal(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortletException, SystemException, PortalException {
+		long portfolioPlid = Long.parseLong(ParamUtil.getString(actionRequest, "portfolioPlid"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(portfolioPlid);
+		portfolio.setGlobal();
+	}
+
+	public void requestFeedbackFromUser(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws SystemException, PortalException {
+		long plid = Long.parseLong(ParamUtil.getString(actionRequest, "portfolioPlid"));
+		long userId = Long.parseLong(ParamUtil.getString(actionRequest, "userId"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
+	}
+
+	public void removeFeedbackForPortfolio(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws SystemException, PortalException {
+		long plid = Long.parseLong(ParamUtil.getString(actionRequest, "portfolioPlid"));
+		long userId = Long.parseLong(ParamUtil.getString(actionRequest, "userId"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_UNREQUESTED);
+	}
+
+	public void requestFeedbackFromUsers(ActionRequest actionRequest, ActionResponse actionResponse)
+			throws PortletException, SystemException, NumberFormatException, PortalException {
+		String userNames = ParamUtil.getString(actionRequest, "userNames");
+		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
+		String[] userNameList = userNames.split(",");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		for (String userName : userNameList) {
+			User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
+			if (user != null) {
+				Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(Long.parseLong(portfolioPlid));
+				portfolio.publishToUserAndRequestFeedback(user.getUserId(),
+						ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
+			}
+		}
+	}
+
 }

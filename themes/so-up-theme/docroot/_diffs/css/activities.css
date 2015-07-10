@@ -27,11 +27,69 @@
 
 /***Social Office Activities ***/
 
-.so-portlet-activities .activity-footer-toolbar, 
-.so-portlet-activities .comment-entry, 
+
+.so-portlet-activities .comment-entry{
+	padding: 5px;
+ 
+}
+
+.so-portlet-activities .comment-entry .comment-body {
+	background-color: #fff;
+  padding: 5px;
+  margin-left: 60px;
+    min-height: 30px;
+}
+
+.so-portlet-activities .comment-entry .comment-info {
+	margin-left:60px;
+}
+
+.so-portlet-activities .comment-entry .comment-body:before { 
+		content: '';
+	
+	border-style: solid;
+	border-width: 12px 17px 12px 0;
+	border-color:transparent #fff;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-left: -20px;
+	position: absolute;
+
+	
+}
+
+.so-portlet-activities .comments-container .control-group {
+	  margin: 0 2px 0 0px;
+}
+
+.so-portlet-activities .comment-entry .comment-body span.message {
+	
+	font-family: georgia;
+  font-style: italic;
+	  line-height: 1.5;
+}
 .so-portlet-activities .comments-container .form  {
 	background: #D0DAE3;
 	border:0px;
+}
+
+.so-portlet-activities .activity-footer-toolbar {
+	background: #ededed;
+	padding:5px;
+	
+}
+
+.so-portlet-activities .comments-list {
+	background-color:#ededed;
+}
+
+.so-portlet-activities .comments-container .user-portrait {
+	position:relative;
+}
+
+.so-portlet-activities a.group {
+	color:#014260;
 }
 
 .so-announcements-portlet .entry-footer-toolbar {

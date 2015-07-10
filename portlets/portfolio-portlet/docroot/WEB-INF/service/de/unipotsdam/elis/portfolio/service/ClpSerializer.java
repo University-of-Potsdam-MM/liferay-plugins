@@ -25,7 +25,8 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 
-import de.unipotsdam.elis.portfolio.model.PortfolioPermissionClp;
+import de.unipotsdam.elis.portfolio.model.PortfolioClp;
+import de.unipotsdam.elis.portfolio.model.PortfolioFeedbackClp;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -102,8 +103,12 @@ public class ClpSerializer {
 
 		String oldModelClassName = oldModelClass.getName();
 
-		if (oldModelClassName.equals(PortfolioPermissionClp.class.getName())) {
-			return translateInputPortfolioPermission(oldModel);
+		if (oldModelClassName.equals(PortfolioClp.class.getName())) {
+			return translateInputPortfolio(oldModel);
+		}
+
+		if (oldModelClassName.equals(PortfolioFeedbackClp.class.getName())) {
+			return translateInputPortfolioFeedback(oldModel);
 		}
 
 		return oldModel;
@@ -121,11 +126,20 @@ public class ClpSerializer {
 		return newList;
 	}
 
-	public static Object translateInputPortfolioPermission(
-		BaseModel<?> oldModel) {
-		PortfolioPermissionClp oldClpModel = (PortfolioPermissionClp)oldModel;
+	public static Object translateInputPortfolio(BaseModel<?> oldModel) {
+		PortfolioClp oldClpModel = (PortfolioClp)oldModel;
 
-		BaseModel<?> newModel = oldClpModel.getPortfolioPermissionRemoteModel();
+		BaseModel<?> newModel = oldClpModel.getPortfolioRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
+	public static Object translateInputPortfolioFeedback(BaseModel<?> oldModel) {
+		PortfolioFeedbackClp oldClpModel = (PortfolioFeedbackClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getPortfolioFeedbackRemoteModel();
 
 		newModel.setModelAttributes(oldClpModel.getModelAttributes());
 
@@ -150,8 +164,45 @@ public class ClpSerializer {
 		String oldModelClassName = oldModelClass.getName();
 
 		if (oldModelClassName.equals(
-					"de.unipotsdam.elis.portfolio.model.impl.PortfolioPermissionImpl")) {
-			return translateOutputPortfolioPermission(oldModel);
+					"de.unipotsdam.elis.portfolio.model.impl.PortfolioImpl")) {
+			return translateOutputPortfolio(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
+		if (oldModelClassName.equals(
+					"de.unipotsdam.elis.portfolio.model.impl.PortfolioFeedbackImpl")) {
+			return translateOutputPortfolioFeedback(oldModel);
 		}
 		else if (oldModelClassName.endsWith("Clp")) {
 			try {
@@ -267,20 +318,34 @@ public class ClpSerializer {
 		}
 
 		if (className.equals(
-					"de.unipotsdam.elis.portfolio.NoSuchPermissionException")) {
-			return new de.unipotsdam.elis.portfolio.NoSuchPermissionException();
+					"de.unipotsdam.elis.portfolio.NoSuchPortfolioException")) {
+			return new de.unipotsdam.elis.portfolio.NoSuchPortfolioException();
+		}
+
+		if (className.equals(
+					"de.unipotsdam.elis.portfolio.NoSuchFeedbackException")) {
+			return new de.unipotsdam.elis.portfolio.NoSuchFeedbackException();
 		}
 
 		return throwable;
 	}
 
-	public static Object translateOutputPortfolioPermission(
-		BaseModel<?> oldModel) {
-		PortfolioPermissionClp newModel = new PortfolioPermissionClp();
+	public static Object translateOutputPortfolio(BaseModel<?> oldModel) {
+		PortfolioClp newModel = new PortfolioClp();
 
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
-		newModel.setPortfolioPermissionRemoteModel(oldModel);
+		newModel.setPortfolioRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputPortfolioFeedback(BaseModel<?> oldModel) {
+		PortfolioFeedbackClp newModel = new PortfolioFeedbackClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setPortfolioFeedbackRemoteModel(oldModel);
 
 		return newModel;
 	}

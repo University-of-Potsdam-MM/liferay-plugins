@@ -1,4 +1,4 @@
-@import "compass";
+ @import "compass"; 
 /*custom*/
 .container-fluid#wrapper div#content  {
 	width: 78%;
@@ -15,12 +15,30 @@
 
 
 /* ---------- Portlet wrapper and icons ---------- */
-body.portlet {
-	border: none;
+body .portlet {
+	border: 2px solid #fff;
 }
 
+body .portlet:hover {
+	border:2px solid #d0dae3;
+}
+
+.aui .modal .portlet:hover {
+	border:2px solid #fff;
+}
+
+
+.portlet-topper .portlet-topper-toolbar a i {
+	display:none;
+}
+
+portlet:hover .portlet-topper .portlet-topper-toolbar a i {
+	display:inline;
+}
+
+
 .portlet-boundary {
-	border-bottom: 1px dotted #D0DAE3;
+	
 	margin-bottom: 10px;
 	padding-bottom: 10px;
 	
@@ -28,6 +46,10 @@ body.portlet {
 
 .portlet .portlet-title {
 	font-size: 2em;
+}
+
+.portlet .portlet-content, .portlet .portlet-topper {
+	padding-top: .5em;
 }
 
 .portlet-title {
@@ -51,11 +73,16 @@ body.portlet {
 /* portlet edit mode */
 
 .portlet-borderless-bar {
-	background-color: #FF9;
+	background-color: #FFF;
   padding: 3px;
   margin-bottom: 3px;
-    text-align: right;
+    text-align:left;
   padding-right: 50px;
+ 	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	font-size: 1.2em;
+	color: #014260;
+	border-bottom: 1px solid #ededed;
 }
 
 .portlet-topper {
@@ -97,14 +124,27 @@ body.portlet {
 
 /* borderless portlet */
 
+.portlet-borderless {
+	border:2px solid #fff;
+}
+
+
+.portlet-borderless:hover {
+	border:2px solid #d0dae3;
+}
+
+.aui .modal .portlet-borderless:hover {
+	border:2px solid #fff;
+}
 .portlet-borderless-bar span.portlet-actions {
 	position: absolute;
 
   margin-right: 10px;
+  right:0;
 }
 
 .portlet-borderless-bar span.portlet-actions span div a li.caret {
-	margint-top:4px;
+	margin-top:4px;
 }
 
 .portlet-borderless-bar span.portlet-actions span span.portlet-action-separator {

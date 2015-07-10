@@ -6,14 +6,17 @@
 
 <head>
 	<title>${the_title} - ${company_name}</title>
-
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
-
 	${theme.include(top_head_include)}
 
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
-
+	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste für die Seiten unter all sites-->
+	<div class="">
+		<@liferay.dockbar />
+		${theme.include(body_top_include)}
+		${theme.search()}
+	</div>
 ${theme.include(body_top_include)}
 
 <#if is_signed_in>
@@ -31,7 +34,7 @@ ${theme.include(body_top_include)}
 				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
 				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
 				<div class="switch">
-					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" selected="selected">Eigene</input>
+					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" checked="checked">Eigene</input>
 					<input type="radio" name="select-type" id="public" value="sidebar-all-sites">&Ouml;ffentliche</input>
 				</div>
 				<ul id="sidebar-my-sites">
@@ -44,9 +47,7 @@ ${theme.include(body_top_include)}
 					</#list>
 	        	</ul>
 	        	<ul id="sidebar-all-sites hidden">
-	        		<#list theme.sitesDirectory() as all_site>
-	        			<li></li>
-	        		</#list>
+
 	        	</ul>
 			</div>
 		</div>
@@ -158,7 +159,9 @@ ${theme.include(body_top_include)}
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
 				<a href="javascript:;" id="toggleDockbar">
-					<span class="icon workspace"></span>Workspace konfigurieren
+					<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">
+						<span class="icon workspace"></span>Workspace konfigurieren
+					</a>
 				</a>
 			</li>
 			</#if>
