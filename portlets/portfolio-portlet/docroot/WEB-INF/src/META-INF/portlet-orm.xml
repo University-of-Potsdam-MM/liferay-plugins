@@ -7,19 +7,39 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
-	<mapped-superclass class="de.unipotsdam.elis.portfolio.model.impl.PortfolioPermissionModelImpl">
-		<id-class class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPermissionPK" />
+	<mapped-superclass class="de.unipotsdam.elis.portfolio.model.impl.PortfolioModelImpl">
+		<attributes>
+			<id name="plid" />
+			<basic name="publishmentType" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="de.unipotsdam.elis.portfolio.model.impl.PortfolioFeedbackModelImpl">
+		<id-class class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK" />
 		<attributes>
 			<id name="plid" />
 			<id name="userId" />
+			<basic name="feedbackStatus" />
+			<basic name="createDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="modifiedDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
 			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
-	<entity class="de.unipotsdam.elis.portfolio.model.impl.PortfolioPermissionImpl" name="PortfolioPermission">
-		<table name="Portfolio_PortfolioPermission" />
+	<entity class="de.unipotsdam.elis.portfolio.model.impl.PortfolioImpl" name="Portfolio">
+		<table name="Portfolio_Portfolio" />
+		<attributes />
+	</entity>
+	<entity class="de.unipotsdam.elis.portfolio.model.impl.PortfolioFeedbackImpl" name="PortfolioFeedback">
+		<table name="Portfolio_PortfolioFeedback" />
 		<attributes />
 	</entity>
 </entity-mappings>
