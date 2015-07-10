@@ -13,7 +13,7 @@
 <!-- TODO: Button mit Funktion hinterlegen -->
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page" />
 
-<div id="edittest">test</div>
+<!--  <div id="edittest">test</div>-->
 
 <table id="test" class="aui table table-striped table-bordered">
     <thead>
@@ -149,15 +149,15 @@
     </tbody>
 </table>
 <aui:script use="liferay-util-window">
-
+/*
 AUI().ready('aui-base','aui-editable-deprecated','aui-node-deprecated','event',
 		function(A) {
 	 	var editable = new A.Editable({
 		  node: '#edittest'
 		});
-	 	A.Event.simulate(editable,"click");
+	 	//A.Event.simulate(editable,"click");
 	 	editable.show();
-		});
+		});*/
 
 AUI().use('aui-base',
 	'aui-io-plugin-deprecated',
@@ -213,12 +213,21 @@ AUI().use('aui-base',
 function openPopUp(renderURL, title){
 	var popUpWindow=Liferay.Util.Window.getWindow({
 		dialog: {
+			after: {
+				destroy: function(event) {
+					document.location.href = '<%=redirect%>';
+				}
+			},
 			centered: true,
+			constrain: true,
 			constrain2view: true,
 			modal: true,
 			resizable: false,
 			width: 700 ,
-			height: 500 
+			height: 500,
+			destroyOnClose: true,
+			destroyOnHide: true,
+			contentBox: '<div class="loading-animation"></div>',
 		}
 	}).plug(
 		A.Plugin.IO, {
