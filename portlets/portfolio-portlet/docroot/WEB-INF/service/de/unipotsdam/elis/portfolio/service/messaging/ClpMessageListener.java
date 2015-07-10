@@ -18,8 +18,10 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import de.unipotsdam.elis.portfolio.service.ClpSerializer;
-import de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalServiceUtil;
-import de.unipotsdam.elis.portfolio.service.PortfolioPermissionServiceUtil;
+import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackServiceUtil;
+import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.service.PortfolioServiceUtil;
 
 /**
  * @author Matthias
@@ -36,9 +38,12 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
-			PortfolioPermissionLocalServiceUtil.clearService();
+			PortfolioLocalServiceUtil.clearService();
 
-			PortfolioPermissionServiceUtil.clearService();
+			PortfolioServiceUtil.clearService();
+			PortfolioFeedbackLocalServiceUtil.clearService();
+
+			PortfolioFeedbackServiceUtil.clearService();
 		}
 	}
 }
