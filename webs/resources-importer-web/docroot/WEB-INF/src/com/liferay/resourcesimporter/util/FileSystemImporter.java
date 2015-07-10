@@ -572,12 +572,13 @@ public class FileSystemImporter extends BaseImporter {
 
 	protected void addDDMTemplates(
 			String ddmStructureKey, String fileName, InputStream inputStream)
-		throws Exception {		
+		throws Exception {
+
+		String language = getDDMTemplateLanguage(fileName);
 
 		fileName = FileUtil.stripExtension(fileName);
 
 		String name = getName(fileName);
-		String language = getDDMTemplateLanguage(fileName);
 
 		String xsl = StringUtil.read(inputStream);
 
@@ -614,9 +615,9 @@ public class FileSystemImporter extends BaseImporter {
 					PortalUtil.getClassNameId(DDMStructure.class),
 					ddmStructure.getStructureId(), getKey(fileName),
 					getMap(name), null,
-					DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY, null,
-					language, replaceFileEntryURL(xsl), false, false, null,
-					null, serviceContext);
+					DDMTemplateConstants.TEMPLATE_TYPE_DISPLAY, null, language,
+					replaceFileEntryURL(xsl), false, false, null, null,
+					serviceContext);
 			}
 			else {
 				ddmTemplate = DDMTemplateLocalServiceUtil.updateTemplate(

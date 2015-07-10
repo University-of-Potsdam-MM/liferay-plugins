@@ -1815,7 +1815,7 @@ Please find a solution that does not require portal-impl.jar.
 				</then>
 				<else>
 					<if>
-						<matches pattern=".*-test" string="@{module.dir}" />
+						<matches pattern=".*-test$" string="@{module.dir}" />
 						<then>
 							<loop-macrodef-or-target
 								module.dirs="@{module.dir}"
@@ -2001,6 +2001,13 @@ Please find a solution that does not require portal-impl.jar.
 													<if>
 														<available file="${temp.deployed.plugin.dir}" />
 														<then>
+															<touch millis="0">
+																<fileset
+																	dir="${temp.deployed.plugin.dir}"
+																	includes="WEB-INF/liferay-web.xml,WEB-INF/web.xml,WEB-INF/tld/*"
+																/>
+															</touch>
+
 															<jar destfile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" duplicate="preserve" update="true">
 																<fileset
 																	dir="${app.server.portal.dir}"
@@ -2550,7 +2557,7 @@ Please find a solution that does not require portal-impl.jar.
 				<available file="@{module.dir}/test/integration" type="dir" />
 				<then>
 					<resourcecount property="test.integration.count">
-						<fileset dir="@{module.dir}/test-classes/integration" includes="**/@{test.class}.class" />
+						<fileset dir="@{module.dir}/test/integration" includes="**/@{test.class}.java" />
 					</resourcecount>
 				</then>
 			</if>
@@ -2559,7 +2566,7 @@ Please find a solution that does not require portal-impl.jar.
 				<available file="@{module.dir}/test/unit" type="dir" />
 				<then>
 					<resourcecount property="test.unit.count">
-						<fileset dir="@{module.dir}/test-classes/unit" includes="**/@{test.class}.class" />
+						<fileset dir="@{module.dir}/test/unit" includes="**/@{test.class}.java" />
 					</resourcecount>
 				</then>
 			</if>

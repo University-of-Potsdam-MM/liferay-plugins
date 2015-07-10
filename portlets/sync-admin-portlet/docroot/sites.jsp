@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String tabs1 = ParamUtil.getString(request, "tabs1", "sync-sites");
+String tabs1 = ParamUtil.getString(request, "tabs1", "sites");
 
 String keywords = ParamUtil.getString(request, "keywords");
 
@@ -68,7 +68,29 @@ portletURL.setParameter("delta", String.valueOf(delta));
 
 	List<Group> groups = GroupLocalServiceUtil.search(themeDisplay.getCompanyId(), keywords, groupParams, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-	List<String> defaultResourceActions = ResourceActionsUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
+	List<String> resourceActions = ListUtil.toList(SyncPermissionsConstants.getFileResourceActions(SyncPermissionsConstants.PERMISSIONS_FULL_ACCESS));
+
+	List<String> localizedResourceActions = new ArrayList<String>(resourceActions.size());
+
+	for (String resourceAction : resourceActions) {
+		localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
+	}
+
+	String fullAccessPermissionsDescription = LanguageUtil.format(locale, "full-access-x", StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE));
+
+	resourceActions = ResourceActionsUtil.getModelResourceGroupDefaultActions(DLFileEntry.class.getName());
+
+	String defaultPermissionsDescription = null;
+
+	if (resourceActions != null) {
+		localizedResourceActions = new ArrayList<String>(resourceActions.size());
+
+		for (String resourceAction : resourceActions) {
+			localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
+		}
+
+		defaultPermissionsDescription = StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE);
+	}
 	%>
 
 	<liferay-ui:search-container
@@ -89,12 +111,41 @@ portletURL.setParameter("delta", String.valueOf(delta));
 		>
 			<liferay-ui:search-container-column-text
 				name="name"
-				value="<%= group.getDescriptiveName() %>"
+				property="descriptiveName"
+			/>
+
+			<liferay-ui:search-container-column-text
+				name="description"
+				property="description"
 			/>
 
 			<%
 			boolean syncSiteEnabled = GetterUtil.getBoolean(group.getTypeSettingsProperty("syncEnabled"), true);
+
+			String permissionsDescription = StringPool.BLANK;
+
+			if (syncSiteEnabled) {
+				int currentPermissions = GetterUtil.getInteger(group.getTypeSettingsProperty("syncSiteMemberFilePermissions"));
+
+				if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_VIEW_ONLY) {
+					permissionsDescription = LanguageUtil.get(pageContext, "view-only");
+				}
+				else if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_VIEW_AND_ADD_DISCUSSION) {
+					permissionsDescription = LanguageUtil.get(pageContext, "view-and-add-discussion");
+				}
+				else if (currentPermissions == SyncPermissionsConstants.PERMISSIONS_FULL_ACCESS) {
+					permissionsDescription = fullAccessPermissionsDescription;
+				}
+				else if (Validator.isNotNull(defaultPermissionsDescription)) {
+					permissionsDescription = defaultPermissionsDescription;
+				}
+			}
 			%>
+
+			<liferay-ui:search-container-column-text
+				name="default-file-permissions"
+				value="<%= permissionsDescription %>"
+			/>
 
 			<liferay-ui:search-container-column-text
 				name="enabled"
@@ -102,38 +153,10 @@ portletURL.setParameter("delta", String.valueOf(delta));
 				value='<%= syncSiteEnabled ? "yes" : "no" %>'
 			/>
 
-			<%
-			List<String> localizedResourceActions = null;
-
-			if (syncSiteEnabled) {
-				int permissions = GetterUtil.getInteger(group.getTypeSettingsProperty("syncSiteMemberFilePermissions"));
-
-				List<String> resourceActions = null;
-
-				if (permissions > 0) {
-					resourceActions = ListUtil.toList(SyncPermissionsConstants.getFileResourceActions(permissions));
-				}
-				else {
-					resourceActions = defaultResourceActions;
-				}
-
-				localizedResourceActions = new ArrayList<String>(resourceActions.size());
-
-				for (String resourceAction : resourceActions) {
-					localizedResourceActions.add(LanguageUtil.get(locale, ResourceActionsUtil.getActionNamePrefix() + resourceAction));
-				}
-			}
-			%>
-
-			<liferay-ui:search-container-column-text
-				name="default-file-permissions"
-				value="<%= ListUtil.isNotEmpty(localizedResourceActions) ? StringUtil.merge(localizedResourceActions, StringPool.COMMA_AND_SPACE) : StringPool.BLANK %>"
-			/>
-
 			<liferay-ui:search-container-column-jsp
 				align="right"
 				cssClass="entry-action"
-				path="/sync_sites_action.jsp"
+				path="/sites_action.jsp"
 			/>
 		</liferay-ui:search-container-row>
 
