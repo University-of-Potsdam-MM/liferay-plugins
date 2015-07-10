@@ -21,9 +21,9 @@
 		
 		<liferay-ui:search-container-column-jsp name="portfolio-title-column"
 			path="/html/otherportfolios/columns/title_column.jsp"/>
-
-		<liferay-ui:search-container-column-text name="portfolio-creator-column"
-			value="<%= owner.getScreenName() %>" />
+			
+		<liferay-ui:search-container-column-jsp name="portfolio-creator-column"
+			path="/html/otherportfolios/columns/creator_column.jsp"/>
 			
 		<liferay-ui:search-container-column-jsp name="portfolio-feedback-column"
 			path="/html/otherportfolios/columns/feedback_column.jsp" />

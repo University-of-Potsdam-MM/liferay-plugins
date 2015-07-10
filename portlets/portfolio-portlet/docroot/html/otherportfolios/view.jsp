@@ -1,4 +1,5 @@
 
+<%@page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects /> 
@@ -9,6 +10,7 @@
 <%
 	String tab = ParamUtil.getString(request, "myParam", "1"); 
 	String tabNames = LanguageUtil.get(pageContext, "portfolio-for-me") + "," + LanguageUtil.get(pageContext, "portfolio-portalwide");
+	String redirect = PortalUtil.getCurrentURL(renderRequest); 
 %>
 
 <liferay-ui:tabs names="<%= tabNames %>" url="<%=tabURL.toString()%>" param="myParam" tabsValues="1,2" >

@@ -11,13 +11,13 @@
 <%@ page import="com.liferay.portal.kernel.util.WebKeys"%>
 <%@ page import="com.liferay.portal.kernel.util.Constants"%>
 <%@ page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
+<%@ page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.model.Layout"%>
 <%@ page import="com.liferay.portal.model.User"%>
 <%@ page import="com.liferay.portal.util.PortalUtil"%>
-
 <%@ page import="de.unipotsdam.elis.portfolio.PortfolioManager"%>
 <%@ page import="de.unipotsdam.elis.portfolio.util.jsp.JspHelper"%>
 <%@ page import="de.unipotsdam.elis.portfolio.model.Portfolio"%>
