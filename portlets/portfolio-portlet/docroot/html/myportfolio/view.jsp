@@ -6,13 +6,21 @@
 <liferay-theme:defineObjects /> 
 
 <%
-	List<Portfolio> userPortfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId()); 
+	String filterValue = ParamUtil.getString(request, "filterValue");
+	List<Portfolio> userPortfolios = 
+			PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId(), (filterValue == null) ? "" : filterValue, themeDisplay.getLocale()); 
 	String redirect = PortalUtil.getCurrentURL(renderRequest);  
+	
 %>
+<portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
+</portlet:actionURL>
 
-<!-- TODO: Button mit Funktion hinterlegen -->
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page" />
 
+<!-- TODO: filter dynamisch machen (filtern ohne Enter drücken zu müssen) -->
+<aui:form action="<%= filterPortfoliosURL.toString() %>">
+	<aui:input class="filterInput" name="filterValue" label=""></aui:input>
+</aui:form>
 <!--  <div id="edittest">test</div>-->
 
 <table id="test" class="aui table table-striped table-bordered">

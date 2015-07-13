@@ -270,5 +270,12 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			}
 		}
 	}
+	
+	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse)
+			{
+		String filterValue = ParamUtil.getString(actionRequest, "filterValue");
+		actionResponse.setRenderParameter("filterValue", filterValue);
+	}
+	
 
 }

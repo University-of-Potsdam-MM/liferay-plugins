@@ -14,26 +14,21 @@
 
 package de.unipotsdam.elis.portfolio.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import com.liferay.compat.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.DynamicQuery;
-import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
 import de.unipotsdam.elis.portfolio.NoSuchPortfolioException;
 import de.unipotsdam.elis.portfolio.PortfolioStatics;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
-import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
-import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.service.base.PortfolioLocalServiceBaseImpl;
+import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinderUtil;
 
 /**
  * The implementation of the portfolio local service.
@@ -81,58 +76,46 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 
 	public Portfolio deletePortfolio(long plid) throws SystemException, PortalException {
 		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(plid);
-		LayoutLocalServiceUtil.deleteLayout(LayoutLocalServiceUtil.getLayout(plid),true, new ServiceContext());
+		LayoutLocalServiceUtil.deleteLayout(LayoutLocalServiceUtil.getLayout(plid), true, new ServiceContext());
 		return portfolioPersistence.remove(plid);
 	}
 
 	public List<Portfolio> getPortfoliosByLayoutUserId(long userId) throws SystemException {
-		List<Object> userPlids = LayoutLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil.forClass(Layout.class)
-				.add(PropertyFactoryUtil.forName("userId").eq(userId))
-				.setProjection(ProjectionFactoryUtil.property("plid")));
+		return PortfolioFinderUtil.findByLayoutUserId(userId);
+	}
 
-		return PortfolioLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil.forClass(Portfolio.class).add(
-				PropertyFactoryUtil.forName("plid").in(userPlids)));
-
-		// TODO: warum findet der die Klasse Layout nicht bei subquery?
-		/*
-		 * DynamicQuery dynamicQuery =
-		 * DynamicQueryFactoryUtil.forClass(Portfolio.class,
-		 * PortalClassLoaderUtil.getClassLoader());
-		 * dynamicQuery.add(PropertyFactoryUtil.forName("plid").in(
-		 * DynamicQueryFactoryUtil.forClass(Layout.class, "layout",
-		 * PortalClassLoaderUtil.getClassLoader())
-		 * .add(PropertyFactoryUtil.forName("userId").eq(userId))
-		 * .setProjection(ProjectionFactoryUtil.property("plid"))));
-		 * 
-		 * 
-		 * return PortfolioLocalServiceUtil.dynamicQuery(dynamicQuery);
-		 */
+	public List<Portfolio> getPortfoliosByLayoutUserId(long userId, String titleFilter, Locale locale) throws SystemException, PortalException {
+		List<Portfolio> portfolios = PortfolioFinderUtil.findByLayoutUserId(userId);
+		return filterPortfolio(portfolios, titleFilter, locale);
 	}
 
 	public List<Portfolio> getPortfoliosByPortfolioFeedbackUserId(long userId) throws SystemException {
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Portfolio.class);
-		dynamicQuery.add(PropertyFactoryUtil.forName("plid").in(
-				DynamicQueryFactoryUtil.forClass(PortfolioFeedback.class)
-						.add(PropertyFactoryUtil.forName("primaryKey.userId").eq(userId))
-						.setProjection(ProjectionFactoryUtil.property("primaryKey.plid"))));
-		return PortfolioLocalServiceUtil.dynamicQuery(dynamicQuery);
+		return PortfolioFinderUtil.findByPortfolioFeedbackUserId(userId);
 	}
 
-	public List<Portfolio> getPortfolioByPublishmentTypeAndNoPortfolioFeedback(int publishmentType, long userId)
+	public List<Portfolio> getPortfoliosByPortfolioFeedbackUserId(long userId, String titleFilter, Locale locale)
+			throws SystemException, PortalException {
+		List<Portfolio> portfolios = PortfolioFinderUtil.findByPortfolioFeedbackUserId(userId, titleFilter);
+		return filterPortfolio(portfolios, titleFilter, locale);
+	}
+
+	public List<Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(int publishmentType, long userId)
 			throws SystemException {
-		List<Object> userPlids = LayoutLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil.forClass(Layout.class)
-				.add(PropertyFactoryUtil.forName("userId").eq(userId))
-				.setProjection(ProjectionFactoryUtil.property("plid")));
-		
-		// TODO: warum findet der die Klasse Layout nicht bei subquery?
-		
-		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(Portfolio.class);
-		dynamicQuery.add(PropertyFactoryUtil.forName("publishmentType").eq(publishmentType));
-		dynamicQuery.add(PropertyFactoryUtil.forName("plid").notIn(
-				DynamicQueryFactoryUtil.forClass(PortfolioFeedback.class)
-						.add(PropertyFactoryUtil.forName("primaryKey.userId").eq(userId))
-						.setProjection(ProjectionFactoryUtil.property("primaryKey.plid"))));
-		dynamicQuery.add(RestrictionsFactoryUtil.not(PropertyFactoryUtil.forName("plid").in(userPlids)));
-		return PortfolioFeedbackLocalServiceUtil.dynamicQuery(dynamicQuery);
+		return PortfolioFinderUtil.findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId);
+	}
+
+	public List<Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(int publishmentType, long userId,
+			String titleFilter, Locale locale) throws SystemException, PortalException {
+		List<Portfolio> portfolios = PortfolioFinderUtil.findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, titleFilter);
+		return filterPortfolio(portfolios, titleFilter, locale);
+	}
+	
+	private List<Portfolio> filterPortfolio(List<Portfolio> portfolios, String titleFilter, Locale locale) throws PortalException, SystemException{
+		List<Portfolio> result = new ArrayList<Portfolio>();
+		for (Portfolio p : portfolios){
+			if (p.getLayout().getTitle(locale).matches(".*" + titleFilter + ".*"))
+				result.add(p);
+		}
+		return result;
 	}
 }

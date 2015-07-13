@@ -37,5 +37,16 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
 		portfolio.updateFeedbackStatus(themeDisplay.getUserId(), PortfolioStatics.FEEDBACK_DELIVERED);
 	}
+	
+	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse)
+	{
+		String filterValue = ParamUtil.getString(actionRequest, "filterValue");
+		actionResponse.setRenderParameter("filterValue", filterValue);
+		String tab = ParamUtil.getString(actionRequest, "myParam");
+		System.out.println("tab " +tab);
+		if (tab != null)
+			actionResponse.setRenderParameter("myParam", tab);
+			
+	}
 
 }

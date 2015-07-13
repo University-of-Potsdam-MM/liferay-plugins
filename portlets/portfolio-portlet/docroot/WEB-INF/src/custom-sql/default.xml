@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+    <sql id="findPortfoliosByLayoutUserId">
+        SELECT Portfolio_Portfolio.*
+        FROM Portfolio_Portfolio
+        INNER JOIN
+            Layout ON Portfolio_Portfolio.plid = Layout.plid
+        WHERE
+        	(Layout.userId = ?)
+    </sql>
+    <sql id="findPortfoliosByPortfolioFeedbackUserId">
+        SELECT Portfolio_Portfolio.*
+        FROM Portfolio_Portfolio
+        INNER JOIN
+            Portfolio_PortfolioFeedback ON Portfolio_Portfolio.plid = Portfolio_PortfolioFeedback.plid
+        WHERE
+        	(Portfolio_PortfolioFeedback.userId = ?) 
+    </sql>
+    <sql id="findPortfoliosByPublishmentTypeAndNoPortfolioFeedback">
+        SELECT Portfolio_Portfolio.*
+        FROM Portfolio_Portfolio
+        WHERE
+        	(Portfolio_Portfolio.publishmentType = ?) AND
+        	(Portfolio_Portfolio.plid NOT IN 
+        		(SELECT Portfolio_PortfolioFeedback.plid
+        		 FROM Portfolio_PortfolioFeedback
+        		 WHERE Portfolio_PortfolioFeedback.userId = ?)) AND 
+        	(Portfolio_Portfolio.plid NOT IN 
+        		(SELECT Layout.plid
+        		 FROM Layout
+        		 WHERE Layout.userId = ? ))
+    </sql>
+</custom-sql>

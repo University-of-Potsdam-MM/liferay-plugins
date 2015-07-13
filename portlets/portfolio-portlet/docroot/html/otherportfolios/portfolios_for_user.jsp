@@ -4,8 +4,17 @@
 <liferay-theme:defineObjects />
 
 <%
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay.getUserId());
+	String filterValue = ParamUtil.getString(request, "filterValue");
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay.getUserId(), (filterValue == null) ? "" : filterValue, themeDisplay.getLocale()); 
 %>
+
+<portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
+	<portlet:param name="myParam" value="1"/>
+</portlet:actionURL>
+
+<aui:form action="<%= filterPortfoliosURL.toString() %>">
+	<aui:input class="filterInput" name="filterValue" label=""></aui:input>
+</aui:form>
 
 <liferay-ui:search-container delta="10" emptyResultsMessage="portfolio-no-other-portfolios">
 	<liferay-ui:search-container-results results="<%=portfolios%>"

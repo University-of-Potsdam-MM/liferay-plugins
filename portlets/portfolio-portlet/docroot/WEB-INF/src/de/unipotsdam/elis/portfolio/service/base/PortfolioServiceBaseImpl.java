@@ -25,6 +25,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.service.PortfolioService;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistence;
+import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinder;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistence;
 
 import javax.sql.DataSource;
@@ -104,6 +105,24 @@ public abstract class PortfolioServiceBaseImpl extends BaseServiceImpl
 	public void setPortfolioPersistence(
 		PortfolioPersistence portfolioPersistence) {
 		this.portfolioPersistence = portfolioPersistence;
+	}
+
+	/**
+	 * Returns the portfolio finder.
+	 *
+	 * @return the portfolio finder
+	 */
+	public PortfolioFinder getPortfolioFinder() {
+		return portfolioFinder;
+	}
+
+	/**
+	 * Sets the portfolio finder.
+	 *
+	 * @param portfolioFinder the portfolio finder
+	 */
+	public void setPortfolioFinder(PortfolioFinder portfolioFinder) {
+		this.portfolioFinder = portfolioFinder;
 	}
 
 	/**
@@ -340,6 +359,8 @@ public abstract class PortfolioServiceBaseImpl extends BaseServiceImpl
 	protected de.unipotsdam.elis.portfolio.service.PortfolioService portfolioService;
 	@BeanReference(type = PortfolioPersistence.class)
 	protected PortfolioPersistence portfolioPersistence;
+	@BeanReference(type = PortfolioFinder.class)
+	protected PortfolioFinder portfolioFinder;
 	@BeanReference(type = de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService.class)
 	protected de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService portfolioFeedbackLocalService;
 	@BeanReference(type = de.unipotsdam.elis.portfolio.service.PortfolioFeedbackService.class)
