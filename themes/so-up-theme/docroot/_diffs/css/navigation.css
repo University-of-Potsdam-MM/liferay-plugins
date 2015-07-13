@@ -1,4 +1,4 @@
-@import "compass";
+ @import "compass"; 
 /*custom styles*/
 
 #navigation {
@@ -39,10 +39,6 @@
 	margin-left:1em;
 	}
 
-#navigation ul li a span {
-	margin-left:.5em;
-
-}
 
 #navigation ul li ul {
 	display:none;
