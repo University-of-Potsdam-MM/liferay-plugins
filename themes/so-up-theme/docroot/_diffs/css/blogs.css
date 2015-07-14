@@ -8,8 +8,8 @@
 	display: inline-block;
 	text-indent: 10px;
 	height: 20px;
-	  padding-top: 5px;
-  padding-bottom: 5px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 /*test*/
@@ -39,7 +39,7 @@
 
 .portlet-blogs .navbar-inner .collapse .nav li+li a:hover span {
 	font-size: 12px;
-
+}
 
 .portlet-blogs .navbar-inner .collapse .nav li a:hover {
 	background-color: #ededed;
@@ -53,23 +53,21 @@
 	width: 150px;
 	height: 30px;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-  box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+	box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
 }
 
 .portlet-blogs .portlet .portlet-content .portlet-body form .navbar-search .form-search .input-append .btn {
 	margin-top: 0px;
-  padding-bottom: 4px;
-  padding-top: 5px;
-  color: #014260;
-  text-shadow: 0 0px 0px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-    border-top: 1px solid #d0dae3;
+	padding-bottom: 4px;
+	padding-top: 5px;
+	color: #014260;
+	text-shadow: 0 0px 0px;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: bold;
+	border-top: 1px solid #d0dae3;
 }
-
-
 
 .portlet-blogs .aui .form-search .input-append .btn {
 	padding-bottom: 10px;
@@ -142,14 +140,12 @@ body .portlet-blogs .edit-actions a:hover {
 	background-color: #fff091;
 }
 
-.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover
-	{
+.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover {
 	color: #014260;
 	text-decoration: underline;
 }
 
-.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited
-	{
+.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited {
 	color: #014260;
 	text-decoration: underline;
 }
@@ -181,27 +177,25 @@ body .portlet-blogs .edit-actions a:hover {
 	border-top: 0px solid #e5e5e5;
 }
 
-.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input
-	{
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input {
 	width: 98%;
 }
 
-.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input+br
-	{
+.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input+br {
 	display: none;
 }
 
 .portlet-blogs #blogsCommentsPanelContainer .fieldset.add-comment a {
 	background-color: #d0dae3;
-  padding: 5px;
-  color: #014260;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  height: 10px;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  margin-right: 1px;
+	padding: 5px;
+	color: #014260;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: bold;
+	height: 10px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	margin-right: 1px;
 }
 
 .portlet-blogs .taglib-discussion .lfr-discussion {
@@ -220,22 +214,22 @@ body .portlet-blogs .edit-actions a:hover {
 }
 
 .taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image img {
-	  width: 70px;
-  /* text-align: left; */
-  border: 2px solid #d0dae3;
+	width: 70px;
+	/* text-align: left; */
+	border: 2px solid #d0dae3;
 }
 
 .taglib-user-display.display-style-2 .user-name {
-	  text-align: center;
-  font-family: georgia,serif;
-  font-style: italic;
-  color: #014260;
-  font-size: .9em;
-  max-width: 60px;
-  text-decoration: none;
-  line-height: 1.2em;
-  font-weight: normal;
-  display:inline-block;
+	text-align: center;
+	font-family: georgia,serif;
+	font-style: italic;
+	color: #014260;
+	font-size: .9em;
+	max-width: 60px;
+	text-decoration: none;
+	line-height: 1.2em;
+	font-weight: normal;
+	display:inline-block;
 }
 
 /*ende user picture */
@@ -243,24 +237,21 @@ body .portlet-blogs .edit-actions a:hover {
 .portlet-blogs .taglib-discussion .lfr-discussion-message {
 	background-color:#fff;
 	padding:5px;
-	  border-radius: 3px;
-  min-height: 60px;
-
+	border-radius: 3px;
+	min-height: 60px;
 }
 
 .portlet-blogs .taglib-discussion .lfr-discussion-message:after {
-content: '';
-	
+	content: '';
 	border-style: solid;
 	border-width: 12px 17px 12px 0;
 	border-color: transparent #fff;
 	display: block;
 	width: 0;
 	z-index: 1;
-	  margin-top: -20px;
- 
-  top: 41%;
-  margin-left: -17px;
+	margin-top: -20px;
+	top: 41%;
+  	margin-left: -17px;
 }
 
 .taglib-ratings.thumbs, .taglib-discussion .lfr-discussion-actions  {
@@ -270,17 +261,16 @@ content: '';
 
 .lfr-discussion-controls ul.lfr-discussion-actions li a {
 	background-color:#d0dae3;
-	 padding: 5px;
-  color: #014260;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-  height: 10px;
-  padding-bottom: 10px;
-  padding-top: 8px;
-  margin-right: 1px;
-  line-height: 10px;
-	
+	padding: 5px;
+	color: #014260;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: bold;
+	height: 10px;
+	padding-bottom: 10px;
+	padding-top: 8px;
+	margin-right: 1px;
+	line-height: 10px;
 }
 
 .lfr-discussion-controls ul.lfr-discussion-actions li a span {
@@ -319,19 +309,17 @@ content: '';
 
 .portlet-blogs .row-fluid.lfr-discussion-form-container {
 	margin-left: 25% !important;
-  width: auto;
-  margin-top: 10px;
+	width: auto;
+	margin-top: 10px;
 }
 
 .portlet-blogs .row-fluid.lfr-discussion-form-container .control-group {
-	
-  margin-top: 10px;
+	margin-top: 10px;
 }
 
 .portlet-blogs .lfr-discussion-form.lfr-discussion-form-edit {
-	  
-  width: 100%;
-   margin-top: 10px;
+	width: 100%;
+	margin-top: 10px;
 }
 
 
