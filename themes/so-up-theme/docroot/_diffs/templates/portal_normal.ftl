@@ -11,17 +11,12 @@
 
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
-	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste für die Seiten unter all sites-->
-	<div class="">
-		<@liferay.dockbar />
-		${theme.include(body_top_include)}
-		${theme.search()}
-	</div>
-${theme.include(body_top_include)}
+	
+	${theme.include(body_top_include)}
 
-<#if is_signed_in>
-	<@liferay.dockbar />
-</#if>
+	<#if is_signed_in>
+		<@liferay.dockbar />
+	</#if>
 
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
@@ -159,9 +154,9 @@ ${theme.include(body_top_include)}
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
 				<a href="javascript:;" id="toggleDockbar">
-					<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">
+					<!--<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">-->
 						<span class="icon workspace"></span>Workspace konfigurieren
-					</a>
+					<!--</a>-->
 				</a>
 			</li>
 			</#if>
@@ -183,7 +178,7 @@ ${theme.include(body_top_include)}
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
@@ -214,7 +209,7 @@ ${theme.include(body_top_include)}
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>

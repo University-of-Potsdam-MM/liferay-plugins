@@ -15,10 +15,10 @@
 			</#if>
 			
 			<#-- Custom Logic to seperate portfolio sites in users private site -->
-			<#if nav_item.getLayout().getExpandoBridge().hasAttribute("Portfolio")??>
+			<#if nav_item.getLayout().getExpandoBridge().getAttribute("Portfolio")??>
 				<#assign portfoliopage = nav_item.getLayout().getExpandoBridge().getAttribute("Portfolio") />
 			</#if>
-			<#if layout.getExpandoBridge().hasAttribute("Portfolio")??>
+			<#if layout.getExpandoBridge().getAttribute("Portfolio")??>
 				<#assign currentportfoliopage = layout.getExpandoBridge().getAttribute("Portfolio") />
 			</#if>
 			<#if currentportfoliopage?? && portfoliopage??>
