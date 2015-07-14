@@ -12,16 +12,21 @@
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
 	
-	${theme.include(body_top_include)}
-
+	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste für die Seiten unter all sites-->
+	<div class="hidden">
+		${theme.search()}
+		${theme.include(body_top_include)}
+	</div>
 	<#if is_signed_in>
+	<div class="liferay_dockbar">
 		<@liferay.dockbar />
+	</div>	
 	</#if>
 
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Workspaces<span class="arrow"></span></div>
+			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
 				 

@@ -261,6 +261,7 @@
 				{
 					width: 50px;
 					overflow: visible;
+					position: relative;
 					
 					.icon
 					{
@@ -273,11 +274,11 @@
 						z-index: 1002;
 						background: $upLightBlue;
 						overflow: hidden;
-						position: relative;
-						top: -50px;
-						left: -250px;
+						position: absolute;
+						top: 0px;
+						right: 0px;
 						width: 374px;
-						height: 50px;
+						height: 46px;
 						
 						form{
 							margin: 0px;
@@ -362,7 +363,7 @@
 				transform:rotate(-90deg);
 				
 				width:140px;
-				height:20px;
+				height:25px;
 				padding:10px;
 				right:-100px;
 				top:190px;
@@ -372,17 +373,20 @@
 				font-weight: bold;
 				font-variant: small-caps;
 				
+				text-align:center;
+				
 				.arrow
 				{
 					@include up-grafic;
-					background-position: -18px -505px;
+					background-position: -14px -505px;
 					display: inline-block;
 					
 					-moz-transform: rotate(90deg);
 					-ms-transform: rotate(90deg);
 					-o-transform: rotate(90deg);
 					-webkit-transform: rotate(90deg);
-					transform:rotate(90deg);				
+					transform:rotate(90deg);
+					margin-left: 10px;				
 				}
 				
 				.arrow.down {
@@ -696,10 +700,12 @@
 			top: 0px;
 			left: 0px;	
 			width: 120px;
-			height: 30px;
+			height: 25px;
 			z-index: 1001;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
+			
+			padding-top: 10px;
 			
 			.arrow
 			{
@@ -731,8 +737,8 @@
 			position: fixed;
 			top: 0px;
 			right: 0px;
-			height: 50px;		
-			z-index:1001;
+			height: 45px;		
+			z-index:1002;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
 			
@@ -781,10 +787,10 @@
 		{
 			position: fixed;
 			top:0px;
-			right: 180px;
+			right: 200px;
 			width: 100px;
 			z-index:1001;
-			height: 50px;
+			height: 45px;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
 			overflow: hidden;
@@ -824,11 +830,11 @@
 			position: fixed;
 			top: 0px;
 			left: 140px;
-			right: 280px;
+			right: 300px;
 			z-index:1001;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
-			min-height: 50px;
+			min-height: 45px;
 			background: $upWhite;
 			
 			li
