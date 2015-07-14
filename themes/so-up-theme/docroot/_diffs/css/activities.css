@@ -67,7 +67,7 @@
 	
 	font-family: georgia;
   font-style: italic;
-	
+	  line-height: 1.5;
 }
 .so-portlet-activities .comments-container .form  {
 	background: #D0DAE3;
@@ -86,6 +86,10 @@
 
 .so-portlet-activities .comments-container .user-portrait {
 	position:relative;
+}
+
+.so-portlet-activities a.group {
+	color:#014260;
 }
 
 .so-announcements-portlet .entry-footer-toolbar {

@@ -6,7 +6,7 @@
 	String portfolioPlid = renderRequest.getParameter("portfolioPlid");
 	ResultRow row = (ResultRow) request.getAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
 	String userName = (String) row.getObject();
-	String redirect = PortalUtil.getCurrentURL(renderRequest);
+	String redirect = PortalUtil.getCurrentURL(renderRequest); 
 %>
 
 <liferay-ui:icon-menu>

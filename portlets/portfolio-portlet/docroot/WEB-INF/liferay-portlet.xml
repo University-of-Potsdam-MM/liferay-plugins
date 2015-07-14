@@ -5,6 +5,8 @@
 	<portlet>
 		<portlet-name>my-portfolio</portlet-name>
 		<icon>/icon.png</icon>
+		<user-notification-definitions>notifications/portfolio_notifications_definition.xml</user-notification-definitions>
+    	<user-notification-handler-class>de.unipotsdam.elis.portfolio.notifications.PortfolioNotificationHandler</user-notification-handler-class>		
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>

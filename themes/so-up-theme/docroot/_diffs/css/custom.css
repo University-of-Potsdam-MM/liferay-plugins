@@ -1,4 +1,4 @@
-@import "compass";
+@import "compass"; 
 
 @import url(./so_core.css);
 @import url(./color_schemes/so_classic.css);
@@ -19,13 +19,60 @@
 @import url(messages.css);
 
 @import url(tasks.css);
-@import  url(blogs.css);
+
+@import  url(./blogs.css);
+
+@import  url(./login.css);
+
 
 
 @import url(./up_mobile.css);
 
+@import url(./editor-form.css);
+
+@import url(./search.css);
+
 /*@import url(media_queries.css);*/
 
+/* no radius, no shadow, no background-image */
+.cke_toolbar_separator, 
+.cke_editor__36_editor .cke_combo_off a.cke_combo_button:active, 
+.cke_editor__36_editor .cke_combo_on a.cke_combo_button,
+ body .cke_editor__36_editor, 
+ body .cke_toolgroup, 
+ .cke_toolbar a.cke_button_off:hover,
+ .cke_toolbar a.cke_button_off:focus,
+ .cke_toolbar a.cke_button_off:active, 
+ .cke_toolbar a.cke_button_disabled:hover, 
+ .cke_toolbar a.cke_button_disabled:focus, 
+ .cke_toolbar a.cke_button_disabled:active, 
+ .cke_toolbar .cke_combo_off a.cke_combo_button:hover, 
+ .cke_toolbar .cke_combo_off a.cke_combo_button:focus,
+ body .cke_combo_button, a.cke_button,
+  body .cke_top, body .cke_bottom,
+  .aui input[type="text"], 
+  .aui input[type="password"], 
+  .aui input[type="file"], 
+  .aui input[type="submit"], 
+  .aui input[type="button"], 
+  .aui input[type="reset"], 
+  .aui select, .aui textarea, 
+  .aui .textarea, 
+  .aui button, 
+  .aui select, 
+  .aui textarea, 
+  .aui .textarea, 
+  .aui button,
+  .aui .modal{
+ 
+ -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
+  -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
+  box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
+   background-image: none;
+   -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 0px;
+}
 
 /*Layout*/
 
@@ -64,6 +111,17 @@
 
 h2.page-title {
 	display: none;
+}
+
+.aui .modal h3 {
+	color:#014260;
+}
+
+.aui .modal-header {
+	background:#d0dae3;
+	borde-bottom:none;
+	font-style:italic;
+	font-family:"Source Sans Pro",Helvetica, Arial, sans-serif;
 }
 
 /* Breadcrumbs*/
@@ -240,4 +298,11 @@ aui .btn.disabled, .aui .btn[disabled] {
   background-color: #D0DAE3 !important;
   border-color: #FFF  !important;
   border-width: 2px  !important;
+}
+
+/* Kleiningkeiten */
+
+.textboxlistentry {
+	  background-color: #d0dae3;
+  border: 1px solid #d0dae3;
 }

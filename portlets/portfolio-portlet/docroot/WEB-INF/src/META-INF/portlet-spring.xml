@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioPermissionLocalService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioPermissionLocalServiceImpl" />
-	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioPermissionService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioPermissionServiceImpl" />
-	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPermissionPersistence" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPermissionPersistenceImpl" parent="basePersistence" />
+	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioLocalService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioLocalServiceImpl" />
+	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioServiceImpl" />
+	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistence" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistenceImpl" parent="basePersistence" />
+	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinder" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinderImpl" parent="basePersistence" />
+	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioFeedbackLocalServiceImpl" />
+	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioFeedbackService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioFeedbackServiceImpl" />
+	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistence" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistenceImpl" parent="basePersistence" />
 </beans>

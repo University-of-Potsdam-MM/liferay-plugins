@@ -12,6 +12,8 @@
   padding-bottom: 5px;
 }
 
+/*test*/
+
 .portlet-blogs .navbar-inner .collapse .nav li a:before {
 	content: '+';
 	font-weight: bold;
@@ -38,7 +40,7 @@
 .portlet-blogs .navbar-inner .collapse .nav li+li a:hover span {
 	font-size: 12px;
 
-}
+
 .portlet-blogs .navbar-inner .collapse .nav li a:hover {
 	background-color: #ededed;
 }
@@ -100,7 +102,7 @@ body .portlet-blogs .edit-actions a {
 	height: 30px;
 	line-height: 2;
 	background-color: #d0dae3;
-	padding: 0px 10px
+	padding: 0px 10px;
 }
 
 body .portlet-blogs .edit-actions a span {
