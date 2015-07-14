@@ -12,17 +12,13 @@
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
 	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste f¸r die Seiten unter all sites-->
-	<div class="">
-		<@liferay.dockbar />
-		${theme.include(body_top_include)}
+	<div class="hidden">
 		${theme.search()}
+		${theme.include(body_top_include)}
 	</div>
-${theme.include(body_top_include)}
-
-<#if is_signed_in>
-	<@liferay.dockbar />
-</#if>
-
+	<div class="liferay_dockbar">
+		<@liferay.dockbar />
+	</div>	
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
@@ -159,9 +155,7 @@ ${theme.include(body_top_include)}
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
 				<a href="javascript:;" id="toggleDockbar">
-					<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">
 						<span class="icon workspace"></span>Workspace konfigurieren
-					</a>
 				</a>
 			</li>
 			</#if>
@@ -182,18 +176,6 @@ ${theme.include(body_top_include)}
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
-					<#list myLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
-							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
-						</#if>
-						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "false">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
-							</#if>	
-						</#if>
-					</#list>
 				</ul>
 			</li>
 			<li>
@@ -213,18 +195,6 @@ ${theme.include(body_top_include)}
 			<li>
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
-					<#list myLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")??>
-							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
-						</#if>
-						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "true">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
-							</#if>
-						</#if>
-					</#list>
 				</ul>
 			</li>
 			<span class="icon close hidden">Schlieﬂen</span>
@@ -249,7 +219,7 @@ ${theme.include(body_top_include)}
 		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
 	</header>
 	<div class="wrapper-portlet-area">
-	<div id="heading">
+		<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
@@ -267,13 +237,7 @@ ${theme.include(body_top_include)}
 			</h2>
 		</div>
 	
-		<#if has_navigation>
-				<#include "${full_templates_path}/navigation.ftl" />
-		</#if>
-
 		<div id="content">
-		
-
 			<#if selectable>
 				${theme.include(content_include)}
 			<#else>
