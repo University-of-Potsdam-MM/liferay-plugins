@@ -35,6 +35,7 @@ import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistence;
+import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinder;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistence;
 
 import java.io.Serializable;
@@ -343,6 +344,24 @@ public abstract class PortfolioFeedbackLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the portfolio finder.
+	 *
+	 * @return the portfolio finder
+	 */
+	public PortfolioFinder getPortfolioFinder() {
+		return portfolioFinder;
+	}
+
+	/**
+	 * Sets the portfolio finder.
+	 *
+	 * @param portfolioFinder the portfolio finder
+	 */
+	public void setPortfolioFinder(PortfolioFinder portfolioFinder) {
+		this.portfolioFinder = portfolioFinder;
+	}
+
+	/**
 	 * Returns the portfolio feedback local service.
 	 *
 	 * @return the portfolio feedback local service
@@ -581,6 +600,8 @@ public abstract class PortfolioFeedbackLocalServiceBaseImpl
 	protected de.unipotsdam.elis.portfolio.service.PortfolioService portfolioService;
 	@BeanReference(type = PortfolioPersistence.class)
 	protected PortfolioPersistence portfolioPersistence;
+	@BeanReference(type = PortfolioFinder.class)
+	protected PortfolioFinder portfolioFinder;
 	@BeanReference(type = de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService.class)
 	protected de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService portfolioFeedbackLocalService;
 	@BeanReference(type = de.unipotsdam.elis.portfolio.service.PortfolioFeedbackService.class)

@@ -4,6 +4,7 @@
 	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioLocalService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioLocalServiceImpl" />
 	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioServiceImpl" />
 	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistence" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioPersistenceImpl" parent="basePersistence" />
+	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinder" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinderImpl" parent="basePersistence" />
 	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioFeedbackLocalServiceImpl" />
 	<bean id="de.unipotsdam.elis.portfolio.service.PortfolioFeedbackService" class="de.unipotsdam.elis.portfolio.service.impl.PortfolioFeedbackServiceImpl" />
 	<bean id="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistence" class="de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistenceImpl" parent="basePersistence" />
