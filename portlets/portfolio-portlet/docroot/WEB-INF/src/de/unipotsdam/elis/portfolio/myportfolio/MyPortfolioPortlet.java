@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
@@ -19,7 +20,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -40,6 +43,7 @@ import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
 
@@ -222,12 +226,20 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
 		String[] userNameList = userNames.split(",");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		for (String userName : userNameList) {
 			User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
 			if (user != null) {
 				Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(Long.parseLong(portfolioPlid));
 				portfolio.publishToUser(user.getUserId(),
 						ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
+				String message = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
+						"portfolio-portfolio-published-message", new Object[] { themeDisplay.getUser().getFullName(),
+								portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
+				String portfolioLink = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(),
+						themeDisplay.getUser());
+				JspHelper.sendPortfolioNotification(user, themeDisplay.getUser(), message, portfolioLink,
+						ServiceContextFactory.getInstance(actionRequest));
 			}
 		}
 	}
@@ -245,6 +257,19 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		long userId = Long.parseLong(ParamUtil.getString(actionRequest, "userId"));
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
 		portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
+		sendFeedbackRequestedNotification(actionRequest, userId, portfolio);
+	}
+
+	private void sendFeedbackRequestedNotification(ActionRequest actionRequest, long userId, Portfolio portfolio)
+			throws PortalException, SystemException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		String message = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
+				"portfolio-portfolio-feedback-requested-message", new Object[] { themeDisplay.getUser().getFullName(),
+						portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
+		String portfolioLink = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
+		JspHelper.sendPortfolioNotification(UserLocalServiceUtil.getUser(userId), themeDisplay.getUser(), message, portfolioLink,
+				ServiceContextFactory.getInstance(actionRequest));
 	}
 
 	public void removeFeedbackForPortfolio(ActionRequest actionRequest, ActionResponse actionResponse)
@@ -267,15 +292,15 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(Long.parseLong(portfolioPlid));
 				portfolio.publishToUserAndRequestFeedback(user.getUserId(),
 						ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
+
+				sendFeedbackRequestedNotification(actionRequest, user.getUserId(), portfolio);
 			}
 		}
 	}
-	
-	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse)
-			{
+
+	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse) {
 		String filterValue = ParamUtil.getString(actionRequest, "filterValue");
 		actionResponse.setRenderParameter("filterValue", filterValue);
 	}
-	
 
 }
