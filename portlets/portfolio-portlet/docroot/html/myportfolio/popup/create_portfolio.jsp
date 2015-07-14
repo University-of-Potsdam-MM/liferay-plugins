@@ -1,3 +1,4 @@
+<%@page import="de.unipotsdam.elis.portfolio.myportfolio.MyPortfolioPortlet"%>
 <%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
@@ -14,5 +15,12 @@
 
 <aui:form action="<%=createPortfolioURL.toString()%>" method="post">
 	<aui:input id="portfolioNameInput" name="portfolioName" type="text" label="portfolio-name" />
+	<aui:field-wrapper name="template" >
+		<aui:input checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= MyPortfolioPortlet.WIKI_LAYOUT_PROTOTYPE %>" label="wiki"  />
+		<aui:input inlineLabel="right" name="template" type="radio" value="<%= MyPortfolioPortlet.BLOG_LAYOUT_PROTOTYPE %>" label="blog"  />
+		<aui:input inlineLabel="right" name="template" type="radio" value="<%= MyPortfolioPortlet.CDP_LAYOUT_PROTOTYPE %>" label="portfolio-cdp"  />
+		<aui:input inlineLabel="right" name="template" type="radio" value="<%= MyPortfolioPortlet.EMPTY_LAYOUT_PROTOTYPE %>" label="portfolio-empty-page"  />
+	</aui:field-wrapper>
 	<aui:button type="submit" value="portfolio-add-portfolio" />
 </aui:form> 
+
