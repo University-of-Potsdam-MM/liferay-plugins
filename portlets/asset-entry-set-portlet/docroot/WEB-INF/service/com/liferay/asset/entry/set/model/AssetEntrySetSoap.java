@@ -20,10 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used by SOAP remote services, specifically {@link com.liferay.asset.entry.set.service.http.AssetEntrySetServiceSoap}.
+ * This class is used by SOAP remote services.
  *
  * @author Brian Wing Shun Chan
- * @see com.liferay.asset.entry.set.service.http.AssetEntrySetServiceSoap
  * @generated
  */
 public class AssetEntrySetSoap implements Serializable {
@@ -39,6 +38,7 @@ public class AssetEntrySetSoap implements Serializable {
 		soapModel.setParentAssetEntrySetId(model.getParentAssetEntrySetId());
 		soapModel.setCreatorClassNameId(model.getCreatorClassNameId());
 		soapModel.setCreatorClassPK(model.getCreatorClassPK());
+		soapModel.setCreatorName(model.getCreatorName());
 		soapModel.setPayload(model.getPayload());
 		soapModel.setChildAssetEntrySetsCount(model.getChildAssetEntrySetsCount());
 		soapModel.setAssetEntrySetLikesCount(model.getAssetEntrySetLikesCount());
@@ -167,6 +167,14 @@ public class AssetEntrySetSoap implements Serializable {
 		_creatorClassPK = creatorClassPK;
 	}
 
+	public String getCreatorName() {
+		return _creatorName;
+	}
+
+	public void setCreatorName(String creatorName) {
+		_creatorName = creatorName;
+	}
+
 	public String getPayload() {
 		return _payload;
 	}
@@ -212,6 +220,7 @@ public class AssetEntrySetSoap implements Serializable {
 	private long _parentAssetEntrySetId;
 	private long _creatorClassNameId;
 	private long _creatorClassPK;
+	private String _creatorName;
 	private String _payload;
 	private int _childAssetEntrySetsCount;
 	private int _assetEntrySetLikesCount;

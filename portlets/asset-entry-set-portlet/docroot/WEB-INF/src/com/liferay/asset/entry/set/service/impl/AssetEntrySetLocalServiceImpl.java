@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
@@ -97,6 +98,9 @@ public class AssetEntrySetLocalServiceImpl
 		assetEntrySet.setParentAssetEntrySetId(parentAssetEntrySetId);
 		assetEntrySet.setCreatorClassNameId(creatorClassNameId);
 		assetEntrySet.setCreatorClassPK(creatorClassPK);
+		assetEntrySet.setCreatorName(
+			AssetEntrySetParticipantInfoUtil.getParticipantName(
+				creatorClassNameId, creatorClassPK));
 
 		filterAssetTagNames(payloadJSONObject);
 
@@ -171,14 +175,14 @@ public class AssetEntrySetLocalServiceImpl
 
 	@Override
 	public List<AssetEntrySet> getNewAssetEntrySets(
-			long userId, long createTime, long parentAssetEntrySetId,
+			long userId, long modifiedTime, long parentAssetEntrySetId,
 			JSONArray sharedToJSONArray, String[] assetTagNames, int start,
 			int end)
 		throws PortalException, SystemException {
 
 		return getAssetEntrySets(
-			userId, createTime, true, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			userId, modifiedTime, true, parentAssetEntrySetId,
+			sharedToJSONArray, assetTagNames, start, end);
 	}
 
 	@Override
@@ -197,14 +201,14 @@ public class AssetEntrySetLocalServiceImpl
 
 	@Override
 	public List<AssetEntrySet> getOldAssetEntrySets(
-			long userId, long createTime, long parentAssetEntrySetId,
+			long userId, long modifiedTime, long parentAssetEntrySetId,
 			JSONArray sharedToJSONArray, String[] assetTagNames, int start,
 			int end)
 		throws PortalException, SystemException {
 
 		return getAssetEntrySets(
-			userId, createTime, false, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			userId, modifiedTime, false, parentAssetEntrySetId,
+			sharedToJSONArray, assetTagNames, start, end);
 	}
 
 	@Override
@@ -419,7 +423,7 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected List<AssetEntrySet> getAssetEntrySets(
-			long userId, long createTime, boolean gtCreateTime,
+			long userId, long modifiedTime, boolean gtModifiedTime,
 			long parentAssetEntrySetId, JSONArray sharedToJSONArray,
 			String[] assetTagNames, int start, int end)
 		throws PortalException, SystemException {
@@ -431,9 +435,9 @@ public class AssetEntrySetLocalServiceImpl
 		List<AssetEntrySet> assetEntrySets =
 			assetEntrySetFinder.findByCT_PAESI_CNI(
 				classNameIdAndClassPKOVP.getKey(),
-				classNameIdAndClassPKOVP.getValue(), createTime, gtCreateTime,
-				parentAssetEntrySetId, sharedToJSONArray, assetTagNames, start,
-				end);
+				classNameIdAndClassPKOVP.getValue(), modifiedTime,
+				gtModifiedTime, parentAssetEntrySetId, sharedToJSONArray,
+				assetTagNames, start, end);
 
 		return assetEntrySets;
 	}
@@ -472,11 +476,19 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected boolean isValidAssetTagName(String assetTagName) {
-		if (!Validator.isChar(assetTagName.charAt(0))) {
+		if (Validator.isDigit(assetTagName.charAt(0))) {
 			return false;
 		}
 
-		return Validator.isAlphanumericName(assetTagName);
+		for (char c : assetTagName.toCharArray()) {
+			if (!Validator.isChar(c) && !Validator.isDigit(c) &&
+				(c != CharPool.UNDERLINE)) {
+
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	protected void setSharedToClassPKsMap(

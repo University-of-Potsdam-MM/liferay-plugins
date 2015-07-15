@@ -283,8 +283,6 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		setModel(baseModel, properties);
 
 		persistModel(baseModel);
-
-		indexModel(baseModel);
 	}
 
 	protected void addOpenerSuccessMessage() {
@@ -1036,6 +1034,17 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return search(
 			indexer, alloyServiceInvoker, request, portletRequest,
 			searchContainer, attributes, keywords, sorts);
+	}
+
+	protected AlloySearchResult search(
+			Indexer indexer, AlloyServiceInvoker alloyServiceInvoker,
+			HttpServletRequest request, PortletRequest portletRequest,
+			Map<String, Serializable> attributes, String keywords, Sort[] sorts)
+		throws Exception {
+
+		return search(
+			indexer, alloyServiceInvoker, request, portletRequest, null,
+			attributes, keywords, sorts);
 	}
 
 	protected AlloySearchResult search(
