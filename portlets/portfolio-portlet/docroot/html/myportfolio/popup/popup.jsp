@@ -129,7 +129,6 @@ function userHasPermission(val){
 function addUser(){
 	event.preventDefault();
 	currentUserNames.push(userNameInputField.get('value'));
-	console.log('addUser: ' + currentUserNames);
 	updateUserTable();
 };
 

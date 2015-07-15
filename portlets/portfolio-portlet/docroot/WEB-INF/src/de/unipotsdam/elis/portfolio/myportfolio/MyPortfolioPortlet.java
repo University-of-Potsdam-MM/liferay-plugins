@@ -318,7 +318,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			throws PortletException, SystemException, NumberFormatException, PortalException, IOException {
 		// TODO: eventuell Fehlermeldungen
 		String userNames = ParamUtil.getString(actionRequest, "userNames");
-		System.out.println(userNames);
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
 		String[] userNameList = userNames.split(";");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);

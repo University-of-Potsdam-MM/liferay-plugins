@@ -18,7 +18,6 @@
 <%@ page import="com.liferay.portal.model.Layout"%>
 <%@ page import="com.liferay.portal.model.User"%>
 <%@ page import="com.liferay.portal.util.PortalUtil"%>
-<%@ page import="de.unipotsdam.elis.portfolio.PortfolioManager"%>
 <%@ page import="de.unipotsdam.elis.portfolio.util.jsp.JspHelper"%>
 <%@ page import="de.unipotsdam.elis.portfolio.model.Portfolio"%>
 <%@ page import="de.unipotsdam.elis.portfolio.model.PortfolioFeedback"%>
