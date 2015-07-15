@@ -219,32 +219,29 @@ AUI().use('aui-base',
 	});
 
 function openPopUp(renderURL, title){
-	var popUpWindow=Liferay.Util.Window.getWindow({
-		dialog: {
-			after: {
-				destroy: function(event) {
-					document.location.href = '<%=redirect%>';
-				}
-			},
-			centered: true,
-			constrain: true,
-			constrain2view: true,
-			modal: true,
-			resizable: false,
-			width: 700 ,
-			height: 500,
-			destroyOnClose: true,
-			destroyOnHide: true,
-			contentBox: '<div class="loading-animation"></div>',
-		}
-	}).plug(
-		A.Plugin.IO, {
-			autoLoad: true,
-		}).render();
-		popUpWindow.show();
-		popUpWindow.titleNode.html(title);
-		popUpWindow.io.set('uri',renderURL.toString());
-		popUpWindow.io.start();
+	
+	Liferay.Util.openWindow(
+			{
+				dialog: {
+					after: {
+						destroy: function(event) {
+							document.location.href = '<%=redirect%>';
+						}
+					},
+					centered: true,
+					constrain: true,
+					destroyOnHide: true,
+					height: 600,
+					modal: true,
+					plugins: [Liferay.WidgetZIndex],
+					width: 600
+				},
+				id: '<portlet:namespace />Dialog',
+				title: title, 
+				uri: renderURL
+			}
+		);
+	
 }
 
 </aui:script>

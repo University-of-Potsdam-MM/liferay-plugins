@@ -13,5 +13,9 @@ public class PortfolioStatics {
 	
 	public static int PUBLISHMENT_INDIVIDUAL = 0;
 	public static int PUBLISHMENT_GLOBAL = 1;
-
+	
+	public final static String WIKI_LAYOUT_PROTOTYPE = "Wiki";
+	public final static String BLOG_LAYOUT_PROTOTYPE = "Blog";
+	public final static String CDP_LAYOUT_PROTOTYPE = "Content Display Page";
+	public final static String EMPTY_LAYOUT_PROTOTYPE = "Empty";
 }

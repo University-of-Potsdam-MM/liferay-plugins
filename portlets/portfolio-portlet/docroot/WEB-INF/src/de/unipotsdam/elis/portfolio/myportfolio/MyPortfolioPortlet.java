@@ -7,11 +7,15 @@ import java.util.Locale;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletResponse;
 
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -22,7 +26,11 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.PortletResponseUtil;
+import com.liferay.portal.kernel.servlet.ServletResponseUtil;
+import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -49,11 +57,6 @@ import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
-
-	public final static String WIKI_LAYOUT_PROTOTYPE = "Wiki";
-	public final static String BLOG_LAYOUT_PROTOTYPE = "Blog";
-	public final static String CDP_LAYOUT_PROTOTYPE = "Content Display Page";
-	public final static String EMPTY_LAYOUT_PROTOTYPE = "Empty";
 
 	/**
 	 * Retracts the publishment of a portfolio to a user.
@@ -171,66 +174,116 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		out.println(usersJSONArray.toString());
 	}
 
-	public void createPortfolio(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException,
-			PortletException, SystemException, PortalException {
-		String portfolioName = ParamUtil.getString(actionRequest, "portfolioName");
-		String template = ParamUtil.getString(actionRequest, "template");
+	@Override
+	public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws PortletException {
+
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		if (!themeDisplay.isSignedIn()) {
+			return;
+		}
+
 		try {
-			// Get Portfolio page
-			// TODO: eindeutigeren weg vielleicht?
-			List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
-			Layout portfolioParentPage = null;
-			for (Layout layout : layouts) {
-				if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
-					portfolioParentPage = layout;
-			}
+			String actionName = ParamUtil.getString(actionRequest, ActionRequest.ACTION_NAME);
 
-			// preparations
-			ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
-
-			if (portfolioParentPage == null) {
-				portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
-						.getGroupId(), false, 0, "Portfolio", "Portfolio", "", LayoutConstants.TYPE_PORTLET, false,
-						"/Portfolio", serviceContext);
-			}
-
-			Layout newPortfolio = null;
-
-			if (!template.equals(EMPTY_LAYOUT_PROTOTYPE)) {
-				LayoutPrototype lp = getLayoutPrototype(template);
-				if (lp != null) {
-					serviceContext.setAttribute("layoutPrototypeLinkEnabled", false);
-
-					serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
-
-					newPortfolio = LayoutLocalServiceUtil
-							.addLayout(themeDisplay.getUserId(), portfolioParentPage.getGroupId(), false,
-									portfolioParentPage.getLayoutId(), portfolioName, portfolioName, "",
-									LayoutConstants.TYPE_PORTLET, false, "/" + portfolioName, serviceContext);
-
-					SitesUtil.mergeLayoutPrototypeLayout(newPortfolio.getGroup(), newPortfolio);
-				} else {
-					System.err.println("Could not find layout prototype with the name " + template);
-				}
+			if (actionName.equals("createPortfolio")) {
+				createPortfolio(actionRequest, actionResponse);
+			} else if (actionName.equals("publishPortfolioGlobal")) {
+				publishPortfolioGlobal(actionRequest, actionResponse);
+			} else if (actionName.equals("publishPortfolioToUsers")) {
+				publishPortfolioToUsers(actionRequest, actionResponse);
+			} else if (actionName.equals("requestFeedbackFromUsers")) {
+				requestFeedbackFromUsers(actionRequest, actionResponse);
 			} else {
+				super.processAction(actionRequest, actionResponse);
+			}
+		} catch (Exception e) {
+			throw new PortletException(e);
+		}
+	}
+
+	public void createPortfolio(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		// TODO: eventuell Fehlermeldungen
+		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
+		String portfolioName = ParamUtil.getString(uploadRequest, "portfolioName");
+		String template = ParamUtil.getString(uploadRequest, "template");
+
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		// Get Portfolio page
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
+		Layout portfolioParentPage = null;
+		for (Layout layout : layouts) {
+			if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
+				portfolioParentPage = layout;
+		}
+
+		// preparations
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
+
+		if (portfolioParentPage == null) {
+			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
+					.getGroupId(), false, 0, "Portfolio", "Portfolio", "", LayoutConstants.TYPE_PORTLET, false,
+					"/Portfolio", serviceContext);
+		}
+
+		Layout newPortfolio = null;
+
+		if (!template.equals(PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE)) {
+			LayoutPrototype lp = getLayoutPrototype(template);
+			if (lp != null) {
+				serviceContext.setAttribute("layoutPrototypeLinkEnabled", false);
+
+				serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
+
 				newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
 						portfolioParentPage.getGroupId(), false, portfolioParentPage.getLayoutId(), portfolioName,
-						portfolioName, "", LayoutConstants.TYPE_PORTLET, false, "/" + portfolioName, serviceContext);
+						portfolioName, "", LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
+
+				SitesUtil.mergeLayoutPrototypeLayout(newPortfolio.getGroup(), newPortfolio);
+			} else {
+				System.err.println("Could not find layout prototype with the name " + template);
 			}
-			PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid());
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
+			newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), portfolioParentPage.getGroupId(),
+					false, portfolioParentPage.getLayoutId(), portfolioName, portfolioName, "",
+					LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
 		}
+		PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid());
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("success", Boolean.TRUE);
+		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
+	@Override
+	protected void writeJSON(PortletRequest portletRequest, ActionResponse actionResponse, Object json)
+			throws IOException {
+
+		HttpServletResponse response = PortalUtil.getHttpServletResponse(actionResponse);
+
+		response.setContentType(ContentTypes.TEXT_HTML);
+
+		ServletResponseUtil.write(response, json.toString());
+
+		response.flushBuffer();
+	}
+
+	@Override
+	protected void writeJSON(PortletRequest portletRequest, MimeResponse mimeResponse, Object json) throws IOException {
+
+		mimeResponse.setContentType(ContentTypes.TEXT_HTML);
+
+		PortletResponseUtil.write(mimeResponse, json.toString());
+
+		mimeResponse.flushBuffer();
 	}
 
 	private LayoutPrototype getLayoutPrototype(String name) throws SystemException {
 		List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(0,
 				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
 
-		// find the portfolio template
 		for (LayoutPrototype lp : layoutPrototypes) {
-			System.out.println(lp.getName(Locale.GERMAN));
 			if (lp.getName(Locale.GERMAN).equals(name)) {
 				return lp;
 			}
@@ -262,10 +315,12 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	}
 
 	public void publishPortfolioToUsers(ActionRequest actionRequest, ActionResponse actionResponse)
-			throws PortletException, SystemException, NumberFormatException, PortalException {
+			throws PortletException, SystemException, NumberFormatException, PortalException, IOException {
+		// TODO: eventuell Fehlermeldungen
 		String userNames = ParamUtil.getString(actionRequest, "userNames");
+		System.out.println(userNames);
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
-		String[] userNameList = userNames.split(",");
+		String[] userNameList = userNames.split(";");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		for (String userName : userNameList) {
@@ -283,13 +338,19 @@ public class MyPortfolioPortlet extends MVCPortlet {
 						ServiceContextFactory.getInstance(actionRequest));
 			}
 		}
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("success", Boolean.TRUE);
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void publishPortfolioGlobal(ActionRequest actionRequest, ActionResponse actionResponse)
-			throws PortletException, SystemException, PortalException {
+			throws PortletException, SystemException, PortalException, IOException {
 		long portfolioPlid = Long.parseLong(ParamUtil.getString(actionRequest, "portfolioPlid"));
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(portfolioPlid);
 		portfolio.setGlobal();
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("success", Boolean.TRUE);
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void requestFeedbackFromUser(ActionRequest actionRequest, ActionResponse actionResponse)
@@ -322,10 +383,10 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	}
 
 	public void requestFeedbackFromUsers(ActionRequest actionRequest, ActionResponse actionResponse)
-			throws PortletException, SystemException, NumberFormatException, PortalException {
+			throws PortletException, SystemException, NumberFormatException, PortalException, IOException {
 		String userNames = ParamUtil.getString(actionRequest, "userNames");
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
-		String[] userNameList = userNames.split(",");
+		String[] userNameList = userNames.split(";");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		for (String userName : userNameList) {
 			User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), userName);
@@ -337,6 +398,9 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				sendFeedbackRequestedNotification(actionRequest, user.getUserId(), portfolio);
 			}
 		}
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("success", Boolean.TRUE);
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse) {

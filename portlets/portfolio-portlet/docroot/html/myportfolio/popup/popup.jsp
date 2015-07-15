@@ -129,6 +129,7 @@ function userHasPermission(val){
 function addUser(){
 	event.preventDefault();
 	currentUserNames.push(userNameInputField.get('value'));
+	console.log('addUser: ' + currentUserNames);
 	updateUserTable();
 };
 
@@ -156,35 +157,6 @@ function createDeleteUserFunction(i) {
 		updateUserTable(); 
 	};
 }
-
-function publishPortfolioToUsers(){
-	AUI().use('aui-base',function(A) {
-	var publishPortfolioForm = A.one('#<portlet:namespace />publishPortfolioForm');
-	publishPortfolioForm.setAttribute("action", createPublishPortfolioURL(currentUserNames).toString());});
-};
-
-function publishPortfolioGlobal(){
-	AUI().use('aui-base',function(A) {
-	var publishPortfolioForm = A.one('#<portlet:namespace />publishPortfolioForm');
-	publishPortfolioForm.setAttribute("action",'<%= publishPortfolioGlobalURL %>')});
-};
-
-var createPublishPortfolioURL = function(userNames) {
-    var portletURL = '<%= publishPortfolioToUsersURL %>';
-    
-    var namespace = Liferay.Util.getPortletNamespace('myportfolio_WAR_portfolioportlet');
-    AUI().Object.each(
-        {
-            userNames: userNames
-        },
-        function(item, index, collection) {
-            if (item) {
-                portletURL = portletURL + '&' + namespace + encodeURIComponent(index) + '=' + encodeURIComponent(item); 
-            }
-        }
-    );
-    return portletURL;
-};
 
 function requestFeedbackFromUsers(){
 	AUI().use('aui-base',function(A) {
