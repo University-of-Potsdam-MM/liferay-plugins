@@ -1,0 +1,67 @@
+.nt-up-ev-item, .nt-up-ev-noitem{
+	font-family:Arial, Helvetica, Verdana, Sans-serif;
+	padding-bottom:15px;
+}
+
+.nt-up-ev-date {
+	display: table-cell;
+	background:url(../images/event-date-box.png) no-repeat;
+	width:60px;
+	height:60px;
+	color:#000000;
+}
+
+.nt-up-ev-month {
+	padding-top:5px;
+	text-align:center;
+	font-size:15px;
+	text-transform:uppercase;
+}
+
+.nt-up-ev-day {
+	font-family:Georgia, "Times New Roman", Times, serif;
+	text-align:center;
+	font-size:30px;
+	line-height:25px;	
+}
+
+
+.nt-up-ev-text {
+	display: table-cell;
+	padding-left:10px;
+	vertical-align:top;
+	
+}
+
+.nt-up-ev-title {
+	font-size:14px;
+}
+
+.nt-up-ev-title a{
+	text-decoration:none;
+}
+
+.nt-up-ev-fulldate {
+	color:#999999;
+	font-size:11px;
+}
+
+.nt-up-ev-location {
+	color:#999999;
+	font-size:11px;
+}
+
+
+.nt-up-ev-noitem-left{
+    display: table-cell;
+	background:url(../images/event-date-box-none.png) no-repeat;
+	width:60px;
+	height:60px;
+}
+
+.nt-up-ev-noitem-right{
+	display: table-cell;
+	font-size:14px;
+	padding-left:10px;
+	vertical-align:top;
+}
