@@ -71,13 +71,12 @@ function sendRequest(actionURL) {
 	AUI().use('aui-base','aui-io-request-deprecated','aui-loading-mask-deprecated','io-upload-iframe','json-parse',function(A) {
 		var loadingMask = new A.LoadingMask(
 			{
-				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "sending-message") %>',
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-publishing-Portfolio") %>',
 				target: A.one('.popup-layout')
 			}
 		);
 		
 		loadingMask.show();
-		console.log(currentUserNames);
 		A.io.request(
 				actionURL,
 			{

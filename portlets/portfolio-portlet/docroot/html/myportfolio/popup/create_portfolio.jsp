@@ -29,7 +29,7 @@ form.on(
 		
 		var loadingMask = new A.LoadingMask(
 			{
-				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "sending-message") %>',
+				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-creating-Portfolio") %>',
 				target: A.one('.popup-layout')
 			}
 		);

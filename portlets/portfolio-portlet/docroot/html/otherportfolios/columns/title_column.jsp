@@ -11,7 +11,7 @@
 %>
 
 <a href="<%= JspHelper.getPortfolioURL(themeDisplay, userPortfolio.getLayout(), owner) %>"><%= userPortfolio.getLayout().getName(themeDisplay.getLocale())%></a>
-
+(<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(userPortfolio.getPortfolioFeedback(themeDisplay.getUserId()).getModifiedDate()) %>)
 
 <portlet:actionURL name="removePortfolioFeedback" var="removePortfolioPermissionURL">
 	<portlet:param name="portfolioPlid"

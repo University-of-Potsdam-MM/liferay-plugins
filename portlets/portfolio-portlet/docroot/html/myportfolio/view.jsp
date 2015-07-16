@@ -26,9 +26,12 @@
 <table id="test" class="aui table table-striped table-bordered">
     <thead>
         <tr>
-            <th id="titel"><%= LanguageUtil.get(pageContext, "portfolio-title-column")%> &nbsp; &nbsp;  <liferay-ui:icon image="../arrows/09_down"/><liferay-ui:icon image="../arrows/09_up"/></th>
+            <th id="title"><%= LanguageUtil.get(pageContext, "portfolio-title-column")%></th>
+            <th id="title_option"></th>
             <th id="publishment"><%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%></th>
+            <th id="publishment_option"></th>
             <th id="feedback"><%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%></th>
+            <th id="feedback_option"></th>
             <th id="changes"><%= LanguageUtil.get(pageContext, "portfolio-changes-column")%></th>
         </tr>
     </thead>
@@ -43,7 +46,10 @@
 	    			<a href="<%=JspHelper.getPortfolioURL(themeDisplay, userPortfolio.getLayout(), themeDisplay.getUser()) %>">
 	    				<%= userPortfolio.getLayout().getName(themeDisplay.getLocale())%>
 					</a>
-					<liferay-ui:icon-menu>
+				</td>
+				
+				<td rowspan ="<%= pfs.size() + 1%>">
+					<liferay-ui:icon-menu extended="false"> 
 	
 						<portlet:actionURL name="deletePortfolio" var="deletePortfolioURL">
 							<portlet:param name="portfolioPlid"
@@ -63,7 +69,9 @@
 	    		
 					<td>
 						<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>
-						
+					</td>
+					
+					<td>
 						<portlet:actionURL name="deleteGlobalPublishment" var="deleteGlobalPublishmentURL"> 
 							<portlet:param name="portfolioPlid"
 								value="<%=String.valueOf(userPortfolio.getPlid())%>" />
@@ -71,13 +79,15 @@
 						</portlet:actionURL>
 				
 						<liferay-ui:icon-delete url="<%=deleteGlobalPublishmentURL.toString()%>" />
-						
 					</td>
 						
 					<td>
 						<a href="#" class="feedbackPopUpLink"><%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>
 							<input id="portfolioPlid" hidden="true" value="<%=userPortfolio.getPlid()%>"/> 
 						</a>						
+					</td>
+					
+					<td>
 					</td>
 					
 					
@@ -87,6 +97,12 @@
 		    			<a href="#" class="popUpLink"><%= LanguageUtil.get(pageContext, "portfolio-setup-publishment")%>
 							<input id="portfolioPlid" hidden="true" value="<%=userPortfolio.getPlid()%>"/> 
 						</a>
+					</td>
+					
+					<td>
+					</td>
+					
+					<td>
 					</td>
 					
 					<td>
@@ -112,15 +128,16 @@
 								value="<%=String.valueOf(userPortfolio.getPlid())%>" />
 							<portlet:param name="redirect" value="<%=redirect%>" />
 						</portlet:actionURL>
-						
-						<% if (!userPortfolio.feedbackRequested(pp.getUserId())) { %>
-							<liferay-ui:icon-delete url="<%=deletePublishmentURL.toString()%>" />
-						<% } %>
-						
 					</td>
 					
 					<td>
-						<% if (pp.getFeedbackStatus() == 0){ %>
+						<% if (!userPortfolio.feedbackRequested(pp.getUserId())) { %>
+							<liferay-ui:icon-delete url="<%=deletePublishmentURL.toString()%>" />
+						<% } %>
+					</td>
+					
+					<td>
+						<% if (pp.getFeedbackStatus() == PortfolioStatics.FEEDBACK_UNREQUESTED){ %>
 						   
 							 <portlet:actionURL name="requestFeedbackFromUser" var="requestFeedbackURL">
 								<portlet:param name="portfolioPlid" value="<%=String.valueOf(userPortfolio.getPlid())%>" />
@@ -128,6 +145,9 @@
 								<portlet:param name="redirect" value="<%=redirect%>" />
 							</portlet:actionURL>
 							<a href="<%=requestFeedbackURL.toString()%>"><%=LanguageUtil.get(pageContext, "portfolio-request-feedback")%></a> 
+							
+							<td>
+							</td>
 							
 						<% } else { %>
 						
@@ -137,7 +157,7 @@
 								<portlet:param name="redirect" value="<%=redirect%>" />
 							</portlet:actionURL>
 							
-							<% if (pp.getFeedbackStatus() == 1){ %>
+							<% if (pp.getFeedbackStatus() == PortfolioStatics.FEEDBACK_REQUESTED){ %>
 							
 								<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>
 								
@@ -148,7 +168,10 @@
 							<% } %>
 							
 							(<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(pp.getModifiedDate()) %>)
-							<liferay-ui:icon-delete url="<%=removeFeedbackURL.toString()%>" />
+							
+							<td>
+								<liferay-ui:icon-delete url="<%=removeFeedbackURL.toString()%>" />
+							</td>
 						<% } %>	
 					</td>
 				</tr>
