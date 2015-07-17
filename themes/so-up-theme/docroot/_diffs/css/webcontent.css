@@ -1,0 +1,45 @@
+.portlet-journal-content .fieldset.add-comment {
+	margin-bottom: 1em;
+	
+}
+
+.portlet-journal-content .taglib-discussion .lfr-discussion {
+  border-bottom-color: #DDD;
+  background-color: #ededed;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 2em;
+}
+
+.portlet-journal-content .taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image {
+	text-align:center;
+}
+
+.portlet-journal-content .taglib-discussion .lfr-discussion-details .taglib-user-display {
+	text-align:center;
+}
+
+.portlet-journal-content .taglib-discussion .lfr-discussion-actions {
+	margin-top:1em;
+	
+}
+
+.taglib-workflow-status .workflow-id, 
+.taglib-workflow-status .workflow-version {
+	padding:2px;
+}
+
+.portlet-journal .article-structure-template-toolbar {
+	display:none;
+}
+
+body:first-of-type .portlet-journal .portlet-content .lfr-icon-actions .taglib-text {
+	  max-width: 200px;
+}
+
+.portlet-journal .lfr-icon-action.lfr-icon-action-edit {
+	background-color: #d0dae3;
+  padding: 5px;
+  height: 20px;
+  line-height: 20px
+}

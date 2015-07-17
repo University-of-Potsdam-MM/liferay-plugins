@@ -140,12 +140,12 @@ body .portlet-blogs .edit-actions a:hover {
 	background-color: #fff091;
 }
 
-.portlet-blogs .comments a:hover, .portlet-blogs .taglib-flags  a:hover {
+.comments a:hover, .portlet-blogs .taglib-flags  a:hover {
 	color: #014260;
 	text-decoration: underline;
 }
 
-.portlet-blogs .comments a:visited, .portlet-blogs .taglib-flags  a:visited {
+.comments a:visited, .portlet-blogs .taglib-flags  a:visited {
 	color: #014260;
 	text-decoration: underline;
 }
@@ -185,7 +185,7 @@ body .portlet-blogs .edit-actions a:hover {
 	display: none;
 }
 
-.portlet-blogs #blogsCommentsPanelContainer .fieldset.add-comment a {
+.fieldset.add-comment a {
 	background-color: #d0dae3;
 	padding: 5px;
 	color: #014260;
@@ -198,15 +198,28 @@ body .portlet-blogs .edit-actions a:hover {
 	margin-right: 1px;
 }
 
-.portlet-blogs .taglib-discussion .lfr-discussion {
+.taglib-discussion .lfr-discussion {
 	margin-top: 25px;
 }
 
 /*user picture */
 
+.taglib-discussion .row-fluid .span3 {
+	width:13%;
+}
+
+.taglib-discussion .row-fluid .span9 {
+	width:83%;
+}
+
 .taglib-user-display {
 	padding:0;
 	margin-bottom:15px;
+}
+
+.taglib-discussion .lfr-discussion-posted-on {
+	  padding-right: 2em;
+	
 }
 
 .taglib-discussion .lfr-discussion-details .taglib-user-display .user-profile-image {
@@ -234,14 +247,14 @@ body .portlet-blogs .edit-actions a:hover {
 
 /*ende user picture */
 
-.portlet-blogs .taglib-discussion .lfr-discussion-message {
+.taglib-discussion .lfr-discussion-message {
 	background-color:#fff;
 	padding:5px;
 	border-radius: 3px;
 	min-height: 60px;
 }
 
-.portlet-blogs .taglib-discussion .lfr-discussion-message:after {
+.taglib-discussion .lfr-discussion-message:after {
 	content: '';
 	border-style: solid;
 	border-width: 12px 17px 12px 0;
@@ -256,6 +269,11 @@ body .portlet-blogs .edit-actions a:hover {
 
 .taglib-ratings.thumbs, .taglib-discussion .lfr-discussion-actions  {
 	float:none;
+}
+
+.taglib-discussion .lfr-discussion-form-container .lfr-discussion-form.lfr-discussion-form-edit, 
+.taglib-discussion .lfr-discussion-form-container .lfr-discussion-form.lfr-discussion-form-reply {
+	margin-left: 15.5%;
 }
 
 
@@ -288,13 +306,18 @@ body .portlet-blogs .edit-actions a:hover {
 	
 }
 
-.portlet-blogs .add-comment .control-group {
+.add-comment .control-group {
 	margin-top: 10px;
 }
 
 
-.portlet-blogs .add-comment textarea {
+.add-comment textarea {
 	width:100%;
+}
+
+.aui body .portlet .taglib-discussion .lfr-discussion .row-fluid.lfr-discussion-form-container {
+	width:auto;
+	margin-left:0 !important;
 }
 
 @media (min-width: 1200px) {
@@ -303,50 +326,49 @@ body .portlet-blogs .edit-actions a:hover {
 	}
 }
 
-.portlet-blogs #blogsCommentsPanelContainer .lfr-discussion-details {
+		.lfr-discussion-details {
 	padding-left: 0;
 }
 
-.portlet-blogs .row-fluid.lfr-discussion-form-container {
-	margin-left: 25% !important;
+.row-fluid.lfr-discussion-form-container {
 	width: auto;
 	margin-top: 10px;
 }
 
-.portlet-blogs .row-fluid.lfr-discussion-form-container .control-group {
+.row-fluid.lfr-discussion-form-container .control-group {
 	margin-top: 10px;
 }
 
-.portlet-blogs .lfr-discussion-form.lfr-discussion-form-edit {
+ .lfr-discussion-form.lfr-discussion-form-edit {
 	width: 100%;
 	margin-top: 10px;
 }
 
 
-.portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image {
+.taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image {
 	position:relative;
 	width:50px;
 }
 
-.portlet-blogs .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image .avatar {
+ .taglib-discussion .lfr-discussion-form-container .lfr-discussion-form .taglib-user-display .user-profile-image .avatar {
 	float:left;
 }
 
-.portlet-blogs .app-view-search-entry-taglib {
+ .app-view-search-entry-taglib {
 	margin:10px 0 0 0;
 	padding:5px;
 	
 }
 
-.portlet-blogs .app-view-search-entry-taglib .entry-discussion {
+.app-view-search-entry-taglib .entry-discussion {
 	margin:0;
 	
 }
 
-.portlet-blogs  .rating-input-container label{
+ .rating-input-container label{
 	display:inline
 }
 
-.portlet-blogs .thumbrating-content {
+.thumbrating-content {
 	margin-bottom:5px;
 }

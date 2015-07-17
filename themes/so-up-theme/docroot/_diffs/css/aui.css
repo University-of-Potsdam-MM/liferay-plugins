@@ -33,19 +33,23 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	background:#fff !important;
 }
 
-.aui a {
+.aui .wrapper-portlet-area a {
 	color:#014260;;
 }
 
-.aui h1, .aui h2, .aui h3, .aui h4, .aui h5, .aui h6 {
+.aui .wrapper-portlet-area h1, .aui .wrapper-portlet-area h2, .aui .wrapper-portlet-area h3, .aui .wrapper-portlet-area h4, .aui .wrapper-portlet-area h5, .aui .wrapper-portlet-area h6 {
 	font-family:georgia, serif;
 }
 
-.aui h2 {
+.aui .wrapper-portlet-area h2 {
 	font-size:1.5em;
 }
 
-.aui .navbar-inner {
+.aui .wrapper-portlet-area .navbar {
+	margin-bottom:0;
+}
+
+.aui .wrapper-portlet-area .navbar-inner {
 	-webkit-box-shadow: 0 0px 0px rgba(0,0,0,0.065);
   	-moz-box-shadow: 0 0px 0px rgba(0,0,0,0.065);
  	 box-shadow: 0 0px 0px rgba(0,0,0,0.065);
@@ -53,7 +57,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	
 }
 
-.aui .alert-success, .aui .portlet-msg-success, .aui .portlet-msg-success {
+.aui .wrapper-portlet-area .alert-success, .aui .wrapper-portlet-area .portlet-msg-success, .aui .wrapper-portlet-area .portlet-msg-success {
 	
 	  background-color: #ff9;
  	 border-color: #fff;
@@ -61,7 +65,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	
 }
 
-.aui input[type="text"], .aui input[type="password"], .aui input[type="file"], .aui input[type="submit"], .aui input[type="button"], .aui input[type="reset"], .aui select, .aui textarea, .aui .textarea, .aui button {
+.aui .wrapper-portlet-area input[type="text"], .aui .wrapper-portlet-area input[type="password"], .aui .wrapper-portlet-area input[type="file"], .aui .wrapper-portlet-area input[type="submit"], .aui .wrapper-portlet-area input[type="button"], .aui .wrapper-portlet-area input[type="reset"], .aui .wrapper-portlet-area select, .aui .wrapper-portlet-area textarea, .aui .wrapper-portlet-area .textarea, .aui .wrapper-portlet-area button {
 		border-radius:0;
 		-webkit-border-radius:0;
 		-ms-border-radius:0;
@@ -71,7 +75,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 
 
-.aui .form-search .input-append .search-query {
+.aui .wrapper-portlet-area .form-search .input-append .search-query {
 	webkit-border-radius: 0;
   -moz-border-radius: 0;
    -o-border-radius: 0;
@@ -84,13 +88,13 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
    -ms-box-shadow: inset 0 0px 0px;
 }
 
-.aui .navbar .nav>.active>a, .aui .navbar .nav>.active>a:hover, .aui .navbar .nav>.active>a:focus {
+.aui .wrapper-portlet-area .navbar .nav>.active>a, .aui .wrapper-portlet-area .navbar .nav>.active>a:hover, .aui .wrapper-portlet-area .navbar .nav>.active>a:focus {
 	color:#014260;
 }
 
 
 /* mal gucken ob das bleiben kann */
-.aui label {
+.aui .wrapper-portlet-area label {
   display: block;
   margin-bottom: 5px;
   font-family: georgia, serif;
@@ -98,21 +102,45 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
   color: #666;
 }
 
-.btn-group button.btn {
-	margin-right:1px;
+.wrapper-portlet-area .btn-group button.btn {
+	margin-right:3px;
 }
 
-.aui .accordion-heading .accordion-toggle {
+.aui .wrapper-portlet-area .accordion-heading .accordion-toggle {
 	background:#d0dae3;
 	border:none;
 	
 }
 
-.aui .badge-info {
+.aui .wrapper-portlet-area .badge-info {
 	background-color:#014260;
 }
 
-.aui body .row-fluid .span4 {
+.aui body .wrapper-portlet-area .row-fluid .span4 {
 	margin-left: 2%;
  	 width: 32%;
+}
+
+.aui .wrapper-portlet-area .navbar .nav>li {
+	  float: left;
+	  font-weight:bold;
+	  background-color:#fff;
+	  border-bottom: 1px solid #014260;
+}
+.aui .wrapper-portlet-area .navbar {
+	margin-bottom:0;
+}
+
+.aui .wrapper-portlet-area .navbar .nav>li.active {
+	border-bottom:0px;
+} 
+
+.aui .wrapper-portlet-area .navbar .nav>.active>a, 
+.aui .wrapper-portlet-area .navbar .nav>.active>a:hover, 
+.aui .wrapper-portlet-area .navbar .nav>.active>a:focus {
+	border-top: 1px solid #014260;
+  border-right: 1px solid #014260;
+  border-left: 1px solid #014260;
+  border-bottom: 1px solid #fff;
+    color: #014260;
 }
