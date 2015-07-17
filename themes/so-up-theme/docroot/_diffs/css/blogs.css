@@ -12,7 +12,6 @@
 	padding-bottom: 5px;
 }
 
-/*test*/
 
 .portlet-blogs .navbar-inner .collapse .nav li a:before {
 	content: '+';
@@ -89,6 +88,9 @@
 
 .portlet-blogs .navbar-search {
 	margin-top:0;
+}
+.aui li {
+	display:inline;
 }
 
 body .portlet-blogs .edit-actions a {
