@@ -37,8 +37,8 @@
 		<liferay-ui:search-container-column-jsp name="portfolio-feedback-column"
 			path="/html/otherportfolios/columns/feedback_column.jsp" />
 			
-		<liferay-ui:search-container-column-text name="portfolio-last-changes-column"
-			value="<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(portfolio.getLayout().getModifiedDate()) %>" />
+		<liferay-ui:search-container-column-jsp name="portfolio-options-column"
+			path="/html/otherportfolios/columns/options_column.jsp" />
 	</liferay-ui:search-container-row>
 
 	<liferay-ui:search-iterator />

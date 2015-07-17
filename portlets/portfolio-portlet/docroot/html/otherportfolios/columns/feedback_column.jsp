@@ -18,15 +18,3 @@
 <% } %>
 
 <%= JspHelper.getFeedbackStatusString(pageContext, pf.getFeedbackStatus()) %>
-
-
-<% if (pf.getFeedbackStatus() == PortfolioStatics.FEEDBACK_REQUESTED) { %>
-
-	<portlet:actionURL name="markAsFeedbackDelivered" var="markAsFeedbackDeliveredURL">
-		<portlet:param name="portfolioPlid"
-			value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-		<portlet:param name="redirect" value="<%=redirect%>" />
-	</portlet:actionURL>
-
-	<liferay-ui:icon image="submit" url="<%=markAsFeedbackDeliveredURL.toString()%>" /> 
-<% } %>
