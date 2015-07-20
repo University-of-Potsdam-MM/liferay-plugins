@@ -17,4 +17,4 @@
 	<liferay-ui:icon toolTip="" message="" image="check" />
 <% } %>
 
-<%= JspHelper.getFeedbackStatusString(pageContext, pf.getFeedbackStatus()) %>
+<%= JspHelper.getFeedbackStatusString(portletConfig,locale, pf.getFeedbackStatus()) %>

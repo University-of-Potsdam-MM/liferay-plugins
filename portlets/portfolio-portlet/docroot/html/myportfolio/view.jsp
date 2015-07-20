@@ -111,7 +111,7 @@ AUI().use(
                     o.cell.setHTML('<a href="' + o.data.url + '">' + o.data.title + '</a>');
                     var row = o.cell.ancestor();
                     for (var i in o.data.portfolioFeedbacks) {
-                        var userName = o.data.portfolioFeedbacks[i].userName + '(' + o.data.portfolioFeedbacks[i].creationDate + ')';
+                        var userName = o.data.portfolioFeedbacks[i].userName + ' (' + o.data.portfolioFeedbacks[i].creationDate + ')';
                         var publishmentDeleteIcon = "";
                         var feedback;
                         var feedbackDeleteIcon = A.one("#portfolioFeedbackDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
@@ -128,7 +128,7 @@ AUI().use(
                         else {
                         	feedback = '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
                         }
-                        feedback += '(' + o.data.portfolioFeedbacks[i].modifiedDate +')' +
+                        feedback += ' (' + o.data.portfolioFeedbacks[i].modifiedDate +')' +
                         '<td>' + feedbackDeleteIcon.get('innerHTML') + '</td>'
                         }
                         row.insert(
@@ -211,7 +211,6 @@ AUI().use(
                 nodeFormatter: function(o) {
                     o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
                    	o.cell.setHTML(o.data.lastChanges);
-                   	var dateList = o.data.lastChanges.split('.');
                     return false;
                 },
                 sortable: true,

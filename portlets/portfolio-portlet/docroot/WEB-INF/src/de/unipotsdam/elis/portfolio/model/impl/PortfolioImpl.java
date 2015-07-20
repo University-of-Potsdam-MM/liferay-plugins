@@ -129,6 +129,8 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 	}
 
 	public boolean userHasPermission(long userId) throws SystemException {
+		if (this.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL)
+			return true;
 		PortfolioFeedback pf = PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 		return pf != null;
 	}

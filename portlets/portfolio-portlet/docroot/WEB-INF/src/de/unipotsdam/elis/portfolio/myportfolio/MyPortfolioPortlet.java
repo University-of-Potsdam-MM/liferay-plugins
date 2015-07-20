@@ -58,10 +58,6 @@ import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
 
-	
-
-	
-
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException {

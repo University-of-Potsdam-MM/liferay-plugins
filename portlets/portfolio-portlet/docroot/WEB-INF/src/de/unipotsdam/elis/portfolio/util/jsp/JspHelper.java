@@ -1,6 +1,8 @@
 package de.unipotsdam.elis.portfolio.util.jsp;
 
-import javax.servlet.jsp.PageContext;
+import java.util.Locale;
+
+import javax.portlet.PortletConfig;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -13,6 +15,7 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
@@ -43,13 +46,13 @@ public class JspHelper {
 				+ portfolio.getFriendlyURL(themeDisplay.getLocale());
 	}
 
-	public static String getFeedbackStatusString(PageContext pageContext, int feedbackStatus) {
+	public static String getFeedbackStatusString(PortletConfig portletConfig, Locale locale, int feedbackStatus) {
 		if (feedbackStatus == PortfolioStatics.FEEDBACK_REQUESTED)
-			return LanguageUtil.get(pageContext, "portfolio-feedback-requested");
+			return LanguageUtil.get(portletConfig, locale, "portfolio-feedback-requested");
 		if (feedbackStatus == PortfolioStatics.FEEDBACK_DELIVERED)
-			return LanguageUtil.get(pageContext, "portfolio-feedback-delivered");
+			return LanguageUtil.get(portletConfig, locale, "portfolio-feedback-delivered");
 		else
-			return LanguageUtil.get(pageContext, "portfolio-no-feedback-requested");
+			return LanguageUtil.get(portletConfig, locale, "portfolio-no-feedback-requested");
 	}
 
 	public static void sendPortfolioNotification(User recipient, User sender, String message, String portfolioLink,
@@ -104,5 +107,45 @@ public class JspHelper {
 		portfolioJSON.put("inFeedbackProcess", inFeedbackProcess);
 		portfolioJSON.put("portfolioFeedbacks", portfolioFeedbackJSONArray);
 		portfolioJSONArray.put(portfolioJSON);
+	}
+
+	public static void addToPortfolioFeedbackJSONArray(JSONArray portfolioFeedbackJSONArray, Portfolio portfolio,
+			ThemeDisplay themeDisplay, PortletConfig portletConfig) throws PortalException, SystemException {
+		JSONObject portfolioFeedbackJSON = JSONFactoryUtil.createJSONObject();
+		portfolioFeedbackJSON = JSONFactoryUtil.createJSONObject();
+		portfolioFeedbackJSON.put("plid", portfolio.getPlid());
+		portfolioFeedbackJSON.put("userId", portfolio.getLayout().getUserId());
+		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
+				.getFullName());
+		portfolioFeedbackJSON.put("title", portfolio.getLayout().getTitle(themeDisplay.getLocale()));
+		portfolioFeedbackJSON.put("url",
+				JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
+		PortfolioFeedback portfolioFeedback = portfolio.getPortfolioFeedback(themeDisplay.getUserId());
+		portfolioFeedbackJSON.put("feedbackStatus", portfolioFeedback.getFeedbackStatus());
+		portfolioFeedbackJSON.put("feedbackStatusString",
+				getFeedbackStatusString(portletConfig, themeDisplay.getLocale(), portfolioFeedback.getFeedbackStatus()));
+		portfolioFeedbackJSON.put(
+				"createDate",
+				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+						portfolioFeedback.getCreateDate()));
+		portfolioFeedbackJSONArray.put(portfolioFeedbackJSON);
+	}
+	
+	public static void addGlobalPortfolioToJSONArray(JSONArray portfolioFeedbackJSONArray, Portfolio portfolio,
+			ThemeDisplay themeDisplay) throws PortalException, SystemException {
+		JSONObject portfolioFeedbackJSON = JSONFactoryUtil.createJSONObject();
+		portfolioFeedbackJSON = JSONFactoryUtil.createJSONObject();
+		portfolioFeedbackJSON.put("plid", portfolio.getPlid());
+		portfolioFeedbackJSON.put("userId", portfolio.getLayout().getUserId());
+		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
+				.getFullName());
+		portfolioFeedbackJSON.put("title", portfolio.getLayout().getTitle(themeDisplay.getLocale()));
+		portfolioFeedbackJSON.put("url",
+				getPortfolioURL(themeDisplay, portfolio.getLayout(), UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
+		portfolioFeedbackJSON.put(
+				"modifiedDate",
+				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+						portfolio.getLayout().getModifiedDate()));
+		portfolioFeedbackJSONArray.put(portfolioFeedbackJSON);
 	}
 }
