@@ -1,185 +1,352 @@
 
 
+<%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects /> 
 
 <%
-	String filterValue = ParamUtil.getString(request, "filterValue");
-	List<Portfolio> userPortfolios = 
-			PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId(), (filterValue == null) ? "" : filterValue, themeDisplay.getLocale()); 
-	String redirect = PortalUtil.getCurrentURL(renderRequest);  
-	
+	String redirect = PortalUtil.getCurrentURL(renderRequest); 
 %>
 <portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
 </portlet:actionURL>
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page" />
 
-<!-- TODO: filter dynamisch machen (filtern ohne Enter drücken zu müssen) -->
-<aui:form action="<%= filterPortfoliosURL.toString() %>">
-	<aui:input class="filterInput" name="filterValue" label=""></aui:input>
-</aui:form>
-<!--  <div id="edittest">test</div>-->
+<aui:input id="filterInput" class="filterInput" name="" ></aui:input>
+<div id="myDataTable"></div>  
 
-<table id="test" class="aui table table-striped table-bordered">
-    <thead>
-        <tr>
-            <th id="title"><%= LanguageUtil.get(pageContext, "portfolio-title-column")%></th>
-            <th id="title_option"></th>
-            <th id="publishment"><%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%></th>
-            <th id="publishment_option"></th>
-            <th id="feedback"><%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%></th>
-            <th id="feedback_option"></th>
-            <th id="changes"><%= LanguageUtil.get(pageContext, "portfolio-changes-column")%></th>
-        </tr>
-    </thead>
+<portlet:resourceURL var="getPortfoliosURL">
+	<portlet:param name="<%=Constants.CMD %>" value="getPortfolios" />
+</portlet:resourceURL>
+<portlet:resourceURL var="deletePortfolioURL">
+	<portlet:param name="<%=Constants.CMD %>" value="deletePortfolio" />
+</portlet:resourceURL>
+<portlet:resourceURL var="deletePublishment1URL">
+	<portlet:param name="<%=Constants.CMD %>" value="deletePublishment" />
+</portlet:resourceURL>
+<portlet:resourceURL var="deleteGlobalPublishment1URL">
+	<portlet:param name="<%=Constants.CMD %>" value="deleteGlobalPublishment" />
+</portlet:resourceURL>
+<portlet:resourceURL var="requestFeedbackFromUserURL">
+	<portlet:param name="<%=Constants.CMD %>" value="requestFeedbackFromUser" />
+</portlet:resourceURL>
+<portlet:resourceURL var="deleteFeedbackRequestURL">
+	<portlet:param name="<%=Constants.CMD %>" value="deleteFeedbackRequest" />
+</portlet:resourceURL>
+
+<% 
+	JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
+ 	for (Portfolio portfolio : PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId())){
+ 		String div = "iconMenuDiv_" + portfolio.getPlid();
+ 		String menu = "iconMenu_" + portfolio.getPlid();
+ 		String onClickMethod = renderResponse.getNamespace() + "deletePortfolio(" + portfolio.getPlid() + ");";
+ 		String url = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
+ 		%>
+<div id="<%= div %>" hidden=true>
+	<liferay-ui:icon-menu extended="false" id="<%= menu %>">
+		<liferay-ui:icon image="delete" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+		<liferay-ui:icon image="edit" url="<%= url %>"></liferay-ui:icon>
+	</liferay-ui:icon-menu>
+</div>
+
+<% div = "helpIconDiv_" + portfolio.getPlid(); %>
+<div id="<%= div %>" hidden=true>
+	<liferay-ui:icon-help message="<%= LanguageUtil.get(pageContext, \"portfolio-locked-message\") %>"></liferay-ui:icon-help>
+</div>
+
+<%	
+
+if (portfolio.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL){
+	div = "globalPublishmentDeleteDiv_" + portfolio.getPlid();
+	onClickMethod = renderResponse.getNamespace() + "deleteGlobalPublishment(" + portfolio.getPlid() + ");";
+	%>
+		<div id="<%= div %>" hidden=true>
+			<liferay-ui:icon image="delete" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+		</div>
+	
+	<%
+}
+		JspHelper.addToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+		for (PortfolioFeedback portfolioFeedback : portfolio.getPortfolioFeedbacks()){
+			div = "portfolioPublishmentDeleteDiv_" + portfolio.getPlid() + "_" + portfolioFeedback.getUserId();
+			onClickMethod = renderResponse.getNamespace() + "deletePublishment(" + portfolio.getPlid() + "," + portfolioFeedback.getUserId() + ");";
+			%> 
+				<div id="<%= div %>" hidden=true>
+						<liferay-ui:icon image="delete" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+				</div>
+			<% 
+			div = "portfolioFeedbackDeleteDiv_" + portfolio.getPlid() + "_" + portfolioFeedback.getUserId();
+			onClickMethod = renderResponse.getNamespace() + "deletePortfolioFeedbackRequest(" + portfolio.getPlid() + "," + portfolioFeedback.getUserId() + ");";
+			%> 
+				<div id="<%= div %>" hidden=true>
+						<liferay-ui:icon image="delete" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+				</div>
+			<% 	
+			
+		}
+ 	}
+ 	String portfoliosJSON = portfolioJSONArray.toString();
+%>
+<aui:script>
+var iconMenuIdlist = [];
+var dt;
+var currentData;
+AUI().use(
+    'aui-datatable',
+    'datatable-sort',
+    'datatable-paginator',
+    'datatable-sort',
+    'liferay-menu',
+    function(A) {
+        var data = JSON.parse('<%=portfoliosJSON%>');
+        dt = new A.DataTable({
+            columns: [{
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
+                key: 'title',
+                nodeFormatter: function(o) {
+                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+                    o.cell.setHTML('<a href="' + o.data.url + '">' + o.data.title + '</a>');
+                    var row = o.cell.ancestor();
+                    for (var i in o.data.portfolioFeedbacks) {
+                        var userName = o.data.portfolioFeedbacks[i].userName + '(' + o.data.portfolioFeedbacks[i].creationDate + ')';
+                        var publishmentDeleteIcon = "";
+                        var feedback;
+                        var feedbackDeleteIcon = A.one("#portfolioFeedbackDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
+                        if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')){
+                        	feedback = '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
+                            	'<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
+                            '</a>';
+                            publishmentDeleteIcon = A.one("#portfolioPublishmentDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId).get("innerHTML");
+                        }
+                        else {
+                        if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_REQUESTED%>')){
+                        	feedback = '<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>';
+                        }
+                        else {
+                        	feedback = '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
+                        }
+                        feedback += '(' + o.data.portfolioFeedbacks[i].modifiedDate +')' +
+                        '<td>' + feedbackDeleteIcon.get('innerHTML') + '</td>'
+                        }
+                        row.insert(
+                            '<tr><td>' +
+                            userName +
+                            '</td><td>' +
+                            publishmentDeleteIcon +
+                            '</td><td>' +
+                            feedback +
+                            '</td><td></td></tr>',
+                            'after');
+                    }
+
+                    return false;
+                }
+            }, {
+                label: ' ',
+                key: 'titleOptions',
+                nodeFormatter: function(o) {
+                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+                	if (o.data.inFeedbackProcess){
+                        o.cell.setHTML(A.one('#helpIconDiv_' + o.data.plid).get('innerHTML'));
+                	}
+                	else {
+                    var iconMenuDiv = A.one("#iconMenuDiv_" + o.data.plid);
+                    var iconMenuId = '<portlet:namespace />iconMenu_' + o.data.plid;
+                    if (!(iconMenuId in iconMenuIdlist)) {
+                    	iconMenuIdlist.push(iconMenuId);
+                    }
+                    o.cell.setHTML(iconMenuDiv.get("innerHTML"));
+                    Liferay.Menu.register(iconMenuId);}
+
+                    return false;
+                },
+                sortable: true,
+                sortFn: function(a, b, desc) {
+                     var compare = a.get('title').localeCompare(b.get('title'));
+                     return desc ? compare : -compare
+                }
+            }, {
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%>',
+                key: 'publishment',
+                nodeFormatter: function(o) {
+                    if (o.data.isGlobal) {
+                        o.cell.setHTML('<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>');
+                    } else {
+                        o.cell.setHTML(
+                            '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openPublishPortfolioPopup(' + o.data.plid + ');">' +
+                            '<%= LanguageUtil.get(pageContext, "portfolio-setup-publishment")%>' +
+                            '</a>');
+                    }
+                    return false;
+                }
+            }, {
+                label: ' ',
+                key: 'publishmentOptions',
+                nodeFormatter: function(o) {
+                	if (o.data.isGlobal) {
+                        o.cell.setHTML(A.one("#globalPublishmentDeleteDiv_" + o.data.plid).get('innerHTML'));
+                    } 
+                }
+            }, {
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%>',
+                key: 'feedback',
+                nodeFormatter: function(o) {
+                    if (o.data.isGlobal) {
+                    	 o.cell.setHTML(
+                          '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
+                          '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
+                          '</a>');
+                    } 
+                    return false;
+                }
+            },{
+                label: ' ',
+                key: 'feedbackOptions'
+            },{
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-changes-column")%>',
+                key: 'changes',
+                nodeFormatter: function(o) {
+                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+                   	o.cell.setHTML(o.data.lastChanges);
+                   	var dateList = o.data.lastChanges.split('.');
+                    return false;
+                },
+                sortable: true,
+                sortFn: function(a, b, desc) {
+                	var datA = a.get("lastChanges").split('.');
+                	var datB = b.get("lastChanges").split('.');
+                        var compare = new Date(datA[0],datA[1],datA[2])-new Date(datB[0],datB[1],datB[2]);
+                        return desc ? compare : -compare
+                }
+            }],
+            data: data,
+            rowsPerPage: 5,
+            pageSizes: [5,10,20,30,50,100, 'Show All']
+        });
+
+        dt.render("#myDataTable");
+
+        currentData = dt.data;
+        A.one('#<portlet:namespace />filterInput').on('keyup', function(e) {
+            var filteredData = currentData.filter({
+                asList: true
+            }, function(list) {
+
+                return list.get('title').toLowerCase().includes(e.currentTarget.get("value").toLowerCase());
+            });
+            dt.set('data', filteredData);
+        });
+
+
+    }
+);
+
+Liferay.provide(window, '<portlet:namespace />deletePortfolio',
+    function(plid) {
+        AUI().use('aui-base', 'aui-io-request', function(A) {
+            A.io.request('<%=deletePortfolioURL.toString()%>', {
+                dataType: 'text/html',
+                method: 'post',
+                data: { <portlet:namespace/>portfolioPlid: plid
+                },
+                on: {
+                    success: function() {
+                        currentData = currentData.filter({
+                            asList: true
+                        }, function(list) {
+                            return (list.get('plid') !== plid);
+                        });
+                        dt.set('data', currentData);
+                    }
+                }
+            });
+        });
+    });
+
+Liferay.provide(window, '<portlet:namespace />deletePublishment',
+    function(plid, userId) {
+        AUI().use('aui-base', 'aui-io-request', function(A) {
+            A.io.request('<%=deletePublishment1URL.toString()%>', {
+                dataType: 'text/html',
+                method: 'post',
+                data: { <portlet:namespace/>portfolioPlid: plid, <portlet:namespace/>userId: userId
+                },
+                on: {
+                    success: function() {
+                    	updateTableData(A);
+                    }
+                }
+            });
+        });
+    });
     
-    <tbody>
-	    <% 	for (Portfolio userPortfolio : userPortfolios){
-	    	boolean isGlobal = userPortfolio.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL;
-	    	List<PortfolioFeedback> pfs = userPortfolio.getPortfolioFeedbacks(); %>
-	    	<tr>
-	    	
-	    		<td rowspan ="<%= pfs.size() + 1%>">
-	    			<a href="<%=JspHelper.getPortfolioURL(themeDisplay, userPortfolio.getLayout(), themeDisplay.getUser()) %>">
-	    				<%= userPortfolio.getLayout().getName(themeDisplay.getLocale())%>
-					</a>
-				</td>
-				
-				<td rowspan ="<%= pfs.size() + 1%>">
-					<liferay-ui:icon-menu extended="false"> 
-	
-						<portlet:actionURL name="deletePortfolio" var="deletePortfolioURL">
-							<portlet:param name="portfolioPlid"
-								value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-							<portlet:param name="redirect" value="<%=redirect%>" />
-						</portlet:actionURL>
-	
-						<liferay-ui:icon-delete url="<%=deletePortfolioURL.toString()%>" />
-						
-				
-						<liferay-ui:icon image="edit"
-							url="<%=JspHelper.getPortfolioURL(themeDisplay, userPortfolio.getLayout(), themeDisplay.getUser())%>"></liferay-ui:icon>
-					</liferay-ui:icon-menu>
-				</td>
-				
-				<% if (isGlobal){ %>
-	    		
-					<td>
-						<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>
-					</td>
-					
-					<td>
-						<portlet:actionURL name="deleteGlobalPublishment" var="deleteGlobalPublishmentURL"> 
-							<portlet:param name="portfolioPlid"
-								value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-							<portlet:param name="redirect" value="<%=redirect%>" />
-						</portlet:actionURL>
-				
-						<liferay-ui:icon-delete url="<%=deleteGlobalPublishmentURL.toString()%>" />
-					</td>
-						
-					<td>
-						<a href="#" class="feedbackPopUpLink"><%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>
-							<input id="portfolioPlid" hidden="true" value="<%=userPortfolio.getPlid()%>"/> 
-						</a>						
-					</td>
-					
-					<td>
-					</td>
-					
-					
-				<% } else {%>
-				
-					<td>
-		    			<a href="#" class="popUpLink"><%= LanguageUtil.get(pageContext, "portfolio-setup-publishment")%>
-							<input id="portfolioPlid" hidden="true" value="<%=userPortfolio.getPlid()%>"/> 
-						</a>
-					</td>
-					
-					<td>
-					</td>
-					
-					<td>
-					</td>
-					
-					<td>
-					</td>
-					
-				<% }%>	
-								
-				<td rowspan ="<%= (pfs.size() + 1)%>">
-					<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(userPortfolio.getLayout().getModifiedDate()) %>
-				</td>
-				
-	    	</tr>
-	    	
-    		<% for (PortfolioFeedback pp : pfs) {%>
-    			<tr>    	
-    				<td>
-		    			<%= pp.getUser().getScreenName() %> (<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(pp.getCreateDate()) %>)
-		    			
-		    			<portlet:actionURL name="deletePublishment" var="deletePublishmentURL">
-							<portlet:param name="userName"
-								value="<%=pp.getUser().getScreenName()%>" />
-							<portlet:param name="portfolioPlid"
-								value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-							<portlet:param name="redirect" value="<%=redirect%>" />
-						</portlet:actionURL>
-					</td>
-					
-					<td>
-						<% if (!userPortfolio.feedbackRequested(pp.getUserId())) { %>
-							<liferay-ui:icon-delete url="<%=deletePublishmentURL.toString()%>" />
-						<% } %>
-					</td>
-					
-					<td>
-						<% if (pp.getFeedbackStatus() == PortfolioStatics.FEEDBACK_UNREQUESTED){ %>
-						   
-							 <portlet:actionURL name="requestFeedbackFromUser" var="requestFeedbackURL">
-								<portlet:param name="portfolioPlid" value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-								<portlet:param name="userId" value="<%=String.valueOf(pp.getUser().getUserId())%>" />
-								<portlet:param name="redirect" value="<%=redirect%>" />
-							</portlet:actionURL>
-							<a href="<%=requestFeedbackURL.toString()%>"><%=LanguageUtil.get(pageContext, "portfolio-request-feedback")%></a> 
-							
-							<td>
-							</td>
-							
-						<% } else { %>
-						
-							<portlet:actionURL name="removeFeedbackForPortfolio" var="removeFeedbackURL">
-								<portlet:param name="portfolioPlid" value="<%=String.valueOf(userPortfolio.getPlid())%>" />
-								<portlet:param name="userId" value="<%=String.valueOf(pp.getUser().getUserId())%>" />
-								<portlet:param name="redirect" value="<%=redirect%>" />
-							</portlet:actionURL>
-							
-							<% if (pp.getFeedbackStatus() == PortfolioStatics.FEEDBACK_REQUESTED){ %>
-							
-								<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>
-								
-							<% } else { %>
-							
-								<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>
-								
-							<% } %>
-							
-							(<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(pp.getModifiedDate()) %>)
-							
-							<td>
-								<liferay-ui:icon-delete url="<%=removeFeedbackURL.toString()%>" />
-							</td>
-						<% } %>	
-					</td>
-				</tr>
-			<% } %>
-	   	<% } %>
-    </tbody>
-</table>
-<aui:script use="liferay-util-window">
+Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
+	    function(plid) {
+	        AUI().use('aui-base', 'aui-io-request', function(A) {
+	            A.io.request('<%=deleteGlobalPublishment1URL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>portfolioPlid: plid
+	                },
+	                on: {
+	                    success: function() {
+	                    	updateTableData(A);
+	                    }
+	                }
+	            });
+	        });
+	    });
+	    
+Liferay.provide(window, '<portlet:namespace />requestFeedbackFromUser',
+	    function(plid, userId) {
+	        AUI().use('aui-base', 'aui-io-request', function(A) {
+	            A.io.request('<%=requestFeedbackFromUserURL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>portfolioPlid: plid, <portlet:namespace/>userId: userId
+	                },
+	                on: {
+	                    success: function() {
+	                    	updateTableData(A);
+	                    }
+	                }
+	            });
+	        });
+	    });
+	    
+Liferay.provide(window, '<portlet:namespace />deletePortfolioFeedbackRequest',
+	    function(plid, userId) {
+	        AUI().use('aui-base', 'aui-io-request', function(A) {
+	            A.io.request('<%=deleteFeedbackRequestURL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>portfolioPlid: plid, <portlet:namespace/>userId: userId
+	                },
+	                on: {
+	                    success: function() {
+	                    	updateTableData(A);
+	                    }
+	                }
+	            });
+	        });
+	    });
+    
+function updateTableData(A){
+	A.io.request('<%=getPortfoliosURL.toString()%>', {
+        dataType: 'text/html',
+        method: 'post',
+        on: {
+            success: function() {
+                result = this.get('responseData');
+                currentData = JSON.parse(result);
+                dt.set('data', currentData);
+            }
+        }
+    });
+}
 /*
 AUI().ready('aui-base','aui-editable-deprecated','aui-node-deprecated','event',
 		function(A) {
@@ -189,40 +356,29 @@ AUI().ready('aui-base','aui-editable-deprecated','aui-node-deprecated','event',
 	 	//A.Event.simulate(editable,"click");
 	 	editable.show();
 		});*/
-
-AUI().use('aui-base',
-	'aui-io-plugin-deprecated',
-	'liferay-util-window',
-	function(A) {
-		A.all('.popUpLink').on('click', function(event){
-			var portfolioPlid = event.currentTarget.one('#portfolioPlid').get('value');
-			var renderURL = Liferay.PortletURL.createRenderURL();
-			renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-			renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
-			renderURL.setParameter("mvcPath", "/html/myportfolio/popup/publish_portfolio.jsp");
-			renderURL.setParameter("portfolioPlid", portfolioPlid);
-			renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-			renderURL.setParameter("currentRedirect","<%=redirect%>");
-			openPopUp(renderURL,"<%=LanguageUtil.get(portletConfig, locale, "portfolio-publish-portfolio") %>");
-		});
-	});
-	
-AUI().use('aui-base',
-	'aui-io-plugin-deprecated',
-	'liferay-util-window',
-	function(A) {
-		A.all('.feedbackPopUpLink').on('click', function(event){
-			var portfolioPlid = event.currentTarget.one('#portfolioPlid').get('value');
-			var renderURL = Liferay.PortletURL.createRenderURL();
-			renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-			renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
-			renderURL.setParameter("mvcPath", "/html/myportfolio/popup/request_feedback.jsp");
-			renderURL.setParameter("portfolioPlid", portfolioPlid);
-			renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-			renderURL.setParameter("currentRedirect","<%=redirect%>");
-			openPopUp(renderURL,"<%=LanguageUtil.get(portletConfig, locale, "portfolio-request-feedback") %>");
-		});
-	});
+Liferay.provide(window,'<portlet:namespace />openPublishPortfolioPopup',		
+	function (plid){
+		var renderURL = Liferay.PortletURL.createRenderURL();
+		renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
+		renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+		renderURL.setParameter("mvcPath", "/html/myportfolio/popup/publish_portfolio.jsp");
+		renderURL.setParameter("portfolioPlid", plid);
+		renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+		openPopUp(renderURL,"<%=LanguageUtil.get(portletConfig, locale, "portfolio-publish-portfolio") %>");
+	},['aui-base','liferay-util-window',]
+);
+		
+Liferay.provide(window,'<portlet:namespace />openRequestFeedbackPopup',		
+	function (plid){
+		var renderURL = Liferay.PortletURL.createRenderURL();
+		renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
+		renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+		renderURL.setParameter("mvcPath", "/html/myportfolio/popup/request_feedback.jsp");
+		renderURL.setParameter("portfolioPlid", plid);
+		renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+		openPopUp(renderURL,"<%=LanguageUtil.get(portletConfig, locale, "portfolio-publish-portfolio") %>");
+	},['aui-base','liferay-util-window',]
+);
 		
 AUI().use('aui-base',
 	'aui-io-plugin-deprecated',
@@ -267,4 +423,9 @@ function openPopUp(renderURL, title){
 	
 }
 
+AUI().use('aui-base',
+	  	'liferay-menu',function(A){
+	for (var menu in iconMenuIdlist){
+		Liferay.Menu.register(iconMenuIdlist[menu]);		
+	}});
 </aui:script>

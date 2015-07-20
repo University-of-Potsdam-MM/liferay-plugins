@@ -17,6 +17,8 @@
 		${theme.search()}
 		${theme.include(body_top_include)}
 	</div>
+	<div class="windowdiv">
+	</div>
 	<#if is_signed_in>
 	<div class="liferay_dockbar">
 		<@liferay.dockbar />
@@ -46,8 +48,7 @@
 						</#if>
 					</#list>
 	        	</ul>
-	        	<ul id="sidebar-all-sites hidden">
-
+	        	<ul id="sidebar-all-sites" class="hidden">
 	        	</ul>
 			</div>
 		</div>

@@ -56,10 +56,17 @@
 			height: 20px;
 		}
 		
+		.windowdiv
+		{
+			z-index:3500;
+			position: absolute;
+			overflow: hidden;
+			display: block;
+		}
+		
 		.liferay_dockbar
 		{
 			z-index:10;
-			display: none;
 	    	overflow: hidden;
 			position: absolute;
 			
@@ -77,8 +84,6 @@
 			
 			#_145_navAccountControlsNavbarCollapse {
 				display: none;
-				
-				
 			}
 			
 			.dockbar .navbar-inner .nav-add-controls{
@@ -419,6 +424,7 @@
 					color: $upWhite;
 					display: inline-block;
 					vertical-align: middle;
+					cursor: pointer;
 					
 					.icon
 					{
@@ -461,7 +467,7 @@
 				
 				
 				
-				#sidebar-my-sites{
+				#sidebar-my-sites, #sidebar-all-sites{
 				
 					list-style: none;
 					margin: 0px;
