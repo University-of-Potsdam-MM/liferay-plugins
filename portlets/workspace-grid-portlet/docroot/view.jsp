@@ -24,10 +24,7 @@
 		String template2_cfg = GetterUtil.getString(portletPreferences.getValue("template2", StringPool.UTF8));
 		String template3_cfg = GetterUtil.getString(portletPreferences.getValue("template3", StringPool.UTF8));
 	
-	
-		
 		List<WorkspaceSlide> workspaceSlides = new LinkedList<WorkspaceSlide>();
-		
 		List<Group> gruppenArbeiten = null;				
 		
 		try {
@@ -38,10 +35,8 @@
 			e1.printStackTrace();
 		}
 	
-		System.out.println(gruppenArbeiten);	
+		//System.out.println(gruppenArbeiten);	
 		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, gruppenArbeiten, template1_cfg);
-		
-		
 		List<Group> portfolios = null;		
 	
 		try {
@@ -52,10 +47,8 @@
 			e1.printStackTrace();
 		}
 	
-		System.out.println(portfolios);	
+		//System.out.println(portfolios);	
 		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, portfolios, template2_cfg);
-		
-		
 		List<Group> courses = null;		
 		
 		try {
@@ -66,9 +59,8 @@
 			e1.printStackTrace();
 		}
 		
-		System.out.println(courses);		
+		//System.out.println(courses);		
 		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, courses, template3_cfg);
-		
 		List<Group> other = null;		
 		
 		try {
@@ -79,23 +71,21 @@
 			e1.printStackTrace();
 		}
 		
-		System.out.println(other);		
+		//System.out.println(other);		
 		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, other, template3_cfg);
-		
 		
 		%>
 		<div id="workspacegrid">
 			<%
 			for (WorkspaceSlide workspaceSlide: workspaceSlides){
-				
-				System.out.println(workspaceSlide);
+				// System.out.println(workspaceSlide);
 			%>
-			
-			
 				
 				<a class="workspaceBox <%= workspaceSlide.getTemplateName() %>" href="<%= workspaceSlide.getWebLink() %>">
 					<span class="linkName"><%= workspaceSlide.getName() %></span>
-					<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span> 
+					<% if (workspaceSlide.getNumberOfNewActivities()!=0){ %>
+					<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span>
+					<% } %> 
 				</a>
 			
 			<%
