@@ -103,13 +103,13 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	private void findUsers(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException, SystemException {
 		JSONArray usersJSONArray = JSONFactoryUtil.createJSONArray();
-		String inputValue = ParamUtil.getString(resourceRequest, "userEmail");
+		String inputValue = ParamUtil.getString(resourceRequest, "inputValue");
 		DynamicQuery userQuery = DynamicQueryFactoryUtil.forClass(User.class, PortalClassLoaderUtil.getClassLoader());
 		Criterion criterion = RestrictionsFactoryUtil.like("screenName", StringPool.PERCENT + inputValue
 				+ StringPool.PERCENT);
 		userQuery.add(criterion);
 		JSONObject userJSON = null;
-		List<User> userList = UserLocalServiceUtil.dynamicQuery(userQuery, 0, 5);
+		List<User> userList = UserLocalServiceUtil.dynamicQuery(userQuery, -1, -1);
 		for (User user : userList) {
 			userJSON = JSONFactoryUtil.createJSONObject();
 			userJSON.put("userId", user.getUserId());

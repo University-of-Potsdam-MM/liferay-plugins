@@ -49,7 +49,7 @@ AUI().use('aui-base',
 AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters', function (A) {
 	var contactSearchFormatter = function (query, results) {
 		return A.Array.map(results, function (result) {
-			return '<strong>'+result.raw.screenName+'</strong><br/>'+result.raw.email;
+			return '<strong>'+result.raw.fullName+'</strong><br/>'+result.raw.email;
 		});
 	};
 	var testData;
