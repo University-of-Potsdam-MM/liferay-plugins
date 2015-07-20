@@ -29,7 +29,7 @@
 			User owner = UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId());
 		%>
 		
-		<liferay-ui:search-container-column-text name="portfolio-title-column"
+		<liferay-ui:search-container-column-text name="portfolio-title-column" 
 		value="<%= portfolio.getLayout().getName(themeDisplay.getLocale())%>" href="<%= JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), owner) %>"/>
 
 		<liferay-ui:search-container-column-text name="portfolio-creator-column"
