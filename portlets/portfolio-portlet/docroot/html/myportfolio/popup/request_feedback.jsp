@@ -3,6 +3,10 @@
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
 
+<portlet:resourceURL var="feedbackRequestedURL">
+	<portlet:param name="<%=Constants.CMD %>" value="feedbackRequested" />
+</portlet:resourceURL>
+
 <!-- TODO: Erfolgsmeldung beim Hinzufügen? -->
 <aui:layout cssClass="popup-layout">
 
@@ -22,7 +26,7 @@
 			</aui:validator>
 			<aui:validator name="custom" errorMessage="portfolio-feedback-already-requested"> 
 				function (val, fieldNode, ruleValue) {
-		            return !userHasPermission(val);
+		            return !feedbackRequested(val);
 				}
 			</aui:validator>
 	     </aui:input>
@@ -103,4 +107,29 @@ form.on(
 		);
 	}
 );
+
+</aui:script>
+<aui:script>
+function feedbackRequested(val){
+	var result;
+	AUI().use('aui-base',
+		function(A) {
+			A.io.request('<%=feedbackRequestedURL.toString()%>', {
+				dataType: 'text/html',
+		       	method: 'post',
+				sync: true,
+				timeout: 3000,
+				data:{
+					<portlet:namespace />name:val,
+					<portlet:namespace />portfolioPlid:<%=portfolioPlid%>				
+				},
+		      	on: {
+		        	success: function() {
+		       			result = this.get('responseData');
+		            }
+		       }
+		    });
+		});
+    return (result == 'true');
+}
 </aui:script>

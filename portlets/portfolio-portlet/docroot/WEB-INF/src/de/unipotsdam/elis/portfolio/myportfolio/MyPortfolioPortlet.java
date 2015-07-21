@@ -70,6 +70,8 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				userExists(resourceRequest, resourceResponse);
 			else if (cmd.equals("userHasPermission"))
 				userHasPermission(resourceRequest, resourceResponse);
+			else if (cmd.equals("feedbackRequested"))
+				feedbackRequested(resourceRequest, resourceResponse);
 			else if (cmd.equals("getPortfolios"))
 				getPortfolios(resourceRequest, resourceResponse);
 			else if (cmd.equals("deletePortfolio"))
@@ -158,6 +160,29 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		PrintWriter out = resourceResponse.getWriter();
 		if (user != null)
 			out.print(portfolio.userHasPermission(user.getUserId()));
+		else
+			out.print(false);
+	}
+	
+	/**
+	 * Checks whether feedback is already requested by a user
+	 * 
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 * @throws IOException
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	private void feedbackRequested(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws IOException, SystemException, PortalException {
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		String name = ParamUtil.getString(resourceRequest, "name");
+		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		User user = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), name);
+		PrintWriter out = resourceResponse.getWriter();
+		if (user != null)
+			out.print(portfolio.feedbackRequested(user.getUserId()));
 		else
 			out.print(false);
 	}

@@ -15,7 +15,7 @@
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page" />
 
-<aui:input id="filterInput" class="filterInput" name="" ></aui:input>
+<aui:input id="filterInput" class="filterInput" name="" placeholder="portfolio-filter-placeholder"></aui:input>
 <div id="myDataTable"></div>  
 
 <portlet:resourceURL var="getPortfoliosURL">
@@ -215,10 +215,8 @@ AUI().use(
                 },
                 sortable: true,
                 sortFn: function(a, b, desc) {
-                	var datA = a.get("lastChanges").split('.');
-                	var datB = b.get("lastChanges").split('.');
-                        var compare = new Date(datA[0],datA[1],datA[2])-new Date(datB[0],datB[1],datB[2]);
-                        return desc ? compare : -compare
+                	var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
+                   	return desc ? compare : -compare
                 }
             }],
             data: data,

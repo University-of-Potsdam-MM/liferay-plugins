@@ -81,8 +81,9 @@ public class JspHelper {
 		portfolioJSON.put("plid", portfolio.getPlid());
 		portfolioJSON.put(
 				"lastChanges",
-				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						portfolio.getLayout().getModifiedDate()));
+		portfolioJSON.put("lastChangesInMilliseconds", portfolio.getLayout().getModifiedDate().getTime());
 		portfolioJSON.put("isGlobal", portfolio.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL);
 		JSONArray portfolioFeedbackJSONArray = JSONFactoryUtil.createJSONArray();
 		JSONObject portfolioFeedbackJSON = null;
@@ -144,8 +145,9 @@ public class JspHelper {
 				getPortfolioURL(themeDisplay, portfolio.getLayout(), UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
 		portfolioFeedbackJSON.put(
 				"modifiedDate",
-				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						portfolio.getLayout().getModifiedDate()));
+		portfolioFeedbackJSON.put("modifiedDateInMilliseconds", portfolio.getLayout().getModifiedDate().getTime());
 		portfolioFeedbackJSONArray.put(portfolioFeedbackJSON);
 	}
 }

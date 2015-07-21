@@ -43,7 +43,7 @@
 	<portlet:param name="myParam" value="1"/>
 </portlet:actionURL>
 
-<aui:input class="otherPortfoliosFilterInput" id="otherPortfoliosFilterInput" name=""></aui:input>
+<aui:input class="otherPortfoliosFilterInput" id="otherPortfoliosFilterInput" name=""  placeholder="portfolio-filter-placeholder"></aui:input>
 
 <div id="otherPortfoliosTable"></div>  
 

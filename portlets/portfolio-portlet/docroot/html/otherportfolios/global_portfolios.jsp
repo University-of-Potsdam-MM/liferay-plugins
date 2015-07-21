@@ -24,7 +24,7 @@
  	String portfoliosJSON = portfolioJSONArray.toString();%>
 
 
-<aui:input class="filterInput" id="otherPortfoliosFilterInput" name="" label=""></aui:input>
+<aui:input class="filterInput" id="otherPortfoliosFilterInput" name=""  placeholder="portfolio-filter-placeholder"></aui:input>
 
 <div id="otherPortfoliosTable"></div>  
 
@@ -71,10 +71,8 @@ AUI().use(
                 },
                 sortable: true,
                 sortFn: function(a, b, desc) {
-                	var datA = a.get("modifiedDate").split('.');
-                	var datB = b.get("modifiedDate").split('.');
-                        var compare = new Date(datA[0],datA[1],datA[2])-new Date(datB[0],datB[1],datB[2]);
-                        return desc ? compare : -compare
+                	var compare = parseInt(a.get("modifiedDateInMilliseconds")) - parseInt(b.get("modifiedDateInMilliseconds"));
+                    return desc ? compare : -compare
                 }
             }],
             data : data,
