@@ -39,9 +39,15 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -90,8 +96,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			e.printStackTrace();
 		}
 	}
-
-	
 
 	/**
 	 * Returns the user with names matching the search term.
@@ -163,7 +167,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		else
 			out.print(false);
 	}
-	
+
 	/**
 	 * Checks whether feedback is already requested by a user
 	 * 
@@ -215,7 +219,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 * @param resourceResponse
 	 * @throws PortalException
 	 * @throws SystemException
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private static void deletePortfolio(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws PortalException, SystemException, IOException {
@@ -226,7 +230,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		PrintWriter out = resourceResponse.getWriter();
 		out.print(true);
 	}
-	
+
 	/**
 	 * Deletes the publishment of a portfolio.
 	 * 
@@ -245,7 +249,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback(plid, userId);
 	}
-	
+
 	/**
 	 * Deletes the global publishment of the portfolio.
 	 * 
@@ -260,7 +264,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
 		portfolio.setPrivate();
 	}
-	
+
 	/**
 	 * Requests feedback from a single user
 	 * 
@@ -276,8 +280,17 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
 		portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
 		sendFeedbackRequestedNotification(resourceRequest, userId, portfolio);
+		removeUpdatePermissionsForLayout(portfolio, userId);
 	}
-	
+
+	private void removeUpdatePermissionsForLayout(Portfolio portfolio, long userId) throws PortalException, SystemException {
+		Role role = RoleLocalServiceUtil.getRole(
+				portfolio.getLayout().getCompanyId(),
+			RoleConstants.OWNER);
+		ResourcePermissionLocalServiceUtil.removeResourcePermission(portfolio.getLayout().getCompanyId(),
+				Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(portfolio.getPlid()), role.getUserId(), ActionKeys.UPDATE);
+	}
+
 	/**
 	 * Removes the feedback entry for a portfolio.
 	 * 
@@ -533,8 +546,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		JspHelper.sendPortfolioNotification(UserLocalServiceUtil.getUser(userId), themeDisplay.getUser(), message,
 				portfolioLink, ServiceContextFactory.getInstance(actionRequest));
 	}
-
-	
 
 	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse) {
 		String filterValue = ParamUtil.getString(actionRequest, "filterValue");

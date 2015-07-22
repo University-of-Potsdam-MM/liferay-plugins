@@ -169,4 +169,8 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 			return (pf.getFeedbackStatus() != PortfolioStatics.FEEDBACK_UNREQUESTED);
 		return false;
 	}
+	
+	public boolean feedbackRequested() throws SystemException{
+		return (PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(getPlid(), PortfolioStatics.FEEDBACK_REQUESTED).size() != 0);
+	}
 }

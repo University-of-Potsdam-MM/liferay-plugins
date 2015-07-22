@@ -374,6 +374,14 @@ public class PortfolioFeedbackLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback> getPortfolioFeedbackByPlidAndFeedbackStatus(
+		long plid, int feedbackStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _portfolioFeedbackLocalService.getPortfolioFeedbackByPlidAndFeedbackStatus(plid,
+			feedbackStatus);
+	}
+
+	@Override
 	public java.util.List<java.lang.Object> getPortfolioPlidsByUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioFeedbackLocalService.getPortfolioPlidsByUserId(userId);

@@ -345,6 +345,12 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 	}
 
 	@Override
+	public boolean feedbackRequested()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _portfolio.feedbackRequested();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
