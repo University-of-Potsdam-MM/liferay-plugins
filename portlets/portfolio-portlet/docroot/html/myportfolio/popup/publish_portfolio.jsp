@@ -45,7 +45,7 @@
 	
 	<aui:form name="form" class="form" id="publishPortfolioForm" method="post">
 		<aui:button type="submit" value="portfolio-publish" onClick="publishPortfolioToUsers()"></aui:button>
-		<aui:button type="submit" value="portfolio-publish-portalwide" onClick="publishPortfolioGlobal()"></aui:button>
+		<aui:button type="submit" value="portfolio-portalwide-publishment" onClick="publishPortfolioGlobal()"></aui:button>
 	</aui:form>
 	
 	<table hidden="true">

@@ -177,9 +177,13 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 
 		_methodParameterTypes59 = new String[] { "long" };
 
-		_methodName60 = "getPortfolioPlidsByUserId";
+		_methodName60 = "getPortfolioFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes60 = new String[] { "long" };
+		_methodParameterTypes60 = new String[] { "long", "int" };
+
+		_methodName61 = "getPortfolioPlidsByUserId";
+
+		_methodParameterTypes61 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -362,6 +366,12 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
+			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
+		}
+
+		if (_methodName61.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.getPortfolioPlidsByUserId(((Long)arguments[0]).longValue());
 		}
 
@@ -430,4 +440,6 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 	private String[] _methodParameterTypes59;
 	private String _methodName60;
 	private String[] _methodParameterTypes60;
+	private String _methodName61;
+	private String[] _methodParameterTypes61;
 }

@@ -172,6 +172,25 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 	}
 
 	@Override
+	public boolean feedbackRequested() {
+		try {
+			String methodName = "feedbackRequested";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public boolean publishToUser(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		try {

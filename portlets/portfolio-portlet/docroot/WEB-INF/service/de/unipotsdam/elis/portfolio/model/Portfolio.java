@@ -105,4 +105,7 @@ public interface Portfolio extends PortfolioModel, PersistedModel {
 
 	public boolean feedbackRequested(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public boolean feedbackRequested()
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

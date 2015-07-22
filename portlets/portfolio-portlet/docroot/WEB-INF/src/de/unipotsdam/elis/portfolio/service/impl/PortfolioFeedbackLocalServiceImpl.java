@@ -121,6 +121,10 @@ public class PortfolioFeedbackLocalServiceImpl
 		return portfolioFeedbackPersistence.findByUserId(userId);
 	}
 	
+	public List<PortfolioFeedback> getPortfolioFeedbackByPlidAndFeedbackStatus(long plid, int feedbackStatus) throws SystemException{
+		return portfolioFeedbackPersistence.findByPlidAndFeedbackStatus(plid, feedbackStatus);
+	}
+	
 	public List<Object> getPortfolioPlidsByUserId(long userId) throws SystemException{
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(PortfolioFeedback.class);
 		dynamicQuery.add(PropertyFactoryUtil.forName("primaryKey.userId").eq(new Long(userId)));

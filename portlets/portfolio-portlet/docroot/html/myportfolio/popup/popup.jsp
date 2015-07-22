@@ -8,8 +8,8 @@
 	String parentPageRedirect = renderRequest.getParameter("currentRedirect");  
 %>
 
-<portlet:resourceURL var="getUsers">
-	<portlet:param name="<%=Constants.CMD %>" value="getUsers" />
+<portlet:resourceURL var="findUsers">
+	<portlet:param name="<%=Constants.CMD %>" value="findUsers" />
 </portlet:resourceURL>
 <portlet:resourceURL var="userExists">
 	<portlet:param name="<%=Constants.CMD %>" value="userExists" />
@@ -49,7 +49,7 @@ AUI().use('aui-base',
 AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters', function (A) {
 	var contactSearchFormatter = function (query, results) {
 		return A.Array.map(results, function (result) {
-			return '<strong>'+result.raw.screenName+'</strong><br/>'+result.raw.email;
+			return '<strong>'+result.raw.fullName+'</strong><br/>'+result.raw.email;
 		});
 	};
 	var testData;
@@ -64,11 +64,11 @@ AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters'
 	resultFormatter: contactSearchFormatter,
 	source:function(){
 		var inputValue=A.one("#<portlet:namespace />userNameInput").get('value');
-		var myAjaxRequest=A.io.request('<%=getUsers.toString()%>',{
+		var myAjaxRequest=A.io.request('<%=findUsers.toString()%>',{
 			    dataType: 'json',
 				method:'POST',
 				data:{
-				<portlet:namespace />userEmail:inputValue,
+				<portlet:namespace />inputValue:inputValue,
 				},
 				autoLoad:false,
 				sync:false,
@@ -92,7 +92,7 @@ function userExists(val){
 		       	method: 'post',
 				sync: true,
 				timeout: 3000,
-				data:{<portlet:namespace />name:val},
+				data:{<portlet:namespace />userName:val},
 		      	on: {
 		        	success: function() {
 		       			result = this.get('responseData');
