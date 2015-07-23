@@ -1,0 +1,100 @@
+.aui .nav-tabs {
+	  border-bottom: 1px solid #014260;
+	  font-weight: bold;
+}
+
+.aui .nav-tabs ul li a {
+	color:#555;
+}
+
+.aui .nav-tabs>.active>a, .aui .nav-tabs>.active>a:hover, .aui .nav-tabs>.active>a:focus {
+	
+	color:#014260;
+}
+
+thead {
+  color: #014260;
+  background-color: #d0dae3;
+}
+
+.aui .table thead th {
+	background-color:transparent;
+}
+
+tbody tr {
+  background-color: #d0dae3 !important;
+}
+
+.table-col-titleOptions, .table-col-publishmentOptions .table-col-feedbackOptions {
+  background-color:#d3e2eb !important;
+  texd-align:center !important;
+}
+
+.table-col-titleOptions .btn-group .dropdown-toggle img {
+	display:none;
+}
+
+tbody td a {
+	text-decoration:underline;
+}
+
+.aui .table th, .aui .table td {
+  
+  border: 1px solid #fff;
+}
+
+.yui3-datatable-paginator-wrapper {
+	padding:0;
+}
+
+.yui3-datatable-paginator {
+	border-top: 1px solid #ededed;
+	background-image:none !important;
+  margin-top: 10px;
+  padding-top: 10px !important;
+    
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control {
+	color:#014260;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group label {
+	margin-bototm:0;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group input {
+  	margin-bottom: 0;
+ 	 margin-right: 5px;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button {
+	height: 30px;
+  padding: 4px 6px;
+  margin-bottom: 0px;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 0;
+    border: 1px solid #ddd;
+  color: #014260;
+
+}
+
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover {
+	border: 1px solid #ccc;
+}
+
+.datatable-paginator .yui3-datatable-paginator-control-first:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-last:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-prev:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-next:hover {
+  box-shadow: 0 0px 0px transparent;
+  color:#014260;
+  background-color:#d0dae3;
+}
+
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group select {
+	margin-bottom: 0;
+}
