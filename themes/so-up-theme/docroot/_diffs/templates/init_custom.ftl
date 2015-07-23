@@ -4,6 +4,8 @@
 	<#assign user_account_url = themeDisplay.getURLMyAccount() />
 	<#assign sign_out_url = htmlUtil.escape(theme_display.getURLSignOut()) />
 	
+	<#assign notificationPortletId = "2_WAR_notificationsportlet" />
+
 	<#assign has_layout_add_permission = 0 />
 	
 	<#if (layout.getParentLayoutId() == 0)>

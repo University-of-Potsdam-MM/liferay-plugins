@@ -12,7 +12,7 @@
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
 	
-	<!-- Ausblenden damit es keine Probleme beim JS gibt und als Liste für die Seiten unter all sites-->
+	<!-- Ausblenden damit es keine Probleme beim JS gibt-->
 	<div class="hidden">
 		${theme.search()}
 		${theme.include(body_top_include)}
@@ -70,7 +70,7 @@
 			<a href="#services" aria-owns="services" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger up-services">
 				UP Dienste</a>
 		</div>
-		<div id="grouproom" class="aui-style-default aui-dropdown2">
+		<div id="grouproom" class="aui-style-default aui-dropdown hidden">
 			<ul class="aui-list-truncate">
 				<#list user_my_sites as user_site>
 					<#if user_site.hasPrivateLayouts()>
@@ -81,27 +81,27 @@
 				</#list>
 			</ul>
 		</div>
-		<div id="personal" class="aui-style-default aui-dropdown2">
+		<div id="personal" class="aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="profile" class="aui-style-default aui-dropdown2">
+		<div id="profile" class="aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="contact" class="aui-style-default aui-dropdown2">
+		<div id="contact" class="aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="portfolio" class="aui-style-default aui-dropdown2">
+		<div id="portfolio" class="aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="services" class="aui-style-default aui-dropdown2">
+		<div id="services" class="aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
@@ -150,11 +150,15 @@
 			</li>
 			
 			<#if is_signed_in>
+				${theme.runtime(notificationPortletId, "", "")}
 				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
 			<#else>
+				<li class="notofication disabled"><span class="icon notification"></span></a></li>
 				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
 			</#if>
 		</ul>
+		<div class="notification-info hidden">
+		</div>
 		<#if is_signed_in>
 		<ul id="admin">
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
