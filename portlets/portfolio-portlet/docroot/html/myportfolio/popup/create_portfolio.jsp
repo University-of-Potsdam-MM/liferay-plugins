@@ -24,6 +24,7 @@
 
 <aui:script>
 function createPortfolio() {
+	event.preventDefault();
 	AUI().use(	'aui-io-request-deprecated','aui-loading-mask-deprecated','autocomplete,io-upload-iframe','json-parse', function(A){
 		var form = A.one('#<portlet:namespace />form');
 	var loadingMask = new A.LoadingMask(
