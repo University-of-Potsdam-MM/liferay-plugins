@@ -1,0 +1,43 @@
+.lfr-admin-panel h1 {
+	color:#d0dae3;	
+}
+
+.aui .lfr-admin-panel .navbar .nav>li {
+	  margin-right: 3px;
+}
+
+.aui .lfr-admin-panel .navbar .nav>li>a {
+  background-color: #014260;
+  color: #fff;
+}
+
+.aui .lfr-admin-panel .accordion-group {
+	border: none;
+	-webkit-border-radius: 0px;
+ 	 -moz-border-radius: 0px;
+ 	 border-radius: 0px;
+  	background-color: #d0dae3;
+	
+}
+
+.lfr-edit-layout-panel .taglib-form-navigator .accordion .accordion-group.lfr-panel-extended .accordion-inner {
+	  background-color: #fff;
+  border: 1px solid #d0dae3;	
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li {
+	background-color:#fff;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a {
+	background: #fff;
+  color: #014260;
+  border-radius:0;
+  -o-border-radius:0;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a:hover {
+  background: #014260 !important;
+}

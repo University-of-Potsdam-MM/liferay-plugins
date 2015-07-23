@@ -32,6 +32,8 @@
 
 @import url(./search.css);
 
+@import url(./webcontent.css);
+
 /*@import url(media_queries.css);*/
 
 /* no radius, no shadow, no background-image */
@@ -63,7 +65,10 @@
   .aui textarea, 
   .aui .textarea, 
   .aui button,
-  .aui .modal{
+  .aui .modal,
+  .aui .popover,
+  .yui3-skin-sam .yui3-calendar-content,
+  .aui .navbar .container {
  
  -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
   -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
@@ -181,7 +186,7 @@ h2.page-title {
 	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
 	-moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
 	box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
-	background-color: #D0DAE3
+	background-color: #fff;
 }
 
 .aui .nav-list>.active>a, .aui .nav-list>.active>a:hover, .aui .nav-list>.active>a:focus {
@@ -305,4 +310,18 @@ aui .btn.disabled, .aui .btn[disabled] {
 .textboxlistentry {
 	  background-color: #d0dae3;
   border: 1px solid #d0dae3;
+}
+
+/*Kalender*/
+
+.yui3-skin-sam .yui3-calendar-content {
+	background: #fff;
+  background: -moz-linear-gradient(top,#fff 0,#fff 100%);
+  background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fff),color-stop(100%,#fff));
+  background: -webkit-linear-gradient(top,#fff 0,#fff 100%);
+  background: -o-linear-gradient(top,#fff 0,#fff 100%);
+  background: -ms-linear-gradient(top,#fff 0,#fff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff',endColorstr='#fff',GradientType=0);
+  background: linear-gradient(top,#fff 0,#fff 100%);
+	
 }

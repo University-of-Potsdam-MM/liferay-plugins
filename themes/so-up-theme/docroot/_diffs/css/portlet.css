@@ -22,34 +22,16 @@
 /* ---------- Portlet wrapper and icons ---------- */
 
 
-body .portlet:hover {
-	-webkit-box-shadow: 0px 0px 4px 0px rgba(194,192,194,1);
--moz-box-shadow: 0px 0px 4px 0px rgba(194,192,194,1);
-box-shadow: 0px 0px 4px 0px rgba(194,192,194,1);
-}
-
-body .portlet:hover .portlet-title-text, body .portlet:hover .portlet-default-title{
-	-webkit-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
--moz-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
-}
 
 .portlet {
-	border-bottom:none;
+	border: 1px solid #ededed;
 }
 
 
 .portlet .portlet-topper {
 	padding-left:0 !important;
 	padding-top:0 !important;
-}
-
-.portlet-topper .portlet-topper-toolbar a i {
-	display:none;
-}
-
-portlet:hover .portlet-topper .portlet-topper-toolbar a i {
-	display:inline;
+	padding:0 !important;
 }
 
 
@@ -60,9 +42,6 @@ portlet:hover .portlet-topper .portlet-topper-toolbar a i {
 	
 }
 
-.portlet .portlet-title {
-	font-size: 2em;
-}
 
 .portlet .portlet-content, .portlet .portlet-topper {
 	padding-top: .5em;
@@ -70,9 +49,25 @@ portlet:hover .portlet-topper .portlet-topper-toolbar a i {
 
 .portlet-title {
 	
-  margin-top: 0!important;
-  padding-left: 0;
-  padding-bottom: 0px !important;
+  font-size: 1.5em;
+  font-weight: 200;
+  line-height: 1.25em;
+  margin: 0;
+ 
+  text-align: left;
+  
+  min-width: 100px;
+ 
+  
+background: #014260; /* Old browsers */
+background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* IE10+ */
+background: linear-gradient(to right,  #014260 0%,#d0dae3 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', endColorstr='#d0dae3',GradientType=1 ); /* IE6-9 */
+
 }
 
 .portlet-title img {
@@ -80,17 +75,19 @@ portlet:hover .portlet-topper .portlet-topper-toolbar a i {
 }
 
 .portlet-title-text, .portlet-title-default {
-	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-	font-weight: 300;
-	font-size: .8em;
-	color: #014260;
-	text-transform: uppercase;
- -webkit-box-shadow: -4px -4px 5px -4px rgba(194,192,194,1);
--moz-box-shadow: -4px -4px 5px -4px rgba(194,192,194,1);
-box-shadow: -4px -4px 5px -4px rgba(194,192,194,1);
-  letter-spacing: 2px;
-  padding: 5px;
-  display:inline-block;
+	  display: inline-block;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  min-width: 100px;
+  text-align: left;
+  text-indent: 10px;
+ 
+  font-size: .6em;
+  line-height: 2;
 }
 
 /* portlet edit mode */
@@ -119,9 +116,9 @@ box-shadow: -4px -4px 5px -4px rgba(194,192,194,1);
   margin: 0;
   padding: 2px;
   position: absolute;
-  right: 20px;
+  right: 5px;
   text-align: right;
-  top: 16px;
+  top: 3px;
   z-index: 300;
 }
 
@@ -136,6 +133,8 @@ box-shadow: -4px -4px 5px -4px rgba(194,192,194,1);
   text-overflow: ellipsis;
   vertical-align: top;
   white-space: nowrap;
+  color: #fff;
+  font-family: "source sans pro", arial, helvetica, sans-serif;
 }
 .portlet-title-editable {
   cursor: pointer;
@@ -169,8 +168,5 @@ box-shadow: 0px 0px 4px 0px rgba(194,192,194,1);
 
 .portlet-borderless-bar span.portlet-actions span span.portlet-action-separator {
 	visibility:hidden;
-}
-.portlet-content {
-	padding-left:.5em;
 }
 

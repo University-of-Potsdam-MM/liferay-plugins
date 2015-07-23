@@ -1,33 +1,17 @@
-/*hier kommt das css*/
-
 .aui .portlet-wiki .navbar .nav {
-	border-bottom: 1px solid #d0dae3;
-  width: 100%;
-  margin-right: 0;
+	background-color: #fff;
+ 
 	
 }
 
 .aui .portlet-wiki .navbar-inner {
-	background-color:#d0dae3;
+	
 	border:none;
 	
 }
 
-.aui .portlet-wiki .navbar .nav>.active>a {
-	background-color: #014260;
-	color:#fff;
-}
-
-.aui .portlet-wiki .navbar .nav>li>a:focus, .aui .portlet-wiki .navbar .nav>li>a:hover {
-	background-color:#ededed;
-	color:014260;
-}
 
 
-.aui .portlet-wiki .nav-tabs>.active>a, .aui .portlet-wiki .nav-tabs>.active>a:hover, .aui  .portlet-wiki .nav-tabs>.active>a:focus {
-	color:014260;
-	background-color: #d0dae3;
-}
 
 .aui  .portlet-wiki .form-search .input-append .btn {
 	
@@ -40,10 +24,6 @@
 	margin-bototm:0;
 	}
 	
-.portlet-wiki .taglib-header {
-	border-bottom:1px solid #d0dae3;
-}
-
 .portlet-wiki .taglib-header .header-title {
 	color: #014260;
 }
@@ -70,6 +50,9 @@
   text-shadow:0px 0px 0px;
   color:#014260;
     padding: 0px 7px;
+}
+.portlet-wiki .page-actions.top-actions {
+	text-align:left;
 }
 
 .portlet-wiki .page-actions a span {
