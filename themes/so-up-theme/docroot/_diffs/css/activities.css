@@ -30,18 +30,23 @@
 
 .so-portlet-activities .comment-entry{
 	padding: 5px;
+	padding-bottom:10px;
+	background-color:#fff;
  
 }
 
 .so-portlet-activities .comment-entry .comment-body {
-	background-color: #fff;
+	background-color: #ededed;
   padding: 5px;
   margin-left: 60px;
     min-height: 30px;
+      border: 1px solid #ededed;
+  border-radius: 5px;
 }
 
 .so-portlet-activities .comment-entry .comment-info {
-	margin-left:60px;
+	  font-size: .8em;
+  text-indent: 30px;
 }
 
 .so-portlet-activities .comment-entry .comment-body:before { 
@@ -49,12 +54,13 @@
 	
 	border-style: solid;
 	border-width: 12px 17px 12px 0;
-	border-color:transparent #fff;
+	  border-color: transparent #ededed;
 	display: block;
 	width: 0;
 	z-index: 1;
-	margin-left: -20px;
-	position: absolute;
+	  margin-left: -22px;
+  position: absolute;
+  margin-top: 2px;
 
 	
 }
@@ -70,12 +76,23 @@
 	  line-height: 1.5;
 }
 .so-portlet-activities .comments-container .form  {
-	background: #D0DAE3;
+	background: #fff;
 	border:0px;
 }
 
+.so-portlet-activities .comments-container .form .control-group input.field.comment-form {
+  width: 93%;
+  display: inline-block;
+  margin-left: 13px;
+  margin-top: 2px;
+}
+
+.activity-footer {
+	margin-left:2px;
+}
+
 .so-portlet-activities .activity-footer-toolbar {
-	background: #ededed;
+	background: #fff;
 	padding:5px;
 	
 }
@@ -95,6 +112,10 @@
 .so-announcements-portlet .entry-footer-toolbar {
 	background: #D0DAE3;
 
+}
+
+.so-portlet-activities .activity-item {
+	margin-bottom:3em;
 }
 
 .so-portlet-activities .activity-item .control-group input {
@@ -127,3 +148,28 @@
   padding-right: 30px;
 }
 
+
+.portlet-activities .portlet .portlet-content {
+	padding:0;
+}
+
+.so-portlet-activities .activity-body, .so-portlet-activities .grouped-activity-body-container {
+	border-width:0 0 0 2px;
+	border-color:#d0dae3;
+	border-style:solid;
+}
+
+.so-portlet-activities .activity-body {
+  padding: 0 0 0 1em;
+}
+
+.so-portlet-activities .activity-user-name {
+ 
+  font-weight: bold;
+}
+
+.so-portlet-activities .activity-action {
+  
+  color: #999;
+  font-size: .9em;
+}

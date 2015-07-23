@@ -144,3 +144,16 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
   border-bottom: 1px solid #fff;
     color: #014260;
 }
+
+/* aui table */
+
+.aui .table-bordered th, .aui .table-bordered td {
+	border-left: none;
+}
+
+.aui .table th, .aui .table td {
+	border-top: none;
+}
+.aui .table-bordered {
+	border:none;
+}
