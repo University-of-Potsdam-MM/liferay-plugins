@@ -138,7 +138,7 @@ AUI().use(
                             publishmentDeleteIcon +
                             '</td><td>' +
                             feedback +
-                            '</td><td></td></tr>',
+                            '</td></tr>',
                             'after');
                     }
 
