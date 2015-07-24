@@ -562,14 +562,14 @@
 				.workspace
 				{
 					@include ple-grafic;
-					background-position: 0px -334px;
+					background-position: 0px -354px;
 					display: inline-block;
 				}
 				
 				.admin
 				{
 					@include ple-grafic;
-					background-position: 0px -401px;
+					background-position: 0px -421px;
 					display: inline-block;
 				}
 			} 

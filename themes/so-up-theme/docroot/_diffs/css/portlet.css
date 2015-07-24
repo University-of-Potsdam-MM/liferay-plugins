@@ -59,15 +59,16 @@
   min-width: 100px;
  
   
-background: #014260; /* Old browsers */
-background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(left,  #014260 0%,#d0dae3 100%); /* IE10+ */
-background: linear-gradient(to right,  #014260 0%,#d0dae3 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', endColorstr='#d0dae3',GradientType=1 ); /* IE6-9 */
-
+background: #3687AC; /* Old browsers */
+/*
+background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); 
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); 
+background: -webkit-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
+background: -o-linear-gradient(left,  #014260 0%,#d0dae3 100%);
+background: -ms-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
+background: linear-gradient(to right,  #014260 0%,#d0dae3 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', endColorstr='#d0dae3',GradientType=1 ); 
+*/
 }
 
 .portlet-title img {

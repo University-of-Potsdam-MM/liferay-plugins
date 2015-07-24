@@ -10,6 +10,7 @@
 .aui .nav-tabs>.active>a, .aui .nav-tabs>.active>a:hover, .aui .nav-tabs>.active>a:focus {
 	
 	color:#014260;
+	border:1px solid #014260;
 }
 
 thead {
@@ -21,13 +22,31 @@ thead {
 	background-color:transparent;
 }
 
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(1) {
+    border-right: 1px solid #d0dae3;
+}
+
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(5) {
+    border-right: 1px solid #d0dae3;
+}
+
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(4) {
+    border-left: 1px solid #d0dae3;
+}
+
 tbody tr {
   background-color: #d0dae3 !important;
 }
 
-.table-col-titleOptions, .table-col-publishmentOptions .table-col-feedbackOptions {
+.table-col-titleOptions, .table-col-publishmentOptions, .table-col-feedbackOptions {
   background-color:#d3e2eb !important;
-  texd-align:center !important;
+  text-align:center !important;
+}
+
+td:nth-child(2), td:nth-child(4) {
+     background-color:#d3e2eb;
 }
 
 .table-col-titleOptions .btn-group .dropdown-toggle img {
@@ -60,7 +79,7 @@ tbody td a {
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group label {
-	margin-bototm:0;
+	margin-bottom:0;
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group input {
@@ -81,20 +100,39 @@ tbody td a {
 }
 
 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover {
 	border: 1px solid #ccc;
+	background-color:#fff;
 }
 
 .datatable-paginator .yui3-datatable-paginator-control-first:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-last:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-prev:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-next:hover {
-  box-shadow: 0 0px 0px transparent;
+  box-shadow: 0 0px 0px transparent !important;
   color:#014260;
   background-color:#d0dae3;
 }
 
 
+
+
 .yui3-datatable-paginator .yui3-datatable-paginator-group select {
 	margin-bottom: 0;
+}
+
+#_myportfolio_WAR_portfolioportlet_createPageButton {
+	float:left;
+	margin-right:10px;
+	background-color:#014260;
+	color:#fff;
+	text-shadow: 0 0px 0px transparent;
+}
+
+input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_portfolioportlet_otherPortfoliosFilterInput {
+	   background-image: url(/so-up-theme/images/up/ple-icons.png);
+    background-position: 3px -92px;
+    background-repeat: no-repeat;
+    text-indent: 20px;
 }

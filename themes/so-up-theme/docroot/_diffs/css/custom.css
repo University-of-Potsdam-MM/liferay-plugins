@@ -118,6 +118,28 @@ h2.page-title {
 	display: none;
 }
 
+/*Popups*/
+
+.aui .modal-content {
+  overflow: hidden;
+  background-color: #000;
+  opacity: .9;
+  color: #fff;
+}
+
+.yui3-skin-sam .yui3-widget-mask {
+	opacity: 1;
+}
+
+.aui .modal-header .close {
+  margin-top: 0px; 
+  opacity: 1;
+  background-color: #fff;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+}
+
 .aui .modal h3 {
 	color:#014260;
 }
@@ -325,3 +347,6 @@ aui .btn.disabled, .aui .btn[disabled] {
   background: linear-gradient(top,#fff 0,#fff 100%);
 	
 }
+
+/*--------------*/
+
