@@ -148,17 +148,16 @@
 					${theme.search()}
 				</div>
 			</li>
-			
+			<li class="notificationspace"></li>
 			<#if is_signed_in>
-				${theme.runtime(notificationPortletId, "", "")}
 				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
 			<#else>
-				<li class="notofication disabled"><span class="icon notification"></span></a></li>
 				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
 			</#if>
 		</ul>
-		<div class="notification-info hidden">
-		</div>
+		<#if is_signed_in>
+				${theme.runtime(notificationPortletId, "", "")}
+		</#if>
 		<#if is_signed_in>
 		<ul id="admin">
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
