@@ -50,7 +50,7 @@
 	</table>
 	
 	<aui:form name="form" class="form" id="requestFeedbackForm" method="post">
-		<aui:button type="submit" value="portfolio-request-feedback"></aui:button>
+		<aui:button type="submit" value="portfolio-request-feedback" onClick="requestFeedback(event)"></aui:button>
 	</aui:form>
 	
 	<table hidden="true">
@@ -62,54 +62,50 @@
 
 </aui:layout>
 
-<aui:script use="aui-io-request-deprecated,aui-loading-mask-deprecated,autocomplete,io-upload-iframe,json-parse">
-var form = A.one('#<portlet:namespace />form');
-
-form.on(
-	'submit',
-	function(event) {
-		
+<aui:script>
+function requestFeedback(event){
+	event.preventDefault();
+	AUI().use('aui-io-request-deprecated','aui-loading-mask-deprecated','autocomplete','io-upload-iframe','json-parse', function (A){
 		var loadingMask = new A.LoadingMask(
-			{
-				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-requesting-feedback") %>',
-				target: A.one('.popup-layout')
-			}
-		);
-		
-		loadingMask.show();
+				{
+					'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-requesting-feedback") %>',
+					target: A.one('.popup-layout')
+				}
+			);
+			
+			loadingMask.show();
 
-		A.io.request(
-				'<portlet:actionURL name="requestFeedbackFromUsers"></portlet:actionURL>',
-			{
-				dataType: 'text/html',
-				data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
-				on: {
-					complete: function(event, id, obj) {
-						var responseText = obj.responseText;
+			A.io.request(
+					'<portlet:actionURL name="requestFeedbackFromUsers"></portlet:actionURL>',
+				{
+					dataType: 'text/html',
+					data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
+					on: {
+						complete: function(event, id, obj) {
+							var responseText = obj.responseText;
 
-						var responseData = A.JSON.parse(responseText);
+							var responseData = A.JSON.parse(responseText);
 
-						if (responseData.success) {
-							Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
-						}
-						else {
-							var messageContainer = A.one('#<portlet:namespace />messageContainer');
-
-							if (messageContainer) {
-								messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+							if (responseData.success) {
+								Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
 							}
+							else {
+								var messageContainer = A.one('#<portlet:namespace />messageContainer');
 
-							loadingMask.hide();
+								if (messageContainer) {
+									messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+								}
+
+								loadingMask.hide();
+							}
 						}
 					}
 				}
-			}
-		);
-	}
-);
+			);
+	});
+}
 
-</aui:script>
-<aui:script>
+
 function feedbackRequested(val){
 	var result;
 	AUI().use('aui-base',

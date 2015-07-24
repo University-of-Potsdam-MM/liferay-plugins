@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.portlet.PortletConfig;
 
+import com.liferay.compat.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -75,7 +76,7 @@ public class JspHelper {
 	public static void addToPortfolioJSONArray(JSONArray portfolioJSONArray, Portfolio portfolio,
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject portfolioJSON = JSONFactoryUtil.createJSONObject();
-		portfolioJSON.put("title", portfolio.getLayout().getTitle(themeDisplay.getLocale()));
+		portfolioJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
 		portfolioJSON
 				.put("url", JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser()));
 		portfolioJSON.put("plid", portfolio.getPlid());
@@ -118,7 +119,7 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("userId", portfolio.getLayout().getUserId());
 		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
 				.getFullName());
-		portfolioFeedbackJSON.put("title", portfolio.getLayout().getTitle(themeDisplay.getLocale()));
+		portfolioFeedbackJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
 		portfolioFeedbackJSON.put("url",
 				JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
 		PortfolioFeedback portfolioFeedback = portfolio.getPortfolioFeedback(themeDisplay.getUserId());
@@ -140,7 +141,7 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("userId", portfolio.getLayout().getUserId());
 		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
 				.getFullName());
-		portfolioFeedbackJSON.put("title", portfolio.getLayout().getTitle(themeDisplay.getLocale()));
+		portfolioFeedbackJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
 		portfolioFeedbackJSON.put("url",
 				getPortfolioURL(themeDisplay, portfolio.getLayout(), UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
 		portfolioFeedbackJSON.put(
