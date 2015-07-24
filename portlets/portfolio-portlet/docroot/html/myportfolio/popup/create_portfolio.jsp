@@ -7,7 +7,7 @@
 
 	<div class="message-container" id="<portlet:namespace />messageContainer"></div>
 
-	<aui:form name="form" class="form" method="post" onSubmit="createPortfolio();">
+	<aui:form name="form" class="form" method="post" onSubmit="createPortfolio(event);">
 		<aui:input id="portfolioNameInput" name="portfolioName" type="text" label="portfolio-name">
 	      	<aui:validator name="required" />
 	    </aui:input>
@@ -23,7 +23,7 @@
 </aui:layout>
 
 <aui:script>
-function createPortfolio() {
+function createPortfolio(event) {
 	event.preventDefault();
 	AUI().use(	'aui-io-request-deprecated','aui-loading-mask-deprecated','autocomplete,io-upload-iframe','json-parse', function(A){
 		var form = A.one('#<portlet:namespace />form');

@@ -4,7 +4,7 @@
 <aui:layout cssClass="popup-layout">
 
 	<div class="message-container" id="<portlet:namespace />messageContainer"></div>
-	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser()">
+	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser(event)" >
 		<!-- TODO: browser autocomplete deaktivieren -->
 	     <aui:input name="name" id="userNameInput" type="text">
 	      	<aui:validator name="required" />
@@ -44,8 +44,8 @@
 	</table>
 	
 	<aui:form name="form" class="form" id="publishPortfolioForm" method="post">
-		<aui:button type="submit" value="portfolio-publish" onClick="publishPortfolioToUsers()"></aui:button>
-		<aui:button type="submit" value="portfolio-portalwide-publishment" onClick="publishPortfolioGlobal()"></aui:button>
+		<aui:button type="submit" value="portfolio-publish" onClick="publishPortfolioToUsers(event)"></aui:button>
+		<aui:button type="submit" value="portfolio-portalwide-publishment" onClick="publishPortfolioGlobal(event)"></aui:button>
 	</aui:form>
 	
 	<table hidden="true">
@@ -59,16 +59,18 @@
 
 <aui:script>
 
-function publishPortfolioToUsers(){
+function publishPortfolioToUsers(event){
+	event.preventDefault();
 	sendRequest('<portlet:actionURL name="publishPortfolioToUsers"></portlet:actionURL>');
 };
 
-function publishPortfolioGlobal(){
+function publishPortfolioGlobal(event){
+	event.preventDefault();
 	sendRequest('<portlet:actionURL name="publishPortfolioGlobal"></portlet:actionURL>');
 };
 
 function sendRequest(actionURL) {
-	AUI().use('aui-base','aui-io-request-deprecated','aui-loading-mask-deprecated','io-upload-iframe','json-parse',function(A) {
+	AUI().use('aui-base','aui-io-request','aui-loading-mask-deprecated','io-upload-iframe','json-parse',function(A) {
 		var loadingMask = new A.LoadingMask(
 			{
 				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-publishing-Portfolio") %>',
@@ -81,6 +83,7 @@ function sendRequest(actionURL) {
 				actionURL,
 			{
 				dataType: 'text/html',
+                method: 'post',
 				data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
 				on: {
 					complete: function(event, id, obj) {

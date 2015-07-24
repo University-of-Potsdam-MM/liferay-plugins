@@ -10,7 +10,7 @@
 <!-- TODO: Erfolgsmeldung beim Hinzufügen? -->
 <aui:layout cssClass="popup-layout">
 
-	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser()">
+	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser(event)">
 		<!-- TODO: browser autocomplete deaktivieren -->
 	     <aui:input name="name" id="userNameInput" type="text">
 	      	<aui:validator name="required" />
