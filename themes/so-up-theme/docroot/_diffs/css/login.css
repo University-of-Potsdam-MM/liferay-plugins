@@ -7,13 +7,14 @@ section #portlet_58 {
   margin-bottom: 10px;
 	
 }
-.portlet-login .portlet-title {
+.portlet-login .portlet .portlet-title {
 	text-transform:uppercase;
 	display: inline-block;
 	color:#d0dae3;
 	border-bottom:0px;
 	line-height: 3em !important;
 	overflow: visible;
+	background-color:#fff;
 }
 
 .portlet-login .portlet-title-text {
@@ -21,6 +22,7 @@ section #portlet_58 {
   color: #d0dae3;
     text-overflow: clip;
       max-width: 100%;
+      background-color:#fff;
 }
 
 .portlet-login fieldset.fieldset {

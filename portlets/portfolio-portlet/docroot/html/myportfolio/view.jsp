@@ -1,5 +1,3 @@
-
-
 <%@page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
 <%@page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@ include file="/html/init.jsp"%>

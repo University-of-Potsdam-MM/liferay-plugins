@@ -126,7 +126,7 @@ function userHasPermission(val){
     return (result == 'true');
 }
 		
-function addUser(){
+function addUser(event){
 	event.preventDefault();
 	currentUserNames.push(userNameInputField.get('value'));
 	updateUserTable();
