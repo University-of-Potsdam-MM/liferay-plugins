@@ -313,6 +313,23 @@
 				}
 			}
 			
+			.notifications-portlet
+			{
+				position: absolute;
+				top: 0px;
+				right: 120px;
+				
+				li
+				{
+					list-style:none;
+					
+					span
+					{
+						background: none;
+					}
+				}
+			}
+			
 			#logo {
 				display: block;
 				width: 160px;
@@ -744,7 +761,7 @@
 			top: 0px;
 			right: 0px;
 			height: 45px;		
-			z-index:1002;
+			z-index:1003;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
 			
@@ -795,7 +812,7 @@
 			top:0px;
 			right: 200px;
 			width: 100px;
-			z-index:1001;
+			z-index:1002;
 			height: 45px;
 			margin: 0px;
 			border-bottom: 2px solid $upGray;
@@ -835,13 +852,17 @@
 		{
 			position: fixed;
 			top: 0px;
-			left: 140px;
-			right: 300px;
+			left: 0px;
+			right: 0px;
 			z-index:1001;
 			margin: 0px;
-			border-bottom: 2px solid $upGray;
-			min-height: 45px;
-			background: $upWhite;
+		    min-height: 45px;
+
+			border-bottom: 20px solid $upGray;
+		    border-left: 140px solid $upGray;
+		    border-right: 300px solid $upGray;
+
+			
 			
 			li
 			{
