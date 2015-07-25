@@ -105,38 +105,39 @@ AUI().use(
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
                 key: 'title',
                 nodeFormatter: function(o) {
+                	var trTag = '<tr class="' + (((o.rowIndex % 2) == 0 ) ? 'table-even' : 'table-odd') + '">'
                     o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
                     o.cell.setHTML('<a href="' + o.data.url + '">' + o.data.title + '</a>');
-                    var row = o.cell.ancestor();
+                    var row = o.td.ancestor();
                     for (var i in o.data.portfolioFeedbacks) {
-                        var userName = o.data.portfolioFeedbacks[i].userName + ' (' + o.data.portfolioFeedbacks[i].creationDate + ')';
+                        var userName = o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>';
                         var publishmentDeleteIcon = "";
                         var feedback;
                         var feedbackDeleteIcon = A.one("#portfolioFeedbackDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
                         if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')){
-                        	feedback = '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
+                        	feedback = '<td class="feedback-unrequested"><a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
                             	'<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
-                            '</a>';
+                            '</a></td>';
                             publishmentDeleteIcon = A.one("#portfolioPublishmentDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId).get("innerHTML");
                         }
                         else {
                         if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_REQUESTED%>')){
-                        	feedback = '<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>';
+                        	feedback = '<td class="feedback-requested">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>';
                         }
                         else {
-                        	feedback = '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
+                        	feedback = '<td class="feedback-delivered">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
                         }
-                        feedback += ' (' + o.data.portfolioFeedbacks[i].modifiedDate +')' +
-                        '<td>' + feedbackDeleteIcon.get('innerHTML') + '</td>'
+                        feedback += ' <span>(' + o.data.portfolioFeedbacks[i].modifiedDate +')</span>' +
+                        '</td><td>' + feedbackDeleteIcon.get('innerHTML') + '</td>'
                         }
                         row.insert(
-                            '<tr><td>' +
+                        	trTag + '<td>' +
                             userName +
                             '</td><td>' +
                             publishmentDeleteIcon +
-                            '</td><td>' +
+                            '</td>' +
                             feedback +
-                            '</td></tr>',
+                            '</tr>',
                             'after');
                     }
 

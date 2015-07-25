@@ -85,18 +85,23 @@ AUI().use(
             },{
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%>',
                 key: 'feedback',
-                formatter: function(o) {
+                nodeFormatter: function(o) {
                 	var result = "";
-                	if (o.data.feedbackStatus === parseInt('<%= PortfolioStatics.FEEDBACK_REQUESTED%>')){
+                	if (o.data.feedbackStatus === parseInt('<%= PortfolioStatics.FEEDBACK_UNREQUESTED%>')){
+                		o.td.setAttribute('class','feedback-unrequested');
+                	}
+                	else if (o.data.feedbackStatus === parseInt('<%= PortfolioStatics.FEEDBACK_REQUESTED%>')){
+                		o.td.setAttribute('class','feedback-requested');
                 		result += A.one('#feedbackRequestedIconDiv').get('innerHTML');
                 	}
                 	else if (o.data.feedbackStatus === parseInt('<%= PortfolioStatics.FEEDBACK_DELIVERED%>')){
+                		o.td.setAttribute('class','feedback-delivered');
                 		result += A.one('#feedbackDeliveredIconDiv').get('innerHTML');                		
                 	}
                 	result += o.data.feedbackStatusString;
-                    return result;
+                	o.cell.setHTML(result);
+                    return false;
                 },
-                allowHTML : true,
                 sortable: true,
                 sortFn: function(a, b, desc) {
                     var compare = a.get('feedbackStatusString').localeCompare(b.get('feedbackStatusString'));
