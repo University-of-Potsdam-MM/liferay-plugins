@@ -129,11 +129,11 @@ AUI().use(
                     for (var i in o.data.portfolioFeedbacks) {
                         var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
                         var publishmentDeleteIconCell;
-                        var feedbackCell;
+                        var feedbackCell; 
                         if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')) {
                             feedbackCell = '<td class="feedback-unrequested"><a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
                                 '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
-                                '</a></td>';
+                                '</a></td><td></td>';
                             var publishmentDeleteIcon = A.one("#portfolioPublishmentDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
                             publishmentDeleteIconCell = '<td>' + publishmentDeleteIcon.get("innerHTML") + '</td>';
                         } else {
