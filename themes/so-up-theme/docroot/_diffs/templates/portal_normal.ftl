@@ -200,8 +200,8 @@
 			<li>
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${user_account_url}">Profilansicht</a></li>
-					<li>Bearbeitungsmodus</li>
+					<li><a href="${portal_url}/web/${user_sname}">Profilansicht</a></li>
+					<li><a href="${user_account_url}">Mein Account</a></li>	
 				</ul>
 			</li>
 			<li>
