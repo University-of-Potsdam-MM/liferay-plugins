@@ -218,7 +218,7 @@
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPublicLayouts as myLayout>
-						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio")>
+						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio") && myLayout.isRootLayout() && !myLayout.isHidden()>
 							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
 						</#if>
 					</#list>
