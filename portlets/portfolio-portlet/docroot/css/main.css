@@ -1,65 +1,244 @@
-.aui .nav-tabs {
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs {
 	  border-bottom: 1px solid #014260;
 	  font-weight: bold;
 }
 
-.aui .nav-tabs ul li a {
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs ul li a {
 	color:#555;
 }
 
-.aui .nav-tabs>.active>a, .aui .nav-tabs>.active>a:hover, .aui .nav-tabs>.active>a:focus {
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a, 
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a:hover, 
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a:focus {
 	
 	color:#014260;
 	border:1px solid #014260;
 }
 
-thead {
-  color: #014260;
-  background-color: #d0dae3;
+ #portlet_myportfolio_WAR_portfolioportlet thead,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ thead {
+  color: #fff;
+  background-color: #014260;
 }
 
-.aui .table thead th {
+.aui  #portlet_myportfolio_WAR_portfolioportlet .table thead th,
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table thead th{
 	background-color:transparent;
 }
 
 .aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(1) {
-    border-right: 1px solid #d0dae3;
+    border-right:  none !important;
 }
 
+#portlet_myportfolio_WAR_portfolioportlet .table-col-title + th {
+    border-left: none !important;
+}
+
+#portlet_myportfolio_WAR_portfolioportlet .table-col-feedback + th {
+    border-left: none !important;
+}
 
 .aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(5) {
-    border-right: 1px solid #d0dae3;
+    border-right:  none !important;
 }
 
 
 .aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(4) {
-    border-left: 1px solid #d0dae3;
+    border-left: none !important;
 }
 
-tbody tr {
-  background-color: #d0dae3 !important;
+ #portlet_myportfolio_WAR_portfolioportlet tbody tr,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table tbody tr {
+  background-color: #F5F8FB !important;
 }
 
-.table-col-titleOptions, .table-col-publishmentOptions, .table-col-feedbackOptions {
-  background-color:#d3e2eb !important;
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-titleOptions, 
+#portlet_myportfolio_WAR_portfolioportlet .table-col-publishmentOptions, 
+#portlet_myportfolio_WAR_portfolioportlet .table-col-feedbackOptions {
+ /* background-color:#C8D5E0 !important;*/
   text-align:center !important;
 }
 
-td:nth-child(2), td:nth-child(4) {
-     background-color:#d3e2eb;
+ #portlet_myportfolio_WAR_portfolioportlet td span,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ td span {
+    font-size: .8em;
+    color: #737373;
+}
+/*border neben Titel */
+
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(1) {
+    border-right: none !important;
 }
 
-.table-col-titleOptions .btn-group .dropdown-toggle img {
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(2) {
+    border-left: none!important;
+}
+
+/*hinterrgundfarbe fuer interkationspalten dummes wort*/
+ #portlet_myportfolio_WAR_portfolioportlet td:nth-child(2), td:nth-child(4) {
+    /* background-color: #C8D5E0 !important; */
+}
+
+
+
+/*trenner */
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-odd + tr.table-even,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ tr.table-odd + tr.table-even {
+    border-top: 4px solid #fff;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even + tr.table-odd,
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even + tr.table-odd {
+    border-top: 4px solid #fff;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even {
+    border-bottom: 1px solid #D8D8D8;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-odd {
+    border-bottom: 1px solid #e2e9f1;
+}
+
+/*border hinter feedback*/
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(5) {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(6) {
+    border-left: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet  .table-col-publishment + td {
+    border-left: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-publishment {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .feedback-requested {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .feedback-requested + td {
+    border-left: none !important;
+}
+
+/*spalten hintergrund */
+ #portlet_myportfolio_WAR_portfolioportlet .table-even td,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table-even td {
+    background-color: #E2E7EC;
+}
+/*table font */
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-title,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table-col-title {
+    font-weight: bold;
+    
+    
+}
+
+
+.aui #portlet_myportfolio_WAR_portfolioportlet table a:hover, 
+.aui  #portlet_myportfolio_WAR_portfolioportlet table a:focus,
+#p_p_id_otherportfolios_WAR_portfolioportlet_ table a:hover,
+#p_p_id_otherportfolios_WAR_portfolioportlet_ table a:focus {
+	
+	    text-decoration: underline !important; 
+}
+/*feedback icons */
+td.feedback-unrequested:before {
+	position:absolute;
+	content:".";
+	color:red;
+	background-color:red;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	text-indent:-999999px;
+	margin-top: .3em;
+}
+
+td.feedback-unrequested a {
+	margin-left:1.1em;
+}
+
+
+#p_p_id_otherportfolios_WAR_portfolioportlet_ td.feedback-unrequested{
+	text-indent: 1.1em;
+}
+
+#p_p_id_otherportfolios_WAR_portfolioportlet_ td.feedback-unrequested:before{
+	margin-left:-1.3em;
+}
+
+td.feedback-requested:before {
+	position:absolute;
+	content:".";
+	text-indent:-999999px;
+	color:orange;
+	background-color:orange;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	margin-left: -1.1em;
+	margin-top: .2em;
+}
+
+td.feedback-requested {
+	text-indent:1em;
+}
+
+td.feedback-requested span img  {
 	display:none;
 }
 
-tbody td a {
+td.feedback-delivered:before {
+	position:absolute;
+	content:".";
+	text-indent:-999999px;
+	color:green;
+	background-color:green;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	    margin-left: -1.2em;
+	    margin-top: .3em;
+	
+}
+
+
+td.feedback-delivered {
+	text-indent:1em;
+}
+
+td.feedback-delivered span img {
+	display:none;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-titleOptions .btn-group .dropdown-toggle img {
+	display:none;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tbody td a,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ tbody td a {
 	text-decoration:underline;
 }
 
-.aui .table th, .aui .table td {
+.aui #portlet_myportfolio_WAR_portfolioportlet .table th,
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table th  {
   
-  border: 1px solid #fff;
+  border: 2px solid #fff;
+}
+
+ .aui  #portlet_myportfolio_WAR_portfolioportlet .table td,
+ .aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table td {
+  
+  border-right: 2px solid #fff;
+   border-left: 2px solid #fff;
 }
 
 .yui3-datatable-paginator-wrapper {
@@ -136,3 +315,4 @@ input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_
     background-repeat: no-repeat;
     text-indent: 20px;
 }
+
