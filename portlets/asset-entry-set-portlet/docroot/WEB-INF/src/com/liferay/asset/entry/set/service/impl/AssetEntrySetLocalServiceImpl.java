@@ -21,6 +21,7 @@ import com.liferay.asset.entry.set.service.base.AssetEntrySetLocalServiceBaseImp
 import com.liferay.asset.entry.set.service.persistence.AssetEntrySetFinderUtil;
 import com.liferay.asset.entry.set.service.persistence.AssetEntrySetLikePK;
 import com.liferay.asset.entry.set.util.AssetEntrySetConstants;
+import com.liferay.asset.entry.set.util.AssetEntrySetImageUtil;
 import com.liferay.asset.entry.set.util.AssetEntrySetManagerUtil;
 import com.liferay.asset.entry.set.util.AssetEntrySetParticipantInfoUtil;
 import com.liferay.asset.entry.set.util.PortletKeys;
@@ -327,6 +328,13 @@ public class AssetEntrySetLocalServiceImpl
 
 		Set<Long> fileEntryIds = new HashSet<Long>();
 
+		try {
+			AssetEntrySetImageUtil.rotateImage(file);
+		}
+		catch (IOException ioe) {
+			throw new SystemException(ioe);
+		}
+
 		FileEntry rawFileEntry = addFileEntry(userId, file, StringPool.BLANK);
 
 		fileEntryIds.add(rawFileEntry.getFileEntryId());
@@ -334,8 +342,7 @@ public class AssetEntrySetLocalServiceImpl
 		for (String imageType :
 				PortletPropsValues.ASSET_ENTRY_SET_IMAGE_TYPES) {
 
-			FileEntry fileEntry = addImageFileEntry(
-				userId, file, rawFileEntry, imageType);
+			FileEntry fileEntry = addImageFileEntry(userId, file, imageType);
 
 			fileEntryIds.add(fileEntry.getFileEntryId());
 
@@ -358,7 +365,7 @@ public class AssetEntrySetLocalServiceImpl
 	}
 
 	protected FileEntry addImageFileEntry(
-			long userId, File file, FileEntry rawFileEntry, String imageType)
+			long userId, File file, String imageType)
 		throws PortalException, SystemException {
 
 		ImageBag imageBag = null;
@@ -380,12 +387,6 @@ public class AssetEntrySetLocalServiceImpl
 		RenderedImage scaledRenderedImage = ImageToolUtil.scale(
 			rawRenderedImage, GetterUtil.getInteger(maxDimensions[0]),
 			GetterUtil.getInteger(maxDimensions[1]));
-
-		if ((rawRenderedImage.getWidth() == scaledRenderedImage.getWidth()) &&
-			(rawRenderedImage.getHeight() == scaledRenderedImage.getHeight())) {
-
-			return rawFileEntry;
-		}
 
 		File scaledFile = null;
 

@@ -1,4 +1,3 @@
-<%
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,10 +11,30 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+package com.liferay.shortlink;
 
-<portlet:defineObjects />
+import com.liferay.portal.kernel.exception.PortalException;
 
-This is the <b>Up Iframe</b> portlet.
+/**
+ * @author Brian Wing Shun Chan
+ */
+public class ShortLinkEntryOriginalURLException extends PortalException {
+
+	public ShortLinkEntryOriginalURLException() {
+		super();
+	}
+
+	public ShortLinkEntryOriginalURLException(String msg) {
+		super(msg);
+	}
+
+	public ShortLinkEntryOriginalURLException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public ShortLinkEntryOriginalURLException(Throwable cause) {
+		super(cause);
+	}
+
+}
