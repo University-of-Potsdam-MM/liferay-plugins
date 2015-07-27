@@ -52,6 +52,16 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 		}
 	}
 
+	/**
+	 * Returns portfolios published to the user
+	 * 
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
 	private void getPortfoliosForUser(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException, SystemException, PortalException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
@@ -66,6 +76,14 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 		out.println(portfolioJSONArray.toString());
 	}
 
+	/**
+	 * Marks a portfolio as feedback delivered
+	 * 
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
 	private void markAsFeedbackDelivered(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws SystemException, PortalException {
 		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
@@ -82,10 +100,19 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 				ServiceContextFactory.getInstance(resourceRequest));
 	}
 
+	/**
+	 * Returns portfolios published globally
+	 * 
+	 * @param resourceRequest
+	 * @param resourceResponse
+	 * @throws IOException
+	 * @throws PortletException
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
 	private void getGlobalPortfolios(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException, SystemException, PortalException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		PortletConfig portletConfig = (PortletConfig) resourceRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay
 				.getUserId());
 		JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();

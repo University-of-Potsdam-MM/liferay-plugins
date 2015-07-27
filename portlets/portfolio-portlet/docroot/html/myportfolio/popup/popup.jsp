@@ -14,8 +14,8 @@
 <portlet:resourceURL var="userExists">
 	<portlet:param name="<%=Constants.CMD %>" value="userExists" />
 </portlet:resourceURL>
-<portlet:resourceURL var="userHasPermission">
-	<portlet:param name="<%=Constants.CMD %>" value="userHasPermission" />
+<portlet:resourceURL var="userHasViewPermissionURL">
+	<portlet:param name="<%=Constants.CMD %>" value="userHasViewPermission" />
 </portlet:resourceURL>
 <portlet:actionURL name="publishPortfolioToUsers" var="publishPortfolioToUsersURL" >
     <portlet:param name="mvcPath" value="/html/myportfolio/view.jsp" />
@@ -103,11 +103,11 @@ function userExists(val){
     return (result == 'true');
 }
 
-function userHasPermission(val){
+function userHasViewPermission(val){
 	var result;
 	AUI().use('aui-base',
 		function(A) {
-			A.io.request('<%=userHasPermission.toString()%>', {
+			A.io.request('<%=userHasViewPermissionURL.toString()%>', {
 				dataType: 'text/html',
 		       	method: 'post',
 				sync: true,

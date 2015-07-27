@@ -81,23 +81,8 @@ function requestFeedback(event){
 					dataType: 'text/html',
 					data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
 					on: {
-						complete: function(event, id, obj) {
-							var responseText = obj.responseText;
-
-							var responseData = A.JSON.parse(responseText);
-
-							if (responseData.success) {
-								Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
-							}
-							else {
-								var messageContainer = A.one('#<portlet:namespace />messageContainer');
-
-								if (messageContainer) {
-									messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
-								}
-
-								loadingMask.hide();
-							}
+						success: function() {
+							Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
 						}
 					}
 				}

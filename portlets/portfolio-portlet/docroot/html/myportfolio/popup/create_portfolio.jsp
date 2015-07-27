@@ -24,47 +24,44 @@
 
 <aui:script>
 function createPortfolio(event) {
-	event.preventDefault();
-	AUI().use(	'aui-io-request-deprecated','aui-loading-mask-deprecated','autocomplete,io-upload-iframe','json-parse', function(A){
-		var form = A.one('#<portlet:namespace />form');
-	var loadingMask = new A.LoadingMask(
-		{
-			'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-creating-Portfolio") %>',
-			target: A.one('.popup-layout')
-		}
-	);
-	
-	loadingMask.show();
+    event.preventDefault();
+    AUI().use('aui-io-request-deprecated', 'aui-loading-mask-deprecated', 'autocomplete,io-upload-iframe', 'json-parse', function(A) {
+        var form = A.one('#<portlet:namespace />form');
+        var loadingMask = new A.LoadingMask({
+            'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-creating-Portfolio") %>',
+            target: A.one('.popup-layout')
+        });
 
-	A.io.request(
-			'<portlet:actionURL name="createPortfolio"></portlet:actionURL>',
-		{
-			dataType: 'json',
-			form: {
-				id: form,
-				upload: true
-			},
-			on: {
-				complete: function(event, id, obj) {
-					var responseText = obj.responseText;
+        loadingMask.show();
 
-					var responseData = A.JSON.parse(responseText);
+        A.io.request(
+            '<portlet:actionURL name="createPortfolio"></portlet:actionURL>', {
+                dataType: 'json',
+                form: {
+                    id: form,
+                    upload: true
+                },
+                on: {
+                    complete: function(event, id, obj) {
+                        var responseText = obj.responseText;
 
-					if (responseData.success) {
-						Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
-					}
-					else {
-						var messageContainer = A.one('#<portlet:namespace />messageContainer');
+                        var responseData = A.JSON.parse(responseText);
 
-						if (messageContainer) {
-							messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
-						}
+                        if (responseData.success) {
+                            Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
+                        } else {
+                            var messageContainer = A.one('#<portlet:namespace />messageContainer');
 
-						loadingMask.hide();
-					}
-				}
-			}
-		}
-	);});
+                            if (messageContainer) {
+                                messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+                            }
+
+                            loadingMask.hide();
+                        }
+                    }
+                }
+            }
+        );
+    });
 }
 </aui:script>
