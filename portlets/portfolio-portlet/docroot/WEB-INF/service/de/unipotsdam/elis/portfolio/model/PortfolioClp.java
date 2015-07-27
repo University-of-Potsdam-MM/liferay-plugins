@@ -213,6 +213,25 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 	}
 
 	@Override
+	public boolean userHasViewPermission(long userId) {
+		try {
+			String methodName = "userHasViewPermission";
+
+			Class<?>[] parameterTypes = new Class<?>[] { long.class };
+
+			Object[] parameterValues = new Object[] { userId };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public com.liferay.portal.model.Layout getLayout() {
 		try {
 			String methodName = "getLayout";
@@ -354,25 +373,6 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 			java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback> returnObj =
 				(java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback>)invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
-	public boolean userHasPermission(long userId) {
-		try {
-			String methodName = "userHasPermission";
-
-			Class<?>[] parameterTypes = new Class<?>[] { long.class };
-
-			Object[] parameterValues = new Object[] { userId };
-
-			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
