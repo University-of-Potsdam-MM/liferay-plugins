@@ -190,7 +190,7 @@
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
-					<#list myLayouts as myLayout>
+					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
@@ -205,23 +205,29 @@
 				</ul>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow"></span>
+				UP Dienste<span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${portal_url}/web/${user_sname}">Profilansicht</a></li>
-					<li><a href="${user_account_url}">Mein Account</a></li>	
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle2.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mailup/">Mail.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
+					<!--<li><a href="${portal_url}/user/${user_sname}/moodle/">Bibliothekssuche</a></li>-->
 				</ul>
 			</li>
 			<li>
-				Meine Kontakte <span class="icon arrow"></span>
+				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_id}/contacts/">Kontaktliste</a></li>
-					<li>Personen suchen</li>
+					<#list myPublicLayouts as myLayout>
+						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio")>
+							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+						</#if>
+					</#list>
 				</ul>
 			</li>
 			<li>
 				Portfolio <span class="icon arrow"></span>
 				<ul class="hidden">
-					<#list myLayouts as myLayout>
+					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>

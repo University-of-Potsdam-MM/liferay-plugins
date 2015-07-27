@@ -40,9 +40,9 @@
 	<#assign group = user.getGroup() />
 	<#assign PortalUtil = staticUtil["com.liferay.portal.util.PortalUtil"] />
 	<#assign layoutService = objectUtil("com.liferay.portal.service.LayoutLocalServiceUtil") />
-	<#assign myLayouts = layoutService.getLayouts(group.getGroupId(), true) />
+	<#assign myPrivateLayouts = layoutService.getLayouts(group.getGroupId(), true) />
+	<#assign myPublicLayouts = layoutService.getLayouts(group.getGroupId(), false) />
 
-	
 <#else>
 	<#assign user_my_sites = user.getMySiteGroups()  />
 	<#assign user_sname = "" />
