@@ -125,7 +125,11 @@
 			<li class="unipage"><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
 			<li class="services"><a class="up_services" href="">UP Dienste</a><span class="icon arrow"></span>
 				<ul class="service_list hidden">
-					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
+					<#if is_signed_in>
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle</a></li>
+					<#else>
+					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li>
+					</#if> 
 					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
 					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
 					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
