@@ -3,10 +3,14 @@
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
 
+<portlet:resourceURL var="feedbackRequestedURL">
+	<portlet:param name="<%=Constants.CMD %>" value="feedbackRequested" />
+</portlet:resourceURL>
+
 <!-- TODO: Erfolgsmeldung beim Hinzufügen? -->
 <aui:layout cssClass="popup-layout">
 
-	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser()">
+	<aui:form name="addUserForm" action="" method="post" onSubmit="addUser(event)">
 		<!-- TODO: browser autocomplete deaktivieren -->
 	     <aui:input name="name" id="userNameInput" type="text">
 	      	<aui:validator name="required" />
@@ -22,7 +26,7 @@
 			</aui:validator>
 			<aui:validator name="custom" errorMessage="portfolio-feedback-already-requested"> 
 				function (val, fieldNode, ruleValue) {
-		            return !userHasPermission(val);
+		            return !feedbackRequested(val);
 				}
 			</aui:validator>
 	     </aui:input>
@@ -46,7 +50,7 @@
 	</table>
 	
 	<aui:form name="form" class="form" id="requestFeedbackForm" method="post">
-		<aui:button type="submit" value="portfolio-request-feedback"></aui:button>
+		<aui:button type="submit" value="portfolio-request-feedback" onClick="requestFeedback(event)"></aui:button>
 	</aui:form>
 	
 	<table hidden="true">
@@ -58,49 +62,55 @@
 
 </aui:layout>
 
-<aui:script use="aui-io-request-deprecated,aui-loading-mask-deprecated,autocomplete,io-upload-iframe,json-parse">
-var form = A.one('#<portlet:namespace />form');
-
-form.on(
-	'submit',
-	function(event) {
-		
+<aui:script>
+function requestFeedback(event){
+	event.preventDefault();
+	AUI().use('aui-io-request-deprecated','aui-loading-mask-deprecated','autocomplete','io-upload-iframe','json-parse', function (A){
 		var loadingMask = new A.LoadingMask(
-			{
-				'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-requesting-feedback") %>',
-				target: A.one('.popup-layout')
-			}
-		);
-		
-		loadingMask.show();
+				{
+					'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "portfolio-requesting-feedback") %>',
+					target: A.one('.popup-layout')
+				}
+			);
+			
+			loadingMask.show();
 
-		A.io.request(
-				'<portlet:actionURL name="requestFeedbackFromUsers"></portlet:actionURL>',
-			{
-				dataType: 'text/html',
-				data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
-				on: {
-					complete: function(event, id, obj) {
-						var responseText = obj.responseText;
-
-						var responseData = A.JSON.parse(responseText);
-
-						if (responseData.success) {
+			A.io.request(
+					'<portlet:actionURL name="requestFeedbackFromUsers"></portlet:actionURL>',
+				{
+					dataType: 'text/html',
+					data:{<portlet:namespace />userNames:currentUserNames.toString().replace(',', ';'),<portlet:namespace />portfolioPlid:<%=portfolioPlid%>},
+					on: {
+						success: function() {
 							Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
-						}
-						else {
-							var messageContainer = A.one('#<portlet:namespace />messageContainer');
-
-							if (messageContainer) {
-								messageContainer.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
-							}
-
-							loadingMask.hide();
 						}
 					}
 				}
-			}
-		);
-	}
-);
+			);
+	});
+}
+
+
+function feedbackRequested(val){
+	var result;
+	AUI().use('aui-base',
+		function(A) {
+			A.io.request('<%=feedbackRequestedURL.toString()%>', {
+				dataType: 'text/html',
+		       	method: 'post',
+				sync: true,
+				timeout: 3000,
+				data:{
+					<portlet:namespace />name:val,
+					<portlet:namespace />portfolioPlid:<%=portfolioPlid%>				
+				},
+		      	on: {
+		        	success: function() {
+		       			result = this.get('responseData');
+		            }
+		       }
+		    });
+		});
+    return (result == 'true');
+}
 </aui:script>

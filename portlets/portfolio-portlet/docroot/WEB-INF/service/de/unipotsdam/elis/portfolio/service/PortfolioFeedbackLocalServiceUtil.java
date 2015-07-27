@@ -345,6 +345,14 @@ public class PortfolioFeedbackLocalServiceUtil {
 		return getService().getPortfolioFeedbackByUserId(userId);
 	}
 
+	public static java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback> getPortfolioFeedbackByPlidAndFeedbackStatus(
+		long plid, int feedbackStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getPortfolioFeedbackByPlidAndFeedbackStatus(plid,
+			feedbackStatus);
+	}
+
 	public static java.util.List<java.lang.Object> getPortfolioPlidsByUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPortfolioPlidsByUserId(userId);

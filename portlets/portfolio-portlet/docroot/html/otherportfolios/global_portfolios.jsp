@@ -3,42 +3,101 @@
 <portlet:defineObjects /> 
 <liferay-theme:defineObjects />
 
-<%
-	String filterValue = ParamUtil.getString(request, "filterValue");
-	List<Portfolio> portfolios = 
-		PortfolioLocalServiceUtil.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(PortfolioStatics.PUBLISHMENT_GLOBAL, themeDisplay.getUserId(), filterValue, themeDisplay.getLocale()); 
+<% 
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(PortfolioStatics.PUBLISHMENT_GLOBAL, themeDisplay.getUserId());
 %>
 
-<portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
-	<portlet:param name="myParam" value="2"/>
-</portlet:actionURL>
+<aui:input class="filterInput" id="otherPortfoliosFilterInput" name=""  placeholder="portfolio-filter-placeholder"></aui:input>
 
-<aui:form action="<%= filterPortfoliosURL.toString() %>">
-	<aui:input class="filterInput" name="filterValue" label=""></aui:input>
-</aui:form>
+<% if (portfolios.size() == 0){ %>
+	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
+<% } else { %>
+	<div id=globalPortfoliosTable></div>
+<% } %>
 
-<liferay-ui:search-container delta="10" emptyResultsMessage="portfolio-no-other-portfolios">
-	<liferay-ui:search-container-results results="<%=portfolios%>"
-		total="<%=portfolios.size()%>" />
+<% 
+	JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
+ 	for (Portfolio portfolio : portfolios){
+ 		String div = "messageIconDiv_" + portfolio.getPlid();
+ 		String onClickMethod = renderResponse.getNamespace() + "sendMessage(" + portfolio.getLayout().getUserId() + ");";
+ 		%>
+ 		
+ 		<div id="<%= div %>" hidden=true>
+			<liferay-ui:icon cssClass="send-message" image="../aui/envelope" message="message" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+		</div>
+ 	<% 
 
-	<liferay-ui:search-container-row
-		className="de.unipotsdam.elis.portfolio.model.Portfolio" keyProperty="plid"
-		modelVar="portfolio">
-		
-		<%  	
-			User owner = UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId());
-		%>
-		
-		<liferay-ui:search-container-column-text name="portfolio-title-column" 
-		value="<%= portfolio.getLayout().getName(themeDisplay.getLocale())%>" href="<%= JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), owner) %>"/>
+		JspHelper.addGlobalPortfolioToJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+ 	} 
+ 	String portfoliosJSON = portfolioJSONArray.toString();
+ %>
 
-		<liferay-ui:search-container-column-text name="portfolio-creator-column"
-			value="<%= owner.getScreenName() %>" />
-			
-		<liferay-ui:search-container-column-text name="portfolio-last-changes-column"
-			value="<%= FastDateFormatFactoryUtil.getDate(locale, timeZone).format(portfolio.getLayout().getModifiedDate()) %>" /> 
-	</liferay-ui:search-container-row>
+<aui:script>
+var globalPortfoliosDataTable;
+var globalPortfoliosData;
+AUI().use(
+    'aui-datatable',
+    'datatable-sort',
+    'datatable-paginator',
+    'datatable-sort',
+    function(A) {
+        if (A.one("#globalPortfoliosTable") == null)
+            return;
+        var data = JSON.parse('<%=portfoliosJSON%>');
+        globalPortfoliosDataTable = new A.DataTable({
+            columns: [{
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
+                key: 'title',
+                formatter: function(o) {
+                    return '<a href=' + o.data.url + '>' + o.data.title + '</a>';
+                },
+                allowHTML: true,
+                sortable: true,
+                sortFn: function(a, b, desc) {
+                    var compare = a.get('title').localeCompare(b.get('title'));
+                    return desc ? compare : -compare
+                }
+            }, {
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-creator-column")%>',
+                key: 'creator',
+                formatter: function(o) {
+                    return o.data.userName + ' ' + A.one('#messageIconDiv_' + o.data.plid).get('innerHTML');
+                },
+                allowHTML: true,
+                sortable: true,
+                sortFn: function(a, b, desc) {
+                    var compare = a.get('userName').localeCompare(b.get('userName'));
+                    return desc ? compare : -compare
+                }
+            }, {
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-last-changes-column")%>',
+                key: 'changes',
+                formatter: function(o) {
+                    return o.data.modifiedDate;
+                },
+                sortable: true,
+                sortFn: function(a, b, desc) {
+                    var compare = parseInt(a.get("modifiedDateInMilliseconds")) - parseInt(b.get("modifiedDateInMilliseconds"));
+                    return desc ? compare : -compare
+                }
+            }],
+            data: data,
+            rowsPerPage: 5,
+            pageSizes: [5, 10, 20, 30, 50, 100, 'Show All']
+        });
 
-	<liferay-ui:search-iterator />
+        globalPortfoliosDataTable.render("#globalPortfoliosTable");
 
-</liferay-ui:search-container>
+        globalPortfoliosData = globalPortfoliosDataTable.data;
+        A.one('#<portlet:namespace />otherPortfoliosFilterInput').on('keyup', function(e) {
+            var filteredData = globalPortfoliosData.filter({
+                asList: true
+            }, function(list) {
+
+                return list.get('title').toLowerCase().includes(e.currentTarget.get("value").toLowerCase());
+            });
+            globalPortfoliosDataTable.set('data', filteredData);
+        });
+    }
+);
+</aui:script>

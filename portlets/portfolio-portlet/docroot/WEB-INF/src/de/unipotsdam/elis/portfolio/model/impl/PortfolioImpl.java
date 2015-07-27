@@ -128,7 +128,9 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 		return PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 	}
 
-	public boolean userHasPermission(long userId) throws SystemException {
+	public boolean userHasViewPermission(long userId) throws SystemException {
+		if (this.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL)
+			return true;
 		PortfolioFeedback pf = PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 		return pf != null;
 	}
@@ -166,5 +168,9 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 		if (pf != null)
 			return (pf.getFeedbackStatus() != PortfolioStatics.FEEDBACK_UNREQUESTED);
 		return false;
+	}
+	
+	public boolean feedbackRequested() throws SystemException{
+		return (PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(getPlid(), PortfolioStatics.FEEDBACK_REQUESTED).size() != 0);
 	}
 }

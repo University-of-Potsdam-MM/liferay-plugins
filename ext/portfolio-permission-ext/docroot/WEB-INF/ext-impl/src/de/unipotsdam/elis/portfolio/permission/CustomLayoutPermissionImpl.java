@@ -13,16 +13,21 @@ import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 
 	public CustomLayoutPermissionImpl() {
-		System.out.println("CustomLayoutPermission 4 created");
+		System.out.println("CustomLayoutPermission 5 created");
 	}
 
 	@Override
 	public boolean contains(PermissionChecker permissionChecker, Layout layout, boolean checkViewableGroup,
 			String actionId) throws PortalException, SystemException {
-		if (actionId.equals(ActionKeys.VIEW) && PortfolioLocalServiceUtil.fetchPortfolio(layout.getPlid()) != null) {
-			if (permissionChecker.getUserId() != layout.getUserId()) {
-				Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(layout.getPlid());
-				return portfolio.userHasPermission(permissionChecker.getUserId());
+		Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(layout.getPlid());
+		if (portfolio != null) {
+			if (permissionChecker.getUserId() != layout.getUserId()){
+				 if (actionId.equals(ActionKeys.VIEW)) {
+					return portfolio.userHasViewPermission(permissionChecker.getUserId());
+				}
+			}
+			else if(!actionId.equals(ActionKeys.VIEW) && !actionId.equals(ActionKeys.CUSTOMIZE)){
+				return !portfolio.feedbackRequested();
 			}
 		}
 		return super.contains(permissionChecker, layout, checkViewableGroup, actionId);

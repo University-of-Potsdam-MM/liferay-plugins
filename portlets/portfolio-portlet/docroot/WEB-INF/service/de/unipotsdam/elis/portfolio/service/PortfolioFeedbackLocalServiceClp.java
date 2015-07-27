@@ -173,9 +173,13 @@ public class PortfolioFeedbackLocalServiceClp
 
 		_methodParameterTypes29 = new String[] { "long" };
 
-		_methodName30 = "getPortfolioPlidsByUserId";
+		_methodName30 = "getPortfolioFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes30 = new String[] { "long" };
+		_methodParameterTypes30 = new String[] { "long", "int" };
+
+		_methodName31 = "getPortfolioPlidsByUserId";
+
+		_methodParameterTypes31 = new String[] { "long" };
 	}
 
 	@Override
@@ -1081,13 +1085,43 @@ public class PortfolioFeedbackLocalServiceClp
 	}
 
 	@Override
+	public java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback> getPortfolioFeedbackByPlidAndFeedbackStatus(
+		long plid, int feedbackStatus)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
+					new Object[] { plid, feedbackStatus });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<java.lang.Object> getPortfolioPlidsByUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1169,4 +1203,6 @@ public class PortfolioFeedbackLocalServiceClp
 	private String[] _methodParameterTypes29;
 	private String _methodName30;
 	private String[] _methodParameterTypes30;
+	private String _methodName31;
+	private String[] _methodParameterTypes31;
 }

@@ -172,6 +172,25 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 	}
 
 	@Override
+	public boolean feedbackRequested() {
+		try {
+			String methodName = "feedbackRequested";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public boolean publishToUser(long userId,
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		try {
@@ -182,6 +201,25 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 				};
 
 			Object[] parameterValues = new Object[] { userId, serviceContext };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public boolean userHasViewPermission(long userId) {
+		try {
+			String methodName = "userHasViewPermission";
+
+			Class<?>[] parameterTypes = new Class<?>[] { long.class };
+
+			Object[] parameterValues = new Object[] { userId };
 
 			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
@@ -335,25 +373,6 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 			java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback> returnObj =
 				(java.util.List<de.unipotsdam.elis.portfolio.model.PortfolioFeedback>)invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
-	public boolean userHasPermission(long userId) {
-		try {
-			String methodName = "userHasPermission";
-
-			Class<?>[] parameterTypes = new Class<?>[] { long.class };
-
-			Object[] parameterValues = new Object[] { userId };
-
-			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;

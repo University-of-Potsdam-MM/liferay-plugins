@@ -14,8 +14,8 @@
 <portlet:resourceURL var="userExists">
 	<portlet:param name="<%=Constants.CMD %>" value="userExists" />
 </portlet:resourceURL>
-<portlet:resourceURL var="userHasPermission">
-	<portlet:param name="<%=Constants.CMD %>" value="userHasPermission" />
+<portlet:resourceURL var="userHasViewPermissionURL">
+	<portlet:param name="<%=Constants.CMD %>" value="userHasViewPermission" />
 </portlet:resourceURL>
 <portlet:actionURL name="publishPortfolioToUsers" var="publishPortfolioToUsersURL" >
     <portlet:param name="mvcPath" value="/html/myportfolio/view.jsp" />
@@ -49,7 +49,7 @@ AUI().use('aui-base',
 AUI().use('autocomplete-list','aui-base','aui-io-request','autocomplete-filters','autocomplete-highlighters', function (A) {
 	var contactSearchFormatter = function (query, results) {
 		return A.Array.map(results, function (result) {
-			return '<strong>'+result.raw.screenName+'</strong><br/>'+result.raw.email;
+			return '<strong>'+result.raw.fullName+'</strong><br/>'+result.raw.email;
 		});
 	};
 	var testData;
@@ -103,11 +103,11 @@ function userExists(val){
     return (result == 'true');
 }
 
-function userHasPermission(val){
+function userHasViewPermission(val){
 	var result;
 	AUI().use('aui-base',
 		function(A) {
-			A.io.request('<%=userHasPermission.toString()%>', {
+			A.io.request('<%=userHasViewPermissionURL.toString()%>', {
 				dataType: 'text/html',
 		       	method: 'post',
 				sync: true,
@@ -126,7 +126,7 @@ function userHasPermission(val){
     return (result == 'true');
 }
 		
-function addUser(){
+function addUser(event){
 	event.preventDefault();
 	currentUserNames.push(userNameInputField.get('value'));
 	updateUserTable();
