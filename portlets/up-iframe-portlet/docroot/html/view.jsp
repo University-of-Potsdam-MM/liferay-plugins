@@ -115,9 +115,10 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		'<portlet:namespace />init',
 		function() {
 			var A = AUI();
-			var iframe = A.one('#<portlet:namespace />iframe');		
-			var contentHeight = document.documentElement.clientHeight - A.one('.portlet-dockbar').get('offsetHeight');
-			iframe.setStyle('height', contentHeight);
+			<portlet:namespace />resizeIFrame();
+			window.onresize = function(event) {
+				<portlet:namespace />resizeIFrame();
+			};
 
 			var hash = document.location.hash.replace('#', '');
 
@@ -190,6 +191,15 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		},
 		['aui-base', 'querystring']
 	);
+	
+	Liferay.provide(
+			window,
+			'<portlet:namespace />resizeIFrame',function(){
+				var A = AUI();
+				var iframe = A.one('#<portlet:namespace />iframe');		
+				var contentHeight = document.documentElement.clientHeight - A.one('.portlet-dockbar').get('offsetHeight');
+				iframe.setStyle('height', contentHeight);			
+			},['aui-autosize-iframe']),
 
 	<portlet:namespace />init();
 </aui:script>
@@ -208,10 +218,9 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		iframe.on(
 			'load',
 			function() {
-				var iframe = A.one('#<portlet:namespace />iframe');		
-				var contentHeight = document.documentElement.clientHeight - A.one('.portlet-dockbar').get('offsetHeight');
-				iframe.setStyle('height', contentHeight);
-				iframe.autosizeiframe.set('monitorHeight', false);
+				<portlet:namespace />resizeIFrame();
+				var iframe = A.one('#<portlet:namespace />iframe');	
+				iframe.autosizeiframe.set('monitorHeight', false);		
 			}
 		);
 	}
