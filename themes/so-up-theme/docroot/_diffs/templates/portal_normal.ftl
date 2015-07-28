@@ -5,7 +5,7 @@
 <html class="${root_css_class}" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
 
 <head>
-	<title>${the_title} - ${company_name}</title>
+	<title>${company_name} | ${the_title}</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	${theme.include(top_head_include)}
 
@@ -60,9 +60,9 @@
 			<a href="#personal-trigger" aria-owns="personal" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
 				Pers&ouml;nlicher Bereich</a>
 			<a href="#profile-trigger" aria-owns="profile" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Mein Profil</a>
+				UP Dienste</a>
 			<a href="#contact-trigger" aria-owns="contact" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Meine Kontakte</a>
+				Mein Profil</a>
 			<a href="#portfolio-trigger" aria-owns="portfolio" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
 				Portfolio</a>
 			<a class="aui-button aui-style-default edit">
@@ -116,7 +116,7 @@
                 <img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png"></a>
             </div>
 	        <div id="up_logo_title">
-	            <a title="Zur Startseite" href="/">Learn.UP</a>
+	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
 	        </div>
             <div id="up_logo_footer">
             </div>
@@ -224,8 +224,8 @@
 					</#list>
 				</ul>
 			</li>
-			<li>
-				Portfolio <span class="icon arrow"></span>
+			<li><@liferay.language key="so-up-theme-portfolio" />
+				<span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
@@ -241,7 +241,7 @@
 					</#list>
 				</ul>
 			</li>
-			<span class="icon close hidden">Schlieﬂen</span>
+			<span class="icon close hidden"><@liferay.language key="close" /></span>
 		</ul>
 		<#else>	
 		<ul id="main-menu" class="disabled">
@@ -249,13 +249,13 @@
 				Pers&ouml;nlicher Bereich <span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow disabled"></span>
+				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Meine Kontakte <span class="icon arrow disabled"></span>
+				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Portfolio <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-portfolio" /><span class="icon arrow disabled"></span>
 			</li>
 		</ul>
 		</#if>		
