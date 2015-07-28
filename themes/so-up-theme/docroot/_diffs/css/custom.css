@@ -84,7 +84,7 @@
 
 #main-content {
 	
-   webkit-box-shadow: 0px 0 0px 0px rgba(0,0,0,0.6);
+  -webkit-box-shadow: 0px 0 0px 0px rgba(0,0,0,0.6);
   -moz-box-shadow: 0px 0 0px 0px rgba(0,0,0,0);
   box-shadow: 0px 0 0px 0px rgba(0,0,0,0);
 }
@@ -120,16 +120,7 @@ h2.page-title {
 
 /*Popups*/
 
-.aui .modal-content {
-  overflow: hidden;
-  background-color: #000;
-  opacity: .9;
-  color: #fff;
-}
 
-.yui3-skin-sam .yui3-widget-mask {
-	opacity: 1;
-}
 
 .aui .modal-header .close {
   margin-top: 0px; 
@@ -149,6 +140,12 @@ h2.page-title {
 	borde-bottom:none;
 	font-style:italic;
 	font-family:"Source Sans Pro",Helvetica, Arial, sans-serif;
+}
+/*popups adminbereich*/
+
+.aui .modal-content iframe.dialog-iframe-node html body header.banner {
+    display: none !important;
+    /* visibility: hidden; */
 }
 
 /* Breadcrumbs*/
@@ -179,7 +176,7 @@ h2.page-title {
 
 .aui #breadcrumbs .breadcrumb>li a {
 	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
-	font-size: 1.1 em;
+	font-size: 1.1em;
 	color: #8a8a8a;
 }
 
@@ -242,15 +239,20 @@ h2.page-title {
  	border-radius: 0px;
 }
 
+.aui .alert .btn-primary {
+    color: #014260!important;
+    background-color: #d0dae3 !important;
+}
+
 /* Suchfelder */ 
 .aui .form-search .input-append .search-query {
-	webkit-border-radius: 0px 0 0 0px;
+	-webkit-border-radius: 0px 0 0 0px;
 	-moz-border-radius: 0px 0 0 0px;
 	border-radius: 0px 0 0 0px;
 }
 
 .aui .form-search .input-append .btn {
-	webkit-border-radius: 0 0px 0px 0;
+	-webkit-border-radius: 0 0px 0px 0;
 	-moz-border-radius: 0 0px 0px 0;
 	border-radius: 0 0px 0px 0;
 	border: 0px solid #D0DAE3;
@@ -293,6 +295,13 @@ aui .btn.disabled, .aui .btn[disabled] {
 }
 
 /*.aui links, farben*/
+.aui a {
+	color:#014260;
+}
+
+.aui a:visited {
+	color:#014260;
+}
 
 .aui a:hover, .aui a:focus {
   color: #026694;
@@ -337,14 +346,8 @@ aui .btn.disabled, .aui .btn[disabled] {
 /*Kalender*/
 
 .yui3-skin-sam .yui3-calendar-content {
-	background: #fff;
-  background: -moz-linear-gradient(top,#fff 0,#fff 100%);
-  background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fff),color-stop(100%,#fff));
-  background: -webkit-linear-gradient(top,#fff 0,#fff 100%);
-  background: -o-linear-gradient(top,#fff 0,#fff 100%);
-  background: -ms-linear-gradient(top,#fff 0,#fff 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff',endColorstr='#fff',GradientType=0);
-  background: linear-gradient(top,#fff 0,#fff 100%);
+	background: #fff important;
+
 	
 }
 
