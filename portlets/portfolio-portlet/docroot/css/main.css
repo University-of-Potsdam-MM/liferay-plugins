@@ -304,9 +304,13 @@ td.feedback-delivered span img {
 #_myportfolio_WAR_portfolioportlet_createPageButton {
 	float:left;
 	margin-right:10px;
-	background-color:#014260;
-	color:#fff;
+	background-color:#d0dae3;
+	color:#014260;
 	text-shadow: 0 0px 0px transparent;
+}
+
+#_myportfolio_WAR_portfolioportlet_createPageButton:hover {
+	background-color:#ededed;
 }
 
 input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_portfolioportlet_otherPortfoliosFilterInput {

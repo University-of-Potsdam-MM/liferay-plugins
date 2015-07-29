@@ -76,7 +76,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 
 .aui .wrapper-portlet-area .form-search .input-append .search-query {
-	webkit-border-radius: 0;
+	-webkit-border-radius: 0;
   -moz-border-radius: 0;
    -o-border-radius: 0;
     -ms-border-radius: 0;
@@ -164,7 +164,8 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 .aui .nav .dropdown-toggle .caret {
     border-top-color: #014260;
     border-bottom-color: #014260;
-
+    
+}
 /* aui table */
 
 .aui .table-bordered th, .aui .table-bordered td {
