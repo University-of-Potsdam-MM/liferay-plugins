@@ -7,8 +7,9 @@
 }
 
 .aui .lfr-admin-panel .navbar .nav>li>a {
-  background-color: #014260;
-  color: #fff;
+  background-color: #fff;
+  color: #014260;
+  border:1px solid #ededed;
 }
 
 .aui .lfr-admin-panel .accordion-group {
@@ -40,4 +41,25 @@
 
 .aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a:hover {
   background: #014260 !important;
+}
+
+.lfr-add-panel .add-content-menu .accordion .accordion-group .accordion-inner {
+
+    background-color: #fff;
+}
+
+.lfr-add-panel .add-content-menu .accordion .accordion-group .accordion-inner {
+    padding: 6px 0;
+    background-color: #fff;
+}
+
+.aui .dockbar-split .dockbar .row-fluid {
+	margin-top:70px;
+}
+
+.aui .dockbar-split .dockbar .alert-info {
+	    background-color: #fff091;
+    border: 0;
+    position: absolute;
+    top: 110px;
 }
