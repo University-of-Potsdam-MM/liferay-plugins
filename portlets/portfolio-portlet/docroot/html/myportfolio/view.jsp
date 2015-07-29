@@ -10,6 +10,7 @@
 
 <portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
 </portlet:actionURL>
+<div id="edittest">savx</div>
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page"/>
 
@@ -33,6 +34,11 @@
 <portlet:resourceURL var="deleteFeedbackRequestURL">
 	<portlet:param name="<%=Constants.CMD%>" value="deleteFeedbackRequest" />
 </portlet:resourceURL>
+<portlet:resourceURL var="renamePortfolioURL">
+	<portlet:param name="<%=Constants.CMD%>" value="renamePortfolio" />
+</portlet:resourceURL>
+
+<div id="dtable"></div>
 
 <% if (portfolios.size() == 0){ %>
 	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
@@ -51,10 +57,8 @@
 
 		<div id="<%=div%>" hidden=true>
 			<liferay-ui:icon-menu extended="false" id="<%=menu%>">
-				<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>"
-					url="javascript:void(0);"
-				/>
-				<liferay-ui:icon image="edit" url="<%=url%>"></liferay-ui:icon>
+				<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>" url="javascript:void(0);"/>
+				<liferay-ui:icon image="configuration" url="<%=url%>" message="edit"></liferay-ui:icon>
 			</liferay-ui:icon-menu>
 		</div>
 
@@ -107,6 +111,7 @@
 var iconMenuIdlist = [];
 var myPortfolioDataTable;
 var myPortfolioData;
+var currentPlid;
 AUI().use(
     'aui-datatable',
     'datatable-sort',
@@ -117,14 +122,32 @@ AUI().use(
     	if (A.one("#myPortfolioTable") == null)
     		return;
         var data = JSON.parse('<%=portfoliosJSON%>');
+        var nameEditor = new A.TextAreaCellEditor();
+        nameEditor.on('save',function(e){
+        	A.io.request('<%=renamePortfolioURL.toString()%>', {
+            dataType: 'text/html',
+            method: 'post',
+            zindex: 1,
+            data: { <portlet:namespace/>portfolioPlid: currentPlid, <portlet:namespace/>newTitle: e.newVal
+            },
+            on: {
+                success: function() {
+                    updateTableData(A);
+                }
+            }
+        });
+   	updateTableData(A);});
+
         myPortfolioDataTable = new A.DataTable({
             columns: [{
+            	editor: nameEditor,
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
                 key: 'title',
                 nodeFormatter: function(o) {
                     var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + '">'
                     o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
-                    o.cell.setHTML('<a href="' + o.data.url + '">' + o.data.title + '</a>');
+                    o.td.setAttribute('onclick', 'currentPlid=' + o.data.plid + ';');
+                    o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" href="' + o.data.url + '">' + o.data.title + '</a>');
                     var row = o.td.ancestor();
                     for (var i in o.data.portfolioFeedbacks) {
                         var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
@@ -179,6 +202,7 @@ AUI().use(
             }, {
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%>',
                 key: 'publishment',
+                editable: true,
                 nodeFormatter: function(o) {
                     if (o.data.isGlobal) {
                         o.cell.setHTML('<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>');
@@ -226,14 +250,18 @@ AUI().use(
                     var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
                     return desc ? compare : -compare
                 }
-            }],
+            },],
             data: data,
+            editEvent: 'dblclick',
             rowsPerPage: 5,
             pageSizes: [5, 10, 20, 30, 50, 100, 'Show All']
         });
-
         myPortfolioDataTable.render("#myPortfolioTable");
-
+        
+        //var test = myPortfolioDataTable.getEditor(myPortfolioDataTable.get('data').item(0),myPortfolioDataTable.get('columns')[0])
+        //test.render();
+        //A.one('#td_45009').on('click',function(A){console.log(A);})
+        //A.one('#td_45009').fire('click','test');
         myPortfolioData = myPortfolioDataTable.data;
         A.one('#<portlet:namespace />filterInput').on('keyup', function(e) {
             var filteredData = myPortfolioData.filter({
@@ -347,15 +375,7 @@ function updateTableData(A) {
         }
     });
 }
-/*
-AUI().ready('aui-base','aui-editable-deprecated','aui-node-deprecated','event',
-		function(A) {
-	 	var editable = new A.Editable({
-		  node: '#edittest'
-		});
-	 	//A.Event.simulate(editable,"click");
-	 	editable.show();
-		});*/
+
 Liferay.provide(window, '<portlet:namespace />openPublishPortfolioPopup',
     function(plid) {
         var renderURL = Liferay.PortletURL.createRenderURL();

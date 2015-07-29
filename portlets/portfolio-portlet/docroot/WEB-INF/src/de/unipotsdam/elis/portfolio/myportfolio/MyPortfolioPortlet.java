@@ -31,6 +31,7 @@ import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -38,10 +39,12 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutFriendlyURL;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.service.LayoutFriendlyURLLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -57,6 +60,7 @@ import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
+import de.unipotsdam.elis.portfolio.util.FriendlyURLValidator;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
@@ -93,6 +97,8 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				requestFeedbackFromUser(resourceRequest, resourceResponse);
 			else if (cmd.equals("deleteFeedbackRequest"))
 				deleteFeedbackRequest(resourceRequest, resourceResponse);
+			else if (cmd.equals("renamePortfolio"))
+				renamePortfolio(resourceRequest, resourceResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new PortletException(e);
@@ -271,16 +277,16 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 * 
 	 * @param actionRequest
 	 * @param actionResponse
-	 * @throws SystemException
-	 * @throws PortalException
+	 * @throws Exception
 	 */
 	private void requestFeedbackFromUser(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws SystemException, PortalException {
+			throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
-		if (themeDisplay.getUserId() == portfolio.getLayout().getUserId()) {
+		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
+				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
 			portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
 			sendFeedbackRequestedNotification(resourceRequest, userId, portfolio);
 		}
@@ -291,18 +297,59 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 * 
 	 * @param actionRequest
 	 * @param actionResponse
-	 * @throws SystemException
-	 * @throws PortalException
+	 * @throws Exception
 	 */
 	private void deleteFeedbackRequest(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws SystemException, PortalException {
+			throws Exception {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
-		if (themeDisplay.getUserId() == portfolio.getLayout().getUserId()) {
+		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
+				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
 			portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_UNREQUESTED);
 		}
+	}
+
+	private void renamePortfolio(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
+		String newTitle = ParamUtil.getString(resourceRequest, "newTitle");
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
+				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
+			changeLayoutFriendlyURLs(portfolio.getLayout(), newTitle);
+			Layout layout = portfolio.getLayout();
+			layout.setTitle(newTitle);
+			layout.setName(newTitle);
+			changeLayoutFriendlyURLs(layout, newTitle);
+			LayoutLocalServiceUtil.updateLayout(layout);
+		}
+	}
+
+	private void changeLayoutFriendlyURLs(Layout layout, String newTitle) throws PortalException, SystemException {
+		String friendlyURL = StringPool.SLASH + FriendlyURLNormalizerUtil.normalize(newTitle);
+		String newFriendlyURL = friendlyURL;
+		if (!FriendlyURLValidator.validateFriendlyURL(layout.getGroupId(), layout.getPrivateLayout(),
+				layout.getLayoutId(), newFriendlyURL)) {
+			newFriendlyURL = StringPool.SLASH + layout.getLayoutId();
+		} else {
+			for (int i = 1;; i++) {
+				if (!FriendlyURLValidator.isDuplicate(layout.getGroupId(), layout.getPrivateLayout(),
+						layout.getLayoutId(), newFriendlyURL))
+					break;
+				newFriendlyURL = friendlyURL + i;
+			}
+		}
+		Locale[] locales = LanguageUtil.getAvailableLocales(layout.getGroupId());
+
+		for (Locale locale : locales) {
+			LayoutFriendlyURL layoutFriendlyURL = LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURL(
+					layout.getPlid(), locale.toLanguageTag());
+			layoutFriendlyURL.setFriendlyURL(newFriendlyURL);
+			LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
+		}
+
 	}
 
 	@Override
@@ -478,10 +525,9 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	 * 
 	 * @param actionRequest
 	 * @param actionResponse
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private void requestFeedbackFromUsers(ActionRequest actionRequest, ActionResponse actionResponse)
-			throws Exception {
+	private void requestFeedbackFromUsers(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
 		String userNames = ParamUtil.getString(actionRequest, "userNames");
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
 		String[] userNameList = userNames.split(";");
