@@ -121,47 +121,6 @@
             <div id="up_logo_footer">
             </div>
         </div>
-		<ul id="up-general">
-			<li class="unipage"><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<li class="services"><a class="up_services" href="">UP Dienste</a><span class="icon arrow"></span>
-				<ul class="service_list hidden">
-					<#if is_signed_in>
-					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle</a></li>
-					<#else>
-					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li>
-					</#if> 
-					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
-					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
-					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
-					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
-				</ul> 
-			</li>			
-			<li class="lang">
-				<span class="lang-img"></span>
-				<!--
-				<select name="language_id">
-					<option value="de_DE" selected>Deutsch</option>
-					<option value="en_US">English</option>
-				</select>
-				-->
-			</li>
-			<li class="search">
-				<span class="search-img"></span>
-				<div id="searchfield" class="hidden searchfield">
-					<span class="search-img"></span>
-					${theme.search()}
-				</div>
-			</li>
-			<li class="notificationspace"></li>
-			<#if is_signed_in>
-				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
-			<#else>
-				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
-			</#if>
-		</ul>
-		<#if is_signed_in>
-				${theme.runtime(notificationPortletId, "", "")}
-		</#if>
 		<#if is_signed_in>
 		<ul id="admin">
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
