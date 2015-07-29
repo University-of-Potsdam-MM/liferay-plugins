@@ -173,4 +173,8 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 	public boolean feedbackRequested() throws SystemException{
 		return (PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(getPlid(), PortfolioStatics.FEEDBACK_REQUESTED).size() != 0);
 	}
+	
+	public void rename(String newTitle) throws PortalException, SystemException{
+		getLayout().setTitle(newTitle);
+	}
 }
