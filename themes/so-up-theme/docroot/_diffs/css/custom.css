@@ -34,6 +34,8 @@
 
 @import url(./webcontent.css);
 
+@import url(./notification.css);
+
 /*@import url(media_queries.css);*/
 
 /* no radius, no shadow, no background-image */
@@ -137,7 +139,7 @@ h2.page-title {
 
 .aui .modal-header {
 	background:#d0dae3;
-	borde-bottom:none;
+	border-bottom:none;
 	font-style:italic;
 	font-family:"Source Sans Pro",Helvetica, Arial, sans-serif;
 }
@@ -317,7 +319,7 @@ aui .btn.disabled, .aui .btn[disabled] {
 .aui .dropdown-menu {
  -moz-border-radius: 0px;
   border-radius: 0px; 
-  webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
+  -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
   -moz-box-shadow: 0 0px 0px rgba(0,0,0,0.2);
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
  
@@ -346,7 +348,7 @@ aui .btn.disabled, .aui .btn[disabled] {
 /*Kalender*/
 
 .yui3-skin-sam .yui3-calendar-content {
-	background: #fff important;
+	background: #fff !important;
 
 	
 }

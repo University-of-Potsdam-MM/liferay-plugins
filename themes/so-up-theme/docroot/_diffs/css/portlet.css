@@ -24,7 +24,8 @@
 
 
 .portlet {
-	border: 1px solid #ededed;
+	border: 1px solid #014260;
+	border-bottom:1px solid #014260 !important;
 }
 
 
@@ -59,7 +60,7 @@
   min-width: 100px;
  
   
-background: #3687AC; /* Old browsers */
+background: #014260; /* Old browsers */
 /*
 background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); 
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); 

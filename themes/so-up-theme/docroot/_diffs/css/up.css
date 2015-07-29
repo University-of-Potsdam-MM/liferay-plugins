@@ -196,6 +196,7 @@
 						display: inline-block;
 					}
 					
+				 
 					.lang-img
 					{
 						@include up-grafic;
@@ -227,15 +228,15 @@
 					
 					ul
 					{
-						list-style: none;
-						position: relative;
-						z-index: 2000;
-						margin-left: 0px;
+						position: absolute;
+   						z-index: 100;
+    					min-width: 13.33333em;
+    					margin-top: 2px !important;
+    					padding: 5px 10px 10px 10px !important;
+   						background-color: #cfdae3;
+    					left: -13px;
 						
-						li
-						{
-							float: none;
-						}
+						
 					}
 				}
 	
@@ -247,7 +248,7 @@
 				
 				li.services
 				{
-					min-width: 120px;
+					min-width: 80px;
 				}
 				
 				li.lang
@@ -559,7 +560,7 @@
 			position: absolute;
 			right: 60px;
 			top: 90px;
-			background: $upLightBlue;
+			
 			color: $upDarkBlue;
 			
 			li
@@ -567,6 +568,8 @@
 				float: left;
 				padding: 5px;
 				padding-right: 20px;
+				background: $upLightBlue;
+				margin-left:2px;
 				
 				#toggleDockbar
 				{
@@ -872,4 +875,57 @@
 			
 		}
 	}
+}
+
+/* gerne einsortieren, danke */
+
+/* notification in dockbar */
+.aui body header#banner ul#up-general li.notificationspace {
+    background-color: #014260;
+    min-width: 30px;
+        cursor: pointer;
+   
+}
+
+.aui body header#banner ul#up-general li.notificationspace:hover {
+    background-color: #d0dae3;
+}
+
+.aui body header#banner ul#up-general li.notificationspace span.notification-img{
+   
+   background-image: url(/so-up-theme/css/../images/up/ple-icons.png);
+    background-position: 0 380px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-top: 7px
+}
+
+span.notification-count {
+    color: #fff;
+}
+
+/* UP Dienste Dropdown */
+
+.services .icon.arrow {
+    margin-top: 5px;
+}
+
+.aui body header#banner ul#up-general li ul.service_list li {
+    float: none;
+    -webkit-transition: background-color .2s ease-out;
+    transition: background-color .2s ease-out;
+    padding: .26667em .66667em;
+    border-bottom: 1px solid #e2e9ee;
+    font-size: .9em;
+    text-align: left;
+    list-style-type:none;
+    list-style-type: none;
+    height: auto;
+    
+}
+
+.aui body header#banner ul#up-general li ul.service_list li a {
+	padding-top:0;
+	line-height:2;
 }
