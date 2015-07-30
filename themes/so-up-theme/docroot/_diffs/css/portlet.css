@@ -72,6 +72,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 */
 }
 
+.aui .portlet-topper-toolbar .caret {
+   
+    vertical-align: top;
+    border-top: 4px solid white !important;
+}
+   
+   .aui .portlet-topper-toolbar .icon-cog {
+    color: #fff;
+}
+
+
 .portlet-title img {
 	display: none;
 }

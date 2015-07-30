@@ -241,6 +241,14 @@ td.feedback-delivered span img {
    border-left: 2px solid #fff;
 }
 
+.aui #portlet_myportfolio_WAR_portfolioportlet .table td.feedback-unrequested {
+    border-right: none !important;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table td.feedback-unrequested +td {
+    border-left: none !important;
+}
+
 .yui3-datatable-paginator-wrapper {
 	padding:0;
 }

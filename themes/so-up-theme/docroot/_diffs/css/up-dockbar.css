@@ -185,7 +185,7 @@ html.aui .dockbar-split .dockbar .navbar-inner .container .nav-account-controls 
 .smallhead .dockbar .navbar-inner .container .nav-account-controls {
     right: 0;
     z-index: 6000;
-    margin-right:0;
+    margin-right:0 !important;
 }
 
 .smallhead .dockbar .navbar-inner .nav>li {
