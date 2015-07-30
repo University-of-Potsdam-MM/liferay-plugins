@@ -1,3 +1,7 @@
+.aui .dockbar-split .dockbar .navbar-inner #_145_navAddControlsNavbarCollapse .nav>li {
+    background-color: #d0dae3;
+}
+
 .lfr-admin-panel h1 {
 	color:#d0dae3;	
 }
@@ -62,4 +66,21 @@
     border: 0;
     position: absolute;
     top: 110px;
+}
+
+div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
+    background-color: #fff;
+}
+
+
+.smallhead #_145_navAddControls {
+    margin-top: 10px;
+}
+
+#_145_navAddControlsNavbarCollapse i:hover {
+    background-color: #014260;
+}
+
+#_145_navAddControls a:hover {
+    color: #fff;
 }
