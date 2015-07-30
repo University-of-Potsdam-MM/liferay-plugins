@@ -270,6 +270,22 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 	}
 
 	@Override
+	public void rename(java.lang.String newTitle) {
+		try {
+			String methodName = "rename";
+
+			Class<?>[] parameterTypes = new Class<?>[] { java.lang.String.class };
+
+			Object[] parameterValues = new Object[] { newTitle };
+
+			invokeOnRemoteModel(methodName, parameterTypes, parameterValues);
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public boolean feedbackRequested(long userId) {
 		try {
 			String methodName = "feedbackRequested";

@@ -37,7 +37,7 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{plid=");
 		sb.append(plid);
@@ -45,6 +45,8 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 		sb.append(userId);
 		sb.append(", feedbackStatus=");
 		sb.append(feedbackStatus);
+		sb.append(", hidden=");
+		sb.append(hidden);
 		sb.append(", createDate=");
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
@@ -61,6 +63,7 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 		portfolioFeedbackImpl.setPlid(plid);
 		portfolioFeedbackImpl.setUserId(userId);
 		portfolioFeedbackImpl.setFeedbackStatus(feedbackStatus);
+		portfolioFeedbackImpl.setHidden(hidden);
 
 		if (createDate == Long.MIN_VALUE) {
 			portfolioFeedbackImpl.setCreateDate(null);
@@ -86,6 +89,7 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 		plid = objectInput.readLong();
 		userId = objectInput.readLong();
 		feedbackStatus = objectInput.readInt();
+		hidden = objectInput.readBoolean();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
 	}
@@ -96,6 +100,7 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 		objectOutput.writeLong(plid);
 		objectOutput.writeLong(userId);
 		objectOutput.writeInt(feedbackStatus);
+		objectOutput.writeBoolean(hidden);
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 	}
@@ -103,6 +108,7 @@ public class PortfolioFeedbackCacheModel implements CacheModel<PortfolioFeedback
 	public long plid;
 	public long userId;
 	public int feedbackStatus;
+	public boolean hidden;
 	public long createDate;
 	public long modifiedDate;
 }

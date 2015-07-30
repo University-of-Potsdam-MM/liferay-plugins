@@ -126,6 +126,7 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("feedbackStatus", portfolioFeedback.getFeedbackStatus());
 		portfolioFeedbackJSON.put("feedbackStatusString",
 				getFeedbackStatusString(portletConfig, themeDisplay.getLocale(), portfolioFeedback.getFeedbackStatus()));
+		portfolioFeedbackJSON.put("hidden", portfolioFeedback.isHidden());
 		portfolioFeedbackJSON.put(
 				"createDate",
 				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(

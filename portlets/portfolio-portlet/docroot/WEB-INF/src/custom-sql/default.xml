@@ -14,7 +14,7 @@
         INNER JOIN
             Portfolio_PortfolioFeedback ON Portfolio_Portfolio.plid = Portfolio_PortfolioFeedback.plid
         WHERE
-        	(Portfolio_PortfolioFeedback.userId = ?) 
+        	(Portfolio_PortfolioFeedback.userId = ?)
     </sql>
     <sql id="findPortfoliosByPublishmentTypeAndNoPortfolioFeedback">
         SELECT Portfolio_Portfolio.*

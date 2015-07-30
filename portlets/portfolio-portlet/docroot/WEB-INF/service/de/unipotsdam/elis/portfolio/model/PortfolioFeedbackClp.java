@@ -80,6 +80,7 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 		attributes.put("plid", getPlid());
 		attributes.put("userId", getUserId());
 		attributes.put("feedbackStatus", getFeedbackStatus());
+		attributes.put("hidden", getHidden());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 
@@ -104,6 +105,12 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 
 		if (feedbackStatus != null) {
 			setFeedbackStatus(feedbackStatus);
+		}
+
+		Boolean hidden = (Boolean)attributes.get("hidden");
+
+		if (hidden != null) {
+			setHidden(hidden);
 		}
 
 		Date createDate = (Date)attributes.get("createDate");
@@ -199,6 +206,34 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 	}
 
 	@Override
+	public boolean getHidden() {
+		return _hidden;
+	}
+
+	@Override
+	public boolean isHidden() {
+		return _hidden;
+	}
+
+	@Override
+	public void setHidden(boolean hidden) {
+		_hidden = hidden;
+
+		if (_portfolioFeedbackRemoteModel != null) {
+			try {
+				Class<?> clazz = _portfolioFeedbackRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setHidden", boolean.class);
+
+				method.invoke(_portfolioFeedbackRemoteModel, hidden);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -282,6 +317,22 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 		}
 	}
 
+	@Override
+	public void changeVisibility() {
+		try {
+			String methodName = "changeVisibility";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			invokeOnRemoteModel(methodName, parameterTypes, parameterValues);
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
 	public BaseModel<?> getPortfolioFeedbackRemoteModel() {
 		return _portfolioFeedbackRemoteModel;
 	}
@@ -356,6 +407,7 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 		clone.setPlid(getPlid());
 		clone.setUserId(getUserId());
 		clone.setFeedbackStatus(getFeedbackStatus());
+		clone.setHidden(getHidden());
 		clone.setCreateDate(getCreateDate());
 		clone.setModifiedDate(getModifiedDate());
 
@@ -402,7 +454,7 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{plid=");
 		sb.append(getPlid());
@@ -410,6 +462,8 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 		sb.append(getUserId());
 		sb.append(", feedbackStatus=");
 		sb.append(getFeedbackStatus());
+		sb.append(", hidden=");
+		sb.append(getHidden());
 		sb.append(", createDate=");
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
@@ -421,7 +475,7 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("de.unipotsdam.elis.portfolio.model.PortfolioFeedback");
@@ -438,6 +492,10 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 		sb.append(
 			"<column><column-name>feedbackStatus</column-name><column-value><![CDATA[");
 		sb.append(getFeedbackStatus());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>hidden</column-name><column-value><![CDATA[");
+		sb.append(getHidden());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>createDate</column-name><column-value><![CDATA[");
@@ -457,6 +515,7 @@ public class PortfolioFeedbackClp extends BaseModelImpl<PortfolioFeedback>
 	private long _userId;
 	private String _userUuid;
 	private int _feedbackStatus;
+	private boolean _hidden;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private BaseModel<?> _portfolioFeedbackRemoteModel;

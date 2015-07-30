@@ -130,31 +130,13 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 
 		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "getPortfoliosByLayoutUserId";
+		_methodName23 = "getPortfoliosByPortfolioFeedbackUserId";
 
-		_methodParameterTypes23 = new String[] {
-				"long", "java.lang.String", "java.util.Locale"
-			};
+		_methodParameterTypes23 = new String[] { "long" };
 
-		_methodName24 = "getPortfoliosByPortfolioFeedbackUserId";
+		_methodName24 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
 
-		_methodParameterTypes24 = new String[] { "long" };
-
-		_methodName25 = "getPortfoliosByPortfolioFeedbackUserId";
-
-		_methodParameterTypes25 = new String[] {
-				"long", "java.lang.String", "java.util.Locale"
-			};
-
-		_methodName26 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
-
-		_methodParameterTypes26 = new String[] { "int", "long" };
-
-		_methodName27 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
-
-		_methodParameterTypes27 = new String[] {
-				"int", "long", "java.lang.String", "java.util.Locale"
-			};
+		_methodParameterTypes24 = new String[] { "int", "long" };
 	}
 
 	@Override
@@ -827,98 +809,16 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 	}
 
 	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByLayoutUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
-					new Object[] {
-						userId,
-						
-					ClpSerializer.translateInput(titleFilter),
-						
-					ClpSerializer.translateInput(locale)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
-					new Object[] {
-						userId,
-						
-					ClpSerializer.translateInput(titleFilter),
-						
-					ClpSerializer.translateInput(locale)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
@@ -943,56 +843,12 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
 					new Object[] { publishmentType, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(
-		int publishmentType, long userId, java.lang.String titleFilter,
-		java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
-					new Object[] {
-						publishmentType,
-						
-					userId,
-						
-					ClpSerializer.translateInput(titleFilter),
-						
-					ClpSerializer.translateInput(locale)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
@@ -1059,10 +915,4 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 	private String[] _methodParameterTypes23;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
-	private String _methodName25;
-	private String[] _methodParameterTypes25;
-	private String _methodName26;
-	private String[] _methodParameterTypes26;
-	private String _methodName27;
-	private String[] _methodParameterTypes27;
 }

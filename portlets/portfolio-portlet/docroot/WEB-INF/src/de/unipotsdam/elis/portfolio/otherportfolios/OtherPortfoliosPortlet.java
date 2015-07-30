@@ -26,6 +26,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import de.unipotsdam.elis.portfolio.PortfolioStatics;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
+import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
@@ -45,6 +46,8 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 				markAsFeedbackDelivered(resourceRequest, resourceResponse);
 			if (cmd.equals("getGlobalPortfolios"))
 				getGlobalPortfolios(resourceRequest, resourceResponse);
+			if (cmd.equals("changeVisibility"))
+				changeVisibility(resourceRequest, resourceResponse);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		} catch (PortalException e) {
@@ -121,6 +124,15 @@ public class OtherPortfoliosPortlet extends MVCPortlet {
 		}
 		PrintWriter out = resourceResponse.getWriter();
 		out.println(portfolioJSONArray.toString());
+	}
+	
+	private void changeVisibility(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws SystemException, PortalException {
+		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		PortfolioFeedback portfolioFeedback = portfolio.getPortfolioFeedback(themeDisplay.getUserId());
+		portfolioFeedback.changeVisibility();
 	}
 
 }

@@ -15,7 +15,7 @@ import de.unipotsdam.elis.portfolio.model.impl.PortfolioImpl;
 
 public class PortfolioFinderImpl extends BasePersistenceImpl<Portfolio> implements PortfolioFinder {
 
-	public List<Portfolio> findByLayoutUserId(long userId, String title, int begin, int end) {
+	public List<Portfolio> findByLayoutUserId(long userId, int begin, int end) {
 
 		Session session = null;
 		try {
@@ -44,18 +44,10 @@ public class PortfolioFinderImpl extends BasePersistenceImpl<Portfolio> implemen
 	}
 
 	public List<Portfolio> findByLayoutUserId(long userId) {
-		return findByLayoutUserId(userId, "%", QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		return findByLayoutUserId(userId,  QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
-	public List<Portfolio> findByLayoutUserId(long userId, String title) {
-		return findByLayoutUserId(userId, title, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-	}
-
-	public List<Portfolio> findByLayoutUserId(long userId, int begin, int end) {
-		return findByLayoutUserId(userId, "", begin, end);
-	}
-
-	public List<Portfolio> findByPortfolioFeedbackUserId(long userId, String title, int begin, int end) {
+	public List<Portfolio> findByPortfolioFeedbackUserId(long userId, int begin, int end) {
 
 		Session session = null;
 		try {
@@ -84,18 +76,10 @@ public class PortfolioFinderImpl extends BasePersistenceImpl<Portfolio> implemen
 	}
 
 	public List<Portfolio> findByPortfolioFeedbackUserId(long userId) {
-		return findByPortfolioFeedbackUserId(userId, "%", QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		return findByPortfolioFeedbackUserId(userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
-	public List<Portfolio> findByPortfolioFeedbackUserId(long userId, String title) {
-		return findByPortfolioFeedbackUserId(userId, title, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-	}
-
-	public List<Portfolio> findByPortfolioFeedbackUserId(long userId, int begin, int end) {
-		return findByPortfolioFeedbackUserId(userId, "", begin, end);
-	}
-
-	public List<Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(long publishmentType, long userId, String title, int begin,
+	public List<Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(long publishmentType, long userId, int begin,
 			int end) {
 
 		Session session = null;
@@ -127,15 +111,7 @@ public class PortfolioFinderImpl extends BasePersistenceImpl<Portfolio> implemen
 	}
 
 	public List<Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(long publishmentType, long userId) {
-		return findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, "%", QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-	}
-
-	public List<Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(long publishmentType, long userId, String title) {
-		return findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, title, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-	}
-
-	public List<Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(long publishmentType, long userId, int begin, int end) {
-		return findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, "", begin, end);
+		return findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 }

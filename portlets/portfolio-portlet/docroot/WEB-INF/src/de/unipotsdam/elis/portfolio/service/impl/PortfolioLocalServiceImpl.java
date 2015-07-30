@@ -14,9 +14,7 @@
 
 package de.unipotsdam.elis.portfolio.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -84,38 +82,12 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		return PortfolioFinderUtil.findByLayoutUserId(userId);
 	}
 
-	public List<Portfolio> getPortfoliosByLayoutUserId(long userId, String titleFilter, Locale locale) throws SystemException, PortalException {
-		List<Portfolio> portfolios = PortfolioFinderUtil.findByLayoutUserId(userId);
-		return filterPortfolio(portfolios, titleFilter, locale);
-	}
-
 	public List<Portfolio> getPortfoliosByPortfolioFeedbackUserId(long userId) throws SystemException {
 		return PortfolioFinderUtil.findByPortfolioFeedbackUserId(userId);
-	}
-
-	public List<Portfolio> getPortfoliosByPortfolioFeedbackUserId(long userId, String titleFilter, Locale locale)
-			throws SystemException, PortalException {
-		List<Portfolio> portfolios = PortfolioFinderUtil.findByPortfolioFeedbackUserId(userId, titleFilter);
-		return filterPortfolio(portfolios, titleFilter, locale);
 	}
 
 	public List<Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(int publishmentType, long userId)
 			throws SystemException {
 		return PortfolioFinderUtil.findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId);
-	}
-
-	public List<Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(int publishmentType, long userId,
-			String titleFilter, Locale locale) throws SystemException, PortalException {
-		List<Portfolio> portfolios = PortfolioFinderUtil.findByPublishmentTypeAndNoPortfolioFeedback(publishmentType, userId, titleFilter);
-		return filterPortfolio(portfolios, titleFilter, locale);
-	}
-	
-	private List<Portfolio> filterPortfolio(List<Portfolio> portfolios, String titleFilter, Locale locale) throws PortalException, SystemException{
-		List<Portfolio> result = new ArrayList<Portfolio>();
-		for (Portfolio p : portfolios){
-			if (p.getLayout().getTitle(locale).matches(".*" + titleFilter + ".*"))
-				result.add(p);
-		}
-		return result;
 	}
 }

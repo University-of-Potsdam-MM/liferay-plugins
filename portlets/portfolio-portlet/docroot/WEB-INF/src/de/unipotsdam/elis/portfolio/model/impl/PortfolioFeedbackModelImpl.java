@@ -65,10 +65,11 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 			{ "plid", Types.BIGINT },
 			{ "userId", Types.BIGINT },
 			{ "feedbackStatus", Types.INTEGER },
+			{ "hidden_", Types.BOOLEAN },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Portfolio_PortfolioFeedback (plid LONG not null,userId LONG not null,feedbackStatus INTEGER,createDate DATE null,modifiedDate DATE null,primary key (plid, userId))";
+	public static final String TABLE_SQL_CREATE = "create table Portfolio_PortfolioFeedback (plid LONG not null,userId LONG not null,feedbackStatus INTEGER,hidden_ BOOLEAN,createDate DATE null,modifiedDate DATE null,primary key (plid, userId))";
 	public static final String TABLE_SQL_DROP = "drop table Portfolio_PortfolioFeedback";
 	public static final String ORDER_BY_JPQL = " ORDER BY portfolioFeedback.id.plid ASC, portfolioFeedback.id.userId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Portfolio_PortfolioFeedback.plid ASC, Portfolio_PortfolioFeedback.userId ASC";
@@ -104,6 +105,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 		model.setPlid(soapModel.getPlid());
 		model.setUserId(soapModel.getUserId());
 		model.setFeedbackStatus(soapModel.getFeedbackStatus());
+		model.setHidden(soapModel.getHidden());
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
 
@@ -175,6 +177,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 		attributes.put("plid", getPlid());
 		attributes.put("userId", getUserId());
 		attributes.put("feedbackStatus", getFeedbackStatus());
+		attributes.put("hidden", getHidden());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 
@@ -199,6 +202,12 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 
 		if (feedbackStatus != null) {
 			setFeedbackStatus(feedbackStatus);
+		}
+
+		Boolean hidden = (Boolean)attributes.get("hidden");
+
+		if (hidden != null) {
+			setHidden(hidden);
 		}
 
 		Date createDate = (Date)attributes.get("createDate");
@@ -295,6 +304,22 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 
 	@JSON
 	@Override
+	public boolean getHidden() {
+		return _hidden;
+	}
+
+	@Override
+	public boolean isHidden() {
+		return _hidden;
+	}
+
+	@Override
+	public void setHidden(boolean hidden) {
+		_hidden = hidden;
+	}
+
+	@JSON
+	@Override
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -336,6 +361,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 		portfolioFeedbackImpl.setPlid(getPlid());
 		portfolioFeedbackImpl.setUserId(getUserId());
 		portfolioFeedbackImpl.setFeedbackStatus(getFeedbackStatus());
+		portfolioFeedbackImpl.setHidden(getHidden());
 		portfolioFeedbackImpl.setCreateDate(getCreateDate());
 		portfolioFeedbackImpl.setModifiedDate(getModifiedDate());
 
@@ -407,6 +433,8 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 
 		portfolioFeedbackCacheModel.feedbackStatus = getFeedbackStatus();
 
+		portfolioFeedbackCacheModel.hidden = getHidden();
+
 		Date createDate = getCreateDate();
 
 		if (createDate != null) {
@@ -430,7 +458,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{plid=");
 		sb.append(getPlid());
@@ -438,6 +466,8 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 		sb.append(getUserId());
 		sb.append(", feedbackStatus=");
 		sb.append(getFeedbackStatus());
+		sb.append(", hidden=");
+		sb.append(getHidden());
 		sb.append(", createDate=");
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
@@ -449,7 +479,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("de.unipotsdam.elis.portfolio.model.PortfolioFeedback");
@@ -466,6 +496,10 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 		sb.append(
 			"<column><column-name>feedbackStatus</column-name><column-value><![CDATA[");
 		sb.append(getFeedbackStatus());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>hidden</column-name><column-value><![CDATA[");
+		sb.append(getHidden());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>createDate</column-name><column-value><![CDATA[");
@@ -495,6 +529,7 @@ public class PortfolioFeedbackModelImpl extends BaseModelImpl<PortfolioFeedback>
 	private int _feedbackStatus;
 	private int _originalFeedbackStatus;
 	private boolean _setOriginalFeedbackStatus;
+	private boolean _hidden;
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _columnBitmask;

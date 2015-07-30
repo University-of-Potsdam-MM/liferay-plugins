@@ -312,27 +312,9 @@ public class PortfolioLocalServiceWrapper implements PortfolioLocalService,
 	}
 
 	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByLayoutUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _portfolioLocalService.getPortfoliosByLayoutUserId(userId,
-			titleFilter, locale);
-	}
-
-	@Override
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioLocalService.getPortfoliosByPortfolioFeedbackUserId(userId);
-	}
-
-	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _portfolioLocalService.getPortfoliosByPortfolioFeedbackUserId(userId,
-			titleFilter, locale);
 	}
 
 	@Override
@@ -341,16 +323,6 @@ public class PortfolioLocalServiceWrapper implements PortfolioLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioLocalService.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
 			userId);
-	}
-
-	@Override
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(
-		int publishmentType, long userId, java.lang.String titleFilter,
-		java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _portfolioLocalService.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
-			userId, titleFilter, locale);
 	}
 
 	/**

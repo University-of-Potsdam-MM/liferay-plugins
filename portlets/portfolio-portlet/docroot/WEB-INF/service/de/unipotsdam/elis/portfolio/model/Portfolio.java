@@ -108,4 +108,8 @@ public interface Portfolio extends PortfolioModel, PersistedModel {
 
 	public boolean feedbackRequested()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void rename(java.lang.String newTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

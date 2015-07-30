@@ -7,6 +7,7 @@ create table Portfolio_PortfolioFeedback (
 	plid LONG not null,
 	userId LONG not null,
 	feedbackStatus INTEGER,
+	hidden_ BOOLEAN,
 	createDate DATE null,
 	modifiedDate DATE null,
 	primary key (plid, userId)

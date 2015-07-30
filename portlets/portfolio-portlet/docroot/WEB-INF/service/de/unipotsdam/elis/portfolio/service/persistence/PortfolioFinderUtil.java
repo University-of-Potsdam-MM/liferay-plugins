@@ -22,8 +22,8 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  */
 public class PortfolioFinderUtil {
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, java.lang.String title, int begin, int end) {
-		return getFinder().findByLayoutUserId(userId, title, begin, end);
+		long userId, int begin, int end) {
+		return getFinder().findByLayoutUserId(userId, begin, end);
 	}
 
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
@@ -31,20 +31,9 @@ public class PortfolioFinderUtil {
 		return getFinder().findByLayoutUserId(userId);
 	}
 
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, java.lang.String title) {
-		return getFinder().findByLayoutUserId(userId, title);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, int begin, int end) {
-		return getFinder().findByLayoutUserId(userId, begin, end);
-	}
-
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, java.lang.String title, int begin, int end) {
-		return getFinder()
-				   .findByPortfolioFeedbackUserId(userId, title, begin, end);
+		long userId, int begin, int end) {
+		return getFinder().findByPortfolioFeedbackUserId(userId, begin, end);
 	}
 
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
@@ -52,22 +41,11 @@ public class PortfolioFinderUtil {
 		return getFinder().findByPortfolioFeedbackUserId(userId);
 	}
 
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, java.lang.String title) {
-		return getFinder().findByPortfolioFeedbackUserId(userId, title);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, int begin, int end) {
-		return getFinder().findByPortfolioFeedbackUserId(userId, begin, end);
-	}
-
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId, java.lang.String title, int begin,
-		int end) {
+		long publishmentType, long userId, int begin, int end) {
 		return getFinder()
 				   .findByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
-			userId, title, begin, end);
+			userId, begin, end);
 	}
 
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
@@ -75,20 +53,6 @@ public class PortfolioFinderUtil {
 		return getFinder()
 				   .findByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
 			userId);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId, java.lang.String title) {
-		return getFinder()
-				   .findByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
-			userId, title);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId, int begin, int end) {
-		return getFinder()
-				   .findByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
-			userId, begin, end);
 	}
 
 	public static PortfolioFinder getFinder() {

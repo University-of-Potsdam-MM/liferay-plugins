@@ -351,6 +351,13 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 	}
 
 	@Override
+	public void rename(java.lang.String newTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_portfolio.rename(newTitle);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;

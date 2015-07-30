@@ -8,10 +8,6 @@
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId());
 %>
 
-<portlet:actionURL name="filterPortfolios" var="filterPortfoliosURL">
-</portlet:actionURL>
-<div id="edittest">savx</div>
-
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page"/>
 
 <aui:input id="filterInput" class="filterInput" name="" placeholder="portfolio-filter-placeholder"/>

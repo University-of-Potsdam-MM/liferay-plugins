@@ -4,7 +4,7 @@
 <liferay-theme:defineObjects />
 
 <% 
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay.getUserId());
+	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay.getUserId()); 
 %>
 
 <portlet:resourceURL var="getPortfoliosForUserURL">
@@ -12,6 +12,9 @@
 </portlet:resourceURL>
 <portlet:resourceURL var="markAsFeedbackDeliveredURL">
 	<portlet:param name="<%=Constants.CMD %>" value="markAsFeedbackDelivered" />
+</portlet:resourceURL>
+<portlet:resourceURL var="changeVisibilityURL">
+	<portlet:param name="<%=Constants.CMD %>" value="changeVisibility" />
 </portlet:resourceURL>
 
 <div id="feedbackRequestedIconDiv" hidden=true>
@@ -29,17 +32,29 @@
 	<div id="otherPortfoliosTable"></div>  
 <% } %>
 
+<a id="visibilityHref" href="javascript:void(0);" onClick="<portlet:namespace />changeShownPortfolioPages()"><%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%></a>
+
+
 <% 
 	JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
  	for (Portfolio portfolio : portfolios){
  		String div = "messageIconDiv_" + portfolio.getPlid();
  		String onClickMethod = renderResponse.getNamespace() + "sendMessage(" + portfolio.getLayout().getUserId() + ");";
- 		%>
- 		
+ 		%>	
  		<div id="<%= div %>" hidden=true>
 			<liferay-ui:icon cssClass="send-message" image="../aui/envelope" message="message" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
 		</div>
- 	
+		<% 
+ 		String divUnhidden = "unhiddenIconDiv_" + portfolio.getPlid();
+ 		String divHidden = "hiddenIconDiv_" + portfolio.getPlid();
+ 		onClickMethod = renderResponse.getNamespace() + "changeVisibility(" + portfolio.getPlid() + ");";
+		%>
+ 		<div id="<%= divUnhidden %>" hidden=true>
+			<liferay-ui:icon image="../aui/eye-open" message="visible" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+		</div>
+ 		<div id="<%= divHidden %>" hidden=true>
+			<liferay-ui:icon image="../aui/eye-close" message="hidden" onClick="<%= onClickMethod %>" url="javascript:void(0);" />
+		</div>
 		<% 
 		JspHelper.addToPortfolioFeedbackJSONArray(portfolioJSONArray, portfolio, themeDisplay,portletConfig);
  	} 
@@ -49,6 +64,7 @@
 <aui:script>
 var otherPortfoliosDataTable;
 var otherPortfoliosData;
+var showHidden = false;
 AUI().use(
     'aui-datatable',
     'datatable-sort',
@@ -118,6 +134,19 @@ AUI().use(
                     return result;
                 },
                 allowHTML: true
+            }, {
+                label: '<%= LanguageUtil.get(pageContext, "portfolio-visible")%>',
+                key: 'visible',
+                formatter: function(o) {
+                    var result = "";
+                    if (Boolean(o.data.hidden)) {
+                        result += A.one('#hiddenIconDiv_' + o.data.plid).get('innerHTML');
+                    } else {
+                        result += A.one('#unhiddenIconDiv_' + o.data.plid).get('innerHTML');
+                    }
+                    return result;
+                },
+                allowHTML: true
             }],
             data: data,
             rowsPerPage: 5,
@@ -125,21 +154,22 @@ AUI().use(
         });
 
         otherPortfoliosDataTable.render("#otherPortfoliosTable");
-
         otherPortfoliosData = otherPortfoliosDataTable.data;
+        filterPortfoliosByVisibleState(otherPortfoliosData);
+
         A.one('#<portlet:namespace />otherPortfoliosFilterInput').on('keyup', function(e) {
             var filteredData = otherPortfoliosData.filter({
                 asList: true
             }, function(list) {
 
-                return list.get('title').toLowerCase().includes(e.currentTarget.get("value").toLowerCase());
+                return list.get('title').toLowerCase().includes(e.currentTarget.get("value").toLowerCase()) && Boolean(list.get('hidden')) === showHidden;
             });
             otherPortfoliosDataTable.set('data', filteredData);
         });
     }
 );
 
-function updateTableData1(A) {
+function updateOtherPortfoliosData(A) {
     A.io.request('<%=getPortfoliosForUserURL.toString()%>', {
         dataType: 'text/html',
         method: 'post',
@@ -148,6 +178,7 @@ function updateTableData1(A) {
                 result = this.get('responseData');
                 otherPortfoliosData = JSON.parse(result);
                 otherPortfoliosDataTable.set('data', otherPortfoliosData);
+                filterPortfoliosByVisibleState(otherPortfoliosDataTable.data);
             }
         }
     });
@@ -163,10 +194,48 @@ Liferay.provide(window, '<portlet:namespace />markAsFeedbackDelivered',
                 },
                 on: {
                     success: function() {
-                        updateTableData1(A);
+                        updateOtherPortfoliosData(A);
                     }
                 }
             });
         });
     });
+
+Liferay.provide(window, '<portlet:namespace />changeVisibility',
+    function(plid) {
+        AUI().use('aui-base', 'aui-io-request', function(A) {
+            A.io.request('<%=changeVisibilityURL.toString()%>', {
+                dataType: 'text/html',
+                method: 'post',
+                data: { <portlet:namespace/>portfolioPlid: plid
+                },
+                on: {
+                    success: function() {
+                        updateOtherPortfoliosData(A);
+                    }
+                }
+            });
+        });
+    });
+
+Liferay.provide(window, '<portlet:namespace />changeShownPortfolioPages',
+    function() {
+        var A = new AUI();
+        showHidden = !showHidden;
+        updateOtherPortfoliosData(A);
+        var visibilityHref = A.one('#visibilityHref');
+        if (showHidden)
+            visibilityHref.set('text', '<%= LanguageUtil.get(pageContext, "portfolio-show-unhidden-portfolio-pages")%>');
+        else
+            visibilityHref.set('text', '<%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%>');
+    });
+
+function filterPortfoliosByVisibleState(tableData) {
+    var filteredData = tableData.filter({
+        asList: true
+    }, function(list) {
+        return Boolean(list.get('hidden')) === showHidden;
+    });
+    otherPortfoliosDataTable.set('data', filteredData);
+}
 </aui:script>
