@@ -182,17 +182,18 @@ html.aui .dockbar-split .dockbar .navbar-inner .container .nav-account-controls 
 	z-index: 1100;
 }
 
-.smallhead .nav-account-controls {
-	right:0;
+.smallhead .dockbar .navbar-inner .container .nav-account-controls {
+    right: 0;
+    z-index: 6000;
+    margin-right:0;
 }
 
-.smallhead .dockbar-split .dockbar .navbar-inner .nav>li {
-	
+.smallhead .dockbar .navbar-inner .nav>li {
     width: 60px;
+    height: 40px;
     overflow: hidden;
-    height: 41px;
 }
 
-.smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a {
-	height:40px;
+.smallhead .dockbar .navbar-inner .nav>li.dockbar-user-notifications {
+    height: 43px;
 }
