@@ -196,6 +196,7 @@
 						display: inline-block;
 					}
 					
+				 
 					.lang-img
 					{
 						@include up-grafic;
@@ -227,15 +228,15 @@
 					
 					ul
 					{
-						list-style: none;
-						position: relative;
-						z-index: 2000;
-						margin-left: 0px;
+						position: absolute;
+   						z-index: 100;
+    					min-width: 13.33333em;
+    					margin-top: 2px !important;
+    					padding: 5px 10px 10px 10px !important;
+   						background-color: #cfdae3;
+    					left: -13px;
 						
-						li
-						{
-							float: none;
-						}
+						
 					}
 				}
 	
@@ -247,7 +248,7 @@
 				
 				li.services
 				{
-					min-width: 120px;
+					min-width: 80px;
 				}
 				
 				li.lang
@@ -559,7 +560,7 @@
 			position: absolute;
 			right: 60px;
 			top: 90px;
-			background: $upLightBlue;
+			
 			color: $upDarkBlue;
 			
 			li
@@ -567,6 +568,8 @@
 				float: left;
 				padding: 5px;
 				padding-right: 20px;
+				background: $upLightBlue;
+				margin-left:2px;
 				
 				#toggleDockbar
 				{
@@ -579,14 +582,14 @@
 				.workspace
 				{
 					@include ple-grafic;
-					background-position: 0px -334px;
+					background-position: 0px -354px;
 					display: inline-block;
 				}
 				
 				.admin
 				{
 					@include ple-grafic;
-					background-position: 0px -401px;
+					background-position: 0px -421px;
 					display: inline-block;
 				}
 			} 
@@ -873,3 +876,5 @@
 		}
 	}
 }
+
+

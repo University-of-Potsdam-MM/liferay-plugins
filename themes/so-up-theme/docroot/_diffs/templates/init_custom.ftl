@@ -1,7 +1,9 @@
 <#if is_signed_in>
+	<#assign portal_url = themeDisplay.getPortalURL() />
 	<#assign user_my_sites = user.getMySiteGroups() />
 	<#assign user_sname = user.getScreenName() />
 	<#assign user_account_url = themeDisplay.getURLMyAccount() />
+	
 	<#assign sign_out_url = htmlUtil.escape(theme_display.getURLSignOut()) />
 	
 	<#assign notificationPortletId = "2_WAR_notificationsportlet" />
@@ -38,9 +40,9 @@
 	<#assign group = user.getGroup() />
 	<#assign PortalUtil = staticUtil["com.liferay.portal.util.PortalUtil"] />
 	<#assign layoutService = objectUtil("com.liferay.portal.service.LayoutLocalServiceUtil") />
-	<#assign myLayouts = layoutService.getLayouts(group.getGroupId(), true) />
+	<#assign myPrivateLayouts = layoutService.getLayouts(group.getGroupId(), true) />
+	<#assign myPublicLayouts = layoutService.getLayouts(group.getGroupId(), false) />
 
-	
 <#else>
 	<#assign user_my_sites = user.getMySiteGroups()  />
 	<#assign user_sname = "" />

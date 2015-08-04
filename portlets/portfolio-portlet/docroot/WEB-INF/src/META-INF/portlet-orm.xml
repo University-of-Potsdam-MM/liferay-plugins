@@ -22,6 +22,9 @@
 			<id name="plid" />
 			<id name="userId" />
 			<basic name="feedbackStatus" />
+			<basic name="hidden">
+				<column name="HIDDEN_" />
+			</basic>
 			<basic name="createDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>

@@ -305,9 +305,9 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 	}
 
 	@Override
-	public boolean userHasPermission(long userId)
+	public boolean userHasViewPermission(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _portfolio.userHasPermission(userId);
+		return _portfolio.userHasViewPermission(userId);
 	}
 
 	@Override
@@ -348,6 +348,13 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 	public boolean feedbackRequested()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolio.feedbackRequested();
+	}
+
+	@Override
+	public void rename(java.lang.String newTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_portfolio.rename(newTitle);
 	}
 
 	@Override

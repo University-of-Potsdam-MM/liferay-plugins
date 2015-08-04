@@ -128,7 +128,7 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 		return PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 	}
 
-	public boolean userHasPermission(long userId) throws SystemException {
+	public boolean userHasViewPermission(long userId) throws SystemException {
 		if (this.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL)
 			return true;
 		PortfolioFeedback pf = PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
@@ -172,5 +172,9 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 	
 	public boolean feedbackRequested() throws SystemException{
 		return (PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(getPlid(), PortfolioStatics.FEEDBACK_REQUESTED).size() != 0);
+	}
+	
+	public void rename(String newTitle) throws PortalException, SystemException{
+		getLayout().setTitle(newTitle);
 	}
 }

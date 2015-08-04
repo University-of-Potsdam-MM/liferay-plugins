@@ -23,10 +23,10 @@ public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 		if (portfolio != null) {
 			if (permissionChecker.getUserId() != layout.getUserId()){
 				 if (actionId.equals(ActionKeys.VIEW)) {
-					return portfolio.userHasPermission(permissionChecker.getUserId());
+					return portfolio.userHasViewPermission(permissionChecker.getUserId());
 				}
 			}
-			else if(!actionId.equals(ActionKeys.VIEW)){
+			else if(!actionId.equals(ActionKeys.VIEW) && !actionId.equals(ActionKeys.CUSTOMIZE)){
 				return !portfolio.feedbackRequested();
 			}
 		}

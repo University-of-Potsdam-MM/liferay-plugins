@@ -5,7 +5,7 @@
 <html class="${root_css_class}" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
 
 <head>
-	<title>${the_title} - ${company_name}</title>
+	<title>${company_name} | ${the_title}</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	${theme.include(top_head_include)}
 
@@ -60,9 +60,9 @@
 			<a href="#personal-trigger" aria-owns="personal" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
 				Pers&ouml;nlicher Bereich</a>
 			<a href="#profile-trigger" aria-owns="profile" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Mein Profil</a>
+				UP Dienste</a>
 			<a href="#contact-trigger" aria-owns="contact" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Meine Kontakte</a>
+				Mein Profil</a>
 			<a href="#portfolio-trigger" aria-owns="portfolio" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
 				Portfolio</a>
 			<a class="aui-button aui-style-default edit">
@@ -116,48 +116,11 @@
                 <img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png"></a>
             </div>
 	        <div id="up_logo_title">
-	            <a title="Zur Startseite" href="/">Learn.UP</a>
+	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
 	        </div>
             <div id="up_logo_footer">
             </div>
         </div>
-		<ul id="up-general">
-			<li class="unipage"><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<li class="services"><a class="up_services" href="">UP Dienste</a><span class="icon arrow"></span>
-				<ul class="service_list hidden">
-					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
-					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
-					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
-					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
-					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
-				</ul> 
-			</li>			
-			<li class="lang">
-				<span class="lang-img"></span>
-				<!--
-				<select name="language_id">
-					<option value="de_DE" selected>Deutsch</option>
-					<option value="en_US">English</option>
-				</select>
-				-->
-			</li>
-			<li class="search">
-				<span class="search-img"></span>
-				<div id="searchfield" class="hidden searchfield">
-					<span class="search-img"></span>
-					${theme.search()}
-				</div>
-			</li>
-			<#if is_signed_in>
-				<li class="notificationspace"></li>
-				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
-			<#else>
-				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
-			</#if>
-		</ul>
-		<#if is_signed_in>
-				${theme.runtime(notificationPortletId, "", "")}
-		</#if>
 		<#if is_signed_in>
 		<ul id="admin">
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
@@ -186,7 +149,7 @@
 			<li>
 				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
 				<ul class="hidden">
-					<#list myLayouts as myLayout>
+					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
@@ -201,23 +164,29 @@
 				</ul>
 			</li>
 			<li>
+				UP Dienste<span class="icon arrow"></span>
+				<ul class="hidden">
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle2.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mailup/">Mail.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
+					<!--<li><a href="${portal_url}/user/${user_sname}/moodle/">Bibliothekssuche</a></li>-->
+				</ul>
+			</li>
+			<li>
 				Mein Profil <span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${user_account_url}">Profilansicht</a></li>
-					<li>Bearbeitungsmodus</li>
+					<#list myPublicLayouts as myLayout>
+						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio") && myLayout.isRootLayout() && !myLayout.isHidden()>
+							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+						</#if>
+					</#list>
 				</ul>
 			</li>
-			<li>
-				Meine Kontakte <span class="icon arrow"></span>
+			<li><@liferay.language key="so-up-theme-portfolio" />
+				<span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_id}/contacts/">Kontaktliste</a></li>
-					<li>Personen suchen</li>
-				</ul>
-			</li>
-			<li>
-				Portfolio <span class="icon arrow"></span>
-				<ul class="hidden">
-					<#list myLayouts as myLayout>
+					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
@@ -231,7 +200,7 @@
 					</#list>
 				</ul>
 			</li>
-			<span class="icon close hidden">Schlieﬂen</span>
+			<span class="icon close hidden"><@liferay.language key="close" /></span>
 		</ul>
 		<#else>	
 		<ul id="main-menu" class="disabled">
@@ -239,13 +208,13 @@
 				Pers&ouml;nlicher Bereich <span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow disabled"></span>
+				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Meine Kontakte <span class="icon arrow disabled"></span>
+				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Portfolio <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-portfolio" /><span class="icon arrow disabled"></span>
 			</li>
 		</ul>
 		</#if>		

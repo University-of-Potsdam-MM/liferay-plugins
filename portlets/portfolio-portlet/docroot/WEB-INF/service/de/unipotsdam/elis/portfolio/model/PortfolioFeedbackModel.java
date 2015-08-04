@@ -119,6 +119,27 @@ public interface PortfolioFeedbackModel extends BaseModel<PortfolioFeedback> {
 	public void setFeedbackStatus(int feedbackStatus);
 
 	/**
+	 * Returns the hidden of this portfolio feedback.
+	 *
+	 * @return the hidden of this portfolio feedback
+	 */
+	public boolean getHidden();
+
+	/**
+	 * Returns <code>true</code> if this portfolio feedback is hidden.
+	 *
+	 * @return <code>true</code> if this portfolio feedback is hidden; <code>false</code> otherwise
+	 */
+	public boolean isHidden();
+
+	/**
+	 * Sets whether this portfolio feedback is hidden.
+	 *
+	 * @param hidden the hidden of this portfolio feedback
+	 */
+	public void setHidden(boolean hidden);
+
+	/**
 	 * Returns the create date of this portfolio feedback.
 	 *
 	 * @return the create date of this portfolio feedback

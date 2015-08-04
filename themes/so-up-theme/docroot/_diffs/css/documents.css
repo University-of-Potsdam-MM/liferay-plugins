@@ -1,3 +1,204 @@
-.app-view-entry:hover, .app-view-entry.hover {
-  background-color: #d0dae3;
+.aui .wrapper-portlet-area .portlet-document-library .navbar .nav>li {
+	border-bottom:none;
 }
+
+.aui .document-library-breadcrumb ul.breadcrumb {
+	    width: 90%;
+    padding-left: 0px;
+    background-color: transparent;
+    margin-top: 0 !important;
+    margin-left: 30px;
+    padding-top: 3px;
+}
+	
+
+.aui .portlet-document-library .control-group.form-inline {
+	margin-bottom:0;
+}
+
+.portlet-document-library .nav.nav-display-style-buttons.pull-right {
+	display:none;
+}
+
+.portlet-document-library .show-sync-message-icon-container {
+	position: relative;
+    width: 20px;
+    float: left;
+    margin-left: 10px;
+}
+
+.portlet-document-library .subscribe-action  { 
+	position: absolute;
+    right: 0;
+       margin-top: -35px;
+}
+
+.portlet-document-library .lfr-app-column-view .context-pane .navbar .nav>li.open>a{
+	-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: inset 0 0px 0px rgba(0,0,0,0.25);
+    box-shadow: inset 0 0px 0px rgba(0,0,0,0.25);
+}
+
+.aui .portlet-document-library .nav-collapse .dropdown-menu {
+	margin:0 0 0 25px;
+	top: 35px;
+}
+
+.aui .portlet-document-library .navbar .nav>li>.dropdown-menu:before, .aui .portlet-document-library .navbar .nav>li>.dropdown-menu:after {
+	display:none;
+}
+
+.aui .portlet-document-library thead.table-columns, .aui .portlet-document-library thead.table-columns a {
+	background-color: #014260;
+    color: #fff;
+}
+
+.portlet-document-library .lfr-app-column-view .sync-notification, 
+.portlet-document-library-display .lfr-app-column-view .sync-notification {
+	display:none;
+}
+
+.portlet-document-library .lfr-app-column-view {
+    background: #fff;
+    border-bottom: none;
+}
+
+.portlet-document-library .lfr-app-column-view .navigation-pane .nav {
+    background: #fff;
+}
+
+.aui .portlet-document-library .nav-list>li>a, 
+.aui .portlet-document-library .nav-list .nav-header {
+	font-weight:bold;
+}
+
+.portlet-document-library .lfr-app-column-view .navigation-pane .nav li>a {
+    border-bottom: 1px solid #cfdae3;
+}
+
+.portlet-document-library .row-fluid .span10 {
+    
+    width: 85.33333%;
+}
+
+.portlet-document-library .row-fluid .span2 {
+    width: 12.66667%;
+    margin-right: 20px;
+}
+
+.portlet-document-library .lfr-app-column-view .context-pane {
+	border-left:none;
+}
+
+th.table-sortable-column.table-sorted {
+	background-color:#d0dae3;
+	color:#014260;
+}
+
+.aui .portlet-document-library thead.table-columns th.table-sortable-column.table-sorted a  {
+	background-color:#d0dae3;
+	color:#014260;
+}
+
+.portlet-document-library .lfr-app-column-view .navigation-pane .nav li.active>a {
+    border-color: transparent;
+}
+
+.portlet-document-library .document-info, .portlet-document-library-display .document-info, .portlet-trash .document-info {
+    background: #fff;
+    border-bottom: none;
+}
+
+.portlet-document-library-display .document-info .user-date
+{display:block;}
+
+
+.lfr-preview-file-image-current-column {
+    -webkit-box-shadow: inset 0 0 0px rgba(0,0,0,0.8);
+    -moz-box-shadow: inset 0 0 0px rgba(0,0,0,0.8);
+    box-shadow: inset 0 0 0px rgba(0,0,0,0.8);
+}
+
+.portlet-document-library .lfr-asset-column-details .lfr-panel {
+    margin-top: 20px;
+}
+
+.portlet-document-library .accordion-group, .portlet-document-library .accordion-inner {
+    
+    padding-left: 0;
+}
+
+.portlet-document-library .taglib-discussion, 
+.portlet-document-library-display .taglib-discussion, 
+.portlet-trash .taglib-discussion {
+    width: 97%;
+    margin: 0;
+}
+
+.portlet-document-library fieldset {
+    border-width: 0;
+    padding: 10px 0 0 0;
+}
+
+.aui .wrapper-portlet-area .lfr-document-library-comments .alert-success {
+    width: 96%;
+    margin-left: 0;
+    margin-bottom: 10px;
+}
+
+.lfr-preview-file-image-current-column, .lfr-preview-file-video-current-column {
+	background:none;
+	background-image:none;
+}
+
+.lfr-preview-file-content {
+    border-bottom-color: #fff;
+}
+
+.lfr-preview-file-image-current-column, 
+.lfr-preview-file-video-current-column {
+	padding:0;
+}
+
+.portlet-document-library .document-info .document-title, 
+.portlet-document-library-display .document-info .document-title, 
+.portlet-trash .document-info .document-title {
+	    text-shadow: 0px 0px #FFF;
+    color: #014260;
+    font-family: "source sans pro", arial, sans-serif;
+}
+
+
+.portlet-document-library .asset-details h3.version, 
+.portlet-document-library-display .asset-details h3.version, 
+.portlet-trash .asset-details h3.version {
+    margin: 0 0 0px;
+    font-family: "source sans pro", arial, sans-serif;
+    font-size: 1.2em;
+}
+
+.aui .wrapper-portlet-area #documentLibraryAssetMetadataPanel label {
+    font-size: .9em;
+    margin-bottom: 0;
+    line-height: 1;
+    font-family: "source sans pro", arial, sans-serif;
+    display: inline
+}
+
+.aui .wrapper-portlet-area #documentLibraryAssetMetadataPanel:after label{
+	content:": ";
+}
+
+.portlet-document-library .view .toolbar {
+    border-bottom: none;
+    padding: 7px 0px;
+}
+
+
+
+
+
+
+
+
+

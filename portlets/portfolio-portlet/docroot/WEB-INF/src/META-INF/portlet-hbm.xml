@@ -18,6 +18,7 @@
 			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		</composite-id>
 		<property name="feedbackStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="hidden" type="com.liferay.portal.dao.orm.hibernate.BooleanType" column="hidden_" />
 		<property name="createDate" type="org.hibernate.type.TimestampType" />
 		<property name="modifiedDate" type="org.hibernate.type.TimestampType" />
 	</class>

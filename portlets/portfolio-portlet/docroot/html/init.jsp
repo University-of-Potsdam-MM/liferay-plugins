@@ -13,6 +13,8 @@
 <%@ page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
 <%@ page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil"%>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONFactoryUtil"%>
+<%@ page import="com.liferay.portal.kernel.json.JSONArray"%>
 <%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.service.UserLocalServiceUtil"%>
 <%@ page import="com.liferay.portal.model.Layout"%>
@@ -30,3 +32,36 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui"%>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
+<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>" var="privateMessagingURL">
+	<portlet:param name="mvcPath" value="/new_message.jsp"/>
+	<portlet:param name="redirect" value="<%= redirectURL %>"/>
+</liferay-portlet:renderURL> 
+
+<aui:script>
+Liferay.provide(
+    window,
+    '<portlet:namespace />sendMessage',
+    function(userId) {
+        var uri = '<%=privateMessagingURL.toString()%>'; 
+        uri = Liferay.Util.addParams('<%= PortalUtil.getPortletNamespace("1_WAR_privatemessagingportlet") %>userIds=' + userId, uri) || uri;
+
+        Liferay.Util.openWindow({
+            dialog: {
+                centered: true,
+                constrain: true,
+                cssClass: 'private-messaging-portlet',
+                destroyOnHide: true,
+                height: 600,
+                modal: true,
+                plugins: [Liferay.WidgetZIndex],
+                width: 600
+            },
+            id: '<%= PortalUtil.getPortletNamespace("1_WAR_privatemessagingportlet") %>Dialog',
+            title: '<%= UnicodeLanguageUtil.get(pageContext, "new-message") %>',
+            uri: uri
+        });
+    }
+);
+</aui:script>

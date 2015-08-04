@@ -36,6 +36,7 @@ public class PortfolioFeedbackSoap implements Serializable {
 		soapModel.setPlid(model.getPlid());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setFeedbackStatus(model.getFeedbackStatus());
+		soapModel.setHidden(model.getHidden());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 
@@ -118,6 +119,18 @@ public class PortfolioFeedbackSoap implements Serializable {
 		_feedbackStatus = feedbackStatus;
 	}
 
+	public boolean getHidden() {
+		return _hidden;
+	}
+
+	public boolean isHidden() {
+		return _hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		_hidden = hidden;
+	}
+
 	public Date getCreateDate() {
 		return _createDate;
 	}
@@ -137,6 +150,7 @@ public class PortfolioFeedbackSoap implements Serializable {
 	private long _plid;
 	private long _userId;
 	private int _feedbackStatus;
+	private boolean _hidden;
 	private Date _createDate;
 	private Date _modifiedDate;
 }

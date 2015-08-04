@@ -84,7 +84,7 @@ public interface Portfolio extends PortfolioModel, PersistedModel {
 	public de.unipotsdam.elis.portfolio.model.PortfolioFeedback getPortfolioFeedback(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException;
 
-	public boolean userHasPermission(long userId)
+	public boolean userHasViewPermission(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void setGlobal()
@@ -108,4 +108,8 @@ public interface Portfolio extends PortfolioModel, PersistedModel {
 
 	public boolean feedbackRequested()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void rename(java.lang.String newTitle)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 }

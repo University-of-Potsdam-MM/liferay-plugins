@@ -297,26 +297,9 @@ public class PortfolioLocalServiceUtil {
 		return getService().getPortfoliosByLayoutUserId(userId);
 	}
 
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByLayoutUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getPortfoliosByLayoutUserId(userId, titleFilter, locale);
-	}
-
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getPortfoliosByPortfolioFeedbackUserId(userId);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPortfolioFeedbackUserId(
-		long userId, java.lang.String titleFilter, java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getPortfoliosByPortfolioFeedbackUserId(userId, titleFilter,
-			locale);
 	}
 
 	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(
@@ -325,16 +308,6 @@ public class PortfolioLocalServiceUtil {
 		return getService()
 				   .getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
 			userId);
-	}
-
-	public static java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(
-		int publishmentType, long userId, java.lang.String titleFilter,
-		java.util.Locale locale)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(publishmentType,
-			userId, titleFilter, locale);
 	}
 
 	public static void clearService() {

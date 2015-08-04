@@ -7,6 +7,7 @@
 		<column name="plid" type="long" primary="true"></column>
 		<column name="userId" type="long" primary="true"></column>
 		<column name="feedbackStatus" type="int"></column>
+        <column name="hidden" type="boolean"></column>
 		<column name="createDate" type="Date"></column>
 		<column name="modifiedDate" type="Date"></column>
 		<finder name="Plid" return-type="Collection">

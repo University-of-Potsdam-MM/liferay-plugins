@@ -53,6 +53,7 @@ public class PortfolioFeedbackWrapper implements PortfolioFeedback,
 		attributes.put("plid", getPlid());
 		attributes.put("userId", getUserId());
 		attributes.put("feedbackStatus", getFeedbackStatus());
+		attributes.put("hidden", getHidden());
 		attributes.put("createDate", getCreateDate());
 		attributes.put("modifiedDate", getModifiedDate());
 
@@ -77,6 +78,12 @@ public class PortfolioFeedbackWrapper implements PortfolioFeedback,
 
 		if (feedbackStatus != null) {
 			setFeedbackStatus(feedbackStatus);
+		}
+
+		Boolean hidden = (Boolean)attributes.get("hidden");
+
+		if (hidden != null) {
+			setHidden(hidden);
 		}
 
 		Date createDate = (Date)attributes.get("createDate");
@@ -193,6 +200,36 @@ public class PortfolioFeedbackWrapper implements PortfolioFeedback,
 	@Override
 	public void setFeedbackStatus(int feedbackStatus) {
 		_portfolioFeedback.setFeedbackStatus(feedbackStatus);
+	}
+
+	/**
+	* Returns the hidden of this portfolio feedback.
+	*
+	* @return the hidden of this portfolio feedback
+	*/
+	@Override
+	public boolean getHidden() {
+		return _portfolioFeedback.getHidden();
+	}
+
+	/**
+	* Returns <code>true</code> if this portfolio feedback is hidden.
+	*
+	* @return <code>true</code> if this portfolio feedback is hidden; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isHidden() {
+		return _portfolioFeedback.isHidden();
+	}
+
+	/**
+	* Sets whether this portfolio feedback is hidden.
+	*
+	* @param hidden the hidden of this portfolio feedback
+	*/
+	@Override
+	public void setHidden(boolean hidden) {
+		_portfolioFeedback.setHidden(hidden);
 	}
 
 	/**
@@ -352,6 +389,12 @@ public class PortfolioFeedbackWrapper implements PortfolioFeedback,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioFeedback.getPortfolio();
+	}
+
+	@Override
+	public void changeVisibility()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_portfolioFeedback.changeVisibility();
 	}
 
 	@Override

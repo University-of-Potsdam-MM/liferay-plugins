@@ -9,6 +9,7 @@
 		<field name="plid" type="long" />
 		<field name="userId" type="long" />
 		<field name="feedbackStatus" type="int" />
+		<field name="hidden" type="boolean" />
 		<field name="createDate" type="Date" />
 		<field name="modifiedDate" type="Date" />
 	</model>

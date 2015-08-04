@@ -38,4 +38,7 @@ public interface PortfolioFeedback extends PortfolioFeedbackModel, PersistedMode
 	public com.liferay.portal.model.Layout getPortfolio()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public void changeVisibility()
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

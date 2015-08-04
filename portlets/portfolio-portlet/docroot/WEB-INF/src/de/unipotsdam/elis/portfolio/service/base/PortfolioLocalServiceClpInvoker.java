@@ -134,31 +134,13 @@ public class PortfolioLocalServiceClpInvoker {
 
 		_methodParameterTypes52 = new String[] { "long" };
 
-		_methodName53 = "getPortfoliosByLayoutUserId";
+		_methodName53 = "getPortfoliosByPortfolioFeedbackUserId";
 
-		_methodParameterTypes53 = new String[] {
-				"long", "java.lang.String", "java.util.Locale"
-			};
+		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "getPortfoliosByPortfolioFeedbackUserId";
+		_methodName54 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
 
-		_methodParameterTypes54 = new String[] { "long" };
-
-		_methodName55 = "getPortfoliosByPortfolioFeedbackUserId";
-
-		_methodParameterTypes55 = new String[] {
-				"long", "java.lang.String", "java.util.Locale"
-			};
-
-		_methodName56 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
-
-		_methodParameterTypes56 = new String[] { "int", "long" };
-
-		_methodName57 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
-
-		_methodParameterTypes57 = new String[] {
-				"int", "long", "java.lang.String", "java.util.Locale"
-			};
+		_methodParameterTypes54 = new String[] { "int", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -291,32 +273,13 @@ public class PortfolioLocalServiceClpInvoker {
 
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1], (java.util.Locale)arguments[2]);
+			return PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName55.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(((Long)arguments[0]).longValue(),
-				(java.lang.String)arguments[1], (java.util.Locale)arguments[2]);
-		}
-
-		if (_methodName56.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
 			return PortfolioLocalServiceUtil.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue());
-		}
-
-		if (_methodName57.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(((Integer)arguments[0]).intValue(),
-				((Long)arguments[1]).longValue(),
-				(java.lang.String)arguments[2], (java.util.Locale)arguments[3]);
 		}
 
 		throw new UnsupportedOperationException();
@@ -372,10 +335,4 @@ public class PortfolioLocalServiceClpInvoker {
 	private String[] _methodParameterTypes53;
 	private String _methodName54;
 	private String[] _methodParameterTypes54;
-	private String _methodName55;
-	private String[] _methodParameterTypes55;
-	private String _methodName56;
-	private String[] _methodParameterTypes56;
-	private String _methodName57;
-	private String[] _methodParameterTypes57;
 }

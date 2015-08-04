@@ -19,39 +19,20 @@ package de.unipotsdam.elis.portfolio.service.persistence;
  */
 public interface PortfolioFinder {
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, java.lang.String title, int begin, int end);
+		long userId, int begin, int end);
 
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
 		long userId);
 
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, java.lang.String title);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByLayoutUserId(
-		long userId, int begin, int end);
-
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, java.lang.String title, int begin, int end);
+		long userId, int begin, int end);
 
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
 		long userId);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, java.lang.String title);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPortfolioFeedbackUserId(
-		long userId, int begin, int end);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId, java.lang.String title, int begin,
-		int end);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId);
-
-	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
-		long publishmentType, long userId, java.lang.String title);
 
 	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
 		long publishmentType, long userId, int begin, int end);
+
+	public java.util.List<de.unipotsdam.elis.portfolio.model.Portfolio> findByPublishmentTypeAndNoPortfolioFeedback(
+		long publishmentType, long userId);
 }

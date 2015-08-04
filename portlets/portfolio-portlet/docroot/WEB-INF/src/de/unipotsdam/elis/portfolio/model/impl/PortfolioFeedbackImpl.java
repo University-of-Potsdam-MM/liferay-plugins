@@ -21,6 +21,8 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
+import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
+
 /**
  * The extended model implementation for the PortfolioFeedback service. Represents a row in the &quot;Portfolio_PortfolioFeedback&quot; database table, with each column mapped to a property of this class.
  *
@@ -52,5 +54,10 @@ public class PortfolioFeedbackImpl extends PortfolioFeedbackBaseImpl {
 		if (_portfolio == null)
 			_portfolio = LayoutLocalServiceUtil.getLayout(getPlid());
 		return _portfolio;
+	}
+	
+	public void changeVisibility() throws SystemException{
+		setHidden(!isHidden());
+		PortfolioFeedbackLocalServiceUtil.updatePortfolioFeedback(this);
 	}
 }
