@@ -148,8 +148,8 @@
 					${theme.search()}
 				</div>
 			</li>
-			<li class="notificationspace"></li>
 			<#if is_signed_in>
+				<li class="notificationspace"></li>
 				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
 			<#else>
 				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
