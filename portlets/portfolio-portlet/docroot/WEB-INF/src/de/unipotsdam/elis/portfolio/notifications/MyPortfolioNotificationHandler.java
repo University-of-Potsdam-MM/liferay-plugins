@@ -8,11 +8,11 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.ServiceContext;
 
-public class PortfolioNotificationHandler extends BaseUserNotificationHandler {
+public class MyPortfolioNotificationHandler extends BaseUserNotificationHandler {
+	
+	public static String PORTLET_ID = "myportfolio_WAR_portfolioportlet";
 
-	public static final String PORTLET_ID = "myportfolio_WAR_portfolioportlet";
-
-	public PortfolioNotificationHandler() {
+	public MyPortfolioNotificationHandler() {
 
 		setPortletId(PORTLET_ID);
 
@@ -37,9 +37,9 @@ public class PortfolioNotificationHandler extends BaseUserNotificationHandler {
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(userNotificationEvent.getPayload());
 
-		String portfolioLink = jsonObject.getString("portfolioLink");
+		String url = jsonObject.getString("url");
 
-		return portfolioLink;
+		return url;
 	}
 
 	protected String getBodyTemplate() throws Exception {

@@ -11,8 +11,11 @@ import javax.portlet.MimeResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.compat.portal.util.PortalUtil;
@@ -64,7 +67,12 @@ import de.unipotsdam.elis.portfolio.util.FriendlyURLValidator;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
-
+@Override
+public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+	PortletConfig portletConfig = (PortletConfig) request
+			.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+	super.render(request, response);
+}
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException {
@@ -287,8 +295,12 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
 				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
-			portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
-			sendFeedbackRequestedNotification(resourceRequest, userId, portfolio);
+			User user = UserLocalServiceUtil.fetchUserById(userId);
+			if (user != null) {
+				portfolio.updateFeedbackStatus(userId, PortfolioStatics.FEEDBACK_REQUESTED);
+				JspHelper.handleSocialActivities(portfolio, resourceRequest, user,
+						PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED);
+			}
 		}
 	}
 
@@ -496,7 +508,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		String portfolioPlid = ParamUtil.getString(actionRequest, "portfolioPlid");
 		String[] userNameList = userNames.split(";");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(Long.parseLong(portfolioPlid));
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
 				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
@@ -505,16 +516,8 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				if (user != null) {
 					portfolio.publishToUser(user.getUserId(),
 							ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
-					String message = LanguageUtil.format(
-							portletConfig,
-							themeDisplay.getLocale(),
-							"portfolio-portfolio-published-message",
-							new Object[] { themeDisplay.getUser().getFullName(),
-									portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
-					String portfolioLink = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(),
-							themeDisplay.getUser());
-					JspHelper.sendPortfolioNotification(user, themeDisplay.getUser(), message, portfolioLink,
-							ServiceContextFactory.getInstance(actionRequest));
+					JspHelper.handleSocialActivities(portfolio, actionRequest, user,
+							PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED);
 				}
 			}
 		}
@@ -540,7 +543,8 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				if (user != null) {
 					portfolio.publishToUserAndRequestFeedback(user.getUserId(),
 							ServiceContextFactory.getInstance(PortfolioFeedback.class.getName(), actionRequest));
-					sendFeedbackRequestedNotification(actionRequest, user.getUserId(), portfolio);
+					JspHelper.handleSocialActivities(portfolio, actionRequest, user,
+							PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED);
 				}
 			}
 		}
@@ -560,27 +564,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		mimeResponse.setContentType(ContentTypes.TEXT_HTML);
 		PortletResponseUtil.write(mimeResponse, json.toString());
 		mimeResponse.flushBuffer();
-	}
-
-	/**
-	 * Sends notification to a user
-	 * 
-	 * @param actionRequest
-	 * @param userId
-	 * @param portfolio
-	 * @throws PortalException
-	 * @throws SystemException
-	 */
-	private void sendFeedbackRequestedNotification(PortletRequest actionRequest, long userId, Portfolio portfolio)
-			throws PortalException, SystemException {
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-		String message = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
-				"portfolio-portfolio-feedback-requested-message", new Object[] { themeDisplay.getUser().getFullName(),
-						portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
-		String portfolioLink = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
-		JspHelper.sendPortfolioNotification(UserLocalServiceUtil.getUser(userId), themeDisplay.getUser(), message,
-				portfolioLink, ServiceContextFactory.getInstance(actionRequest));
 	}
 
 	public void filterPortfolios(ActionRequest actionRequest, ActionResponse actionResponse) {
