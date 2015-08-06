@@ -8,18 +8,14 @@
 		margin-right: 63px;
 		transition-property: margin-right;
 	
-		.liferay_dockbar
+		.dockbar .navbar-inner .nav-add-controls
 		{
-			display: block;
-	
-			.dockbar .navbar-inner .nav-add-controls
-			{
-				left: auto;
-				right: 0px;
-				margin-left: 0px;
-				margin-right: 0px;
-			}
-		}		
+			left: auto;
+			right: 0px;
+			margin-left: 0px;
+			margin-right: 0px;
+			transition-property: margin-right;
+		}
 	}
 	
 	.lfr-admin-panel
@@ -167,6 +163,68 @@
 			overflow: visible;
 			min-height: 256px;
 			
+			#p_p_id_145_{
+			
+				.navbar-inner {
+				
+					border: 0px;
+					box-shadow: none;
+					border-radius: 0px;
+				
+					ul.navbar-nav
+					{
+						background: $upDarkBlue;
+					
+						li
+						{
+							*:hover
+							{
+								background: none;
+							}
+							
+							a, a:hover
+							{
+								color: $upWhite;
+								background: none;
+								
+								span
+								{
+									color:$upWhite;
+								}
+							}	
+							
+							ul li span
+							{
+								color: $upDarkBlue;
+							}
+							
+						}	
+						
+						a.user-notification-link
+						{
+							height: auto;
+							padding: 3px;
+							
+							span.user-notifications-count
+							{
+								background-color: transparent;
+								top: 4px;
+								height: 20px;
+								line-height: 20px;
+								background-position: 4px 379px;
+								background-color: transparent;
+								top:4px;
+							}
+							
+							span.user-notifications-count::after
+							{
+								top:4px;
+							}
+						}
+					}
+				}
+			
+			}
 		
 			ul#up-general {
 				display: block;
@@ -598,8 +656,7 @@
 		
 		#main-menu
 		{
-			margin: 60px;
-			margin-bottom: 20px;
+			margin: 45px 60px 20px;
 			list-style: none;
 			display: block;
 			overflow: hidden;

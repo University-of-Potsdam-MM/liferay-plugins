@@ -19,11 +19,6 @@
 	</div>
 	<div class="windowdiv">
 	</div>
-	<#if is_signed_in>
-	<div class="liferay_dockbar">
-		<@liferay.dockbar />
-	</div>	
-	</#if>
 
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
@@ -121,7 +116,9 @@
             <div id="up_logo_footer">
             </div>
         </div>
+		<@liferay.dockbar />
 		<#if is_signed_in>
+		
 		<ul id="admin">
 			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
