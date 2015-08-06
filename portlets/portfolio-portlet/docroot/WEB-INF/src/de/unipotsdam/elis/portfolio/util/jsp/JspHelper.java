@@ -26,7 +26,7 @@ import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
-import de.unipotsdam.elis.activities.ExtendedSocialRelationConstants;
+import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.portfolio.PortfolioStatics;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
@@ -121,7 +121,7 @@ public class JspHelper {
 		jsonObject.put("portletId", portletId);
 		jsonObject.put("companyId", themeDisplay.getCompanyId());
 		SocialActivityLocalServiceUtil.addActivity(themeDisplay.getUserId(), 0, Portfolio.class.getName(),
-				portfolio.getPlid(), ExtendedSocialRelationConstants.TYPE_PORTFOLIO, jsonObject.toString(), receiver.getUserId()); 
+				portfolio.getPlid(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO, jsonObject.toString(), receiver.getUserId()); 
 	}
 
 	private static void createPortfolioNotification(User sender, User receiver, String message, String portfolioURL,

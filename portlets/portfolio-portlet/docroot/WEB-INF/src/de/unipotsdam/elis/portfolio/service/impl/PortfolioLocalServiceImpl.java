@@ -59,7 +59,7 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 		Portfolio portfolio = portfolioPersistence.create(plid);
 		portfolio.setPublishmentType(publishmentType);
 		super.addPortfolio(portfolio);
-		return portfolio;
+		return portfolio; 
 	}
 
 	public Portfolio addPortfolio(long plid) throws SystemException {

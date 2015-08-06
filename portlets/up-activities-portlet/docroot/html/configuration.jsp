@@ -5,9 +5,8 @@
 <liferay-portlet:renderURL portletConfiguration="true" var="configurationRenderURL" />
 <liferay-ui:error key="at-least-one-activity-needs-to-be-selected" message="at-least-one-activity-needs-to-be-selected"></liferay-ui:error>
 
-
 <c:choose>
-	<c:when test="<%= group.isUser() && layout.isPrivateLayout() && !oneTab%>"> 
+	<c:when test="<%= (group.isUser() && layout.isPrivateLayout()) ||  group.isLayoutSetPrototype()  %>"> 
 		<aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 			<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 			<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />

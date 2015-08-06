@@ -19,16 +19,27 @@ package de.unipotsdam.elis.activities.util;
 
 import java.util.List;
 
+import com.liferay.compat.portal.kernel.dao.orm.ProjectionFactoryUtil;
+import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
+import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.SQLQuery;
+import com.liferay.portal.kernel.dao.orm.Session;
+import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
+import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
+import com.liferay.util.dao.orm.CustomSQLUtil;
 
 /**
  * @author Matthew Kong
@@ -52,16 +63,18 @@ public class ActivitiesUtil {
 
 	public static List<SocialActivity> getSocialActivityByType(long userId, int activityType, int start, int end)
 			throws SystemException {
-		return SocialActivityLocalServiceUtil.dynamicQuery(getDynamicQueryByTypeCount(userId, activityType), start, end);
+		return SocialActivityLocalServiceUtil.dynamicQuery(getDynamicQueryforSocialActivity(userId, activityType),
+				start, end);
 	}
-	
-	public static long getSocialActivityByTypeCount(long userId, int activityType)
-			throws SystemException {
-		return SocialActivityLocalServiceUtil.dynamicQueryCount(getDynamicQueryByTypeCount(userId, activityType));
+
+	public static long getSocialActivityByTypeCount(long userId, int activityType) throws SystemException {
+		return SocialActivityLocalServiceUtil.dynamicQueryCount(getDynamicQueryforSocialActivity(userId, activityType));
 	}
-	
-	private static DynamicQuery getDynamicQueryByTypeCount(long userId, int activityType){
-		return DynamicQueryFactoryUtil.forClass(SocialActivity.class,(ClassLoader)PortletBeanLocatorUtil.locate("so-portlet","portletClassLoader"))
+
+	private static DynamicQuery getDynamicQueryforSocialActivity(long userId, int activityType) {
+		return DynamicQueryFactoryUtil
+				.forClass(SocialActivity.class,
+						(ClassLoader) PortletBeanLocatorUtil.locate("so-portlet", "portletClassLoader"))
 				.add(PropertyFactoryUtil.forName("userId").eq(userId))
 				.add(PropertyFactoryUtil.forName("type").eq(activityType));
 	}

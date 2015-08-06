@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="portfolio-portlet" basedir="." default="deploy">
-	<property name="import.shared" value="up-activities-portlet" />
-	
+<project name="portfolio-portlet" basedir="." default="deploy">	
 	<import file="../build-common-portlet.xml" />
 
 	<target name="build-service" depends="build-common-plugin.build-service">
