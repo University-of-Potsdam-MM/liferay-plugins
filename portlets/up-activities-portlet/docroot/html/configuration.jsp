@@ -7,7 +7,7 @@
 
 
 <c:choose>
-	<c:when test="<%= group.isUser() && layout.isPrivateLayout() && !oneTab%>"> 
+	<c:when test="<%= group.isUser() && layout.isPrivateLayout() %>"> 
 		<aui:form action="<%= configurationActionURL %>" method="post" name="fm">
 			<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 			<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />

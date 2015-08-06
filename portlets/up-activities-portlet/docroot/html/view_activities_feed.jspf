@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"%>
 <%@page import="de.unipotsdam.elis.activities.ExtendedSocialRelationConstants"%>
 <%
 Date now = new Date();
@@ -67,7 +68,7 @@ for (SocialActivity activity : results) {
 		User curUser = null;
 
 		try {
-			if (activity.getType() == ExtendedSocialRelationConstants.TYPE_PORTFOLIO)
+			if (activity.getType() == ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO)
 				curUser = UserLocalServiceUtil.getUserById(Long.parseLong(activity.getExtraDataValue("userId")));
 			else
 				curUser = UserLocalServiceUtil.getUserById(activity.getUserId());

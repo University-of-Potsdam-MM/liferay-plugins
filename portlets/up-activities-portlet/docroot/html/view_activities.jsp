@@ -38,8 +38,8 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 				total = SocialActivityLocalServiceUtil.getUserGroupsActivitiesCount(group.getClassPK());
 			}
 			else if (tabs1.equals("portfolio")){
-				results = ActivitiesUtil.getSocialActivityByType(themeDisplay.getUserId(), ExtendedSocialRelationConstants.TYPE_PORTFOLIO, start, end);
-				total = ActivitiesUtil.getSocialActivityByTypeCount(themeDisplay.getUserId(), ExtendedSocialRelationConstants.TYPE_PORTFOLIO);
+				results = ActivitiesUtil.getSocialActivityByType(themeDisplay.getUserId(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO, start, end);
+				total = ActivitiesUtil.getSocialActivityByTypeCount(themeDisplay.getUserId(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO);
 			}
 			else {
 				results = SocialActivityLocalServiceUtil.getUserActivities(group.getClassPK(), start, end);

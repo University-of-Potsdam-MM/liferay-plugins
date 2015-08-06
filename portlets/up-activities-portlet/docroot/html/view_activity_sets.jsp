@@ -11,17 +11,21 @@
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
  * for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 --%>
 
-<%@ include file="/html/init.jsp" %>
+<%@page import="de.unipotsdam.elis.activities.service.ExtLocalServiceUtil"%>
+<%@page import="de.unipotsdam.elis.activities.service.persistence.ExtFinderUtil"%>
+<%@page
+	import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"
+%>
+<%@ include file="/html/init.jsp"%>
 
 <%
-
-List<SocialActivitySet> results = null;
+	List<SocialActivitySet> results = null;
 
 int count = 0;
 int total = 0;
@@ -32,22 +36,23 @@ int end = start + _DELTA;
 while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	if (group.isUser()) {
 		if (layout.isPrivateLayout()) {
-			if (tabs1.equals("me")) {
-				results = SocialActivitySetLocalServiceUtil.getUserActivitySets(group.getClassPK(), start, end);
-				total = SocialActivitySetLocalServiceUtil.getUserActivitySetsCount(group.getClassPK());
-			}
-			else if (tabs1.equals("my-sites")) {
+			int[] activityTypes = new int[]{ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO};
+			if (tabs1.equals("my-sites")) {
 				results = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySets(group.getClassPK(), start, end);
 				total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(group.getClassPK());
 			}
-			else {
-				results = SocialActivitySetLocalServiceUtil.getUserViewableActivitySets(group.getClassPK(), start, end);
-				total = SocialActivitySetLocalServiceUtil.getUserViewableActivitySetsCount(group.getClassPK());
+			else if (tabs1.equals("portfolio")) {
+				 results = ExtLocalServiceUtil.findSocialActivitySetsByUserIdAndActivityTypes(group.getClassPK(), activityTypes, start, end);
+				 total = ExtLocalServiceUtil.countSocialActivitySetsByUserIdAndActivityTypes(group.getClassPK(), activityTypes);
+				}
+			else { 
+				results = ExtLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(group.getClassPK(), activityTypes, start, end);
+				total = ExtLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(group.getClassPK(), activityTypes);
 			}
 		}
 		else {
-			results = SocialActivitySetLocalServiceUtil.getUserActivitySets(group.getClassPK(), start, end);
-			total = SocialActivitySetLocalServiceUtil.getUserActivitySetsCount(group.getClassPK());
+	results = SocialActivitySetLocalServiceUtil.getUserActivitySets(group.getClassPK(), start, end);
+	total = SocialActivitySetLocalServiceUtil.getUserActivitySetsCount(group.getClassPK());
 		}
 	}
 	else {
@@ -56,7 +61,7 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	}
 %>
 
-	<%@ include file="/html/view_activity_sets_feed.jspf" %>
+<%@ include file="/html/view_activity_sets_feed.jspf"%>
 
 <%
 	end = start + _DELTA;
@@ -66,11 +71,13 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 <aui:script>
 	<portlet:namespace />start = <%= start %>;
 </aui:script>
+	
 
-<c:if test="<%= (results.isEmpty()) %>">
+
+<c:if test="<%=(results.isEmpty())%>">
 	<div class="no-activities">
 		<c:choose>
-			<c:when test="<%= total == 0 %>">
+			<c:when test="<%=total == 0%>">
 				<liferay-ui:message key="there-are-no-activities" />
 			</c:when>
 			<c:otherwise>
