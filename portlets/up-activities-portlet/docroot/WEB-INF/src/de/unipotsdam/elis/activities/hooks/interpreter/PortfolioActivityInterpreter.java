@@ -127,7 +127,7 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 		if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
 			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"portfolio-portfolio-page-published-activity",
-					new String[] { receiver.getFullName() }));
+					new String[] { getUserName(receiver.getUserId(), serviceContext) }));
 		} else if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
 			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"portfolio-feedback-requested-activity",
