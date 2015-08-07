@@ -10,6 +10,7 @@
 			<generator class="assigned" />
 		</id>
 		<property name="publishmentType" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />
+		<property name="learningTemplateId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="de.unipotsdam.elis.portfolio.model.impl.PortfolioFeedbackImpl" table="Portfolio_PortfolioFeedback">
 		<cache usage="read-write" />

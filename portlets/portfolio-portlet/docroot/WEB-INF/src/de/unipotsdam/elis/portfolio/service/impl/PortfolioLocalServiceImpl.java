@@ -54,17 +54,24 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	 * de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil} to access
 	 * the portfolio local service.
 	 */
-
-	public Portfolio addPortfolio(long plid, int publishmentType) throws SystemException {
+	
+	public Portfolio addPortfolio(long plid, int publishmentType, String learningTemplateId) throws SystemException {
 		Portfolio portfolio = portfolioPersistence.create(plid);
 		portfolio.setPublishmentType(publishmentType);
+		portfolio.setLearningTemplateId(learningTemplateId);
 		super.addPortfolio(portfolio);
 		return portfolio; 
+	}
+
+	public Portfolio addPortfolio(long plid, int publishmentType) throws SystemException {
+		return addPortfolio(plid, publishmentType, null);
 	}
 
 	public Portfolio addPortfolio(long plid) throws SystemException {
 		return addPortfolio(plid, PortfolioStatics.PUBLISHMENT_INDIVIDUAL);
 	}
+	
+	
 
 	public Portfolio updatePortfolio(long plid, int publishmentType) throws NoSuchPortfolioException, SystemException {
 		Portfolio portfolio = portfolioPersistence.findByPrimaryKey(plid);

@@ -74,6 +74,7 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 		attributes.put("plid", getPlid());
 		attributes.put("publishmentType", getPublishmentType());
+		attributes.put("learningTemplateId", getLearningTemplateId());
 
 		return attributes;
 	}
@@ -90,6 +91,12 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 		if (publishmentType != null) {
 			setPublishmentType(publishmentType);
+		}
+
+		String learningTemplateId = (String)attributes.get("learningTemplateId");
+
+		if (learningTemplateId != null) {
+			setLearningTemplateId(learningTemplateId);
 		}
 	}
 
@@ -132,6 +139,30 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 				Method method = clazz.getMethod("setPublishmentType", int.class);
 
 				method.invoke(_portfolioRemoteModel, publishmentType);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getLearningTemplateId() {
+		return _learningTemplateId;
+	}
+
+	@Override
+	public void setLearningTemplateId(String learningTemplateId) {
+		_learningTemplateId = learningTemplateId;
+
+		if (_portfolioRemoteModel != null) {
+			try {
+				Class<?> clazz = _portfolioRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setLearningTemplateId",
+						String.class);
+
+				method.invoke(_portfolioRemoteModel, learningTemplateId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -469,6 +500,7 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 		clone.setPlid(getPlid());
 		clone.setPublishmentType(getPublishmentType());
+		clone.setLearningTemplateId(getLearningTemplateId());
 
 		return clone;
 	}
@@ -521,12 +553,14 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{plid=");
 		sb.append(getPlid());
 		sb.append(", publishmentType=");
 		sb.append(getPublishmentType());
+		sb.append(", learningTemplateId=");
+		sb.append(getLearningTemplateId());
 		sb.append("}");
 
 		return sb.toString();
@@ -534,7 +568,7 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("<model><model-name>");
 		sb.append("de.unipotsdam.elis.portfolio.model.Portfolio");
@@ -548,6 +582,10 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 			"<column><column-name>publishmentType</column-name><column-value><![CDATA[");
 		sb.append(getPublishmentType());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>learningTemplateId</column-name><column-value><![CDATA[");
+		sb.append(getLearningTemplateId());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -556,6 +594,7 @@ public class PortfolioClp extends BaseModelImpl<Portfolio> implements Portfolio 
 
 	private long _plid;
 	private int _publishmentType;
+	private String _learningTemplateId;
 	private BaseModel<?> _portfolioRemoteModel;
 	private Class<?> _clpSerializerClass = de.unipotsdam.elis.portfolio.service.ClpSerializer.class;
 }

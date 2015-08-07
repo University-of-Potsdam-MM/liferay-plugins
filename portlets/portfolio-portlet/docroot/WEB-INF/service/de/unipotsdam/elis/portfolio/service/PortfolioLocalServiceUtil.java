@@ -275,6 +275,13 @@ public class PortfolioLocalServiceUtil {
 	}
 
 	public static de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
+		long plid, int publishmentType, java.lang.String learningTemplateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addPortfolio(plid, publishmentType, learningTemplateId);
+	}
+
+	public static de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
 		long plid, int publishmentType)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().addPortfolio(plid, publishmentType);

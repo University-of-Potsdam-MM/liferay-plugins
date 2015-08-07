@@ -15,6 +15,7 @@
 package de.unipotsdam.elis.portfolio.model.impl;
 
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 
 import de.unipotsdam.elis.portfolio.model.Portfolio;
@@ -35,12 +36,14 @@ public class PortfolioCacheModel implements CacheModel<Portfolio>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{plid=");
 		sb.append(plid);
 		sb.append(", publishmentType=");
 		sb.append(publishmentType);
+		sb.append(", learningTemplateId=");
+		sb.append(learningTemplateId);
 		sb.append("}");
 
 		return sb.toString();
@@ -53,6 +56,13 @@ public class PortfolioCacheModel implements CacheModel<Portfolio>,
 		portfolioImpl.setPlid(plid);
 		portfolioImpl.setPublishmentType(publishmentType);
 
+		if (learningTemplateId == null) {
+			portfolioImpl.setLearningTemplateId(StringPool.BLANK);
+		}
+		else {
+			portfolioImpl.setLearningTemplateId(learningTemplateId);
+		}
+
 		portfolioImpl.resetOriginalValues();
 
 		return portfolioImpl;
@@ -62,6 +72,7 @@ public class PortfolioCacheModel implements CacheModel<Portfolio>,
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		plid = objectInput.readLong();
 		publishmentType = objectInput.readInt();
+		learningTemplateId = objectInput.readUTF();
 	}
 
 	@Override
@@ -69,8 +80,16 @@ public class PortfolioCacheModel implements CacheModel<Portfolio>,
 		throws IOException {
 		objectOutput.writeLong(plid);
 		objectOutput.writeInt(publishmentType);
+
+		if (learningTemplateId == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(learningTemplateId);
+		}
 	}
 
 	public long plid;
 	public int publishmentType;
+	public String learningTemplateId;
 }

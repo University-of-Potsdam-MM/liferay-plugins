@@ -1,6 +1,7 @@
 create table Portfolio_Portfolio (
 	plid LONG not null primary key,
-	publishmentType INTEGER
+	publishmentType INTEGER,
+	learningTemplateId VARCHAR(75) null
 );
 
 create table Portfolio_PortfolioFeedback (

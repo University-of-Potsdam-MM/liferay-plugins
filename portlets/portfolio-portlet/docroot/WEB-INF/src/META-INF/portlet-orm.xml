@@ -11,6 +11,7 @@
 		<attributes>
 			<id name="plid" />
 			<basic name="publishmentType" />
+			<basic name="learningTemplateId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

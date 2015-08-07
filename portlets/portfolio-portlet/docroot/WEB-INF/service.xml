@@ -28,13 +28,21 @@
 		<!-- Group instance -->
 
 		<!-- Audit fields -->
-        <column name="plid" type="long" primary="true"></column>
-        <column name="publishmentType" type="int"></column>
-        <finder name="Plid" return-type="Portfolio">
-            <finder-column name="plid"></finder-column>
-        </finder>
-        <finder name="PublishmentType" return-type="Collection">
-            <finder-column name="publishmentType"></finder-column>
-        </finder>
+		<column name="plid" type="long" primary="true"></column>
+		<column name="publishmentType" type="int"></column>
+        <column name="learningTemplateId" type="String"></column>
+		<finder name="Plid" return-type="Portfolio">
+			<finder-column name="plid"></finder-column>
+		</finder>
+		<finder name="PublishmentType" return-type="Collection">
+			<finder-column name="publishmentType"></finder-column>
+		</finder>
+
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
 	</entity>
 </service-builder>

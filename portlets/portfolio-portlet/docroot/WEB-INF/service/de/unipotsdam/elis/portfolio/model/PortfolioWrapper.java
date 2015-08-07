@@ -50,6 +50,7 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 
 		attributes.put("plid", getPlid());
 		attributes.put("publishmentType", getPublishmentType());
+		attributes.put("learningTemplateId", getLearningTemplateId());
 
 		return attributes;
 	}
@@ -66,6 +67,12 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 
 		if (publishmentType != null) {
 			setPublishmentType(publishmentType);
+		}
+
+		String learningTemplateId = (String)attributes.get("learningTemplateId");
+
+		if (learningTemplateId != null) {
+			setLearningTemplateId(learningTemplateId);
 		}
 	}
 
@@ -127,6 +134,26 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 	@Override
 	public void setPublishmentType(int publishmentType) {
 		_portfolio.setPublishmentType(publishmentType);
+	}
+
+	/**
+	* Returns the learning template ID of this portfolio.
+	*
+	* @return the learning template ID of this portfolio
+	*/
+	@Override
+	public java.lang.String getLearningTemplateId() {
+		return _portfolio.getLearningTemplateId();
+	}
+
+	/**
+	* Sets the learning template ID of this portfolio.
+	*
+	* @param learningTemplateId the learning template ID of this portfolio
+	*/
+	@Override
+	public void setLearningTemplateId(java.lang.String learningTemplateId) {
+		_portfolio.setLearningTemplateId(learningTemplateId);
 	}
 
 	@Override

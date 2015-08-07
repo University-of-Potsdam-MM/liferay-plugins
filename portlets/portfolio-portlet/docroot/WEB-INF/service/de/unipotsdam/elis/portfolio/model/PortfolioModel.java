@@ -14,6 +14,7 @@
 
 package de.unipotsdam.elis.portfolio.model;
 
+import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
@@ -83,6 +84,21 @@ public interface PortfolioModel extends BaseModel<Portfolio> {
 	 * @param publishmentType the publishment type of this portfolio
 	 */
 	public void setPublishmentType(int publishmentType);
+
+	/**
+	 * Returns the learning template ID of this portfolio.
+	 *
+	 * @return the learning template ID of this portfolio
+	 */
+	@AutoEscape
+	public String getLearningTemplateId();
+
+	/**
+	 * Sets the learning template ID of this portfolio.
+	 *
+	 * @param learningTemplateId the learning template ID of this portfolio
+	 */
+	public void setLearningTemplateId(String learningTemplateId);
 
 	@Override
 	public boolean isNew();

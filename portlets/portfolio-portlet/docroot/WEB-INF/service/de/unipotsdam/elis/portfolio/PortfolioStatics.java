@@ -18,6 +18,7 @@ public class PortfolioStatics {
 	public final static String BLOG_LAYOUT_PROTOTYPE = "Blog";
 	public final static String CDP_LAYOUT_PROTOTYPE = "Content Display Page";
 	public final static String EMPTY_LAYOUT_PROTOTYPE = "Empty";
+	public final static String REFLECTION_PORTFOLIO_LAYOUT_PROTOTYPE = "Reflection Portfolio";
 	
 	public final static int MESSAGE_TYPE_PORTFOLIO_CREATED = 0;
 	public final static int MESSAGE_TYPE_PORTFOLIO_PUBLISHED = 1;

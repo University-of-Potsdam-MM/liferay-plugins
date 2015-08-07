@@ -15,7 +15,7 @@
 			<aui:input checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.WIKI_LAYOUT_PROTOTYPE %>" label="wiki"  />
 			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.BLOG_LAYOUT_PROTOTYPE %>" label="blog"  />
 			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.CDP_LAYOUT_PROTOTYPE %>" label="portfolio-cdp"  />
-			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE %>" label="portfolio-empty-page"  />
+			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.REFLECTION_PORTFOLIO_LAYOUT_PROTOTYPE %>" label="portfolio-reflection-portfolio"  />
 		</aui:field-wrapper>
 		<aui:button type="submit" value="portfolio-add-portfolio" />
 	</aui:form> 

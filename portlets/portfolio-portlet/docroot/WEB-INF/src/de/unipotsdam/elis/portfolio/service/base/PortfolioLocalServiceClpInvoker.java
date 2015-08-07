@@ -116,31 +116,35 @@ public class PortfolioLocalServiceClpInvoker {
 
 		_methodName48 = "addPortfolio";
 
-		_methodParameterTypes48 = new String[] { "long", "int" };
+		_methodParameterTypes48 = new String[] { "long", "int", "java.lang.String" };
 
 		_methodName49 = "addPortfolio";
 
-		_methodParameterTypes49 = new String[] { "long" };
+		_methodParameterTypes49 = new String[] { "long", "int" };
 
-		_methodName50 = "updatePortfolio";
+		_methodName50 = "addPortfolio";
 
-		_methodParameterTypes50 = new String[] { "long", "int" };
+		_methodParameterTypes50 = new String[] { "long" };
 
-		_methodName51 = "deletePortfolio";
+		_methodName51 = "updatePortfolio";
 
-		_methodParameterTypes51 = new String[] { "long" };
+		_methodParameterTypes51 = new String[] { "long", "int" };
 
-		_methodName52 = "getPortfoliosByLayoutUserId";
+		_methodName52 = "deletePortfolio";
 
 		_methodParameterTypes52 = new String[] { "long" };
 
-		_methodName53 = "getPortfoliosByPortfolioFeedbackUserId";
+		_methodName53 = "getPortfoliosByLayoutUserId";
 
 		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
+		_methodName54 = "getPortfoliosByPortfolioFeedbackUserId";
 
-		_methodParameterTypes54 = new String[] { "int", "long" };
+		_methodParameterTypes54 = new String[] { "long" };
+
+		_methodName55 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
+
+		_methodParameterTypes55 = new String[] { "int", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -247,37 +251,44 @@ public class PortfolioLocalServiceClpInvoker {
 		if (_methodName48.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return PortfolioLocalServiceUtil.addPortfolio(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+				((Integer)arguments[1]).intValue(),
+				(java.lang.String)arguments[2]);
 		}
 
 		if (_methodName49.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
-			return PortfolioLocalServiceUtil.addPortfolio(((Long)arguments[0]).longValue());
+			return PortfolioLocalServiceUtil.addPortfolio(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName50.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
-			return PortfolioLocalServiceUtil.updatePortfolio(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+			return PortfolioLocalServiceUtil.addPortfolio(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName51.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
-			return PortfolioLocalServiceUtil.deletePortfolio(((Long)arguments[0]).longValue());
+			return PortfolioLocalServiceUtil.updatePortfolio(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName52.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(((Long)arguments[0]).longValue());
+			return PortfolioLocalServiceUtil.deletePortfolio(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			return PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(((Long)arguments[0]).longValue());
+			return PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			return PortfolioLocalServiceUtil.getPortfoliosByPublishmentTypeAndNoPortfolioFeedback(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue());
 		}
@@ -335,4 +346,6 @@ public class PortfolioLocalServiceClpInvoker {
 	private String[] _methodParameterTypes53;
 	private String _methodName54;
 	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
 }

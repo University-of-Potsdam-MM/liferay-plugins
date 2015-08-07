@@ -1113,6 +1113,7 @@ public class PortfolioPersistenceImpl extends BasePersistenceImpl<Portfolio>
 
 		portfolioImpl.setPlid(portfolio.getPlid());
 		portfolioImpl.setPublishmentType(portfolio.getPublishmentType());
+		portfolioImpl.setLearningTemplateId(portfolio.getLearningTemplateId());
 
 		return portfolioImpl;
 	}

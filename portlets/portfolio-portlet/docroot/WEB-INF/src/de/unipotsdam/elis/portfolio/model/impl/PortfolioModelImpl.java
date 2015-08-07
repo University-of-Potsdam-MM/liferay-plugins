@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.service.ServiceContext;
@@ -63,9 +64,10 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 	public static final String TABLE_NAME = "Portfolio_Portfolio";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "plid", Types.BIGINT },
-			{ "publishmentType", Types.INTEGER }
+			{ "publishmentType", Types.INTEGER },
+			{ "learningTemplateId", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Portfolio_Portfolio (plid LONG not null primary key,publishmentType INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table Portfolio_Portfolio (plid LONG not null primary key,publishmentType INTEGER,learningTemplateId VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Portfolio_Portfolio";
 	public static final String ORDER_BY_JPQL = " ORDER BY portfolio.plid ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Portfolio_Portfolio.plid ASC";
@@ -99,6 +101,7 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 		model.setPlid(soapModel.getPlid());
 		model.setPublishmentType(soapModel.getPublishmentType());
+		model.setLearningTemplateId(soapModel.getLearningTemplateId());
 
 		return model;
 	}
@@ -165,6 +168,7 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 		attributes.put("plid", getPlid());
 		attributes.put("publishmentType", getPublishmentType());
+		attributes.put("learningTemplateId", getLearningTemplateId());
 
 		return attributes;
 	}
@@ -181,6 +185,12 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 		if (publishmentType != null) {
 			setPublishmentType(publishmentType);
+		}
+
+		String learningTemplateId = (String)attributes.get("learningTemplateId");
+
+		if (learningTemplateId != null) {
+			setLearningTemplateId(learningTemplateId);
 		}
 	}
 
@@ -230,6 +240,22 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 		return _originalPublishmentType;
 	}
 
+	@JSON
+	@Override
+	public String getLearningTemplateId() {
+		if (_learningTemplateId == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _learningTemplateId;
+		}
+	}
+
+	@Override
+	public void setLearningTemplateId(String learningTemplateId) {
+		_learningTemplateId = learningTemplateId;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -263,6 +289,7 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 		portfolioImpl.setPlid(getPlid());
 		portfolioImpl.setPublishmentType(getPublishmentType());
+		portfolioImpl.setLearningTemplateId(getLearningTemplateId());
 
 		portfolioImpl.resetOriginalValues();
 
@@ -334,17 +361,27 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 		portfolioCacheModel.publishmentType = getPublishmentType();
 
+		portfolioCacheModel.learningTemplateId = getLearningTemplateId();
+
+		String learningTemplateId = portfolioCacheModel.learningTemplateId;
+
+		if ((learningTemplateId != null) && (learningTemplateId.length() == 0)) {
+			portfolioCacheModel.learningTemplateId = null;
+		}
+
 		return portfolioCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{plid=");
 		sb.append(getPlid());
 		sb.append(", publishmentType=");
 		sb.append(getPublishmentType());
+		sb.append(", learningTemplateId=");
+		sb.append(getLearningTemplateId());
 		sb.append("}");
 
 		return sb.toString();
@@ -352,7 +389,7 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("<model><model-name>");
 		sb.append("de.unipotsdam.elis.portfolio.model.Portfolio");
@@ -365,6 +402,10 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 		sb.append(
 			"<column><column-name>publishmentType</column-name><column-value><![CDATA[");
 		sb.append(getPublishmentType());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>learningTemplateId</column-name><column-value><![CDATA[");
+		sb.append(getLearningTemplateId());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -382,6 +423,7 @@ public class PortfolioModelImpl extends BaseModelImpl<Portfolio>
 	private int _publishmentType;
 	private int _originalPublishmentType;
 	private boolean _setOriginalPublishmentType;
+	private String _learningTemplateId;
 	private long _columnBitmask;
 	private Portfolio _escapedModel;
 }

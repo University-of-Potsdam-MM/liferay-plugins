@@ -116,27 +116,31 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 
 		_methodName19 = "addPortfolio";
 
-		_methodParameterTypes19 = new String[] { "long", "int" };
+		_methodParameterTypes19 = new String[] { "long", "int", "java.lang.String" };
 
 		_methodName20 = "addPortfolio";
 
-		_methodParameterTypes20 = new String[] { "long" };
+		_methodParameterTypes20 = new String[] { "long", "int" };
 
-		_methodName21 = "updatePortfolio";
+		_methodName21 = "addPortfolio";
 
-		_methodParameterTypes21 = new String[] { "long", "int" };
+		_methodParameterTypes21 = new String[] { "long" };
 
-		_methodName22 = "getPortfoliosByLayoutUserId";
+		_methodName22 = "updatePortfolio";
 
-		_methodParameterTypes22 = new String[] { "long" };
+		_methodParameterTypes22 = new String[] { "long", "int" };
 
-		_methodName23 = "getPortfoliosByPortfolioFeedbackUserId";
+		_methodName23 = "getPortfoliosByLayoutUserId";
 
 		_methodParameterTypes23 = new String[] { "long" };
 
-		_methodName24 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
+		_methodName24 = "getPortfoliosByPortfolioFeedbackUserId";
 
-		_methodParameterTypes24 = new String[] { "int", "long" };
+		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "getPortfoliosByPublishmentTypeAndNoPortfolioFeedback";
+
+		_methodParameterTypes25 = new String[] { "int", "long" };
 	}
 
 	@Override
@@ -689,13 +693,49 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 
 	@Override
 	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
-		long plid, int publishmentType)
+		long plid, int publishmentType, java.lang.String learningTemplateId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName19,
 					_methodParameterTypes19,
+					new Object[] {
+						plid,
+						
+					publishmentType,
+						
+					ClpSerializer.translateInput(learningTemplateId)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (de.unipotsdam.elis.portfolio.model.Portfolio)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
+		long plid, int publishmentType)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
 					new Object[] { plid, publishmentType });
 		}
 		catch (Throwable t) {
@@ -723,8 +763,8 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20, new Object[] { plid });
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21, new Object[] { plid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -753,8 +793,8 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName21,
-					_methodParameterTypes21,
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
 					new Object[] { plid, publishmentType });
 		}
 		catch (Throwable t) {
@@ -786,8 +826,8 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -814,8 +854,8 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -843,8 +883,8 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] { publishmentType, userId });
 		}
 		catch (Throwable t) {
@@ -915,4 +955,6 @@ public class PortfolioLocalServiceClp implements PortfolioLocalService {
 	private String[] _methodParameterTypes23;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
 }

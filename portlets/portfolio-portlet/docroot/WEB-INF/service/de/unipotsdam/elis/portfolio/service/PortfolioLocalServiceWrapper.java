@@ -286,6 +286,14 @@ public class PortfolioLocalServiceWrapper implements PortfolioLocalService,
 
 	@Override
 	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
+		long plid, int publishmentType, java.lang.String learningTemplateId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _portfolioLocalService.addPortfolio(plid, publishmentType,
+			learningTemplateId);
+	}
+
+	@Override
+	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
 		long plid, int publishmentType)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _portfolioLocalService.addPortfolio(plid, publishmentType);

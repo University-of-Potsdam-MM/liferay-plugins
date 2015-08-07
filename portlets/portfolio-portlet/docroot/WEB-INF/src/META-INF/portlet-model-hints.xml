@@ -4,6 +4,7 @@
 	<model name="de.unipotsdam.elis.portfolio.model.Portfolio">
 		<field name="plid" type="long" />
 		<field name="publishmentType" type="int" />
+		<field name="learningTemplateId" type="String" />
 	</model>
 	<model name="de.unipotsdam.elis.portfolio.model.PortfolioFeedback">
 		<field name="plid" type="long" />

@@ -32,6 +32,7 @@ public class PortfolioSoap implements Serializable {
 
 		soapModel.setPlid(model.getPlid());
 		soapModel.setPublishmentType(model.getPublishmentType());
+		soapModel.setLearningTemplateId(model.getLearningTemplateId());
 
 		return soapModel;
 	}
@@ -100,6 +101,15 @@ public class PortfolioSoap implements Serializable {
 		_publishmentType = publishmentType;
 	}
 
+	public String getLearningTemplateId() {
+		return _learningTemplateId;
+	}
+
+	public void setLearningTemplateId(String learningTemplateId) {
+		_learningTemplateId = learningTemplateId;
+	}
+
 	private long _plid;
 	private int _publishmentType;
+	private String _learningTemplateId;
 }

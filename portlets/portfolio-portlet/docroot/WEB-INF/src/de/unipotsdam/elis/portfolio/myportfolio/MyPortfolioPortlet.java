@@ -67,12 +67,12 @@ import de.unipotsdam.elis.portfolio.util.FriendlyURLValidator;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
-@Override
-public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-	PortletConfig portletConfig = (PortletConfig) request
-			.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-	super.render(request, response);
-}
+	@Override
+	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		super.render(request, response);
+	}
+
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException {
@@ -427,7 +427,8 @@ public void render(RenderRequest request, RenderResponse response) throws Portle
 		Layout newPortfolio = null;
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		if (!template.equals(PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE)) {
+		if (!template.equals(PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE)
+				&& !template.equals(PortfolioStatics.REFLECTION_PORTFOLIO_LAYOUT_PROTOTYPE)) {
 			// find template and set it as parent template
 			LayoutPrototype lp = getLayoutPrototype(template);
 			if (lp != null) {
@@ -455,7 +456,12 @@ public void render(RenderRequest request, RenderResponse response) throws Portle
 					false, portfolioParentPage.getLayoutId(), portfolioName, portfolioName, "",
 					LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
 		}
-		PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid());
+
+		if (template.equals(PortfolioStatics.REFLECTION_PORTFOLIO_LAYOUT_PROTOTYPE))
+			PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid(), PortfolioStatics.PUBLISHMENT_INDIVIDUAL,
+					"11 Sprachkompetenz, Univ. (ELC, DE)");
+		else
+			PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid()); 
 
 		jsonObject.put("success", Boolean.TRUE);
 		writeJSON(actionRequest, actionResponse, jsonObject);

@@ -253,6 +253,10 @@ public interface PortfolioLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
+		long plid, int publishmentType, java.lang.String learningTemplateId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public de.unipotsdam.elis.portfolio.model.Portfolio addPortfolio(
 		long plid, int publishmentType)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
