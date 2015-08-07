@@ -50,15 +50,48 @@
 				padding: 0px;
 				width: 100%;
 				height: 40px;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+				
+				.main
+				{
+					position: relative;
+					width: auto;
+					padding-right: 100px;
+					height: 30px;
+					
+					a
+					{
+						width: 25%;
+						display: inline-block;
+						height: 30px;
+					}
+				}
+				
+				.right
+				{
+					position: absolute;
+					right: 0px;
+					top: 0px;
+					width: 100px;
+					height: 30px;
+					
+					a
+					{
+						height: 30px;
+						width: 45px;
+						padding: 2px;	
+					}
+				}
 				
 				a.aui-button
 				{
 					float: left;
 					margin: 0.2%;
 					padding: 5px 0px;
-					width:15.2%;
-					height: 30px;
-					overflow: Visible;
+					overflow: hidden;
 					background: $upWhite;
 					color: $upDarkBlue;
 					display: block;
@@ -66,7 +99,33 @@
 					border-radius:0px;
 					border: 1px solid $upGray;
 					
-				}
+					span.icon{
+						@include ple-grafic;
+						display: inline-block;
+						width: 20px;
+						height: 20px;
+					}
+					
+					span.grouproom
+					{
+						background-position: 0px -33px;
+					}
+					span.personal
+					{
+						background-position: 0px -33px;
+					}
+					span.profile
+					{
+						background-position: 0px -33px;
+					}					
+					span.portfolio
+					{
+						background-position: 0px -33px;
+					}					
+					span.edit
+					{
+						background-position: 0px -33px;
+					}					}
 				
 				a.edit
 				{

@@ -50,20 +50,24 @@
 	</#if>
 	<header id="mobile-menu">
 		<div id="up-menu">
-			<a href="#grouproom-trigger" aria-owns="grouproom" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger ">
-				Gruppenr&auml;ume</a>
-			<a href="#personal-trigger" aria-owns="personal" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Pers&ouml;nlicher Bereich</a>
-			<a href="#profile-trigger" aria-owns="profile" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				UP Dienste</a>
-			<a href="#contact-trigger" aria-owns="contact" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Mein Profil</a>
-			<a href="#portfolio-trigger" aria-owns="portfolio" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Portfolio</a>
-			<a class="aui-button aui-style-default edit">
-				Edit</a>
-			<a href="#services" aria-owns="services" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger up-services">
-				UP Dienste</a>
+			<#if is_signed_in>
+			<div class="main">
+				<a href="#grouproom-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger ">
+					<span class="icon grouproom"></span></a>
+				<a href="#personal-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon personal"></span></a>
+				<a href="#contact-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon profile"></span></a>
+				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon portfolio"></span></a>
+			</div>
+			<div class="right">
+				<a href="" class="mobile-edit aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon edit"></span></a>
+				<a href="#profile-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon services"></span></a>
+			</div>
+			</#if>
 		</div>
 		<div id="grouproom" class="aui-style-default aui-dropdown hidden">
 			<ul class="aui-list-truncate">
