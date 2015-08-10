@@ -67,12 +67,12 @@ import de.unipotsdam.elis.portfolio.util.FriendlyURLValidator;
 import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 public class MyPortfolioPortlet extends MVCPortlet {
-@Override
-public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-	PortletConfig portletConfig = (PortletConfig) request
-			.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-	super.render(request, response);
-}
+	@Override
+	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		super.render(request, response);
+	}
+
 	@Override
 	public void serveResource(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws IOException,
 			PortletException {
@@ -327,15 +327,17 @@ public void render(RenderRequest request, RenderResponse response) throws Portle
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "portfolioPlid"));
 		String newTitle = ParamUtil.getString(resourceRequest, "newTitle");
-		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
-		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
-				portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
-			changeLayoutFriendlyURLs(portfolio.getLayout(), newTitle);
-			Layout layout = portfolio.getLayout();
-			layout.setTitle(newTitle);
-			layout.setName(newTitle);
-			changeLayoutFriendlyURLs(layout, newTitle);
-			LayoutLocalServiceUtil.updateLayout(layout);
+		if (newTitle.trim().length() != 0) {
+			Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+			if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()),
+					portfolio.getLayout(), ActionKeys.CUSTOMIZE)) {
+				changeLayoutFriendlyURLs(portfolio.getLayout(), newTitle);
+				Layout layout = portfolio.getLayout();
+				layout.setTitle(newTitle);
+				layout.setName(newTitle);
+				changeLayoutFriendlyURLs(layout, newTitle);
+				LayoutLocalServiceUtil.updateLayout(layout);
+			}
 		}
 	}
 

@@ -115,28 +115,41 @@ AUI().use(
     'datatable-sort',
     'liferay-menu',
     function(A) {
-    	if (A.one("#myPortfolioTable") == null)
-    		return;
+        if (A.one("#myPortfolioTable") == null)
+            return;
         var data = JSON.parse('<%=portfoliosJSON%>');
         var nameEditor = new A.TextAreaCellEditor();
-        nameEditor.on('save',function(e){
-        	A.io.request('<%=renamePortfolioURL.toString()%>', {
-            dataType: 'text/html',
-            method: 'post',
-            zindex: 1,
-            data: { <portlet:namespace/>portfolioPlid: currentPlid, <portlet:namespace/>newTitle: e.newVal
-            },
-            on: {
-                success: function() {
-                    updateTableData(A);
-                }
+        nameEditor.on('keydown', function(e) {
+            if (event.which == 13 || event.keyCode == 13) {
+                e.preventDefault();
+                nameEditor.fire('save', {
+                    newVal: nameEditor.getValue(),
+                    prevVal: nameEditor.get('value')
+                });
             }
         });
-   	updateTableData(A);});
+        nameEditor.on('save', function(e) {
+            var newTitle = e.newVal.trim();
+            if (newTitle.length !== 0) {
+                A.io.request('<%=renamePortfolioURL.toString()%>', {
+                    dataType: 'text/html',
+                    method: 'post',
+                    zindex: 1,
+                    data: { <portlet:namespace/>portfolioPlid: currentPlid, <portlet:namespace/>newTitle: newTitle
+                    },
+                    on: {
+                        success: function() {
+                            updateTableData(A);
+                        }
+                    }
+                });
+            }
+            updateTableData(A);
+        });
 
         myPortfolioDataTable = new A.DataTable({
             columns: [{
-            	editor: nameEditor,
+                editor: nameEditor,
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
                 key: 'title',
                 nodeFormatter: function(o) {
@@ -148,7 +161,7 @@ AUI().use(
                     for (var i in o.data.portfolioFeedbacks) {
                         var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
                         var publishmentDeleteIconCell;
-                        var feedbackCell; 
+                        var feedbackCell;
                         if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')) {
                             feedbackCell = '<td class="feedback-unrequested"><a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
                                 '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
@@ -246,14 +259,14 @@ AUI().use(
                     var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
                     return desc ? compare : -compare
                 }
-            },],
+            }, ],
             data: data,
             editEvent: 'dblclick',
             rowsPerPage: 5,
             pageSizes: [5, 10, 20, 30, 50, 100, 'Show All']
         });
         myPortfolioDataTable.render("#myPortfolioTable");
-        
+
         //var test = myPortfolioDataTable.getEditor(myPortfolioDataTable.get('data').item(0),myPortfolioDataTable.get('columns')[0])
         //test.render();
         //A.one('#td_45009').on('click',function(A){console.log(A);})

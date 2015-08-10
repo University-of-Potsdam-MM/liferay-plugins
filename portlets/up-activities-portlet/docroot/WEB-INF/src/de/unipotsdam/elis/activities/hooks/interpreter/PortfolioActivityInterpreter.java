@@ -15,11 +15,16 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.blogs.model.BlogsEntry;
+import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
@@ -47,52 +52,38 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 	protected SocialActivityFeedEntry doInterpret(SocialActivitySet activitySet, ServiceContext serviceContext)
 			throws Exception {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(activitySet.getExtraData());
-		String title = getTitle(jsonObject, serviceContext, activitySet.getModifiedDate());
-		return new SocialActivityFeedEntry("", title, "");
+		PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
+				.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
+		String title = getTitle(jsonObject, serviceContext,portletConfig, activitySet.getModifiedDate());
+		String body = getBody(jsonObject, serviceContext, portletConfig);
+		return new SocialActivityFeedEntry("", title, body);
 	}
 
 	@Override
 	protected SocialActivityFeedEntry doInterpret(SocialActivity activity, ServiceContext serviceContext)
 			throws Exception {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(activity.getExtraData());
-		String title = getTitle(jsonObject, serviceContext, activity.getCreateDate());
-		return new SocialActivityFeedEntry("", title, "");
+		PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
+				.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
+		String title = getTitle(jsonObject, serviceContext,portletConfig, activity.getCreateDate());
+		String body = getBody(jsonObject, serviceContext, portletConfig);
+		return new SocialActivityFeedEntry("", title, body);
 	}
 	
-	private String getTitle(JSONObject jsonObject, ServiceContext serviceContext, long displayDate) throws PortalException, SystemException, PortletException{
-
+	private String getTitle(JSONObject jsonObject, ServiceContext serviceContext,PortletConfig portletConfig, long displayDate) throws PortalException, SystemException, PortletException{
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(jsonObject.getLong("plid"));
+		User sender = UserLocalServiceUtil.getUser(jsonObject.getLong("userId"));
+		String url = jsonObject.getString("url");
+		String portfolioTitle = "<a href=\"" + url + "\">" + portfolio.getLayout().getTitle(serviceContext.getLocale()) + "</a>";
+		
 		StringBundler sb = new StringBundler(8);
 
 		sb.append("<div class=\"activity-header\">");
 		sb.append("<div class=\"activity-user-name\">");
 		
-		String url = jsonObject.getString("url");
-
-		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(jsonObject.getLong("plid"));
-		User sender = UserLocalServiceUtil.getUser(jsonObject.getLong("userId"));
-		User receiver = UserLocalServiceUtil.getUser(jsonObject.getLong("receiverUserId"));
-		String portfolioTitle = "<a href=\"" + url + "\">" + portfolio.getLayout().getTitle(serviceContext.getLocale()) + "</a>";
-		String title = "";
-		if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
-			PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
-					.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
-			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"portfolio-portfolio-published-activity",
-					new String[] { sender.getFullName(), portfolioTitle, receiver.getFullName() });
-		} else if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
-			PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
-					.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
-			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"portfolio-feedback-requested-activity",
-					new String[] { sender.getFullName(), portfolioTitle, receiver.getFullName() });
-		} else {
-			PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
-					.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
-			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"portfolio-feedback-delivered-activity", new String[] { sender.getFullName(), portfolioTitle });
-		}
-
-		sb.append(title);
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+				"portfolio-in-portfolio-area",
+				new String[] {getUserName(sender.getUserId(), serviceContext) }));
 		
 		sb.append("</div><div class=\"activity-time\" title=\"");
 
@@ -116,6 +107,34 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 
 		sb.append(relativeTimeDescription);
 
+		sb.append("</div></div><div class=\"activity-action\">");
+		
+
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+				"portfolio-changes-to-portfolio-page",
+				new String[] { portfolioTitle }));
+
+		sb.append("</div>");
+
+		return sb.toString();
+	}
+	
+	private String getBody(JSONObject jsonObject, ServiceContext serviceContext,PortletConfig portletConfig) throws PortalException, SystemException{
+		User receiver = UserLocalServiceUtil.getUser(jsonObject.getLong("receiverUserId"));
+		StringBundler sb = new StringBundler(5);
+
+		sb.append("<div class=\"activity-body\"><div class=\"title\">");
+		if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
+			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+					"portfolio-portfolio-page-published-activity",
+					new String[] { getUserName(receiver.getUserId(), serviceContext) }));
+		} else if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
+			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+					"portfolio-feedback-requested-activity",
+					new String[] { getUserName(receiver.getUserId(), serviceContext) }));
+		} else {
+			sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(), "portfolio-feedback-delivered-activity"));
+		}
 		sb.append("</div></div>");
 
 		return sb.toString();
