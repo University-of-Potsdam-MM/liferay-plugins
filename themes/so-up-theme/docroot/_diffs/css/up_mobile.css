@@ -7,7 +7,8 @@
 		
 		header#banner,
 		#breadcrumbs,
-		#sidebar {
+		#sidebar 
+		{
 			display: none;
 		}	
 		

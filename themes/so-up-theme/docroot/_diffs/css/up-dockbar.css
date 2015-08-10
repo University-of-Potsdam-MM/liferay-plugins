@@ -1,18 +1,7 @@
-.aui body .liferay_dockbar {
-    z-index: 10;
-    overflow: hidden;
-    margin-top: -20px;
-}
-
 .aui .dockbar-split .dockbar {
     height: 0;
-   
 }
 
-.aui .dockbar-split .dockbar {
-    height: 0;
-   
-}
 
 html.aui .dockbar-split .dockbar.navbar-static-top .collapse .nav-account-controls, 
 html.aui .dockbar-split .dockbar .navbar-inner .container .nav-account-controls {
@@ -22,17 +11,16 @@ html.aui .dockbar-split .dockbar .navbar-inner .container .nav-account-controls 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li {
     background-color: #D0DAE3;
     color: #003f60;
-        padding-bottom: 5px;
-        position: relative;
-            text-align: center;
-                margin-right: 2px;
+    padding-bottom: 5px;
+    position: relative;
+    text-align: center;
+    margin-right: 2px;
 }
-
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li>a {
     color: #014260;
     line-height: 30px;
-  
+
     text-transform: uppercase;
 }
 

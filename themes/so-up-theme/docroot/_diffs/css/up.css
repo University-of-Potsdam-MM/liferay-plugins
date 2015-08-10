@@ -6,7 +6,7 @@
 	{
 		border-left: 0px solid white;
 		margin-right: 63px;
-		transition-property: margin-right;
+		transition: none;
 	
 		.dockbar .navbar-inner .nav-add-controls
 		{
@@ -14,7 +14,7 @@
 			right: 0px;
 			margin-left: 0px;
 			margin-right: 0px;
-			transition-property: margin-right;
+			transition: none;
 		}
 	}
 	
@@ -772,6 +772,71 @@
 			top: 55px;
 		}
 		
+		ul#_145_navAccountControls
+		{
+			position: fixed;
+			top: 0px;
+			right: 0px;
+			height: 45px;		
+			z-index:1003;
+			margin: 0px;
+			border-bottom: 2px solid $upGray;
+			background: transparent;
+			
+	
+			li
+			{
+				width: 40px;
+				border-right: 2px solid $upWhite;		
+				background: $upDarkBlue;	
+			}
+			
+			li.unipage
+			{
+				display: none;
+			}
+			
+			li.lang
+			{
+				width: 40px;
+				overflow: visible;
+				
+				li
+				{
+					width: auto;
+				}
+			}
+			
+			li.services
+			{
+				display: none;
+			}
+			
+			li.logout
+			{
+				width: 40px;
+				position: relative;
+				
+				a
+				{
+					color: $upLightBlue;
+				}
+				
+				span.icon
+				{
+					position: absolute;
+					left: 23px;
+				}
+			}
+			
+		}
+		
+		#_145_navAddControls
+		{
+		    display: none;
+		    margin-top: 65px;
+   		}
+		
 		#sidebar .title
 		{
 			-moz-transform: rotate(0deg);
@@ -817,52 +882,6 @@
 		
 		#banner #up-general
 		{
-			position: fixed;
-			top: 0px;
-			right: 0px;
-			height: 45px;		
-			z-index:1003;
-			margin: 0px;
-			border-bottom: 2px solid $upGray;
-			
-			li
-			{
-				width: 40px;
-				border-right: 2px solid $upWhite;			
-			}
-			
-			li.unipage
-			{
-				display: none;
-			}
-			
-			li.lang
-			{
-				width: 40px;
-				overflow: hidden;
-			}
-			
-			li.services
-			{
-				display: none;
-			}
-			
-			li.logout
-			{
-				width: 40px;
-				position: relative;
-				
-				a
-				{
-					color: $upLightBlue;
-				}
-				
-				span.icon
-				{
-					position: absolute;
-					left: 23px;
-				}
-			}
 			
 		}
 		
@@ -870,7 +889,7 @@
 		{
 			position: fixed;
 			top:0px;
-			right: 200px;
+			right: 84px;
 			width: 100px;
 			z-index:1002;
 			height: 45px;
@@ -920,7 +939,7 @@
 
 			border-bottom: 20px solid $upGray;
 		    border-left: 140px solid $upGray;
-		    border-right: 300px solid $upGray;
+		    border-right: 184px solid $upGray;
 
 			
 			
@@ -931,6 +950,14 @@
 			}
 			
 		}
+	}
+	
+	body.smallhead.show-dockbar
+	{
+		#_145_navAddControls
+		{
+		    display: block;
+   		}	
 	}
 }
 
