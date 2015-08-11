@@ -71,9 +71,11 @@
 						
 						a
 						{
+							background: $UpLightBlue;
+							color: $upDarkBlue;
 							width: 24%;
 							display: inline-block;
-							height: 30px;
+							height: 20px;
 						}
 					}
 					
@@ -99,12 +101,9 @@
 						margin: 0.3%;
 						padding: 5px 0px;
 						overflow: hidden;
-						background: $upWhite;
-						color: $upDarkBlue;
 						display: block;
 						overflow:hidden;
 						border-radius:0px;
-						border: 1px solid $upGray;
 						
 						span.icon{
 							@include ple-grafic;
@@ -147,22 +146,23 @@
 						background: $upLightBlue;
 					}
 					
-					.submenu
+
+				}	
+				.submenu
+				{
+					margin-top: 65px;
+					
+					ul
 					{
-						margin-top: 65px;
+						list-style:none;
 						
-						ul
+						li
 						{
-							list-style:none;
-							
-							li
-							{
-								margin: 4px;
-								background: $upGray;
-							}
+							margin: 4px;
+							background: $upGray;
 						}
 					}
-				}			
+				}
 			}
 			
 			.wrapper-portlet-area

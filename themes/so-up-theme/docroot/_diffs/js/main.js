@@ -247,9 +247,8 @@ AUI().ready(
 		}
 		
 		var mobilemenu = A.all('a.mobile-menu');
-		var submenu = A.all('.submenu')
 		
-		if(mobilemenu && submenu){
+		if(mobilemenu){
 			mobilemenu.on('click', function(event){
 				event.preventDefault();
 				event.stopPropagation();
@@ -258,12 +257,11 @@ AUI().ready(
 				var href = target.getAttribute('href');
 				var elem = A.one(href);
 
-				for(var i = 0; i < submenu.count; i++)
-				{
-					console.log(submenu[i]);
-					if(submenu[i].id != href)
-						submenu[i].addClass('hidden');
-				}
+				var s = '.submenu:not(' + href +')';
+				var submenu = A.all(s)
+				console.log(submenu);
+				console.log(s);
+				submenu.addClass('hidden');
 				
 				if(elem)
 					elem.toggleClass('hidden');
