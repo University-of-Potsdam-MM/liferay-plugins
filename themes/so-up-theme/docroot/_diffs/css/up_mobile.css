@@ -80,7 +80,7 @@
 							color: $upDarkBlue;
 							width: 24%;
 							display: inline-block;
-							height: 20px;
+							height: 25px;
 							margin: 0.3%;
 							padding: 5px 0px;
 							overflow: hidden;
@@ -90,29 +90,29 @@
 							span.icon{
 								@include ple-grafic;
 								display: block;
-								width: 20px;
-								height: 20px;
+								width: 15px;
+								height: 32px;
 							    margin-left: auto;
 							    margin-right: auto;		
-								margin-top: 5px;
+								margin-top: -1px;
 								float: none;
 							}
 						
 							span.grouproom
 							{
-								background-position: 0px -33px;
+								background-position: 1px -280px;
 							}
 							span.personal
 							{
-								background-position: 0px -33px;
+								background-position: 1px -135px;
 							}
 							span.profile
 							{
-								background-position: 0px -33px;
+								background-position: 0px -230px;
 							}					
 							span.portfolio
 							{
-								background-position: 0px -33px;
+								background-position: 0px -183px;
 							}					
 							span.edit
 							{

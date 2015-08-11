@@ -192,15 +192,15 @@ html.aui
 						left: auto;
 						display: block;
 					
-						li.dockbar-item
+						li
 						{
-							background: $upDarkBlue;
-							color: $upWhite;
+							background: $upLightBlue;
+							color: $upDarkBlue;
 							height: 43px;
 
 							span
 							{
-								color: $upWhite;
+								color: $upDarkBlue;
 							}				
 						
 							*:hover
@@ -216,6 +216,7 @@ html.aui
 							ul li span
 							{
 								color: $upDarkBlue;
+								height: auto;
 							}
 						}	
 						
@@ -734,18 +735,30 @@ html.aui
 				{
 					width: 40px;
 					border-right: 2px solid $upWhite;		
-					background: $upDarkBlue;	
-					
+					height: 45px;
 					a
 					{
-						width: 40px;
-						height:40px;
-						background: $upDarkBlue;
-						overflow: hidden;	
+						width: 20px;
+						height:20px;
+						overflow: hidden;
+						color:$upLightBlue;	
+					}
+					
+					ul li
+					{
+						height: auto;
+						border: none;
+						width: auto;
+						
+						a
+						{
+							width: auto;
+							padding: 2px;
+						}
 					}
 				}
 				
-				li.unipage
+				li.unipage, li.services
 				{
 					display: none;
 				}
@@ -755,21 +768,24 @@ html.aui
 					width: 40px;
 					overflow: visible;
 					
+					span
+					{
+						color: $upWhite;
+					}
 					li
 					{
 						width: auto;
+						span
+						{
+							color: $upDarkBlue;
+						}
 					}
 				}
 				
-				li.services
-				{
-					display: none;
-				}
-				
-				li.logout
+				li.user-avatar
 				{
 					width: 40px;
-					position: relative;
+					height: 45px;
 					
 					a
 					{
@@ -846,7 +862,7 @@ html.aui
 		{
 			position: fixed;
 			top:0px;
-			right: 84px;
+			right: 114px;
 			width: 100px;
 			z-index:1002;
 			height: 45px;
@@ -896,7 +912,7 @@ html.aui
 
 			border-bottom: 20px solid $upGray;
 		    border-left: 140px solid $upGray;
-		    border-right: 184px solid $upGray;
+		    border-right: 215px solid $upGray;
 
 			
 			
