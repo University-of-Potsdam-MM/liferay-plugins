@@ -138,7 +138,7 @@
 			<li>
 				<a href="javascript:;" id="toggleDockbar">
 					<!--<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">-->
-						<span class="icon workspace"></span>Workspace konfigurieren
+						<span class="icon workspace"></span><@liferay.language key="so-up-theme-workspace-configure" />
 					<!--</a>-->
 				</a>
 			</li>
@@ -158,7 +158,7 @@
 		<#if is_signed_in>
 		<ul id="main-menu" class="enabled">
 			<li>
-				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-private-space" /><span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPrivateLayouts as myLayout>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
@@ -175,17 +175,16 @@
 				</ul>
 			</li>
 			<li>
-				UP Dienste<span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-up-services" /><span class="icon arrow"></span>
 				<ul class="hidden">
 					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle2.UP</a></li>
 					<li><a href="${portal_url}/user/${user_sname}/mailup/">Mail.UP</a></li>
 					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
 					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
-					<!--<li><a href="${portal_url}/user/${user_sname}/moodle/">Bibliothekssuche</a></li>-->
 				</ul>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-public-space" /><span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPublicLayouts as myLayout>
 						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio") && myLayout.isRootLayout() && !myLayout.isHidden()>
