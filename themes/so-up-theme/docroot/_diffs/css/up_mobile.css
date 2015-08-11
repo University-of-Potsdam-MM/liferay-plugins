@@ -1,156 +1,175 @@
 @import "up";
 
 @media (max-width: $mediaHandheldWidthMax) {
-	.aui body {
+	html.aui body {
 		background: black;
 		padding: 0px;
 		
-		header#banner,
-		#breadcrumbs,
-		#sidebar 
+		div#wrapper
 		{
-			display: none;
-		}	
 		
-		#line
-		{
-			width: 100%;
-			height: 10px;
-			
-			.blue
+			header#banner,
+			#breadcrumbs,
+			#sidebar 
 			{
-				width: 50%;
-				background: $upDarkBlue;
-				height: 5px;
-			}
+				display: none;
+			}	
 			
-			.lineimg
+			#line
 			{
-				float: right;
-				height: 10px;
-				wdith: 10px;
-				padding-right: 4px;
-			}
-		}
-		
-
-		header#mobile-menu {
-			display: block;
-			width: 100%;
-			overflow: hidden;
-			background: $upGray;
-			color: $upDarkBlue;
-			min-height: 47px;
-			border: 4px solid red;
-			overflow: hidden;
-			position: fixed;
-			z-index: 1040;
-			
-
-			div#up-menu
-			{
-				float:right;
-				background: $upGray;
-				margin: 0px;
-				padding: 0px;
 				width: 100%;
-				height: 40px;
+				height: 10px;
+				
+				.blue
+				{
+					width: 50%;
+					background: $upDarkBlue;
+					height: 5px;
+				}
+				
+				.lineimg
+				{
+					float: right;
+					height: 10px;
+					wdith: 10px;
+					padding-right: 4px;
+				}
+			}
+			
+	
+			header#mobile-menu {
+				display: block;
+				width: 100%;
+				overflow: hidden;
+				background: $upGray;
+				color: $upDarkBlue;
+				min-height: 47px;
+				overflow: hidden;
 				position: fixed;
-				top: 0px;
-				left: 0px;
-				right: 0px;
+				z-index: 1040;
 				
-				.main
+	
+				div#up-menu
 				{
-					position: relative;
-					width: auto;
-					padding-right: 100px;
-					height: 30px;
-					
-					a
-					{
-						width: 24%;
-						display: inline-block;
-						height: 30px;
-					}
-				}
-				
-				.right
-				{
-					position: absolute;
-					right: 0px;
+					float:right;
+					background: $upGray;
+					margin: 0px;
+					padding: 0px;
+					width: 100%;
+					height: 40px;
+					position: fixed;
 					top: 0px;
-					width: 100px;
-					height: 30px;
+					left: 0px;
+					right: 0px;
 					
-					a
+					.main
 					{
+						position: relative;
+						width: auto;
+						padding-right: 100px;
 						height: 30px;
-						width: 45px;
-						padding: 2px;	
-					}
-				}
-				
-				a.aui-button
-				{
-					float: left;
-					margin: 0.3%;
-					padding: 5px 0px;
-					overflow: hidden;
-					background: $upWhite;
-					color: $upDarkBlue;
-					display: block;
-					overflow:hidden;
-					border-radius:0px;
-					border: 1px solid $upGray;
-					
-					span.icon{
-						@include ple-grafic;
-						display: inline-block;
-						width: 20px;
-						height: 20px;
+						
+						a
+						{
+							width: 24%;
+							display: inline-block;
+							height: 30px;
+						}
 					}
 					
-					span.grouproom
+					.right
 					{
-						background-position: 0px -33px;
+						position: absolute;
+						right: 0px;
+						top: 0px;
+						width: 100px;
+						height: 30px;
+						
+						a
+						{
+							height: 30px;
+							width: 45px;
+							padding: 2px;	
+						}
 					}
-					span.personal
+					
+					a.aui-button
 					{
-						background-position: 0px -33px;
+						float: left;
+						margin: 0.3%;
+						padding: 5px 0px;
+						overflow: hidden;
+						background: $upWhite;
+						color: $upDarkBlue;
+						display: block;
+						overflow:hidden;
+						border-radius:0px;
+						border: 1px solid $upGray;
+						
+						span.icon{
+							@include ple-grafic;
+							display: inline-block;
+							width: 20px;
+							height: 20px;
+							margin: auto;
+							margin-top: 5px;
+						}
+						
+						span.grouproom
+						{
+							background-position: 0px -33px;
+						}
+						span.personal
+						{
+							background-position: 0px -33px;
+						}
+						span.profile
+						{
+							background-position: 0px -33px;
+						}					
+						span.portfolio
+						{
+							background-position: 0px -33px;
+						}					
+						span.edit
+						{
+							background-position: 0px -33px;
+						}					}
+					
+					a.edit
+					{
+						width:6%;
+						background: $upLightBlue;
 					}
-					span.profile
+					
+					a.up-services
 					{
-						background-position: 0px -33px;
-					}					
-					span.portfolio
+						background: $upLightBlue;
+					}
+					
+					.submenu
 					{
-						background-position: 0px -33px;
-					}					
-					span.edit
-					{
-						background-position: 0px -33px;
-					}					}
-				
-				a.edit
-				{
-					width:6%;
-					background: $upLightBlue;
-				}
-				
-				a.up-services
-				{
-					background: $upLightBlue;
-				}
-				
-				
-			}			
-		}
-		
-		.wrapper-portlet-area
-		{
-			margin-top: 70px;
-			width: 100%;
-		}			
+						margin-top: 65px;
+						
+						ul
+						{
+							list-style:none;
+							
+							li
+							{
+								margin: 4px;
+								background: $upGray;
+							}
+						}
+					}
+				}			
+			}
+			
+			.wrapper-portlet-area
+			{
+				margin-top: 70px;
+				width: 100%;
+			}	
+		}		
 	}
 }

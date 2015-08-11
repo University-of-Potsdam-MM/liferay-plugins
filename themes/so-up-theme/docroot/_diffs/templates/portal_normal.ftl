@@ -69,7 +69,7 @@
 			</div>
 			</#if>
 		</div>
-		<div id="grouproom" class="aui-style-default aui-dropdown hidden">
+		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
 			<ul class="aui-list-truncate">
 				<#list user_my_sites as user_site>
 					<#if user_site.hasPrivateLayouts()>
@@ -80,27 +80,33 @@
 				</#list>
 			</ul>
 		</div>
-		<div id="personal" class="aui-style-default aui-dropdown2 hidden">
+		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			<ul class="aui-list-truncate">
+				<#list myPrivateLayouts as myLayout>
+					<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+					</#if>
+					<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+						<#if portfoliopage??>
+							<#if portfoliopage?string("true", "false") = "false">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
+						</#if>	
+					</#if>
+				</#list>
+			</ul>
+		</div>
+		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="profile" class="aui-style-default aui-dropdown2 hidden">
+		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="contact" class="aui-style-default aui-dropdown2 hidden">
-			<ul class="aui-list-truncate">
-				<li></li>
-			</ul>
-		</div>
-		<div id="portfolio" class="aui-style-default aui-dropdown2 hidden">
-			<ul class="aui-list-truncate">
-				<li></li>
-			</ul>
-		</div>
-		<div id="services" class="aui-style-default aui-dropdown2 hidden">
+		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>

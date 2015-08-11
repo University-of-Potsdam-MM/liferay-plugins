@@ -111,7 +111,6 @@ AUI().ready(
 		        		var l = this.get('responseData').sites;
 			            for(var i = 0; i < l.length; i++)
 			            {
-			            	console.log(l[i]);
 			            	allsites.append('<li><a href="' + l[i].publicLayoutsURL + '">' + l[i].name + '</a></li>')
 			            }
 		        	}
@@ -245,6 +244,32 @@ AUI().ready(
 					body.toggleClass('show-dockbar');
 				}
 			);
+		}
+		
+		var mobilemenu = A.all('a.mobile-menu');
+		var submenu = A.all('.submenu')
+		
+		if(mobilemenu && submenu){
+			mobilemenu.on('click', function(event){
+				event.preventDefault();
+				event.stopPropagation();
+
+				var target = event.currentTarget;
+				var href = target.getAttribute('href');
+				var elem = A.one(href);
+
+				for(var i = 0; i < submenu.count; i++)
+				{
+					console.log(submenu[i]);
+					if(submenu[i].id != href)
+						submenu[i].addClass('hidden');
+				}
+				
+				if(elem)
+					elem.toggleClass('hidden');
+				
+				return false;
+			})
 		}
 
 		var siteNavigationNavbar = A.one('#_145_navSiteNavigationNavbarCollapse ul');
