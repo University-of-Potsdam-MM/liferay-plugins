@@ -1,17 +1,30 @@
 @import "up";
 
-.aui 
+html.aui 
 {
-	.dockbar-split.show-dockbar 
+	.dockbar-split 
+		.dockbar
+		{
+			transition: none !important;
+			
+			.nav-account-controls
+			{
+				transition: none !important;
+			}
+		}
+	
+	.dockbar-split.show-dockbar
 	{
 		border-left: 0px solid white;
 		margin-right: 63px;
 		transition: none;
+		overflow: visible;
 	
 		.dockbar .navbar-inner .nav-add-controls
 		{
+			position: absolute;
 			left: auto;
-			right: 0px;
+			right: -60px;
 			margin-left: 0px;
 			margin-right: 0px;
 			transition: none;
@@ -91,7 +104,7 @@
 	
 		#wrapper
 		{
-			overflow: hidden;
+			overflow: visible;
 			width: 100%;
 			min-height: 100%;
 			position: absolute;
@@ -171,12 +184,19 @@
 					box-shadow: none;
 					border-radius: 0px;
 				
-					ul.navbar-nav
+					ul.navbar-nav.nav-account-controls
 					{
 						background: $upDarkBlue;
+						position: absolute;
+						top: 0px;
+						right: 10px;
+						left: auto;
+						display: block;
 					
 						li
 						{
+							background: none;
+						
 							*:hover
 							{
 								background: none;
@@ -213,7 +233,6 @@
 								line-height: 20px;
 								background-position: 4px 379px;
 								background-color: transparent;
-								top:4px;
 							}
 							
 							span.user-notifications-count::after
@@ -222,155 +241,21 @@
 							}
 						}
 					}
-				}
-			
-			}
-		
-			ul#up-general {
-				display: block;
-				overflow: visible;
-				list-style-type: none;
-				float:right;
-				color: $upDarkBlue;
-				position: absolute;
-				top: 0px;
-				right: 60px;
-				
-				li
-				{
-					float: left;
-					margin-left: 2px;
-					background: $upLightBlue;
-					height: 40px;
-					minwidth: 100px;
-					color: $upDarkBlue;
-					font-size: 0.86667em;
-					padding: 3px 10px;
 					
-					a
-					{
-						color: $upDarkBlue;
-						padding-top: 10px;
-						display: inline-block;
-					}
-					
-				 
-					.lang-img
-					{
-						@include up-grafic;
-						background-position: -7px -46px;
-						width: 40px;
-						height:40px;
-						display: inline-block;
-					}
-					
-					span.search-img
-					{
-						@include up-grafic;
-						background-position: -7px 0px;
-						width: 40px;
-						height:40px;
-						display: inline-block;
-					}
-					
-					span.logout
-					{
-						@include ple-grafic;
-						background-position: 0px -33px;
-						display: inline-block;
-						width: 12px;
-						height:26px;
-						padding-left: 10px;
-						padding-top: 0px;
-					}
-					
-					ul
-					{
-						position: absolute;
-   						z-index: 100;
-    					min-width: 13.33333em;
-    					margin-top: 2px !important;
-    					padding: 5px 10px 10px 10px !important;
-   						background-color: #cfdae3;
-    					left: -13px;
-						
-						
-					}
-				}
-	
-				li.unipage
-				{
-					font-weight: bold;
-					background: $upGray;
-				}
-				
-				li.services
-				{
-					min-width: 80px;
-				}
-				
-				li.lang
-				{
-					background: $upWhite;
-					width: 110px;
-					
-					select
-					{
-						background: $upWhite;
-						width: 60px;
-					}
-				}
-				
-				li.search
-				{
-					width: 50px;
-					overflow: visible;
-					position: relative;
-					
-					.icon
-					{
-						float: none;
-					}
-					
-					div
+					ul.nav-add-controls
 					{
 						display: block;
-						z-index: 1002;
-						background: $upLightBlue;
+						transistion: none !important;
+						transition-duration: 0s;
+						transition-property: none;
+						
+						width: 60px;
+						height: 300px;
 						overflow: hidden;
-						position: absolute;
-						top: 0px;
-						right: 0px;
-						width: 374px;
-						height: 46px;
-						
-						form{
-							margin: 0px;
-							float: right;
-						}
-						
-						input
-						{
-							border: 1px solid $upDarkBlue;
-							background: $upLightBlue;
-							margin: 10px;
-							width: 305px;
-							border-radius: 0px;
-							padding: 0px;
-						}
-						
-						select
-						{
-							display: none;
-						}
-						
-						input[type="image"] 
-						{
-							display: none;
-						}
 					}
 				}
 			}
+	
 			
 			.notifications-portlet
 			{
@@ -772,70 +657,76 @@
 			top: 55px;
 		}
 		
-		ul#_145_navAccountControls
+		div#wrapper header#banner
 		{
-			position: fixed;
-			top: 0px;
-			right: 0px;
-			height: 45px;		
-			z-index:1003;
-			margin: 0px;
-			border-bottom: 2px solid $upGray;
-			background: transparent;
-			
-	
-			li
+		
+			ul#_145_navAccountControls.nav
 			{
-				width: 40px;
-				border-right: 2px solid $upWhite;		
-				background: $upDarkBlue;	
-			}
-			
-			li.unipage
-			{
-				display: none;
-			}
-			
-			li.lang
-			{
-				width: 40px;
-				overflow: visible;
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				height: 45px;		
+				z-index:1003;
+				margin: 0px;
+				border-bottom: 2px solid $upGray;
+				background: transparent;
 				
+		
 				li
 				{
-					width: auto;
-				}
-			}
-			
-			li.services
-			{
-				display: none;
-			}
-			
-			li.logout
-			{
-				width: 40px;
-				position: relative;
-				
-				a
-				{
-					color: $upLightBlue;
+					width: 40px;
+					border-right: 2px solid $upWhite;		
+					background: $upDarkBlue;	
 				}
 				
-				span.icon
+				li.unipage
 				{
-					position: absolute;
-					left: 23px;
+					display: none;
 				}
-			}
-			
-		}
-		
-		#_145_navAddControls
-		{
-		    display: none;
-		    margin-top: 65px;
+				
+				li.lang
+				{
+					width: 40px;
+					overflow: visible;
+					
+					li
+					{
+						width: auto;
+					}
+				}
+				
+				li.services
+				{
+					display: none;
+				}
+				
+				li.logout
+				{
+					width: 40px;
+					position: relative;
+					
+					a
+					{
+						color: $upLightBlue;
+					}
+					
+					span.icon
+					{
+						position: absolute;
+						left: 23px;
+					}
+				}
+			}	
+			#_145_navAddControls
+			{
+			    margin-top: 65px;
+			    position: fixed;
+			    right:0px;
+			    display: none;
+	   		}
    		}
+		
+
 		
 		#sidebar .title
 		{
@@ -954,10 +845,14 @@
 	
 	body.smallhead.show-dockbar
 	{
-		#_145_navAddControls
+		div#wrapper header#banner
 		{
-		    display: block;
-   		}	
+	
+			ul#_145_navAddControls.nav
+			{
+			    display: block;
+	   		}
+		}	
 	}
 }
 
