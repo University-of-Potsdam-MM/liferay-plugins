@@ -70,6 +70,7 @@
 			</#if>
 		</div>
 		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
+			<#if is_signed_in>
 			<ul class="aui-list-truncate">
 				<#list user_my_sites as user_site>
 					<#if user_site.hasPrivateLayouts()>
@@ -79,8 +80,10 @@
 					</#if>
 				</#list>
 			</ul>
+			</#if>
 		</div>
 		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			<#if is_signed_in>
 			<ul class="aui-list-truncate">
 				<#list myPrivateLayouts as myLayout>
 					<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
@@ -95,6 +98,7 @@
 					</#if>
 				</#list>
 			</ul>
+			</#if>
 		</div>
 		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
