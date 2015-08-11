@@ -100,8 +100,7 @@ html.aui
 				margin-right: 0px;
 			}
 		}
-	
-	
+		
 		#wrapper
 		{
 			overflow: visible;
@@ -186,16 +185,23 @@ html.aui
 				
 					ul.navbar-nav.nav-account-controls
 					{
-						background: $upDarkBlue;
+						background: transparent;
 						position: absolute;
 						top: 0px;
-						right: 10px;
+						right: 60px;
 						left: auto;
 						display: block;
 					
-						li
+						li.dockbar-item
 						{
-							background: none;
+							background: $upDarkBlue;
+							color: $upWhite;
+							height: 43px;
+
+							span
+							{
+								color: $upWhite;
+							}				
 						
 							*:hover
 							{
@@ -204,21 +210,73 @@ html.aui
 							
 							a, a:hover
 							{
-								color: $upWhite;
 								background: none;
-								
-								span
-								{
-									color:$upWhite;
-								}
 							}	
 							
 							ul li span
 							{
 								color: $upDarkBlue;
 							}
-							
 						}	
+						
+						
+						li.services
+						{
+							background: transparent;
+							color: $upDarkBlue;
+							span
+							{
+								color: $upDarkBlue;
+							}				
+							
+						}
+						
+						li.lang
+						{
+							background-color: $upWhite;
+							color: $upDarkBlue;
+							padding-left: 20px;			
+							
+							span
+							{
+								color: $upDarkBlue;
+							}				
+						}
+						li.lang:after
+						{
+						    display: block;
+						    content: "";
+						    width: 14px;
+						    height: 14px;
+						    @include up-grafic;
+						    background-position: -17px -53px;
+						    left: 5px;
+						    position: absolute;
+						    top: 12px;		
+						}
+						
+						li.dockbar-user-notifications
+						{
+							width: 25px;
+							height: 43px;
+							padding-left: 16px;
+						}
+						li.dockbar-user-notifications:after
+						{
+						    display: block;
+						    content: "";
+						    width: 23px;
+						    height: 20px;
+						    @include ple-grafic;
+						    background-position: -1px -335px;
+						    left: 5px;
+						    position: absolute;
+						    top: 12px;		
+						}
+						
+						li.user-avatar
+						{
+						}
 						
 						a.user-notification-link
 						{
@@ -677,6 +735,14 @@ html.aui
 					width: 40px;
 					border-right: 2px solid $upWhite;		
 					background: $upDarkBlue;	
+					
+					a
+					{
+						width: 40px;
+						height:40px;
+						background: $upDarkBlue;
+						overflow: hidden;	
+					}
 				}
 				
 				li.unipage

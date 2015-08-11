@@ -71,11 +71,53 @@
 						
 						a
 						{
+					
+						}
+						
+					a.aui-button
+					{
 							background: $upLightBlue;
 							color: $upDarkBlue;
 							width: 24%;
 							display: inline-block;
 							height: 20px;
+							margin: 0.3%;
+							padding: 5px 0px;
+							overflow: hidden;
+							border-radius: 0px;
+							float: left;
+						
+							span.icon{
+								@include ple-grafic;
+								display: block;
+								width: 20px;
+								height: 20px;
+							    margin-left: auto;
+							    margin-right: auto;		
+								margin-top: 5px;
+								float: none;
+							}
+						
+							span.grouproom
+							{
+								background-position: 0px -33px;
+							}
+							span.personal
+							{
+								background-position: 0px -33px;
+							}
+							span.profile
+							{
+								background-position: 0px -33px;
+							}					
+							span.portfolio
+							{
+								background-position: 0px -33px;
+							}					
+							span.edit
+							{
+								background-position: 0px -33px;
+							}					
 						}
 					}
 					
@@ -93,60 +135,17 @@
 							width: 45px;
 							padding: 2px;	
 						}
-					}
-					
-					a.aui-button
-					{
-						float: left;
-						margin: 0.3%;
-						padding: 5px 0px;
-						overflow: hidden;
-						display: block;
-						overflow:hidden;
-						border-radius:0px;
-						
-						span.icon{
-							@include ple-grafic;
-							display: inline-block;
-							width: 20px;
-							height: 20px;
-							margin: auto;
-							margin-top: 5px;
+						a.edit
+						{
+							width:6%;
+							background: $upLightBlue;
 						}
 						
-						span.grouproom
+						a.up-services
 						{
-							background-position: 0px -33px;
+							background: $upLightBlue;
 						}
-						span.personal
-						{
-							background-position: 0px -33px;
-						}
-						span.profile
-						{
-							background-position: 0px -33px;
-						}					
-						span.portfolio
-						{
-							background-position: 0px -33px;
-						}					
-						span.edit
-						{
-							background-position: 0px -33px;
-						}					}
-					
-					a.edit
-					{
-						width:6%;
-						background: $upLightBlue;
 					}
-					
-					a.up-services
-					{
-						background: $upLightBlue;
-					}
-					
-
 				}	
 				.submenu
 				{
