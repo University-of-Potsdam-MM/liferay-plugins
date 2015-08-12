@@ -213,10 +213,15 @@ html.aui
 								background: none;
 							}	
 							
-							ul li span
+							ul li 
 							{
-								color: $upDarkBlue;
 								height: auto;
+							
+								span 
+								{
+									color: $upDarkBlue;
+									height: auto;
+								}	
 							}
 						}	
 						
@@ -261,6 +266,11 @@ html.aui
 							width: 25px;
 							height: 43px;
 							padding-left: 16px;
+							
+							span
+							{
+								border:none;
+							}
 						}
 						li.dockbar-user-notifications:after
 						{
@@ -277,6 +287,16 @@ html.aui
 						
 						li.user-avatar
 						{
+						}
+						
+						li.sign-in 
+						{
+							background-color: $upDarkBlue;
+							
+							span
+							{
+								color: $upWhite;
+							}
 						}
 						
 						a.user-notification-link
@@ -301,17 +321,22 @@ html.aui
 						}
 					}
 					
-					ul.nav-add-controls
+					#_145_navAddControlsNavbarCollaps
 					{
-						display: block;
-						transistion: none !important;
-						transition-duration: 0s;
-						transition-property: none;
-						
-						width: 60px;
-						height: 300px;
-						overflow: hidden;
-					}
+						position: absolute;
+					
+						ul.nav-add-controls
+						{
+							display: block;
+							transistion: none !important;
+							transition-duration: 0s;
+							transition-property: none;
+							
+							width: 60px;
+							height: 300px;
+							overflow: hidden;
+						}
+					}	
 				}
 			}
 	
@@ -758,7 +783,7 @@ html.aui
 					}
 				}
 				
-				li.unipage, li.services
+				li.unipage, li.services, li.info-link-container
 				{
 					display: none;
 				}
