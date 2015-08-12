@@ -324,6 +324,7 @@ html.aui
 					#_145_navAddControlsNavbarCollaps
 					{
 						position: absolute;
+						right: 0px;
 					
 						ul.nav-add-controls
 						{
