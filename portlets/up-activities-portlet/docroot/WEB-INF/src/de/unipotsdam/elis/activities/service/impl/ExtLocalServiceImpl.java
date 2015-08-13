@@ -16,6 +16,8 @@ package de.unipotsdam.elis.activities.service.impl;
 
 import java.util.List;
 
+import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 
 import de.unipotsdam.elis.activities.service.base.ExtLocalServiceBaseImpl;
@@ -42,19 +44,39 @@ public class ExtLocalServiceImpl extends ExtLocalServiceBaseImpl {
 	 * Never reference this interface directly. Always use {@link de.unipotsdam.elis.activities.service.ExtLocalServiceUtil} to access the ext local service.
 	 */
 	
-	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(long userId, int[] activityTypes, int begin, int end){
-		return ExtFinderUtil.findSocialActivitySetsByUserIdAndActivityTypes(userId, activityTypes, begin, end);
+	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames, int begin, int end){
+		return ExtFinderUtil.findSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
-	public int countSocialActivitySetsByUserIdAndActivityTypes(long userId, int[] activityTypes){
-		return ExtFinderUtil.countSocialActivitySetsByUserIdAndActivityTypes(userId, activityTypes);
+	public int countSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames){
+		return ExtFinderUtil.countSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames));
 	}
 	
-	public List<SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(long userId, int[] activityTypes, int begin, int end){
-		return ExtFinderUtil.findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId, activityTypes, begin, end);
+	public List<SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames, int begin, int end){
+		return ExtFinderUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(long userId, int[] activityTypes){
-		return ExtFinderUtil.countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId, activityTypes);
+	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames){
+		return ExtFinderUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames));
+	}
+	
+	public SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(long userId, long classNameId, long classPK){
+		return ExtFinderUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(userId,classNameId,classPK);
+		
+	}
+	
+	public List<SocialActivity> findSocialActivitiesByActivitySetIdAndType(long activitySetId, int type){
+		return ExtFinderUtil.findSocialActivitiesByActivitySetIdAndType(activitySetId,type);
+	}
+	
+	public List<SocialActivity> findSocialActivitiesByActivitySetId(long activitySetId){
+		return ExtFinderUtil.findSocialActivitiesByActivitySetId(activitySetId);
+	}
+	
+	private long[] getClassNameIds(String[] classNames){
+		long[] result = new long[classNames.length];
+		for (int i = 0; i < result.length; i++)
+			result[i] = PortalUtil.getClassNameId(classNames[i]);
+		return result;
 	}
 }

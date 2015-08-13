@@ -22,12 +22,14 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 
 import de.unipotsdam.elis.portfolio.NoSuchFeedbackException;
 import de.unipotsdam.elis.portfolio.PortfolioStatics;
 import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.base.PortfolioFeedbackLocalServiceBaseImpl;
+import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackFinderUtil;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK;
 
 /**
@@ -130,5 +132,9 @@ public class PortfolioFeedbackLocalServiceImpl
 		dynamicQuery.add(PropertyFactoryUtil.forName("primaryKey.userId").eq(new Long(userId)));
 		dynamicQuery.setProjection(ProjectionFactoryUtil.property("primaryKey.plid"));
 		return portfolioFeedbackPersistence.findWithDynamicQuery(dynamicQuery);
+	}
+	
+	public List<User> getUsersByPortfolioFeedback(long plid){
+		return PortfolioFeedbackFinderUtil.findUsersByPortfolioFeedback(plid);
 	}
 }

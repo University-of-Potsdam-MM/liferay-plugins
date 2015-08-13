@@ -180,6 +180,10 @@ public class PortfolioFeedbackLocalServiceClp
 		_methodName31 = "getPortfolioPlidsByUserId";
 
 		_methodParameterTypes31 = new String[] { "long" };
+
+		_methodName32 = "getUsersByPortfolioFeedback";
+
+		_methodParameterTypes32 = new String[] { "long" };
 	}
 
 	@Override
@@ -1142,6 +1146,30 @@ public class PortfolioFeedbackLocalServiceClp
 		return (java.util.List<java.lang.Object>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public java.util.List<com.liferay.portal.model.User> getUsersByPortfolioFeedback(
+		long plid) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32, new Object[] { plid });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portal.model.User>)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -1205,4 +1233,6 @@ public class PortfolioFeedbackLocalServiceClp
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
 }

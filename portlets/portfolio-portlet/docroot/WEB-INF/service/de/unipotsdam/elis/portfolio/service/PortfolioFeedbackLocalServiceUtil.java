@@ -358,6 +358,11 @@ public class PortfolioFeedbackLocalServiceUtil {
 		return getService().getPortfolioPlidsByUserId(userId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.User> getUsersByPortfolioFeedback(
+		long plid) {
+		return getService().getUsersByPortfolioFeedback(plid);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

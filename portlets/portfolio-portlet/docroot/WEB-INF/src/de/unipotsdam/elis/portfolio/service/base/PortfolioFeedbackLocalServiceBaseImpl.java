@@ -33,6 +33,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalService;
+import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackFinder;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPersistence;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinder;
@@ -419,6 +420,25 @@ public abstract class PortfolioFeedbackLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the portfolio feedback finder.
+	 *
+	 * @return the portfolio feedback finder
+	 */
+	public PortfolioFeedbackFinder getPortfolioFeedbackFinder() {
+		return portfolioFeedbackFinder;
+	}
+
+	/**
+	 * Sets the portfolio feedback finder.
+	 *
+	 * @param portfolioFeedbackFinder the portfolio feedback finder
+	 */
+	public void setPortfolioFeedbackFinder(
+		PortfolioFeedbackFinder portfolioFeedbackFinder) {
+		this.portfolioFeedbackFinder = portfolioFeedbackFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -608,6 +628,8 @@ public abstract class PortfolioFeedbackLocalServiceBaseImpl
 	protected de.unipotsdam.elis.portfolio.service.PortfolioFeedbackService portfolioFeedbackService;
 	@BeanReference(type = PortfolioFeedbackPersistence.class)
 	protected PortfolioFeedbackPersistence portfolioFeedbackPersistence;
+	@BeanReference(type = PortfolioFeedbackFinder.class)
+	protected PortfolioFeedbackFinder portfolioFeedbackFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)

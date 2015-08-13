@@ -86,11 +86,13 @@ public class JspHelper {
 		String portletId = PortalUtil.getPortletId(request);
 		String portfolioURL;
 		String notificationMessage;
+		int socialActivityType;
 		if (activityType == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
 			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"portfolio-portfolio-published-message", new Object[] { themeDisplay.getUser().getFullName(),
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
+			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED;
 		} else if (activityType == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
 			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
 			notificationMessage = LanguageUtil.format(
@@ -99,29 +101,23 @@ public class JspHelper {
 					"portfolio-portfolio-feedback-requested-message",
 					new Object[] { themeDisplay.getUser().getFullName(),
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
-		} else{
+			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED;
+		} else {
 			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), receiver);
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"portfolio-portfolio-feedback-delivered", new Object[] { themeDisplay.getUser().getFullName(),
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
-			
+			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
+
 		}
-		createPortfolioActivity(portfolio, themeDisplay, receiver, activityType, portfolioURL, portletId);
+		createPortfolioActivity(portfolio, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
 		createPortfolioNotification(themeDisplay.getUser(), receiver, notificationMessage, portfolioURL, portletId);
 	}
 
-	private static void createPortfolioActivity(Portfolio portfolio, ThemeDisplay themeDisplay, User receiver,
-			int activityType, String portfolioURL, String portletId) throws PortalException, SystemException {
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-		jsonObject.put("plid", portfolio.getPlid());
-		jsonObject.put("userId", themeDisplay.getUserId());
-		jsonObject.put("receiverUserId", receiver.getUserId());
-		jsonObject.put("activityType", activityType);
-		jsonObject.put("url", portfolioURL);
-		jsonObject.put("portletId", portletId);
-		jsonObject.put("companyId", themeDisplay.getCompanyId());
-		SocialActivityLocalServiceUtil.addActivity(themeDisplay.getUserId(), 0, Portfolio.class.getName(),
-				portfolio.getPlid(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO, jsonObject.toString(), receiver.getUserId()); 
+	private static void createPortfolioActivity(Portfolio portfolio, long userId, long receiverUserId,
+			int socialActivityType) throws PortalException, SystemException {
+		SocialActivityLocalServiceUtil.addActivity(userId, 0, Portfolio.class.getName(), portfolio.getPlid(),
+				socialActivityType, "", receiverUserId);
 	}
 
 	private static void createPortfolioNotification(User sender, User receiver, String message, String portfolioURL,

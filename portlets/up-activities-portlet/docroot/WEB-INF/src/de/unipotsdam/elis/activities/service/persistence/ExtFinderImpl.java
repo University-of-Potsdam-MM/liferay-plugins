@@ -11,19 +11,20 @@ import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
 public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implements ExtFinder{
 	
-	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(long userId, int[] activityTypes, int begin, int end){
+	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(long userId, long[] classNameIds, int begin, int end){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
 	        session = sessionFactory.openSession();
 
-	        String sql = CustomSQLUtil.get("findByUserIdAndActivityTypes");
-	        sql = sql.replace("{0}", createPlaceholder(activityTypes.length));
+	        String sql = CustomSQLUtil.get("findByUserIdAndClassNameIds");
+	        sql = sql.replace("{0}", createPlaceholder(classNameIds.length));
 
 	        SQLQuery q = session.createSQLQuery(sql);
 	        q.setCacheable(false);
@@ -32,7 +33,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        QueryPos qPos = QueryPos.getInstance(q);
 	        qPos.add(userId);
 	        qPos.add(userId);
-	        qPos.add(activityTypes);
+	        qPos.add(classNameIds);
 
 	        return (List<SocialActivitySet>) QueryUtil.list(q, getDialect(), begin, end);
 	    } catch (Exception e) {
@@ -48,14 +49,14 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return null;
 	}
 	
-	public int countSocialActivitySetsByUserIdAndActivityTypes(long userId, int[] activityTypes){
+	public int countSocialActivitySetsByUserIdAndClassNameIds(long userId, long[] classNameIds){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
 	        session = sessionFactory.openSession();
 
-	        String sql = CustomSQLUtil.get("countByUserIdAndActivityTypes");
-	        sql = sql.replace("{0}", createPlaceholder(activityTypes.length));
+	        String sql = CustomSQLUtil.get("countByUserIdAndClassNameIds");
+	        sql = sql.replace("{0}", createPlaceholder(classNameIds.length));
 	        
 	        SQLQuery q = session.createSQLQuery(sql); 
 	        q.setCacheable(false);
@@ -64,8 +65,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        QueryPos qPos = QueryPos.getInstance(q);
 	        qPos.add(userId);
 	        qPos.add(userId);
-	        qPos.add(activityTypes);
-
+	        qPos.add(classNameIds);
 
 	        return (Integer)q.uniqueResult();
 	    } catch (Exception e) {
@@ -81,14 +81,14 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return 0;
 	}
 	
-	public List<SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(long userId, int[] activityTypes, int begin, int end){
+	public List<SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(long userId, long[] classNameIds, int begin, int end){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
 	        session = sessionFactory.openSession();
 
-	        String sql = CustomSQLUtil.get("findByUserGroupsOrUserIdAndActivityTypes");
-	        sql = sql.replace("{0}", createPlaceholder(activityTypes.length));
+	        String sql = CustomSQLUtil.get("findByUserGroupsOrUserIdAndClassNameIds");
+	        sql = sql.replace("{0}", createPlaceholder(classNameIds.length));
 
 	        SQLQuery q = session.createSQLQuery(sql);
 	        q.setCacheable(false);
@@ -100,7 +100,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        qPos.add(userId);
 	        qPos.add(userId);
 	        qPos.add(userId);
-	        qPos.add(activityTypes);
+	        qPos.add(classNameIds);
 
 	        return (List<SocialActivitySet>) QueryUtil.list(q, getDialect(), begin, end);
 	    } catch (Exception e) {
@@ -116,14 +116,14 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return null;
 	}
 	
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(long userId, int[] activityTypes){
+	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(long userId, long[] classNameIds){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
 	        session = sessionFactory.openSession();
 
-	        String sql = CustomSQLUtil.get("countByUserGroupsOrUserIdAndActivityTypes");
-	        sql = sql.replace("{0}", createPlaceholder(activityTypes.length));
+	        String sql = CustomSQLUtil.get("countByUserGroupsOrUserIdAndClassNameIds");
+	        sql = sql.replace("{0}", createPlaceholder(classNameIds.length));
 
 	        SQLQuery q = session.createSQLQuery(sql);
 	        q.setCacheable(false);
@@ -135,7 +135,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        qPos.add(userId);
 	        qPos.add(userId);
 	        qPos.add(userId);
-	        qPos.add(activityTypes);
+	        qPos.add(classNameIds);
 
 	        return (Integer)q.uniqueResult();
 	    } catch (Exception e) {
@@ -157,6 +157,98 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 			sb.append(",?");
 		sb.append(")");
 		return sb.toString() ;
+	}
+	
+	public SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(long userId, long classNameId, long classPK){
+		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
+		Session session = null;
+	    try {
+	        session = sessionFactory.openSession();
+
+	        String sql = CustomSQLUtil.get("findFirstByUserIdAndClassNameIdAndClassPK");
+
+	        SQLQuery q = session.createSQLQuery(sql);
+	        q.setCacheable(false);
+	        q.addEntity("SocialActivitySet", PortalClassLoaderUtil.getClassLoader().loadClass("com.liferay.portlet.social.model.impl.SocialActivitySetImpl"));
+
+	        QueryPos qPos = QueryPos.getInstance(q);
+	        qPos.add(userId);
+	        qPos.add(classNameId);
+	        qPos.add(classPK);
+
+	        return (SocialActivitySet) q.uniqueResult();
+	    } catch (Exception e) {
+	        try {
+	            throw new SystemException(e);
+	        } catch (SystemException se) {
+	            se.printStackTrace();
+	        }
+	    } finally {
+	    	sessionFactory.closeSession(session);
+	    }
+
+	    return null;
+	}
+	
+	public List<SocialActivity> findSocialActivitiesByActivitySetIdAndType(long activitySetId, int type){
+		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
+		Session session = null;
+	    try {
+	        session = sessionFactory.openSession();
+
+	        String sql = CustomSQLUtil.get("findByActivitySetIdAndType");
+
+	        SQLQuery q = session.createSQLQuery(sql);
+	        q.setCacheable(false);
+	        q.addEntity("SocialActivity", PortalClassLoaderUtil.getClassLoader().loadClass("com.liferay.portlet.social.model.impl.SocialActivityImpl"));
+
+	        QueryPos qPos = QueryPos.getInstance(q);
+	        qPos.add(activitySetId);
+	        qPos.add(type);
+
+	        return (List<SocialActivity>) QueryUtil.list(q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	    } catch (Exception e) {
+	        try {
+	            throw new SystemException(e);
+	        } catch (SystemException se) {
+	            se.printStackTrace();
+	        }
+	    } finally {
+	    	sessionFactory.closeSession(session);
+	    }
+
+	    return null;
+	}
+	
+
+	
+	public List<SocialActivity> findSocialActivitiesByActivitySetId(long activitySetId){
+		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
+		Session session = null;
+	    try {
+	        session = sessionFactory.openSession();
+
+	        String sql = CustomSQLUtil.get("findByActivitySetId");
+
+	        SQLQuery q = session.createSQLQuery(sql);
+	        q.setCacheable(false);
+	        q.addEntity("SocialActivity", PortalClassLoaderUtil.getClassLoader().loadClass("com.liferay.portlet.social.model.impl.SocialActivityImpl"));
+
+	        QueryPos qPos = QueryPos.getInstance(q);
+	        qPos.add(activitySetId);
+
+	        return (List<SocialActivity>) QueryUtil.list(q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	    } catch (Exception e) {
+	        try {
+	            throw new SystemException(e);
+	        } catch (SystemException se) {
+	            se.printStackTrace();
+	        }
+	    } finally {
+	    	sessionFactory.closeSession(session);
+	    }
+
+	    return null;
 	}
 
 }

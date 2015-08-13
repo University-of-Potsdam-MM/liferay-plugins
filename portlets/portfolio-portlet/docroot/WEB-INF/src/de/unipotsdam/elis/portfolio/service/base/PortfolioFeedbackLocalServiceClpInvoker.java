@@ -114,76 +114,80 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 				"de.unipotsdam.elis.portfolio.model.PortfolioFeedback"
 			};
 
-		_methodName42 = "getBeanIdentifier";
+		_methodName44 = "getBeanIdentifier";
 
-		_methodParameterTypes42 = new String[] {  };
+		_methodParameterTypes44 = new String[] {  };
 
-		_methodName43 = "setBeanIdentifier";
+		_methodName45 = "setBeanIdentifier";
 
-		_methodParameterTypes43 = new String[] { "java.lang.String" };
+		_methodParameterTypes45 = new String[] { "java.lang.String" };
 
-		_methodName48 = "addPortfolioFeedback";
+		_methodName50 = "addPortfolioFeedback";
 
-		_methodParameterTypes48 = new String[] {
+		_methodParameterTypes50 = new String[] {
 				"long", "long", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName49 = "addPortfolioFeedback";
+		_methodName51 = "addPortfolioFeedback";
 
-		_methodParameterTypes49 = new String[] {
+		_methodParameterTypes51 = new String[] {
 				"long", "long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName50 = "updatePortfolioFeedback";
+		_methodName52 = "updatePortfolioFeedback";
 
-		_methodParameterTypes50 = new String[] { "long", "long", "int" };
+		_methodParameterTypes52 = new String[] { "long", "long", "int" };
 
-		_methodName51 = "deletePortfolioFeedback";
+		_methodName53 = "deletePortfolioFeedback";
 
-		_methodParameterTypes51 = new String[] {
+		_methodParameterTypes53 = new String[] {
 				"de.unipotsdam.elis.portfolio.model.PortfolioFeedback"
 			};
 
-		_methodName52 = "deletePortfolioFeedback";
+		_methodName54 = "deletePortfolioFeedback";
 
-		_methodParameterTypes52 = new String[] { "long", "long" };
+		_methodParameterTypes54 = new String[] { "long", "long" };
 
-		_methodName53 = "deletePortfolioFeedbackByPlid";
+		_methodName55 = "deletePortfolioFeedbackByPlid";
 
-		_methodParameterTypes53 = new String[] { "long" };
+		_methodParameterTypes55 = new String[] { "long" };
 
-		_methodName54 = "deletePortfolioFeedbackByUserId";
+		_methodName56 = "deletePortfolioFeedbackByUserId";
 
-		_methodParameterTypes54 = new String[] { "long" };
+		_methodParameterTypes56 = new String[] { "long" };
 
-		_methodName55 = "deletePortfolioFeedbackByPlidAndFeedbackStatus";
+		_methodName57 = "deletePortfolioFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes55 = new String[] { "long", "int" };
+		_methodParameterTypes57 = new String[] { "long", "int" };
 
-		_methodName56 = "getPortfolioFeedback";
+		_methodName58 = "getPortfolioFeedback";
 
-		_methodParameterTypes56 = new String[] { "long", "long" };
+		_methodParameterTypes58 = new String[] { "long", "long" };
 
-		_methodName57 = "fetchPortfolioFeedback";
+		_methodName59 = "fetchPortfolioFeedback";
 
-		_methodParameterTypes57 = new String[] { "long", "long" };
+		_methodParameterTypes59 = new String[] { "long", "long" };
 
-		_methodName58 = "getPortfolioFeedbackByPlid";
+		_methodName60 = "getPortfolioFeedbackByPlid";
 
-		_methodParameterTypes58 = new String[] { "long" };
+		_methodParameterTypes60 = new String[] { "long" };
 
-		_methodName59 = "getPortfolioFeedbackByUserId";
-
-		_methodParameterTypes59 = new String[] { "long" };
-
-		_methodName60 = "getPortfolioFeedbackByPlidAndFeedbackStatus";
-
-		_methodParameterTypes60 = new String[] { "long", "int" };
-
-		_methodName61 = "getPortfolioPlidsByUserId";
+		_methodName61 = "getPortfolioFeedbackByUserId";
 
 		_methodParameterTypes61 = new String[] { "long" };
+
+		_methodName62 = "getPortfolioFeedbackByPlidAndFeedbackStatus";
+
+		_methodParameterTypes62 = new String[] { "long", "int" };
+
+		_methodName63 = "getPortfolioPlidsByUserId";
+
+		_methodParameterTypes63 = new String[] { "long" };
+
+		_methodName64 = "getUsersByPortfolioFeedback";
+
+		_methodParameterTypes64 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -275,104 +279,109 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 			return PortfolioFeedbackLocalServiceUtil.updatePortfolioFeedback((de.unipotsdam.elis.portfolio.model.PortfolioFeedback)arguments[0]);
 		}
 
-		if (_methodName42.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName43.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			PortfolioFeedbackLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName48.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.addPortfolioFeedback(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[3]);
 		}
 
-		if (_methodName49.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.addPortfolioFeedback(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[2]);
 		}
 
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.updatePortfolioFeedback(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback((de.unipotsdam.elis.portfolio.model.PortfolioFeedback)arguments[0]);
-		}
-
-		if (_methodName52.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
-		}
-
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(((Long)arguments[0]).longValue());
-
-			return null;
+			return PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback((de.unipotsdam.elis.portfolio.model.PortfolioFeedback)arguments[0]);
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByUserId(((Long)arguments[0]).longValue());
-
-			return null;
+			return PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName55.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
-			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
 		if (_methodName56.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByUserId(((Long)arguments[0]).longValue());
+
+			return null;
 		}
 
 		if (_methodName57.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
+
+			return null;
 		}
 
 		if (_methodName58.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlid(((Long)arguments[0]).longValue());
+			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName59.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByUserId(((Long)arguments[0]).longValue());
+			return PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
-			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlid(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName61.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByUserId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName62.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
+			return PortfolioFeedbackLocalServiceUtil.getPortfolioFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
+		}
+
+		if (_methodName63.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
 			return PortfolioFeedbackLocalServiceUtil.getPortfolioPlidsByUserId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName64.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
+			return PortfolioFeedbackLocalServiceUtil.getUsersByPortfolioFeedback(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -410,14 +419,10 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 	private String[] _methodParameterTypes14;
 	private String _methodName15;
 	private String[] _methodParameterTypes15;
-	private String _methodName42;
-	private String[] _methodParameterTypes42;
-	private String _methodName43;
-	private String[] _methodParameterTypes43;
-	private String _methodName48;
-	private String[] _methodParameterTypes48;
-	private String _methodName49;
-	private String[] _methodParameterTypes49;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
+	private String _methodName45;
+	private String[] _methodParameterTypes45;
 	private String _methodName50;
 	private String[] _methodParameterTypes50;
 	private String _methodName51;
@@ -442,4 +447,10 @@ public class PortfolioFeedbackLocalServiceClpInvoker {
 	private String[] _methodParameterTypes60;
 	private String _methodName61;
 	private String[] _methodParameterTypes61;
+	private String _methodName62;
+	private String[] _methodParameterTypes62;
+	private String _methodName63;
+	private String[] _methodParameterTypes63;
+	private String _methodName64;
+	private String[] _methodParameterTypes64;
 }

@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="de.unipotsdam.elis.portfolio.model.Portfolio"%>
 <%@page import="de.unipotsdam.elis.activities.service.ExtLocalServiceUtil"%>
 <%@page import="de.unipotsdam.elis.activities.service.persistence.ExtFinderUtil"%>
 <%@page
@@ -36,18 +37,18 @@ int end = start + _DELTA;
 while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	if (group.isUser()) {
 		if (layout.isPrivateLayout()) {
-			int[] activityTypes = new int[]{ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO};
+			String[] classNames = new String[]{Portfolio.class.getName()};
 			if (tabs1.equals("my-sites")) {
 				results = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySets(group.getClassPK(), start, end);
 				total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(group.getClassPK());
 			}
 			else if (tabs1.equals("portfolio")) {
-				 results = ExtLocalServiceUtil.findSocialActivitySetsByUserIdAndActivityTypes(group.getClassPK(), activityTypes, start, end);
-				 total = ExtLocalServiceUtil.countSocialActivitySetsByUserIdAndActivityTypes(group.getClassPK(), activityTypes);
+				 results = ExtLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
+				 total = ExtLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
 				}
 			else { 
-				results = ExtLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(group.getClassPK(), activityTypes, start, end);
-				total = ExtLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(group.getClassPK(), activityTypes);
+				results = ExtLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames, start, end);
+				total = ExtLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames);
 			}
 		}
 		else {

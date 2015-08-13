@@ -21,32 +21,51 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
  * @author Matthias
  */
 public class ExtFinderUtil {
-	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(
+		long userId, long[] classNameIds, int begin, int end) {
 		return getFinder()
-				   .findSocialActivitySetsByUserIdAndActivityTypes(userId,
-			activityTypes, begin, end);
+				   .findSocialActivitySetsByUserIdAndClassNameIds(userId,
+			classNameIds, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserIdAndActivityTypes(
-		long userId, int[] activityTypes) {
+	public static int countSocialActivitySetsByUserIdAndClassNameIds(
+		long userId, long[] classNameIds) {
 		return getFinder()
-				   .countSocialActivitySetsByUserIdAndActivityTypes(userId,
-			activityTypes);
+				   .countSocialActivitySetsByUserIdAndClassNameIds(userId,
+			classNameIds);
 	}
 
-	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+		long userId, long[] classNameIds, int begin, int end) {
 		return getFinder()
-				   .findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId,
-			activityTypes, begin, end);
+				   .findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId,
+			classNameIds, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes) {
+	public static int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+		long userId, long[] classNameIds) {
 		return getFinder()
-				   .countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId,
-			activityTypes);
+				   .countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId,
+			classNameIds);
+	}
+
+	public static com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
+		long userId, long classNameId, long classPK) {
+		return getFinder()
+				   .findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(userId,
+			classNameId, classPK);
+	}
+
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetIdAndType(
+		long activitySetId, int type) {
+		return getFinder()
+				   .findSocialActivitiesByActivitySetIdAndType(activitySetId,
+			type);
+	}
+
+	public static java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
+		long activitySetId) {
+		return getFinder().findSocialActivitiesByActivitySetId(activitySetId);
 	}
 
 	public static ExtFinder getFinder() {

@@ -3,6 +3,7 @@ package de.unipotsdam.elis.activities.hooks.interpreter;
 import java.text.DateFormat;
 import java.text.Format;
 import java.util.Date;
+import java.util.List;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
@@ -10,34 +11,29 @@ import javax.portlet.PortletException;
 import com.liferay.compat.portal.kernel.util.Time;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
-import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.PortletBagPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.blogs.model.BlogsEntry;
-import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
+import com.liferay.util.portlet.PortletProps;
 
-import de.unipotsdam.elis.portfolio.PortfolioStatics;
+import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
+import de.unipotsdam.elis.activities.service.ExtLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 
 public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter {
-	
+
 	@Override
 	public String getSelector() {
 		return "SO";
@@ -47,105 +43,103 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 	public String[] getClassNames() {
 		return new String[] { Portfolio.class.getName() };
 	}
-	
+
 	@Override
 	protected SocialActivityFeedEntry doInterpret(SocialActivitySet activitySet, ServiceContext serviceContext)
 			throws Exception {
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(activitySet.getExtraData());
-		PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
-				.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
-		String title = getTitle(jsonObject, serviceContext,portletConfig, activitySet.getModifiedDate());
-		String body = getBody(jsonObject, serviceContext, portletConfig);
+		PortletConfig portletConfig = PortalUtil.getPortletConfig(serviceContext.getCompanyId(),
+				serviceContext.getPortletId(), PortletBagPool.get(serviceContext.getPortletId()).getServletContext());
+		String title = getTitle(activitySet.getClassPK(), activitySet.getModifiedDate(), serviceContext, portletConfig);
+		List<SocialActivity> activities = ExtLocalServiceUtil.findSocialActivitiesByActivitySetId(activitySet
+				.getActivitySetId());
+		String body = getBody(activities.toArray(new SocialActivity[activities.size()]), serviceContext, portletConfig);
 		return new SocialActivityFeedEntry("", title, body);
 	}
 
 	@Override
 	protected SocialActivityFeedEntry doInterpret(SocialActivity activity, ServiceContext serviceContext)
 			throws Exception {
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(activity.getExtraData());
-		PortletConfig portletConfig = PortalUtil.getPortletConfig(jsonObject.getLong("companyId"), jsonObject
-				.getString("portletId"), PortletBagPool.get(jsonObject.getString("portletId")).getServletContext());
-		String title = getTitle(jsonObject, serviceContext,portletConfig, activity.getCreateDate());
-		String body = getBody(jsonObject, serviceContext, portletConfig);
+		PortletConfig portletConfig = PortalUtil.getPortletConfig(serviceContext.getCompanyId(),
+				serviceContext.getPortletId(), PortletBagPool.get(serviceContext.getPortletId()).getServletContext());
+		String title = getTitle(activity.getClassPK(), activity.getCreateDate(), serviceContext, portletConfig);
+		String body = getBody(new SocialActivity[] { activity }, serviceContext, portletConfig);
 		return new SocialActivityFeedEntry("", title, body);
 	}
-	
-	private String getTitle(JSONObject jsonObject, ServiceContext serviceContext,PortletConfig portletConfig, long displayDate) throws PortalException, SystemException, PortletException{
-		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(jsonObject.getLong("plid"));
-		User sender = UserLocalServiceUtil.getUser(jsonObject.getLong("userId"));
-		String url = jsonObject.getString("url");
-		String portfolioTitle = "<a href=\"" + url + "\">" + portfolio.getLayout().getTitle(serviceContext.getLocale()) + "</a>";
-		
+
+	private String getTitle(long plid, long changeDate, ServiceContext serviceContext, PortletConfig portletConfig)
+			throws PortalException, SystemException, PortletException {
+		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(plid);
+		User sender = UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId());
+		String url = PortalUtil.getLayoutFullURL(portfolio.getLayout(), serviceContext.getThemeDisplay());
+		String portfolioTitle = "<a href=\"" + url + "\">" + portfolio.getLayout().getTitle(serviceContext.getLocale())
+				+ "</a>";
+
 		StringBundler sb = new StringBundler(8);
 
 		sb.append("<div class=\"activity-header\">");
 		sb.append("<div class=\"activity-user-name\">");
-		
-		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-				"portfolio-in-portfolio-area",
-				new String[] {getUserName(sender.getUserId(), serviceContext) }));
-		
+
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "portfolio-in-portfolio-area",
+				new String[] { getUserName(sender.getUserId(), serviceContext) }));
+
 		sb.append("</div><div class=\"activity-time\" title=\"");
 
-		Format dateFormatDate = FastDateFormatFactoryUtil.getDateTime(
-			DateFormat.FULL, DateFormat.SHORT, serviceContext.getLocale(),
-			serviceContext.getTimeZone());
+		Format dateFormatDate = FastDateFormatFactoryUtil.getDateTime(DateFormat.FULL, DateFormat.SHORT,
+				serviceContext.getLocale(), serviceContext.getTimeZone());
 
-		Date activityDate = new Date(displayDate);
+		Date activityDate = new Date(changeDate);
 
 		sb.append(dateFormatDate.format(activityDate));
 
 		sb.append("\">");
 
-		Format dateFormat = FastDateFormatFactoryUtil.getDate(
-			DateFormat.FULL, serviceContext.getLocale(),
-			serviceContext.getTimeZone());
+		Format dateFormat = FastDateFormatFactoryUtil.getDate(DateFormat.FULL, serviceContext.getLocale(),
+				serviceContext.getTimeZone());
 
-		String relativeTimeDescription = Time.getRelativeTimeDescription(
-			displayDate, serviceContext.getLocale(),
-			serviceContext.getTimeZone(), dateFormat);
+		String relativeTimeDescription = Time.getRelativeTimeDescription(changeDate, serviceContext.getLocale(),
+				serviceContext.getTimeZone(), dateFormat);
 
 		sb.append(relativeTimeDescription);
 
 		sb.append("</div></div><div class=\"activity-action\">");
-		
 
-		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-				"portfolio-changes-to-portfolio-page",
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "portfolio-changes-to-portfolio-page",
 				new String[] { portfolioTitle }));
 
 		sb.append("</div>");
 
 		return sb.toString();
 	}
-	
-	private String getBody(JSONObject jsonObject, ServiceContext serviceContext,PortletConfig portletConfig) throws PortalException, SystemException{
-		User receiver = UserLocalServiceUtil.getUser(jsonObject.getLong("receiverUserId"));
-		StringBundler sb = new StringBundler(5);
 
-		sb.append("<div class=\"activity-body\"><div class=\"title\">");
-		if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
-			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"portfolio-portfolio-page-published-activity",
-					new String[] { getUserName(receiver.getUserId(), serviceContext) }));
-		} else if (jsonObject.getInt("activityType") == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
-			sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"portfolio-feedback-requested-activity",
-					new String[] { getUserName(receiver.getUserId(), serviceContext) }));
-		} else {
-			sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(), "portfolio-feedback-delivered-activity"));
+	private String getBody(SocialActivity[] activities, ServiceContext serviceContext, PortletConfig portletConfig)
+			throws PortalException, SystemException {
+		StringBundler sb = new StringBundler("<div class=\"activity-body\">");
+		for (SocialActivity activity : activities) {
+			if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED) {
+				sb.append("<div class=\"title portfolioPublished\">");
+				sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+						"portfolio-portfolio-page-published-activity",
+						new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
+			} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED) {
+				sb.append("<div class=\"title feedbackRequested\">");
+				sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+						"portfolio-feedback-requested-activity",
+						new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
+			} else {
+				sb.append("<div class=\"title feedbackDelivered\">");
+				sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(),
+						"portfolio-feedback-delivered-activity"));
+			}
+			sb.append("</div>");
 		}
-		sb.append("</div></div>");
-
+		sb.append("</div>");
 		return sb.toString();
 	}
-	
-	@Override
-	public void updateActivitySet(long activityId)
-		throws PortalException, SystemException {
 
-		SocialActivity activity =
-			SocialActivityLocalServiceUtil.fetchSocialActivity(activityId);
+	@Override
+	public void updateActivitySet(long activityId) throws PortalException, SystemException {
+
+		SocialActivity activity = SocialActivityLocalServiceUtil.fetchSocialActivity(activityId);
 
 		if ((activity == null) || (activity.getActivitySetId() > 0)) {
 			return;
@@ -154,19 +148,60 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 		long activitySetId = getActivitySetId(activityId);
 
 		if (activitySetId > 0) {
-			SocialActivitySetLocalServiceUtil.incrementActivityCount(
-				activitySetId, activityId);
+			SocialActivitySetLocalServiceUtil.incrementActivityCount(activitySetId, activityId);
+
+			for (SocialActivity socialActivity : ExtLocalServiceUtil.findSocialActivitiesByActivitySetIdAndType(
+					activitySetId, activity.getType())) {
+				if (socialActivity.getActivityId() != activity.getActivityId()
+						&& socialActivity.getReceiverUserId() == activity.getReceiverUserId()) {
+					SocialActivityLocalServiceUtil.deleteActivity(socialActivity);
+					SocialActivitySetLocalServiceUtil.decrementActivityCount(activitySetId);
+				}
+			}
+
+			SocialActivitySet activitySet = SocialActivitySetLocalServiceUtil.getSocialActivitySet(activitySetId);
+			activitySet.setModifiedDate(activity.getCreateDate());
+			SocialActivitySetLocalServiceUtil.updateSocialActivitySet(activitySet);
 
 			return;
 		}
 
-		SocialActivitySet activitySet =
-			SocialActivitySetLocalServiceUtil.addActivitySet(activityId);
-		
-		activitySet.setType(activity.getType());
-		activitySet.setExtraData(activity.getExtraData());
+		SocialActivitySet activitySet = SocialActivitySetLocalServiceUtil.addActivitySet(activityId);
 
-		SocialActivitySetLocalServiceUtil.updateSocialActivitySet(activitySet);}
-	
+		SocialActivitySetLocalServiceUtil.updateSocialActivitySet(activitySet);
+	}
+
+	@Override
+	protected long getActivitySetId(long activityId) {
+		try {
+			SocialActivitySet activitySet = null;
+
+			SocialActivity activity = SocialActivityLocalServiceUtil.getActivity(activityId);
+
+			activitySet = ExtLocalServiceUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
+					activity.getUserId(), activity.getClassNameId(), activity.getClassPK());
+
+			if ((activitySet != null) && !isExpired(activitySet)) {
+				return activitySet.getActivitySetId();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	protected boolean isExpired(SocialActivitySet activitySet) {
+
+		long age = System.currentTimeMillis() - activitySet.getCreateDate();
+
+		long timeWindow = Time.MINUTE * Long.parseLong(PortletProps.get("social.activity.sets.bundling.time.window"));
+
+		if (age > timeWindow) {
+			return true;
+		}
+
+		return false;
+	}
 
 }

@@ -65,7 +65,7 @@ for (SocialActivitySet activitySet : results) {
 			<%= activityFeedEntry.getBody() %>
 
 			<div class="activity-footer">
-				<c:if test="<%=activitySet.getType() != ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO &&
+				<c:if test="<%=!Validator.equals(activitySet.getClassName(), Portfolio.class.getName()) &&
 						!Validator.equals(activitySet.getClassName(), MBMessage.class.getName()) %>">
 					<div class="activity-footer-toolbar">
 						<c:if test="<%= Validator.isNotNull(activityFeedEntry.getLink()) %>">

@@ -32,21 +32,37 @@ public class ExtLocalServiceClpInvoker {
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
 
-		_methodName20 = "findSocialActivitySetsByUserIdAndActivityTypes";
+		_methodName20 = "findSocialActivitySetsByUserIdAndClassNames";
 
-		_methodParameterTypes20 = new String[] { "long", "int[][]", "int", "int" };
+		_methodParameterTypes20 = new String[] {
+				"long", "java.lang.String[][]", "int", "int"
+			};
 
-		_methodName21 = "countSocialActivitySetsByUserIdAndActivityTypes";
+		_methodName21 = "countSocialActivitySetsByUserIdAndClassNames";
 
-		_methodParameterTypes21 = new String[] { "long", "int[][]" };
+		_methodParameterTypes21 = new String[] { "long", "java.lang.String[][]" };
 
-		_methodName22 = "findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes";
+		_methodName22 = "findSocialActivitySetsByUserGroupsOrUserIdAndClassNames";
 
-		_methodParameterTypes22 = new String[] { "long", "int[][]", "int", "int" };
+		_methodParameterTypes22 = new String[] {
+				"long", "java.lang.String[][]", "int", "int"
+			};
 
-		_methodName23 = "countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes";
+		_methodName23 = "countSocialActivitySetsByUserGroupsOrUserIdAndClassNames";
 
-		_methodParameterTypes23 = new String[] { "long", "int[][]" };
+		_methodParameterTypes23 = new String[] { "long", "java.lang.String[][]" };
+
+		_methodName24 = "findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK";
+
+		_methodParameterTypes24 = new String[] { "long", "long", "long" };
+
+		_methodName25 = "findSocialActivitiesByActivitySetIdAndType";
+
+		_methodParameterTypes25 = new String[] { "long", "int" };
+
+		_methodName26 = "findSocialActivitiesByActivitySetId";
+
+		_methodParameterTypes26 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -65,28 +81,48 @@ public class ExtLocalServiceClpInvoker {
 
 		if (_methodName20.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes20, parameterTypes)) {
-			return ExtLocalServiceUtil.findSocialActivitySetsByUserIdAndActivityTypes(((Long)arguments[0]).longValue(),
-				(int[])arguments[1], ((Integer)arguments[2]).intValue(),
+			return ExtLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(((Long)arguments[0]).longValue(),
+				(java.lang.String[])arguments[1],
+				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue());
 		}
 
 		if (_methodName21.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes21, parameterTypes)) {
-			return ExtLocalServiceUtil.countSocialActivitySetsByUserIdAndActivityTypes(((Long)arguments[0]).longValue(),
-				(int[])arguments[1]);
+			return ExtLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(((Long)arguments[0]).longValue(),
+				(java.lang.String[])arguments[1]);
 		}
 
 		if (_methodName22.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes22, parameterTypes)) {
-			return ExtLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(((Long)arguments[0]).longValue(),
-				(int[])arguments[1], ((Integer)arguments[2]).intValue(),
+			return ExtLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(((Long)arguments[0]).longValue(),
+				(java.lang.String[])arguments[1],
+				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue());
 		}
 
 		if (_methodName23.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes23, parameterTypes)) {
-			return ExtLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(((Long)arguments[0]).longValue(),
-				(int[])arguments[1]);
+			return ExtLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(((Long)arguments[0]).longValue(),
+				(java.lang.String[])arguments[1]);
+		}
+
+		if (_methodName24.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes24, parameterTypes)) {
+			return ExtLocalServiceUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
+		}
+
+		if (_methodName25.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes25, parameterTypes)) {
+			return ExtLocalServiceUtil.findSocialActivitiesByActivitySetIdAndType(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
+		}
+
+		if (_methodName26.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes26, parameterTypes)) {
+			return ExtLocalServiceUtil.findSocialActivitiesByActivitySetId(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -104,4 +140,10 @@ public class ExtLocalServiceClpInvoker {
 	private String[] _methodParameterTypes22;
 	private String _methodName23;
 	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
 }

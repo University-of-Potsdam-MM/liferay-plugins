@@ -18,15 +18,24 @@ package de.unipotsdam.elis.activities.service.persistence;
  * @author Matthias
  */
 public interface ExtFinder {
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end);
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(
+		long userId, long[] classNameIds, int begin, int end);
 
-	public int countSocialActivitySetsByUserIdAndActivityTypes(long userId,
-		int[] activityTypes);
+	public int countSocialActivitySetsByUserIdAndClassNameIds(long userId,
+		long[] classNameIds);
 
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end);
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+		long userId, long[] classNameIds, int begin, int end);
 
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes);
+	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+		long userId, long[] classNameIds);
+
+	public com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
+		long userId, long classNameId, long classPK);
+
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetIdAndType(
+		long activitySetId, int type);
+
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
+		long activitySetId);
 }

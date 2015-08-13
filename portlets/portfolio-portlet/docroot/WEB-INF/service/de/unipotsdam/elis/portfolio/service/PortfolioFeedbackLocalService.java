@@ -311,4 +311,8 @@ public interface PortfolioFeedbackLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<java.lang.Object> getPortfolioPlidsByUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.User> getUsersByPortfolioFeedback(
+		long plid);
 }

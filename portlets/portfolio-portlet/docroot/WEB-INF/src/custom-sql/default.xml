@@ -30,4 +30,13 @@
         		 FROM Layout
         		 WHERE Layout.userId = ? ))
     </sql>
+     <sql id="findUsersByPortfolioFeedback">
+        SELECT User_.*
+        FROM User_
+        WHERE
+        	(User_.userId IN
+        		(SELECT Portfolio_PortfolioFeedback.userId
+        		 FROM Portfolio_PortfolioFeedback
+        		 WHERE Portfolio_PortfolioFeedback.plid = ?))
+    </sql>
 </custom-sql>

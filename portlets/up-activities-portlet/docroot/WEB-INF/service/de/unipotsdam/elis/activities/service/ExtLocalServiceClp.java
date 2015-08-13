@@ -32,21 +32,37 @@ public class ExtLocalServiceClp implements ExtLocalService {
 
 		_methodParameterTypes1 = new String[] { "java.lang.String" };
 
-		_methodName3 = "findSocialActivitySetsByUserIdAndActivityTypes";
+		_methodName3 = "findSocialActivitySetsByUserIdAndClassNames";
 
-		_methodParameterTypes3 = new String[] { "long", "int[][]", "int", "int" };
+		_methodParameterTypes3 = new String[] {
+				"long", "java.lang.String[][]", "int", "int"
+			};
 
-		_methodName4 = "countSocialActivitySetsByUserIdAndActivityTypes";
+		_methodName4 = "countSocialActivitySetsByUserIdAndClassNames";
 
-		_methodParameterTypes4 = new String[] { "long", "int[][]" };
+		_methodParameterTypes4 = new String[] { "long", "java.lang.String[][]" };
 
-		_methodName5 = "findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes";
+		_methodName5 = "findSocialActivitySetsByUserGroupsOrUserIdAndClassNames";
 
-		_methodParameterTypes5 = new String[] { "long", "int[][]", "int", "int" };
+		_methodParameterTypes5 = new String[] {
+				"long", "java.lang.String[][]", "int", "int"
+			};
 
-		_methodName6 = "countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes";
+		_methodName6 = "countSocialActivitySetsByUserGroupsOrUserIdAndClassNames";
 
-		_methodParameterTypes6 = new String[] { "long", "int[][]" };
+		_methodParameterTypes6 = new String[] { "long", "java.lang.String[][]" };
+
+		_methodName7 = "findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK";
+
+		_methodParameterTypes7 = new String[] { "long", "long", "long" };
+
+		_methodName8 = "findSocialActivitiesByActivitySetIdAndType";
+
+		_methodParameterTypes8 = new String[] { "long", "int" };
+
+		_methodName9 = "findSocialActivitiesByActivitySetId";
+
+		_methodParameterTypes9 = new String[] { "long" };
 	}
 
 	@Override
@@ -100,8 +116,8 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNames(
+		long userId, java.lang.String[] classNames, int begin, int end) {
 		Object returnObj = null;
 
 		try {
@@ -110,7 +126,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 					new Object[] {
 						userId,
 						
-					ClpSerializer.translateInput(activityTypes),
+					ClpSerializer.translateInput(classNames),
 						
 					begin,
 						
@@ -133,8 +149,8 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserIdAndActivityTypes(long userId,
-		int[] activityTypes) {
+	public int countSocialActivitySetsByUserIdAndClassNames(long userId,
+		java.lang.String[] classNames) {
 		Object returnObj = null;
 
 		try {
@@ -143,7 +159,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 					new Object[] {
 						userId,
 						
-					ClpSerializer.translateInput(activityTypes)
+					ClpSerializer.translateInput(classNames)
 					});
 		}
 		catch (Throwable t) {
@@ -162,8 +178,8 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+		long userId, java.lang.String[] classNames, int begin, int end) {
 		Object returnObj = null;
 
 		try {
@@ -172,7 +188,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 					new Object[] {
 						userId,
 						
-					ClpSerializer.translateInput(activityTypes),
+					ClpSerializer.translateInput(classNames),
 						
 					begin,
 						
@@ -195,8 +211,8 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes) {
+	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+		long userId, java.lang.String[] classNames) {
 		Object returnObj = null;
 
 		try {
@@ -205,7 +221,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 					new Object[] {
 						userId,
 						
-					ClpSerializer.translateInput(activityTypes)
+					ClpSerializer.translateInput(classNames)
 					});
 		}
 		catch (Throwable t) {
@@ -221,6 +237,79 @@ public class ExtLocalServiceClp implements ExtLocalService {
 		}
 
 		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
+		long userId, long classNameId, long classPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
+					new Object[] { userId, classNameId, classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portlet.social.model.SocialActivitySet)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetIdAndType(
+		long activitySetId, int type) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8, new Object[] { activitySetId, type });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portlet.social.model.SocialActivity>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
+		long activitySetId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9, new Object[] { activitySetId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portlet.social.model.SocialActivity>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -236,4 +325,10 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	private String[] _methodParameterTypes5;
 	private String _methodName6;
 	private String[] _methodParameterTypes6;
+	private String _methodName7;
+	private String[] _methodParameterTypes7;
+	private String _methodName8;
+	private String[] _methodParameterTypes8;
+	private String _methodName9;
+	private String[] _methodParameterTypes9;
 }

@@ -385,27 +385,29 @@ function updateTableData(A) {
     });
 }
 
+function refreshPortlet() {
+	location.reload();
+}
+
 Liferay.provide(window, '<portlet:namespace />openPublishPortfolioPopup',
     function(plid) {
         var renderURL = Liferay.PortletURL.createRenderURL();
-        renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-        renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+        renderURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString() %>");
         renderURL.setParameter("mvcPath", "/html/myportfolio/popup/publish_portfolio.jsp");
         renderURL.setParameter("portfolioPlid", plid);
         renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-        openPopUp(renderURL, "<%=LanguageUtil.get(portletConfig, locale, "portfolio-publish-portfolio") %>");
+        openInvitePopUp(renderURL,"<%=LanguageUtil.get(pageContext, "portfolio-publish-portfolio")%>", true);
     }
 );
 
 Liferay.provide(window, '<portlet:namespace />openRequestFeedbackPopup',
     function(plid) {
         var renderURL = Liferay.PortletURL.createRenderURL();
-        renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-        renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+        renderURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString() %>");
         renderURL.setParameter("mvcPath", "/html/myportfolio/popup/request_feedback.jsp");
         renderURL.setParameter("portfolioPlid", plid);
         renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-        openPopUp(renderURL, "<%=LanguageUtil.get(portletConfig, locale, "portfolio-publish-portfolio") %>");
+        openInvitePopUp(renderURL, "<%=LanguageUtil.get(portletConfig, locale, "portfolio-request-feedback") %>", false);
     }
 );
 
@@ -443,7 +445,45 @@ function openPopUp(renderURL, title) {
         title: title,
         uri: renderURL
     });
+}
 
+function openInvitePopUp(renderURL, title, forPublishment){
+    AUI().use('aui-base','aui-io-plugin-deprecated','liferay-so-invite-members','liferay-util-window', function(A) {
+	var dialog = Liferay.Util.Window.getWindow(
+			{
+				dialog: {
+					align: {
+						node: null,
+						points: ['tc', 'tc']
+					},
+					cssClass: 'invite-members',
+					destroyOnClose: true,
+					closeOnHide:true,
+					modal: true,
+					resizable: false,
+					width: 900
+				},
+				title: title
+			}
+		).plug(
+			A.Plugin.IO,
+			{
+				after: {
+					success: function() {
+						new Liferay.SO.InviteMembers(
+							{
+								dialog: dialog,
+								portletNamespace: '<portlet:namespace />',
+								forPublishment: forPublishment
+							}
+						);
+					}
+				},
+				method: 'GET',
+				uri: renderURL.toString()
+			}
+		).render();
+	});
 }
 
 AUI().use('aui-base',

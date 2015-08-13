@@ -24,24 +24,24 @@ import java.util.Arrays;
  */
 public class PortfolioServiceClpInvoker {
 	public PortfolioServiceClpInvoker() {
-		_methodName26 = "getBeanIdentifier";
+		_methodName28 = "getBeanIdentifier";
 
-		_methodParameterTypes26 = new String[] {  };
+		_methodParameterTypes28 = new String[] {  };
 
-		_methodName27 = "setBeanIdentifier";
+		_methodName29 = "setBeanIdentifier";
 
-		_methodParameterTypes27 = new String[] { "java.lang.String" };
+		_methodParameterTypes29 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
-		if (_methodName26.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes26, parameterTypes)) {
+		if (_methodName28.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes28, parameterTypes)) {
 			return PortfolioServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName27.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes27, parameterTypes)) {
+		if (_methodName29.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes29, parameterTypes)) {
 			PortfolioServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
@@ -50,8 +50,8 @@ public class PortfolioServiceClpInvoker {
 		throw new UnsupportedOperationException();
 	}
 
-	private String _methodName26;
-	private String[] _methodParameterTypes26;
-	private String _methodName27;
-	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
+	private String _methodName29;
+	private String[] _methodParameterTypes29;
 }

@@ -57,31 +57,51 @@ public class ExtLocalServiceWrapper implements ExtLocalService,
 	}
 
 	@Override
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
-		return _extLocalService.findSocialActivitySetsByUserIdAndActivityTypes(userId,
-			activityTypes, begin, end);
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNames(
+		long userId, java.lang.String[] classNames, int begin, int end) {
+		return _extLocalService.findSocialActivitySetsByUserIdAndClassNames(userId,
+			classNames, begin, end);
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserIdAndActivityTypes(long userId,
-		int[] activityTypes) {
-		return _extLocalService.countSocialActivitySetsByUserIdAndActivityTypes(userId,
-			activityTypes);
+	public int countSocialActivitySetsByUserIdAndClassNames(long userId,
+		java.lang.String[] classNames) {
+		return _extLocalService.countSocialActivitySetsByUserIdAndClassNames(userId,
+			classNames);
 	}
 
 	@Override
-	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes, int begin, int end) {
-		return _extLocalService.findSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId,
-			activityTypes, begin, end);
+	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+		long userId, java.lang.String[] classNames, int begin, int end) {
+		return _extLocalService.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(userId,
+			classNames, begin, end);
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(
-		long userId, int[] activityTypes) {
-		return _extLocalService.countSocialActivitySetsByUserGroupsOrUserIdAndActivityTypes(userId,
-			activityTypes);
+	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+		long userId, java.lang.String[] classNames) {
+		return _extLocalService.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(userId,
+			classNames);
+	}
+
+	@Override
+	public com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
+		long userId, long classNameId, long classPK) {
+		return _extLocalService.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(userId,
+			classNameId, classPK);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetIdAndType(
+		long activitySetId, int type) {
+		return _extLocalService.findSocialActivitiesByActivitySetIdAndType(activitySetId,
+			type);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
+		long activitySetId) {
+		return _extLocalService.findSocialActivitiesByActivitySetId(activitySetId);
 	}
 
 	/**

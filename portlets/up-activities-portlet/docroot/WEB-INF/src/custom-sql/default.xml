@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom-sql>
-    <sql id="findByUserIdAndActivityTypes">
+    <sql id="findByUserIdAndClassNameIds">
         SELECT 
-        	SocialActivitySet.*
+        	DISTINCT SocialActivitySet.*
         FROM 
         	SocialActivitySet
         INNER JOIN
@@ -10,11 +10,11 @@
         WHERE
         	((SocialActivity.userid = ?) OR
         	(SocialActivity.receiveruserid = ?)) AND
-        	(SocialActivity.type_ IN {0})
+        	(SocialActivity.classnameid IN {0})
 		ORDER BY
 			modifiedDate DESC
     </sql>
-       <sql id="countByUserIdAndActivityTypes">
+       <sql id="countByUserIdAndClassNameIds">
         SELECT 
         	COUNT(socialActivitySet) 
         FROM 
@@ -24,9 +24,9 @@
         WHERE
         	((SocialActivity.userid = ?) OR
         	(SocialActivity.receiveruserid = ?)) AND
-        	(SocialActivity.type_ IN {0})
+        	(SocialActivity.classnameid IN {0})
     </sql>
-    <sql id="findByUserGroupsOrUserIdAndActivityTypes">
+    <sql id="findByUserGroupsOrUserIdAndClassNameIds">
 		SELECT
 			DISTINCT {SocialActivitySet.*}
 		FROM
@@ -71,14 +71,14 @@
 					WHERE
 						((SocialActivity.userid = ?) OR
         				(SocialActivity.receiveruserid = ?)) AND
-        				(SocialActivity.type_ IN {0})
+        				(SocialActivity.classnameid IN {0})
 				)
 			)
 		ORDER BY
 			modifiedDate DESC
 	</sql>
 	
-    <sql id="countByUserGroupsOrUserIdAndActivityTypes">
+    <sql id="countByUserGroupsOrUserIdAndClassNameIds">
 		SELECT 
         	COUNT(socialActivitySet) 
         FROM 
@@ -123,9 +123,39 @@
 					WHERE
 						((SocialActivity.userid = ?) OR
         				(SocialActivity.receiveruserid = ?)) AND
-        				(SocialActivity.type_ IN {0})
+        				(SocialActivity.classnameid IN {0})
 				)
 			)
 	</sql>
+    <sql id="findFirstByUserIdAndClassNameIdAndClassPK">
+        SELECT 
+        	SocialActivitySet.*
+        FROM 
+        	SocialActivitySet
+        WHERE
+        	(SocialActivitySet.userid = ?) AND
+        	(SocialActivitySet.classnameid = ?) AND
+        	(SocialActivitySet.classpk = ?)
+		ORDER BY
+			modifiedDate DESC
+		LIMIT 1
+    </sql>
+    <sql id="findByActivitySetIdAndType">
+        SELECT 
+        	SocialActivity.*
+        FROM 
+        	SocialActivity
+        WHERE
+        	(SocialActivity.activitysetid = ?) AND
+        	(SocialActivity.type_ = ?)
+    </sql>
+    <sql id="findByActivitySetId">
+        SELECT 
+        	SocialActivity.*
+        FROM 
+        	SocialActivity
+        WHERE
+        	(SocialActivity.activitysetid = ?) 
+    </sql>
     
 </custom-sql>
