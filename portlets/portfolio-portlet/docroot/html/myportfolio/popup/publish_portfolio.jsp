@@ -215,7 +215,6 @@ String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPubl
 						
 						var feedbackRequested = "";
 						if (invitedList){
-							console.log(result.feedbackRequested + ' ' + result.userFullName );
 							if (result.feedbackRequested){
 								feedbackRequested = " feedbackRequested";
 							}

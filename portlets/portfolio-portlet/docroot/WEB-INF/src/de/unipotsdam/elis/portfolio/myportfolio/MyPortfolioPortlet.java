@@ -3,8 +3,11 @@ package de.unipotsdam.elis.portfolio.myportfolio;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -15,6 +18,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.jasper.compiler.JspUtil;
 
 import com.liferay.compat.portal.kernel.util.ListUtil;
 import com.liferay.compat.portal.kernel.util.StringUtil;
@@ -58,7 +63,9 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.sites.util.SitesUtil;
+import com.liferay.portal.kernel.dao.orm.CustomSQLParam;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.dao.orm.CustomSQLUtil;
 import com.liferay.portal.util.comparator.UserFirstNameComparator;
 
 import de.unipotsdam.elis.portfolio.NoSuchFeedbackException;
@@ -392,7 +399,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 
 			if (actionName.equals("createPortfolio")) {
 				createPortfolio(actionRequest, actionResponse);
-			}  else {
+			} else {
 				super.processAction(actionRequest, actionResponse);
 			}
 		} catch (Exception e) {
@@ -414,12 +421,14 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		String template = ParamUtil.getString(uploadRequest, "template");
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 
 		// Get portfolio parent page
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
 		Layout portfolioParentPage = null;
+		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "portfolio-portfolio-pages");
 		for (Layout layout : layouts) {
-			if (layout.getName(themeDisplay.getLocale()).equals("Portfolio"))
+			if (layout.getName(themeDisplay.getLocale()).equals(parentPageName))
 				portfolioParentPage = layout;
 		}
 
@@ -427,9 +436,16 @@ public class MyPortfolioPortlet extends MVCPortlet {
 
 		// create portfolio parent page if none exists
 		if (portfolioParentPage == null) {
+			// Map<Locale,String> localeMap =
+			// JspHelper.getLocaleMap("portfolio-portfolio-pages",
+			// portletConfig);
+			// portfolioParentPage =
+			// LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
+			// themeDisplay.getUser().getGroupId(), false,
+			// 0,localeMap,localeMap,null,null,null,LayoutConstants.TYPE_PORTLET,false,parentPageName
 			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
-					.getGroupId(), false, 0, "Portfolio", "Portfolio", "", LayoutConstants.TYPE_PORTLET, false,
-					"/Portfolio", serviceContext);
+					.getGroupId(), false, 0, parentPageName, parentPageName, "", LayoutConstants.TYPE_PORTLET, false,
+					"/" + parentPageName, serviceContext);
 		}
 
 		Layout newPortfolio = null;
@@ -450,8 +466,6 @@ public class MyPortfolioPortlet extends MVCPortlet {
 				SitesUtil.mergeLayoutPrototypeLayout(newPortfolio.getGroup(), newPortfolio);
 			} else {
 				jsonObject.put("success", Boolean.FALSE);
-				PortletConfig portletConfig = (PortletConfig) actionRequest
-						.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 				jsonObject.put("message", LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
 						"portfolio-portfolio-could-not-be-created"));
 				writeJSON(actionRequest, actionResponse, jsonObject);
@@ -569,8 +583,11 @@ public class MyPortfolioPortlet extends MVCPortlet {
 
 		jsonObject.put("options", optionsJSONObject);
 
+		LinkedHashMap<String, Object> usersParams = new LinkedHashMap<String, Object>();
+		usersParams.put("userId", new CustomSQLParam(CustomSQLUtil.get("filterByUserId"), themeDisplay.getUserId()));
+
 		List<User> users = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), keywords,
-				WorkflowConstants.STATUS_APPROVED, null, start, end, new UserFirstNameComparator(true));
+				WorkflowConstants.STATUS_APPROVED, usersParams, start, end, new UserFirstNameComparator(true));
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
 
@@ -596,7 +613,7 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		Portfolio portfolio = PortfolioLocalServiceUtil.getPortfolio(portfolioPlid);
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-		
+
 		jsonObject.put("isGlobal", portfolio.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL);
 
 		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
@@ -643,14 +660,15 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			List<PortfolioFeedback> publishments = PortfolioFeedbackLocalServiceUtil
 					.getPortfolioFeedbackByPlid(portfolioPlid);
 			List<Long> oldUserIds = new ArrayList<Long>();
-			for (PortfolioFeedback publishment : publishments){
+			for (PortfolioFeedback publishment : publishments) {
 				oldUserIds.add(publishment.getUserId());
-				if (!newUserIds.contains(publishment.getUserId()) && publishment.getFeedbackStatus() != PortfolioStatics.FEEDBACK_REQUESTED)
+				if (!newUserIds.contains(publishment.getUserId())
+						&& publishment.getFeedbackStatus() != PortfolioStatics.FEEDBACK_REQUESTED)
 					portfolio.removeUser(publishment.getUserId());
 			}
 
 			for (Long userId : newUserIds) {
-				if (!oldUserIds.contains(userId)) {
+				if (!oldUserIds.contains(userId) && userId != themeDisplay.getUserId()) {
 					User user = UserLocalServiceUtil.fetchUser(userId);
 					if (user != null) {
 						portfolio.publishToUser(user.getUserId(),
