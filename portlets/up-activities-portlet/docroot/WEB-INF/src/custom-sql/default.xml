@@ -20,7 +20,7 @@
         FROM 
         	SocialActivitySet socialActivitySet
         INNER JOIN
-            SocialActivity ON SocialActivitySet.activitysetid = SocialActivity.activitysetid
+            SocialActivity ON socialActivitySet.activitysetid = SocialActivity.activitysetid
         WHERE
         	((SocialActivity.userid = ?) OR
         	(SocialActivity.receiveruserid = ?)) AND
