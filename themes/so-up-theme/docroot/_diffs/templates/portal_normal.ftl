@@ -171,10 +171,12 @@
 			<li>
 				<@liferay.language key="so-up-theme-up-services" /><span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle2.UP</a></li>
-					<li><a href="${portal_url}/user/${user_sname}/mailup/">Mail.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/">Media.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle.UP</a></li>
 					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
 					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/puls/">PULS</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/"><@liferay.language key="so-up-theme-library" /></a></li>	
 				</ul>
 			</li>
 			<li>
@@ -209,10 +211,10 @@
 		<#else>	
 		<ul id="main-menu" class="disabled">
 			<li>
-				Pers&ouml;nlicher Bereich <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-private-space" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-up-services" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
 				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
