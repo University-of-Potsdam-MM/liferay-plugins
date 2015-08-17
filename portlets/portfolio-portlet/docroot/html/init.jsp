@@ -46,6 +46,9 @@
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<portlet:defineObjects />
+<liferay-theme:defineObjects />
+
 <portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 <liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>" var="privateMessagingURL">
 	<portlet:param name="mvcPath" value="/new_message.jsp"/>
@@ -57,7 +60,7 @@ Liferay.provide(
     window,
     '<portlet:namespace />sendMessage',
     function(userId) {
-        var uri = '<%=privateMessagingURL.toString()%>'; 
+        var uri = '<%=privateMessagingURL.toString()%>';
         uri = Liferay.Util.addParams('<%= PortalUtil.getPortletNamespace("1_WAR_privatemessagingportlet") %>userIds=' + userId, uri) || uri;
 
         Liferay.Util.openWindow({
@@ -77,4 +80,57 @@ Liferay.provide(
         });
     }
 );
+AUI().use(
+    'aui-datatable',
+    'datatable-paginator',
+    function(A) {
+        PaginatorTemplates = A.DataTable.Templates.Paginator;
+        CustomPaginatorView = A.Base.create('CustomPaginatorView', A.DataTable.Paginator.View, [], {
+            _initStrings: function() {
+                var foo = {
+                    first: '<%= LanguageUtil.get(pageContext, "first")%>',
+                    prev: '<%= LanguageUtil.get(pageContext, "previous")%>',
+                    next: '<%= LanguageUtil.get(pageContext, "next")%>',
+                    last: '<%= LanguageUtil.get(pageContext, "last")%>',
+                    goToLabel: '<%= LanguageUtil.get(pageContext, "page")%>:',
+                    goToAction: '<%= LanguageUtil.get(pageContext, "portfolio-go")%>',
+                    perPage: '<%= LanguageUtil.get(pageContext, "portfolio-rows")%>:',
+                    of: '<%= LanguageUtil.get(pageContext, "of")%>'
+                };
+                A.Intl.add('datatable-paginator', '<%=themeDisplay.getLocale().toString()%>', foo);
+                this.set('strings', A.mix((this.get('strings') || {}),
+                    A.Intl.get('datatable-paginator')));
+            },
+            _buildGotoGroup: function() {
+                var strings = this.get('strings');
+                var gotoPage = PaginatorTemplates.gotoPage({
+                    classNames: this.classNames,
+                    strings: strings,
+                    page: this.get('model').get('page')
+                });
+                gotoPage = gotoPage.replace('<button>', strings.of + ' <span id="itemsPerPage"></span><button>');
+                return gotoPage;
+            },
+            _modelChange: function(e) {
+                var changed = e.changed,
+                    page = (changed && changed.page),
+                    itemsPerPage = (changed && changed.itemsPerPage);
+
+                container = this.get('container');
+                container.one('#itemsPerPage').set('text', this.get('model').get('totalPages'));
+
+                if (page) {
+                    this._updateControlsUI(page.newVal);
+                }
+                if (itemsPerPage) {
+                    this._updateItemsPerPageUI(itemsPerPage.newVal);
+                    if (!page) {
+                        this._updateControlsUI(e.target.get('page'));
+                    }
+                }
+
+            }
+
+        }, {});
+    });
 </aui:script>

@@ -1,8 +1,5 @@
 <%@ include file="/html/init.jsp"%>
 
-<portlet:defineObjects />
-<liferay-theme:defineObjects />
-
 <%
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId());
@@ -112,9 +109,9 @@ AUI().use(
     'aui-datatable',
     'datatable-sort',
     'datatable-paginator',
-    'datatable-sort',
     'liferay-menu',
-    function(A) {
+    function(A) {    	
+    	
         if (A.one("#myPortfolioTable") == null)
             return;
         var data = JSON.parse('<%=portfoliosJSON%>');
@@ -263,14 +260,13 @@ AUI().use(
             data: data,
             editEvent: 'dblclick',
             rowsPerPage: 5,
-            pageSizes: [5, 10, 20, 30, 50, 100, 'Show All']
+            pageSizes: [5, 10, 20, 30, 50, 100, '<%= LanguageUtil.get(pageContext, "portfolio-show-all")%>'],
+            paginatorView : CustomPaginatorView
+            
         });
+        
         myPortfolioDataTable.render("#myPortfolioTable");
-
-        //var test = myPortfolioDataTable.getEditor(myPortfolioDataTable.get('data').item(0),myPortfolioDataTable.get('columns')[0])
-        //test.render();
-        //A.one('#td_45009').on('click',function(A){console.log(A);})
-        //A.one('#td_45009').fire('click','test');
+       
         myPortfolioData = myPortfolioDataTable.data;
         A.one('#<portlet:namespace />filterInput').on('keyup', function(e) {
             var filteredData = myPortfolioData.filter({
@@ -493,4 +489,5 @@ AUI().use('aui-base',
             Liferay.Menu.register(iconMenuIdlist[menu]);
         }
     });
+    
 </aui:script>

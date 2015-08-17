@@ -1,8 +1,5 @@
 <%@ include file="/html/init.jsp"%>
 
-<portlet:defineObjects /> 
-<liferay-theme:defineObjects />
-
 <% 
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByPortfolioFeedbackUserId(themeDisplay.getUserId()); 
 %>
@@ -150,7 +147,8 @@ AUI().use(
             }],
             data: data,
             rowsPerPage: 5,
-            pageSizes: [5, 10, 20, 30, 50, 100, 'Show All']
+            pageSizes: [5, 10, 20, 30, 50, 100, '<%= LanguageUtil.get(pageContext, "portfolio-show-all")%>'],
+            paginatorView : CustomPaginatorView
         });
 
         otherPortfoliosDataTable.render("#otherPortfoliosTable");
