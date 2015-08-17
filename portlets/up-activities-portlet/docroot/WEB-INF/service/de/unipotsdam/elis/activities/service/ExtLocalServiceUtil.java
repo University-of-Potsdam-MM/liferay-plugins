@@ -70,7 +70,7 @@ public class ExtLocalServiceUtil {
 			classNames, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserIdAndClassNames(
+	public static long countSocialActivitySetsByUserIdAndClassNames(
 		long userId, java.lang.String[] classNames) {
 		return getService()
 				   .countSocialActivitySetsByUserIdAndClassNames(userId,
@@ -84,7 +84,7 @@ public class ExtLocalServiceUtil {
 			classNames, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+	public static long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
 		long userId, java.lang.String[] classNames) {
 		return getService()
 				   .countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(userId,

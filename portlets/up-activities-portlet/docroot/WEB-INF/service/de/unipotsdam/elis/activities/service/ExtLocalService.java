@@ -64,13 +64,13 @@ public interface ExtLocalService extends BaseLocalService, InvokableLocalService
 	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNames(
 		long userId, java.lang.String[] classNames, int begin, int end);
 
-	public int countSocialActivitySetsByUserIdAndClassNames(long userId,
+	public long countSocialActivitySetsByUserIdAndClassNames(long userId,
 		java.lang.String[] classNames);
 
 	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
 		long userId, java.lang.String[] classNames, int begin, int end);
 
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
 		long userId, java.lang.String[] classNames);
 
 	public com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(

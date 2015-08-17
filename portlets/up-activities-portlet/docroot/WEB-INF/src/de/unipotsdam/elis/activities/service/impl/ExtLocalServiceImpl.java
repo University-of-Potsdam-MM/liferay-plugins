@@ -48,7 +48,7 @@ public class ExtLocalServiceImpl extends ExtLocalServiceBaseImpl {
 		return ExtFinderUtil.findSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
-	public int countSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames){
+	public long countSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames){
 		return ExtFinderUtil.countSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames));
 	}
 	
@@ -56,7 +56,7 @@ public class ExtLocalServiceImpl extends ExtLocalServiceBaseImpl {
 		return ExtFinderUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames){
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames){
 		return ExtFinderUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames));
 	}
 	

@@ -36,11 +36,11 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 			if (tabs1.equals("my-sites")) {
 				results = SocialActivityLocalServiceUtil.getUserGroupsActivities(group.getClassPK(), start, end);
 				total = SocialActivityLocalServiceUtil.getUserGroupsActivitiesCount(group.getClassPK());
-			}
+			}/*
 			else if (tabs1.equals("portfolio")){
 				results = ActivitiesUtil.getSocialActivityByType(themeDisplay.getUserId(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO, start, end);
 				total = ActivitiesUtil.getSocialActivityByTypeCount(themeDisplay.getUserId(), ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO);
-			}
+			}*/
 			else {
 				results = SocialActivityLocalServiceUtil.getUserActivities(group.getClassPK(), start, end);
 				total = SocialActivityLocalServiceUtil.getUserActivitiesCount(group.getClassPK());

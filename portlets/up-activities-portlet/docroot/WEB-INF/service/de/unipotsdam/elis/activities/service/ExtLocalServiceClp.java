@@ -149,7 +149,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserIdAndClassNames(long userId,
+	public long countSocialActivitySetsByUserIdAndClassNames(long userId,
 		java.lang.String[] classNames) {
 		Object returnObj = null;
 
@@ -174,7 +174,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 			}
 		}
 
-		return ((Integer)returnObj).intValue();
+		return ((Long)returnObj).longValue();
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
 		long userId, java.lang.String[] classNames) {
 		Object returnObj = null;
 
@@ -236,7 +236,7 @@ public class ExtLocalServiceClp implements ExtLocalService {
 			}
 		}
 
-		return ((Integer)returnObj).intValue();
+		return ((Long)returnObj).longValue();
 	}
 
 	@Override

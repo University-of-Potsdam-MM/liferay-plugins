@@ -21,13 +21,13 @@ public interface ExtFinder {
 	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(
 		long userId, long[] classNameIds, int begin, int end);
 
-	public int countSocialActivitySetsByUserIdAndClassNameIds(long userId,
+	public long countSocialActivitySetsByUserIdAndClassNameIds(long userId,
 		long[] classNameIds);
 
 	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
 		long userId, long[] classNameIds, int begin, int end);
 
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
 		long userId, long[] classNameIds);
 
 	public com.liferay.portlet.social.model.SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(

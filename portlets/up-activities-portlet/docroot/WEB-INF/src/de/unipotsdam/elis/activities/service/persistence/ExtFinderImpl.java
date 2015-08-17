@@ -1,5 +1,6 @@
 package de.unipotsdam.elis.activities.service.persistence;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
@@ -49,7 +50,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return null;
 	}
 	
-	public int countSocialActivitySetsByUserIdAndClassNameIds(long userId, long[] classNameIds){
+	public long countSocialActivitySetsByUserIdAndClassNameIds(long userId, long[] classNameIds){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
@@ -67,7 +68,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        qPos.add(userId);
 	        qPos.add(classNameIds);
 
-	        return (Integer)q.uniqueResult();
+	        return ((BigInteger)q.uniqueResult()).longValue();
 	    } catch (Exception e) {
 	        try {
 	            throw new SystemException(e);
@@ -116,7 +117,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return null;
 	}
 	
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(long userId, long[] classNameIds){
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(long userId, long[] classNameIds){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 	    try {
@@ -137,7 +138,7 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	        qPos.add(userId);
 	        qPos.add(classNameIds);
 
-	        return (Integer)q.uniqueResult();
+	        return ((BigInteger)q.uniqueResult()).longValue();
 	    } catch (Exception e) {
 	        try {
 	            throw new SystemException(e);

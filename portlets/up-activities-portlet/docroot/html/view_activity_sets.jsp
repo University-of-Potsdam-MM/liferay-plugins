@@ -29,7 +29,7 @@
 	List<SocialActivitySet> results = null;
 
 int count = 0;
-int total = 0;
+long total = 0;
 
 int start = ParamUtil.getInteger(request, "start");
 int end = start + _DELTA;

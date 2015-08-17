@@ -28,7 +28,7 @@ public class ExtFinderUtil {
 			classNameIds, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserIdAndClassNameIds(
+	public static long countSocialActivitySetsByUserIdAndClassNameIds(
 		long userId, long[] classNameIds) {
 		return getFinder()
 				   .countSocialActivitySetsByUserIdAndClassNameIds(userId,
@@ -42,7 +42,7 @@ public class ExtFinderUtil {
 			classNameIds, begin, end);
 	}
 
-	public static int countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
+	public static long countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(
 		long userId, long[] classNameIds) {
 		return getFinder()
 				   .countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId,

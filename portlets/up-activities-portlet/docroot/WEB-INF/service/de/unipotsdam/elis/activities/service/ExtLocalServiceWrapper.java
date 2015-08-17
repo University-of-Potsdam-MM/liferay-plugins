@@ -64,7 +64,7 @@ public class ExtLocalServiceWrapper implements ExtLocalService,
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserIdAndClassNames(long userId,
+	public long countSocialActivitySetsByUserIdAndClassNames(long userId,
 		java.lang.String[] classNames) {
 		return _extLocalService.countSocialActivitySetsByUserIdAndClassNames(userId,
 			classNames);
@@ -78,7 +78,7 @@ public class ExtLocalServiceWrapper implements ExtLocalService,
 	}
 
 	@Override
-	public int countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
+	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(
 		long userId, java.lang.String[] classNames) {
 		return _extLocalService.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(userId,
 			classNames);
