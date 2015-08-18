@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="de.unipotsdam.elis.portfolio">
+	<author>Matthias</author>
+	<namespace>Portfolio</namespace>
+	<entity name="PortfolioFeedback" local-service="true">
+		<column name="plid" type="long" primary="true"></column>
+		<column name="userId" type="long" primary="true"></column>
+		<column name="feedbackStatus" type="int"></column>
+        <column name="hidden" type="boolean"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+		<finder name="Plid" return-type="Collection">
+			<finder-column name="plid"></finder-column>
+		</finder>
+		<finder name="UserId" return-type="Collection">
+			<finder-column name="userId"></finder-column>
+		</finder>
+		<finder name="PlidAndFeedbackStatus" return-type="Collection">
+			<finder-column name="plid"></finder-column>
+			<finder-column name="feedbackStatus"></finder-column>
+		</finder>
+	</entity>
+	<entity name="Portfolio" local-service="true">
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+        <column name="plid" type="long" primary="true"></column>
+        <column name="publishmentType" type="int"></column>
+        <finder name="Plid" return-type="Portfolio">
+            <finder-column name="plid"></finder-column>
+        </finder>
+        <finder name="PublishmentType" return-type="Collection">
+            <finder-column name="publishmentType"></finder-column>
+        </finder>
+	</entity>
+</service-builder>

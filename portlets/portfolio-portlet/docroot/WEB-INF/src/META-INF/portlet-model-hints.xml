@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="de.unipotsdam.elis.portfolio.model.Portfolio">
+		<field name="plid" type="long" />
+		<field name="publishmentType" type="int" />
+	</model>
+	<model name="de.unipotsdam.elis.portfolio.model.PortfolioFeedback">
+		<field name="plid" type="long" />
+		<field name="userId" type="long" />
+		<field name="feedbackStatus" type="int" />
+		<field name="hidden" type="boolean" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>

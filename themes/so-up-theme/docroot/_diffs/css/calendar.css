@@ -1,0 +1,45 @@
+.yui3-skin-sam .calendar-portlet .yui3-calendar-weekday{
+  color: #014260;
+  font-weight: bold;
+}
+
+.yui3-skin-sam .yui3-calendar-header-label {
+  margin: 0;
+  font-size: 1em;
+  font-weight: bold;
+  font-weight: bold;
+  font-style: italic;
+  font-family: georgia,serif; 
+}
+
+.yui3-skin-sam .calendar-portlet .yui3-calendar-day:hover, 
+.yui3-skin-sam .calendar-portlet .yui3-calendar-day.yui3-calendar-day-selected:hover, 
+.yui3-skin-sam .calendar-portlet .yui3-calendar-day.yui3-calendar-day-selected.lfr-busy-day:hover {
+  background: #d0dae3;
+  color: #014260;
+  border-radius: 0;
+}
+
+.calendar-portlet-list-header {
+  color: #FFF;
+  padding: 2px 5px;
+  background-color: #014260;
+}
+
+.calendar-portlet-list-arrow {
+  background: url(../images/up_icons.png);
+  display: inline-block;
+  height: 13px;
+  vertical-align: middle;
+  width: 12px;
+  background-position: -59px -1149px !important;
+  background-repeat:no-repeat;
+}
+
+.scheduler-view-day-header-day .scheduler-today-hd {
+	color:#014260 !important;
+}
+
+.scheduler-today-hd {
+  border: 3px solid #014260; 
+}

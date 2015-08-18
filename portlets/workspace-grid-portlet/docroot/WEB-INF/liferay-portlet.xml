@@ -5,6 +5,7 @@
 	<portlet>
 		<portlet-name>workspace-grid</portlet-name>
 		<icon>/icon.png</icon>
+		<configuration-action-class>de.unipotsdam.elis.portlet.eventlisting.action.ConfigurationActionImpl</configuration-action-class>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>workspace-grid-portlet</css-class-wrapper>

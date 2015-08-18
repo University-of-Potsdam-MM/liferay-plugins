@@ -1,0 +1,185 @@
+ @import "compass"; 
+/*custom*/
+.container-fluid#wrapper div#content  {
+	width: 78%;
+  
+  margin-left: 22%;
+  padding-left: 0px;
+}
+
+.portlet-column {
+	width: 78%;
+  
+  margin-left: 22%;
+}
+
+
+.portlet-column .portlet-column-content {
+	border-width: 0 0px 0 0 !important;
+	padding-right:1em;
+}
+
+/* ---------- Portlet wrapper and icons ---------- */
+
+
+
+.portlet {
+	border: 1px solid #014260;
+	border-bottom:1px solid #014260 !important;
+}
+
+
+.portlet .portlet-topper {
+	padding-left:0 !important;
+	padding-top:0 !important;
+	padding:0 !important;
+}
+
+
+.portlet-boundary {
+	
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	
+}
+
+
+.portlet .portlet-content, .portlet .portlet-topper {
+	padding-top: .5em;
+}
+
+.portlet-title {
+	
+  font-size: 1.5em;
+  font-weight: 200;
+  line-height: 1.25em;
+  margin: 0;
+ 
+  text-align: left;
+  
+  min-width: 100px;
+ 
+  
+background: #014260; /* Old browsers */
+/*
+background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); 
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); 
+background: -webkit-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
+background: -o-linear-gradient(left,  #014260 0%,#d0dae3 100%);
+background: -ms-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
+background: linear-gradient(to right,  #014260 0%,#d0dae3 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', endColorstr='#d0dae3',GradientType=1 ); 
+*/
+}
+
+.aui .portlet-topper-toolbar .caret {
+   
+    vertical-align: top;
+    border-top: 4px solid white !important;
+}
+   
+   .aui .portlet-topper-toolbar .icon-cog {
+    color: #fff;
+}
+
+
+.portlet-title img {
+	display: none;
+}
+
+.portlet-title-text, .portlet-title-default {
+	  display: inline-block;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+
+  min-width: 100px;
+  text-align: left;
+  text-indent: 10px;
+ 
+  font-size: .6em;
+  line-height: 2;
+}
+
+/* portlet edit mode */
+
+.portlet-borderless-bar {
+	background-color: #FFF;
+  padding: 0px;
+  margin-bottom: 3px;
+    text-align:left;
+  padding-right: 50px;
+ 	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	font-size: 1.6em;
+	color: #014260;
+	
+}
+
+.portlet-topper {
+  position: relative;
+}
+
+.controls-visible .portlet .portlet-topper .portlet-topper-toolbar {
+  display: block;
+}
+.portlet-topper .portlet-topper-toolbar {
+  margin: 0;
+  padding: 2px;
+  position: absolute;
+  right: 5px;
+  text-align: right;
+  top: 3px;
+  z-index: 300;
+}
+
+.portlet-draggable .portlet-topper {
+  cursor: move;
+}
+
+.portlet-title-text {
+  display: inline-block;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  white-space: nowrap;
+  color: #fff;
+  font-family: "source sans pro", arial, helvetica, sans-serif;
+}
+.portlet-title-editable {
+  cursor: pointer;
+}
+
+.portlet-topper .portlet-topper-toolbar a i {
+  font-size: 19px;
+}
+
+/* borderless portlet */
+
+
+
+.portlet-borderless:hover {
+	-webkit-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
+-moz-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
+box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
+}
+
+
+.portlet-borderless-bar span.portlet-actions {
+	position: absolute;
+
+  margin-right: 10px;
+  right:0;
+}
+
+.portlet-borderless-bar span.portlet-actions span div a li.caret {
+	margin-top:4px;
+}
+
+.portlet-borderless-bar span.portlet-actions span span.portlet-action-separator {
+	visibility:hidden;
+}
+

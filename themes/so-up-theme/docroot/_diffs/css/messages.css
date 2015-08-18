@@ -1,0 +1,12 @@
+.private-messaging-portlet .controls {
+	background-color:#ededed;
+	-webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
+  border-radius: 0px;
+}
+
+.private-messaging-portlet img.avatar {
+   margin: 0 10px 10px 0px;
+}

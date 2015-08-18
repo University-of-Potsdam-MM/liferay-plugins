@@ -5,22 +5,25 @@
 <html class="${root_css_class}" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
 
 <head>
-	<title>${the_title} - ${company_name}</title>
-
+	<title>${company_name} | ${the_title}</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
-
 	${theme.include(top_head_include)}
-<!--   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
-	<script src="//aui-cdn.atlassian.com/aui-adg/5.8.10/js/aui.js"></script>
-	<link rel="stylesheet" type="text/css" href="//aui-cdn.atlassian.com/aui-adg/5.8.10/css/aui.css"/>-->	
+
 </head>
-<body class="${css_class}">
+<body class="dockbar-split so-strata-theme ${css_class}">
+	
+	<!-- Ausblenden damit es keine Probleme beim JS gibt-->
+	<div class="hidden">
+		${theme.search()}
+		${theme.include(body_top_include)}
+	</div>
+	<div class="windowdiv">
+	</div>
 
 <div class="container-fluid" id="wrapper">
 	<#if is_signed_in>
 		<div id="sidebar">
-			<div class="title">Workspaces <span class="arrow"></span></div>
+			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
 				 
@@ -28,7 +31,7 @@
 				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
 				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
 				<div class="switch">
-					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" selected="selected">Eigene</input>
+					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" checked="checked">Eigene</input>
 					<input type="radio" name="select-type" id="public" value="sidebar-all-sites">&Ouml;ffentliche</input>
 				</div>
 				<ul id="sidebar-my-sites">
@@ -40,32 +43,28 @@
 						</#if>
 					</#list>
 	        	</ul>
-	        	<ul id="sidebar-all-sites hidden">
-	        		<#list theme.sitesDirectory() as all_site>
-	        			<li></li>
-	        		</#list>
+	        	<ul id="sidebar-all-sites" class="hidden">
 	        	</ul>
 			</div>
 		</div>
 	</#if>
 	<header id="mobile-menu">
 		<div id="up-menu">
-			<a href="#grouproom-trigger" aria-owns="grouproom" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger ">
-				Gruppenr&auml;ume</a>
-			<a href="#personal-trigger" aria-owns="personal" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Pers&ouml;nlicher Bereich</a>
-			<a href="#profile-trigger" aria-owns="profile" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Mein Profil</a>
-			<a href="#contact-trigger" aria-owns="contact" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Meine Kontakte</a>
-			<a href="#portfolio-trigger" aria-owns="portfolio" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger">
-				Portfolio</a>
-			<a class="aui-button aui-style-default edit">
-				Edit</a>
-			<a href="#services" aria-owns="services" aria-haspopup="true" class="aui-button aui-style-default aui-dropdown2-trigger up-services">
-				UP Dienste</a>
+			<#if is_signed_in>
+			<div class="main">
+				<a href="#grouproom-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger ">
+					<span class="icon grouproom"></span></a>
+				<a href="#personal-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon personal"></span></a>
+				<a href="#contact-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon profile"></span></a>
+				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon portfolio"></span></a>
+			</div>
+			</#if>
 		</div>
-		<div id="grouproom" class="aui-style-default aui-dropdown2">
+		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
+			<#if is_signed_in>
 			<ul class="aui-list-truncate">
 				<#list user_my_sites as user_site>
 					<#if user_site.hasPrivateLayouts()>
@@ -75,28 +74,37 @@
 					</#if>
 				</#list>
 			</ul>
+			</#if>
 		</div>
-		<div id="personal" class="aui-style-default aui-dropdown2">
+		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			<#if is_signed_in>
+			<ul class="aui-list-truncate">
+				<#list myPrivateLayouts as myLayout>
+					<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+					</#if>
+					<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+						<#if portfoliopage??>
+							<#if portfoliopage?string("true", "false") = "false">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
+						</#if>	
+					</#if>
+				</#list>
+			</ul>
+			</#if>
+		</div>
+		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="profile" class="aui-style-default aui-dropdown2">
+		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
 		</div>
-		<div id="contact" class="aui-style-default aui-dropdown2">
-			<ul class="aui-list-truncate">
-				<li></li>
-			</ul>
-		</div>
-		<div id="portfolio" class="aui-style-default aui-dropdown2">
-			<ul class="aui-list-truncate">
-				<li></li>
-			</ul>
-		</div>
-		<div id="services" class="aui-style-default aui-dropdown2">
+		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
 				<li></li>
 			</ul>
@@ -111,50 +119,24 @@
                 <img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png"></a>
             </div>
 	        <div id="up_logo_title">
-	            <a title="Zur Startseite" href="/">Learn.UP</a>
+	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
 	        </div>
             <div id="up_logo_footer">
             </div>
         </div>
-		<ul id="up-general">
-			<li class="unipage"><a href="http://www.uni-potsdam.de">Uni Startseite</a></li>
-			<li class="services"><a class="up_services" href="">UP Dienste</a><span class="icon arrow"></span>
-				<ul class="service_list hidden">
-					<li><a href="https://moodle2.uni-potsdam.de/">Moodle</a></li> 
-					<li><a href="https://puls.uni-potsdam.de/qisserver/rds?state=user&type=0&application=lsf">PULS</a></li>
-					<li><a href="http://mediaup.uni-potsdam.de/">Media.UP</a></li>
-					<li><a href="http://info.ub.uni-potsdam.de/">Bibliothek</a></li>
-					<li><a href="http://www.hochschulsport-potsdam.de/">Hochschulsport</a></li>
-				</ul> 
-			</li>			
-			<li class="lang">
-				<span class="lang-img"></span>
-				<select name="language_id">
-					<option value="de_DE" selected>Deutsch</option>
-					<option value="en_US">English</option>
-				</select>
-			</li>
-			<li class="search">
-				<span class="search-img"></span>
-				<div id="searchfield" class="hidden searchfield">
-					<span class="search-img"></span>
-					${theme.search()}
-				</div>
-			</li>
-			
-			<#if is_signed_in>
-				<li class="logout"><a href="${sign_out_url}" id="sign-out" rel="nofollow">${user_sname}<span class="icon logout"></span></a></li>
-			<#else>
-				<li><a href="${sign_in_url}" data-redirect="${is_login_redirect_required?string}" id="sign-in" rel="nofollow">${sign_in_text}</a></li>
-			</#if>
-		</ul>
+		<@liferay.dockbar />
 		<#if is_signed_in>
+		
 		<ul id="admin">
+			<#if ((!page_group.isControlPanel()) && user.isSetupComplete() && (show_add_controls || show_edit_controls || show_preview_controls || show_toggle_controls))>		
 			<li>
-				<div id="toggleDockbar">
-					<span class="icon workspace"></span>Workspace konfigurieren
-				</div>
+				<a href="javascript:;" id="toggleDockbar">
+					<!--<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">-->
+						<span class="icon workspace"></span><@liferay.language key="so-up-theme-workspace-configure" />
+					<!--</a>-->
+				</a>
 			</li>
+			</#if>
 			<#if show_control_panel>
 			<li>
 				<a href="${control_panel_url}">
@@ -170,64 +152,82 @@
 		<#if is_signed_in>
 		<ul id="main-menu" class="enabled">
 			<li>
-				Pers&ouml;nlicher Bereich <span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-private-space" /><span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_sname}/dashboard/">&Uumlbersicht</a></li>
-					<li><a href="/user/${user_sname}/calendar/">Kalender</a></li>
-					<li><a href="/user/${user_sname}/e-mail/">Webmail</a></li>
-					<li>Box.Up</li>
-					<li>Poodle</li>
-					<li>Pad.Up</li>
+					<#list myPrivateLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "false">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>	
+						</#if>
+					</#list>
 				</ul>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-up-services" /><span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="${my_account_url}">Profilansicht</a></li>
-					<li>Bearbeitungsmodus</li>
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/">Media.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/puls/">PULS</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/"><@liferay.language key="so-up-theme-library" /></a></li>	
 				</ul>
 			</li>
 			<li>
-				Meine Kontakte <span class="icon arrow"></span>
+				<@liferay.language key="so-up-theme-public-space" /><span class="icon arrow"></span>
 				<ul class="hidden">
-					<li><a href="/user/${user_id}/contacts/">Kontaktliste</a></li>
-					<li>Personen suchen</li>
+					<#list myPublicLayouts as myLayout>
+						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio") && myLayout.isRootLayout() && !myLayout.isHidden()>
+							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+						</#if>
+					</#list>
 				</ul>
 			</li>
-			<li>
-				Portfolio <span class="icon arrow"></span>
+			<li><@liferay.language key="so-up-theme-portfolio" />
+				<span class="icon arrow"></span>
 				<ul class="hidden">
-					<li>Kategorien</li>
-					<li>Portfolioseiten</li>
-					<li>Portfolioaufgaben</li>
+					<#list myPrivateLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "true">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>
+						</#if>
+					</#list>
 				</ul>
 			</li>
-			<span class="icon close hidden">Schlieﬂen</span>
+			<span class="icon close hidden"><@liferay.language key="close" /></span>
 		</ul>
 		<#else>	
 		<ul id="main-menu" class="disabled">
 			<li>
-				Pers&ouml;nlicher Bereich <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-private-space" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Mein Profil <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-up-services" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Meine Kontakte <span class="icon arrow disabled"></span>
+				<@liferay.language key="my-profile" /><span class="icon arrow disabled"></span>
 			</li>
 			<li>
-				Portfolio <span class="icon arrow disabled"></span>
+				<@liferay.language key="so-up-theme-portfolio" /><span class="icon arrow disabled"></span>
 			</li>
 		</ul>
-		</#if>	
-		
-		<!-- Ausblenden damit es keine Probleme beim JS gibt -->
-		<div class="hidden">
-			<@liferay.dockbar />
-			${theme.include(body_top_include)}
-		</div>
-
-		
+		</#if>		
+	
+		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
+	</header>
+	<div class="wrapper-portlet-area">
 		<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
@@ -235,7 +235,7 @@
 				</a>
 
 				<#if show_site_name>
-					<span class="site-name" title="<@liferay.language_format objects="${site_name}" key="go-to-x" />">
+					<span class="site-name" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 						${site_name}
 					</span>
 				</#if>
@@ -245,21 +245,24 @@
 				<span>${the_title}</span>
 			</h2>
 		</div>
-	</header>
-
-	<div id="content">
-		<nav id="breadcrumbs"><@liferay.breadcrumbs /></nav>
-
-		<#if selectable>
-			${theme.include(content_include)}
-		<#else>
-			${portletDisplay.recycle()}
-
-			${portletDisplay.setTitle(the_title)}
-
-			${theme.wrapPortlet("portlet.ftl", content_include)}
+	
+		<#if has_navigation>
+				<#include "${full_templates_path}/navigation.ftl" />
 		</#if>
-	</div>
+
+		<div id="content">
+		
+			<#if selectable>
+				${theme.include(content_include)}
+			<#else>
+				${portletDisplay.recycle()}
+
+				${portletDisplay.setTitle(the_title)}
+
+				${theme.wrapPortlet("portlet.ftl", content_include)}
+			</#if>
+		</div><!-- end content -->
+	</div><!-- end portlet area wrapper -->
 
 	<footer id="footer" role="contentinfo">
 	</footer>
@@ -267,8 +270,8 @@
 
 ${theme.include(body_bottom_include)}
 
-${theme.include(bottom_include)}
-
 </body>
+
+${theme.include(bottom_include)}
 
 </html>

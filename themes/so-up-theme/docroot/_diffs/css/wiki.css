@@ -1,0 +1,107 @@
+.aui .portlet-wiki .navbar .nav {
+	background-color: #fff;
+ 
+	
+}
+
+.aui .portlet-wiki .navbar-inner {
+	
+	border:none;
+	
+}
+
+
+
+
+.aui  .portlet-wiki .form-search .input-append .btn {
+	
+  margin-top: 0;
+   height: 30px;
+
+}
+
+.aui .portlet-wiki form {
+	margin-bototm:0;
+	}
+	
+.portlet-wiki .taglib-header .header-title {
+	color: #014260;
+}
+
+.portlet-wiki .page-actions a {
+  box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -o-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -moz-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -webkiz-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -ms-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  border-radius: 0;
+  -o-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -webkit-border-radius: 0;
+  background: #d0dae3;
+  border: none;
+  height: 30px;
+  line-height: 30px;
+  -o-text-shadow:0px 0px 0px;
+  -ms-text-shadow:0px 0px 0px;
+  -moz-text-shadow:0px 0px 0px;
+  -webkit-text-shadow:0px 0px 0px;
+  text-shadow:0px 0px 0px;
+  color:#014260;
+    padding: 0px 7px;
+}
+.portlet-wiki .page-actions.top-actions {
+	text-align:left;
+}
+
+.portlet-wiki .page-actions a span {
+	font-size:0;
+	transition: font-size .2s ease-in-out;
+	-webkit-transitions: font-size .2s ease-in-out;
+	-moz-transitions: font-size .2s ease-in-out;
+	-o-transitions: font-size .2s ease-in-out;
+	-ms-transitions: font-size .2s ease-in-out;
+}
+
+.portlet-wiki .page-actions a:hover span {
+	font-size:1em;
+		text-transform: uppercase;
+		  font-size: 12px;
+	
+}
+
+.portlet-wiki .page-actions a:hover {
+	  box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -o-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -moz-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -webkiz-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  -ms-box-shadow: 0 0px 0 rgba(255,255,255,0.75) inset,0 0px 0 rgba(0,0,0,0.15) inset;
+  border-radius: 0;
+  -o-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -webkit-border-radius: 0;
+  background: #ededed;
+  border: none;
+  -o-text-shadow:0px 0px 0px;
+  -ms-text-shadow:0px 0px 0px;
+  -moz-text-shadow:0px 0px 0px;
+  -webkit-text-shadow:0px 0;
+   color:#014260;
+	
+}
+
+
+.portlet-wiki .page-actions a img {
+	vertical-align:middle;
+}
+
+.taglib-asset-tags-summary .tag {
+	color:#014260;
+}
+
+.wiki-body p:first-letter {
+	font-size:2em;
+	font-family:serif;
+}

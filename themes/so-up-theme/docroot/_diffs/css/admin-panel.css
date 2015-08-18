@@ -1,0 +1,86 @@
+.aui .dockbar-split .dockbar .navbar-inner #_145_navAddControlsNavbarCollapse .nav>li {
+    background-color: #d0dae3;
+}
+
+.lfr-admin-panel h1 {
+	color:#d0dae3;	
+}
+
+.aui .lfr-admin-panel .navbar .nav>li {
+	  margin-right: 3px;
+}
+
+.aui .lfr-admin-panel .navbar .nav>li>a {
+  background-color: #fff;
+  color: #014260;
+  border:1px solid #ededed;
+}
+
+.aui .lfr-admin-panel .accordion-group {
+	border: none;
+	-webkit-border-radius: 0px;
+ 	 -moz-border-radius: 0px;
+ 	 border-radius: 0px;
+  	background-color: #d0dae3;
+	
+}
+
+.lfr-edit-layout-panel .taglib-form-navigator .accordion .accordion-group.lfr-panel-extended .accordion-inner {
+	  background-color: #fff;
+  border: 1px solid #d0dae3;	
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li {
+	background-color:#fff;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a {
+	background: #fff;
+  color: #014260;
+  border-radius:0;
+  -o-border-radius:0;
+  -moz-border-radius:0;
+  -webkit-border-radius:0;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a:hover {
+  background: #014260 !important;
+}
+
+.lfr-add-panel .add-content-menu .accordion .accordion-group .accordion-inner {
+
+    background-color: #fff;
+}
+
+.lfr-add-panel .add-content-menu .accordion .accordion-group .accordion-inner {
+    padding: 6px 0;
+    background-color: #fff;
+}
+
+.aui .dockbar-split .dockbar .row-fluid {
+	margin-top:70px;
+}
+
+.aui .dockbar-split .dockbar .alert-info {
+	    background-color: #fff091;
+    border: 0;
+    position: absolute;
+    top: 110px;
+}
+
+div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
+    background-color: #fff;
+}
+
+
+.smallhead #_145_navAddControls {
+    margin-top: 10px;
+}
+
+#_145_navAddControlsNavbarCollapse i:hover {
+    background-color: #014260;
+}
+
+#_145_navAddControls a:hover {
+    color: #fff;
+}

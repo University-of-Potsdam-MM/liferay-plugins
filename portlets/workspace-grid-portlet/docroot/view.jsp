@@ -14,96 +14,87 @@
  */
 %>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
-<portlet:defineObjects />
-
-This is the <b>Test1</b> portlet.
-
-
 <%@ include file="/init.jsp" %>
-<%
-	/*
-	*	Template CSS Classes
-	*/
-	String template1Name = "template1";
-	String template2Name = "template2";
-	String template3Name = "template3";
-	
-	List<WorkspaceSlide> workspaceSlides = new LinkedList<WorkspaceSlide>();
-	
-	List<Group> gruppenArbeiten = null;				
-	
-	try {
-		gruppenArbeiten = WorkspaceUtilService.getAllGroupworkSites();
-	} catch (PortalException e1) {
-		e1.printStackTrace();
-	} catch (SystemException e1) {
-		e1.printStackTrace();
-	}
 
-	System.out.println(gruppenArbeiten);	
-	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, gruppenArbeiten, template1Name);
-	
-	
-	List<Group> portfolios = null;		
+<c:choose>
+	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
-	try {
-		portfolios = WorkspaceUtilService.getAllPortfolioSites();
-	} catch (PortalException e1) {
-		e1.printStackTrace();
-	} catch (SystemException e1) {
-		e1.printStackTrace();
-	}
-
-	System.out.println(portfolios);	
-	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, portfolios, template2Name);
-	
-	
-	List<Group> courses = null;		
-	
-	try {
-		courses = WorkspaceUtilService.getAllCourseSites();
-	} catch (PortalException e1) {
-		e1.printStackTrace();
-	} catch (SystemException e1) {
-		e1.printStackTrace();
-	}
-	
-	System.out.println(courses);		
-	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, courses, template3Name);
-	
-	List<Group> other = null;		
-	
-	try {
-		other = WorkspaceUtilService.getOtherSites();
-	} catch (PortalException e1) {
-		e1.printStackTrace();
-	} catch (SystemException e1) {
-		e1.printStackTrace();
-	}
-	
-	System.out.println(other);		
-	GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, other, template3Name);
-	
-	
-	%>
-	<div id="workspacegrid">
 		<%
-		for (WorkspaceSlide workspaceSlide: workspaceSlides){
-			
-			System.out.println(workspaceSlide);
-		%>
+		String template1_cfg = GetterUtil.getString(portletPreferences.getValue("template1", StringPool.UTF8));
+		String template2_cfg = GetterUtil.getString(portletPreferences.getValue("template2", StringPool.UTF8));
+		String template3_cfg = GetterUtil.getString(portletPreferences.getValue("template3", StringPool.UTF8));
+	
+		List<WorkspaceSlide> workspaceSlides = new LinkedList<WorkspaceSlide>();
+		List<Group> gruppenArbeiten = null;				
 		
-		
-			
-			<a class="workspaceBox <%= workspaceSlide.getTemplateName() %>" href="<%= workspaceSlide.getWebLink() %>">
-				<span class="linkName"><%= workspaceSlide.getName() %></span>
-				<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span> 
-			</a>
-		
-		<%
+		try {
+			gruppenArbeiten = WorkspaceUtilService.getAllGroupworkSites();
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
 		}
+	
+		//System.out.println(gruppenArbeiten);	
+		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, gruppenArbeiten, template1_cfg);
+		List<Group> portfolios = null;		
+	
+		try {
+			portfolios = WorkspaceUtilService.getAllPortfolioSites();
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+	
+		//System.out.println(portfolios);	
+		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, portfolios, template2_cfg);
+		List<Group> courses = null;		
+		
+		try {
+			courses = WorkspaceUtilService.getAllCourseSites();
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+		
+		//System.out.println(courses);		
+		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, courses, template3_cfg);
+		List<Group> other = null;		
+		
+		try {
+			other = WorkspaceUtilService.getOtherSites();
+		} catch (PortalException e1) {
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			e1.printStackTrace();
+		}
+		
+		//System.out.println(other);		
+		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, other, template3_cfg);
+		
 		%>
-		<div style="clear:left;">
-	</div>	
+		<div id="workspacegrid">
+			<%
+			for (WorkspaceSlide workspaceSlide: workspaceSlides){
+				// System.out.println(workspaceSlide);
+			%>
+				
+				<a class="workspaceBox <%= workspaceSlide.getTemplateName() %>" href="<%= workspaceSlide.getWebLink() %>">
+					<span class="linkName"><%= workspaceSlide.getName() %></span>
+					<% if (workspaceSlide.getNumberOfNewActivities()!=0){ %>
+					<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span>
+					<% } %> 
+				</a>
+			
+			<%
+			}
+			%>
+			<div style="clear:left;" />
+		</div>
+	</c:when>
+	<c:otherwise>
+	
+	</c:otherwise>
+</c:choose>

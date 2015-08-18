@@ -1,0 +1,5 @@
+<aui:nav-item cssClass="lang lang-img" dropdown="true" id="language_id" label="language">
+	<aui:nav-item anchorId="upServicesLink" href="" iconCssClass="icon-cog" label="german"></aui:nav-item>
+	<aui:nav-item anchorId="upServicesLink" href="" iconCssClass="icon-cog" label="english"></aui:nav-item>
+</aui:nav-item>
+<aui:nav-item cssClass="divider-vertical"></aui:nav-item>

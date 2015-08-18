@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="portfolio-portlet" basedir="." default="deploy">	
+	<import file="../build-common-portlet.xml" />
+
+	<target name="build-service" depends="build-common-plugin.build-service">
+		<copy file="${plugin.lib.dir}\portfolio-portlet-service.jar" todir="${app.server.lib.global.dir}" />
+	</target>
+
+	<target name="all" depends="build-common-plugin.all">
+		<if>
+			<available file="${app.server.deploy.dir}\${plugin.name}\WEB-INF\lib\portfolio-portlet-service.jar" />
+			<then>
+				<move file="${app.server.deploy.dir}\${plugin.name}\WEB-INF\lib\portfolio-portlet-service.jar" todir="${app.server.lib.global.dir}" />
+			</then>
+			<else>
+				<copy file="${plugin.lib.dir}\portfolio-portlet-service.jar" todir="${app.server.lib.global.dir}" />
+				<echo>portfolio-portlet-service.jar needs to be removed manually from ${app.server.deploy.dir}\${plugin.name}\WEB-INF\lib after deployment</echo>
+			</else>
+		</if>
+	</target>
+</project>

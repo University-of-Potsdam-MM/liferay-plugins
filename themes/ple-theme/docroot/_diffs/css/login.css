@@ -1,0 +1,96 @@
+section #portlet_58 {
+	width:600px;
+}
+
+.portlet-login .portlet-topper {
+	  border-bottom: 1px solid #ededed;
+  margin-bottom: 10px;
+	
+}
+.portlet-login .portlet-title {
+	text-transform:uppercase;
+	display: inline-block;
+	color:#d0dae3;
+	
+	overflow: visible;
+}
+
+.portlet-login .portlet-title-text {
+  font-size: 1.5em;
+  color: #d0dae3;
+    text-overflow: clip;
+      max-width: 100%;
+}
+
+.portlet-login .login-image {
+	width:200px;
+	height:200px;
+	float:left;
+	background:green;
+}
+
+
+/* .portlet-login .navigation { */
+/* 	background-color:#fff; */
+/* 	  border-top: 0px solid #bfbfbf; */
+/*   padding: 10px; */
+/* } */
+
+/* .portlet-login .navigation .taglib-icon-list li:first-child{ */
+/* 	display:none; */
+/* 	visibility:hidden; */
+	
+/* } */
+
+/* .portlet-login .navigation .taglib-icon-list li:first-child + li{ */
+/* 	display:none; */
+/* 	visibility:hidden; */
+	
+	
+/* } */
+
+
+/* .portlet-login .navigation .taglib-icon-list li:first-child + li +li a{ */
+	
+/*   display: inline-block; */
+/*    line-height: 3.5em; */
+/*   margin-left: 10px; */
+/* } */
+
+/* .portlet-login .navigation .taglib-icon-list li:first-child + li +li a span{ */
+/* 	width: 80px; */
+/* 	line-height: 1; */
+/* 	  display: inline-block; */
+	
+  
+	
+/* } */
+
+/* .portlet-login .navigation .taglib-icon-list li:first-child + li +li a img { */
+/* 	display:none; */
+/* } */
+.portlet-login .control-group {
+  margin-bottom: 5px;
+}
+
+.portlet-login .control-group input {
+	
+	width:300px;
+	background-color:#d0dae3;
+	color:#000;
+	webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+  -moz-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+  box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
+}
+
+.portlet-login .control-group .control-label {
+	display:none;
+}
+
+.portlet-login .control-group label.checkbox {
+	display:inline-block;
+}
+
+.portlet-login .control-group .checkbox input[type="checkbox"] {
+	margin-left:-4px;
+}

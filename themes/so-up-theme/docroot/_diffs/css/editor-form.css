@@ -1,0 +1,52 @@
+body .cke_top, body .cke_bottom {
+	border-bottom: 1px solid #014260;
+
+  background-color: #014260;
+  border-color: #014260;
+}
+
+
+body .cke_combo_button, a.cke_button {
+	  border: none;
+  border-bottom-color: #979797;
+ 
+  background: #d0dae3;
+
+  color:#014260;
+}
+
+.cke_toolbar a.cke_button_off:hover,.cke_toolbar a.cke_button_off:focus,.cke_toolbar a.cke_button_off:active, .cke_toolbar a.cke_button_disabled:hover, .cke_toolbar a.cke_button_disabled:focus, .cke_toolbar a.cke_button_disabled:active, .cke_toolbar .cke_combo_off a.cke_combo_button:hover, .cke_toolbar .cke_combo_off a.cke_combo_button:focus {
+	background: #ededed;
+
+  color:#014260;
+   border: none;
+ 
+}
+
+body .cke_toolgroup {
+	
+   border: none;
+   background:transparent;
+   
+}
+
+body .cke_editor__36_editor {
+	margin-bottom:15px;
+	
+   border-left:1px solid #014260 !important;
+    border-right:1px solid #014260 !important;
+}
+
+.cke_editor__36_editor .cke_combo_off a.cke_combo_button:active, .cke_editor__36_editor .cke_combo_on a.cke_combo_button {
+	
+   border-left:none;
+    background: #fff;
+
+}
+
+.cke_toolbar_separator {
+  background-color: #d0dae3;
+  margin: 0px 2px 0;
+  height: 25px;
+}
+

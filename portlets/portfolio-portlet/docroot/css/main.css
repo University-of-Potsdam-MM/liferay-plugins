@@ -1,0 +1,507 @@
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs {
+	  border-bottom: 1px solid #014260;
+	  font-weight: bold;
+}
+
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs ul li a {
+	color:#555;
+}
+
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a, 
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a:hover, 
+.aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs>.active>a:focus {
+	
+	color:#014260;
+	border:1px solid #014260;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet thead,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ thead {
+  color: #fff;
+  background-color: #014260;
+}
+
+.aui  #portlet_myportfolio_WAR_portfolioportlet .table thead th,
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table thead th{
+	background-color:transparent;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(1) {
+    border-right:  none !important;
+}
+
+#portlet_myportfolio_WAR_portfolioportlet .table-col-title + th {
+    border-left: none !important;
+}
+
+#portlet_myportfolio_WAR_portfolioportlet .table-col-feedback + th {
+    border-left: none !important;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(5) {
+    border-right:  none !important;
+}
+
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table thead th:nth-child(4) {
+    border-left: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tbody tr,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table tbody tr {
+  background-color: #F5F8FB !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-titleOptions, 
+#portlet_myportfolio_WAR_portfolioportlet .table-col-publishmentOptions, 
+#portlet_myportfolio_WAR_portfolioportlet .table-col-feedbackOptions {
+ /* background-color:#C8D5E0 !important;*/
+  text-align:center !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet td span,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ td span {
+    font-size: .8em;
+    color: #737373;
+}
+/*border neben Titel */
+
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(1) {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(2) {
+    border-left: none!important;
+}
+
+/*hinterrgundfarbe fuer interkationspalten dummes wort*/
+ #portlet_myportfolio_WAR_portfolioportlet td:nth-child(2), td:nth-child(4) {
+    /* background-color: #C8D5E0 !important; */
+}
+
+
+
+/*trenner */
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-odd + tr.table-even,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ tr.table-odd + tr.table-even {
+    border-top: 4px solid #fff;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even + tr.table-odd,
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even + tr.table-odd {
+    border-top: 4px solid #fff;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-even {
+    border-bottom: 1px solid #D8D8D8;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr.table-odd {
+    border-bottom: 1px solid #e2e9f1;
+}
+
+/*border hinter feedback*/
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(5) {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tr td:nth-child(6) {
+    border-left: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet  .table-col-publishment + td {
+    border-left: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-publishment {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .feedback-requested {
+    border-right: none !important;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .feedback-requested + td {
+    border-left: none !important;
+}
+
+/*spalten hintergrund */
+ #portlet_myportfolio_WAR_portfolioportlet .table-even td,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table-even td {
+    background-color: #E2E7EC;
+}
+/*table font */
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-title,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ .table-col-title {
+    font-weight: bold;
+    
+    
+}
+
+
+.aui #portlet_myportfolio_WAR_portfolioportlet table a:hover, 
+.aui  #portlet_myportfolio_WAR_portfolioportlet table a:focus,
+#p_p_id_otherportfolios_WAR_portfolioportlet_ table a:hover,
+#p_p_id_otherportfolios_WAR_portfolioportlet_ table a:focus {
+	
+	    text-decoration: underline !important; 
+}
+/*feedback icons */
+td.feedback-unrequested:before {
+	position:absolute;
+	content:".";
+	color:red;
+	background-color:red;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	text-indent:-999999px;
+	margin-top: .3em;
+}
+
+td.feedback-unrequested a {
+	margin-left:1.1em;
+}
+
+
+#p_p_id_otherportfolios_WAR_portfolioportlet_ td.feedback-unrequested{
+	text-indent: 1.1em;
+}
+
+#p_p_id_otherportfolios_WAR_portfolioportlet_ td.feedback-unrequested:before{
+	margin-left:-1.3em;
+}
+
+td.feedback-requested:before {
+	position:absolute;
+	content:".";
+	text-indent:-999999px;
+	color:orange;
+	background-color:orange;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	margin-left: -1.1em;
+	margin-top: .2em;
+}
+
+td.feedback-requested {
+	text-indent:1em;
+}
+
+td.feedback-requested span img  {
+	display:none;
+}
+
+td.feedback-delivered:before {
+	position:absolute;
+	content:".";
+	text-indent:-999999px;
+	color:green;
+	background-color:green;
+	width:1em;
+	height:1em;
+	border-radius:50%;
+	    margin-left: -1.2em;
+	    margin-top: .3em;
+	
+}
+
+
+td.feedback-delivered {
+	text-indent:1em;
+}
+
+td.feedback-delivered span img {
+	display:none;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet .table-col-titleOptions .btn-group .dropdown-toggle img {
+	display:none;
+}
+
+ #portlet_myportfolio_WAR_portfolioportlet tbody td a,
+ #p_p_id_otherportfolios_WAR_portfolioportlet_ tbody td a {
+	text-decoration:underline;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table th,
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table th  {
+  
+  border: 2px solid #fff;
+}
+
+ .aui  #portlet_myportfolio_WAR_portfolioportlet .table td,
+ .aui #p_p_id_otherportfolios_WAR_portfolioportlet_ .table td {
+  
+  border-right: 2px solid #fff;
+   border-left: 2px solid #fff;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table td.feedback-unrequested {
+    border-right: none !important;
+}
+
+.aui #portlet_myportfolio_WAR_portfolioportlet .table td.feedback-unrequested +td {
+    border-left: none !important;
+}
+
+.yui3-datatable-paginator-wrapper {
+	padding:0;
+}
+
+.yui3-datatable-paginator {
+	border-top: 1px solid #ededed;
+	background-image:none !important;
+  margin-top: 10px;
+  padding-top: 10px !important;
+    
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control {
+	color:#014260;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group label {
+	margin-bottom:0;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group input {
+  	margin-bottom: 0;
+ 	 margin-right: 5px;
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button {
+	height: 30px;
+  padding: 4px 6px;
+  margin-bottom: 0px;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 0;
+    border: 1px solid #ddd;
+  color: #014260;
+
+}
+
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover {
+	border: 1px solid #ccc;
+	background-color:#fff;
+}
+
+.datatable-paginator .yui3-datatable-paginator-control-first:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-last:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-prev:hover, 
+.yui3-datatable-paginator .yui3-datatable-paginator-control-next:hover {
+  box-shadow: 0 0px 0px transparent !important;
+  color:#014260;
+  background-color:#d0dae3;
+}
+
+
+
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group select {
+	margin-bottom: 0;
+}
+
+#_myportfolio_WAR_portfolioportlet_createPageButton {
+	float:left;
+	margin-right:10px;
+	background-color:#d0dae3;
+	color:#014260;
+	text-shadow: 0 0px 0px transparent;
+}
+
+#_myportfolio_WAR_portfolioportlet_createPageButton:hover {
+	background-color:#ededed;
+}
+
+input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_portfolioportlet_otherPortfoliosFilterInput {
+	   background-image: url(/so-up-theme/images/up/ple-icons.png);
+    background-position: 3px -92px;
+    background-repeat: no-repeat;
+    text-indent: 20px;
+}
+
+	.email-invited h2 span {
+		color: #999;
+		font-size: 0.8em;
+		font-weight: normal;
+		margin-left: 2em;
+		position: absolute;
+		right: 5px;
+	}
+
+	.users-wrapper {
+		min-height: 450px;
+		position: relative;
+	}
+
+	.search {
+		background: #FFF url(/so-up-theme/images/forms/input_shadow.png) no-repeat;
+		border: 1px solid;
+		border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
+		height: 300px;
+		width: 205px;
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		.more-results a {
+			display: block;
+			margin: 5px;
+			padding: 2px;
+			text-align: center;
+
+			&:hover {
+				background-color: #CCE6F7;
+			}
+		}
+	}
+
+	.user-search-wrapper {
+		background: #F0F5F7;
+		border: 1px solid #B0BAFF;
+		float: left;
+		padding: 12px;
+
+		.footnote {
+			color: #AAA;
+			font-size: 0.8em;
+		}
+	}
+
+	.invited-users-wrapper {
+		margin-left: 250px;
+	}
+
+	h2 {
+		font-size: 1em;
+		margin: 0 0 1em;
+	}
+
+	.list {
+		margin-bottom: 1em;
+	}
+	
+	.user-invited .list {
+		height: 250px;
+		overflow-y:auto;
+		overflow-x:auto;
+	}
+
+	.invite-user-search {
+		width: 203px;
+	}
+
+	.invited-users-wrapper {
+		h2 {
+			border-bottom: 1px solid #CCC;
+			color: #3E3639;
+			font-size: 1.1em;
+			margin: 0;
+			padding-top: 0.5em;
+			position: relative;
+		}
+
+		.invite-actions {
+			background: #EEE;
+			border: 1px solid #CCC;
+			margin: 2.5em 0;
+			padding: 5px;
+			text-align: center;
+
+			h2 {
+				margin: 0 0 0.5em;
+				padding: 0;
+			}
+
+			input {
+				margin-right: 12px;
+			}
+		}
+	}
+
+	.user-invited h2 span {
+		color: #999;
+		font-size: 0.8em;
+		font-weight: normal;
+		margin-left: 2em;
+		position: absolute;
+		right: 5px;
+	}
+
+	.invited, .user {
+		background: transparent url(/so-up-theme/images/arrows/01_plus.png) no-repeat 0 50%;
+		border-bottom: 1px solid transparent;
+		border-top: 1px solid transparent;
+		cursor: pointer;
+		list-style-type: none;
+		padding: 2px 5px 2px 18px;
+		white-space: nowrap;
+	}
+
+	.email-invited .user, .user-invited .user {
+		background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 99% 50%;
+		border-bottom: 1px solid #CCC;
+		padding: 0.5em 1.5em 0.5em 0.5em;
+	}
+
+	.email-invited .user {
+		background-color: #EEF;
+	}
+
+	.user-invited {
+		.user {
+			span {
+				display: inline-block;
+				width: 50%;
+			}
+
+			.name {
+				color: #555;
+				font-weight: bold;
+			}
+
+			.email {
+				color: #000;
+				font-size: 1em;
+				margin: 0;
+			}
+		}
+	}
+
+	.email-invited .user .email {
+		color: #555;
+		font-size: 1em;
+		font-weight: bold;
+		margin: 0;
+	}
+
+	.controls a {
+		padding-left: 10px;
+	}
+
+	.pending-member-request {
+		background: url(/so-up-theme/images/common/check.png) no-repeat 0 50%;
+	}
+
+	.invited {
+		background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 0 50%;
+		border-color: #AFA;
+	}
+
+	.invite-to select {
+		margin-top: 1em;
+		min-width: 300px;
+	}
+
+	span.email {
+		color: #AAA;
+		font-size: 0.8em;
+		margin-left: 0.5em;
+	}
