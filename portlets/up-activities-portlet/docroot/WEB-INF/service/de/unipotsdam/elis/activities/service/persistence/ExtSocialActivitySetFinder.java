@@ -17,7 +17,7 @@ package de.unipotsdam.elis.activities.service.persistence;
 /**
  * @author Matthias
  */
-public interface ExtFinder {
+public interface ExtSocialActivitySetFinder {
 	public java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(
 		long userId, long[] classNameIds, int begin, int end);
 
@@ -38,4 +38,6 @@ public interface ExtFinder {
 
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
 		long activitySetId);
+
+	public void deleteActivitySetsByClassPK(long classPK);
 }

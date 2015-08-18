@@ -20,57 +20,61 @@ import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 
-import de.unipotsdam.elis.activities.service.base.ExtLocalServiceBaseImpl;
-import de.unipotsdam.elis.activities.service.persistence.ExtFinderUtil;
+import de.unipotsdam.elis.activities.service.base.ExtSocialActivitySetLocalServiceBaseImpl;
+import de.unipotsdam.elis.activities.service.persistence.ExtSocialActivitySetFinderUtil;
 
 /**
- * The implementation of the ext local service.
+ * The implementation of the ext social activity set local service.
  *
  * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link de.unipotsdam.elis.activities.service.ExtLocalService} interface.
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalService} interface.
  *
  * <p>
  * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
  * </p>
  *
  * @author Matthias
- * @see de.unipotsdam.elis.activities.service.base.ExtLocalServiceBaseImpl
- * @see de.unipotsdam.elis.activities.service.ExtLocalServiceUtil
+ * @see de.unipotsdam.elis.activities.service.base.ExtSocialActivitySetLocalServiceBaseImpl
+ * @see de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil
  */
-public class ExtLocalServiceImpl extends ExtLocalServiceBaseImpl {
+public class ExtSocialActivitySetLocalServiceImpl
+	extends ExtSocialActivitySetLocalServiceBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never reference this interface directly. Always use {@link de.unipotsdam.elis.activities.service.ExtLocalServiceUtil} to access the ext local service.
+	 * Never reference this interface directly. Always use {@link de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil} to access the ext social activity set local service.
 	 */
 	
 	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames, int begin, int end){
-		return ExtFinderUtil.findSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
+		return ExtSocialActivitySetFinderUtil.findSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
 	public long countSocialActivitySetsByUserIdAndClassNames(long userId, String[] classNames){
-		return ExtFinderUtil.countSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames));
+		return ExtSocialActivitySetFinderUtil.countSocialActivitySetsByUserIdAndClassNameIds(userId, getClassNameIds(classNames));
 	}
 	
 	public List<SocialActivitySet> findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames, int begin, int end){
-		return ExtFinderUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
+		return ExtSocialActivitySetFinderUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames), begin, end);
 	}
 	
 	public long countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(long userId, String[] classNames){
-		return ExtFinderUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames));
+		return ExtSocialActivitySetFinderUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNameIds(userId, getClassNameIds(classNames));
 	}
 	
 	public SocialActivitySet findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(long userId, long classNameId, long classPK){
-		return ExtFinderUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(userId,classNameId,classPK);
-		
+		return ExtSocialActivitySetFinderUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(userId,classNameId,classPK);
 	}
 	
 	public List<SocialActivity> findSocialActivitiesByActivitySetIdAndType(long activitySetId, int type){
-		return ExtFinderUtil.findSocialActivitiesByActivitySetIdAndType(activitySetId,type);
+		return ExtSocialActivitySetFinderUtil.findSocialActivitiesByActivitySetIdAndType(activitySetId,type);
 	}
 	
 	public List<SocialActivity> findSocialActivitiesByActivitySetId(long activitySetId){
-		return ExtFinderUtil.findSocialActivitiesByActivitySetId(activitySetId);
+		return ExtSocialActivitySetFinderUtil.findSocialActivitiesByActivitySetId(activitySetId);
+	}
+	
+	public void deleteActivitySetsByClassPK(long classPK){
+		ExtSocialActivitySetFinderUtil.deleteActivitySetsByClassPK(classPK);
 	}
 	
 	private long[] getClassNameIds(String[] classNames){

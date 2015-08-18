@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
 /**
  * @author Matthias
  */
-public class ExtFinderUtil {
+public class ExtSocialActivitySetFinderUtil {
 	public static java.util.List<com.liferay.portlet.social.model.SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(
 		long userId, long[] classNameIds, int begin, int end) {
 		return getFinder()
@@ -68,22 +68,28 @@ public class ExtFinderUtil {
 		return getFinder().findSocialActivitiesByActivitySetId(activitySetId);
 	}
 
-	public static ExtFinder getFinder() {
-		if (_finder == null) {
-			_finder = (ExtFinder)PortletBeanLocatorUtil.locate(de.unipotsdam.elis.activities.service.ClpSerializer.getServletContextName(),
-					ExtFinder.class.getName());
+	public static void deleteActivitySetsByClassPK(long classPK) {
+		getFinder().deleteActivitySetsByClassPK(classPK);
+	}
 
-			ReferenceRegistry.registerReference(ExtFinderUtil.class, "_finder");
+	public static ExtSocialActivitySetFinder getFinder() {
+		if (_finder == null) {
+			_finder = (ExtSocialActivitySetFinder)PortletBeanLocatorUtil.locate(de.unipotsdam.elis.activities.service.ClpSerializer.getServletContextName(),
+					ExtSocialActivitySetFinder.class.getName());
+
+			ReferenceRegistry.registerReference(ExtSocialActivitySetFinderUtil.class,
+				"_finder");
 		}
 
 		return _finder;
 	}
 
-	public void setFinder(ExtFinder finder) {
+	public void setFinder(ExtSocialActivitySetFinder finder) {
 		_finder = finder;
 
-		ReferenceRegistry.registerReference(ExtFinderUtil.class, "_finder");
+		ReferenceRegistry.registerReference(ExtSocialActivitySetFinderUtil.class,
+			"_finder");
 	}
 
-	private static ExtFinder _finder;
+	private static ExtSocialActivitySetFinder _finder;
 }

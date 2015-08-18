@@ -3,5 +3,5 @@
 <service-builder package-path="de.unipotsdam.elis.activities">
 	<author>Matthias</author>
 	<namespace>Activity</namespace>
-    <entity name="Ext" remote-service="false" local-service="true"></entity>
+    <entity name="ExtSocialActivitySet" remote-service="false" local-service="true"></entity>
 </service-builder>

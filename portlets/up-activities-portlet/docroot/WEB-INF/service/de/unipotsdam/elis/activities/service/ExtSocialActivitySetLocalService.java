@@ -22,24 +22,25 @@ import com.liferay.portal.service.BaseLocalService;
 import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * Provides the local service interface for Ext. Methods of this
+ * Provides the local service interface for ExtSocialActivitySet. Methods of this
  * service will not have security checks based on the propagated JAAS
  * credentials because this service can only be accessed from within the same
  * VM.
  *
  * @author Matthias
- * @see ExtLocalServiceUtil
- * @see de.unipotsdam.elis.activities.service.base.ExtLocalServiceBaseImpl
- * @see de.unipotsdam.elis.activities.service.impl.ExtLocalServiceImpl
+ * @see ExtSocialActivitySetLocalServiceUtil
+ * @see de.unipotsdam.elis.activities.service.base.ExtSocialActivitySetLocalServiceBaseImpl
+ * @see de.unipotsdam.elis.activities.service.impl.ExtSocialActivitySetLocalServiceImpl
  * @generated
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface ExtLocalService extends BaseLocalService, InvokableLocalService {
+public interface ExtSocialActivitySetLocalService extends BaseLocalService,
+	InvokableLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this interface directly. Always use {@link ExtLocalServiceUtil} to access the ext local service. Add custom service methods to {@link de.unipotsdam.elis.activities.service.impl.ExtLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
+	 * Never modify or reference this interface directly. Always use {@link ExtSocialActivitySetLocalServiceUtil} to access the ext social activity set local service. Add custom service methods to {@link de.unipotsdam.elis.activities.service.impl.ExtSocialActivitySetLocalServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
 
 	/**
@@ -81,4 +82,6 @@ public interface ExtLocalService extends BaseLocalService, InvokableLocalService
 
 	public java.util.List<com.liferay.portlet.social.model.SocialActivity> findSocialActivitiesByActivitySetId(
 		long activitySetId);
+
+	public void deleteActivitySetsByClassPK(long classPK);
 }

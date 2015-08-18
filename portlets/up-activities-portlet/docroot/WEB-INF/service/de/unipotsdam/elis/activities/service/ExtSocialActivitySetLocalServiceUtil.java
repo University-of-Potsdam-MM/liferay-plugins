@@ -19,24 +19,24 @@ import com.liferay.portal.kernel.util.ReferenceRegistry;
 import com.liferay.portal.service.InvokableLocalService;
 
 /**
- * Provides the local service utility for Ext. This utility wraps
- * {@link de.unipotsdam.elis.activities.service.impl.ExtLocalServiceImpl} and is the
+ * Provides the local service utility for ExtSocialActivitySet. This utility wraps
+ * {@link de.unipotsdam.elis.activities.service.impl.ExtSocialActivitySetLocalServiceImpl} and is the
  * primary access point for service operations in application layer code running
  * on the local server. Methods of this service will not have security checks
  * based on the propagated JAAS credentials because this service can only be
  * accessed from within the same VM.
  *
  * @author Matthias
- * @see ExtLocalService
- * @see de.unipotsdam.elis.activities.service.base.ExtLocalServiceBaseImpl
- * @see de.unipotsdam.elis.activities.service.impl.ExtLocalServiceImpl
+ * @see ExtSocialActivitySetLocalService
+ * @see de.unipotsdam.elis.activities.service.base.ExtSocialActivitySetLocalServiceBaseImpl
+ * @see de.unipotsdam.elis.activities.service.impl.ExtSocialActivitySetLocalServiceImpl
  * @generated
  */
-public class ExtLocalServiceUtil {
+public class ExtSocialActivitySetLocalServiceUtil {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify this class directly. Add custom service methods to {@link de.unipotsdam.elis.activities.service.impl.ExtLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
+	 * Never modify this class directly. Add custom service methods to {@link de.unipotsdam.elis.activities.service.impl.ExtSocialActivitySetLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
 
 	/**
@@ -110,23 +110,27 @@ public class ExtLocalServiceUtil {
 		return getService().findSocialActivitiesByActivitySetId(activitySetId);
 	}
 
+	public static void deleteActivitySetsByClassPK(long classPK) {
+		getService().deleteActivitySetsByClassPK(classPK);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}
 
-	public static ExtLocalService getService() {
+	public static ExtSocialActivitySetLocalService getService() {
 		if (_service == null) {
 			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					ExtLocalService.class.getName());
+					ExtSocialActivitySetLocalService.class.getName());
 
-			if (invokableLocalService instanceof ExtLocalService) {
-				_service = (ExtLocalService)invokableLocalService;
+			if (invokableLocalService instanceof ExtSocialActivitySetLocalService) {
+				_service = (ExtSocialActivitySetLocalService)invokableLocalService;
 			}
 			else {
-				_service = new ExtLocalServiceClp(invokableLocalService);
+				_service = new ExtSocialActivitySetLocalServiceClp(invokableLocalService);
 			}
 
-			ReferenceRegistry.registerReference(ExtLocalServiceUtil.class,
+			ReferenceRegistry.registerReference(ExtSocialActivitySetLocalServiceUtil.class,
 				"_service");
 		}
 
@@ -136,8 +140,8 @@ public class ExtLocalServiceUtil {
 	/**
 	 * @deprecated As of 6.2.0
 	 */
-	public void setService(ExtLocalService service) {
+	public void setService(ExtSocialActivitySetLocalService service) {
 	}
 
-	private static ExtLocalService _service;
+	private static ExtSocialActivitySetLocalService _service;
 }

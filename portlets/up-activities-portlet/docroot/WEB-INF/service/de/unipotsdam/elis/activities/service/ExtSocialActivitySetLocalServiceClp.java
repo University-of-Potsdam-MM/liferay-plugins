@@ -20,8 +20,10 @@ import com.liferay.portal.service.InvokableLocalService;
  * @author Matthias
  * @generated
  */
-public class ExtLocalServiceClp implements ExtLocalService {
-	public ExtLocalServiceClp(InvokableLocalService invokableLocalService) {
+public class ExtSocialActivitySetLocalServiceClp
+	implements ExtSocialActivitySetLocalService {
+	public ExtSocialActivitySetLocalServiceClp(
+		InvokableLocalService invokableLocalService) {
 		_invokableLocalService = invokableLocalService;
 
 		_methodName0 = "getBeanIdentifier";
@@ -63,6 +65,10 @@ public class ExtLocalServiceClp implements ExtLocalService {
 		_methodName9 = "findSocialActivitiesByActivitySetId";
 
 		_methodParameterTypes9 = new String[] { "long" };
+
+		_methodName10 = "deleteActivitySetsByClassPK";
+
+		_methodParameterTypes10 = new String[] { "long" };
 	}
 
 	@Override
@@ -312,6 +318,25 @@ public class ExtLocalServiceClp implements ExtLocalService {
 		return (java.util.List<com.liferay.portlet.social.model.SocialActivity>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
+	public void deleteActivitySetsByClassPK(long classPK) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName10,
+				_methodParameterTypes10, new Object[] { classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	private InvokableLocalService _invokableLocalService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -331,4 +356,6 @@ public class ExtLocalServiceClp implements ExtLocalService {
 	private String[] _methodParameterTypes8;
 	private String _methodName9;
 	private String[] _methodParameterTypes9;
+	private String _methodName10;
+	private String[] _methodParameterTypes10;
 }

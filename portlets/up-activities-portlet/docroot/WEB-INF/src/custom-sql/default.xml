@@ -157,5 +157,11 @@
         WHERE
         	(SocialActivity.activitysetid = ?) 
     </sql>
+    <sql id="deleteActivitySetsByClassPK">
+        DELETE FROM  
+        	SocialActivitySet
+        WHERE
+        	(SocialActivitySet.classPK = ?) 
+    </sql>
     
 </custom-sql>

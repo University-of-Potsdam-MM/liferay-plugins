@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import de.unipotsdam.elis.activities.service.ClpSerializer;
-import de.unipotsdam.elis.activities.service.ExtLocalServiceUtil;
+import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 
 /**
  * @author Matthias
@@ -35,7 +35,7 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
-			ExtLocalServiceUtil.clearService();
+			ExtSocialActivitySetLocalServiceUtil.clearService();
 		}
 	}
 }

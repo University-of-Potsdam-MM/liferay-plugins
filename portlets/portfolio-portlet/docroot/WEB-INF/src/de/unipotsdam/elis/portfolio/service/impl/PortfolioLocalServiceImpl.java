@@ -18,15 +18,19 @@ import java.util.List;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 
+import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
+import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.NoSuchPortfolioException;
 import de.unipotsdam.elis.portfolio.PortfolioStatics;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.service.PortfolioFeedbackLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.service.base.PortfolioLocalServiceBaseImpl;
 import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFinderUtil;
+import de.unipotsdam.elis.portfolio.util.jsp.JspHelper;
 
 /**
  * The implementation of the portfolio local service.
@@ -74,7 +78,10 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 
 	public Portfolio deletePortfolio(long plid) throws SystemException, PortalException {
 		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(plid);
-		LayoutLocalServiceUtil.deleteLayout(LayoutLocalServiceUtil.getLayout(plid), true, new ServiceContext());
+		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+		LayoutLocalServiceUtil.deleteLayout(layout, true, new ServiceContext());
+		//ExtSocialActivitySetLocalServiceUtil.deleteActivitySetsByClassPK(plid);
+		JspHelper.createPortfolioActivity(layout, layout.getUserId(),0, ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED);
 		return portfolioPersistence.remove(plid);
 	}
 

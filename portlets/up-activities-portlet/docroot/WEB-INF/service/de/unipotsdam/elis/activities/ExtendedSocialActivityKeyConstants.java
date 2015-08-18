@@ -9,4 +9,6 @@ public class ExtendedSocialActivityKeyConstants extends SocialActivityKeyConstan
 	public static final int PORTFOLIO_FEEDBACK_REQUESTED = 2;
 	
 	public static final int PORTFOLIO_FEEDBACK_DELIVERED = 3;
+	
+	public static final int PORTFOLIO_DELETED = 4;
 }

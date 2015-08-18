@@ -1,9 +1,13 @@
 package de.unipotsdam.elis.portfolio.util.jsp;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
+
+import org.eclipse.jdt.internal.compiler.ast.JavadocSingleNameReference;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
 import com.liferay.compat.portal.util.PortalUtil;
@@ -110,14 +114,17 @@ public class JspHelper {
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
 
 		}
-		createPortfolioActivity(portfolio, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+		createPortfolioActivity(portfolio.getLayout(), themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
 		createPortfolioNotification(themeDisplay.getUser(), receiver, notificationMessage, portfolioURL, portletId);
 	}
 
-	private static void createPortfolioActivity(Portfolio portfolio, long userId, long receiverUserId,
+	public static void createPortfolioActivity(Layout layout, long userId, long receiverUserId,
 			int socialActivityType) throws PortalException, SystemException {
-		SocialActivityLocalServiceUtil.addActivity(userId, 0, Portfolio.class.getName(), portfolio.getPlid(),
-				socialActivityType, "", receiverUserId);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("userId", layout.getUserId());
+		jsonObject.put("title", layout.getTitle());
+		SocialActivityLocalServiceUtil.addActivity(userId, 0, Portfolio.class.getName(), layout.getPlid(),
+				socialActivityType, jsonObject.toString(), receiverUserId);
 	}
 
 	private static void createPortfolioNotification(User sender, User receiver, String message, String portfolioURL,
@@ -216,5 +223,13 @@ public class JspHelper {
 						portfolio.getLayout().getModifiedDate()));
 		portfolioFeedbackJSON.put("modifiedDateInMilliseconds", portfolio.getLayout().getModifiedDate().getTime());
 		portfolioFeedbackJSONArray.put(portfolioFeedbackJSON);
+	}
+	
+	public static Map<Locale,String> getLocaleMap(String key, PortletConfig portletConfig){
+		Map<Locale, String> result = new HashMap<Locale, String>();
+		for (Locale locale : LanguageUtil.getAvailableLocales()){
+			result.put(locale, LanguageUtil.get(portletConfig, locale, key));
+		}
+		return result;		
 	}
 }

@@ -16,7 +16,7 @@ import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.util.dao.orm.CustomSQLUtil;
 
-public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implements ExtFinder{
+public class ExtSocialActivitySetFinderImpl extends BasePersistenceImpl<SocialActivitySet> implements ExtSocialActivitySetFinder{
 	
 	public List<SocialActivitySet> findSocialActivitySetsByUserIdAndClassNameIds(long userId, long[] classNameIds, int begin, int end){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
@@ -221,8 +221,6 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    return null;
 	}
 	
-
-	
 	public List<SocialActivity> findSocialActivitiesByActivitySetId(long activitySetId){
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
@@ -250,6 +248,33 @@ public class ExtFinderImpl extends BasePersistenceImpl<SocialActivitySet> implem
 	    }
 
 	    return null;
+	}
+	
+	public void deleteActivitySetsByClassPK(long classPK){
+		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
+		Session session = null;
+	    try {
+	        session = sessionFactory.openSession();
+
+	        String sql = CustomSQLUtil.get("deleteActivitySetsByClassPK");
+
+	        SQLQuery q = session.createSQLQuery(sql);
+	        q.setCacheable(false);
+	        q.addEntity("SocialActivitySet", PortalClassLoaderUtil.getClassLoader().loadClass("com.liferay.portlet.social.model.impl.SocialActivitySetImpl"));
+
+	        QueryPos qPos = QueryPos.getInstance(q);
+	        qPos.add(classPK);
+
+	        q.executeUpdate();
+	    } catch (Exception e) {
+	        try {
+	            throw new SystemException(e);
+	        } catch (SystemException se) {
+	            se.printStackTrace();
+	        }
+	    } finally {
+	    	sessionFactory.closeSession(session);
+	    }
 	}
 
 }
