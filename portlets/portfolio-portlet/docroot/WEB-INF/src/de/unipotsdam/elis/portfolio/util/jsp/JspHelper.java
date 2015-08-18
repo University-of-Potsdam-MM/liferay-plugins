@@ -7,8 +7,6 @@ import java.util.Map;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 
-import org.eclipse.jdt.internal.compiler.ast.JavadocSingleNameReference;
-
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.exception.PortalException;
