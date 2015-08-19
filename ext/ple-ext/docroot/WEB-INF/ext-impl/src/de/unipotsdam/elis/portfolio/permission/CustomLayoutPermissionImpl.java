@@ -13,7 +13,7 @@ import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 
 	public CustomLayoutPermissionImpl() {
-		System.out.println("CustomLayoutPermission 5 created");
+		System.out.println("CustomLayoutPermission 6 created");
 	}
 
 	@Override
