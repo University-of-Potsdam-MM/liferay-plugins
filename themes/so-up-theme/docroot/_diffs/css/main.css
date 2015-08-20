@@ -18,6 +18,8 @@
 
 @import url(custom.css);
 
+@import url(./up-dockbar.css);
+
 
 .container-fluid#wrapper div#content  {
 	width: 78%;

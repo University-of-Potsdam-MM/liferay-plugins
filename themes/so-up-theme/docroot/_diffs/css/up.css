@@ -186,17 +186,17 @@ html.aui
 					ul.navbar-nav.nav-account-controls
 					{
 						background: transparent;
-						position: absolute;
+						/*position: absolute;
 						top: 0px;
 						right: 60px;
 						left: auto;
-						display: block;
+						display: block;*/
 					
 						li
 						{
 							background: $upLightBlue;
 							color: $upDarkBlue;
-							height: 43px;
+							/*height: 43px;*/
 
 							span
 							{
@@ -205,12 +205,12 @@ html.aui
 						
 							*:hover
 							{
-								background: none;
+								/*background: none;*/
 							}
 							
 							a, a:hover
 							{
-								background: none;
+								/*background: none;*/
 							}	
 							
 							ul li 
@@ -242,11 +242,15 @@ html.aui
 							background-color: $upWhite;
 							color: $upDarkBlue;
 							padding-left: 20px;			
-							
+						
 							span
 							{
 								color: $upDarkBlue;
 							}				
+						}
+						
+						li.lang:hover {
+							background-color:#d0dae3;
 						}
 						li.lang:after
 						{
@@ -256,20 +260,25 @@ html.aui
 						    height: 14px;
 						    @include up-grafic;
 						    background-position: -17px -53px;
-						    left: 5px;
+						    left: 10px;
 						    position: absolute;
-						    top: 12px;		
+						    top: 15px;		
+						}
+						
+						li.lang.open 
+						{	
+							background-color:#d0dae3;
 						}
 						
 						li.dockbar-user-notifications
 						{
-							width: 25px;
+							/*width: 25px;
 							height: 43px;
-							padding-left: 16px;
+							padding-left: 16px;*/
 							
 							span
 							{
-								border:none;
+								/*border:none;*/
 							}
 						}
 						li.dockbar-user-notifications:after
@@ -280,9 +289,9 @@ html.aui
 						    height: 20px;
 						    @include ple-grafic;
 						    background-position: -1px -335px;
-						    left: 5px;
+						    left: 15px;
 						    position: absolute;
-						    top: 12px;		
+						    top: 14px;		
 						}
 						
 						li.user-avatar
@@ -301,22 +310,24 @@ html.aui
 						
 						a.user-notification-link
 						{
-							height: auto;
-							padding: 3px;
+							/*height: auto;
+							padding: 3px;*/
 							
 							span.user-notifications-count
 							{
 								background-color: transparent;
-								top: 4px;
+								top: 10px;
 								height: 20px;
 								line-height: 20px;
 								background-position: 4px 379px;
 								background-color: transparent;
+								font-weight:bold;
+								margin-left: 3px;
 							}
 							
 							span.user-notifications-count::after
 							{
-								top:4px;
+								/*top:4px;*/
 							}
 						}
 					}
@@ -344,9 +355,9 @@ html.aui
 			
 			.notifications-portlet
 			{
-				position: absolute;
+				/*position: absolute;
 				top: 0px;
-				right: 120px;
+				right: 120px;*/
 				
 				li
 				{
@@ -369,7 +380,7 @@ html.aui
 			
 		
 			.portlet-dockbar{
-				padding-top: 20px;
+				/*padding-top: 20px;*/
 			}
 			
 			#heading{
@@ -626,6 +637,7 @@ html.aui
 		
 		#main-menu
 		{
+			
 			margin: 45px 60px 20px;
 			list-style: none;
 			display: block;
@@ -755,19 +767,26 @@ html.aui
 				margin: 0px;
 				border-bottom: 2px solid $upGray;
 				background: transparent;
+				margin-right:0;
 				
 		
 				li
 				{
-					width: 40px;
-					border-right: 2px solid $upWhite;		
-					height: 45px;
+					width: 44px;
+					margin-right:2px;	
+					height: 46px;
+					padding:0;
+					
 					a
 					{
-						width: 20px;
-						height:20px;
-						overflow: hidden;
+						padding:0;
+						width: 45px;
+   						height: 45px;
 						color:$upLightBlue;	
+					}
+					
+					a.user-notification-link {
+						overflow:visible;
 					}
 					
 					ul li
@@ -791,8 +810,9 @@ html.aui
 				
 				li.lang
 				{
-					width: 40px;
+					width: 44px;
 					overflow: visible;
+					    padding: 0;
 					
 					span
 					{
@@ -810,8 +830,11 @@ html.aui
 				
 				li.user-avatar
 				{
-					width: 40px;
-					height: 45px;
+					width: 45px;
+					height: 46px;
+					border-right:0;
+					margin-right:0;
+					
 					
 					a
 					{
@@ -888,8 +911,8 @@ html.aui
 		{
 			position: fixed;
 			top:0px;
-			right: 114px;
-			width: 100px;
+			    right: 139px;
+		
 			z-index:1002;
 			height: 45px;
 			margin: 0px;
@@ -903,8 +926,8 @@ html.aui
 				height: 46px;
 				overflow: hidden;
 				color: $upLightBlue;
-				border-right: 2px solid $upWhite;
-				padding: 2px;
+				
+				padding: 0px;
 				
 				a
 				{

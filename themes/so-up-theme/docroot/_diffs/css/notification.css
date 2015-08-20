@@ -41,7 +41,12 @@ ul.dropdown-menu.pull-right.user-notifications-list {
     border: none;
 }
 
-.aui .user-notifications-header a {
+.aui .dockbar-split .dockbar .navbar-inner .nav>li.dockbar-user-notifications:hover .user-notifications-header {
+	background-color:#014260;
+	
+}
+
+.aui .user-notifications-header a, .aui .user-notifications-header a:visited {
     color: #fff;
     text-decoration:underline;
 }
@@ -56,6 +61,7 @@ ul.dropdown-menu.pull-right.user-notifications-list {
     min-height: 21px;
     padding: 0 10px 0px 10px;
     margin-bottom: 10px;
+    text-align:left;
 }
 
 .notifications-portlet .user-notifications-list .mark-all-as-read {
@@ -87,5 +93,5 @@ ul.dropdown-menu.pull-right.user-notifications-list {
     max-height: none;
     padding: 10px;
     right: 0;
-    margin-top: 8px !important;
+  
 }
