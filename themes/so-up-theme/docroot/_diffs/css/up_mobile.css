@@ -28,63 +28,128 @@
 					margin-top: 20px;				
 				}
 				
-				ul#_145_navAccountControls.nav
-				{
-					display: block;
-					position: fixed;
-					top: 0;
-					right: 0px;
-					z-index: 1040;
-					
-					li
+				
+				#p_p_id_145_ 
 					{
-						width: 46px;
-						height: 37px;
-						margin-right: 2px;
-						
-						span
+						.navbar.navbar-static-top
 						{
-							color: $upWhite;
-							
-							.icon-caret-down
+							.navbar-inner
 							{
-								display: none;
+								box-shadow: 0 0px 0px rgba(0,0,0,0.1);
+								
+								.container 
+								{
+									.btn-navbar#_145_navAddControlsNavbarBtn {
+										display:none;
+									}
+								
+									.btn-navbar#_145_navSiteNavigationNavbarBtn {
+										display:none;
+									}
+									
+									ul.nav-account-controls#_145_navAccountControls 
+									{	
+										right: 0em;
+										width: 35.5%;
+										height: 45px;	
+										z-index: 4000;
+										
+										li
+										{
+											width: 21%;
+											min-width:45px;
+											height: 46px;
+											padding:0;
+											background-color:transparent;
+					
+											a
+											{
+												padding:0;
+												
+   												height: 46px;
+												color:$upLightBlue;	
+												
+											}
+					
+											a.user-notification-link {
+												overflow:visible;
+												
+												span#_2_WAR_notificationsportlet_userNotificationsCount 
+												{
+  												  padding-bottom: 0;
+   												  border-bottom: none;
+    											  border-right: none;
+    											  height: 31px;
+												}
+											}
+										}/* end li */		
+										
+										li.dockbar-user-notifications 
+										{
+   											height: 46px;
+										}
+										
+										li.dockbar-user-notifications a:after
+										{
+						   					 display: block;
+						   					 content: "";
+						   					 width: 23px;
+						    				height: 20px;
+						    				@include ple-grafic;
+						    				background-position: -1px -335px;
+						   					left: 15px;
+						   					 position: absolute;
+						    				top: 14px;		
+										}
+										li.lang 
+										{
+											background-color:transparent;
+											
+											span 
+											{
+												display:none;
+												
+												
+											}
+											
+											i.icon-caret-down:before
+												{
+													display:none;
+												}
+										}
+										
+										li.lang a:after
+										{
+						   					 display: block;
+						    					content: "";
+						    				width: 14px;
+						    				height: 14px;
+						   					 @include up-grafic;
+						    				background-position: -17px -53px;
+						    				left: 10px;
+						    				position: absolute;
+						    				top: 15px;		
+											}
+										
+										li.user-avatar 
+										{
+											 overflow: hidden;
+											 
+											 span.nav-item-label 
+											 {
+    												display: none;
+								    			}
+										}
+																		
+									} /* end ul */
+								} /* end container */
+								
+													
 							}
-						}
+						} 
 					}
-					
-					li.lang, li.services
-					{
-						display: none;
-					}
-					
-					li.dockbar-user-notifications
-					{
-						background-color: $upDarkBlue;
-					}
-					
-					li.user-avatar
-					{
-						background-color: $upDarkBlue;
-						
-						span
-						{
-							color: $upWhite;
-							overflow: hidden;
-							height: 25px;
-							
-							.user-full-name
-							{
-								display: none;
-							}
-						}
-						
-						.user-avatar-link .nav-item-label img
-						{
-							display: block;
-						}						
-					}
-				}				
+				
+										
 			}
 			
 			#line
@@ -110,7 +175,8 @@
 			
 
 	
-			header#mobile-menu {
+			header#mobile-menu 
+			{
 				display: block;
 				width: 100%;
 				overflow: hidden;
@@ -124,12 +190,11 @@
 	
 				div#up-menu
 				{
-					float:right;
 					background: $upGray;
 					margin: 0px;
 					padding: 0px;
 					width: 100%;
-					height: 40px;
+					height: 46px;
 					position: fixed;
 					top: 0px;
 					left: 0px;
@@ -138,18 +203,19 @@
 					.main
 					{
 						position: relative;
-						width: auto;
-						padding-right: 100px;
-						height: 30px;
+						width: 65.5%;
+						
+						height: 46px;
 						
 						a.aui-button
 						{
 							background: $upLightBlue;
 							color: $upDarkBlue;
 							width: 24%;
+							min-width:32px;
 							display: inline-block;
-							height: 25px;
-							margin: 0.3%;
+							height: 32px;
+							margin: 0 2px 0px 0;
 							padding: 5px 0px;
 							overflow: hidden;
 							border-radius: 0px;
@@ -189,6 +255,8 @@
 						}
 					}
 					
+					
+										
 					.right
 					{
 						position: absolute;

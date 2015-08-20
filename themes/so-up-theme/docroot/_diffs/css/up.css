@@ -252,7 +252,7 @@ html.aui
 						li.lang:hover {
 							background-color:#d0dae3;
 						}
-						li.lang:after
+						li.lang a:after
 						{
 						    display: block;
 						    content: "";
@@ -281,7 +281,7 @@ html.aui
 								/*border:none;*/
 							}
 						}
-						li.dockbar-user-notifications:after
+						li.dockbar-user-notifications a:after
 						{
 						    display: block;
 						    content: "";
