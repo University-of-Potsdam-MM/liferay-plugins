@@ -35,7 +35,7 @@ import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.util.portlet.PortletProps;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
-import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil; 
+import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
 import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 
@@ -56,9 +56,10 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 			throws Exception {
 		PortletConfig portletConfig = PortalUtil.getPortletConfig(serviceContext.getCompanyId(),
 				serviceContext.getPortletId(), PortletBagPool.get(serviceContext.getPortletId()).getServletContext());
-		String title = getTitle(activitySet.getUserId(),activitySet.getClassPK(), activitySet.getModifiedDate(), JSONFactoryUtil.createJSONObject(activitySet.getExtraData()) , serviceContext, portletConfig);
-		List<SocialActivity> activities = ExtSocialActivitySetLocalServiceUtil.findSocialActivitiesByActivitySetId(activitySet
-				.getActivitySetId());
+		String title = getTitle(activitySet.getUserId(), activitySet.getClassPK(), activitySet.getModifiedDate(),
+				JSONFactoryUtil.createJSONObject(activitySet.getExtraData()), serviceContext, portletConfig);
+		List<SocialActivity> activities = ExtSocialActivitySetLocalServiceUtil
+				.findSocialActivitiesByActivitySetId(activitySet.getActivitySetId());
 		String body = getBody(activities.toArray(new SocialActivity[activities.size()]), serviceContext, portletConfig);
 		return new SocialActivityFeedEntry("", title, body);
 	}
@@ -68,17 +69,20 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 			throws Exception {
 		PortletConfig portletConfig = PortalUtil.getPortletConfig(serviceContext.getCompanyId(),
 				serviceContext.getPortletId(), PortletBagPool.get(serviceContext.getPortletId()).getServletContext());
-		String title = getTitle(activity.getUserId(),activity.getClassPK(), activity.getCreateDate(), JSONFactoryUtil.createJSONObject(activity.getExtraData()), serviceContext, portletConfig);
+		String title = getTitle(activity.getUserId(), activity.getClassPK(), activity.getCreateDate(),
+				JSONFactoryUtil.createJSONObject(activity.getExtraData()), serviceContext, portletConfig);
 		String body = getBody(new SocialActivity[] { activity }, serviceContext, portletConfig);
 		return new SocialActivityFeedEntry("", title, body);
 	}
 
-	private String getTitle(long userId, long plid, long changeDate, JSONObject extraData,ServiceContext serviceContext, PortletConfig portletConfig)
-			throws PortalException, SystemException, PortletException {
+	private String getTitle(long userId, long plid, long changeDate, JSONObject extraData,
+			ServiceContext serviceContext, PortletConfig portletConfig) throws PortalException, SystemException,
+			PortletException {
 		User sender = UserLocalServiceUtil.getUser(userId);
-		String portfolioTitle = LocalizationUtil.getLocalization(extraData.getString("title"), LocaleUtil.toLanguageId(serviceContext.getLocale()));
+		String portfolioTitle = LocalizationUtil.getLocalization(extraData.getString("title"),
+				LocaleUtil.toLanguageId(serviceContext.getLocale()));
 		Layout layout = LayoutLocalServiceUtil.fetchLayout(plid);
-		if (layout != null){
+		if (layout != null) {
 			String url = PortalUtil.getLayoutFullURL(layout, serviceContext.getThemeDisplay());
 			portfolioTitle = "<a href=\"" + url + "\">" + portfolioTitle + "</a>";
 		}
@@ -124,26 +128,29 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 			throws PortalException, SystemException {
 		StringBundler sb = new StringBundler("<div class=\"activity-body\">");
 		for (SocialActivity activity : activities) {
-			if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED) {
-				sb.append("<div class=\"title portfolioPublished\">");
-				sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-						"portfolio-portfolio-page-published-activity",
-						new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
-			} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED) {
-				sb.append("<div class=\"title feedbackRequested\">");
-				sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-						"portfolio-feedback-requested-activity",
-						new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
-			} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED){
-				sb.append("<div class=\"title feedbackDelivered\">");
-				sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(),
-						"portfolio-feedback-delivered-activity"));
-			} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED){
-				sb.append("<div class=\"title portfolioDeleted\">");
-				sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(),
-						"portfolio-deleted"));
+			if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED
+					|| activity.getUserId() == serviceContext.getUserId()
+					|| activity.getReceiverUserId() == serviceContext.getUserId()) {
+				if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED) {
+					sb.append("<div class=\"title portfolioPublished\">");
+					sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+							"portfolio-portfolio-page-published-activity",
+							new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED) {
+					sb.append("<div class=\"title feedbackRequested\">");
+					sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+							"portfolio-feedback-requested-activity",
+							new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED) {
+					sb.append("<div class=\"title feedbackDelivered\">");
+					sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(),
+							"portfolio-feedback-delivered-activity"));
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED) {
+					sb.append("<div class=\"title portfolioDeleted\">");
+					sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(), "portfolio-deleted"));
+				}
+				sb.append("</div>");
 			}
-			sb.append("</div>");
 		}
 		sb.append("</div>");
 		return sb.toString();
@@ -163,8 +170,8 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 		if (activitySetId > 0) {
 			SocialActivitySetLocalServiceUtil.incrementActivityCount(activitySetId, activityId);
 
-			for (SocialActivity socialActivity : ExtSocialActivitySetLocalServiceUtil.findSocialActivitiesByActivitySetIdAndType(
-					activitySetId, activity.getType())) {
+			for (SocialActivity socialActivity : ExtSocialActivitySetLocalServiceUtil
+					.findSocialActivitiesByActivitySetIdAndType(activitySetId, activity.getType())) {
 				if (socialActivity.getActivityId() != activity.getActivityId()
 						&& socialActivity.getReceiverUserId() == activity.getReceiverUserId()) {
 					SocialActivityLocalServiceUtil.deleteActivity(socialActivity);
@@ -191,8 +198,9 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 
 			SocialActivity activity = SocialActivityLocalServiceUtil.getActivity(activityId);
 
-			activitySet = ExtSocialActivitySetLocalServiceUtil.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(
-					activity.getUserId(), activity.getClassNameId(), activity.getClassPK());
+			activitySet = ExtSocialActivitySetLocalServiceUtil
+					.findFirstSocialActivitySetByUseridAndClassNameIdAndClassPK(activity.getUserId(),
+							activity.getClassNameId(), activity.getClassPK());
 
 			if ((activitySet != null) && !isExpired(activitySet)) {
 				return activitySet.getActivitySetId();
