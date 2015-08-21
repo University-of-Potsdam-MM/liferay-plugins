@@ -328,6 +328,15 @@ input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_
     text-indent: 20px;
 }
 
+#templateChoice {
+    float: left;
+    width: 50%;
+}
+
+#addPortfolioButton {
+    clear: left;
+}
+
 	.email-invited h2 span {
 		color: #999;
 		font-size: 0.8em;

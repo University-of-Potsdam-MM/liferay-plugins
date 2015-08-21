@@ -1,7 +1,15 @@
+<%@page import="java.util.Locale"%>
+<%@page import="java.util.Map"%>
+<%@page import="com.liferay.portal.model.LayoutPrototype"%>
+
 <%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
+
+<%
+	Map<String,LayoutPrototype> portfolioTemplates = JspHelper.getPortfolioLayoutPrototypes();
+%>
 
 <aui:layout cssClass="popup-layout">
 
@@ -11,18 +19,53 @@
 		<aui:input id="portfolioNameInput" name="portfolioName" type="text" label="portfolio-name">
 	      	<aui:validator name="required" />
 	    </aui:input>
-		<aui:field-wrapper name="template" >
-			<aui:input checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.WIKI_LAYOUT_PROTOTYPE %>" label="wiki"  />
-			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.BLOG_LAYOUT_PROTOTYPE %>" label="blog"  />
-			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.CDP_LAYOUT_PROTOTYPE %>" label="portfolio-cdp"  />
-			<aui:input inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE %>" label="portfolio-empty-page"  />
-		</aui:field-wrapper>
-		<aui:button type="submit" value="portfolio-add-portfolio" />
+	    
+	 	<div id="templateChoice">
+			<aui:field-wrapper name="template" >
+				<% for (LayoutPrototype lp : portfolioTemplates.values()){ %>
+					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMAN) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
+					<input id="<%= portletDisplay.getNamespace() + lp.getLayoutPrototypeId() + "_description" %>" hidden="true" value ="<%= lp.getDescription() %>"/>
+				<% } %>
+				<aui:input id="emptyPage" inlineLabel="right" name="template" type="radio" value="<%= PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE %>" label="portfolio-empty-page"  />
+				<input id="<%=  portletDisplay.getNamespace() + "emptyPage_description"%>" hidden="true" value ="<%= LanguageUtil.get(pageContext, "portfolio-empty-page") %>"/>
+			</aui:field-wrapper>
+		</div>
+		<div id="description">
+			<div><%= LanguageUtil.get(pageContext, "description") %></div>
+			<div id="descriptionContent"></div>
+		</div>
+		<div id="addPortfolioButton">
+			<aui:button type="submit" value="portfolio-add-portfolio" />
+		</div>
 	</aui:form> 
 	
 </aui:layout>
 
 <aui:script>
+AUI().use('aui-base',
+	    'aui-datatable',
+	    'datatable-sort',
+	    'datatable-paginator',
+	    'liferay-menu',
+	    function(A) {    
+			var fieldWrapper = A.one('.field-wrapper');
+			fieldWrapper.on('click',function(){setDescription();});
+	    }
+	);
+	
+function setDescription(){
+	AUI().use('aui-base',function(A){
+	var inputs = A.all('input');
+	for (var i = 0; i < inputs.size(); i++){
+		var item = inputs.item(i);
+		if (item.get("type") === 'radio' && item.get("checked") === true){
+			var descriptionDiv = A.one('#descriptionContent');
+			var description = A.one('#' + item.get("id") + '_description').get("value");
+			descriptionDiv.set('innerHTML',description);
+		}
+	}});
+}
+
 function createPortfolio(event) {
     event.preventDefault();
     AUI().use('aui-io-request-deprecated', 'aui-loading-mask-deprecated', 'autocomplete,io-upload-iframe', 'json-parse', function(A) {
@@ -64,4 +107,6 @@ function createPortfolio(event) {
         );
     });
 }
+
+setDescription();
 </aui:script>

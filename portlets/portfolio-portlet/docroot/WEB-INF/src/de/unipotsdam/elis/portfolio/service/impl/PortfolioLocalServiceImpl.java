@@ -77,11 +77,11 @@ public class PortfolioLocalServiceImpl extends PortfolioLocalServiceBaseImpl {
 	}
 
 	public Portfolio deletePortfolio(long plid) throws SystemException, PortalException {
-		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(plid);
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
-		LayoutLocalServiceUtil.deleteLayout(layout, true, new ServiceContext());
 		//ExtSocialActivitySetLocalServiceUtil.deleteActivitySetsByClassPK(plid);
 		JspHelper.createPortfolioActivity(layout, layout.getUserId(),0, ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED);
+		PortfolioFeedbackLocalServiceUtil.deletePortfolioFeedbackByPlid(plid);
+		LayoutLocalServiceUtil.deleteLayout(layout, true, new ServiceContext());
 		return portfolioPersistence.remove(plid);
 	}
 

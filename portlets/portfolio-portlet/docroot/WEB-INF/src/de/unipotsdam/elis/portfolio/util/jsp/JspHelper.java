@@ -1,6 +1,7 @@
 package de.unipotsdam.elis.portfolio.util.jsp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,7 +22,9 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -112,12 +115,13 @@ public class JspHelper {
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
 
 		}
-		createPortfolioActivity(portfolio.getLayout(), themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+		createPortfolioActivity(portfolio.getLayout(), themeDisplay.getUserId(), receiver.getUserId(),
+				socialActivityType);
 		createPortfolioNotification(themeDisplay.getUser(), receiver, notificationMessage, portfolioURL, portletId);
 	}
 
-	public static void createPortfolioActivity(Layout layout, long userId, long receiverUserId,
-			int socialActivityType) throws PortalException, SystemException {
+	public static void createPortfolioActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
+			throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("userId", layout.getUserId());
 		jsonObject.put("title", layout.getTitle());
@@ -222,12 +226,34 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("modifiedDateInMilliseconds", portfolio.getLayout().getModifiedDate().getTime());
 		portfolioFeedbackJSONArray.put(portfolioFeedbackJSON);
 	}
-	
-	public static Map<Locale,String> getLocaleMap(String key, PortletConfig portletConfig){
+
+	public static Map<Locale, String> getLocaleMap(String key, PortletConfig portletConfig) {
 		Map<Locale, String> result = new HashMap<Locale, String>();
-		for (Locale locale : LanguageUtil.getAvailableLocales()){
+		for (Locale locale : LanguageUtil.getAvailableLocales()) {
 			result.put(locale, LanguageUtil.get(portletConfig, locale, key));
 		}
-		return result;		
+		return result;
+	}
+
+	/**
+	 * Returns the layout prototype with the given name
+	 * 
+	 * @param name
+	 * @return layout prototype
+	 * @throws SystemException
+	 */
+	public static Map<String,LayoutPrototype> getPortfolioLayoutPrototypes() throws SystemException {
+		Map<String, LayoutPrototype> result = new HashMap<String, LayoutPrototype>();
+		List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(0,
+				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
+
+		for (LayoutPrototype lp : layoutPrototypes) {
+			if (lp.getName(Locale.GERMAN).equals(PortfolioStatics.BLOG_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.CDP_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.WIKI_LAYOUT_PROTOTYPE)) {
+				result.put(lp.getName(Locale.GERMAN), lp);
+			}
+		}
+		return result;
 	}
 }
