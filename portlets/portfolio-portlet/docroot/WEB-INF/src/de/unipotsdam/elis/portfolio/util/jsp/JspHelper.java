@@ -242,7 +242,7 @@ public class JspHelper {
 	 * @return layout prototype
 	 * @throws SystemException
 	 */
-	public static Map<String,LayoutPrototype> getPortfolioLayoutPrototypes() throws SystemException {
+	public static Map<String, LayoutPrototype> getPortfolioLayoutPrototypes() throws SystemException {
 		Map<String, LayoutPrototype> result = new HashMap<String, LayoutPrototype>();
 		List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(0,
 				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
@@ -250,7 +250,8 @@ public class JspHelper {
 		for (LayoutPrototype lp : layoutPrototypes) {
 			if (lp.getName(Locale.GERMAN).equals(PortfolioStatics.BLOG_LAYOUT_PROTOTYPE)
 					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.CDP_LAYOUT_PROTOTYPE)
-					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.WIKI_LAYOUT_PROTOTYPE)) {
+					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.WIKI_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMAN).equals(PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE)) {
 				result.put(lp.getName(Locale.GERMAN), lp);
 			}
 		}

@@ -14,10 +14,10 @@ public class PortfolioStatics {
 	public static int PUBLISHMENT_INDIVIDUAL = 0;
 	public static int PUBLISHMENT_GLOBAL = 1;
 	
-	public final static String WIKI_LAYOUT_PROTOTYPE = "Wiki";
-	public final static String BLOG_LAYOUT_PROTOTYPE = "Blog";
-	public final static String CDP_LAYOUT_PROTOTYPE = "Content Display Page";
-	public final static String EMPTY_LAYOUT_PROTOTYPE = "Empty";
+	public final static String WIKI_LAYOUT_PROTOTYPE = "Portfolioseite mit einem Wiki";
+	public final static String BLOG_LAYOUT_PROTOTYPE = "Portfolioseite mit einem Blog";
+	public final static String CDP_LAYOUT_PROTOTYPE = "Portfolioseite mit beliebigem Inhalt";
+	public final static String EMPTY_LAYOUT_PROTOTYPE = "Frei gestaltbare Portfolioseite";
 	
 	public final static int MESSAGE_TYPE_PORTFOLIO_CREATED = 0;
 	public final static int MESSAGE_TYPE_PORTFOLIO_PUBLISHED = 1;

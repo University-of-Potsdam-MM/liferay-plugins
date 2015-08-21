@@ -228,13 +228,17 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	private void getUserPortfolios(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortalException, SystemException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId());
-		JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
-		for (Portfolio portfolio : portfolios) {
-			JspHelper.addToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+		if (themeDisplay.getSiteGroup().isUser()) {
+			List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay
+					.getSiteGroup().getClassPK());
+			JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
+			for (Portfolio portfolio : portfolios) {
+				if (portfolio.userHasViewPermission(themeDisplay.getUserId()))
+					JspHelper.addToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+			}
+			PrintWriter out = resourceResponse.getWriter();
+			out.println(portfolioJSONArray.toString());
 		}
-		PrintWriter out = resourceResponse.getWriter();
-		out.println(portfolioJSONArray.toString());
 	}
 
 	/**
@@ -447,32 +451,26 @@ public class MyPortfolioPortlet extends MVCPortlet {
 		Layout newPortfolio = null;
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		if (!template.equals(PortfolioStatics.EMPTY_LAYOUT_PROTOTYPE)) {
-			// find template and set it as parent template
-			LayoutPrototype lp = getLayoutPrototype(template);
-			if (lp != null) {
-				serviceContext.setAttribute("layoutPrototypeLinkEnabled", false);
+		// find template and set it as parent template
+		LayoutPrototype lp = getLayoutPrototype(template);
+		if (lp != null) {
+			serviceContext.setAttribute("layoutPrototypeLinkEnabled", false);
 
-				serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
+			serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
 
-				newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
-						portfolioParentPage.getGroupId(), false, portfolioParentPage.getLayoutId(), portfolioName,
-						portfolioName, "", LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
-
-				SitesUtil.mergeLayoutPrototypeLayout(newPortfolio.getGroup(), newPortfolio);
-			} else {
-				jsonObject.put("success", Boolean.FALSE);
-				jsonObject.put("message", LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
-						"portfolio-portfolio-could-not-be-created"));
-				writeJSON(actionRequest, actionResponse, jsonObject);
-				throw new SystemException("Could not find layout prototype with the name " + template);
-			}
-		} else {
-			// create empty page
 			newPortfolio = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), portfolioParentPage.getGroupId(),
 					false, portfolioParentPage.getLayoutId(), portfolioName, portfolioName, "",
 					LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
+
+			SitesUtil.mergeLayoutPrototypeLayout(newPortfolio.getGroup(), newPortfolio);
+		} else {
+			jsonObject.put("success", Boolean.FALSE);
+			jsonObject.put("message", LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
+					"portfolio-portfolio-could-not-be-created"));
+			writeJSON(actionRequest, actionResponse, jsonObject);
+			throw new SystemException("Could not find layout prototype with the name " + template);
 		}
+
 		PortfolioLocalServiceUtil.addPortfolio(newPortfolio.getPlid());
 
 		jsonObject.put("success", Boolean.TRUE);
