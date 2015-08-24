@@ -306,7 +306,8 @@ public class PortfolioWrapper implements Portfolio, ModelWrapper<Portfolio> {
 
 	@Override
 	public boolean userHasViewPermission(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		return _portfolio.userHasViewPermission(userId);
 	}
 

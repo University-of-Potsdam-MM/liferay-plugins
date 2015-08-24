@@ -152,6 +152,7 @@ AUI().use(
         });
 
         otherPortfoliosDataTable.render("#otherPortfoliosTable");
+        otherPortfoliosDataTable.sort('title');
         otherPortfoliosData = otherPortfoliosDataTable.data;
         filterPortfoliosByVisibleState(otherPortfoliosData);
 
@@ -168,6 +169,7 @@ AUI().use(
 );
 
 function updateOtherPortfoliosData(A) {
+	var currentPage = otherPortfoliosDataTable.get('paginatorModel').get('page');
     A.io.request('<%=getPortfoliosForUserURL.toString()%>', {
         dataType: 'text/html',
         method: 'post',
@@ -177,6 +179,7 @@ function updateOtherPortfoliosData(A) {
                 otherPortfoliosData = JSON.parse(result);
                 otherPortfoliosDataTable.set('data', otherPortfoliosData);
                 filterPortfoliosByVisibleState(otherPortfoliosDataTable.data);
+                otherPortfoliosDataTable.get('paginatorModel').set('page',currentPage);
             }
         }
     });

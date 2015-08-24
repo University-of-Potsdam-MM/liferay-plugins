@@ -179,6 +179,25 @@ public class JspHelper {
 		portfolioJSONArray.put(portfolioJSON);
 	}
 
+	public static void publicAddToPortfolioJSONArray(JSONArray portfolioJSONArray, Portfolio portfolio,
+			ThemeDisplay themeDisplay) throws PortalException, SystemException {
+		JSONObject portfolioJSON = JSONFactoryUtil.createJSONObject();
+		portfolioJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
+		portfolioJSON
+				.put("url", JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser()));
+		portfolioJSON.put(
+				"lastChanges",
+				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+						portfolio.getLayout().getModifiedDate()));
+		portfolioJSON.put("lastChangesInMilliseconds", portfolio.getLayout().getModifiedDate().getTime());
+		portfolioJSON.put(
+				"templateName",
+				LayoutPrototypeLocalServiceUtil.getLayoutPrototypeByUuidAndCompanyId(
+						portfolio.getLayout().getLayoutPrototypeUuid(), themeDisplay.getCompanyId()).getName(
+						themeDisplay.getLocale()));
+		portfolioJSONArray.put(portfolioJSON);
+	}
+
 	public static void addToPortfolioFeedbackJSONArray(JSONArray portfolioFeedbackJSONArray, Portfolio portfolio,
 			ThemeDisplay themeDisplay, PortletConfig portletConfig) throws PortalException, SystemException {
 		JSONObject portfolioFeedbackJSON = JSONFactoryUtil.createJSONObject();

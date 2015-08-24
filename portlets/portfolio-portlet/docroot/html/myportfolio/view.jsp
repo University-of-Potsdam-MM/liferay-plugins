@@ -3,6 +3,13 @@
 <%
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
 	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId());
+	
+	Group scopeGroup = GroupLocalServiceUtil.getGroup(scopeGroupId);
+	
+	boolean personalSite = scopeGroup.isUser();
+	boolean publicPage = layout.isPublicLayout();
+	boolean privatePersonalPage = personalSite &&  !publicPage;
+	if (personalSite) {
 %>
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page"/>
@@ -11,6 +18,7 @@
 
 <portlet:resourceURL var="getUserPortfoliosURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserPortfolios" />
+	<portlet:param name="privatePersonalPage" value="<%= String.valueOf(privatePersonalPage) %>" />
 </portlet:resourceURL>
 <portlet:resourceURL var="deletePortfolioURL">
 	<portlet:param name="<%=Constants.CMD%>" value="deletePortfolio" />
@@ -39,224 +47,228 @@
 	<div id="myPortfolioTable"></div>
 <% } %>
 
-<%
-	JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
- 	for (Portfolio portfolio : portfolios){
- 		String div = "iconMenuDiv_" + portfolio.getPlid();
- 		String menu = "iconMenu_" + portfolio.getPlid();
- 		String onClickMethod = renderResponse.getNamespace() + "deletePortfolio(" + portfolio.getPlid() + ");";
- 		String url = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
-		%>
-
-		<div id="<%=div%>" hidden=true>
-			<liferay-ui:icon-menu extended="false" id="<%=menu%>">
-				<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>" url="javascript:void(0);"/>
-				<liferay-ui:icon image="configuration" url="<%=url%>" message="edit"></liferay-ui:icon>
-			</liferay-ui:icon-menu>
-		</div>
-
-		<%
-			div = "helpIconDiv_" + portfolio.getPlid();
-		%>
-		
-		<div id="<%=div%>" hidden=true>
-			<liferay-ui:icon-help message="<%=LanguageUtil.get(pageContext,\"portfolio-locked-message\")%>"/>
-		</div>
-
-		<%
-			if (portfolio.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL){
-				div = "globalPublishmentDeleteDiv_" + portfolio.getPlid();
-				onClickMethod = renderResponse.getNamespace() + "deleteGlobalPublishment(" + portfolio.getPlid() + ");";
-			%>
-		
-				<div id="<%=div%>" hidden=true>
-					<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>" url="javascript:void(0);"/>
-				</div>
-
-			<%
-			}
-			JspHelper.addToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
-			for (PortfolioFeedback portfolioFeedback : portfolio.getPortfolioFeedbacks()){
-				div = "portfolioPublishmentDeleteDiv_" + portfolio.getPlid() + "_" + portfolioFeedback.getUserId();
-				onClickMethod = renderResponse.getNamespace() + "deletePublishment(" + portfolio.getPlid() + "," + portfolioFeedback.getUserId() + ");";
-				%>
-				
-				<div id="<%=div%>" hidden=true>
-					<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>" url="javascript:void(0);"/>
-				</div>
-				
-				<%
-					div = "portfolioFeedbackDeleteDiv_" + portfolio.getPlid() + "_" + portfolioFeedback.getUserId();
-					onClickMethod = renderResponse.getNamespace() + "deletePortfolioFeedbackRequest(" + portfolio.getPlid() + "," + portfolioFeedback.getUserId() + ");";
-				%>
-				
-				<div id="<%=div%>" hidden=true>
-					<liferay-ui:icon image="delete" onClick="<%=onClickMethod%>" url="javascript:void(0);"/>
-				</div>
-				
-				<%
-			}
- 	}
- 	String portfoliosJSON = portfolioJSONArray.toString();
-%>
+<div id="iconMenuDiv" hidden=true>
+	<liferay-ui:icon-menu extended="false" id="iconMenu">
+		<liferay-ui:icon image="delete" url="javascript:void(0);" id="deleteIcon"/>
+		<liferay-ui:icon image="configuration" url="javascript:void(0);" message="edit" id="configurationIcon"></liferay-ui:icon>
+	</liferay-ui:icon-menu>
+</div>
+<div id="helpIconDiv" hidden=true>
+	<liferay-ui:icon id="helpIcon" image="help" message="<%=LanguageUtil.get(pageContext,\"portfolio-locked-message\")%>"/>
+</div>
+<div id="deleteIconDiv" hidden=true>
+	<liferay-ui:icon id="deleteIcon" image="delete" url="javascript:void(0);"/>
+</div>
 
 <aui:script>
 var iconMenuIdlist = [];
 var myPortfolioDataTable;
 var myPortfolioData;
 var currentPlid;
+
+
+AUI().use('aui-base', function(A){
+A.io.request('<%=getUserPortfoliosURL.toString()%>', {
+    dataType: 'text/html',
+    method: 'post',
+    on: {
+        success: function() {
+        	createTable(this.get('responseData'));
+        }
+    }
+});});
+
+
+function createTable(tableData) {
 AUI().use(
     'aui-datatable',
     'datatable-sort',
     'datatable-paginator',
     'liferay-menu',
     function(A) {    	
+    	var nameEditor = new A.TextAreaCellEditor();
+    	nameEditor.on('keydown', function(e) {
+    	    if (event.which == 13 || event.keyCode == 13) {
+    	        e.preventDefault();
+    	        nameEditor.fire('save', {
+    	            newVal: nameEditor.getValue(),
+    	            prevVal: nameEditor.get('value')
+    	        });
+    	    }
+    	});
+    	nameEditor.on('save', function(e) {
+    	    var newTitle = e.newVal.trim();
+    	    if (newTitle.length !== 0) {
+    	        A.io.request('<%=renamePortfolioURL.toString()%>', {
+    	            dataType: 'text/html',
+    	            method: 'post',
+    	            zindex: 1,
+    	            data: { <portlet:namespace/>portfolioPlid: currentPlid, <portlet:namespace/>newTitle: newTitle
+    	            },
+    	            on: {
+    	                success: function() {
+    	                    updateTableData(A);
+    	                }
+    	            }
+    	        });
+    	    }
+    	    updateTableData(A);
+    	});
+
+    	var privateTableColumns = [{
+    	    editor: nameEditor,
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
+    	    key: 'title',
+    	    nodeFormatter: function(o) {
+    	        var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + '">'
+    	        o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+    	        o.td.setAttribute('onclick', 'currentPlid=' + o.data.plid + ';');
+    	        o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" href="' + o.data.url + '">' + o.data.title + '</a>');
+    	        var row = o.td.ancestor();
+    	        for (var i in o.data.portfolioFeedbacks) {
+    	            var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
+    	            var publishmentDeleteIconCell;
+    	            var feedbackCell;
+    	            if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')) {
+    	                feedbackCell = '<td class="feedback-unrequested"><a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
+    	                    '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
+    	                    '</a></td><td></td>';
+    	                var publishmentDeleteIconDiv = A.one("#deleteIconDiv").cloneNode(true);
+    	                publishmentDeleteIconDiv.one('#<portlet:namespace />deleteIcon').setAttribute('onClick','<portlet:namespace />deletePublishment(' + o.data.plid  + "," + o.data.portfolioFeedbacks[i].userId + ');');
+    	                publishmentDeleteIconCell = '<td>' + publishmentDeleteIconDiv.get("innerHTML") + '</td>';
+    	            } else {
+    	                publishmentDeleteIconCell = '<td></td>';
+    	                if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_REQUESTED%>')) {
+    	                    feedbackCell = '<td class="feedback-requested">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>';
+    	                } else {
+    	                    feedbackCell = '<td class="feedback-delivered">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
+    	                }
+    	                var feedbackDeleteIconDiv = A.one("#deleteIconDiv").cloneNode(true);
+    	                feedbackDeleteIconDiv.one('#<portlet:namespace />deleteIcon').setAttribute('onClick','<portlet:namespace />deletePortfolioFeedbackRequest(' + o.data.plid  + "," + o.data.portfolioFeedbacks[i].userId + ');');
+    	                feedbackCell += ' <span>(' + o.data.portfolioFeedbacks[i].modifiedDate + ')</span>' +
+    	                    '</td><td>' + feedbackDeleteIconDiv.get('innerHTML') + '</td>'
+    	            }
+    	            row.insert(trStartTag + userNameCell + publishmentDeleteIconCell + feedbackCell + '</tr>', 'after');
+    	        }
+
+    	        return false;
+    	    }
+    	}, {
+    	    label: ' ',
+    	    key: 'titleOptions',
+    	    nodeFormatter: function(o) {
+    	        o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+    	        if (o.data.inFeedbackProcess) {
+    	            o.cell.setHTML(A.one('#helpIconDiv').get('innerHTML'));
+    	        } else {
+    	            var iconMenuDiv = A.one('#iconMenuDiv').cloneNode(true);
+    	            var iconMenu = iconMenuDiv.one('#<portlet:namespace />iconMenu');
+    	            var iconMenuId = '<portlet:namespace />iconMenu_' + o.data.plid;
+    	            iconMenuDiv.one('#<portlet:namespace />deleteIcon').setAttribute('onClick','<portlet:namespace />deletePortfolio(' + o.data.plid + ');');
+    	            iconMenuDiv.one('#<portlet:namespace />configurationIcon').setAttribute('href',o.data.url);
+    	            iconMenu.setAttribute('id',iconMenuId);
+    	            if (!(iconMenuId in iconMenuIdlist)) {
+    	                iconMenuIdlist.push(iconMenuId);
+    	            }
+    	            o.cell.setHTML(iconMenuDiv.get("innerHTML"));
+    	            Liferay.Menu.register(iconMenuId);
+    	        }
+
+    	        return false;
+    	    },
+    	    sortable: true,
+    	    sortFn: function(a, b, desc) {
+    	        var compare = a.get('title').localeCompare(b.get('title'));
+    	        return desc ? compare : -compare
+    	    }
+    	}, {
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%>',
+    	    key: 'publishment',
+    	    editable: true,
+    	    nodeFormatter: function(o) {
+    	        if (o.data.isGlobal) {
+    	            o.cell.setHTML('<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>');
+    	        } else {
+    	            o.cell.setHTML(
+    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openPublishPortfolioPopup(' + o.data.plid + ');">' +
+    	                '<%= LanguageUtil.get(pageContext, "portfolio-setup-publishment")%>' +
+    	                '</a>');
+    	        }
+    	        return false;
+    	    }
+    	}, {
+    	    label: ' ',
+    	    key: 'publishmentOptions',
+    	    nodeFormatter: function(o) {
+    	        if (o.data.isGlobal) {
+    	            var globalPublishmentDeleteDiv = A.one("#deleteIconDiv").cloneNode(true);
+    	            globalPublishmentDeleteDiv.one('#<portlet:namespace />deleteIcon').setAttribute('onClick','<portlet:namespace />deleteGlobalPublishment(' + o.data.plid  + ');');
+    	            o.cell.setHTML(globalPublishmentDeleteDiv.get('innerHTML'));
+    	        }
+    	    }
+    	}, {
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%>',
+    	    key: 'feedback',
+    	    nodeFormatter: function(o) {
+    	        if (o.data.isGlobal) {
+    	            o.cell.setHTML(
+    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
+    	                '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
+    	                '</a>');
+    	        }
+    	        return false;
+    	    }
+    	}, {
+    	    label: ' ',
+    	    key: 'feedbackOptions'
+    	}, {
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-changes-column")%>',
+    	    key: 'changes',
+    	    nodeFormatter: function(o) {
+    	        o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
+    	        o.cell.setHTML(o.data.lastChanges);
+    	        return false;
+    	    },
+    	    sortable: true,
+    	    sortFn: function(a, b, desc) {
+    	        var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
+    	        return desc ? compare : -compare
+    	    }
+    	}, ]
+    	
+    	var publicTableColumns = [{
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
+    	    key: 'title',
+    	    formatter: function(o) {
+    	    	return '<a href="' + o.data.url + '">' + o.data.title + '</a><br/>' + o.data.templateName;
+    	    },
+    	    allowHTML: true,
+    	    sortable: true,
+    	    sortFn: function(a, b, desc) {
+    	        var compare = a.get('title').localeCompare(b.get('title'));
+    	        return desc ? compare : -compare
+    	    }
+    	},  {
+    	    label: '<%= LanguageUtil.get(pageContext, "portfolio-changes-column")%>',
+    	    key: 'changes',
+    	    formatter: function(o) {
+    	        return o.data.lastChanges;
+    	    },
+    	    sortable: true,
+    	    sortFn: function(a, b, desc) {
+    	        var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
+    	        return desc ? compare : -compare
+    	    }
+    	}, ]
     	
         if (A.one("#myPortfolioTable") == null)
             return;
-        var data = JSON.parse('<%=portfoliosJSON%>');
-        var nameEditor = new A.TextAreaCellEditor();
-        nameEditor.on('keydown', function(e) {
-            if (event.which == 13 || event.keyCode == 13) {
-                e.preventDefault();
-                nameEditor.fire('save', {
-                    newVal: nameEditor.getValue(),
-                    prevVal: nameEditor.get('value')
-                });
-            }
-        });
-        nameEditor.on('save', function(e) {
-            var newTitle = e.newVal.trim();
-            if (newTitle.length !== 0) {
-                A.io.request('<%=renamePortfolioURL.toString()%>', {
-                    dataType: 'text/html',
-                    method: 'post',
-                    zindex: 1,
-                    data: { <portlet:namespace/>portfolioPlid: currentPlid, <portlet:namespace/>newTitle: newTitle
-                    },
-                    on: {
-                        success: function() {
-                            updateTableData(A);
-                        }
-                    }
-                });
-            }
-            updateTableData(A);
-        });
+        
+        var data = JSON.parse(tableData);
+        
 
         myPortfolioDataTable = new A.DataTable({
-            columns: [{
-                editor: nameEditor,
-                label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
-                key: 'title',
-                nodeFormatter: function(o) {
-                    var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + '">'
-                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
-                    o.td.setAttribute('onclick', 'currentPlid=' + o.data.plid + ';');
-                    o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" href="' + o.data.url + '">' + o.data.title + '</a>');
-                    var row = o.td.ancestor();
-                    for (var i in o.data.portfolioFeedbacks) {
-                        var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
-                        var publishmentDeleteIconCell;
-                        var feedbackCell;
-                        if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_UNREQUESTED%>')) {
-                            feedbackCell = '<td class="feedback-unrequested"><a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />requestFeedbackFromUser(' + o.data.plid + "," + o.data.portfolioFeedbacks[i].userId + ');">' +
-                                '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
-                                '</a></td><td></td>';
-                            var publishmentDeleteIcon = A.one("#portfolioPublishmentDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
-                            publishmentDeleteIconCell = '<td>' + publishmentDeleteIcon.get("innerHTML") + '</td>';
-                        } else {
-                            publishmentDeleteIconCell = '<td></td>';
-                            if (o.data.portfolioFeedbacks[i].feedbackStatus === parseInt('<%=PortfolioStatics.FEEDBACK_REQUESTED%>')) {
-                                feedbackCell = '<td class="feedback-requested">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-requested")%>';
-                            } else {
-                                feedbackCell = '<td class="feedback-delivered">' + '<%=LanguageUtil.get(pageContext, "portfolio-feedback-received")%>';
-                            }
-                            var feedbackDeleteIcon = A.one("#portfolioFeedbackDeleteDiv_" + o.data.plid + "_" + o.data.portfolioFeedbacks[i].userId);
-                            feedbackCell += ' <span>(' + o.data.portfolioFeedbacks[i].modifiedDate + ')</span>' +
-                                '</td><td>' + feedbackDeleteIcon.get('innerHTML') + '</td>'
-                        }
-                        row.insert(trStartTag + userNameCell + publishmentDeleteIconCell + feedbackCell + '</tr>', 'after');
-                    }
-
-                    return false;
-                }
-            }, {
-                label: ' ',
-                key: 'titleOptions',
-                nodeFormatter: function(o) {
-                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
-                    if (o.data.inFeedbackProcess) {
-                        o.cell.setHTML(A.one('#helpIconDiv_' + o.data.plid).get('innerHTML'));
-                    } else {
-                        var iconMenuDiv = A.one("#iconMenuDiv_" + o.data.plid);
-                        var iconMenuId = '<portlet:namespace />iconMenu_' + o.data.plid;
-                        if (!(iconMenuId in iconMenuIdlist)) {
-                            iconMenuIdlist.push(iconMenuId);
-                        }
-                        o.cell.setHTML(iconMenuDiv.get("innerHTML"));
-                        Liferay.Menu.register(iconMenuId);
-                    }
-
-                    return false;
-                },
-                sortable: true,
-                sortFn: function(a, b, desc) {
-                    var compare = a.get('title').localeCompare(b.get('title'));
-                    return desc ? compare : -compare
-                }
-            }, {
-                label: '<%= LanguageUtil.get(pageContext, "portfolio-publishment-column")%>',
-                key: 'publishment',
-                editable: true,
-                nodeFormatter: function(o) {
-                    if (o.data.isGlobal) {
-                        o.cell.setHTML('<%=LanguageUtil.get(pageContext, "portfolio-portalwide-publishment") %>');
-                    } else {
-                        o.cell.setHTML(
-                            '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openPublishPortfolioPopup(' + o.data.plid + ');">' +
-                            '<%= LanguageUtil.get(pageContext, "portfolio-setup-publishment")%>' +
-                            '</a>');
-                    }
-                    return false;
-                }
-            }, {
-                label: ' ',
-                key: 'publishmentOptions',
-                nodeFormatter: function(o) {
-                    if (o.data.isGlobal) {
-                        o.cell.setHTML(A.one("#globalPublishmentDeleteDiv_" + o.data.plid).get('innerHTML'));
-                    }
-                }
-            }, {
-                label: '<%= LanguageUtil.get(pageContext, "portfolio-feedback-column")%>',
-                key: 'feedback',
-                nodeFormatter: function(o) {
-                    if (o.data.isGlobal) {
-                        o.cell.setHTML(
-                            '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
-                            '<%= LanguageUtil.get(pageContext, "portfolio-request-feedback")%>' +
-                            '</a>');
-                    }
-                    return false;
-                }
-            }, {
-                label: ' ',
-                key: 'feedbackOptions'
-            }, {
-                label: '<%= LanguageUtil.get(pageContext, "portfolio-changes-column")%>',
-                key: 'changes',
-                nodeFormatter: function(o) {
-                    o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
-                    o.cell.setHTML(o.data.lastChanges);
-                    return false;
-                },
-                sortable: true,
-                sortFn: function(a, b, desc) {
-                    var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
-                    return desc ? compare : -compare
-                }
-            }, ],
+            columns: ('<%= privatePersonalPage %>' ==  'true') ? privateTableColumns : publicTableColumns,
             data: data,
             editEvent: 'dblclick',
             rowsPerPage: 5,
@@ -266,7 +278,8 @@ AUI().use(
         });
         
         myPortfolioDataTable.render("#myPortfolioTable");
-       
+        myPortfolioDataTable.sort('changes');
+       	
         myPortfolioData = myPortfolioDataTable.data;
         A.one('#<portlet:namespace />filterInput').on('keyup', function(e) {
             var filteredData = myPortfolioData.filter({
@@ -280,7 +293,7 @@ AUI().use(
 
 
     }
-);
+);}
 
 Liferay.provide(window, '<portlet:namespace />deletePortfolio',
     function(plid) {
@@ -368,6 +381,7 @@ Liferay.provide(window, '<portlet:namespace />deletePortfolioFeedbackRequest',
     });
 
 function updateTableData(A) {
+	var currentPage = myPortfolioDataTable.get('paginatorModel').get('page');
     A.io.request('<%=getUserPortfoliosURL.toString()%>', {
         dataType: 'text/html',
         method: 'post',
@@ -376,13 +390,15 @@ function updateTableData(A) {
                 result = this.get('responseData');
                 myPortfolioData = JSON.parse(result);
                 myPortfolioDataTable.set('data', myPortfolioData);
+                myPortfolioDataTable.get('paginatorModel').set('page',currentPage);
             }
         }
     });
 }
 
 function refreshPortlet() {
-	location.reload();
+	var A = new AUI();
+	updateTableData(A);
 }
 
 Liferay.provide(window, '<portlet:namespace />openPublishPortfolioPopup',
@@ -426,7 +442,7 @@ function openPopUp(renderURL, title) {
         dialog: {
             after: {
                 destroy: function(event) {
-                    document.location.href = '<%=redirect%>';
+                	refreshPortlet();
                 }
             },
             centered: true,
@@ -491,3 +507,8 @@ AUI().use('aui-base',
     });
     
 </aui:script>
+
+<% } else { %>
+	<liferay-ui:message key="portfolio-portlet-use-only-on-personal-sites"/>
+<% } %>
+

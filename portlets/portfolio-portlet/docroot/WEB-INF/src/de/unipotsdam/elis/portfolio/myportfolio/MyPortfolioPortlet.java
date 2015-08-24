@@ -228,13 +228,21 @@ public class MyPortfolioPortlet extends MVCPortlet {
 	private void getUserPortfolios(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortalException, SystemException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		boolean privatePersonalPage = ParamUtil.getBoolean(resourceRequest, "privatePersonalPage");
 		if (themeDisplay.getSiteGroup().isUser()) {
 			List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay
 					.getSiteGroup().getClassPK());
 			JSONArray portfolioJSONArray = JSONFactoryUtil.createJSONArray();
-			for (Portfolio portfolio : portfolios) {
-				if (portfolio.userHasViewPermission(themeDisplay.getUserId()))
+			if (privatePersonalPage) {
+				for (Portfolio portfolio : portfolios) {
 					JspHelper.addToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+				}
+			} else {
+				for (Portfolio portfolio : portfolios) {
+					if (portfolio.userHasViewPermission(themeDisplay.getUserId()))
+						JspHelper.publicAddToPortfolioJSONArray(portfolioJSONArray, portfolio, themeDisplay);
+				}
+
 			}
 			PrintWriter out = resourceResponse.getWriter();
 			out.println(portfolioJSONArray.toString());

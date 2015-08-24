@@ -85,7 +85,8 @@ public interface Portfolio extends PortfolioModel, PersistedModel {
 		long userId) throws com.liferay.portal.kernel.exception.SystemException;
 
 	public boolean userHasViewPermission(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public void setGlobal()
 		throws com.liferay.portal.kernel.exception.PortalException,

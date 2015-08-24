@@ -128,8 +128,10 @@ public class PortfolioImpl extends PortfolioBaseImpl {
 		return PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 	}
 
-	public boolean userHasViewPermission(long userId) throws SystemException {
+	public boolean userHasViewPermission(long userId) throws SystemException, PortalException {
 		if (this.getPublishmentType() == PortfolioStatics.PUBLISHMENT_GLOBAL)
+			return true;
+		if (getLayout().getUserId() == userId)
 			return true;
 		PortfolioFeedback pf = PortfolioFeedbackLocalServiceUtil.fetchPortfolioFeedback(getPlid(), userId);
 		return pf != null;

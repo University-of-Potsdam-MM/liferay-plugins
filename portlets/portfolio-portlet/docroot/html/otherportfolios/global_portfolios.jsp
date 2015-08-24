@@ -85,6 +85,7 @@ AUI().use(
         });
 
         globalPortfoliosDataTable.render("#globalPortfoliosTable");
+        globalPortfoliosDataTable.sort('title');
 
         globalPortfoliosData = globalPortfoliosDataTable.data;
         A.one('#<portlet:namespace />otherPortfoliosFilterInput').on('keyup', function(e) {
