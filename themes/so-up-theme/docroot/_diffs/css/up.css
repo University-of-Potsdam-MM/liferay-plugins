@@ -281,7 +281,7 @@ html.aui
 								/*border:none;*/
 							}
 						}
-						li.dockbar-user-notifications a:after
+						li.dockbar-user-notifications a.user-notification-link:after
 						{
 						    display: block;
 						    content: "";

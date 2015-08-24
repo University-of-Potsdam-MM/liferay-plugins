@@ -19,13 +19,32 @@
 				display: none;
 			}	
 			
+			.wrapper-portlet-area
+			{
+				margin-top:10px;
+			}
+			
 			header#banner
 			{
 				min-height: 60px;
 				
 				#up_logo
 				{
-					margin-top: 20px;				
+					margin-top: 10px;	
+					margin-left:5px;			
+				
+					#up_logo_image {
+						padding: 0 10px 0 0;
+						
+						a {
+							img 
+							{
+								width:60px;
+								height:60px;
+				
+							}
+						}
+					}
 				}
 				
 				
@@ -57,7 +76,7 @@
 										li
 										{
 											width: 21%;
-											min-width:45px;
+											min-width:32px;
 											height: 46px;
 											padding:0;
 											background-color:transparent;
@@ -82,14 +101,47 @@
     											  height: 31px;
 												}
 											}
+											
+											ul.dropdown-menu 
+											{
+												li 
+												{
+													height:auto;
+   													line-height:2.3em;
+   													width:auto;
+												}
+											}	
 										}/* end li */		
 										
 										li.dockbar-user-notifications 
 										{
    											height: 46px;
+   											
+   											ul.dropdown-menu
+   											{
+   												left: -234px;
+   												max-width: 291px;	
+   												
+   												li
+   												{
+   													width:auto;
+   													background-color: #d0dae3;
+    												line-height: inherit;
+   													 padding: .26667em .66667em;
+   												
+   													span.nav-item-label 
+   													{
+   														display:inline;
+   													} 
+   												
+   												}
+   												
+   												
+   											}
 										}
 										
-										li.dockbar-user-notifications a:after
+									
+										li.dockbar-user-notifications a.user-notification-link:after
 										{
 						   					 display: block;
 						   					 content: "";
@@ -116,6 +168,19 @@
 												{
 													display:none;
 												}
+												
+											ul.dropdown-menu 
+   											{
+   											
+   												li
+   												{
+   													width:100%;
+   													span.nav-item-label
+   													{
+   														display:inline;
+   													}
+												}
+   											}	
 										}
 										
 										li.lang a:after
@@ -131,6 +196,9 @@
 						    				top: 15px;		
 											}
 										
+										
+										
+										
 										li.user-avatar 
 										{
 											 overflow: hidden;
@@ -140,6 +208,33 @@
     												display: none;
 								    			}
 										}
+										
+										li.user-avatar.open 
+										{
+											 overflow: visible;
+											 
+											 span.nav-item-label 
+											 {
+    												display: none;
+								    			}
+											
+											
+											ul.dropdown-menu
+											{
+												li
+												{
+													height:25px;
+													width:100%;
+													
+													span.nav-item-label 
+											 		{
+    													display: inline;
+								    				}
+												}
+											}
+										}
+										
+										
 																		
 									} /* end ul */
 								} /* end container */
@@ -211,7 +306,7 @@
 						{
 							background: $upLightBlue;
 							color: $upDarkBlue;
-							width: 24%;
+							width: 23%;
 							min-width:32px;
 							display: inline-block;
 							height: 32px;
@@ -307,4 +402,30 @@
 			}	
 		}		
 	}
+}
+
+@include respond-to(phone){
+	
+	html.aui {
+			body {
+				#up_logo {	
+					#up_logo_image {
+									a {
+										img 
+										{
+											width:40px;
+											height:40px;
+				
+										}
+									 }
+						
+	
+					}
+					#up_logo_title {
+					    padding-top: 10px;
+						
+					}
+							}
+					}	
+				}
 }

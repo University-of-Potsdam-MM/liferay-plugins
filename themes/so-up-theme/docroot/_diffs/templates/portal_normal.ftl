@@ -61,8 +61,7 @@
 				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
 					<span class="icon portfolio"></span></a>
 			</div>
-			<!-- test maren -->
-			
+						
 			</#if>
 		</div>
 		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
