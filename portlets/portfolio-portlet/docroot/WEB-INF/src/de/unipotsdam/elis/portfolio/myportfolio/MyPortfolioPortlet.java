@@ -47,6 +47,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutFriendlyURL;
 import com.liferay.portal.model.LayoutPrototype;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
@@ -454,6 +455,10 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
 					.getGroupId(), false, 0, parentPageName, parentPageName, "", LayoutConstants.TYPE_PORTLET, false,
 					"/" + parentPageName, serviceContext);
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) portfolioParentPage.getLayoutType();
+			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column"); 
+			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), (String) actionRequest.getAttribute(WebKeys.PORTLET_ID));
+			LayoutLocalServiceUtil.updateLayout(portfolioParentPage);
 		}
 
 		Layout newPortfolio = null;
