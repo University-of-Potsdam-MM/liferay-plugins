@@ -12,12 +12,14 @@ import javax.portlet.ActionResponse;
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.compat.portal.kernel.util.ListUtil;
+import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
@@ -59,6 +61,7 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portal.kernel.dao.orm.CustomSQLParam;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -455,10 +458,18 @@ public class MyPortfolioPortlet extends MVCPortlet {
 			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
 					.getGroupId(), false, 0, parentPageName, parentPageName, "", LayoutConstants.TYPE_PORTLET, false,
 					"/" + parentPageName, serviceContext);
+			String portletId = (String) actionRequest.getAttribute(WebKeys.PORTLET_ID);
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) portfolioParentPage.getLayoutType();
-			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column"); 
-			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), (String) actionRequest.getAttribute(WebKeys.PORTLET_ID));
+			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
+			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
 			LayoutLocalServiceUtil.updateLayout(portfolioParentPage);
+			
+			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(portfolioParentPage,
+					portletId);
+			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
+			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
+			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
+			portletSetup.store();
 		}
 
 		Layout newPortfolio = null;

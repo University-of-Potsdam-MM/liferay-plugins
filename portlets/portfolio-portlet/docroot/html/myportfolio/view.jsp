@@ -10,9 +10,36 @@
 	boolean publicPage = layout.isPublicLayout();
 	boolean privatePersonalPage = personalSite &&  !publicPage;
 	if (personalSite) {
+		if (!publicPage) {
 %>
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="portfolio-create-page"/>
+
+<aui:script>
+AUI().use('aui-base',
+	    'liferay-portlet-url',
+	    function(A) {
+	        A.one('#<portlet:namespace />createPageButton').on('click', function(event) {
+	            var renderURL = Liferay.PortletURL.createRenderURL();
+	            renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
+	            renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+	            renderURL.setParameter("mvcPath", "/html/myportfolio/popup/create_portfolio.jsp");
+	            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	            renderURL.setParameter("currentRedirect", "<%=redirect%>");
+	            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "portfolio-add-portfolio")%>");
+	        });
+	    });
+</aui:script>
+
+<% } else if (scopeGroup.getClassPK() == user.getUserId()){%>
+
+	<span id="portletTitle"><%= LanguageUtil.get(pageContext, "portfolio-my-portfolio-pages") %></span>
+	
+<% } else {%>
+
+	<span id="portletTitle"><%= LanguageUtil.format(pageContext, "portfolio-from-user-for-me-published-pages", new Object[] {UserLocalServiceUtil.getUser(scopeGroup.getClassPK()).getFullName()}) %></span>
+	
+<% } %>
 
 <aui:input id="filterInput" class="filterInput" name="" placeholder="portfolio-filter-placeholder"/>
 
@@ -423,19 +450,7 @@ Liferay.provide(window, '<portlet:namespace />openRequestFeedbackPopup',
     }
 );
 
-AUI().use('aui-base',
-    'liferay-portlet-url',
-    function(A) {
-        A.one('#<portlet:namespace />createPageButton').on('click', function(event) {
-            var renderURL = Liferay.PortletURL.createRenderURL();
-            renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-            renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
-            renderURL.setParameter("mvcPath", "/html/myportfolio/popup/create_portfolio.jsp");
-            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-            renderURL.setParameter("currentRedirect", "<%=redirect%>");
-            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "portfolio-add-portfolio")%>");
-        });
-    });
+
 
 function openPopUp(renderURL, title) {
     Liferay.Util.openWindow({
