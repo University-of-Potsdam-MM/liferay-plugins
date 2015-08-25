@@ -27,9 +27,9 @@
 	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-other-portfolios")%></div>
 <% } else { %>
 	<div id="otherPortfoliosTable"></div>  
+	<a id="visibilityHref" href="javascript:void(0);" onClick="<portlet:namespace />changeShownPortfolioPages()"><%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%></a>
 <% } %>
 
-<a id="visibilityHref" href="javascript:void(0);" onClick="<portlet:namespace />changeShownPortfolioPages()"><%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%></a>
 
 
 <% 
@@ -225,10 +225,12 @@ Liferay.provide(window, '<portlet:namespace />changeShownPortfolioPages',
         showHidden = !showHidden;
         updateOtherPortfoliosData(A);
         var visibilityHref = A.one('#visibilityHref');
+        if (visibilityHref){
         if (showHidden)
             visibilityHref.set('text', '<%= LanguageUtil.get(pageContext, "portfolio-show-unhidden-portfolio-pages")%>');
         else
             visibilityHref.set('text', '<%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%>');
+        }
     });
 
 function filterPortfoliosByVisibleState(tableData) {

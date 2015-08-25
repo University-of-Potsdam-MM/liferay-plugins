@@ -2,7 +2,6 @@
 
 <%
 	String redirect = PortalUtil.getCurrentURL(renderRequest);
-	List<Portfolio> portfolios = PortfolioLocalServiceUtil.getPortfoliosByLayoutUserId(themeDisplay.getUserId());
 	
 	Group scopeGroup = GroupLocalServiceUtil.getGroup(scopeGroupId);
 	
@@ -66,24 +65,19 @@ AUI().use('aui-base',
 	<portlet:param name="<%=Constants.CMD%>" value="renamePortfolio" />
 </portlet:resourceURL>
 
-<div id="dtable"></div>
+<div style="display: none;" id="<%=themeDisplay.getPortletDisplay().getNamespace()%>noPortfolioPages" class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
+<div style="display: none;" id="myPortfolioTable"></div>
 
-<% if (portfolios.size() == 0){ %>
-	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
-<% } else { %>
-	<div id="myPortfolioTable"></div>
-<% } %>
-
-<div id="iconMenuDiv" hidden=true>
+<div id="iconMenuDiv" style="display: none;">
 	<liferay-ui:icon-menu extended="false" id="iconMenu">
 		<liferay-ui:icon image="delete" url="javascript:void(0);" id="deleteIcon"/>
 		<liferay-ui:icon image="configuration" url="javascript:void(0);" message="edit" id="configurationIcon"></liferay-ui:icon>
 	</liferay-ui:icon-menu>
 </div>
-<div id="helpIconDiv" hidden=true>
+<div id="helpIconDiv" style="display: none;">
 	<liferay-ui:icon id="helpIcon" image="help" message="<%=LanguageUtil.get(pageContext,\"portfolio-locked-message\")%>"/>
 </div>
-<div id="deleteIconDiv" hidden=true>
+<div id="deleteIconDiv" style="display: none;">
 	<liferay-ui:icon id="deleteIcon" image="delete" url="javascript:void(0);"/>
 </div>
 
@@ -92,9 +86,14 @@ var iconMenuIdlist = [];
 var myPortfolioDataTable;
 var myPortfolioData;
 var currentPlid;
+var tableCreated = false;
 
+var noPortfolioPagesMessageDiv;
+var tableDiv;
 
 AUI().use('aui-base', function(A){
+noPortfolioPagesMessageDiv = A.one("#<portlet:namespace />noPortfolioPages");
+tableDiv = A.one("#myPortfolioTable");
 A.io.request('<%=getUserPortfoliosURL.toString()%>', {
     dataType: 'text/html',
     method: 'post',
@@ -113,6 +112,7 @@ AUI().use(
     'datatable-paginator',
     'liferay-menu',
     function(A) {    	
+    	console.log('hallooo');
     	var nameEditor = new A.TextAreaCellEditor();
     	nameEditor.on('keydown', function(e) {
     	    if (event.which == 13 || event.keyCode == 13) {
@@ -286,13 +286,21 @@ AUI().use(
     	        var compare = parseInt(a.get("lastChangesInMilliseconds")) - parseInt(b.get("lastChangesInMilliseconds"));
     	        return desc ? compare : -compare
     	    }
-    	}, ]
-    	
-        if (A.one("#myPortfolioTable") == null)
-            return;
+    	}, ];
+		console.log('12wetr23');
         
         var data = JSON.parse(tableData);
-        
+
+		console.log('1223');
+        console.log(noPortfolioPagesMessageDiv.getStyle('display'));
+       	if (data.length > 0){
+       		tableDiv.setStyle('display','block');
+       		noPortfolioPagesMessageDiv.setStyle('display','none');
+       	}
+       	else {
+       		noPortfolioPagesMessageDiv.setStyle('display','block');
+       		tableDiv.setStyle('display','none');
+       	}
 
         myPortfolioDataTable = new A.DataTable({
             columns: ('<%= privatePersonalPage %>' ==  'true') ? privateTableColumns : publicTableColumns,
@@ -318,7 +326,7 @@ AUI().use(
             myPortfolioDataTable.set('data', filteredData);
         });
 
-
+        tableCreated = true;
     }
 );}
 
@@ -416,6 +424,21 @@ function updateTableData(A) {
             success: function() {
                 result = this.get('responseData');
                 myPortfolioData = JSON.parse(result);
+            	if (myPortfolioData.length > 0){
+            		if (tableCreated){
+                   		tableDiv.setStyle('display','block');
+                   		noPortfolioPagesMessageDiv.setStyle('display','none');
+                    }
+            		else {
+                		createTable(result);
+            		}
+            	}
+            	else {
+            		console.log('efsdc');
+               		tableDiv.setStyle('display','none');
+               		noPortfolioPagesMessageDiv.setStyle('display','block');
+            	}
+
                 myPortfolioDataTable.set('data', myPortfolioData);
                 myPortfolioDataTable.get('paginatorModel').set('page',currentPage);
             }

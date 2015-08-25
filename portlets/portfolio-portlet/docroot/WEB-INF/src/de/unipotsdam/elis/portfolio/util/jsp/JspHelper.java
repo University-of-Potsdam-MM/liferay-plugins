@@ -44,20 +44,6 @@ import de.unipotsdam.elis.portfolio.notifications.MyPortfolioNotificationHandler
  *
  */
 public class JspHelper {
-	//
-	/**
-	 * Creates the URL referring to the given portfolio. Expects that the
-	 * portfolio pages are placed in the public area of the user.
-	 * 
-	 * @param themeDisplay
-	 * @param portfolio
-	 * @param user
-	 * @return portfolio URL
-	 */
-	public static String getPortfolioURL(ThemeDisplay themeDisplay, Layout portfolio, User user) {
-		return themeDisplay.getURLPortal() + themeDisplay.getPathFriendlyURLPublic() + "/" + user.getScreenName()
-				+ portfolio.getFriendlyURL(themeDisplay.getLocale());
-	}
 
 	public static String getFeedbackStatusString(PortletConfig portletConfig, Locale locale, int feedbackStatus) {
 		if (feedbackStatus == PortfolioStatics.FEEDBACK_REQUESTED)
@@ -89,17 +75,15 @@ public class JspHelper {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String portletId = PortalUtil.getPortletId(request);
-		String portfolioURL;
+		String portfolioURL = PortalUtil.getLayoutFullURL(portfolio.getLayout(), themeDisplay);
 		String notificationMessage;
 		int socialActivityType;
 		if (activityType == PortfolioStatics.MESSAGE_TYPE_PORTFOLIO_PUBLISHED) {
-			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"portfolio-portfolio-published-message", new Object[] { themeDisplay.getUser().getFullName(),
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED;
 		} else if (activityType == PortfolioStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
-			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser());
 			notificationMessage = LanguageUtil.format(
 					portletConfig,
 					themeDisplay.getLocale(),
@@ -108,7 +92,6 @@ public class JspHelper {
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED;
 		} else {
-			portfolioURL = JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), receiver);
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"portfolio-portfolio-feedback-delivered", new Object[] { themeDisplay.getUser().getFullName(),
 							portfolio.getLayout().getTitle(themeDisplay.getLocale()) });
@@ -145,8 +128,7 @@ public class JspHelper {
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject portfolioJSON = JSONFactoryUtil.createJSONObject();
 		portfolioJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
-		portfolioJSON
-				.put("url", JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser()));
+		portfolioJSON.put("url", PortalUtil.getLayoutFullURL(portfolio.getLayout(), themeDisplay));
 		portfolioJSON.put("plid", portfolio.getPlid());
 		portfolioJSON.put(
 				"lastChanges",
@@ -183,8 +165,7 @@ public class JspHelper {
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject portfolioJSON = JSONFactoryUtil.createJSONObject();
 		portfolioJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
-		portfolioJSON
-				.put("url", JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(), themeDisplay.getUser()));
+		portfolioJSON.put("url", PortalUtil.getLayoutFullURL(portfolio.getLayout(), themeDisplay));
 		portfolioJSON.put(
 				"lastChanges",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
@@ -207,10 +188,7 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
 				.getFullName());
 		portfolioFeedbackJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
-		portfolioFeedbackJSON.put(
-				"url",
-				JspHelper.getPortfolioURL(themeDisplay, portfolio.getLayout(),
-						UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
+		portfolioFeedbackJSON.put("url", PortalUtil.getLayoutFullURL(portfolio.getLayout(), themeDisplay));
 		PortfolioFeedback portfolioFeedback = portfolio.getPortfolioFeedback(themeDisplay.getUserId());
 		portfolioFeedbackJSON.put("feedbackStatus", portfolioFeedback.getFeedbackStatus());
 		portfolioFeedbackJSON
@@ -234,10 +212,7 @@ public class JspHelper {
 		portfolioFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(portfolio.getLayout().getUserId())
 				.getFullName());
 		portfolioFeedbackJSON.put("title", HtmlUtil.escape(portfolio.getLayout().getTitle(themeDisplay.getLocale())));
-		portfolioFeedbackJSON.put(
-				"url",
-				getPortfolioURL(themeDisplay, portfolio.getLayout(),
-						UserLocalServiceUtil.getUser(portfolio.getLayout().getUserId())));
+		portfolioFeedbackJSON.put("url", PortalUtil.getLayoutFullURL(portfolio.getLayout(), themeDisplay));
 		portfolioFeedbackJSON.put(
 				"modifiedDate",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
