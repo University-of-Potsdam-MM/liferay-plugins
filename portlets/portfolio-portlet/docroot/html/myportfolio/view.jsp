@@ -39,7 +39,6 @@ AUI().use('aui-base',
 	<span id="portletTitle"><%= LanguageUtil.format(pageContext, "portfolio-from-user-for-me-published-pages", new Object[] {UserLocalServiceUtil.getUser(scopeGroup.getClassPK()).getFullName()}) %></span>
 	
 <% } %>
-
 <aui:input id="filterInput" class="filterInput" name="" placeholder="portfolio-filter-placeholder"/>
 
 <portlet:resourceURL var="getUserPortfoliosURL">
@@ -112,7 +111,6 @@ AUI().use(
     'datatable-paginator',
     'liferay-menu',
     function(A) {    	
-    	console.log('hallooo');
     	var nameEditor = new A.TextAreaCellEditor();
     	nameEditor.on('keydown', function(e) {
     	    if (event.which == 13 || event.keyCode == 13) {
@@ -287,12 +285,9 @@ AUI().use(
     	        return desc ? compare : -compare
     	    }
     	}, ];
-		console.log('12wetr23');
         
         var data = JSON.parse(tableData);
 
-		console.log('1223');
-        console.log(noPortfolioPagesMessageDiv.getStyle('display'));
        	if (data.length > 0){
        		tableDiv.setStyle('display','block');
        		noPortfolioPagesMessageDiv.setStyle('display','none');
@@ -434,7 +429,6 @@ function updateTableData(A) {
             		}
             	}
             	else {
-            		console.log('efsdc');
                		tableDiv.setStyle('display','none');
                		noPortfolioPagesMessageDiv.setStyle('display','block');
             	}
