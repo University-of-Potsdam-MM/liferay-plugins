@@ -643,6 +643,7 @@ html.aui
 			display: block;
 			overflow: hidden;
 			padding: 0px;
+			position:relative;
 			
 			li
 			{
@@ -690,10 +691,16 @@ html.aui
 			span.close
 			{
 				position: absolute;
-				right: 0px;
-				bottom: 0px;
-				padding-left: 20px;
-				@include up-grafic;
+   				 bottom: 0;
+   				 right: 100px;
+    			text-transform: uppercase;
+    			font-size: 1em;
+    			color: #666;
+    			opacity: 1;
+    			text-shadow: none;
+   				 margin-right: 15px;
+    			margin-bottom: 10px;
+    			cursor: pointer;
 				
 			}
 	
@@ -967,8 +974,13 @@ html.aui
 			
 			li
 			{
-				border-right: 2px solid $upGray;
 				margin-right: -12px;
+			}
+			
+			span.close
+			{
+				display:none !important;
+				visibility: hidden;
 			}
 			
 		}

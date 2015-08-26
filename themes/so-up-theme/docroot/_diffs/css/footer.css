@@ -1,5 +1,9 @@
 
-*, *:before, *:after {
+#up_global_footer_wrapper *, #up_global_footer_wrapper *:before, #up_global_footer_wrapper *:after {
+    box-sizing: border-box;
+}
+
+#up_oe_footer_wrapper *, #up_oe_footer_wrapper *:before, #up_oe_footer_wrapper *:after {
     box-sizing: border-box;
 }
 
