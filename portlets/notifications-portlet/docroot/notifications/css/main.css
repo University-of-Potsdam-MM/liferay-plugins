@@ -4,7 +4,7 @@
 /* ---------- Mixins ---------- */
 
 @mixin default-border-radius {
-	@include border-radius(4px);
+	@include border-radius(0px);
 }
 
 @mixin keyframes($name) {
@@ -53,7 +53,7 @@
 	.non-actionable .user-notification {
 		&, &.archived {
 			&:hover, &.hover {
-				background-color: #F3F3F3;
+				/*background-color: #F3F3F3;*/
 				cursor: pointer;
 
 				.mark-as-read {
@@ -237,12 +237,7 @@
 		width: 350px;
 	}
 
-	.actionable, .non-actionable {
-		background-color: #FFF;
-
-		@include default-border-radius;
-	}
-
+	
 	.non-actionable {
 		margin-bottom: 10px;
 	}
@@ -296,7 +291,7 @@
 	}
 
 	.non-actionable .user-notification {
-		background-color: #EDEDED;
+		
 		overflow: hidden;
 
 		&.archived {
