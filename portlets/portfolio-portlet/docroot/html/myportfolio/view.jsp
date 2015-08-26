@@ -148,7 +148,7 @@ AUI().use(
     	        var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + '">'
     	        o.td.setAttribute('rowspan', (o.data.portfolioFeedbacks.length + 1));
     	        o.td.setAttribute('onclick', 'currentPlid=' + o.data.plid + ';');
-    	        o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" href="' + o.data.url + '">' + o.data.title + '</a>');
+    	        o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" target="_blank" href="' + o.data.url + '">' + o.data.title + '</a>');
     	        var row = o.td.ancestor();
     	        for (var i in o.data.portfolioFeedbacks) {
     	            var userNameCell = '<td>' + o.data.portfolioFeedbacks[i].userName + ' <span>(' + o.data.portfolioFeedbacks[i].creationDate + ')</span>' + '</td>';
