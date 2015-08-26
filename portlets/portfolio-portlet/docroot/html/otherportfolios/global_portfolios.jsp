@@ -46,7 +46,7 @@ AUI().use(
                 label: '<%= LanguageUtil.get(pageContext, "portfolio-title-column")%>',
                 key: 'title',
                 formatter: function(o) {
-                    return '<a href=' + o.data.url + '>' + o.data.title + '</a>';
+                    return '<a target="_blank" href=' + o.data.url + '>' + o.data.title + '</a>';
                 },
                 allowHTML: true,
                 sortable: true,
