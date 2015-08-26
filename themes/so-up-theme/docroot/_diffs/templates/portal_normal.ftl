@@ -311,7 +311,7 @@
 				</div>
 				<div class="up-oe-footer-box-content">
 					<p class="bodytext">
-						Universität Potsdam<br />Am Neuen Palais 10<br />14469 Potsdam
+						Universit&auml;t Potsdam<br />Am Neuen Palais 10<br />14469 Potsdam
 					</p>
 					<p class="bodytext">
 						Tel.: 0331 977-0<br />Fax: 0331 97 21 63
@@ -352,30 +352,30 @@
 							<div class="up-oe-footer-map up-oe-footer-map-palais up-map cur">
 								<a href="http://www.openstreetmap.org/#map=17/52.4008/13.0151"
 									target="_blank"><img
-									src="/idp/files/up-campus-map-palais.jpg" alt="Campus Palais"></a>
+									src="${javascript_folder}/files/up-campus-map-palais.jpg" alt="Campus Palais"></a>
 								<a class="up-oe-footer-map-link"
 									href="http://www.openstreetmap.org/#map=17/52.4008/13.0151"
-									target="_blank"> Größere Karte anzeigen </a>
+									target="_blank"> Gr&ouml;&szlig;ere Karte anzeigen </a>
 							</div>
 
 							<div class="up-oe-footer-map up-oe-footer-map-golm up-map ">
 								<a href="http://www.openstreetmap.org/#map=17/52.40862/12.97618"
 									target="_blank"><img
-									src="/idp/files/up-campus-map-golm.jpg" alt="Campus Golm"></a>
+									src="${javascript_folder}/files/up-campus-map-golm.jpg" alt="Campus Golm"></a>
 								<a class="up-oe-footer-map-link"
 									href="http://www.openstreetmap.org/#map=17/52.40862/12.97618"
-									target="_blank"> Größere Karte anzeigen </a>
+									target="_blank"> Gr&ouml;&szlig;ere Karte anzeigen </a>
 							</div>
 
 							<div
 								class="up-oe-footer-map up-oe-footer-map-griebnitzsee up-map ">
 								<a href="http://www.openstreetmap.org/#map=17/52.39295/13.12888"
 									target="_blank"><img
-									src="/idp/files/up-campus-map-griebnitzsee.jpg"
+									src="${javascript_folder}/files/up-campus-map-griebnitzsee.jpg"
 									alt="Campus Griebnitzsee"></a> <a
 									class="up-oe-footer-map-link"
 									href="http://www.openstreetmap.org/#map=17/52.39295/13.12888"
-									target="_blank"> Größere Karte anzeigen </a>
+									target="_blank"> Gr&ouml;&szlig;ere Karte anzeigen </a>
 							</div>
 
 							<div class="up-clear"></div>
@@ -432,7 +432,7 @@
 							target="_blank">pearls - Potsdam Research Network</a><br /> <a
 							href="http://www.mittelgrosse-universitaeten.de/"
 							title="Homepage Netzwerk Mittelgroße Universitäten"
-							target="_blank">Netzwerk Mittelgroße Universit%auml;ten</a><br />
+							target="_blank">Netzwerk Mittelgro&szlig;e Universit&auml;ten</a><br />
 						<a href="http://www.blrk.de/"
 							title="Homepage Brandenburgische Landesrektorenkonferenz"
 							target="_blank">Brandenburgische Landesrektorenkonferenz</a></span>
@@ -511,31 +511,38 @@
 ${theme.include(body_bottom_include)}
 
 
-<!-- und test -->
 
-<script type="text/javascript"
-		src="/js/files/jquery.foundation.orbit-6d51523cd7444f425eb4e498e938bf94.min.js"></script>
+	<!-- required js-files for dependencies -->
 	<script type="text/javascript"
-		src="/js/files/jquery.validate-b36894a2cc15ccb5515ec7a168e9bd33.min.js"></script>
-	
+		src="${javascript_folder}/files/jquery.min.js"></script>
 	<script type="text/javascript"
-		src="/js/files/messages_de-5a79c9036918be6d530b44a001563f7d.min.js"></script>
+		src="${javascript_folder}/files/modernizr.custom-573fab3ff3dfd74500f7116dbdb911d2.min.js"></script>
 	<script type="text/javascript"
-		src="/js/files/additional-methods_de-240364298e78483fb61185923eed9a3c.min.js"></script>
-	<script type="text/javascript"
-		src="/js/files/app-6be339b929c045ff795012ff9b4b639e.min.js"></script>
-	<script type="text/javascript"
-		src="/js/files/up-83ead6ee5b861de54161bc2667f256ae.min.js"></script>
-	<script type="text/javascript"
-		src="/js/files/up.navigations-79615011a3a452d69f6632ddf8387b43.min.js"></script>
-	<script type="text/javascript"
-		src="/js/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script>
+		src="${javascript_folder}/files/jquery-ui-1.9.2.custom.min.js"></script>
 
+	<!-- additional js-files for footer -->	
 	<script type="text/javascript"
-		src="/js/files/shadowbox_de-eaa4e8ef27adc478e5d9221f2600b4b6.min.js"></script>
+		src="${javascript_folder}/files/jquery.foundation.orbit-6d51523cd7444f425eb4e498e938bf94.min.js"></script>
 	<script type="text/javascript"
-		src="/js/files/javascript_d0d7de8fd9-d0d7de8fd9ef737cf646b76476cd4a08.min.js"></script>
-
+		src="${javascript_folder}/files/jquery.validate-b36894a2cc15ccb5515ec7a168e9bd33.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/jquery.ui.datepicker.validation.de-56d423c39684e2860682e96254d68980.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/messages_de-5a79c9036918be6d530b44a001563f7d.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/additional-methods_de-240364298e78483fb61185923eed9a3c.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/app-6be339b929c045ff795012ff9b4b639e.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/up-83ead6ee5b861de54161bc2667f256ae.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/up.navigations-79615011a3a452d69f6632ddf8387b43.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/shadowbox_de-eaa4e8ef27adc478e5d9221f2600b4b6.min.js"></script>
+	<script type="text/javascript"
+		src="${javascript_folder}/files/javascript_d0d7de8fd9-d0d7de8fd9ef737cf646b76476cd4a08.min.js"></script>
 </body>
 
 ${theme.include(bottom_include)}
