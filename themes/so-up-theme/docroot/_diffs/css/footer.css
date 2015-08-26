@@ -685,7 +685,9 @@ html.no-js #up_nojs .up-nojs-hint {
 }
 
 #up_oe_footer_wrapper {
-	background-color: #ededed
+	background-color: #ededed;
+	padding-left:10%;
+	padding-right:10%;
 }
 
 #up_oe_footer_wrapper #up_oe_footer {
@@ -729,7 +731,9 @@ html.no-js #up_nojs .up-nojs-hint {
 }
 
 #up_global_footer_wrapper {
-	background-color: #004260
+	background-color: #004260;
+	padding-left:10%;
+	padding-right:10%;
 }
 
 #up_global_footer_wrapper #up_global_footer {
