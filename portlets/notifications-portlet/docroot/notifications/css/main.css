@@ -295,7 +295,7 @@
 		overflow: hidden;
 
 		&.archived {
-			background-color: #FFF;
+			/*background-color: #FFF;*/
 
 			.title {
 				font-weight: normal;

@@ -140,7 +140,7 @@ $defaultTextColor: #202020;
 		}
 
 		.user-notifications-count {
-			background-color: #FFF;
+			
 
 			@include border-radius(50%);
 
@@ -479,7 +479,7 @@ $defaultTextColor: #202020;
 						}
 
 						.non-actionable .user-notification:hover {
-							background-color: rgba(0, 0, 0, 0.2);
+							/*background-color: rgba(0, 0, 0, 0.2);*/
 						}
 					}
 				}

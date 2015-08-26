@@ -22,7 +22,7 @@ ul.dropdown-menu.pull-right.user-notifications-list {
 }
 
 .notifications-portlet .non-actionable .user-notification {
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 
 .notifications-portlet .user-notifications-list .user-notification {
@@ -32,7 +32,7 @@ ul.dropdown-menu.pull-right.user-notifications-list {
 }
 
 .dockbar-user-notifications .actionable, .dockbar-user-notifications .non-actionable {
-    background-color: #014260;
+    
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
     -ms-border-radius: 0px;
