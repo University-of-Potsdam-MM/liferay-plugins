@@ -91,7 +91,7 @@
 			<%
 			}
 			%>
-			<div style="clear:left;" />
+			<div style="clear:left;"></div>
 		</div>
 	</c:when>
 	<c:otherwise>
