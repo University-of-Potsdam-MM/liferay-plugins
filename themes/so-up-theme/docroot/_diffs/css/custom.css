@@ -73,7 +73,8 @@
   .aui .modal,
   .aui .popover,
   .yui3-skin-sam .yui3-calendar-content,
-  .aui .navbar .container {
+  .aui .navbar .container,
+  .aui .breadcrumb {
  
  -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
   -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;

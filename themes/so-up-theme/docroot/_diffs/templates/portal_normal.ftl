@@ -8,6 +8,7 @@
 	<title>${company_name} | ${the_title}</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	${theme.include(top_head_include)}
+	
 
 </head>
 <body class="dockbar-split so-strata-theme ${css_class}">
@@ -66,7 +67,7 @@
 		</div>
 		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
 			<#if is_signed_in>
-			<ul class="aui-list-truncate">
+			<!-- <ul class="aui-list-truncate">
 				<#list user_my_sites as user_site>
 					<#if user_site.hasPrivateLayouts()>
 						<li><a href="/group${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
@@ -74,12 +75,29 @@
 						<li><a href="/web${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
 					</#if>
 				</#list>
-			</ul>
+			</ul> -->
+			
+			
+				<ul class="aui-list-truncate">
+					<#list myPrivateLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "false">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>	
+						</#if>
+					</#list>
+				</ul>
+				
 			</#if>
 		</div>
 		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<#if is_signed_in>
-			<ul class="aui-list-truncate">
+			<!--<ul class="aui-list-truncate">
 				<#list myPrivateLayouts as myLayout>
 					<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
@@ -92,18 +110,51 @@
 						</#if>	
 					</#if>
 				</#list>
-			</ul>
+			</ul> -->
+			<ul class="aui-list-truncate">
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/">Media.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/moodle/">Moodle.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/boxup/">Box.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/padup/">Pad.UP</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/puls/">PULS</a></li>
+					<li><a href="${portal_url}/user/${user_sname}/mediaup/"><@liferay.language key="so-up-theme-library" /></a></li>	
+				</ul>
+			
 			</#if>
 		</div>
 		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			
+			<#if is_signed_in>
 			<ul class="aui-list-truncate">
-				<li></li>
+				
+					<#list myPublicLayouts as myLayout>
+						<#if !myLayout.getName(themeDisplay.getLocale()).equals("Portfolio") && myLayout.isRootLayout() && !myLayout.isHidden()>
+							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+						</#if>
+					</#list>
+				
 			</ul>
+			</#if>
 		</div>
 		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			<#if is_signed_in>
 			<ul class="aui-list-truncate">
-				<li></li>
+					
+					<#list myPrivateLayouts as myLayout>
+						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						</#if>
+						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+							<#if portfoliopage??>
+								<#if portfoliopage?string("true", "false") = "true">
+									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+								</#if>
+							</#if>
+						</#if>
+					</#list>
+				
 			</ul>
+		</#if>
 		</div>
 		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<ul class="aui-list-truncate">
@@ -121,6 +172,7 @@
             </div>
 	        <div id="up_logo_title">
 	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
+	            <span class="site-name-mobile">// ${site_name}</span>
 	        </div>
             <div id="up_logo_footer">
             </div>
@@ -232,19 +284,34 @@
 		<div id="heading">
 			<h1 class="site-title">
 				<a class="${logo_css_class}" href="${site_default_url}" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
-					<img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" />
+					<!-- <img alt="${logo_description}" height="${site_logo_height}" src="${site_logo}" width="${site_logo_width}" /> -->
 				</a>
 
-				<#if show_site_name>
-					<span class="site-name" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
+				<!-- <#if show_site_name> -->
+					<span class="site-name hideformobile" title="<@liferay.language_format arguments="${site_name}" key="go-to-x" />">
 						${site_name}
-					</span>
-				</#if>
+					</span> 
+				<!--</#if> -->
+					
+					
+			
+			
+				
 			</h1>
 
 			<h2 class="page-title">
 				<span>${the_title}</span>
 			</h2>
+			
+			<div id="subnav-mobile">
+			<#if has_navigation>
+			
+			<h3 class="clicker">Navigation</h3>
+				<#include "${full_templates_path}/navigation-mobile.ftl" />
+		
+			</#if>
+				</div>
+			
 		</div>
 	
 		<#if has_navigation>
@@ -543,6 +610,12 @@ ${theme.include(body_bottom_include)}
 		src="${javascript_folder}/files/shadowbox_de-eaa4e8ef27adc478e5d9221f2600b4b6.min.js"></script>
 	<script type="text/javascript"
 		src="${javascript_folder}/files/javascript_d0d7de8fd9-d0d7de8fd9ef737cf646b76476cd4a08.min.js"></script>
+	<script type="text/javascript" src="${javascript_folder}/custom.js"></script>
+	$(window).on('resize',clickdropdown);
+		
+
+	
+	
 </body>
 
 ${theme.include(bottom_include)}

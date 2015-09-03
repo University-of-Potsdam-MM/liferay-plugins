@@ -1,5 +1,5 @@
-<nav class="${nav_css_class}" id="navigation" role="navigation">
-	<ul aria-label="#language ("site-pages")" role="menubar" class="no-js">
+<nav class="${nav_css_class} click-nav" id="navigation" role="navigation">
+	<ul aria-label="#language ("site-pages")" role="menubar">
 		<#list nav_items as nav_item >
 			<#assign nav_item_attr_has_popup="">
 			<#assign nav_item_attr_selected="">
@@ -12,11 +12,6 @@
 	
 			<#if nav_item.hasChildren()>
 				<#assign nav_item_attr_has_popup="aria-haspopup='true'">
-				<#assign nav_item_css_class="has-children">
-			</#if>
-			
-			<#if nav_item.hasChildren() && nav_item.isSelected() >
-				<#assign nav_item_css_class="has-children selected">
 			</#if>
 			
 			<#-- Custom Logic to seperate portfolio sites in users private site -->
