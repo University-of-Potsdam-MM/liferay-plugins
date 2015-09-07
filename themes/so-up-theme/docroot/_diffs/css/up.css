@@ -395,6 +395,11 @@ html.aui
 				}
 				
 				
+				.hideformobile
+				{
+					display:block;
+				}
+				
 				
 				
 				
@@ -771,6 +776,11 @@ html.aui
 	body.smallhead
 	{
 		background: $upBgColor;
+		
+		.wrapper-portlet-area 
+		{
+			width:99%;
+		}
 		
 		#line
 		{
