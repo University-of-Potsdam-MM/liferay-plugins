@@ -80,15 +80,16 @@
 			
 				<ul class="aui-list-truncate">
 					<#list myPrivateLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
-							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
-						</#if>
+						<#assign portfoliopage = false />
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")>
+							<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+								<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+							</#if>
+						</#if>1
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "false">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
-							</#if>	
+							<#if portfoliopage?string("true", "false") = "false">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
 						</#if>
 					</#list>
 				</ul>
@@ -97,7 +98,7 @@
 		</div>
 		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			<#if is_signed_in>
-			<!--<ul class="aui-list-truncate">
+			<#--<ul class="aui-list-truncate">
 				<#list myPrivateLayouts as myLayout>
 					<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 						<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
@@ -140,18 +141,19 @@
 			<#if is_signed_in>
 			<ul class="aui-list-truncate">
 					
-					<#list myPrivateLayouts as myLayout>
+				<#list myPrivateLayouts as myLayout>
+					<#assign portfoliopage = false />
+					<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")>
 						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 						</#if>
-						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "true">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
-							</#if>
+					</#if>
+					<#if myLayout.isRootLayout() && !myLayout.isHidden()>
+						<#if portfoliopage?string("true", "false") = "true">
+							<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
 						</#if>
-					</#list>
+					</#if>
+				</#list>
 				
 			</ul>
 		</#if>
@@ -208,15 +210,16 @@
 				<@liferay.language key="so-up-theme-private-space" /><span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPrivateLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
-							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						<#assign portfoliopage = false />
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")>
+							<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+								<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+							</#if>
 						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "false">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
-							</#if>	
+							<#if portfoliopage?string("true", "false") = "false">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
+							</#if>
 						</#if>
 					</#list>
 				</ul>
@@ -246,14 +249,15 @@
 				<span class="icon arrow"></span>
 				<ul class="hidden">
 					<#list myPrivateLayouts as myLayout>
-						<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
-							<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+						<#assign portfoliopage = false />
+						<#if myLayout.getExpandoBridge().hasAttribute("Portfolio")>
+							<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
+								<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
+							</#if>
 						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
-							<#if portfoliopage??>
-								<#if portfoliopage?string("true", "false") = "true">
-									<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
-								</#if>
+							<#if portfoliopage?string("true", "false") = "true">
+								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
 							</#if>
 						</#if>
 					</#list>
@@ -347,23 +351,23 @@
 					<p class="bodytext">
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="https://www.facebook.com/unipotsdam"
-							title="Unsere Facebook-Fanpage im neuen Fenster öffnen"
+							title="Unsere Facebook-Fanpage im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-facebook">Facebook</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="http://www.youtube.com/user/PresseUniPotsdam"
-							title="Unseren YouTube-Kanal im neuen Fenster öffnen"
+							title="Unseren YouTube-Kanal im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-youtube">YouTube</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="http://www.xing.com/companies/universit%C3%84tpotsdam"
-							title="Unsere XING-Seite im neuen Fenster öffnen" target="_blank"
+							title="Unsere XING-Seite im neuen Fenster ï¿½ffnen" target="_blank"
 							class="up-sm-xing">XING</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="https://twitter.com/unipotsdam"
-							title="Unsere Twitter-Seite im neuen Fenster öffnen"
+							title="Unsere Twitter-Seite im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-twitter">Twitter</a><br /></span><span
 							style="font-family: inherit; line-height: 1.45em;"><a
-							href="http://www.researchgate.net/institution/UniversitäPotsdam"
-							title="Unsere Research Gate-Seite im neuen Fenster öffnen"
+							href="http://www.researchgate.net/institution/Universitï¿½Potsdam"
+							title="Unsere Research Gate-Seite im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-researchgate">Research Gate</a><br />
 						<br /></span>
 					</p>
@@ -386,7 +390,7 @@
 					<p class="bodytext">
 						<a href="http://www.zeik.uni-potsdam.de/etc/impressum.html">Impressum</a><br />
 						<a href="http://www.uni-potsdam.de/presse/ansprechpartner.html"
-							title="Referat für Presse- und Öffentlichkeitsarbeit"
+							title="Referat fï¿½r Presse- und ï¿½ffentlichkeitsarbeit"
 							target="_blank">Presse</a>
 					</p>
 				</div>
@@ -468,17 +472,17 @@
 					<p class="bodytext">
 						<span style="line-height: 20.296875px;"><a
 							href="http://www.hrk.de/themen/internationales/arbeitsfelder/nationaler-kodex-fuer-das-auslaenderstudium/"
-							title="Nationaler Kodex für das Ausländerstudium an deutschen Hochschulen"
+							title="Nationaler Kodex fï¿½r das Auslï¿½nderstudium an deutschen Hochschulen"
 							target="_blank">Code of Conduct</a><br />
 						<a
 							href="http://www.stifterverband.org/wissenschaft_und_hochschule/lehre/exzellenz_in_der_lehre/index.html"
 							title="Wettbewerb exzellente Lehre" target="_blank">Exzellenz
 								der Lehre</a><br />
 						<a href="http://www.hrk.de/audit/"
-							title="Audit „Internationalisierung der Hochschulen” (HRK)"
+							title="Audit ï¿½Internationalisierung der Hochschulenï¿½ (HRK)"
 							target="_blank">HRK-Audit</a><br />
 						<a href="http://www.uni-potsdam.de/zfq/index.html"
-							title="Zentrum für Qualitätsentwicklung in Lehre und Studium"
+							title="Zentrum fï¿½r Qualitï¿½tsentwicklung in Lehre und Studium"
 							target="_blank">Systemakkreditiert</a><br />
 						<a href="http://www.total-e-quality.de/"
 							title="Homepage Total E-Quality" target="_blank">Total
@@ -495,10 +499,10 @@
 					<p class="bodytext">
 						<span style="line-height: 20.296875px;"> <a
 							href="http://www.pearlsofscience.de/ueber-pearls.html"
-							title="Homepage pearls – Potsdam Research Network"
+							title="Homepage pearls ï¿½ Potsdam Research Network"
 							target="_blank">pearls - Potsdam Research Network</a><br /> <a
 							href="http://www.mittelgrosse-universitaeten.de/"
-							title="Homepage Netzwerk Mittelgroße Universitäten"
+							title="Homepage Netzwerk Mittelgroï¿½e Universitï¿½ten"
 							target="_blank">Netzwerk Mittelgro&szlig;e Universit&auml;ten</a><br />
 						<a href="http://www.blrk.de/"
 							title="Homepage Brandenburgische Landesrektorenkonferenz"
@@ -518,16 +522,16 @@
 							title="Fristen und Termine rund um das Studium" target="_blank">Fristen
 								&amp; Termine</a><br />
 						<a href="http://www.uni-potsdam.de/uni-a-z/index-a-z.html"
-							title="Schlagwörterübersicht von A-Z" target="_blank">Index
+							title="Schlagwï¿½rterï¿½bersicht von A-Z" target="_blank">Index
 								A-Z</a><br />
 						<a href="http://www.uni-potsdam.de/presse/"
-							title="Referat für Presse- und Öffentlichkeitsarbeit"
+							title="Referat fï¿½r Presse- und ï¿½ffentlichkeitsarbeit"
 							target="_blank">Presse</a><br />
 						<a href="http://www.uni-potsdam.de/verwaltung/dezernat3/stellen/"
-							title="Übersicht der offenen Stellenanzeigen" target="_blank">Stellenausschreibungen</a><br />
+							title="ï¿½bersicht der offenen Stellenanzeigen" target="_blank">Stellenausschreibungen</a><br />
 						<a
 							href="http://www.uni-potsdam.de/studium/konkret/vorlesungsverzeichnisse.html"
-							title="Übersicht der Vorlesungsverzeichnisse der Uni Potsdam"
+							title="ï¿½bersicht der Vorlesungsverzeichnisse der Uni Potsdam"
 							target="_blank">Vorlesungsverzeichnis</a></span><br />
 						<a href="http://www.VBB.de/FahrplanBerlinPotsdam"
 							title="Unifahrplan des VBB" target="_blank">Unifahrplan des
