@@ -29,7 +29,7 @@ String portfolioPlid = renderRequest.getParameter("portfolioPlid");
 	<div class="invited-users-wrapper">
 		<div class="user-invited">
 			<h2>
-				<liferay-ui:message key="manage-feedback-requests" />
+				<liferay-ui:message key="portfolio-manage-feedback-requests" />
 
 				<span>
 					<liferay-ui:message key="to-add,-click-members-on-the-left" />
