@@ -1,3 +1,4 @@
+
 .aui  #p_p_id_otherportfolios_WAR_portfolioportlet_ .nav-tabs {
 	  border-bottom: 1px solid #014260;
 	  font-weight: bold;
@@ -371,146 +372,180 @@ input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_
 			}
 		}
 	}
-
-	.user-search-wrapper {
-		background: #F0F5F7;
-		border: 1px solid #B0BAFF;
-		float: left;
-		padding: 12px;
-
-		.footnote {
-			color: #AAA;
-			font-size: 0.8em;
-		}
-	}
-
-	.invited-users-wrapper {
-		margin-left: 250px;
-	}
-
-	h2 {
-		font-size: 1em;
-		margin: 0 0 1em;
-	}
-
-	.list {
-		margin-bottom: 1em;
-	}
 	
-	.user-invited .list {
-		height: 250px;
-		overflow-y:auto;
-		overflow-x:auto;
-	}
+.aui .invite-members:hover, .aui .invite-members:focus {
+	background-image:none !important;
+}
 
-	.invite-user-search {
-		width: 203px;
-	}
+.user-search-wrapper  {
+		background: #ededed;
+    	border: none;
+    	float: left;
+    	padding: 0 12px 12px 12px; 
+}
+    
+.user-search-wrapper h2{
+	margin-top: 0;
+	font-size: 1.5em;
+}
 
-	.invited-users-wrapper {
-		h2 {
-			border-bottom: 1px solid #CCC;
-			color: #3E3639;
-			font-size: 1.1em;
+.user-search-wrapper .footnote  {
+	color: #AAA;
+	font-size: 0.8em;
+}
+	
+.user-search-wrapper .user.invited{
+	background-color:#d0dae3;
+	border-color:transparent;
+}		
+.user-search-wrapper .user.invited span{
+	text-shadow: none;
+}
+	
+
+
+.invited-users-wrapper {
+		margin-left: 270px; 
+}
+		
+			    
+.invited-users-wrapper  h2 span{
+	display: block;
+	line-height: 20px;
+	font-size:.6em !important;
+ }
+		
+.list {
+	margin-bottom: 1em;
+}
+	
+.user-invited .list {
+	min-height: 250px;
+	overflow-y:auto;
+	overflow-x:auto; }
+		
+.user-invited .list  .user.invited {
+	background-color:#fff;
+	border-color:#ededed;
+}
+	
+.invite-user-search {
+	width: 203px;
+}
+
+.invited-users-wrapper h2 {
+			border-bottom: none;
+			color: #014260;
+			font-size: 1.5em;
 			margin: 0;
-			padding-top: 0.5em;
+			padding-top: 0em;
 			position: relative;
-		}
+			    line-height: 1;
+    margin-bottom: 15px;
+}
 
-		.invite-actions {
-			background: #EEE;
-			border: 1px solid #CCC;
-			margin: 2.5em 0;
-			padding: 5px;
-			text-align: center;
+.invited-users-wrapper .invite-actions {
+	background: #fff;
+	border: none;
+	margin: 2.5em 0;
+	padding: 5px;
+	text-align: right;
 
-			h2 {
-				margin: 0 0 0.5em;
-				padding: 0;
-			}
+}
 
-			input {
-				margin-right: 12px;
-			}
-		}
-	}
+.invited-users-wrapper .invite-actions .btn{
+	   display: block;
+    text-align: right;
+    float: right;
+}
 
-	.user-invited h2 span {
-		color: #999;
-		font-size: 0.8em;
-		font-weight: normal;
-		margin-left: 2em;
-		position: absolute;
-		right: 5px;
-	}
+.invited-users-wrapper .invite-actions form .btn {
+	display: block;
+    float: right;
+    margin-right: 10px;
+}
 
-	.invited, .user {
-		background: transparent url(/so-up-theme/images/arrows/01_plus.png) no-repeat 0 50%;
-		border-bottom: 1px solid transparent;
-		border-top: 1px solid transparent;
-		cursor: pointer;
-		list-style-type: none;
-		padding: 2px 5px 2px 18px;
-		white-space: nowrap;
-	}
 
-	.email-invited .user, .user-invited .user {
-		background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 99% 50%;
-		border-bottom: 1px solid #CCC;
-		padding: 0.5em 1.5em 0.5em 0.5em;
-	}
+.user-invited h2 span {
+	color: #999;
+	font-size: 0.8em;
+	font-weight: normal;
+	margin-left: 0em;
+	position: relative;
+	display:block;
 
-	.email-invited .user {
-		background-color: #EEF;
-	}
+}
 
-	.user-invited {
-		.user {
-			span {
-				display: inline-block;
-				width: 50%;
-			}
+.user-invited .user span {
+    display: inline-block;
+    width: auto;
+    margin-right: 10px;
+}
 
-			.name {
-				color: #555;
-				font-weight: bold;
-			}
+.invited, .user {
+	background: transparent url(/so-up-theme/images/arrows/01_plus.png) no-repeat 0 50%;
+	border-bottom: 1px solid transparent;
+	border-top: 1px solid transparent;
+	cursor: pointer;
+	list-style-type: none;
+	padding: 2px 5px 2px 18px;
+	white-space: nowrap;
+}
 
-			.email {
-				color: #000;
-				font-size: 1em;
-				margin: 0;
-			}
-		}
-	}
+.email-invited .user, .user-invited .user {
+	background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 99% 50%;
+	border-bottom: 1px solid #CCC;
+	padding: 0.5em 1.5em 0.5em 0.5em;
+}
 
-	.email-invited .user .email {
-		color: #555;
-		font-size: 1em;
-		font-weight: bold;
-		margin: 0;
-	}
+.email-invited .user {
+	background-color: #EEF;
+}
 
-	.controls a {
-		padding-left: 10px;
-	}
+.user-invited .user  span {
+	display: inline-block;
+	width: 50%;
+}
 
-	.pending-member-request {
-		background: url(/so-up-theme/images/common/check.png) no-repeat 0 50%;
-	}
+.user-invited .name {
+	color: #555;
+	font-weight: bold;
+}
 
-	.invited {
-		background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 0 50%;
-		border-color: #AFA;
-	}
+.user-invited .email {
+	color: #999;
+	font-size: 1em;
+	margin: 0;
+}
 
-	.invite-to select {
-		margin-top: 1em;
-		min-width: 300px;
-	}
+.email-invited .user .email {
+	color: #555;
+	font-size: 1em;
+	font-weight: bold;
+	margin: 0;
+}
 
-	span.email {
-		color: #AAA;
-		font-size: 0.8em;
-		margin-left: 0.5em;
-	}
+.controls a {
+	padding-left: 10px;
+}
+
+.pending-member-request {
+	background: url(/so-up-theme/images/common/check.png) no-repeat 0 50%;
+}
+
+.invited {
+	background: #DFD url(/so-up-theme/images/arrows/01_minus.png) no-repeat 0 50%;
+	border-color: #AFA;
+}
+
+.invite-to select {
+	margin-top: 1em;
+	min-width: 300px;
+}
+
+span.email {
+	color: #AAA;
+	font-size: 0.8em;
+	margin-left: 0.5em;
+}
+	
