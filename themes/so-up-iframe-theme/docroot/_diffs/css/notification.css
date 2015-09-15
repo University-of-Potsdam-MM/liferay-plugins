@@ -1,0 +1,97 @@
+ul.dropdown-menu.pull-right.user-notifications-list {
+    background-color: #014260 !important;
+    border: none;
+    margin-top: 21px;
+}
+
+.dockbar-user-notifications .user-notifications-list .user-notification .body-container .title strong, 
+.notifications-portlet .user-notifications-list .user-notification .body-container .title strong {
+	color:#014260;
+}
+
+.dockbar-user-notifications .user-notifications-list .user-notification .body-container .title, 
+.notifications-portlet .user-notifications-list .user-notification .body-container .title {
+    font-weight: normal;
+}
+
+.dockbar-user-notifications .user-notifications-list .user-notification .sender .user-thumbnail, 
+.notifications-portlet .user-notifications-list .user-notification .sender .user-thumbnail {
+    -webkit-box-shadow: 0 0 0 2px #d0dae3;
+    -moz-box-shadow: 0 0 0 2px #d0dae3;
+    box-shadow: 0 0 0 2px #d0dae3;
+}
+
+.notifications-portlet .non-actionable .user-notification {
+    /*background-color: #fff;*/
+}
+
+.notifications-portlet .user-notifications-list .user-notification {
+    border-top: 2px solid #014260;
+    color: #000;
+    margin: 0 10px;
+}
+
+.dockbar-user-notifications .actionable, .dockbar-user-notifications .non-actionable {
+    
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    border: none;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li.dockbar-user-notifications:hover .user-notifications-header {
+	background-color:#014260;
+	
+}
+
+.aui .user-notifications-header a, .aui .user-notifications-header a:visited {
+    color: #fff;
+    text-decoration:underline;
+}
+
+.aui .user-notifications-header a:hover {
+    color: #d0dae3;
+}
+
+
+.dockbar-user-notifications .user-notifications-header {
+    border-bottom: 1px solid #598497;
+    min-height: 21px;
+    padding: 0 10px 0px 10px;
+    margin-bottom: 10px;
+    text-align:left;
+}
+
+.notifications-portlet .user-notifications-list .mark-all-as-read {
+	margin:0 0 0 0 ;
+}
+
+.notifications-portlet .user-notifications-list .user-notifications, .dockbar-user-notifications .non-actionable {
+
+
+    margin-bottom: 10px;
+}
+  
+.dockbar-user-notifications .user-notifications-list .message, .notifications-portlet .user-notifications-list .message {
+    margin: 10px 0;
+    color: #fff;
+  
+}
+
+.dockbar-user-notifications .user-notifications-list .user-notification, .notifications-portlet .user-notifications-list .user-notification {
+    line-height: 20px;
+    padding: 10px;
+    position: relative;
+    background-color: #fff;
+    border-bottom: 2px solid #014260 !important;
+}
+
+.aui .dockbar .nav li.dropdown.dockbar-user-notifications .dropdown-menu {
+    left: auto;
+    max-height: none;
+    padding: 10px;
+    right: 0;
+  
+}

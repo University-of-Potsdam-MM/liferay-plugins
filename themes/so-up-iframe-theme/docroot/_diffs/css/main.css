@@ -1,0 +1,35 @@
+@import url(base.css); 
+
+@import url(application.css);
+
+@import url(layout.css);
+
+
+
+@import url(dockbar.css);
+
+@import url(admin-panel.css);
+
+@import url(navigation.css);
+
+@import url(portlet.css);
+
+@import url(extras.css);
+
+@import url(custom.css);
+
+@import url(./up-dockbar.css);
+
+
+.container-fluid#wrapper div#content  {
+	width: 78%;
+  
+  margin-left: 22%;
+}
+
+.portlet-column {
+	width: 78%;
+  
+  margin-left: 22%;
+}
+
