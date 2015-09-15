@@ -1,0 +1,175 @@
+/**Liferay Activities**/
+#portlet_116 {
+	  font-family: "source sans pro", Arial, Helvetica, serif;
+}
+
+.taglib-social-activities .day-separator {
+	font-size:.5em;
+	color:#666;	
+ 	font-size: 1.3em;
+    font-weight: normal;
+    border-bottom:0px;
+}
+
+#portlet_116 .activity-title {
+	  font-size: .9em;
+}
+
+#portlet_116 .activity-title a, #portlet_116 .activity-body a {
+	font-weight:bold;
+}
+
+#portlet_116 .activity-body {
+	font-style:italic;
+	font-weight:300;
+}
+
+
+/***Social Office Activities ***/
+
+
+.so-portlet-activities .comment-entry{
+	padding: 5px;
+	padding-bottom:10px;
+	background-color:#fff;
+ 
+}
+
+.so-portlet-activities .comment-entry .comment-body {
+	background-color: #ededed;
+  padding: 5px;
+  margin-left: 60px;
+    min-height: 30px;
+      border: 1px solid #ededed;
+  border-radius: 5px;
+}
+
+.so-portlet-activities .comment-entry .comment-info {
+	  font-size: .8em;
+  text-indent: 30px;
+}
+
+.so-portlet-activities .comment-entry .comment-body:before { 
+		content: '';
+	
+	border-style: solid;
+	border-width: 12px 17px 12px 0;
+	  border-color: transparent #ededed;
+	display: block;
+	width: 0;
+	z-index: 1;
+	  margin-left: -22px;
+  position: absolute;
+  margin-top: 2px;
+
+	
+}
+
+.so-portlet-activities .comments-container .control-group {
+	  margin: 0 2px 0 0px;
+}
+
+.so-portlet-activities .comment-entry .comment-body span.message {
+	
+	font-family: georgia;
+  font-style: italic;
+	  line-height: 1.5;
+}
+.so-portlet-activities .comments-container .form  {
+	background: #fff;
+	border:0px;
+}
+
+.so-portlet-activities .comments-container .form .control-group input.field.comment-form {
+  width: 93%;
+  display: inline-block;
+  margin-left: 13px;
+  margin-top: 2px;
+}
+
+.activity-footer {
+	margin-left:2px;
+}
+
+.so-portlet-activities .activity-footer-toolbar {
+	background: #fff;
+	padding:5px;
+	
+}
+
+.so-portlet-activities .comments-list {
+	background-color:#ededed;
+}
+
+.so-portlet-activities .comments-container .user-portrait {
+	position:relative;
+}
+
+.so-portlet-activities a.group {
+	color:#014260;
+}
+
+.so-announcements-portlet .entry-footer-toolbar {
+	background: #D0DAE3;
+
+}
+
+.so-portlet-activities .activity-item {
+	margin-bottom:3em;
+}
+
+.so-portlet-activities .activity-item .control-group input {
+	border-color:#d0dae3;
+}
+
+.so-announcements-portlet .entry-body {
+  border: 1px solid #d0dae3;
+}
+  
+.so-announcements-portlet .entry-body   .entry-content-container {
+  	font-family: georgia, serif;
+  	font-style:italic;
+  	letter-spacing:1px;
+  	 padding: .0em .2em .9em .9em;
+  }
+  
+.so-announcements-portlet .entry-body   .title {
+ 	 padding: .4em 0em .0em .9em;
+ 	 color:#014260;
+  }
+  
+.so-announcements-portlet .read-entries-container .entries .header {
+	border:none;
+	font-family: georgia,serif;
+  font-weight: bold;
+  font-style: italic;
+  color: #014260;
+  text-align: right;
+  padding-right: 30px;
+}
+
+
+.portlet-activities .portlet .portlet-content {
+	padding:0;
+}
+
+.so-portlet-activities .activity-body, .so-portlet-activities .grouped-activity-body-container {
+	border-width:0 0 0 2px;
+	border-color:#d0dae3;
+	border-style:solid;
+}
+
+.so-portlet-activities .activity-body {
+  padding: 0 0 0 1em;
+}
+
+.so-portlet-activities .activity-user-name {
+ 
+  font-weight: bold;
+}
+
+.so-portlet-activities .activity-action {
+  
+  color: #999;
+  font-size: .9em;
+}
