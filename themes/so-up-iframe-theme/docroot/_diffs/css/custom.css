@@ -5,35 +5,13 @@
 
 @import url(./up.css);
 
-@import url(calendar.css);
-
 @import url(activities.css);
-
-@import url(wiki.css);
-
-@import url(documents.css);
-
-@import url(microblog.css);
-
-@import url(contacts.css);
-
-@import url(messages.css);
-
-@import url(tasks.css);
-
-@import  url(./blogs.css);
 
 /*@import  url(./login.css);*/
 
-
-
 @import url(./up_mobile.css);
 
-@import url(./editor-form.css);
-
 @import url(./search.css);
-
-@import url(./webcontent.css);
 
 @import url(./notification.css);
 
