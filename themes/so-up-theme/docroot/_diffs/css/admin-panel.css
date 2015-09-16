@@ -98,11 +98,9 @@ div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
 .aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a.toggle-controls-link  {
     background: #d0dae3;
 }
-/*smallhead*/
 
-.smallhead #_145_navAddControls {
-    margin-top: 10px;
-}
+
+
 
 #_145_navAddControlsNavbarCollapse i:hover {
     background-color: #014260;
@@ -110,4 +108,24 @@ div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
 
 #_145_navAddControls a:hover {
     color: #fff;
+}
+
+/* site panel open */
+
+html.aui body.smallhead.show-dockbar div#wrapper header#banner ul#_145_navAccountControls.nav {
+    margin-right: 75px !important;
+}
+
+html.aui body.smallhead.show-dockbar #admin {
+    margin-right: 75px;
+}
+
+html.aui body.smallhead.show-dockbar #main-menu {
+    margin-right: 71px;
+}
+
+
+html.aui body.smallhead.show-dockbar header#banner {
+	margin-right:8px;
+	
 }

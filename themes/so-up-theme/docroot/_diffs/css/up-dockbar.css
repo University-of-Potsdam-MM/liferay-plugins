@@ -196,11 +196,12 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
     margin-right:0 !important;
 }
 
+/*
 .smallhead .dockbar .navbar-inner .nav>li {
     width: 60px;
     height: 40px;
    
-}
+} */
 
 .smallhead .dockbar .navbar-inner .nav>li.dockbar-user-notifications {
     height: 43px;
@@ -233,4 +234,5 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
     color: #fff;
 }
+
 
