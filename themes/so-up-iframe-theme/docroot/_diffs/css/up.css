@@ -1,0 +1,1038 @@
+@import "up";
+
+html.aui 
+{
+	.dockbar-split 
+		.dockbar
+		{
+			transition: none !important;
+			
+			.nav-account-controls
+			{
+				transition: none !important;
+			}
+		}
+	
+	.dockbar-split.show-dockbar
+	{
+		border-left: 0px solid white;
+		margin-right: 63px;
+		transition: none;
+		overflow: visible;
+	
+		.dockbar .navbar-inner .nav-add-controls
+		{
+			position: absolute;
+			left: auto;
+			right: -60px;
+			margin-left: 0px;
+			margin-right: 0px;
+			transition: none;
+		}
+	}
+	
+	.lfr-admin-panel
+	{
+		left: auto;
+		right: 0;
+	}
+	
+	.dockbar-split.show-dockbar.lfr-has-add-content
+	{
+		margin-right: 350px;
+		padding-left: 0px;
+	}
+	
+	.dockbar-split.show-dockbar.lfr-has-edit-layout
+	{
+		margin-right: 460px;
+		padding-left: 0px;
+	}
+
+	body{
+		background: $upBgColor;
+		font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
+
+		position: relative;
+
+		transition-property: margin-right;
+		transition-duration: 0.2s;
+
+	
+		#up_section_indicator{
+			width: 33.3333%;
+			background-color: $upDarkBlue;
+			height: 20px;
+		}
+		
+		.windowdiv
+		{
+			z-index:3500;
+			position: absolute;
+			overflow: hidden;
+			display: block;
+		}
+		
+		.liferay_dockbar
+		{
+			z-index:10;
+	    	overflow: hidden;
+			position: absolute;
+			
+			
+			.dockbar .navbar-inner .nav-add-controls > li > a .nav-item-label
+			{
+				left: auto;
+				right: 100%;
+				margin-right: 0.5em;
+			}
+
+			#_145_navSiteNavigationNavbarCollapse {
+				display: none;
+			}
+			
+			#_145_navAccountControlsNavbarCollapse {
+				display: none;
+			}
+			
+			.dockbar .navbar-inner .nav-add-controls{
+				transition-property: margin-right;
+				margin-right: 0px;
+			}
+		}
+		
+		#wrapper
+		{
+			overflow: visible;
+			width: 100%;
+			min-height: 100%;
+			position: absolute;
+			background: $upBgColor;
+		}
+		
+		#up_logo {
+			width: 100%;
+			height: 60px;
+			top: 0px;
+			margin-left: 60px;
+			
+			#up_logo_indicator
+			{
+				height: 20px;
+			}
+			
+			#up_logo_image{
+				padding: 0px 15px;
+				float: left;
+						
+				img{
+					width: 80px;
+					height: 80px;
+				}
+			}
+			
+			#up_logo_title{
+				float: left;
+				padding-top: 20px;
+			
+				    font-size: 1.53333em;
+    line-height: 1.2em;
+    font-family: "Georgia","Times New Roman",Times,sans-serif;
+				
+				a{
+					color: $upDarkBlue;
+				}
+			}
+			
+			#up_logo_footer{
+				height: 40px;
+			}
+		}
+		#line
+		{
+			width: 100%;
+			height: 20px;
+			background: $upGray;
+			.blue
+			{
+				width: 50%;
+				background: $upDarkBlue;
+				height: 20px;
+			}
+			
+			.lineimg
+			{
+				display: none;
+			}
+		}		
+	
+		header#mobile-menu {
+			display: none;
+		}
+			
+		header#banner{
+		
+			background: $upGray;
+			padding: 0;
+			margin: 0;
+			overflow: visible;
+			min-height: 256px;
+			
+			#p_p_id_145_{
+			
+				.navbar-inner {
+				
+					border: 0px;
+					box-shadow: none;
+					border-radius: 0px;
+				
+					ul.navbar-nav.nav-account-controls
+					{
+						background: transparent;
+						/*position: absolute;
+						top: 0px;
+						right: 60px;
+						left: auto;
+						display: block;*/
+					
+						li
+						{
+							background: $upLightBlue;
+							color: $upDarkBlue;
+							/*height: 43px;*/
+
+							span
+							{
+								color: $upDarkBlue;
+							}				
+						
+							*:hover
+							{
+								/*background: none;*/
+							}
+							
+							a, a:hover
+							{
+								/*background: none;*/
+							}	
+							
+							ul li 
+							{
+								height: auto;
+							
+								span 
+								{
+									color: $upDarkBlue;
+									height: auto;
+								}	
+							}
+						}	
+						
+						
+						li.services
+						{
+							background: transparent;
+							color: $upDarkBlue;
+							span
+							{
+								color: $upDarkBlue;
+							}				
+							
+						}
+						
+						li.lang
+						{
+							background-color: $upWhite;
+							color: $upDarkBlue;
+							padding-left: 20px;			
+						
+							span
+							{
+								color: $upDarkBlue;
+							}				
+						}
+						
+						li.lang:hover {
+							background-color:#d0dae3;
+						}
+						li.lang a:after
+						{
+						    display: block;
+						    content: "";
+						    width: 14px;
+						    height: 14px;
+						    @include up-grafic;
+						    background-position: -17px -53px;
+						    left: 10px;
+						    position: absolute;
+						    top: 15px;		
+						}
+						
+						li.lang.open 
+						{	
+							background-color:#d0dae3;
+						}
+						
+						li.dockbar-user-notifications
+						{
+							/*width: 25px;
+							height: 43px;
+							padding-left: 16px;*/
+							
+							span
+							{
+								/*border:none;*/
+							}
+						}
+						li.dockbar-user-notifications a.user-notification-link:after
+						{
+						    display: block;
+						    content: "";
+						    width: 23px;
+						    height: 20px;
+						    @include ple-grafic;
+						    background-position: -1px -335px;
+						    left: 15px;
+						    position: absolute;
+						    top: 14px;		
+						}
+						
+						li.user-avatar
+						{
+						}
+						
+						li.sign-in 
+						{
+							background-color: $upDarkBlue;
+							
+							span
+							{
+								color: $upWhite;
+							}
+						}
+						
+						a.user-notification-link
+						{
+							/*height: auto;
+							padding: 3px;*/
+							
+							span.user-notifications-count
+							{
+								background-color: transparent;
+								top: 10px;
+								height: 20px;
+								line-height: 20px;
+								background-position: 4px 379px;
+								background-color: transparent;
+								font-weight:bold;
+								margin-left: 3px;
+							}
+							
+							span.user-notifications-count::after
+							{
+								/*top:4px;*/
+							}
+						}
+					}
+					
+					#_145_navAddControlsNavbarCollapse
+					{
+						position: absolute;
+						right: 0px;
+					
+						ul.nav-add-controls
+						{
+							display: block;
+							transistion: none !important;
+							transition-duration: 0s;
+							transition-property: none;
+							
+							width: 60px;
+							height: 300px;
+							overflow: hidden;
+						}
+					}	
+				}
+			}
+	
+			
+			.notifications-portlet
+			{
+				/*position: absolute;
+				top: 0px;
+				right: 120px;*/
+				
+				li
+				{
+					list-style:none;
+					
+					span
+					{
+						background: none;
+					}
+				}
+			}
+			
+			#logo {
+				display: block;
+				width: 160px;
+				height: 172px;
+				background-image: url(../images/up/up_logo_university_2.png);
+				margin-left:100px;
+			}
+			
+		
+			.portlet-dockbar{
+				/*padding-top: 20px;*/
+			}
+			
+			#heading{
+				padding-left: 50px;
+				
+				img
+				{
+					display: none;
+				}
+				
+				
+				.hideformobile
+				{
+					display:block;
+				}
+				
+				
+				
+				
+			}
+		}
+		
+		#content{
+			padding-left: 50px;
+			background: $upWhite;
+			
+			.row-fluid
+			{
+				.span8 {
+					width:63%;
+				}
+			}
+		}
+		
+		#sidebar {
+			width: 0px;
+			left: 0px;
+			top: 0px;
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 100%;
+			margin-right: 0px;
+			z-index: 1401;
+	
+			
+			div
+			{
+				overflow: hidden;
+			}
+			
+			.title {
+				background: $upMenuColor;
+				
+				-moz-transform: rotate(-90deg);
+				-ms-transform: rotate(-90deg);
+				-o-transform: rotate(-90deg);
+				-webkit-transform: rotate(-90deg);
+				transform:rotate(-90deg);
+				
+				width:140px;
+				height:25px;
+				padding:10px;
+				right:-100px;
+				top:190px;
+				position: absolute;
+				z-index:1401;
+				cursor: pointer;
+				font-weight: bold;
+				font-variant: small-caps;
+				
+				text-align:center;
+				
+				.arrow
+				{
+					@include up-grafic;
+					background-position: -14px -505px;
+					display: inline-block;
+					
+					-moz-transform: rotate(90deg);
+					-ms-transform: rotate(90deg);
+					-o-transform: rotate(90deg);
+					-webkit-transform: rotate(90deg);
+					transform:rotate(90deg);
+					margin-left: 10px;				
+				}
+				
+				.arrow.down {
+					-moz-transform: rotate(-90deg);
+					-ms-transform: rotate(-90deg);
+					-o-transform: rotate(-90deg);
+					-webkit-transform: rotate(-90deg);
+					transform:rotate(-90deg);
+				}	
+				
+				span 
+				{
+					display:inline;
+				}
+				
+			}
+			
+			.content {
+				position: absolute;
+				width: 100%;
+				background: $upMenuColor;
+				height: 100%;
+				
+				h2
+				{
+					font-variant: small-caps;
+				}
+										
+				.add, .search
+				{
+					width: 140px;
+					height: 28px;
+					padding-top: 3px;
+					padding-left: 5px;
+					background: $upBlueGray;
+					color: $upWhite;
+					display: inline-block;
+					vertical-align: middle;
+					cursor: pointer;
+					
+					.icon
+					{
+						@include ple-grafic;
+						width: 20px;
+						height: 20px;
+						background-position: -30px -313px;
+						display: inline-block;
+						margin-top: -2px;
+					}
+				}
+				
+				.search .icon
+				{
+						background-position: 0px -313px;
+				}
+				
+				.filter
+				{
+					border: 1px solid $upBlueGray;
+					padding: 2px;
+					height: 20px;
+					overflow: hidden;
+					margin: 10px 8px 0 0;
+					
+					.icon
+					{
+						@include ple-grafic;
+						background-position: 0px -97px;
+						float: left;
+					}
+					
+					input
+					{
+						border:0px;
+						background: $upMenuColor;
+						width: 260px;
+					}
+				}
+				
+				
+				
+				#sidebar-my-sites, #sidebar-all-sites{
+				
+					list-style: none;
+					margin: 0px;
+					padding: 0px;
+					overflow: scoll-x;
+					
+					li {
+						border-bottom: 1px solid $upBlueGray;
+						padding: 10px;
+						margin-bottom: 10px;
+						
+						a {
+							color: $upDarkGray;
+						}
+					}		
+				}
+				
+			}
+			
+			h2
+			{
+				font-size: 14pt;
+				color: $upDarkBlue;
+				overflow: hidden;
+				
+				.search
+				{
+					background-position: -8px -1878px;
+				}
+	
+				.add
+				{
+					background-position: -8px -1878px;
+				}
+	
+				.close
+				{
+					background-position: -11px -312px;
+				}
+	
+			}
+		}
+			
+		#sidebar.show-sidebar {
+			width: 300px;
+			
+			.content
+			{
+				padding: 5px;
+			}
+		}
+		
+		.arrow {
+			@include up-grafic;
+			background-position: -15px -126px;
+			display: inline-block;
+			float: none;
+		}
+		
+		.arrow.down {
+			background-position: -99px -126px;
+		}
+		
+		.icon {
+			@include up-grafic;
+			float: left;
+		}
+		
+		#admin
+		{
+			list-style: none;
+			position: absolute;
+			right: 60px;
+			top: 90px;
+			
+			color: $upDarkBlue;
+			
+			li
+			{
+				float: left;
+				padding: 5px;
+				padding-right: 20px;
+				background: $upLightBlue;
+				margin-left:2px;
+				
+				#toggleDockbar
+				{
+					height: auto;
+					width: auto;
+					overflow: hidden;
+					margin: 0;
+				}
+	
+				.workspace
+				{
+					@include ple-grafic;
+					background-position: 0px -354px;
+					display: inline-block;
+				}
+				
+				.admin
+				{
+					@include ple-grafic;
+					background-position: 0px -421px;
+					display: inline-block;
+				}
+			} 
+		}
+		
+		
+		#main-menu
+		{
+			
+			margin: 45px 60px 20px;
+			list-style: none;
+			display: block;
+			overflow: hidden;
+			padding: 0px;
+			position:relative;
+			
+			li
+			{
+				width: 25%;
+				margin-right:-10px;
+				float: left;
+				background: $upWhite;
+				color: $upDarkBlue;
+				padding: 10px 10px 10px 0px;
+				display: block;
+				Overflow: hidden;
+				text-align: center;
+				
+				.icon{
+					float: none;
+					display: inline-block;
+				}
+				
+				ul
+				{
+					height: 205px;
+					list-style: none;
+					overflow: hidden;
+					padding: 10px 0px;
+					margin: 10px;
+					
+					li
+					{
+						float: none;
+						border-bottom: 1px solid $upLightBlue;
+						width: 100%;
+						padding: 3px;
+						text-align: left;
+						
+						a
+						{
+							color: $upDarkBlue;
+						}
+			
+					}
+				}
+			}
+			
+		
+			span.close
+			{
+				position: absolute;
+   				 bottom: 0;
+   				 right: 100px;
+    			text-transform: uppercase;
+    			font-size: 1em;
+    			color: #666;
+    			opacity: 1;
+    			text-shadow: none;
+   				 margin-right: 15px;
+    			margin-bottom: 10px;
+    			cursor: pointer;
+				
+			}
+	
+		}
+		
+		#main-menu.disabled
+		{
+			background: $upGray;
+		
+			li
+			{
+				color: $upDarkGray;
+			}
+		}
+		
+		#main-menu.open
+		{
+			li:hover
+			{
+				background: $upDarkBlue;
+				color: $upWhite;
+				
+				.icon.arrow
+				{
+					background-position: -136px -126px;
+				}
+				
+				ul
+				{
+					background: $upDarkBlue;
+					
+					li
+					{
+						background: $upDarkBlue;
+						color: $upWhite;
+						
+						a
+						{
+							color: $upWhite;
+						}
+					}	
+				}
+			}
+		}
+	}
+	
+	body.smallhead
+	{
+		background: $upBgColor;
+		
+		.wrapper-portlet-area 
+		{
+			width:99%;
+		}
+		
+		#line
+		{
+			display: none;
+		}
+
+		.liferay_dockbar .dockbar .navbar-inner .nav-add-controls
+		{
+			top: 55px;
+		}
+		
+		div#wrapper header#banner
+		{
+		
+			ul#_145_navAccountControls.nav
+			{
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				height: 45px;		
+				z-index:1003;
+				margin: 0px;
+				border-bottom: 2px solid $upGray;
+				background: transparent;
+				margin-right:0;
+				
+		
+				li
+				{
+					width: 44px;
+					margin-right:2px;	
+					height: 46px;
+					padding:0;
+					
+					a
+					{
+						padding:0;
+						width: 45px;
+   						height: 45px;
+						color:$upLightBlue;	
+					}
+					
+					a.user-notification-link {
+						overflow:visible;
+					}
+					
+					ul li
+					{
+						height: auto;
+						border: none;
+						width: auto;
+						
+						a
+						{
+							width: auto;
+							padding: 2px;
+						}
+					}
+				}
+				
+				li.unipage, li.services, li.info-link-container
+				{
+					display: none;
+				}
+				
+				li.lang
+				{
+					width: 44px;
+					overflow: visible;
+					    padding: 0;
+					
+					span
+					{
+						color: $upWhite;
+					}
+					li
+					{
+						width: auto;
+						span
+						{
+							color: $upDarkBlue;
+						}
+					}
+				}
+				
+				li.user-avatar
+				{
+					width: 45px;
+					height: 46px;
+					border-right:0;
+					margin-right:0;
+					
+					
+					a
+					{
+						color: $upLightBlue;
+					}
+					
+					span.icon
+					{
+						position: absolute;
+						left: 23px;
+					}
+				}
+			}	
+			#_145_navAddControls
+			{
+			    margin-top: 65px;
+			    position: fixed;
+			    right:0px;
+			    display: none;
+	   		}
+   		}
+		
+
+		
+		#sidebar .title
+		{
+			-moz-transform: rotate(0deg);
+			-ms-transform: rotate(0deg);
+			-o-transform: rotate(0deg);
+			-webkit-transform: rotate(0deg);
+			transform:rotate(0deg);
+			position: fixed;
+			top: 0px;
+			left: 0px;	
+			width: 120px;
+			height: 25px;
+			z-index: 1001;
+			margin: 0px;
+			border-bottom: 2px solid $upGray;
+			
+			padding-top: 10px;
+			
+			.arrow
+			{
+				-moz-transform: rotate(0deg);
+				-ms-transform: rotate(0deg);
+				-o-transform: rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				transform:rotate(0deg);			
+			}
+	
+			.arrow.down
+			{
+				-moz-transform: rotate(180deg);
+				-ms-transform: rotate(180deg);
+				-o-transform: rotate(180deg);
+				-webkit-transform: rotate(180deg);
+				transform:rotate(180deg);			
+			}
+	
+		}
+		
+		#sidebar.show-sidebar .title
+		{
+			left: 310px;
+		}
+		
+		#banner #up-general
+		{
+			
+		}
+		
+		#admin
+		{
+			position: fixed;
+			top:0px;
+			    right: 139px;
+		
+			z-index:1002;
+			height: 45px;
+			margin: 0px;
+			border-bottom: 2px solid $upGray;
+			overflow: hidden;
+		
+			
+			li
+			{
+				width: 44px;
+				height: 46px;
+				overflow: hidden;
+				color: $upLightBlue;
+				
+				padding: 0px;
+				
+				a
+				{
+					color: $upLightBlue;
+				}
+				
+				#toggleDockbar, #adminbox
+				{
+					width: 44px;
+					overflow: hidden;
+					
+					.icon
+					{
+						margin: 10px;
+					}
+				}
+				
+				
+			}
+		}
+		
+		#main-menu
+		{
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			z-index:1001;
+			margin: 0px;
+		    min-height: 45px;
+
+			border-bottom: 20px solid $upGray;
+		    border-left: 140px solid $upGray;
+		    border-right: 215px solid $upGray;
+
+			
+			
+			li
+			{
+				margin-right: -12px;
+			}
+			
+			span.close
+			{
+				display:none !important;
+				visibility: hidden;
+			}
+			
+		}
+	}
+	
+	body.smallhead.show-dockbar
+	{
+		div#wrapper header#banner
+		{
+	
+			ul#_145_navAddControls.nav
+			{
+			    display: block;
+	   		}
+		}	
+	}
+}
+
+#heading #subnav-mobile
+				{
+					display:none;
+					
+					
+				}

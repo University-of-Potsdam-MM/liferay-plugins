@@ -1,0 +1,236 @@
+div#p_p_id_145_ {
+    z-index: 7000;
+}
+
+
+.aui .dockbar-split .dockbar {
+    height: 0;
+}
+
+
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li {
+    background-color: #D0DAE3;
+    color: #003f60;
+    
+    position: relative;
+    text-align: center;
+    margin-right: 2px;
+}
+
+html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li.lang:hover {
+    background-color: #d0dae3;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li>a {
+    color: #014260;
+    line-height: 30px;
+
+    text-transform: uppercase;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li:focus {
+    outline: none;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li>a:focus, .aui .dockbar-split .dockbar .navbar-inner .nav>li>a:hover {
+    color: #014260;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav li.dropdown.open {
+	background-color:#d0dae3;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav li.dropdown.open>.dropdown-toggle {
+    background-color: #d0dae3 !important;
+    color: #014260;
+}
+
+.aui .dockbar .dropdown-menu {
+    border: none;
+    position: absolute;
+    z-index: 100;
+    min-width: 13.33333em;
+    margin-top: 2px !important;
+    padding: 5px 10px 10px 10px !important;
+    background-color: #cfdae3;
+    left:0
+}
+
+
+
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li ul li:hover {
+	background-color: #e2e9ee;
+}
+
+
+.aui .dockbar .dropdown-menu li {
+-webkit-transition: background-color 0.2s ease-out;
+    transition: background-color 0.2s ease-out;
+    padding: 0.26667em 0.66667em;
+    border-bottom: 1px solid #e2e9ee;
+    font-size: 0.9em;
+    text-align: left;
+    cursor:pointer;
+}
+.aui .dockbar .dropdown-menu li a {
+    color: #003f60;
+    padding:0;
+}
+
+.aui .dockbar .open {
+    border-bottom: 2px solid #d0dae3;
+}
+
+.aui .dockbar li.open:last-child .dropdown-menu {
+	right:0;
+	left:auto;
+}
+
+.aui .navbar .nav>li>.dropdown-menu:before, .aui .navbar .nav>li>.dropdown-menu:after {
+   display:none !important;
+   content:none;
+}
+
+
+/*notification*/
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li>a.user-notification-link {
+	    padding: 0;
+    height: 50px;
+    width: 45px;
+}
+
+
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li>a.user-avatar-link {
+    height: 50px;
+    padding: 0;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li.dockbar-user-notifications span.user-notifications-count {
+   
+    background-position: 0 380px;
+   
+    margin-top: 7px;
+    color: #fff;
+    margin: 0;
+    padding: 5px;
+    line-height: 40px;
+    padding-left: 0;
+    text-align: left;
+    text-indent: 4px;
+    border-radius: 0;
+        padding-bottom: 8px;
+}
+
+/*.aui .dockbar-split .dockbar .navbar-inner .nav>li.dockbar-user-notifications span.user-notifications-count:after {
+	    background-image: url(/so-up-theme/css/../images/up/ple-icons.png);
+    background-position: 0 380px;
+    width: 25px;
+    height: 23px;
+    position: absolute;
+    content: ".";
+    color: #d0dae3;
+    top: 13px;
+    left: 16px;
+}
+*/
+.dockbar-user-notifications .dropdown-toggle .user-notifications-count {
+    background-color: #d0dae3;
+    border: 1px solid transparent;
+}
+
+.dockbar-user-notifications .dropdown-toggle .user-notifications-count.alert  {
+    background-color: #014260;
+    border: 1px solid #014260;
+}
+
+.dockbar-user-notifications .dropdown-toggle .user-notifications-count.alert span.user-notifications-count {
+  color:#fff;
+}
+
+
+.aui a:focus {
+    outline: thin dotted #333;
+    outline: 0px auto -webkit-focus-ring-color;
+}
+
+
+.aui .dockbar .dropdown-menu>li>a:hover, 
+.aui .dockbar .dropdown-menu>li>a:focus, 
+.aui .dockbar .dropdown-submenu:hover>a, 
+.aui .dockbar .dropdown-submenu:focus>a {
+    background-color: transparent!important;
+    background-image: none !important;
+}
+
+/*icons*/
+
+.aui .services.dropdown .icon-cog:before {
+    content: "";
+}
+
+
+/* kleiner header */
+
+
+.aui body.smallhead .liferay_dockbar {
+	z-index: 1100;
+}
+
+.aui .smallhead .lang .icon-caret-down:before {
+	display: none;
+}
+.smallhead .dockbar span.nav-item-label {
+    display: none;
+}
+
+
+.smallhead .dockbar .navbar-inner .container .nav-account-controls {
+    right: 0;
+    z-index: 6000;
+    margin-right:0 !important;
+}
+
+.smallhead .dockbar .navbar-inner .nav>li {
+    width: 60px;
+    height: 40px;
+   
+}
+
+.smallhead .dockbar .navbar-inner .nav>li.dockbar-user-notifications {
+    height: 43px;
+}
+
+.smallhead span#_2_WAR_notificationsportlet_userNotificationsCount {
+    padding-bottom: 0;
+    border-bottom: none;
+    border-right: none;
+    height: 31px;
+}
+
+.smallhead .dockbar .open .dropdown-menu span.nav-item-label {
+    display: inline-block;
+}
+
+.smallhead .dockbar .navbar-inner .nav>li>a:hover {
+    padding-bottom: 0;
+}
+
+.aui .user-avatar .icon-caret-down:before {
+    content: "\f007";
+    font-size: 1.3em;
+    margin-top: 15px;
+        color: #014260;
+   
+}
+
+
+html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
+    color: #fff;
+}
+

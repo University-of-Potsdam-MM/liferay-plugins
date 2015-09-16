@@ -1,176 +1,71 @@
-@import "compass";
-@import "mixins";
+ @import "compass"; 
+/*custom styles*/
 
-/* ---------- Add/remove page ---------- */
-
-.modify-pages {
-	li {
-		position: relative;
-
-		&.lfr-nav-hover {
-			.delete-tab {
-				@include opacity(1);
-			}
-		}
-	}
-
-	.add-page-editor-input {
-		width: 150px;
-	}
-
-	.delete-tab {
-		color: #444;
-		cursor: pointer;
-		display: block;
-		font-size: 20px;
-		font-weight: bold;
-		height: 10px;
-		line-height: 6px;
-		margin-top: -8px;
-		overflow: hidden;
-
-		@include opacity(0);
-
-		padding: 3px 0;
-		position: absolute;
-		right: 1px;
-		text-shadow: 0 1px #FFF;
-		top: 50%;
-
-		&:hover {
-			color: #B50303;
-		}
-	}
-
-	.lfr-nav-sortable > a > span {
-		padding-left: 28px;
-	}
-
-	.drag-handle {
-		background-color: #555;
-
-		@include border-radius(50%);
-
-		color: #FFF;
-		cursor: pointer;
-		font-size: 16px;
-		left: 3px;
-		line-height: 1em;
-		margin: 8px;
-		padding: 4px;
-		position: absolute;
-		text-align: center;
-		top: 2px;
-		width: 1em;
-	}
-
-	@include respond-to(desktop) {
-		.lfr-nav-sortable > a > span {
-			padding-left: 0;
-		}
-
-		.drag-handle {
-			display: none;
-		}
-	}
-
-	.lfr-nav-updateable.selected a:hover span {
-		cursor: text;
-	}
+#navigation {
+	  width: 20%;
+ 
+  float: left;
 }
 
-.controls-hidden .modify-pages {
-	.lfr-nav-sortable > a > span {
-		padding-left: 0;
+#navigation ul, #navigation ul li ul {
+	list-style-type:none;
+	margin-left:0;
+}
+
+#navigation ul li a, #navigation ul li ul li a {
+	font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
+	display:block;
+	min-height:22px;
+	border-bottom:1px solid #CFDAE3;
+	color:#014260;
+	padding:10px 15px 10px 15px;
+	font-weight:bold;
+
+}
+
+#navigation ul li a:hover, #navigation ul li ul li a:hover {
+	background-color:#d0dae3;
+	text-decoration:none;
+
+}
+
+#navigation ul li.selected ul li a:hover {
+	background-color:#d0dae3;
+	text-decoration:none;
+
+}
+
+#navigation ul li ul li a {
+	margin-left:1em;
 	}
 
-	.drag-handle {
-		display: none;
-	}
+
+#navigation ul li ul {
+	display:none;
 }
 
-.nav {
-	li .toolbar {
-		margin-top: 5px;
-	}
+#navigation ul li.selected ul {
+	display:block;
 }
 
-/* ---------- Navigation portlet ---------- */
-
-.nav-menu {
-	ul {
-		padding-left: 10px;
-	}
-
-	li a {
-		&.ancestor {
-			font-weight: bold;
-		}
-
-		&.selected {
-			color: #000;
-			font-weight: bold;
-			text-decoration: none;
-		}
-	}
+#navigation ul li.selected a{
+	background-color:#014260;
+	color:#fff;
+	font-weight:bold;
 }
 
-.nav-menu-style-arrows ul {
-	list-style-image: url(../images/arrows/04_right.png);
+#navigation ul li.selected ul li a{
+	background-color:#E9E9E9;
+	color:#014260;
+	font-weight:normal;
+	padding-left:.5em;
+	transition: background-color 0.2s ease-out;
 }
 
-/* ---------- Page template selector ---------- */
+#navigation ul li.selected ul li.selected a{
+	background-color:#014260;
+	color:#fff;
 
-.form-options {
-	border: 1px solid #AAA;
-	display: inline-block;
-	vertical-align: middle;
 
-	input {
-		border-width: 0;
-		display: inline;
-		float: left;
-	}
 }
 
-.form-triggers {
-	float: left;
-}
-
-.form-trigger {
-	background: #C4C4C4 url(../images/application/button_bg.png) repeat-x 0 0;
-	border-left: 1px solid #BBB;
-	display: inline-block;
-	float: left;
-
-	img {
-		background: url() no-repeat 50% 40%;
-		height: 25px;
-		padding: 0 3px;
-		vertical-align: middle;
-		width: 16px;
-	}
-
-	&:focus, &:hover {
-		background-color: #83B0CA;
-		background-image: url(../images/application/button_bg_over.png);
-	}
-}
-
-.trigger-selected {
-	background-color: #EBEBEB;
-	background-image: url(../images/application/button_bg_selected.png);
-
-	&:focus, &:hover {
-		background-color: #B7DEF4;
-		background-image: url(../images/application/button_bg_selected_over.png);
-	}
-}
-
-.options-trigger img {
-	background-image: url(../images/common/configuration.png);
-}
-
-.save-trigger img {
-	background-image: url(../images/common/check.png);
-}

@@ -2,7 +2,10 @@
 <!DOCTYPE project>
 
 <project name="so-up-iframe-theme" basedir="." default="deploy">
-	<property name="theme.parent" value="_styled" />
+	
 
 	<import file="../build-common-theme.xml" />
+	
+	<property name="theme.parent" value="_styled" />
+	<property name="theme.type" value="ftl" />
 </project>
