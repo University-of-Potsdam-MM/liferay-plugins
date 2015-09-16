@@ -17,6 +17,10 @@
  */
 --%>
 
+<%@page import="java.util.Comparator"%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.Locale"%>
+<%@page import="sun.util.locale.LocaleUtils"%>
 <%@ include file="/sites/init.jsp" %>
 
 <%
@@ -58,6 +62,14 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 				<%
 				List<LayoutSetPrototype> layoutSetPrototypes = LayoutSetPrototypeServiceUtil.search(company.getCompanyId(), Boolean.TRUE, null);
+				if (layoutSetPrototypes.size() > 0) {
+				    Collections.sort(layoutSetPrototypes, new Comparator<LayoutSetPrototype>() {
+				        @Override
+				        public int compare(final LayoutSetPrototype object1, final LayoutSetPrototype object2) {
+				            return object1.getName(Locale.GERMAN).toUpperCase().compareTo(object2.getName(Locale.GERMAN).toUpperCase());
+				        }
+				       } );
+				   }
 				%>
 
 				<aui:select id="layoutSetPrototypeSelect" label="default-pages" name="layoutSetPrototypeId">
@@ -65,6 +77,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 					<%
 					for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
+						System.out.println(layoutSetPrototype.getName(Locale.GERMAN));
 						UnicodeProperties settingsProperties = layoutSetPrototype.getSettingsProperties();
 
 						String customJspServletContextName = settingsProperties.getProperty("customJspServletContextName", StringPool.BLANK);
@@ -72,19 +85,22 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 						if (!customJspServletContextName.equals("so-hook")) {
 							continue;
 						}
-
+						/*
 						String layoutSetPrototypeKey = (String)layoutSetPrototype.getExpandoBridge().getAttribute(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY);
-
+						
 						boolean layoutSetPrototypeSite = layoutSetPrototypeKey.equals(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
 
 						if (layoutSetPrototypeSite) {
 							defaultLayoutSetPrototype = layoutSetPrototype;
-						}
+						}*/
 					%>
 
-						<aui:option selected="<%= layoutSetPrototypeSite %>" value="<%= layoutSetPrototype.getLayoutSetPrototypeId() %>"><%= layoutSetPrototype.getName(user.getLanguageId()) %></aui:option>
+						<aui:option selected="<%= (defaultLayoutSetPrototype == null) %>" value="<%= layoutSetPrototype.getLayoutSetPrototypeId() %>"><%= layoutSetPrototype.getName(user.getLanguageId()) %></aui:option>
 
 					<%
+						if (defaultLayoutSetPrototype == null){
+							defaultLayoutSetPrototype = layoutSetPrototype;
+						}
 					}
 					%>
 
