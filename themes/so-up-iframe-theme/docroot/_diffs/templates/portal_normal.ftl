@@ -2,7 +2,7 @@
 
 <#include init />
 
-<html class="${root_css_class} smallhead" dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
+<html class="${root_css_class} " dir="<@liferay.language key="lang.dir" />" lang="${w3c_language_id}">
 
 <head>
 	<title>${company_name} | ${the_title}</title>
@@ -11,7 +11,7 @@
 	
 
 </head>
-<body class="dockbar-split so-strata-theme ${css_class}">
+<body class="dockbar-split so-strata-theme smallhead ${css_class}">
 	
 	<!-- Ausblenden damit es keine Probleme beim JS gibt-->
 	<div class="hidden">
@@ -247,22 +247,7 @@
 	
 	</header>
 	<div class="wrapper-portlet-area">
-		<div id="heading">
-			
-			<!-- <div id="subnav-mobile">
-			<#if has_navigation>
-			
-			<h3 class="clicker">Navigation</h3>
-				<#include "${full_templates_path}/navigation-mobile.ftl" />
 		
-			</#if>
-				</div>
-			
-		</div>
-	
-		<#if has_navigation>
-				<#include "${full_templates_path}/navigation.ftl" />
-		</#if> -->
 
 		<div id="content">
 		

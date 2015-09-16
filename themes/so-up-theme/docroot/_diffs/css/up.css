@@ -885,6 +885,16 @@ html.aui
 						left: 23px;
 					}
 				}
+				
+				
+				li.open .dropdown-menu li {
+					height:25px;
+					 border-bottom: 1px solid #e2e9ee;
+					
+					a {
+						height:25px;
+					}
+				}
 			}	
 			#_145_navAddControls
 			{

@@ -108,6 +108,7 @@ html.aui
 			min-height: 100%;
 			position: absolute;
 			background: $upBgColor;
+			margin-top:35px;
 		}
 		
 		#up_logo {
@@ -176,7 +177,7 @@ html.aui
 			padding: 0;
 			margin: 0;
 			overflow: visible;
-			min-height: 256px;
+			
 			
 			#p_p_id_145_{
 			
@@ -297,9 +298,7 @@ html.aui
 						    top: 14px;		
 						}
 						
-						li.user-avatar
-						{
-						}
+						
 						
 						li.sign-in 
 						{
@@ -407,7 +406,7 @@ html.aui
 		}
 		
 		#content{
-			padding-left: 50px;
+			padding-left: 0px;
 			background: $upWhite;
 			
 			.row-fluid
@@ -812,7 +811,7 @@ html.aui
 				{
 					width: 44px;
 					margin-right:2px;	
-					height: 46px;
+					height: 45px;
 					padding:0;
 					
 					a
@@ -869,7 +868,7 @@ html.aui
 				li.user-avatar
 				{
 					width: 45px;
-					height: 46px;
+					height: 45px;
 					border-right:0;
 					margin-right:0;
 					
@@ -883,6 +882,15 @@ html.aui
 					{
 						position: absolute;
 						left: 23px;
+					}
+				}
+				
+				li.open .dropdown-menu li {
+					height:25px;
+					 border-bottom: 1px solid #e2e9ee;
+					
+					a {
+						height:25px;
 					}
 				}
 			}	
@@ -999,7 +1007,7 @@ html.aui
 
 			border-bottom: 20px solid $upGray;
 		    border-left: 140px solid $upGray;
-		    border-right: 215px solid $upGray;
+		    border-right: 139px solid $upGray;
 
 			
 			

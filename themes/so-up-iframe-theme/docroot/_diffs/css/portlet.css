@@ -1,17 +1,6 @@
  @import "compass"; 
 /*custom*/
-.container-fluid#wrapper div#content  {
-	width: 78%;
-  
-  margin-left: 22%;
-  padding-left: 0px;
-}
 
-.portlet-column {
-	width: 78%;
-  
-  margin-left: 22%;
-}
 
 
 .portlet-column .portlet-column-content {

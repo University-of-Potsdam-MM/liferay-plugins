@@ -26,22 +26,7 @@ AUI().ready(
 			);
 		}
 		
-		/*var body = A.one('body');
-		
-		if(body)
-		{
-			A.on('scroll', function(e) {
-				if(window.scrollY > 50)
-				{
-					body.addClass("smallhead");
-				}
-				else
-				{
-					body.removeClass("smallhead");
-				}
-		      });
-		} */
-		
+				
 		var sidebar = A.one('#sidebar');
 		
 		if(sidebar) {

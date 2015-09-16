@@ -22,9 +22,9 @@
 
 
 .container-fluid#wrapper div#content  {
-	width: 78%;
+	width: 100;
   
-  margin-left: 22%;
+  margin-left: 0;
 }
 
 .portlet-column {
