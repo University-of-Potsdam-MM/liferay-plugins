@@ -27,25 +27,7 @@
 			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
-				 
-				<div class="search"><span class="icon search"></span>Suchen</div>
-				<div class="add"><span class="icon add"></span>Hinzuf&uuml;gen</div>
-				<div class="filter"><span class="icon"></span><input name="filter" id="grouproom-filter"></div>
-				<div class="switch">
-					<input type="radio" name="select-type" id="own" value="sidebar-my-sites" checked="checked">Eigene</input>
-					<input type="radio" name="select-type" id="public" value="sidebar-all-sites">&Ouml;ffentliche</input>
-				</div>
-				<ul id="sidebar-my-sites">
-					<#list user_my_sites as user_site>
-						<#if user_site.hasPrivateLayouts()>
-							<li><a href="/group${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
-						<#elseif user_site.hasPublicLayouts()>
-							<li><a href="/web${user_site.friendlyURL}">${user_site.descriptiveName}</a></li>
-						</#if>
-					</#list>
-	        	</ul>
-	        	<ul id="sidebar-all-sites" class="hidden">
-	        	</ul>
+				${theme.runtime(sitesPortletId, "", "")} 
 			</div>
 		</div>
 	</#if>

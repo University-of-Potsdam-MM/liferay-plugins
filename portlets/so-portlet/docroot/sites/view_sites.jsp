@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="com.liferay.so.sites.util.SitesUtil.FilterType"%>
 <%@ include file="/sites/init.jsp" %>
 
 <%
@@ -28,23 +29,27 @@ List<Group> groups = null;
 int groupsCount = 0;
 
 if (tabs1.equals("my-sites")) {
-	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, true, 0, maxResultSize);
-	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, true);
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.USERS_SITES, 0, maxResultSize);
+	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.USERS_SITES);
 
 	if (groupsCount == 0) {
 		tabs1 = "all-sites";
 
-		groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, false, 0, maxResultSize);
-		groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, false);
+		groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.ALL_SITES, 0, maxResultSize);
+		groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.ALL_SITES);
 	}
 }
 else if (tabs1.equals("my-favorites")) {
 	groups = SitesUtil.getFavoriteSitesGroups(themeDisplay.getUserId(), keywords, 0, maxResultSize);
 	groupsCount = SitesUtil.getFavoriteSitesGroupsCount(themeDisplay.getUserId(), keywords);
 }
+else if (tabs1.equals("owner-sites")) {
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.SITE_OWNER, 0, maxResultSize);
+	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.SITE_OWNER);
+}
 else {
-	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, false, 0, maxResultSize);
-	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, false);
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.ALL_SITES, 0, maxResultSize);
+	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords, FilterType.ALL_SITES);
 }
 %>
 
@@ -59,6 +64,7 @@ else {
 				<aui:select label="" name="tabs1">
 					<aui:option label="all-sites" selected='<%= tabs1.equals("all-sites") %>' value="all-sites" />
 					<aui:option label="my-sites" selected='<%= tabs1.equals("my-sites") %>' value="my-sites" />
+					<aui:option label="owner-sites" selected='<%= tabs1.equals("owner-sites") %>' value="owner-sites" />
 					<aui:option label="my-favorites" selected='<%= tabs1.equals("my-favorites") %>' value="my-favorites" />
 				</aui:select>
 			</span>

@@ -69,12 +69,12 @@ public class SitesUtil {
 	}
 
 	public static List<Group> getVisibleSites(
-		long companyId, long userId, String keywords, boolean usersSites,
+		long companyId, long userId, String keywords, FilterType filterType,
 		int start, int end) {
 
 		try {
 			return doGetVisibleSites(
-				companyId, userId, keywords, usersSites, start, end);
+				companyId, userId, keywords, filterType, start, end);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -84,11 +84,11 @@ public class SitesUtil {
 	}
 
 	public static int getVisibleSitesCount(
-		long companyId, long userId, String keywords, boolean usersSites) {
+		long companyId, long userId, String keywords, FilterType filterType) {
 
 		try {
 			return doGetVisibleSitesCount(
-				companyId, userId, keywords, usersSites);
+				companyId, userId, keywords, filterType);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -98,23 +98,32 @@ public class SitesUtil {
 	}
 
 	protected static List<Group> doGetVisibleSites(
-			long companyId, long userId, String keywords, boolean usersSites,
+			long companyId, long userId, String keywords, FilterType filterType,
 			int start, int end)
 		throws Exception {
 
 		keywords = CustomSQLUtil.keywords(keywords)[0];
 
-		if (usersSites) {
+		if (filterType == FilterType.SITE_OWNER || filterType == FilterType.USERS_SITES) {
 			LinkedHashMap<String, Object> params =
 				new LinkedHashMap<String, Object>();
 
 			params.put("active", Boolean.TRUE);
 			params.put("pageCount", Boolean.TRUE);
 			params.put("usersGroups", userId);
-
+			
 			List<Group> groups = GroupLocalServiceUtil.search(
 				companyId, keywords, null, params, true, start, end,
 				new GroupNameComparator(true));
+			
+			if (filterType == FilterType.SITE_OWNER){
+				List<Group> filteredGroups = new ArrayList<Group>();
+				for (Group group : groups){
+					if (group.getCreatorUserId() == userId)
+						filteredGroups.add(group);
+				}
+				return filteredGroups;
+			}
 
 			return groups;
 		}
@@ -140,18 +149,30 @@ public class SitesUtil {
 	}
 
 	protected static int doGetVisibleSitesCount(
-			long companyId, long userId, String keywords, boolean usersSites)
+			long companyId, long userId, String keywords, FilterType filterType)
 		throws Exception {
 
 		keywords = CustomSQLUtil.keywords(keywords)[0];
 
-		if (usersSites) {
+		if (filterType == FilterType.SITE_OWNER || filterType == FilterType.USERS_SITES) {
 			LinkedHashMap<String, Object> params =
 				new LinkedHashMap<String, Object>();
 
 			params.put("active", Boolean.TRUE);
 			params.put("pageCount", Boolean.TRUE);
 			params.put("usersGroups", userId);
+			
+			if (filterType == FilterType.SITE_OWNER){
+				List<Group> groups = GroupLocalServiceUtil.search(
+						companyId, keywords, null, params, true, -1, -1,
+						new GroupNameComparator(true));
+				List<Group> filteredGroups = new ArrayList<Group>();
+				for (Group group : groups){
+					if (group.getCreatorUserId() == userId)
+						filteredGroups.add(group);
+				}
+				return filteredGroups.size();
+			}
 
 			return GroupLocalServiceUtil.searchCount(
 				companyId, keywords, null, params, true);
@@ -176,5 +197,9 @@ public class SitesUtil {
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(SitesUtil.class);
+	
+	public enum FilterType {
+		ALL_SITES, USERS_SITES, SITE_OWNER
+	}
 
 }

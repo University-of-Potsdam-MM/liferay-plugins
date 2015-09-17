@@ -64,6 +64,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.so.service.FavoriteSiteLocalServiceUtil;
 import com.liferay.so.service.SocialOfficeServiceUtil;
 import com.liferay.so.sites.util.SitesUtil;
+import com.liferay.so.sites.util.SitesUtil.FilterType;
 import com.liferay.so.util.GroupConstants;
 import com.liferay.so.util.PortletKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -222,10 +223,10 @@ public class SitesPortlet extends MVCPortlet {
 		if (searchTab.equals("my-sites")) {
 			groups = SitesUtil.getVisibleSites(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
-				true, start, end);
+				FilterType.USERS_SITES, start, end);
 			groupsCount = SitesUtil.getVisibleSitesCount(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
-				true);
+				FilterType.USERS_SITES);
 		}
 		else if (searchTab.equals("my-favorites")) {
 			groups = SitesUtil.getFavoriteSitesGroups(
@@ -233,13 +234,21 @@ public class SitesPortlet extends MVCPortlet {
 			groupsCount = SitesUtil.getFavoriteSitesGroupsCount(
 				themeDisplay.getUserId(), keywords);
 		}
+		else if (searchTab.equals("owner-sites")) {
+			groups = SitesUtil.getVisibleSites(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
+				FilterType.SITE_OWNER, start, end);
+			groupsCount = SitesUtil.getVisibleSitesCount(
+				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
+				FilterType.SITE_OWNER);
+		}
 		else {
 			groups = SitesUtil.getVisibleSites(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
-				false, start, end);
+				FilterType.ALL_SITES, start, end);
 			groupsCount = SitesUtil.getVisibleSitesCount(
 				themeDisplay.getCompanyId(), themeDisplay.getUserId(), keywords,
-				false);
+				FilterType.ALL_SITES);
 		}
 
 		jsonObject.put("count", groupsCount);
