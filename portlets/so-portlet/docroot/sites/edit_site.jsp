@@ -77,7 +77,6 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 					<%
 					for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
-						System.out.println(layoutSetPrototype.getName(Locale.GERMAN));
 						UnicodeProperties settingsProperties = layoutSetPrototype.getSettingsProperties();
 
 						String customJspServletContextName = settingsProperties.getProperty("customJspServletContextName", StringPool.BLANK);
@@ -215,7 +214,6 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		</div>
 	</aui:button-row>
 </aui:form>
-
 <aui:script use="aui-base,aui-io-request-deprecated,aui-loading-mask-deprecated">
 	var form = A.one(document.<portlet:namespace />dialogFm);
 

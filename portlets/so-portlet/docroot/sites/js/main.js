@@ -39,7 +39,7 @@ AUI.add(
 			var node = A.one(config.node);
 
 			var target = A.one(config.target) || node;
-
+			/*
 			target.on(
 				'clickoutside',
 				function(event) {
@@ -71,7 +71,7 @@ AUI.add(
 						target.addClass(showClass);
 					}
 				}
-			);
+			);*/
 		}
 
 		Liferay.namespace('SO');

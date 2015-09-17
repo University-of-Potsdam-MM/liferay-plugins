@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="com.liferay.so.sites.util.SitesUtil.FilterType"%>
 <%@ include file="/sites/init.jsp" %>
 
 <%
@@ -30,7 +31,7 @@ if (defaultSearchTab.equals("my-favorites") && (myFavoritesGroupsCount == 0)) {
 	defaultSearchTab = "my-sites";
 }
 
-int mySitesGroupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true);
+int mySitesGroupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.USERS_SITES);
 
 if (defaultSearchTab.equals("my-sites") && (mySitesGroupsCount == 0)) {
 	defaultSearchTab = "all-sites";
@@ -46,12 +47,16 @@ if (tabs1.equals("my-favorites")) {
 	groupsCount = myFavoritesGroupsCount;
 }
 else if (tabs1.equals("my-sites")) {
-	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true, 0, maxResultSize);
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.USERS_SITES, 0, maxResultSize);
 	groupsCount = mySitesGroupsCount;
 }
+else if (tabs1.equals("owner-sites")) {
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.SITE_OWNER, 0, maxResultSize);
+	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.SITE_OWNER);
+}
 else {
-	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, false, 0, maxResultSize);
-	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, false);
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.ALL_SITES, 0, maxResultSize);
+	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, FilterType.ALL_SITES);
 }
 
 PortletURL portletURL = renderResponse.createRenderURL();
@@ -70,6 +75,7 @@ pageContext.setAttribute("portletURL", portletURL);
 		<aui:select label="" name="tabs1">
 			<aui:option label="all-sites" selected='<%= tabs1.equals("all-sites") %>' value="all-sites" />
 			<aui:option label="my-sites" selected='<%= tabs1.equals("my-sites") %>' value="my-sites" />
+			<aui:option label="owner-sites" selected='<%= tabs1.equals("owner-sites") %>' value="owner-sites" />
 			<aui:option label="my-favorites" selected='<%= tabs1.equals("my-favorites") %>' value="my-favorites" />
 		</aui:select>
 	</div>
