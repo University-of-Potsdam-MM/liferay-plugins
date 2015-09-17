@@ -6,6 +6,10 @@
 	color:#d0dae3;	
 }
 
+.aui .lfr-admin-panel.lfr-edit-layout-panel{
+	z-index:7100 !important;
+}
+
 .aui .lfr-admin-panel .navbar .nav>li {
 	  margin-right: 3px;
 }
