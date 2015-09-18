@@ -141,12 +141,13 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 */
 .dockbar-user-notifications .dropdown-toggle .user-notifications-count {
     background-color: #d0dae3;
-    border: 1px solid transparent;
+    border:none !important;
 }
 
 .dockbar-user-notifications .dropdown-toggle .user-notifications-count.alert  {
-    background-color: #014260;
-    border: 1px solid #014260;
+    border: none;
+  
+    background-color: #EFB2B2 !important;
 }
 
 .dockbar-user-notifications .dropdown-toggle .user-notifications-count.alert span.user-notifications-count {
