@@ -68,6 +68,7 @@ import com.liferay.so.sites.util.SitesUtil.FilterType;
 import com.liferay.so.util.GroupConstants;
 import com.liferay.so.util.PortletKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.portal.util.PortalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,8 @@ import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
+
+import de.unipotsdam.elis.so.sites.util.SitesHelper;
 
 /**
  * @author Ryan Park
@@ -564,19 +567,12 @@ public class SitesPortlet extends MVCPortlet {
 
 		int type = ParamUtil.getInteger(actionRequest, "type");
 
-		boolean privateLayout = false;
+		boolean privateLayout = true;
 
-		if (type == GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED) {
+		if (type == GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED) 
 			type = GroupConstants.TYPE_SITE_RESTRICTED;
-
-			privateLayout = true;
-		}
-		else if (type == GroupConstants.TYPE_SITE_PUBLIC_RESTRICTED) {
-			type = GroupConstants.TYPE_SITE_RESTRICTED;
-		}
-		else if (type == GroupConstants.TYPE_SITE_PRIVATE) {
-			privateLayout = true;
-		}
+		else 
+			type = GroupConstants.TYPE_SITE_PRIVATE;
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			Group.class.getName(), actionRequest);
@@ -590,6 +586,8 @@ public class SitesPortlet extends MVCPortlet {
 
 		if (privateLayout) {
 			privateLayoutSetPrototypeId = layoutSetPrototypeId;
+			publicLayoutSetPrototypeId = SitesHelper.
+					getPublicPageLayoutSetPrototype(PortalUtil.getCompany(actionRequest).getCompanyId()).getLayoutSetPrototypeId();
 		}
 		else {
 			publicLayoutSetPrototypeId = layoutSetPrototypeId;
