@@ -1,0 +1,102 @@
+.my-profile .contacts-portlet .profile-actions {
+    margin-left:0;
+}
+
+.contacts-portlet .user-information-title {
+	text-align:left;
+	width:auto;
+	margin-top:15px;
+}
+
+.contacts-portlet .section h3 {
+	color:#014260;
+	
+}
+
+.contacts-portlet .column.w20.user-information-column-2 {
+    width: 16%;
+    padding-right: 0;
+}
+
+.contacts-portlet .taglib-social-activities {
+    padding-left: 30px;
+}
+
+.portlet-column-only .contacts-portlet .contacts-profile {
+    
+    padding-left: 20px;
+}
+
+.contacts-portlet .column.w80.user-information-column-1 {
+	padding-left:0;
+	
+}
+
+.contacts-portlet .contacts-profile .column-content {
+    padding-left: 0px;
+}
+
+.contacts-portlet .contacts-profile .lfr-contact-thumb {
+	padding-left:0 !important;
+}
+
+.contacts-portlet .contacts-action-content {
+    margin-left: 0px;
+}
+
+.contacts-portlet .lfr-user-info-container .profile-actions {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background: #d0dae3;
+}
+
+.aui .contacts-portlet .alert-info {
+	color: #000;
+}
+
+.contacts-portlet .profile-actions .field-actions-toolbar .lfr-token {
+    background-color: #014260;
+    border-width: 0;
+     -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+        color: #fff;
+}
+
+.contacts-portlet .profile-actions .field-actions-toolbar .lfr-token:hover {
+    background-color: #E9E8E8;
+    color:#014260;
+}
+
+.contacts-portlet .contacts-profile .lfr-contact-name a {
+    color: #014260;
+}
+
+.contacts-portlet .section {
+    border-bottom:none;
+}
+
+.contacts-portlet .lfr-user-info-container {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #d0dae3;
+}
+
+.contacts-portlet .field-group:last-Child {
+    border-bottom: 2px solid #d0dae3;
+}
+
+.contacts-portlet .user-sites-title, .contacts-portlet .user-tags-title {
+	color:#014260;
+	font-weight:bold;
+	font-size: 1.5em;
+	
+}
+
+.contacts-portlet .user-tags-title {
+	margin-top:50px;
+}
