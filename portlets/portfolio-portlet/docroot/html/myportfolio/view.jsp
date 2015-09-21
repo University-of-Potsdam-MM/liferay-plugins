@@ -90,7 +90,7 @@ var tableCreated = false;
 var noPortfolioPagesMessageDiv;
 var tableDiv;
 
-AUI().use('aui-base', function(A){
+AUI().use('aui-base','aui-io-request', function(A){
 noPortfolioPagesMessageDiv = A.one("#<portlet:namespace />noPortfolioPages");
 tableDiv = A.one("#myPortfolioTable");
 A.io.request('<%=getUserPortfoliosURL.toString()%>', {
