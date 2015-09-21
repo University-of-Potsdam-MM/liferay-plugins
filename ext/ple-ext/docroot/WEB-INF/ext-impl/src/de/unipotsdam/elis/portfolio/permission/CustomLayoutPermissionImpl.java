@@ -19,15 +19,17 @@ public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 	@Override
 	public boolean contains(PermissionChecker permissionChecker, Layout layout, boolean checkViewableGroup,
 			String actionId) throws PortalException, SystemException {
-		Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(layout.getPlid());
-		if (portfolio != null) {
-			if (permissionChecker.getUserId() != layout.getUserId()){
-				 if (actionId.equals(ActionKeys.VIEW)) {
-					return portfolio.userHasViewPermission(permissionChecker.getUserId());
+
+		if (!permissionChecker.isOmniadmin()) {
+			Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(layout.getPlid());
+			if (portfolio != null) {
+				if (permissionChecker.getUserId() != layout.getUserId()) {
+					if (actionId.equals(ActionKeys.VIEW)) {
+						return portfolio.userHasViewPermission(permissionChecker.getUserId());
+					}
+				} else if (!actionId.equals(ActionKeys.VIEW) && !actionId.equals(ActionKeys.CUSTOMIZE)) {
+					return !portfolio.feedbackRequested();
 				}
-			}
-			else if(!actionId.equals(ActionKeys.VIEW) && !actionId.equals(ActionKeys.CUSTOMIZE)){
-				return !portfolio.feedbackRequested();
 			}
 		}
 		return super.contains(permissionChecker, layout, checkViewableGroup, actionId);
