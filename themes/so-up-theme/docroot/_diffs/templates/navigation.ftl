@@ -2,7 +2,9 @@
 	<ul aria-label="#language ("site-pages")" role="menubar" class="no-js">
 	
 		<#-- portlet to change to the public or private area of a workspace -->
-		${theme.runtime(scopenavigationPortletId, "", "")}
+		<#if is_signed_in>
+			${theme.runtime(scopenavigationPortletId, "", "")}
+		</#if>
 		
 		<#list nav_items as nav_item >
 			<#assign nav_item_attr_has_popup="">
