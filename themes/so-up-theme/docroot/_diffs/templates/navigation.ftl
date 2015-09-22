@@ -1,9 +1,14 @@
 <nav class="${nav_css_class}" id="navigation" role="navigation">
 	<ul aria-label="#language ("site-pages")" role="menubar" class="no-js">
+	
+		<#-- portlet to change to the public or private area of a workspace -->
+		${theme.runtime(scopenavigationPortletId, "", "")}
+		
 		<#list nav_items as nav_item >
 			<#assign nav_item_attr_has_popup="">
 			<#assign nav_item_attr_selected="">
 			<#assign nav_item_css_class = "">
+			
 
 			<#if nav_item.isSelected()>
 				<#assign nav_item_attr_selected="aria-selected='true'">

@@ -43,9 +43,14 @@
 	<#assign myPrivateLayouts = layoutService.getLayouts(group.getGroupId(), true) />
 	<#assign myPublicLayouts = layoutService.getLayouts(group.getGroupId(), false) />
 	
+	<#-- initialize sites portlet for the sidebar-->
 	<#assign sitesPortletId = "5_WAR_soportlet" />
 	<#assign PortletPreferencesFactoryUtil = staticUtil["com.liferay.portlet.PortletPreferencesFactoryUtil"] />
 	<#assign portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, sitesPortletId) />
+	
+	<#-- initialize scope navigation portlet to switch to the public or private area of a workspace -->
+	<#assign scopenavigationPortletId = "scopenavigation_WAR_scopenavigationportlet" />
+	<#assign scopenavigationportletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, scopenavigationPortletId) />
 
 <#else>
 	<#assign user_my_sites = user.getMySiteGroups()  />
