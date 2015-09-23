@@ -1,0 +1,50 @@
+.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ {
+	margin-bottom:0;
+	
+}
+
+.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet {
+	border: none;
+    border-bottom: none !important;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet .portlet-content {
+	    background-color: #ededed;
+    color: #014260;
+    padding: .3em 0 0 .3em;
+	
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form {
+    margin-bottom: 0;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
+	margin-bottom: 0;
+    width: 85%;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label {
+    color: #014260;
+}
+
+
+.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
+	    width: 100%;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
+	display:inline;
+}
+
+.aui .portlet-topper-toolbar#portlet-topper-toolbar_scopenavigation_WAR_scopenavigationportlet .btn-group {
+	display:none;
+}
+
+
+option.private:before {
+	content:"dsahjds";
+	
+}

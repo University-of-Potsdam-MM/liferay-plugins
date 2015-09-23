@@ -33,9 +33,9 @@ if (layoutSetGroup.isUser()){
 <aui:form action="<%= changeScopeURL %>" method="post" name="changeScopeForm" >
 	<aui:select name="scopeNavigation" onChange="changeScope()" label="current-location">
 		<% if (privateVisible) {%>
-			<aui:option label="private-space" value="private" selected="<%= layout.isPrivateLayout() %>" />
+			<aui:option label="private-space" value="private" class="private" selected="<%= layout.isPrivateLayout() %>" />
 		<% } %>
-		<aui:option label="public-space" value="public" selected="<%= !layout.isPrivateLayout() %>"/>
+		<aui:option label="public-space" value="public" class="public" selected="<%= !layout.isPrivateLayout() %>"/>
 	</aui:select>
 	<liferay-ui:icon-help message="private-public-help"></liferay-ui:icon-help>
 </aui:form>
