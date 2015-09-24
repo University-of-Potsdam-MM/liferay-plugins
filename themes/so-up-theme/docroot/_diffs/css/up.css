@@ -1106,3 +1106,10 @@ html.aui
 					
 					
 				}
+
+				
+				/* später sortieren */
+				
+				.so-portlet-sites ul.site-list li.social-office-enabled {
+    background-image: none !important;
+}

@@ -159,7 +159,7 @@
             </div>
 	        <div id="up_logo_title">
 	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
-	            <span class="site-name-mobile">// ${site_name}</span>
+	            <span class="site-name-mobile"> ${site_name}</span>
 	        </div>
             <div id="up_logo_footer">
             </div>
