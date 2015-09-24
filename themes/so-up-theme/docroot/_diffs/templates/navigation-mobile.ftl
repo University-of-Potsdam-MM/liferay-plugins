@@ -1,4 +1,10 @@
 <nav class="${nav_css_class} click-nav" id="navigation" role="navigation">
+		<#if is_signed_in>
+		<div class="scope-mobile">
+			${theme.runtime(scopenavigationPortletId, "", "")}
+		</div>
+		</#if>
+	
 	<ul aria-label="#language ("site-pages")" role="menubar">
 		<#list nav_items as nav_item >
 			<#assign nav_item_attr_has_popup="">

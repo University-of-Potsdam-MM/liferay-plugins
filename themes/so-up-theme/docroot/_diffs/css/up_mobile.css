@@ -39,41 +39,61 @@
 	html.aui body.smallhead, html.aui body 
 	{
 	
-		#sidebar.show-sidebar .title
+		#sidebar.show-sidebar 
 		{
-			left:100%;
+			
+			z-index: 7401;
+			
+			.title 
+			{
+				left:100%;
+				    background-color: #d0dae3;
+				        padding-top: 20px;
+			
+				.arrow
+				{
+					    -moz-transform: rotate(-180deg);
+    					-ms-transform: rotate(-180deg);
+   						 -o-transform: rotate(-180deg);
+   						 -webkit-transform: rotate(-180deg);
+   						 transform: rotate(-180deg);
+   						  background-position: -14px -505px;
+				}			
+			}
 		}
 		
 		#sidebar .title
 		{
-			-moz-transform:  rotate(270deg);
-			-ms-transform:  rotate(270deg);
-			-o-transform:  rotate(270deg);
-			-webkit-transform:  rotate(270deg);
-			transform: rotate(270deg);
-			width: 25px;
-    		height: 25px;
+			-moz-transform:  rotate(0deg);
+			-ms-transform:  rotate(0deg);
+			-o-transform:  rotate(0deg);
+			-webkit-transform:  rotate(0deg);
+			transform: rotate(0deg);
+			    height: 27px;
+   			 padding: 10px;
    			padding: 10px;
    			right: 0;
     		left: 0;
-    		top: 70px;
+    		top: 0px;
 			position: absolute;
-			z-index:1401;
+			z-index:7401;
 			cursor: pointer;
 			font-weight: bold;
 			text-transform:uppercase;
 			text-align:center;
 			
-			background-color: transparent;
+			
+			    width: 28px;
 		
 			.arrow
 			{
-				-moz-transform: rotate(90deg);
-				-ms-transform:rotate(90deg);
-				-o-transform: rotate(90deg);
-				-webkit-transform: rotate(90deg);
-				transform:rotate(90deg);
+				-moz-transform: rotate(0deg);
+				-ms-transform:rotate(0deg);
+				-o-transform: rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				transform:rotate(0deg);
 				margin-left:0;
+				display:block;
 			}
 			
 			span 
@@ -82,6 +102,8 @@
 			}
 		
 		}
+		
+
 	}
 	
 	
@@ -96,7 +118,7 @@
 			header#banner #main-menu,
 			header#banner #breadcrumbs,
 			header#banner #_145_navSiteNavigationNavbarBtn,
-			header#banner #_145_navAddControlsNavbarBtn,
+			header#banner #_145_navAddControlsNavbarBtn
 			
 			{
 				display: none;
@@ -130,19 +152,33 @@
     				position: relative;
 					
 					.clicker {
-						display:block;
-						text-align:center;
-						margin:0 auto;
-						font-size:1em;
-						color:#014260;
-						background-color:#fff;
-						border:1px solid #014260;
+						   position: absolute;
+    top: -81px;
+    left: 0;
+    z-index: 8;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1em;
+    color: #fff;
+    background-color: #ededed;
+    margin-left: 0px;
+    height: 34px;
+    padding-left: 10px;
+    width: 48px;
+    padding-top: 3px;
+					
 					}
 					
 					.clicker:before {
-						font-family:"fontawesome-alloy";
-						content:"\f0c9";
-						margin-right: 5px;
+						font-family: "fontawesome-alloy";
+    content: "\f0c9";
+    margin-right: 5px;
+    font-size: 1.6em;
+    font-weight: normal;
+    margin-left: 50px;
+    /* padding-top: 5px; */
+    color: #014260;
 					}
 					
 					.clicker.active
@@ -152,12 +188,13 @@
 					
 					#navigation
 					{
-						display:block;
-						width:100%;
-						background-color:#fff;
-						z-index: 1;
-   						position: relative;
-    					margin-bottom:10px;
+						display: block;
+    width: 62%;
+    background-color: #fff;
+    z-index: 5;
+    position: absolute;
+    margin-bottom: 10px;
+    top: -40px;
 						
 						ul 
 						{
@@ -216,17 +253,22 @@
 				{
 					margin-left:.5%;
 					width:99%;
+					margin-top:40px;
 				}
 			}
 			
 			header#banner
 			{
 				min-height: 60px;
+				background-color:#fff;
+				border-bottom: 0;
 				
 				#up_logo
 				{
 					margin-top: 30px;	
-					margin-left:5px;	
+					margin-left:0px;	
+					width: 62%;
+    background-color: #ededed;
 					
 					
 					#up_logo_indicator
@@ -254,13 +296,29 @@
 					
 					#up_logo_title 
 					{
-						padding-top:30px;
-						margin-left: 35px;
+						    padding-top: 30px;
+  							 margin-left: 0px;
+   							 /* background-color: #ededed; */
+   							 width: 98%;
+   							 
+   							 padding-right: 3px;
+    						text-indent: 10px;
+   							 margin-left: 0;
+  
+   							 text-align: left;
+   							 margin-left: 73px;;
 						
 						.site-name-mobile
 						{
 							font-family:arial, sans-serif;
+							color:#014260;
 						}
+						
+						a 
+						{
+							color:#014260;
+						}
+						
 					}
 				}
 				
@@ -269,7 +327,7 @@
 				{
 					width:auto !important;
 					margin: 0;
-    padding: 0;
+    				padding: 0;
 					
 					.navbar.navbar-static-top
 					{
@@ -295,6 +353,7 @@
 										width: 35.5%;
 										height: 45px;	
 										z-index: 4000;
+										background-color:#d0dae3;
 										
 										li
 										{
@@ -471,22 +530,31 @@
 				#breadcrumbs
 				{
 					    display: block;
-					    font-size: .6em;
-					    line-height: 20px;
-    					margin: 0;
+    					font-size: .6em;
+    					line-height: 20px;
+   					 margin: 0;
+   					 position: absolute;
+   					 width: 100%;
+   					 top: 50px;
     					
     					ul.breadcrumb
     					{
-    					    background-color: #dedede;
-   							margin: 0;
-      						padding: 0;
-    						padding-left: 5px;
-    						text-align: left;
-    						width: auto;
+    					        background-color: #014260;
+   								 margin: 0;
+    								padding: 0;
+    								padding-left: 5px;
+   								 text-align: left;
+   							 width: auto;
+   							 width: 61%;
     						
     						li
     						{
     							text-shadow:none;
+    							
+    							a 
+    							{
+    								color:#fff;
+    							}
     						}
     					}
 				}
@@ -551,10 +619,11 @@
 						width: 65.5%;
 						
 						height: 46px;
+						background-color:#d0dae3;
 						
 						a.aui-button
 						{
-							background: $upLightBlue;
+							background: #fff;
 							color: $upDarkBlue;
 							width: 23%;
 							min-width:32px;
@@ -703,5 +772,54 @@
 				}
 }
 
+/* scope navigation */
 
 
+
+.scope-mobile .portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ {
+	
+	    position: absolute;
+   
+    height: 30px;
+  
+    right: 0;
+    top: -100px;
+    overflow: hidden;
+}
+
+.scope-mobile .portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ .portlet-content {
+	padding:0;
+}
+
+
+.scope-mobile .portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet form {
+		margin-bottom:0;
+		margin-right:0;
+}
+
+.scope-mobile #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
+	width: 100%;
+    margin-right: 0;
+}
+.scope-mobile #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label.control-label {
+	display:none;
+}
+
+
+.aui .wrapper-portlet-area .scope-mobile #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
+	width: 100%;
+    border: none;
+    font-size: .8em;
+    margin-bottom: 0;
+}
+
+ .scope-mobile #portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
+ 	display:none;
+ }
+ 
+ 
+ /* mainnavi mobile */
+ 
+ .mainnavi-mobile-wrapper {
+ 	margin-left:50px;
+ }

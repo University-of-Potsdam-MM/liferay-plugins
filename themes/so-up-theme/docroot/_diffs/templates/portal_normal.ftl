@@ -35,6 +35,8 @@
 		<div id="up-menu">
 			<#if is_signed_in>
 			<div class="main">
+				
+				<div class="mainnavi-mobile-wrapper">
 				<a href="#grouproom-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger ">
 					<span class="icon grouproom"></span></a>
 				<a href="#personal-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
@@ -43,6 +45,7 @@
 					<span class="icon profile"></span></a>
 				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
 					<span class="icon portfolio"></span></a>
+				</div>
 			</div>
 						
 			</#if>
@@ -292,7 +295,7 @@
 			<div id="subnav-mobile">
 			<#if has_navigation>
 			
-			<h3 class="clicker">Navigation</h3>
+			<h3 class="clicker"></h3>
 				<#include "${full_templates_path}/navigation-mobile.ftl" />
 		
 			</#if>
