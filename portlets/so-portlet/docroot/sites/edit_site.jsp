@@ -107,7 +107,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 				<aui:select id="typeSelect" label="type" name="type">
 					<c:if test="<%= enableOpenSites %>">
-						<aui:option label="<%= GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_OPEN) %>" value="<%= GroupConstants.TYPE_SITE_OPEN %>" />
+						<aui:option label="open-site" value="<%= GroupConstants.TYPE_SITE_OPEN %>" />
 					</c:if>
 
 					<c:if test="<%= enablePublicRestrictedSites %>">
@@ -115,11 +115,11 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 					</c:if>
 
 					<c:if test="<%= enablePrivateRestrictedSites %>">
-						<aui:option label="<%= GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED) %>" value="<%= GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED %>" />
+						<aui:option label="restricted" value="<%= GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED %>" />
 					</c:if>
 
 					<c:if test="<%= enablePrivateSites %>">
-						<aui:option label="<%= GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_PRIVATE) %>" value="<%= GroupConstants.TYPE_SITE_PRIVATE %>" />
+						<aui:option label="hidden-site" value="<%= GroupConstants.TYPE_SITE_PRIVATE %>" />
 					</c:if>
 				</aui:select>
 			</div>

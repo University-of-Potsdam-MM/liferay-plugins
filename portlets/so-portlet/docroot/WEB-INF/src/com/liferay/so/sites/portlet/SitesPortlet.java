@@ -571,8 +571,6 @@ public class SitesPortlet extends MVCPortlet {
 
 		if (type == GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED) 
 			type = GroupConstants.TYPE_SITE_RESTRICTED;
-		else 
-			type = GroupConstants.TYPE_SITE_PRIVATE;
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			Group.class.getName(), actionRequest);
