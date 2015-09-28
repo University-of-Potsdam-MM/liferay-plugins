@@ -346,6 +346,7 @@
 			<h2 class="page-title"></h2>
 			
 		</div>
+		
 	
 		#if ($has_navigation)
 			#parse ("$full_templates_path/navigation.vm")
