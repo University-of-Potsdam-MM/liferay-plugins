@@ -131,18 +131,26 @@ html.aui
 				}
 			}
 			
-			#up_logo_title{
+			#up_logo_title
+			{
 				float: left;
 				padding-top: 20px;
-			
-				    font-size: 1.53333em;
-    line-height: 1.2em;
-    font-family: "Georgia","Times New Roman",Times,sans-serif;
+			    font-size: 1.53333em;
+    			line-height: 1.2em;
+    			font-family: "Georgia","Times New Roman",Times,sans-serif;
 				
-				a{
+				a
+				{
 					color: $upDarkBlue;
 				}
+			
+				#subnav-mobile
+				{
+					display:none;
+				}
 			}
+			
+			
 			
 			#up_logo_footer{
 				height: 40px;

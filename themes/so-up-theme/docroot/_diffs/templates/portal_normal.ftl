@@ -70,7 +70,7 @@
 							<#if myLayout.getExpandoBridge().getAttribute("Portfolio")??>
 								<#assign portfoliopage = myLayout.getExpandoBridge().getAttribute("Portfolio") />
 							</#if>
-						</#if>1
+						</#if>
 						<#if myLayout.isRootLayout() && !myLayout.isHidden()>
 							<#if portfoliopage?string("true", "false") = "false">
 								<li><a href="${PortalUtil.getLayoutURL(myLayout, themeDisplay)}">${myLayout.getName(themeDisplay.getLocale())}</a></li>
@@ -159,7 +159,16 @@
             </div>
 	        <div id="up_logo_title">
 	            <a title="Zur Startseite" href="${company_url}">${company_name}</a>
-	            <span class="site-name-mobile"> ${site_name}</span>
+	             <span class="hideformobile">${the_title}</span>
+	            <span class="site-name-mobile clicker"><span> ${site_name}</span></span>
+	            <div id="subnav-mobile">
+			<#if has_navigation>
+			
+			
+				<#include "${full_templates_path}/navigation-mobile.ftl" />
+		
+			</#if>
+				</div>
 	        </div>
             <div id="up_logo_footer">
             </div>
@@ -289,17 +298,10 @@
 			</h1>
 
 			<h2 class="page-title">
-				<span>${the_title}</span>
+				
 			</h2>
 			
-			<div id="subnav-mobile">
-			<#if has_navigation>
 			
-			<h3 class="clicker"></h3>
-				<#include "${full_templates_path}/navigation-mobile.ftl" />
-		
-			</#if>
-				</div>
 			
 		</div>
 	
