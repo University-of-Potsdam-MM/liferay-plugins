@@ -304,6 +304,7 @@
 			
 			
 		</div>
+		
 	
 		<#if has_navigation>
 				<#include "${full_templates_path}/navigation.ftl" />
