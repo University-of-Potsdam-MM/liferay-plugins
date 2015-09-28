@@ -30,6 +30,21 @@
 		 --%>
 	</c:if>
 	<%@ include file="/html/portlet/dockbar/view_language.jspf" %>
+	
+	<c:if test="<%= themeDisplay.isSignedIn() && user.isSetupComplete() %>">
+
+	<%
+	request.setAttribute(WebKeys.RENDER_PORTLET_BOUNDARY, false);
+	%>
+
+	<liferay-portlet:runtime portletName="2_WAR_notificationsportlet" />
+
+	<%
+	request.removeAttribute(WebKeys.RENDER_PORTLET_BOUNDARY);
+	%>
+
+	<aui:nav-item cssClass="divider-vertical"></aui:nav-item>
+</c:if>
 
 	<%@ include file="/html/portlet/dockbar/view_user_account.jspf" %>
 </aui:nav>
