@@ -6,6 +6,5 @@
 		<version>6.2.0+</version>
 	</compatibility>
 	<theme id="so-up" name="Social Office UP">
-		<template-extension>ftl</template-extension>
 	</theme>
 </look-and-feel>
