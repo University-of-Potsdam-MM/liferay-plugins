@@ -526,6 +526,7 @@ html.aui
 			
 		#sidebar.show-sidebar {
 			width: 300px;
+			    transition: width .3s ease-in-out;
 			
 			.content 
 			{
@@ -762,6 +763,7 @@ html.aui
 					overflow: hidden;
 					padding: 10px 0px;
 					margin: 10px;
+					transition: height .2s ease-in;
 					
 					li
 					{
@@ -777,6 +779,16 @@ html.aui
 						}
 			
 					}
+				}
+				
+				ul.hidden 
+				{
+					    display: block;
+    					visibility: visible;
+    					height: 0 !important;
+    					width: 0 !important;
+    					padding: 0 !important;
+   						 margin: 0 !important;
 				}
 			}
 			
