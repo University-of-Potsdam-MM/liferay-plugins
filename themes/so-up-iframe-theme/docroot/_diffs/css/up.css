@@ -177,6 +177,7 @@ html.aui
 			padding: 0;
 			margin: 0;
 			overflow: visible;
+			border:none;
 			
 			
 			#p_p_id_145_{
@@ -418,7 +419,7 @@ html.aui
 			}
 		}
 		
-		#sidebar {
+	#sidebar {
 			width: 0px;
 			left: 0px;
 			top: 0px;
@@ -429,13 +430,9 @@ html.aui
 			margin-right: 0px;
 			z-index: 1401;
 	
-			
-			div
+								
+			.title 
 			{
-				overflow: hidden;
-			}
-			
-			.title {
 				background: $upMenuColor;
 				
 				-moz-transform: rotate(-90deg);
@@ -471,7 +468,8 @@ html.aui
 					margin-left: 10px;				
 				}
 				
-				.arrow.down {
+				.arrow.down 
+				{
 					-moz-transform: rotate(-90deg);
 					-ms-transform: rotate(-90deg);
 					-o-transform: rotate(-90deg);
@@ -484,123 +482,185 @@ html.aui
 					display:inline;
 				}
 				
+			} /* ende .title */
+			
+			
+			.content 
+			{
+			
+				h2 
+				{
+					display:none;
+				}								
+				.so-portlet-sites .portlet
+				{
+				
+					.portlet-topper 
+					{
+						display:none;
+						
+						.portlet-topper-toolbar 
+						{
+							display:none;
+						}
+					
+					}
+										
+					.portlet-content 
+					{
+					display:none;
+					}
+				}
 			}
 			
-			.content {
+			
+		} /* end #sidebar */
+			
+		#sidebar.show-sidebar {
+			width: 300px;
+			    transition: width .3s ease-in-out;
+			
+			.content 
+			{
 				position: absolute;
 				width: 100%;
 				background: $upMenuColor;
 				height: 100%;
 				
+				h2 
+				{
+				
+					
+				}
+				
+				.so-portlet-sites .portlet
+				{
+					
+					margin-top:10px;
+					border:none;
+					border-bottom:none !important;
+					padding:.5em;
+					
+					
+					.portlet-topper 
+					{
+						display:none;
+						
+						.portlet-topper-toolbar 
+						{
+							display:none;
+						}
+					
+					}
+					
+					.portlet-content 
+					{
+						padding:0;
+						display:block;
+						
+						.portlet-body
+						{
+							form 
+							{
+							
+							.sites-tabs .control-group
+							{
+								margin-bottom:0;
+								
+								 select.aui-field-select
+								{
+									width: 100%;
+   									 color: #fff;
+    								background-color: #014260;
+    								border: none;
+								}
+							}
+								
+								.search 
+								{
+									    
+    									background-color: transparent;
+    									margin-left: 0;
+    									padding-left: 0;
+								}
+								
+								.site-list-container
+								{
+									ul.site-list 
+									{
+										background: #d0dae3;
+    									border: none;
+    									
+    									li
+    									{
+    										border-width:0px 0px 1px 0px;
+    										border-color: #e2e9ee;
+    										padding: 3px 10px 3px 3px;
+    										
+    										span.name 
+    										{
+    											font-size: 1.3em;
+    											line-height: 1.5;
+    											    font-weight: normal;
+    											color: #014260;
+
+    											
+    											a, a:visited
+    											{
+    												color:#014260;
+    											}
+    										}
+    									}
+    									
+    									li:before 
+    									{
+    										display:none;
+    									}
+    									
+    									li:hover {
+    										border-radius:0;
+    										-webkit-border-radius: 0px;
+    										-moz-border-radius: 0px;
+    										-ms-border-radius: 0px;
+   											 -o-border-radius: 0px;
+    									}
+									} /*ende ul */
+								} /*ende site list container */
+    									
+    							.control-container
+    							{
+    								margin-top:10px;
+    								padding-top:10px;
+    								
+    								padding-bottom:10px;
+    								
+    								
+    								button 
+    								{
+    									    background-color: #014260;
+    										color: #fff;
+   											text-shadow: none;
+   											margin-right: 10px;
+    								}
+    							}
+									
+								
+								
+							} /*ende form */
+						} /* ende portlet body */
+					} /* ende portlet content */
+					
+					
+					
+				} /*ende .portlet */
+				
+				
 				h2
 				{
-					font-variant: small-caps;
-				}
-										
-				.add, .search
-				{
-					width: 140px;
-					height: 28px;
-					padding-top: 3px;
-					padding-left: 5px;
-					background: $upBlueGray;
-					color: $upWhite;
-					display: inline-block;
-					vertical-align: middle;
-					cursor: pointer;
-					
-					.icon
-					{
-						@include ple-grafic;
-						width: 20px;
-						height: 20px;
-						background-position: -30px -313px;
-						display: inline-block;
-						margin-top: -2px;
-					}
-				}
+					text-transform:uppercase;
+				}	
 				
-				.search .icon
-				{
-						background-position: 0px -313px;
-				}
-				
-				.filter
-				{
-					border: 1px solid $upBlueGray;
-					padding: 2px;
-					height: 20px;
-					overflow: hidden;
-					margin: 10px 8px 0 0;
-					
-					.icon
-					{
-						@include ple-grafic;
-						background-position: 0px -97px;
-						float: left;
-					}
-					
-					input
-					{
-						border:0px;
-						background: $upMenuColor;
-						width: 260px;
-					}
-				}
-				
-				
-				
-				#sidebar-my-sites, #sidebar-all-sites{
-				
-					list-style: none;
-					margin: 0px;
-					padding: 0px;
-					overflow: scoll-x;
-					
-					li {
-						border-bottom: 1px solid $upBlueGray;
-						padding: 10px;
-						margin-bottom: 10px;
-						
-						a {
-							color: $upDarkGray;
-						}
-					}		
-				}
-				
-			}
-			
-			h2
-			{
-				font-size: 14pt;
-				color: $upDarkBlue;
-				overflow: hidden;
-				
-				.search
-				{
-					background-position: -8px -1878px;
-				}
-	
-				.add
-				{
-					background-position: -8px -1878px;
-				}
-	
-				.close
-				{
-					background-position: -11px -312px;
-				}
-	
-			}
-		}
-			
-		#sidebar.show-sidebar {
-			width: 300px;
-			
-			.content
-			{
-				padding: 5px;
-			}
+			} /*ende .content */
 		}
 		
 		.arrow {
@@ -949,7 +1009,7 @@ html.aui
 		
 		#sidebar.show-sidebar .title
 		{
-			left: 310px;
+			left: 300px;
 		}
 		
 		#banner #up-general
@@ -1009,7 +1069,7 @@ html.aui
 			margin: 0px;
 		    min-height: 45px;
 
-			border-bottom: 20px solid $upGray;
+			
 		    border-left: 140px solid $upGray;
 		    border-right: 139px solid $upGray;
 
@@ -1033,6 +1093,7 @@ html.aui
 	{
 		div#wrapper header#banner
 		{
+			border:none;
 	
 			ul#_145_navAddControls.nav
 			{
@@ -1048,3 +1109,9 @@ html.aui
 					
 					
 				}
+				
+				
+				
+				.so-portlet-sites ul.site-list li.social-office-enabled {
+    background-image: none !important;
+}
