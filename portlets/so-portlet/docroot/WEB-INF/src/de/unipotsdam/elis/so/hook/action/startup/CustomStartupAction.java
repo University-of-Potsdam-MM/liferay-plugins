@@ -26,7 +26,7 @@ public class CustomStartupAction extends SimpleAction {
 	public void run(String[] s) {
 
 		try {
-		Company company = CompanyLocalServiceUtil.getCompanyByMx(PropsUtil.get(PropsKeys.COMPANY_DEFAULT_WEB_ID));
+		Company company = CompanyLocalServiceUtil.getCompanies().get(0);
         if (SitesHelper.getPublicPageLayoutSetPrototype(company.getCompanyId()) == null){
         	addPublicPageLayoutSetPrototype(company.getCompanyId());
         }
