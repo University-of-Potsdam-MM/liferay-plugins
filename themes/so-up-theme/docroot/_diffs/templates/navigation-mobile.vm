@@ -1,9 +1,10 @@
 <nav class="$nav_css_class click-nav" id="navigation" role="navigation">
-		#if ($is_signed_in)
-		<div class="scope-mobile">
-			$theme.runtime($scopenavigationPortletId, "", "")
-		</div>
-		#end
+	##-- portlet to change to the public or private area of a workspace -- ##
+	#if ($is_signed_in)
+	<div class="scope-mobile">
+		$theme.runtime($scopenavigationPortletId, "", "")
+	</div>
+	#end
 	
 	<ul aria-label="#language ("site-pages")" role="menubar">
 		#foreach ($nav_item in $nav_items)
