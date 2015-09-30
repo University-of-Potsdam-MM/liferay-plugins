@@ -87,6 +87,28 @@
                 <include>false</include>
         </portlet>
         <portlet>
+			<portlet-name>47</portlet-name>
+			<icon>/html/icons/default.png</icon>
+			<struts-path>hello_world</struts-path>
+			<remoteable>true</remoteable>
+			<private-request-attributes>false</private-request-attributes>
+			<private-session-attributes>false</private-session-attributes>
+			<render-weight>50</render-weight>
+			<css-class-wrapper>portlet-hello-world</css-class-wrapper>
+			<include>false</include>
+		</portlet>
+		<portlet>
+			<portlet-name>50</portlet-name>
+			<icon>/html/icons/default.png</icon>
+			<struts-path>hello_velocity</struts-path>
+			<remoteable>true</remoteable>
+			<private-request-attributes>false</private-request-attributes>
+			<private-session-attributes>false</private-session-attributes>
+			<render-weight>50</render-weight>
+			<css-class-wrapper>portlet-hello-velocity</css-class-wrapper>
+			<include>false</include>
+		</portlet>
+        <portlet>
                 <portlet-name>61</portlet-name>
                 <icon>/html/icons/loan_calculator.png</icon>
                 <struts-path>loan_calculator</struts-path>
