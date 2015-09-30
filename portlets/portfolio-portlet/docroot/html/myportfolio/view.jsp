@@ -113,7 +113,7 @@ AUI().use(
     function(A) {    	
     	var nameEditor = new A.TextAreaCellEditor();
     	nameEditor.on('keydown', function(e) {
-    	    if (event.which == 13 || event.keyCode == 13) {
+    	    if (e.domEvent.which == 13 || e.domEvent.keyCode == 13) {
     	        e.preventDefault();
     	        nameEditor.fire('save', {
     	            newVal: nameEditor.getValue(),
