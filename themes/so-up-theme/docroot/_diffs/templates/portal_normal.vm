@@ -157,8 +157,8 @@
             </div>
 	        <div id="up_logo_title">
 	            <a title="Zur Startseite" href="$company_url">$company_name</a>
-	             <span class="hideformobile">$the_title</span>
-	            <span class="site-name-mobile clicker"><span>$site_name</span></span>
+	             <!--<span class="hideformobile">$the_title</span>
+	            <span class="site-name-mobile clicker"><span>$site_name</span></span>-->
 	            <div id="subnav-mobile">
 				#if ($has_navigation)
 				

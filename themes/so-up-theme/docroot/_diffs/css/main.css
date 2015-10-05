@@ -33,3 +33,6 @@
   margin-left: 22%;
 }
 
+li.info-link-container {
+    display: none;
+}
