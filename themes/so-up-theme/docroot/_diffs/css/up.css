@@ -327,14 +327,14 @@ html.aui
 							span.user-notifications-count
 							{
 								    top: 0px;
-   	 								height: 45px;
+   	 								height: 100%;
     								line-height: 20px;
    									background-position: 4px 379px;
     								background-color: transparent;
     								font-weight: bold;
   
     								padding-bottom: 0;
-    								width: 40px;
+    								width: 100%;
 							}
 							
 							span.user-notifications-count::after
@@ -1165,7 +1165,7 @@ html.aui
 				}
 
 				
-				/* später sortieren */
+				/* spï¿½ter sortieren */
 				
 				.so-portlet-sites ul.site-list li.social-office-enabled {
     background-image: none !important;
