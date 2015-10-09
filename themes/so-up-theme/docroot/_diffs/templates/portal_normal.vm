@@ -150,6 +150,7 @@
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
 		<div id="up_logo">
+
 			<div id="up_logo_wrapper">
 	            <div id="up_logo_indicator"></div>
     	        <div id="up_logo_image">
@@ -166,6 +167,19 @@
 							#parse ("$full_templates_path/navigation-mobile.vm")
 						#end
 					</div>
+
+            <div id="up_logo_indicator"></div>
+            <div id="up_logo_image">
+                <a title="Zur Startseite" href="/">
+                <img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png"></a>
+            </div>
+	        <div id="up_logo_title">
+	            <a title="Zur Startseite" href="$company_url">$company_name</a>
+	            <!--<span class="hideformobile">$the_title</span>
+	            <span class="site-name-mobile clicker"><span>$site_name</span></span>-->
+	            <div id="subnav-mobile">
+				#if ($has_navigation)
+
 				
 	       		</div>
             	<div id="up_logo_footer">
