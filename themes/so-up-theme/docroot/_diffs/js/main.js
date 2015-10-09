@@ -31,7 +31,7 @@ AUI().ready(
 		if(body)
 		{
 			A.on('scroll', function(e) {
-				if(window.scrollY > 50)
+				if(window.scrollY > 200)
 				{
 					body.addClass("smallhead");
 				}

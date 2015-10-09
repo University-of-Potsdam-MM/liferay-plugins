@@ -99,7 +99,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 20px auto;
+  margin: 0px auto;
 }
 
 #content  {
@@ -157,11 +157,13 @@ h2.page-title {
 }
 
 /* Breadcrumbs*/
-
+.aui nav#breadcrumbs {
+    background-color: #ededed;
+}
 .aui .breadcrumb {
   width: 90%;
-  margin: 15px auto 15px auto;
-  padding: 8px 15px;
+  margin: 0px auto 15px auto;
+  padding: 15px 0 15px 0;
   background-color: #ededed;
  }
 
@@ -176,7 +178,7 @@ h2.page-title {
 	
 	width: 40px;
 	height: 40px;
-	background-image: url(../images/up_icons.png);
+	background-image: url(/so-up-theme/css/../images/up_icons.png);
 	background-repeat: no-repeat;
 	background-position: -66px -191px;
 	text-indent: -100px;
