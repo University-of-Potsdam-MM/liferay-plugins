@@ -250,6 +250,14 @@ td.feedback-delivered span img {
     border-left: none !important;
 }
 
+.aui #portlet_myportfolio_WAR_portfolioportlet .table th.table-sortable-column div.table-sort-liner {
+    color: #fff;
+}
+
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_  .table th.table-sortable-column div.table-sort-liner {
+    color: #fff;
+}
+
 .yui3-datatable-paginator-wrapper {
 	padding:0;
 }
