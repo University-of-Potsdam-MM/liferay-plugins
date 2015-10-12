@@ -352,7 +352,8 @@ input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_
 		position: relative;
 	}
 
-	.search {
+
+	#portlet_myportfolio_WAR_portfolioportlet .search, #p_p_id_otherportfolios_WAR_portfolioportlet_ .search {
 		background: #FFF url(/so-up-theme/images/forms/input_shadow.png) no-repeat;
 		border: 1px solid;
 		border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
