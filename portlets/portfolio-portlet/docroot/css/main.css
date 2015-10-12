@@ -292,7 +292,26 @@ td.feedback-delivered span img {
   margin-bottom: 0;
     border: 1px solid #ddd;
   color: #014260;
+  background-color:#d0dae3;
 
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button:hover {
+	background-color:#014260;
+	color:#fff;	
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled {
+    color: #D6D6D6 !important;
+    background-color:#DCE7F1;
+
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled:hover{
+	 border: 1px solid #ddd;
+	 color: #D6D6D6 !important;
+	 background-color:#DCE7F1;
+	
 }
 
 
@@ -311,6 +330,14 @@ td.feedback-delivered span img {
   background-color:#d0dae3;
 }
 
+
+form.yui3-datatable-paginator-group #itemsPerPage {
+	margin-right:3px;
+}
+
+.yui3-datatable-paginator form.yui3-datatable-paginator-group .yui3-datatable-paginator-group.yui3-datatable-paginator-per-page label select {
+	width:auto;
+}
 
 
 
