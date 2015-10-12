@@ -124,4 +124,11 @@ section #portlet_58 {
 .guest-site.signed-out.public-page #content {
 	margin-left: 0;
 }
-	
+
+.guest-site.signed-out #banner #uppertoolbar #position-wrapper #p_p_id_145_ ul.nav-account-controls li{
+	width:100px;
+}	
+
+.guest-site.signed-out #banner #uppertoolbar #position-wrapper #p_p_id_145_ ul.nav-account-controls li a{
+	    padding: 8px 3px 8px 3px;
+}	
