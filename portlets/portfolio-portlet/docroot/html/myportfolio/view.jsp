@@ -327,6 +327,7 @@ AUI().use(
 
 Liferay.provide(window, '<portlet:namespace />deletePortfolio',
     function(plid) {
+	if (confirmDeletion()){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deletePortfolioURL.toString()%>', {
                 dataType: 'text/html',
@@ -340,10 +341,12 @@ Liferay.provide(window, '<portlet:namespace />deletePortfolio',
                 }
             });
         });
+	}
     });
 
 Liferay.provide(window, '<portlet:namespace />deletePublishment',
     function(plid, userId) {
+	if (confirmDeletion()){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deletePublishment1URL.toString()%>', {
                 dataType: 'text/html',
@@ -357,10 +360,12 @@ Liferay.provide(window, '<portlet:namespace />deletePublishment',
                 }
             });
         });
+	}
     });
 
 Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
     function(plid) {
+	if (confirmDeletion()){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deleteGlobalPublishment1URL.toString()%>', {
                 dataType: 'text/html',
@@ -374,6 +379,7 @@ Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
                 }
             });
         });
+	}
     });
 
 Liferay.provide(window, '<portlet:namespace />requestFeedbackFromUser',
@@ -395,6 +401,7 @@ Liferay.provide(window, '<portlet:namespace />requestFeedbackFromUser',
 
 Liferay.provide(window, '<portlet:namespace />deletePortfolioFeedbackRequest',
     function(plid, userId) {
+	if (confirmDeletion()){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deleteFeedbackRequestURL.toString()%>', {
                 dataType: 'text/html',
@@ -408,6 +415,7 @@ Liferay.provide(window, '<portlet:namespace />deletePortfolioFeedbackRequest',
                 }
             });
         });
+	}
     });
 
 function updateTableData(A) {
@@ -537,7 +545,6 @@ AUI().use('aui-base',
             Liferay.Menu.register(iconMenuIdlist[menu]);
         }
     });
-    
 </aui:script>
 
 <% } else { %>
