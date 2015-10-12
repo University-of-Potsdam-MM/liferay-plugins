@@ -258,6 +258,11 @@ html.aui
 												}	
 											}/*end ul li */
 									   	}/* end li */	
+									   	
+									   	li.info-items
+									   	{
+									   		display:none !important;
+									   	}
 						
 						
 												
@@ -369,7 +374,7 @@ html.aui
 				 	 	position:relative;
 				 	 	overflow:hidden;
 				 	 	margin-right:2px;
-				 	 	height:47px;
+				 	 	height:50px;
 				 	 	
 				 	 	form
 				 	 	{
@@ -429,38 +434,28 @@ html.aui
    						{
    							padding:0;
    							margin:0;
+   							width: 140px;
    							
-   							#portlet_82
+   							.portlet-borderless-bar
    							{
-   								border:none;
-   								border-bottom:none !important;
-   								
-   								header
+   								display:none;
+   							}
+   							
+   							.portlet-body
+   							{
+   								form
    								{
-   									display:none;
-   								}
-   								
-   								.portlet-content
-   								{
-   									padding:0;
-   									height:47px;
+   									margin:0;
    									
-   									.portlet-body
+   									.control-group
    									{
-   										height:100%;
+   										margin-bottom:0;
    										
-   										form
+   										select
    										{
-   											margin:0;
-   											height:100%;
-   											
-   											select
-   											{
-   												width:100%;
-   												height:47px;
-   												font-weight: bold;
-    											color: #014260;
-   											}
+   										    margin: 0;
+    										height: 50px;
+   											width: 140px;
    										}
    									}
    								}
@@ -1361,7 +1356,9 @@ background: $upBgColor;
     background-image:none !important;
 }	
 	
-	
+html.aui body .page-customization-bar	{ /*kann bei gelegenheit wieder eingebledent werden */
+	display:none;
+}
 	
 	
 	
