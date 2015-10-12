@@ -259,7 +259,7 @@ html.aui
 											}/*end ul li */
 									   	}/* end li */	
 									   	
-									   	li.info-items
+									   	li.info-items, li.info-link-container 
 									   	{
 									   		display:none !important;
 									   	}
