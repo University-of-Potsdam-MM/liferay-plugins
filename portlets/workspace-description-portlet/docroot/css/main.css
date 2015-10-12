@@ -1,0 +1,28 @@
+#p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-description {
+	margin-bottom: 10px;
+    border-bottom: 1px solid #d0dae3;
+    padding-bottom: 5px;
+}
+
+#p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-description #workspace-description-label {
+	font-weight: bold;
+    color: #014260;
+    display: block;
+    font-family: georgi;
+    font-size: 1.3em;
+    line-height: 1.3em;
+}
+
+#p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-description #workspace-description-content {
+	font-family: georgia, serif;
+    font-style: italic;
+}
+
+#p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-template-name, #p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-template-type {
+	font-size: .8em;
+    color: #777;
+}
+
+#p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-template-type-label, #p_p_id_workspacedescription_WAR_workspacedescriptionportlet_ #workspace-template-name-label {
+		font-weight:bold;
+}
