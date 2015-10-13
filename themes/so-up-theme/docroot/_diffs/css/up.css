@@ -1,5 +1,7 @@
 @import "up";
 
+/*smallhead ab 1006*/
+
 html.aui 
 {
 	.dockbar-split 
@@ -118,7 +120,7 @@ html.aui
 			
 			height: 120px;
 			width:100%;
-			
+			transition: width, height .5s ease;
 			#up_logo_wrapper
 			{
 				width:90%;
@@ -180,6 +182,7 @@ html.aui
 			margin: 0;
 			overflow: visible;
 			min-height: 140px;
+			transition: padding .5s ease-in-out;
 			
 			
 			
@@ -369,7 +372,7 @@ html.aui
 				 	 				 	 
 				 	 #globalsearch
 				 	 {
-				 	 	width:140px;
+				 	 	
 				 	 	float:right;
 				 	 	position:relative;
 				 	 	overflow:hidden;
@@ -381,19 +384,37 @@ html.aui
 				 	 		margin:0;
 				 	 		height:100%;
 				 	 		
-				 	 		input
+				 	 		input[type="text"]
 				 	 		{
-				 	 			width:100%;
+				 	 			width:50px;
 				 	 			margin: 0;
     							box-sizing: border-box;
     							line-height:1;
     							text-indent:30px;
-								
 								height: 100%;
-								background-color:#fff;
+								background-color:#d0dae3;
+								background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
+    							background-repeat:no-repeat;
+    							background-position: -3px 5px;
+    							transition: all .3s ease-in-out;
+    							border:none;
+    							    
 				 	 			
 				 	 		}
 				 	 		
+				 	 		input[type=image]
+				 	 		{
+				 	 			display:none;
+				 	 		}
+				 	 		
+				 	 		input:focus 
+				 	 		{
+				 	 			    width: 140px;
+				 	 			    background-color: #fff;
+    								border: 2px solid #014260;
+    								box-sizing: border-box;
+    							
+				 	 		}
 				 	 		
 				 	 		
 				 	 		select
@@ -410,7 +431,7 @@ html.aui
 				 	 	
 				 	 }/*ende globalsearch*/
 				 	 
-				 	 #globalsearch:before 
+				 	/* #globalsearch:before 
 				 	 		{
 				 	 		content:".";
 				 	 		position:absolute;
@@ -419,14 +440,12 @@ html.aui
 				 	 		display:block;
 				 	 		margin:15px 0 0 5px;
 				 			color:#fff;
-				 	 		background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
-    							background-repeat:no-repeat;
-    							background-position: -12px -1711px;
-				 	 		}
+				 	 		
+				 	 		} */
 				 	
 				 	 #languageselect
     			 	 {
-    			 	    width: 140px;
+    			 	    width: 50px;
     					height: 47px;
    						float:right;
    						
@@ -450,12 +469,16 @@ html.aui
    									.control-group
    									{
    										margin-bottom:0;
+   										width:50px;
    										
    										select
    										{
    										    margin: 0;
     										height: 50px;
-   											width: 140px;
+   											width: 50px;
+   											text-indent:50px;
+   											background: url('/so-up-theme/css/../images/up_icons.png') no-repeat -5px -40px;
+   											background-color:#fff;
    										}
    									}
    								}
@@ -533,7 +556,7 @@ html.aui
 			.title 
 			{
 				background: $upMenuColor;
-				
+				 transition: all .5s cubic-bezier(.09,1,.8,-0.37);
 				-moz-transform: rotate(-90deg);
 				-ms-transform: rotate(-90deg);
 				-o-transform: rotate(-90deg);
@@ -830,6 +853,7 @@ html.aui
 		{
 			background-color:#ededed;
 		
+		
 			ul#main-menu
 			{
 			
@@ -1008,6 +1032,7 @@ background: $upBgColor;
 	.wrapper-portlet-area 
 	{
 		width:99%;
+		margin-top:100px;
 	}
 		
 	#line
@@ -1069,7 +1094,11 @@ background: $upBgColor;
 		
 	#up_logo 
 	{
-		display:none;	
+		    height: 0px;
+    		width: 0px;
+    		
+    		position: absolute;
+    		font-size: 0em;
 	} /*ende up logo */
 			
 	header#banner
@@ -1085,6 +1114,11 @@ background: $upBgColor;
     	box-sizing:border-box;
     	padding-left:140px;
     	
+		#up_section_indicator
+		{
+			visibility:hidden;
+		}
+		
 		#uppertoolbar 
 		{
 			height: 47px;
@@ -1121,7 +1155,7 @@ background: $upBgColor;
 								{
 									li
 									{
-										width:47px;
+										
 										
 														
 																		
@@ -1150,9 +1184,16 @@ background: $upBgColor;
 				 	 				 	 
 				 	 #globalsearch
 				 	 {
-				 	 	height: 30px;
-    					margin-top: 8px;
-    					width: 20%;
+				 	 	height: 46px;
+    					
+    					form
+    					{
+    						input[type="text"]:focus
+    						{
+    							width: 100px;
+    						}
+						}
+    					
     						
 				 	 }/*ende globalsearch*/
 				 	
@@ -1192,7 +1233,7 @@ background: $upBgColor;
     		float: right;
     		margin-top: -20px;
     		height: 47px;
-    		z-index: 4;
+    		z-index: 2;
     		top: 0;
 	
 			
@@ -1208,7 +1249,7 @@ background: $upBgColor;
 					float: right;
     				padding: 0;
     				padding-right: 0;
-   					background: #d0dae3;
+   					background: transparent;
     				margin-left: 2px;
     				height: 47px;
     				width: 47px;
@@ -1239,6 +1280,7 @@ background: $upBgColor;
 			margin-top:-20px;
 			background-color:#d0dae3;
 			margin-top:-20px;
+				transition: background-color .7s ease-in-out;
 			
 			
 		
