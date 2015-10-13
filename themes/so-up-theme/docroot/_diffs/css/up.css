@@ -815,6 +815,7 @@ html.aui
 				margin:0 auto;
 				position:relative;
 				list-style: none;
+				display:block;
 				
 				li
 				{
@@ -1242,7 +1243,7 @@ background: $upBgColor;
 				width:100%;
 				margin:0;
 				height:47px;
-				
+				display:block;
 				
 				li
 				{
@@ -1401,6 +1402,12 @@ background: $upBgColor;
 html.aui body .page-customization-bar	{ /*kann bei gelegenheit wieder eingebledent werden */
 	display:none;
 }
-	
+
+
+/* konfigureiren butten voruebergehend ausblenden */
+
+body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin li:first-child {
+    display: none;
+}	
 	
 	
