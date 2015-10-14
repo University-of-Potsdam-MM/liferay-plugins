@@ -669,10 +669,6 @@ $theme.include($body_bottom_include)
 		src="$javascript_folder/files/up.navigations-79615011a3a452d69f6632ddf8387b43.min.js"></script>
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script>
-	<script type="text/javascript"
-		src="$javascript_folder/files/shadowbox_de-eaa4e8ef27adc478e5d9221f2600b4b6.min.js"></script>
-	<script type="text/javascript"
-		src="$javascript_folder/files/javascript_d0d7de8fd9-d0d7de8fd9ef737cf646b76476cd4a08.min.js"></script>
 	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
 	
 	
