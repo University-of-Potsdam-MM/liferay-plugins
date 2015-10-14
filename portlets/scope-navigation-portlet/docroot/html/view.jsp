@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.model.LayoutSet"%>
 <%@page import="com.liferay.portal.model.Group"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
 <%@page import="com.liferay.portal.service.LayoutLocalServiceUtil"%>
@@ -23,7 +24,10 @@ if (layoutSetGroup.isUser()){
 	privateVisible = layoutSetGroup.getClassPK() == user.getUserId();
 }
 
+LayoutSet layoutset = themeDisplay.getLayoutSet();
 
+String publicURL = PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay, false);
+String privateURL = PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay, true);
 %>
 
 <portlet:actionURL name="changeScope" var="changeScopeURL" >
@@ -31,7 +35,7 @@ if (layoutSetGroup.isUser()){
 </portlet:actionURL>
 
 <aui:form action="<%= changeScopeURL %>" method="post" name="changeScopeForm" >
-	<aui:select name="scopeNavigation" onChange="changeScope()" label="current-location">
+	<aui:select name="scopeNavigation" label="current-location">
 		<% if (privateVisible) {%>
 			<aui:option label="private-space" value="private" class="private" selected="<%= layout.isPrivateLayout() %>" />
 		<% } %>
@@ -41,9 +45,15 @@ if (layoutSetGroup.isUser()){
 </aui:form>
 
 <aui:script>
-function changeScope(){
-	AUI().use("aui-base", function(A){
-		A.one('#<portlet:namespace />changeScopeForm').submit();
-	});
-}
+AUI().use("aui-base", function(A){ 
+	console.log(A.all("#<portlet:namespace />scopeNavigation"));
+	A.all("#<portlet:namespace />scopeNavigation").on('change',function(e){
+		if (e.target.get('value') == 'public'){
+			window.location.href = "<%=publicURL%>"
+		}
+		else{
+			window.location.href = "<%=privateURL%>"
+		}
+	})
+});
 </aui:script>

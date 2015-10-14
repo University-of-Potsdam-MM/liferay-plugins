@@ -4,7 +4,7 @@
 	<portlet>
 		<portlet-name>scope-navigation</portlet-name>
 		<display-name>Scope Navigation</display-name>
-		<portlet-class>de.unipotsdam.elis.ScopeNavigationPortlet</portlet-class>
+		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/html/view.jsp</value>
