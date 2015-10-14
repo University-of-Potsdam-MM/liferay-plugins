@@ -26,7 +26,7 @@ AUI().ready(
 			);
 		}
 		
-		$(window).scroll(function() {
+		/*$(window).scroll(function() {
 		    if ($(window).scrollTop() > 200) {
 		        $('body').addClass('smallhead');
 		    } else {
@@ -36,7 +36,7 @@ AUI().ready(
 		
 		var body = A.one('body');
 		
-		/*if(body)
+		if(body)
 		{
 			A.on('scroll', function(e) {
 				if(window.scrollY > 500)

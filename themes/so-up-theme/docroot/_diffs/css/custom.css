@@ -161,6 +161,7 @@ h2.page-title {
 /* Breadcrumbs*/
 .aui nav#breadcrumbs {
     background-color: #ededed;
+    transition: all .5s cubic-bezier(.09,1,.8,-0.37);
 }
 .aui .breadcrumb {
   width: 90%;
