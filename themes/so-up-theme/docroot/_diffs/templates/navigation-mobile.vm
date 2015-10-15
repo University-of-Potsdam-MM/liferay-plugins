@@ -1,6 +1,6 @@
 <nav class="$nav_css_class click-nav" id="navigation" role="navigation">
 	##-- portlet to change to the public or private area of a workspace -- ##
-	#if ($is_signed_in)
+	#if ($is_signed_in && !$isUserPage)
 	<div class="scope-mobile">
 		$theme.runtime($scopenavigationPortletId, "", "")
 	</div>

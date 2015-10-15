@@ -1,8 +1,9 @@
 <nav class="$nav_css_class" id="navigation" role="navigation">
 	##-- portlet to change to the public or private area of a workspace -- ##
-	#if ($is_signed_in)
+	#if ($is_signed_in && $isUserPage)
 		$theme.runtime($scopenavigationPortletId, "", "")
 	#end
+		
 	<ul aria-label="#language ("site-pages")" role="menubar" class="no-js">
 		<!-- AUI funktioniert in diesem Block nicht -->	
 		#foreach ($nav_item in $nav_items)

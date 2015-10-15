@@ -51,6 +51,8 @@
 	## -- initialize scope navigation portlet to switch to the public or private area of a workspace -- ##
 	#set ($scopenavigationPortletId = "scopenavigation_WAR_scopenavigationportlet")
 	#set ($scopenavigationportletSetup = $portletPreferencesFactory.getLayoutPortletSetup($layout, $scopenavigationPortletId))
+	
+	#set ($isUserPage = $layout.getGroup().isUser())
 
 #else
 	#set ($user_my_sites = $user.getMySiteGroups())
