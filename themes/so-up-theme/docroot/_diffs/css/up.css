@@ -68,6 +68,14 @@ html.aui
 			height: 20px;
 		}
 		
+		#wrapper-portlet-area
+		{
+			#content
+			{
+				min-height:1000px !important;
+			}
+		}
+		
 		.windowdiv
 		{
 			z-index:3500;
