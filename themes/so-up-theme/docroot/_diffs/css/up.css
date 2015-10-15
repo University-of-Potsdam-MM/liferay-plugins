@@ -51,7 +51,8 @@ html.aui
 		padding-left: 0px;
 	}
 
-	body{
+	body
+	{
 		background: $upBgColor;
 		font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
 
@@ -68,13 +69,7 @@ html.aui
 			height: 20px;
 		}
 		
-		#wrapper-portlet-area
-		{
-			#content
-			{
-				min-height:1000px !important;
-			}
-		}
+		
 		
 		.windowdiv
 		{
@@ -119,6 +114,14 @@ html.aui
 			min-height: 100%;
 			position: relative;
 			background: $upBgColor;
+			
+			.wrapper-portlet-area
+			{
+				#content
+				{
+					min-height:1000px !important;
+				}
+			}
 		}
 		
 		
