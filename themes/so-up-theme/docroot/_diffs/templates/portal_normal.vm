@@ -95,12 +95,14 @@
 				#end
 			</ul>
 			<ul class="aui-list-truncate">
+					<!--
 					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
-					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>	
+					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
+					-->	
 				</ul>
 
 			#end
@@ -299,12 +301,14 @@
 			<li>
 				#language("so-up-theme-up-services")<span class="icon arrow"></span>
 				<ul class="hidden">
+					<!--
 					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
 					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
-					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>	
+					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
+					-->	
 				</ul>
 			</li>
 			<li>
