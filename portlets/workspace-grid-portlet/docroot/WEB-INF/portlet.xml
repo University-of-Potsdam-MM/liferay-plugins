@@ -4,7 +4,7 @@
 	<portlet>
 		<portlet-name>workspace-grid</portlet-name>
 		<display-name>Workspace Grid</display-name>
-		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
+		<portlet-class>de.unipotsdam.elis.workspacegrid.WorkspaceGridPortlet</portlet-class>
 		<init-param>
 		     <name>config-template</name>
 		     <value>/configuration.jsp</value>

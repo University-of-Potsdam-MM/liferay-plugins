@@ -16,85 +16,134 @@
 
 <%@ include file="/init.jsp" %>
 
+<portlet:resourceURL var="getUserWorkspacesURL">
+	<portlet:param name="<%=Constants.CMD%>" value="getUserWorkspaces" />
+</portlet:resourceURL>
+<portlet:resourceURL var="saveWorkspaceOrderURL">
+	<portlet:param name="<%=Constants.CMD%>" value="saveWorkspaceOrder" />
+</portlet:resourceURL>
+
 <c:choose>
 	<c:when test="<%= themeDisplay.isSignedIn() %>">
 
 		<%
-		String template1_cfg = GetterUtil.getString(portletPreferences.getValue("template1", StringPool.UTF8));
-		String template2_cfg = GetterUtil.getString(portletPreferences.getValue("template2", StringPool.UTF8));
-		String template3_cfg = GetterUtil.getString(portletPreferences.getValue("template3", StringPool.UTF8));
-	
-		List<WorkspaceSlide> workspaceSlides = new LinkedList<WorkspaceSlide>();
-		List<Group> gruppenArbeiten = null;				
-		
-		try {
-			gruppenArbeiten = WorkspaceUtilService.getAllGroupworkSites();
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-	
-		//System.out.println(gruppenArbeiten);	
-		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, gruppenArbeiten, template1_cfg);
-		List<Group> portfolios = null;		
-	
-		try {
-			portfolios = WorkspaceUtilService.getAllPortfolioSites();
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-	
-		//System.out.println(portfolios);	
-		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, portfolios, template2_cfg);
-		List<Group> courses = null;		
-		
-		try {
-			courses = WorkspaceUtilService.getAllCourseSites();
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-		
-		//System.out.println(courses);		
-		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, courses, template3_cfg);
-		List<Group> other = null;		
-		
-		try {
-			other = WorkspaceUtilService.getOtherSites();
-		} catch (PortalException e1) {
-			e1.printStackTrace();
-		} catch (SystemException e1) {
-			e1.printStackTrace();
-		}
-		
-		//System.out.println(other);		
-		GroupToSlideConverter.convertGroupsToSlides(workspaceSlides, other, template3_cfg);
-		
+		String[] workspaceOrder = portletPreferences.getValues("workspaceOrder", new String[]{});
 		%>
-		<div id="workspacegrid">
-			<%
-			for (WorkspaceSlide workspaceSlide: workspaceSlides){
-				// System.out.println(workspaceSlide);
-			%>
-				
-				<a class="workspaceBox <%= workspaceSlide.getTemplateName() %>" href="<%= workspaceSlide.getWebLink() %>">
-					<span class="linkName"><%= workspaceSlide.getName() %></span>
-					<% if (workspaceSlide.getNumberOfNewActivities()!=0){ %>
-					<span class="numberOfActivities"><%= workspaceSlide.getNumberOfNewActivities() %></span>
-					<% } %> 
-				</a>
-			
-			<%
-			}
-			%>
-			<div style="clear:left;"></div>
+		<div id="<portlet:namespace />workspacegrid">
+		
+        <ul id="<portlet:namespace />workspacegridlist">
+        </ul>
 		</div>
+		<div id="<portlet:namespace />showMoreLinkContainer"></div>
 	</c:when>
 	<c:otherwise>
 	
 	</c:otherwise>
 </c:choose>
+<aui:script>
+var sortable;
+var showAll = false;
+var data;
+AUI().use('aui-base', 'aui-io-request', function(A) {
+    A.io.request('<%=getUserWorkspacesURL.toString()%>', {
+        dataType: 'text/html',
+        method: 'post',
+        on: {
+            success: function(result) {
+            	data = JSON.parse(this.get('responseData'));
+            	renderWorkspaceGrid();
+            }
+        }
+    });
+});
+
+
+function renderWorkspaceGrid(){
+	AUI().use('aui-base', function(A) {
+	var workspacegrid = A.one('#<portlet:namespace />workspacegrid');
+	var workspacegridlist = A.one('#<portlet:namespace />workspacegridlist');
+	var showMoreLinkContainer = A.one('#<portlet:namespace />showMoreLinkContainer');
+	workspacegridlist.empty()
+	var end;
+	var allVisible;
+	if (!showAll && data.length > 10){
+		end = 10;
+		allVisible = false;
+	}
+	else {
+		end = data.length;
+		allVisible = true;
+	}
+	for (var i = 0; i < end; i++) {
+		var group = data[i];
+		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '">' +
+	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
+	    		'<span hidden="true" class="url">' + group.url + '</span>' +
+	    		'<div class="workspaceName">' + group.name + '</div>' +
+				((group.activitiesCount.length > 0) ? ('<span class="numberOfActivities">' + group.activitiesCount + '</span>') : '' ) +
+	    		'</li>');
+	}
+	if (!allVisible){
+		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
+	}
+	else if (showAll){
+		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderLess()">'+ '<%= LanguageUtil.get(pageContext, "show-less")%>' +'</a>');		
+	}
+	else{
+		showMoreLinkContainer.empty(); 
+	}
+	getData();
+	});
+}
+
+function renderMore(){
+	showAll = true;
+	renderWorkspaceGrid();
+}
+
+
+function renderLess(){
+	showAll = false;
+	renderWorkspaceGrid();
+}
+
+function getData(){
+AUI().use(
+		  'sortable',
+		  function(A) {    
+			  sortable = new A.Sortable({
+		        container: '#<portlet:namespace />workspacegrid',
+		        nodes: 'li',
+		        opacity: '.5'
+		    });
+			  var button = 1;
+			  sortable.delegate.after("drag:mouseDown", function(e){
+				  	button = e.ev.button;
+				}, false);
+		  
+			sortable.delegate.after("drag:mouseup", function(e){
+				if (button == 1)
+					window.open(sortable.delegate.get('currentNode').one('.url').get('textContent'),"_self");
+			}, false);
+
+			sortable.delegate.after("drag:drophit", function(e){
+				sortable.delegate.get('currentNode')
+				AUI().use('aui-base', 'aui-io-request', function(A) {
+		        	var node = sortable.delegate.get('currentNode');
+		            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
+		                dataType: 'text/html',
+		                method: 'post',
+		                data: { <portlet:namespace/>prev : (node.previous() ? node.previous().one('.groupId').get('textContent') : 'null'), 
+		                	<portlet:namespace/>next : (node.next() ? node.next().one('.groupId').get('textContent') : 'null'),
+		                	<portlet:namespace/>current: node.one('.groupId').get('textContent')},
+		                on: {
+		                    success: function() {
+		                    }
+		                }
+		            });
+		        });
+			}, false);
+		  }
+		);
+}
+</aui:script>
