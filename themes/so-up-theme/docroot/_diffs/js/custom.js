@@ -39,10 +39,23 @@ function clickdropdown() {
 	
 }
 
-/*
-$(document).ready(myfunction);
-$(window).on('resize',myfunction);
+$('document').ready(function($) {
 
-function myfunction() {
-    // do whatever
-} */
+    function sticky()
+    {
+        var window_top=$(window).scrollTop();
+        var top_position=$('body').offset().top;
+        var element_to_stick=$('body');
+        var winwidth=$(window).width();
+        
+        if (window_top > top_position && winwidth>978) {
+            element_to_stick.addClass('smallhead');
+          
+        } else {
+            element_to_stick.removeClass('smallhead');
+        }
+    }
+    $(window).scroll(sticky);
+    sticky();
+    
+});

@@ -26,12 +26,20 @@ AUI().ready(
 			);
 		}
 		
+		/*$(window).scroll(function() {
+		    if ($(window).scrollTop() > 200) {
+		        $('body').addClass('smallhead');
+		    } else {
+		        $('body').removeClass('smallhead');
+		    }
+		});
+		
 		var body = A.one('body');
 		
 		if(body)
 		{
 			A.on('scroll', function(e) {
-				if(window.scrollY > 50)
+				if(window.scrollY > 500)
 				{
 					body.addClass("smallhead");
 				}
@@ -40,7 +48,7 @@ AUI().ready(
 					body.removeClass("smallhead");
 				}
 		      });
-		}
+		}*/
 		
 		var sidebar = A.one('#sidebar');
 		

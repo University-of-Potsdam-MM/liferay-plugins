@@ -3,15 +3,11 @@
 
 <liferay-portlet-app>
 	<portlet>
-		<portlet-name>workspace-grid</portlet-name>
+		<portlet-name>workspace-description</portlet-name>
 		<icon>/icon.png</icon>
-		<configuration-action-class>de.unipotsdam.elis.portlet.eventlisting.action.ConfigurationActionImpl</configuration-action-class>
-		<preferences-company-wide>false</preferences-company-wide>
-		<preferences-unique-per-layout>false</preferences-unique-per-layout>
-		<preferences-owned-by-group>false</preferences-owned-by-group>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>workspace-grid-portlet</css-class-wrapper>
+		<css-class-wrapper>workspace-description-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

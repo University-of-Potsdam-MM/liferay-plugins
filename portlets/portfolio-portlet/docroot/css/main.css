@@ -250,6 +250,14 @@ td.feedback-delivered span img {
     border-left: none !important;
 }
 
+.aui #portlet_myportfolio_WAR_portfolioportlet .table th.table-sortable-column div.table-sort-liner {
+    color: #fff;
+}
+
+.aui #p_p_id_otherportfolios_WAR_portfolioportlet_  .table th.table-sortable-column div.table-sort-liner {
+    color: #fff;
+}
+
 .yui3-datatable-paginator-wrapper {
 	padding:0;
 }
@@ -284,7 +292,26 @@ td.feedback-delivered span img {
   margin-bottom: 0;
     border: 1px solid #ddd;
   color: #014260;
+  background-color:#d0dae3;
 
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button:hover {
+	background-color:#014260;
+	color:#fff;	
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled {
+    color: #D6D6D6 !important;
+    background-color:#DCE7F1;
+
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled:hover{
+	 border: 1px solid #ddd;
+	 color: #D6D6D6 !important;
+	 background-color:#DCE7F1;
+	
 }
 
 
@@ -303,6 +330,14 @@ td.feedback-delivered span img {
   background-color:#d0dae3;
 }
 
+
+form.yui3-datatable-paginator-group #itemsPerPage {
+	margin-right:3px;
+}
+
+.yui3-datatable-paginator form.yui3-datatable-paginator-group .yui3-datatable-paginator-group.yui3-datatable-paginator-per-page label select {
+	width:auto;
+}
 
 
 
@@ -352,7 +387,8 @@ input#_myportfolio_WAR_portfolioportlet_filterInput, input#_otherportfolios_WAR_
 		position: relative;
 	}
 
-	.search {
+
+	#portlet_myportfolio_WAR_portfolioportlet .search, #p_p_id_otherportfolios_WAR_portfolioportlet_ .search {
 		background: #FFF url(/so-up-theme/images/forms/input_shadow.png) no-repeat;
 		border: 1px solid;
 		border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;

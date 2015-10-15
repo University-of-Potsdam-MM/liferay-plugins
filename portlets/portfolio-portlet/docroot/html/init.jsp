@@ -133,4 +133,8 @@ AUI().use(
 
         }, {});
     });
+    
+function confirmDeletion(){
+	return confirm("<%=LanguageUtil.get(pageContext, "portfolio-confirm-deletion")%>");
+}
 </aui:script>

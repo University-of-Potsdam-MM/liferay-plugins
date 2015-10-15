@@ -1,27 +1,55 @@
 <%@ include file="/init.jsp" %>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="configurationURL" />
+<liferay-portlet:actionURL portletConfiguration="true" var="saveColorsURL"/>
 
 <%
-	String template1_cfg = GetterUtil.getString(portletPreferences.getValue("template1", StringPool.UTF8));
-	String template2_cfg = GetterUtil.getString(portletPreferences.getValue("template2", StringPool.UTF8));
-	String template3_cfg = GetterUtil.getString(portletPreferences.getValue("template3", StringPool.UTF8));
+	List<LayoutSetPrototype> prototypes = LayoutSetPrototypeServiceUtil.search(themeDisplay.getCompanyId(), true, null);
 %>
 
 
-<aui:form action="<%= configurationURL %>" method="post" name="fm">
-    <aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
-    
-	<label for="preferences--template1--">Template 1</label>
-    <aui:input name="preferences--template1--" type="text" value="<%= template1_cfg %>" />
-    
-    <label for="preferences--template2--">Template 2</label>
-    <aui:input name="preferences--template2--" type="text" value="<%= template2_cfg %>" />
-    
-    <label for="preferences--template3--">Template 3</label>
-    <aui:input name="preferences--template3--" type="text" value="<%= template3_cfg %>" />
+<form id="workspaceColorForm" action="<%= saveColorsURL %>" method="post" name="fm">
+
+<label for="noTemplate" ><%= LanguageUtil.get(pageContext, "no-template") %></label>
+<input id="noTemplate" class="colorPickerInput form-control" type="text" readonly
+	value="<%=portletPreferences.getValue(WorkspaceGridPortlet.WORKSPACE_COLOR + WorkspaceGridPortlet.NO_TEMPLATE, WorkspaceGridPortlet.DEFAULT_COLOR)%>"  
+		name="<portlet:namespace /><%= WorkspaceGridPortlet.WORKSPACE_COLOR + WorkspaceGridPortlet.NO_TEMPLATE %>"  
+	style="background-color:<%=portletPreferences.getValue(WorkspaceGridPortlet.WORKSPACE_COLOR + WorkspaceGridPortlet.NO_TEMPLATE, WorkspaceGridPortlet.DEFAULT_COLOR)%>;"/>
+
+<%  for (LayoutSetPrototype prototype : prototypes){%>
+
+	<label for="<%= prototype.getUuid() %>"><%= prototype.getName(themeDisplay.getLocale())%></label>
+	<input id="<%= prototype.getUuid() %>" class="colorPickerInput form-control" type="text" readonly 
+		value="<%=portletPreferences.getValue(WorkspaceGridPortlet.WORKSPACE_COLOR + prototype.getUuid(), WorkspaceGridPortlet.DEFAULT_COLOR)%>"  
+		name="<portlet:namespace /><%= WorkspaceGridPortlet.WORKSPACE_COLOR + prototype.getUuid() %>"
+		style="background-color:<%=portletPreferences.getValue(WorkspaceGridPortlet.WORKSPACE_COLOR + prototype.getUuid(), WorkspaceGridPortlet.DEFAULT_COLOR)%>;"/>
+
+<% }%>
 
     <aui:button-row>
        <aui:button type="submit" />
     </aui:button-row>
-</aui:form>
+</form>
+
+<aui:script>
+AUI().use(
+		  'aui-color-picker-popover',
+		  function(A) {
+		    var colorPicker = new A.ColorPickerPopover(
+		      {
+		        trigger: '.colorPickerInput',
+		        position: 'bottom',
+		        zIndex: 3
+		      }
+		    ).render();
+
+		    colorPicker.on('select',
+		      function(event) {
+		        event.trigger.setStyle('backgroundColor', event.color);
+		        event.trigger.set("value",event.color);
+		        console.log(event.color);
+		      }
+		    );
+		  }
+		);
+
+</aui:script>

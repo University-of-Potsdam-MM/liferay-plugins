@@ -8,6 +8,12 @@ div#p_p_id_145_ {
 }
 
 
+.aui .dockbar-split .dockbar .navbar-inner .nav-account-controls#_145_navAccountControls {
+	
+	position:relative;
+	right:auto;
+}
+
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li {
     background-color: #D0DAE3;

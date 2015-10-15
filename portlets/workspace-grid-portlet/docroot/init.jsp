@@ -1,8 +1,5 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
-<%@ page import="de.unipotsdam.elis.workspacegrid.model.WorkspaceUtilService" %>
-<%@ page import="de.unipotsdam.elis.workspacegrid.model.WorkspaceSlide" %>
-<%@ page import="de.unipotsdam.elis.workspacegrid.model.GroupToSlideConverter" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.LinkedList" %>
 
@@ -11,6 +8,7 @@
 <%@ page import="com.liferay.portal.kernel.exception.SystemException" %>
 <%@ page import="com.liferay.portal.model.Group" %>
 <%@ page import="com.liferay.portal.model.User" %>
+<%@ page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
@@ -21,6 +19,11 @@
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
+
+<%@ page import="com.liferay.portal.kernel.language.LanguageUtil"%>
+<%@ page import="de.unipotsdam.elis.workspacegrid.WorkspaceGridPortlet"%>
+<%@ page import="com.liferay.portal.model.LayoutSetPrototype"%>
+<%@ page import="com.liferay.portal.service.LayoutSetPrototypeServiceUtil"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
