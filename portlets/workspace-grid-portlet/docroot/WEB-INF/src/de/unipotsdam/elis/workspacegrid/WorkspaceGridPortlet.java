@@ -144,9 +144,12 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 	private JSONObject createGroupJSON(Group group, ThemeDisplay themeDisplay, PortletPreferences prefs) throws SystemException, PortalException {
 		JSONObject groupJSON = JSONFactoryUtil.createJSONObject();
 		groupJSON.put("groupId", group.getGroupId());
-		groupJSON.put("name", group.getName());
+		groupJSON.put("name", group.getDescriptiveName(themeDisplay.getLocale()));
 		groupJSON.put("prototypeId", group.getPrivateLayoutSet().getLayoutSetPrototypeId());
-		groupJSON.put("url", PortalUtil.getDisplayURL(group, themeDisplay, true));
+		if (group.hasPrivateLayouts())
+			groupJSON.put("url", PortalUtil.getDisplayURL(group, themeDisplay, true));
+		else
+			groupJSON.put("url", PortalUtil.getDisplayURL(group, themeDisplay, false));
 		String prototypeUUID = group.getPrivateLayoutSet().getLayoutSetPrototypeUuid();
 		groupJSON.put("color", prefs.getValue(WORKSPACE_COLOR + ((prototypeUUID.equals("") ? NO_TEMPLATE : prototypeUUID)), DEFAULT_COLOR));
 		int activitiesCount = SocialActivityLocalServiceUtil.getGroupActivitiesCount(group.getGroupId());
