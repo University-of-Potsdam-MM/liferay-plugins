@@ -17,8 +17,9 @@
 Group layoutSetGroup = themeDisplay.getLayoutSet().getGroup();
 boolean isIrregularSite = !layoutSetGroup.isRegularSite();
 boolean isMember = GroupLocalServiceUtil.hasUserGroup(user.getUserId(), layoutSetGroup.getGroupId());
+System.out.println(layout.getGroup().isUser());
 
-boolean privateVisible = isMember || isIrregularSite;
+boolean privateVisible = (isMember || isIrregularSite) && layoutSetGroup.hasPrivateLayouts();
 
 if (layoutSetGroup.isUser()){
 	privateVisible = layoutSetGroup.getClassPK() == user.getUserId();
