@@ -20,7 +20,7 @@ public class CustomLayoutPermissionImpl extends LayoutPermissionImpl {
 	public boolean contains(PermissionChecker permissionChecker, Layout layout, boolean checkViewableGroup,
 			String actionId) throws PortalException, SystemException {
 
-		if (!permissionChecker.isOmniadmin()) {
+		if (!permissionChecker.isOmniadmin() && permissionChecker.isSignedIn()) {
 			Portfolio portfolio = PortfolioLocalServiceUtil.fetchPortfolio(layout.getPlid());
 			if (portfolio != null) {
 				if (permissionChecker.getUserId() != layout.getUserId()) {
