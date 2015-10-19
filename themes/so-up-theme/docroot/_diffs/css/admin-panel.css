@@ -5,10 +5,10 @@
 .lfr-admin-panel h1 {
 	color:#d0dae3;	
 }
-
+/*
 .aui .lfr-admin-panel.lfr-edit-layout-panel{
 	z-index:7100 !important;
-}
+}*/
 
 .aui .lfr-admin-panel .navbar .nav>li {
 	  margin-right: 3px;
@@ -74,6 +74,7 @@
 
 div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
     background-color: #fff;
+    height:50px;
 }
 
 

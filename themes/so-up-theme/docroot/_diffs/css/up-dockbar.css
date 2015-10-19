@@ -239,7 +239,30 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 
 
 html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
-    color: #fff;
+    color: #fff !important;
 }
 
+
+.aui .dockbar-split .dockbar#_145_dockbar .navbar-inner .nav-add-controls#_145_navAddControls > li > a .nav-item-label {
+	background: #014260;
+    display: none;
+    padding: 5px 20px;
+   
+    white-space: nowrap;
+    margin-right: 5px;
+    color: #fff;
+    left: -250px;
+    top: auto;
+    width: auto;
+  
+    margin-top: -35px;
+
+    right: 50px;
+	
+}
+
+.aui .dockbar-split .dockbar#_145_dockbar .navbar-inner .nav-add-controls#_145_navAddControls > li > a:hover .nav-item-label {
+	display:block !important;
+	height: 40px;
+}
 
