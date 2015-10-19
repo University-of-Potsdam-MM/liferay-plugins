@@ -18,7 +18,7 @@ html.aui
 	.dockbar-split.show-dockbar
 	{
 		border-left: 0px solid white;
-		margin-right: 63px;
+		margin-right: 53px;
 		transition: none;
 		overflow: visible;
 	
@@ -371,8 +371,8 @@ html.aui
 											transition-property: none;
 							
 											width: 60px;
-											height: 300px;
-											overflow: hidden;
+										
+											
 										}
 									}/*end 145 Navbar Collapse */
 								}/*end .container*/	
@@ -1184,6 +1184,11 @@ background: $upBgColor;
 									{
 										position: absolute;
 										right: 0px;
+										
+										ul
+										{
+											padding-top:60px;
+										}
 					
 										
 									}/*end 145 Navbar Collapse */
@@ -1203,6 +1208,10 @@ background: $upBgColor;
     						input[type="text"]:focus
     						{
     							width: 100px;
+    							width: 250px;
+    							position: fixed;
+    							height: 47px;
+    							right: 140px;
     						}
 						}
     					
@@ -1421,4 +1430,14 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
     display: none;
 }	
 	
-	
+/* alert info im contentbereich vorübergehend abblenden */
+
+.aui #content .alert.alert-info {
+    background-color: #eee;
+    opacity: .3;
+}	
+
+.aui #content .portlet-column .alert.alert-info {
+    background-color: #fff091;
+    opacity: 1;
+}

@@ -584,4 +584,19 @@ span.email {
 	font-size: 0.8em;
 	margin-left: 0.5em;
 }
-	
+
+.aui #_myportfolio_WAR_portfolioportlet_form label {
+    font-weight: bold;
+    font-family: georgia,serif;
+    color: #014260;
+}	
+
+
+.aui  #portlet_myportfolio_WAR_portfolioportlet div#description {
+    font-weight: bold;
+}
+
+
+.aui  #portlet_myportfolio_WAR_portfolioportlet div#description #descriptionContent{
+    font-weight: normal;
+}
