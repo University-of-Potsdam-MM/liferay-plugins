@@ -3,9 +3,11 @@ package de.unipotsdam.elis.portfolio.myportfolio;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -448,22 +450,17 @@ public class MyPortfolioPortlet extends MVCPortlet {
 
 		// create portfolio parent page if none exists
 		if (portfolioParentPage == null) {
-			// Map<Locale,String> localeMap =
-			// JspHelper.getLocaleMap("portfolio-portfolio-pages",
-			// portletConfig);
-			// portfolioParentPage =
-			// LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
-			// themeDisplay.getUser().getGroupId(), false,
-			// 0,localeMap,localeMap,null,null,null,LayoutConstants.TYPE_PORTLET,false,parentPageName
+			Map<Locale, String> localeMap = JspHelper.getLocaleMap("portfolio-portfolio-pages", portletConfig);
 			portfolioParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
-					.getGroupId(), false, 0, parentPageName, parentPageName, "", LayoutConstants.TYPE_PORTLET, false,
-					"/" + parentPageName, serviceContext);
+					.getGroupId(), false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET,
+					null, false, new HashMap<Locale, String>(), serviceContext);
+
 			String portletId = (String) actionRequest.getAttribute(WebKeys.PORTLET_ID);
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) portfolioParentPage.getLayoutType();
 			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
 			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
 			LayoutLocalServiceUtil.updateLayout(portfolioParentPage);
-			
+
 			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(portfolioParentPage,
 					portletId);
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
