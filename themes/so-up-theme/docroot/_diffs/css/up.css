@@ -1037,7 +1037,7 @@ html.aui
 	
 }
 	
-html.aui body.smallhead
+html.aui .container-fluid.smallhead
 {
 background: $upBgColor;
 		
@@ -1111,6 +1111,10 @@ background: $upBgColor;
     		
     		position: absolute;
     		font-size: 0em;
+    		
+    		img {
+    			display:none;
+    		}
 	} /*ende up logo */
 			
 	header#banner
