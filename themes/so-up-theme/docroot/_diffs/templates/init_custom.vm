@@ -28,11 +28,13 @@
 	#set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", ""))
 	#set ($themeNamespace = "_" + $themeDisplay.getThemeId() + "_")
 
-	#if ($liferay_toggle_controls == "" && !$show_toggle_controls)
+	#if (!$show_toggle_controls)
 		$sessionClicks.put($request, "liferay_toggle_controls", "hidden")
 
 		#set ($liferay_toggle_controls = "hidden")
 		#set ($css_class = $css_class.replaceAll("controls-visible", "controls-hidden"))
+	#else
+		#set ($css_class = $css_class.replaceAll("controls-hidden", "controls-visible"))
 	#end
 	
 	## -- get private sites -- ##
