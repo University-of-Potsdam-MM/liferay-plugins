@@ -21,17 +21,18 @@
 @import url(./up-dockbar.css);
 
 
-
-
 .container-fluid#wrapper div#content  {
-	width: 100;
+	width: 100%;
   
   margin-left: 0;
 }
 
 .portlet-column {
-	width: 78%;
+	width: 100%;
   
-  margin-left: 22%;
+  margin-left: 0;
 }
 
+li.info-link-container {
+    display: none;
+}

@@ -566,7 +566,7 @@ html.aui {
 	margin-bottom: -1px;
 
 	.portlet-content, .portlet-topper {
-		padding: 1em;
+		padding: 0em;
 	}
 
 	.portlet-topper {

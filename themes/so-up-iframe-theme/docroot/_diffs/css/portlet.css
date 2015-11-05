@@ -1,6 +1,17 @@
  @import "compass"; 
 /*custom*/
+.container-fluid#wrapper div#content  {
+	width: 78%;
+  
+  margin-left: 22%;
+  padding-left: 0px;
+}
 
+.portlet-column {
+	width: 78%;
+  
+  margin-left: 22%;
+}
 
 
 .portlet-column .portlet-column-content {
@@ -13,8 +24,8 @@
 
 
 .portlet {
-	border: 1px solid #014260;
-	border-bottom:1px solid #014260 !important;
+	border:none;
+	border-bottom:none;
 }
 
 
@@ -27,14 +38,14 @@
 
 .portlet-boundary {
 	
-	margin-bottom: 10px;
-	padding-bottom: 10px;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 	
 }
 
 
 .portlet .portlet-content, .portlet .portlet-topper {
-	padding-top: .5em;
+	padding-top:0em;
 }
 
 .portlet-title {
@@ -121,7 +132,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
   right: 5px;
   text-align: right;
   top: 3px;
-  z-index: 300;
+ 
 }
 
 .portlet-draggable .portlet-topper {
