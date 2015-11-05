@@ -9,7 +9,6 @@ import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
-import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -29,6 +28,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
