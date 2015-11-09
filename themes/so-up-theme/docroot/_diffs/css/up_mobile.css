@@ -46,7 +46,7 @@
 		display:none;
 	}
 	
-	html.aui body.smallhead, html.aui body 
+	html.aui .container-fluid.smallhead, html.aui body 
 	{
 	
 		#sidebar.show-sidebar 
@@ -919,7 +919,7 @@
 @include respond-to(phone){
 	
 	
-html.aui body.smallhead, html.aui body 
+html.aui .container-fluid.smallhead, html.aui body 
 	{
 		div#wrapper.container-fluid
 		{

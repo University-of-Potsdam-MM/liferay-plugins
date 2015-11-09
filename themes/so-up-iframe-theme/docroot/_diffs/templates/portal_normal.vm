@@ -22,7 +22,7 @@
 	<div class="windowdiv">
 	</div>
 
-<div class="container-fluid smallhead" id="wrapper">
+<div class="container-fluid" id="wrapper">
 	#if ($is_signed_in)
 		<div id="sidebar">
 			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
@@ -151,33 +151,7 @@
 
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
-		<div id="up_logo">
-
-			<div id="up_logo_wrapper">
-	            <div id="up_logo_indicator"></div>
-    	        	<div id="up_logo_image">
-        	       		<a title="Zur Startseite" href="/">
-            	    	<img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png">
-            	    	</a>
-            		</div>
-	        
-	        	<div id="up_logo_title">
-	            	<a title="Zur Startseite" href="$company_url">$company_name</a>
-	            	<!--<span class="hideformobile">$the_title</span>
-	            	<span class="site-name-mobile clicker"><span>$site_name</span></span>-->
-	            	
-	            	<div id="subnav-mobile">
-						#if ($has_navigation)
-							#parse ("$full_templates_path/navigation-mobile.vm")
-						#end
-					</div>
-
-          		</div><!-- ende logo title -->
-          		
-            	<div id="up_logo_footer">
-            	</div>
-            </div> <!-- ende logo wrapper -->
-        </div>
+		
  		<div id="uppertoolbar">
  			<div id="position-wrapper">
  				#dockbar()
@@ -309,6 +283,7 @@ $theme.include($body_bottom_include)
 		src="$javascript_folder/files/modernizr.custom-573fab3ff3dfd74500f7116dbdb911d2.min.js"></script>
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery-ui-1.9.2.custom.min.js"></script>
+	
 
 	
 	
@@ -329,6 +304,7 @@ $theme.include($body_bottom_include)
 	</script>
 	<noscript><p><img src="//campusup.uni-potsdam.de/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
 	<!-- End Piwik Code -->	
+	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
 </body>
 
 $theme.include($bottom_include)

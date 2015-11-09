@@ -1,4 +1,4 @@
-/* toggle worskpaces navigation dropdown */
+/* toggle worskpaces navigation dropdown
 
 $('document').ready(clickdropdown); 
 
@@ -24,18 +24,17 @@ function clickdropdown() {
 					$('.clicker').removeClass('active');
 				}
 			});
-}
-/*
+}  */
+
 $('document').ready(function($) {
 
     function sticky()
     {
-        var window_top=$(window).scrollTop();
-        var top_position=$('body').offset().top;
+      
         var element_to_stick=$('.container-fluid');
         var winwidth=$(window).width();
         
-        if (window_top > top_position && winwidth>978) {
+        if (winwidth>977) {
             element_to_stick.addClass('smallhead');
           
         } else {
@@ -44,8 +43,8 @@ $('document').ready(function($) {
     }
     sticky();
     
-    $(window).scroll(function() {
+    $(window).resize(function() {
         sticky();
     });
     
-});*/
+});

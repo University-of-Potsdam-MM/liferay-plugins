@@ -185,7 +185,7 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 /* kleiner header */
 
 
-.aui body.smallhead .liferay_dockbar {
+.aui .container-fluid.smallhead .liferay_dockbar {
 	z-index: 1100;
 }
 
