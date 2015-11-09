@@ -8,6 +8,12 @@ div#p_p_id_145_ {
 }
 
 
+.aui .dockbar-split .dockbar .navbar-inner .nav-account-controls#_145_navAccountControls {
+	
+	position:relative;
+	right:auto;
+}
+
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li {
     background-color: #D0DAE3;
@@ -179,7 +185,7 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 /* kleiner header */
 
 
-.aui body.smallhead .liferay_dockbar {
+.aui .container-fluid.smallhead .liferay_dockbar {
 	z-index: 1100;
 }
 
@@ -197,11 +203,12 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
     margin-right:0 !important;
 }
 
+/*
 .smallhead .dockbar .navbar-inner .nav>li {
     width: 60px;
     height: 40px;
    
-}
+} */
 
 .smallhead .dockbar .navbar-inner .nav>li.dockbar-user-notifications {
     height: 43px;
@@ -232,6 +239,34 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 
 
 html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
-    color: #fff;
+    color: #fff !important;
 }
 
+
+.aui .dockbar-split .dockbar#_145_dockbar .navbar-inner .nav-add-controls#_145_navAddControls > li > a .nav-item-label {
+	background: #014260;
+    display: none;
+    padding: 5px 20px;
+   
+    white-space: nowrap;
+    margin-right: 5px;
+    color: #fff;
+    left: -250px;
+    top: auto;
+    width: auto;
+  
+    margin-top: -35px;
+
+    right: 50px;
+	
+}
+
+.aui .dockbar-split .dockbar#_145_dockbar .navbar-inner .nav-add-controls#_145_navAddControls > li > a:hover .nav-item-label {
+	display:block !important;
+	height: 40px;
+}
+
+
+.aui .signed-out .user-avatar .icon-caret-down:before {
+	color:#fff;
+}

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="$root_css_class" dir="#language("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$company_name | $the_title</title>
+	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
+	$theme.include($top_head_include)
+	
+
+</head>
+<body class="dockbar-split so-strata-theme $css_class">
+
+
+	<!-- Ausblenden damit es keine Probleme beim JS gibt-->
+	<div class="hidden">
+		$theme.search()
+		$theme.include($body_top_include)
+	</div>
+	<div class="windowdiv">
+	</div>
+
+<div class="container-fluid" id="wrapper">
+	#if ($is_signed_in)
+		<div id="sidebar">
+			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
+			<div class="content">
+				<h2>Workspaces</h2>
+				$theme.runtime($sitesPortletId, "", "") 
+			</div>
+		</div>
+	#end
+	<header id="mobile-menu">
+		<div id="up-menu">
+			#if ($is_signed_in)
+			<div class="main">
+				<div class="mainnavi-mobile-wrapper">
+				<a href="#grouproom-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger ">
+					<span class="icon grouproom"></span></a>
+				<a href="#personal-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon personal"></span></a>
+				<a href="#contact-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon profile"></span></a>
+				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
+					<span class="icon portfolio"></span></a>
+				</div>
+			</div>
+			#end
+		</div>
+
+		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
+			#if ($is_signed_in)
+			<!-- <ul class="aui-list-truncate">
+				#foreach ($user_site in $user_my_sites)
+					#if ($user_site.hasPrivateLayouts())
+						<li><a href="/group$user_site.friendlyURL">$user_site.descriptiveName</a></li>
+					#elseif ($user_site.hasPublicLayouts())
+						<li><a href="/web$user_site.friendlyURL">$user_site.descriptiveName</a></li>
+					#end
+				#end
+			</ul> -->
+				<ul class="aui-list-truncate">
+					#foreach ($myLayout in $myPrivateLayouts)
+						#set ($portfoliopage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
+								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+							#end
+						#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+							#if ($portfoliopage == "false")
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
+						#end
+					#end
+				</ul>
+			#end
+		</div>
+
+		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			#if ($is_signed_in)
+				#foreach ($myLayout in $myPrivateLayouts)
+					#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
+						#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+					#end
+					#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+						#if ($portfoliopage)
+							#if ($portfoliopage == "false")
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
+						#end
+					#end
+				#end
+			</ul>
+			<ul class="aui-list-truncate">
+					<!--
+					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
+					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
+					-->	
+				</ul>
+
+			#end
+		</div>		
+
+		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			
+			#if ($is_signed_in)
+			<ul class="aui-list-truncate">
+				
+					#foreach ($myLayout in $myPublicLayouts)
+						#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+						#end
+					#end
+			</ul>
+			#end
+		</div>
+		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			#if ($is_signed_in)
+			<ul class="aui-list-truncate">
+					
+				#foreach ($myLayout in $myPrivateLayouts)
+					#set ($portfoliopage = false)
+					#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
+						#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
+							#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+						#end
+					#end
+					#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+						#if ($portfoliopage == "true")
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+						#end
+					#end
+				#end
+				
+			</ul>
+			#end
+		</div>
+		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
+			<ul class="aui-list-truncate">
+				<li></li>
+			</ul>
+		</div>
+	</header>		
+
+	<header id="banner" role="banner">
+		<div class="" id="up_section_indicator"></div>
+		
+ 		<div id="uppertoolbar">
+ 			<div id="position-wrapper">
+ 				#dockbar()
+ 			
+				
+				
+			</div>
+		<div class="clear-left"></div>
+		</div><!--end upper toolbar -->
+		
+		
+		#if ($is_signed_in)
+		<div id="main-menu-wrapper">
+		<ul id="main-menu" class="enabled">
+			<li>
+				#language("so-up-theme-private-space")<span class="icon arrow"></span>
+				<ul class="hidden">
+					#foreach ($myLayout in $myPrivateLayouts)
+						#set ($portfoliopage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
+								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+							#end
+						#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+							#if ($portfoliopage == "false")
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
+						#end
+					#end
+				</ul>
+			</li>
+			<li>
+				#language("so-up-theme-up-services")<span class="icon arrow"></span>
+				<ul class="hidden">
+					<!--
+					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
+					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
+					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
+					-->	
+				</ul>
+			</li>
+			<li>
+				#language("so-up-theme-public-space")<span class="icon arrow"></span>
+				<ul class="hidden">
+					#foreach ($myLayout in $myPublicLayouts)
+						#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+						#end
+					#end
+				</ul>
+			</li>
+			<li class="last-child">#language("so-up-theme-portfolio")
+				<span class="icon arrow"></span>
+				<ul class="hidden">
+					#foreach ($myLayout in $myPrivateLayouts)
+						#set ($portfoliopage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
+								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+							#end
+						#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+							#if ($portfoliopage == "true")
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
+						#end
+					#end
+				</ul>
+			</li>
+			<span class="icon close hidden">#language("close")</span>
+		</ul>
+		</div><!-- end main menu wrapper -->
+		#else
+		<div id="main-menu-wrapper">
+		<ul id="main-menu" class="disabled">
+			<li>
+				#language("so-up-theme-private-space")<span class="icon arrow disabled"></span>
+			</li>
+			<li>
+				#language("so-up-theme-up-services")<span class="icon arrow disabled"></span>
+			</li>
+			<li>
+				#language("my-profile")<span class="icon arrow disabled"></span>
+			</li>
+			<li class="last-child">
+				#language("so-up-theme-portfolio")<span class="icon arrow disabled"></span>
+			</li>
+		</ul>
+		</div> <!-- end main menu wrapper --->
+		#end
+	<!-- 
+		<nav id="breadcrumbs">#breadcrumbs()</nav> -->
+	</header>  
+	<div class="wrapper-portlet-area">
+		
+		
+	
+
+
+		<div id="content">
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+
+				$portletDisplay.setTitle($the_title)
+
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div><!-- end content -->
+	</div><!-- end portlet area wrapper --> 
+ 
+				
+	
+</div>
+
+$theme.include($body_bottom_include)
+
+
+
+	<!-- required js-files for dependencies -->
+	<script type="text/javascript"
+		src="$javascript_folder/files/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="$javascript_folder/files/modernizr.custom-573fab3ff3dfd74500f7116dbdb911d2.min.js"></script>
+	<script type="text/javascript"
+		src="$javascript_folder/files/jquery-ui-1.9.2.custom.min.js"></script>
+	
+
+	
+	
+	
+	<!-- $(window).on('resize',clickdropdown);	-->
+	<!-- Piwik -->
+	<script type="text/javascript">
+	  var _paq = _paq || [];
+	  _paq.push(['trackPageView']);
+	  _paq.push(['enableLinkTracking']);
+	  (function() {
+	    var u="//campusup.uni-potsdam.de/piwik/";
+	    _paq.push(['setTrackerUrl', u+'piwik.php']);
+	    _paq.push(['setSiteId', 1]);
+	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+	  })();
+	</script>
+	<noscript><p><img src="//campusup.uni-potsdam.de/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+	<!-- End Piwik Code -->	
+	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
+</body>
+
+$theme.include($bottom_include)
+
+
+</html>
