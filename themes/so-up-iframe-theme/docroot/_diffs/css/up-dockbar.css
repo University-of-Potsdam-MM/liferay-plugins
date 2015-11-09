@@ -266,3 +266,7 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 	height: 40px;
 }
 
+
+.aui .signed-out .user-avatar .icon-caret-down:before {
+	color:#fff;
+}
