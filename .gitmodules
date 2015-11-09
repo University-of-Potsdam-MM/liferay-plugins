@@ -1,3 +1,6 @@
 [submodule "apps/content-targeting"]
 	path = apps/content-targeting
 	url = git@github.com:liferay/liferay-apps-content-targeting.git
+[submodule "hooks/base-hook"]
+	path = hooks/base-hook
+	url = https://gitup.uni-potsdam.de/elis/base-hook.git
