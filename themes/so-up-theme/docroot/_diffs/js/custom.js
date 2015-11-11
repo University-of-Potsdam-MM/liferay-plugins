@@ -48,4 +48,4 @@ $('document').ready(function($) {
         sticky();
     });
     
-});
+}); 

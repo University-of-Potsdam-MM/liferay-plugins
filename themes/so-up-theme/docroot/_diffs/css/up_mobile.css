@@ -25,14 +25,6 @@
 	
 }
 
-
-
-
-/* allgemein */
-
-/* 1 - wsp navi */
-
-
 @include respond-to(tablet, phone){
 	/* seitenpanel rechts ausblenden/nicht verfügbar */
 
@@ -133,7 +125,7 @@
 		{
 			background-color:#ededed;
 			
-			header#banner #admin-wrapper,
+		
 			header#banner #main-menu,
 			header#banner #breadcrumbs,
 			header#banner #_145_navSiteNavigationNavbarBtn,
@@ -687,6 +679,23 @@
 						}
 					}/*end position wrapper */
 				}/*end uppertoolbar*/
+				
+				#admin-wrapper
+				{ 	
+				
+					top:80px;
+				
+					#admin li 
+					{
+						display:none;
+					}
+				
+					#admin li:first-child 
+					{
+						display:block;
+						top:80px;
+					}
+				}
 				
 				#breadcrumbs
 				{

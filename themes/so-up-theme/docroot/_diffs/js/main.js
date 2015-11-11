@@ -24,7 +24,7 @@ AUI().ready(
 					);
 				}
 			);
-		}
+		} 
 		
 		/*$(window).scroll(function() {
 		    if ($(window).scrollTop() > 200) {
@@ -165,4 +165,4 @@ AUI().ready(
 		var _5_WAR_soportlet_next = function()
 		{}
 	}
-);
+); 

@@ -163,8 +163,8 @@
 	        
 	        	<div id="up_logo_title">
 	            	<a title="Zur Startseite" href="$company_url">$company_name</a>
-	            	<!--<span class="hideformobile">$the_title</span>
-	            	<span class="site-name-mobile clicker"><span>$site_name</span></span>-->
+	            	<!--<span class="hideformobile">$the_title</span>-->
+	            	<span class="site-name-mobile clicker"><span>$site_name</span></span>
 	            	
 	            	<div id="subnav-mobile">
 						#if ($has_navigation)
@@ -217,8 +217,9 @@
 							$join_url.setParameter("groupId", "$page_group.getGroupId()")
 							$join_url.setParameter("addUserIds", "$user_id")
 							$join_url.setWindowState("normal")
-							<li>
+							<li> <span id="requestMemberButton"></span>
 								<a class="action request member-link" href="$join_url" id="memberButton">
+									
 									<span>#language("join-site")</span>
 								</a>
 							</li>
@@ -233,14 +234,16 @@
 							#set ($arguments = [$user_name, $community_name])
 
 							$membership_request_url.setParameter("comments", $languageUtil.format($locale, "x-wishes-to-join-x", $arguments.toArray(), false))
-							<li>
+							<li><span id="requestMemberButton"></span>
 								<a class="action request member-link" href="$membership_request_url" id="memberButton">
+									
 									<span>#language ("request-membership")</span>
 								</a>
 							</li>
 						#elseif ($membership_request)
-							<li>
+							<li> <span id="requestMemberButton"></span>
 								<span class="action request member-link" id="memberButton">
+									
 									<span>#language ("membership-requested")</span>
 								</span>
 							</li>
@@ -646,15 +649,15 @@ $theme.include($body_bottom_include)
 
 
 
-	<!-- required js-files for dependencies -->
+<!-- required js-files for dependencies -->
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="$javascript_folder/files/modernizr.custom-573fab3ff3dfd74500f7116dbdb911d2.min.js"></script>
 	<script type="text/javascript"
-		src="$javascript_folder/files/jquery-ui-1.9.2.custom.min.js"></script>
+		src="$javascript_folder/files/jquery-ui-1.9.2.custom.min.js"></script> 
 
-	<!-- additional js-files for footer -->	
+	<!-- additional js-files for footer -->
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery.foundation.orbit-6d51523cd7444f425eb4e498e938bf94.min.js"></script>
 	<script type="text/javascript"
@@ -672,7 +675,7 @@ $theme.include($body_bottom_include)
 	<script type="text/javascript"
 		src="$javascript_folder/files/up.navigations-79615011a3a452d69f6632ddf8387b43.min.js"></script>
 	<script type="text/javascript"
-		src="$javascript_folder/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script>
+		src="$javascript_folder/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script> 
 	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
 	
 	
