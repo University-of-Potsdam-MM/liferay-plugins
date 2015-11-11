@@ -402,13 +402,14 @@ html.aui
     							box-sizing: border-box;
     							line-height:1;
     							text-indent:30px;
-								height: 100%;
+								height: 47px;
 								background-color:#d0dae3;
 								background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
     							background-repeat:no-repeat;
     							background-position: -3px 5px;
     							transition: width .3s ease-in-out;
     							border:none;
+    						
     							    
 				 	 			
 				 	 		}
@@ -424,6 +425,7 @@ html.aui
 				 	 			    background-color: #fff;
     								border: 2px solid #014260;
     								box-sizing: border-box;
+    								
     							
 				 	 		}
 				 	 		
@@ -490,6 +492,9 @@ html.aui
    											text-indent:50px;
    											background: url('/so-up-theme/css/../images/up_icons.png') no-repeat -5px -40px;
    											background-color:#fff;
+   											-webkit-appearance: none;
+											-moz-appearance: none;
+											appearance: none;
    										}
    									}
    								}
@@ -1247,13 +1252,20 @@ background: $upBgColor;
     					
     					form
     					{
+    						
+    						input[type="text"] {
+    							position: fixed;
+    							right: 180px;
+    						}
+    						
+    						
     						input[type="text"]:focus
     						{
     							width: 100px;
     							width: 250px;
-    							position: fixed;
+    							
     							height: 47px;
-    							right: 140px;
+    							
     						}
 						}
     					
