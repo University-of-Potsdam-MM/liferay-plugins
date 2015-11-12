@@ -11,8 +11,6 @@
 }
 
 
-
-
 .aui  .portlet-wiki .form-search .input-append .btn {
 	
   margin-top: 0;
@@ -104,4 +102,8 @@
 .wiki-body p:first-letter {
 	font-size:2em;
 	font-family:serif;
+}
+
+#wikiCommentsPanelContainer {
+	margin-top:80px;
 }

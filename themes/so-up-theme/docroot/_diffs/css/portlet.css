@@ -106,7 +106,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 /* portlet edit mode */
 
 .portlet-borderless-bar {
-	background-color: #FFF;
+	background-color: #014260;
   padding: 0px;
   margin-bottom: 3px;
     text-align:left;
@@ -114,7 +114,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
  	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
 	font-weight: 300;
 	font-size: 1.6em;
-	color: #014260;
+	color: #fff;
 	
 }
 
@@ -159,7 +159,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 
 /* borderless portlet */
 
-
+.controls-visible .portlet-borderless-container, .portlet-borderless-container
+{
+	border:1px solid #014260;
+	
+}
 
 .portlet-borderless:hover {
 	-webkit-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
@@ -167,12 +171,73 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
 }
 
+.portlet-borderless-bar {
+	background-color: #014260;
+    padding: 0px;
+    margin-bottom: 3px;
+    text-align: left;
+    padding-right: 0px;
+    font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 1.6em;
+    color: #fff;
+    position: relative;
+    height: 25px;
+	
+}
+
+.portlet-borderless-bar .portlet-title-text, .portlet-borderless-bar .portlet-title-default {
+	isplay: block;
+    width: 88%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+    min-width: 100px;
+    text-align: left;
+    text-indent: 10px;
+    font-size: .6em;
+    float: left;
+    line-height: 2;
+    height: 25px;
+}
 
 .portlet-borderless-bar span.portlet-actions {
-	position: absolute;
+	border-radius: 0;
+   
+    display: block !important;
+    position: relative;
+        overflow: visible !important;
+    float: right;
+    max-width:50px !important;
+    text-align: right;
+}
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group {
+	height:23px;
+}
 
-  margin-right: 10px;
-  right:0;
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group a {
+	display: block;
+    width: 19px;
+    height: 19px;
+    z-index: 100;
+    position: absolute;
+    color: #fff;
+        right: 5px;
+    background-color: transparent; 	
+    margin-top: 5px;
+}
+
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group a i.caret {
+	    border-top: 4px solid #fff;
+}
+
+.portlet-borderless-bar span.portlet-actions .portlet-close {
+	display:none;
+}
+
+.aui .portlet-borderless-bar .btn-group.open .dropdown-toggle {
+	    background-image: url(../images/portlet/options_borderless.png);
 }
 
 .portlet-borderless-bar span.portlet-actions span div a li.caret {
