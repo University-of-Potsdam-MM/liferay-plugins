@@ -60,6 +60,8 @@ html.aui
 
 		transition-property: margin-right;
 		transition-duration: 0.2s;
+		
+		overflow-y: hidden;
 
 	
 		#up_section_indicator
