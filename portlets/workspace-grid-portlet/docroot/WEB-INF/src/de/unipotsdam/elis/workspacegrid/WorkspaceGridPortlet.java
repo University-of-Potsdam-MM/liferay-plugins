@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
-import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
@@ -36,15 +35,13 @@ import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class WorkspaceGridPortlet extends MVCPortlet {
 
-	private final String[] INIT_COLORS = new String[] { "#D6C8E4", "#D0DAE3", "#9DE4A2", "#DEE48B", "#D6C8E4",
-			"#E4BBC2", "#E4C8B2" };
+	public final static String[] INIT_COLORS = new String[] { "#8b2939", "#f59c00", "#52822f", "#0080b5", "#e4003a"};
 	public final static String WORKSPACE_COLOR = "workspace_color_";
 	public final static String NO_TEMPLATE = "no_template";
 	public final static String DEFAULT_COLOR = "#D0DAE3";
@@ -65,7 +62,7 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 				color = portletPreferences.getValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), "");
 				if (color.equals("")) {
 					portletPreferences
-							.setValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), INIT_COLORS[(i + 1) % 6]);
+							.setValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), INIT_COLORS[(i + 1) % (INIT_COLORS.length-1)]);
 				}
 			}
 

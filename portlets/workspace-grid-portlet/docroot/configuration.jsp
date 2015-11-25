@@ -1,6 +1,11 @@
 <%@ include file="/init.jsp" %>
 
-<liferay-portlet:actionURL portletConfiguration="true" var="saveColorsURL"/>
+<liferay-portlet:actionURL portletConfiguration="true" var="saveColorsURL" >
+	<portlet:param name="<%=Constants.CMD%>" value="saveColors" />
+</liferay-portlet:actionURL>
+<liferay-portlet:actionURL portletConfiguration="true" var="resetColorsURL">
+	<portlet:param name="<%=Constants.CMD%>" value="resetColors" />
+</liferay-portlet:actionURL>
 
 <%
 	List<LayoutSetPrototype> prototypes = LayoutSetPrototypeServiceUtil.search(themeDisplay.getCompanyId(), true, null);
@@ -26,7 +31,8 @@
 <% }%>
 
     <aui:button-row>
-       <aui:button type="submit" />
+       <aui:button type="submit" onClick="submitForm(0)" />
+       <aui:button type="submit" value="reset" onClick="submitForm(1)"></aui:button>
     </aui:button-row>
 </form>
 
@@ -46,10 +52,18 @@ AUI().use(
 		      function(event) {
 		        event.trigger.setStyle('backgroundColor', event.color);
 		        event.trigger.set("value",event.color);
-		        console.log(event.color);
 		      }
 		    );
 		  }
 		);
-
+function submitForm(action){
+	var A = new AUI();
+	  if(action==0){
+	     A.one('#workspaceColorForm').set('action',"<%=saveColorsURL%>");
+	        console.log("if");
+	  }else{
+	     A.one('#workspaceColorForm').set('action',"<%=resetColorsURL%>");
+	        console.log("else");
+	  }
+	}
 </aui:script>

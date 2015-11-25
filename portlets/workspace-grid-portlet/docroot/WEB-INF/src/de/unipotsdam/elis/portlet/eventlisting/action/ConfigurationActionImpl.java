@@ -1,12 +1,16 @@
 package de.unipotsdam.elis.portlet.eventlisting.action;
 
 
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
 
 import com.liferay.portal.kernel.portlet.DefaultConfigurationAction;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.LayoutSetPrototype;
@@ -21,6 +25,19 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     public void processAction(
         PortletConfig portletConfig, ActionRequest actionRequest,
         ActionResponse actionResponse) throws Exception {
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		if (cmd.equals("saveColors"))
+			saveColors(portletConfig, actionRequest, actionResponse);
+		else if (cmd.equals("resetColors"))
+			resetColors(portletConfig, actionRequest, actionResponse);
+		
+        super.processAction(portletConfig, actionRequest, actionResponse);
+    }
+    
+    private void saveColors(PortletConfig portletConfig, ActionRequest actionRequest,
+            ActionResponse actionResponse) throws Exception{
+    	System.out.println("saveColors");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
 		
@@ -33,9 +50,22 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     	}
     	
     	portletPreferences.store();
+    }
 
-        super.processAction(portletConfig, actionRequest, actionResponse);
-
-        
+    
+    private void resetColors(PortletConfig portletConfig, ActionRequest actionRequest,
+            ActionResponse actionResponse) throws Exception{
+    	System.out.println("resetColors");
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletPreferences portletPreferences = actionRequest.getPreferences();
+		
+		portletPreferences.setValue(WorkspaceGridPortlet.WORKSPACE_COLOR + WorkspaceGridPortlet.NO_TEMPLATE, WorkspaceGridPortlet.INIT_COLORS[0]);
+		List<LayoutSetPrototype> prototypes = LayoutSetPrototypeServiceUtil.search(themeDisplay.getCompanyId(),
+				true, null);
+    	for (int i = 0; i < prototypes.size(); i++){
+    		portletPreferences.setValue(WorkspaceGridPortlet.WORKSPACE_COLOR + prototypes.get(i).getUuid(), WorkspaceGridPortlet.INIT_COLORS[(i + 1) % (WorkspaceGridPortlet.INIT_COLORS.length-1)]);
+    	}
+    	
+    	portletPreferences.store();
     }
 }
