@@ -17,15 +17,11 @@
  */
 --%>
 
-<%@page import="de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil"%>
-<%@page import="de.unipotsdam.elis.portfolio.model.Portfolio"%>
-<%@page
-	import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"
-%>
 <%@ include file="/html/init.jsp"%>
 
 <%
 	List<SocialActivitySet> results = null;
+	Map<String,JSONArray> extResults = new HashMap<String,JSONArray>();
 
 int count = 0;
 long total = 0;
@@ -45,6 +41,12 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 				 results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
 				 total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
 				}
+			else if (tabs1.equals("moodle")){
+				results = new ArrayList<SocialActivitySet>();
+				JSONArray moodleActivites = MoodleRestClient.getLatestCourseNews(user.getScreenName(), PrincipalThreadLocal.getPassword());
+				extResults.put("moodle", moodleActivites);
+				total = moodleActivites.length();
+			}
 			else { 
 				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames, start, end);
 				total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames);
@@ -74,7 +76,7 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	
 
 
-<c:if test="<%=(results.isEmpty())%>">
+<c:if test="<%=(results.isEmpty() && extResults.isEmpty()) || (!extResults.isEmpty() && total == 0) %>">
 	<div class="no-activities">
 		<c:choose>
 			<c:when test="<%=total == 0%>">

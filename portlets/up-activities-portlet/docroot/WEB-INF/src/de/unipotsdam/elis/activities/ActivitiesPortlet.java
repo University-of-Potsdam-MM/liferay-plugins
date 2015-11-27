@@ -24,6 +24,7 @@ import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.microblogs.service.MicroblogsEntryServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Constants;
@@ -50,6 +51,7 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+import de.unipotsdam.elis.activities.moodle.rest.MoodleRestClient;
 import de.unipotsdam.elis.activities.util.ActivitiesUtil;
 
 import java.io.IOException;
@@ -73,7 +75,7 @@ import javax.portlet.ResourceResponse;
  */
 public class ActivitiesPortlet extends MVCPortlet {
 
-	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "portfolio" };
+	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "portfolio", "moodle" };
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {

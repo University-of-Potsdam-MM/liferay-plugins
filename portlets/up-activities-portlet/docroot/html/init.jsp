@@ -33,7 +33,15 @@ page import="com.liferay.portlet.social.model.SocialActivitySet" %><%@
 page import="com.liferay.portlet.social.service.SocialActivityLocalServiceUtil" %><%@
 page import="com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil" %><%@
 page import="de.unipotsdam.elis.activities.util.ActivitiesUtil" %><%@
-page import="de.unipotsdam.elis.activities.ActivitiesPortlet"%>
+page import="de.unipotsdam.elis.activities.ActivitiesPortlet"%><%@
+page import="de.unipotsdam.elis.activities.moodle.rest.MoodleRestClient"%><%@
+page import="com.liferay.portal.kernel.json.JSONArray"%><%@
+page import="com.liferay.portal.security.auth.PrincipalThreadLocal"%><%@
+page import="java.util.HashMap"%><%@
+page import="java.util.Map"%><%@
+page import="de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil"%><%@
+page import="de.unipotsdam.elis.portfolio.model.Portfolio"%><%@
+page import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"%>
 
 <%
 PortletPreferences pref = renderRequest.getPreferences();

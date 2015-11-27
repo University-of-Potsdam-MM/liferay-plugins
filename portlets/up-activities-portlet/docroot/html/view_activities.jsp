@@ -17,7 +17,6 @@
  */
 --%>
 
-<%@page import="com.liferay.portal.kernel.dao.orm.DynamicQueryFactory"%>
 <%@ include file="/html/init.jsp" %>
 
 <%
