@@ -41,7 +41,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class WorkspaceGridPortlet extends MVCPortlet {
 
-	public final static String[] INIT_COLORS = new String[] { "#8b2939", "#f59c00", "#52822f", "#0080b5", "#e4003a"};
+	public final static String[] INIT_COLORS = new String[] { "#AB94FA", "#F6CE87", "#A7E37A", "#8BCBE6", "#FF8C9F"};
 	public final static String WORKSPACE_COLOR = "workspace_color_";
 	public final static String NO_TEMPLATE = "no_template";
 	public final static String DEFAULT_COLOR = "#D0DAE3";
