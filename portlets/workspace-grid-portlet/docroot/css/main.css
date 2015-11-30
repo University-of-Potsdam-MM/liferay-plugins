@@ -1,47 +1,111 @@
-#workspaceColorForm .colorPickerInput{
+#workspaceColorForm .colorPickerInput {
 	cursor: pointer;
 }
 
-#workspacegrid{
+#workspacegrid {
+	
 }
 
 .workspaceslide {
-	width: 110px; height : 100px;
-    vertical-align: top;
+	width: 140px;
+	height: 100px;
+	vertical-align: top;
 	margin: 5px;
 	display: inline-block;
 	text-align: center;
 	line-height: 1.1em;
-    cursor: pointer;
+	cursor: pointer;
 	position: relative;
 }
 
 .workspaceName {
 	position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+	top: 50%;
+	transform: translateY(-50%);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 130px;
+	overflow: hidden;
+	margin: 0 auto;
 }
 
 .numberOfActivities {
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    color: #FFF;
-    position: absolute;
-    top: 5px;
-    left: 85px;
+	width: 20px;
+	height: 20px;
+	border-radius: 100%;
+	color: #FFF;
+	position: absolute;
+	top: 5px;
+	left: 110px;
+}
+
+li.workspaceslide .icon {
+	background-image: url('/so-up-theme/css/../images/up/ple-icons.png') !important;
+	background-position: -1px -335px;
+	float: none !important;
+	position: absolute;
+	top: 5px;
+	left: 94px;
+}
+
+li.workspaceslide:hover .mouseover-actions {
+	width: 130px;
+	height: 75px;
+	background-color: #ededed;
+	margin-top: -15px;
+	padding-top: 15px;
+	opacity: .95;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
+	width: 62px;
+	height: 60px;
+	
+	opacity: .5;
+	/* vertical-align: middle; */
+	/* margin-top: 20px; */
+	float: left;
+	cursor: move;
+	background-image: url('/so-up-theme/css/../images/up/move.png');
+	border: 1px dashed #949494;
+	
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+li.workspaceslide:hover div.workspacename {
+	opacity:.5;
+}
+
+li.workspaceslide:hover .mouseover-actions .visit-workspace {
+	width: 62px;
+	height: 60px;
+	
+	opacity: .5;
+	float: right;
+	border: 1px dashed #949494;
+	background-image: url('/so-up-theme/css/../images/up/link.png');
+	
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+li.workspaceslide:hover .mouseover-actions .visit-workspace:hover, li.workspaceslide:hover .mouseover-actions .move-workspaceslide:hover {
+		opacity: 1;
 }
 
 #demo li {
-    list-style-type: none;
-    padding: 3px;
-    margin: 6px;
-    width: 150px;
-    font-size: 114%;
-    background-color: #B6BFDA;
-    border: 1px solid #7E869D;
-    -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    cursor: move;
+	list-style-type: none;
+	padding: 3px;
+	margin: 6px;
+	width: 150px;
+	font-size: 114%;
+	background-color: #B6BFDA;
+	border: 1px solid #7E869D;
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	cursor: move;
 }

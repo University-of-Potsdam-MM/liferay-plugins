@@ -80,8 +80,8 @@ function renderWorkspaceGrid(){
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
 	    		'<span hidden="true" class="url">' + group.url + '</span>' +
 	    		'<div class="workspaceName">' + group.name + '</div>' +
-				((group.activitiesCount.length > 0) ? ('<span class="numberOfActivities">' + group.activitiesCount + '</span>') : '' ) +
-	    		'</li>');
+				((group.activitiesCount.length > 0) ? ('<span class="numberOfActivities">' + group.activitiesCount + '</span><span class="icon"></span>') : '' ) +
+	    		'<div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
 	}
 	if (!allVisible){
 		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
