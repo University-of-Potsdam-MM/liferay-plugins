@@ -60,10 +60,8 @@ function submitForm(action){
 	var A = new AUI();
 	  if(action==0){
 	     A.one('#workspaceColorForm').set('action',"<%=saveColorsURL%>");
-	        console.log("if");
 	  }else{
 	     A.one('#workspaceColorForm').set('action',"<%=resetColorsURL%>");
-	        console.log("else");
 	  }
 	}
 </aui:script>

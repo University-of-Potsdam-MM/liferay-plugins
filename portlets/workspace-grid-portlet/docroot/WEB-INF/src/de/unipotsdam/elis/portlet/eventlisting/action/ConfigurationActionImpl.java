@@ -37,7 +37,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     
     private void saveColors(PortletConfig portletConfig, ActionRequest actionRequest,
             ActionResponse actionResponse) throws Exception{
-    	System.out.println("saveColors");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
 		
@@ -55,7 +54,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     
     private void resetColors(PortletConfig portletConfig, ActionRequest actionRequest,
             ActionResponse actionResponse) throws Exception{
-    	System.out.println("resetColors");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
 		

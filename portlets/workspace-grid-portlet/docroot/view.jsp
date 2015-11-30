@@ -110,23 +110,28 @@ function renderLess(){
 function getData(){
 AUI().use(
 		  'sortable',
-		  function(A) {    
+		  function(A) {
+			  	var currentNodeYuid;
+
+				A.all('.visit-workspace').on('click',function(a){
+					window.open(a.currentTarget.one('.url').get('textContent'),"_self");});
+				A.all('.move-workspaceslide').on('mousedown',function(a){
+					currentNodeYuid = a.currentTarget.get('_yuid')});
+				A.all('.move-workspaceslide').on('mouseup',function(a){
+					currentNodeYuid = ''});
+				
 			  sortable = new A.Sortable({
 		        container: '#<portlet:namespace />workspacegrid',
 		        nodes: 'li',
 		        opacity: '.5'
-		    });
-			  var button = 1;
-			  sortable.delegate.after("drag:mouseDown", function(e){
-				  	button = e.ev.button;
+		    	});
+			  sortable.delegate.before("drag:mouseDown", function(e){
+				  	if (sortable.delegate.get('currentNode').one('.move-workspaceslide').get('_yuid') != currentNodeYuid){
+				  		e.preventDefault();
+				  	}
 				}, false);
-		  
-			sortable.delegate.after("drag:mouseup", function(e){
-				if (button == 1)
-					window.open(sortable.delegate.get('currentNode').one('.url').get('textContent'),"_self");
-			}, false);
 
-			sortable.delegate.after("drag:drophit", function(e){
+				sortable.delegate.after("drag:drophit", function(e){
 				sortable.delegate.get('currentNode')
 				AUI().use('aui-base', 'aui-io-request', function(A) {
 		        	var node = sortable.delegate.get('currentNode');
