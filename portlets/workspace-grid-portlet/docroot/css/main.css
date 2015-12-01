@@ -7,8 +7,8 @@
 }
 
 .workspaceslide {
-	width: 140px;
-	height: 100px;
+	width: 139px;
+	height: 99px;
 	vertical-align: top;
 	margin: 5px;
 	display: inline-block;
@@ -16,47 +16,57 @@
 	line-height: 1.1em;
 	cursor: pointer;
 	position: relative;
+	background-image: url('/so-up-theme/css/../images/up/workspaces-01.png');
+	border-width:2px;
+	border-style: solid;
 }
 
 .workspaceName {
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
-	white-space: nowrap;
-	text-overflow: ellipsis;
+/*	white-space: nowrap;
+	text-overflow: ellipsis;*/
 	width: 130px;
 	overflow: hidden;
 	margin: 0 auto;
+	    font-weight: bold;
+    color: #014260;
 }
 
-.numberOfActivities {
-	width: 20px;
+.activities {
+	width: 40px;
 	height: 20px;
-	border-radius: 100%;
-	color: #FFF;
+
+
 	position: absolute;
 	top: 5px;
-	left: 110px;
+	left: 80px;
+	
 }
 
-li.workspaceslide .icon {
-	background-image: url('/so-up-theme/css/../images/up/ple-icons.png') !important;
-	background-position: -1px -335px;
-	float: none !important;
-	position: absolute;
-	top: 5px;
-	left: 94px;
+.activity-icon {
+	background-image: url('/so-up-theme/css/../images/up/schablone-glocke.png') !important;
+	background-repeat:no-repeat;
+	background-position:left;
+	width:20px;
+	height:18px;
+	display:inline-block;
+	
 }
+
 
 li.workspaceslide:hover .mouseover-actions {
-	width: 130px;
-	height: 75px;
-	background-color: #ededed;
-	margin-top: -15px;
-	padding-top: 15px;
-	opacity: .95;
-	padding-left: 5px;
-	padding-right: 5px;
+	    width: 129px;
+    height: 99px;
+    background-color: #fff;
+    margin-top: 0;
+    padding-top: 0;
+    opacity: .95;
+    padding-left: 5px;
+    padding-right: 5px;
+    position: absolute;
+    top: 0;
 }
 
 li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
@@ -65,7 +75,7 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
 	
 	opacity: .5;
 	/* vertical-align: middle; */
-	/* margin-top: 20px; */
+	margin-top: 20px; 
 	float: left;
 	cursor: move;
 	background-image: url('/so-up-theme/css/../images/up/move.png');
@@ -87,7 +97,7 @@ li.workspaceslide:hover .mouseover-actions .visit-workspace {
 	float: right;
 	border: 1px dashed #949494;
 	background-image: url('/so-up-theme/css/../images/up/link.png');
-	
+	margin-top: 20px;
     background-position: center;
     background-repeat: no-repeat;
 }

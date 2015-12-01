@@ -76,12 +76,34 @@ function renderWorkspaceGrid(){
 	}
 	for (var i = 0; i < end; i++) {
 		var group = data[i];
-		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '">' +
+		
+		var completeName= group.name;
+	
+		var laenge = completeName.length;
+		 if (laenge > 20) {
+			var shortstring = completeName.substr(0,20);
+	   		var shortName = shortstring.concat(" ...");
+	   		
+	   	    
+			
+		} else {
+			var shortName = group.name;
+			
+		}
+		
+		
+		
+		
+		
+		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
-	    		'<span hidden="true" class="url">' + group.url + '</span>' +
-	    		'<div class="workspaceName">' + group.name + '</div>' +
-				((group.activitiesCount.length > 0) ? ('<span class="numberOfActivities">' + group.activitiesCount + '</span><span class="icon"></span>') : '' ) +
-	    		'<div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
+	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
+	    		//'<div class="workspaceName">' + group.name + '</div>' +
+	    		'<div class="workspaceName">' + shortName + '</div>' +
+	    	
+	    		'<div class="activities">' +
+				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ group.color +'"></span><span class="numberOfActivities" style="color:'+ group.color +'">' + group.activitiesCount + '</span>') : '' ) +
+	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
 	}
 	if (!allVisible){
 		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
