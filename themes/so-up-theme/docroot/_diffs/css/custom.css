@@ -101,7 +101,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 0px auto;
+  margin: 100px auto;
 }
 
 #content  {
@@ -347,6 +347,12 @@ aui .btn.disabled, .aui .btn[disabled] {
   background-color: #D0DAE3 !important;
   border-color: #FFF  !important;
   border-width: 2px  !important;
+}
+
+.aui .dropdown-menu > li > a:hover, .aui .dropdown-menu > li > a:focus, .aui .dropdown-submenu:hover > a, .aui .dropdown-submenu:focus > a {
+    background-color: #e2e9ee;
+    background-image: none;
+    color: #014260;
 }
 
 /* Kleiningkeiten */
