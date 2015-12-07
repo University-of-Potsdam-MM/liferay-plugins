@@ -18,14 +18,17 @@
 --%>
 
 
+<%@page import="com.liferay.portal.kernel.json.JSONObject"%>
 <%
 
 for (JSONArray extActivities : extResults.values()){
 	for (int i = 0; i < extActivities.length(); i++){
 		
+		JSONObject activity = extActivities.getJSONObject(i);
+		
 		%>
 		
-		<%= extActivities.getJSONObject(i).getString("news") %>
+		<%= activity.getString("fullname") + " " +  activity.getString("target") + " " + activity.getString("url")%>
 		
 		<% 
 	}

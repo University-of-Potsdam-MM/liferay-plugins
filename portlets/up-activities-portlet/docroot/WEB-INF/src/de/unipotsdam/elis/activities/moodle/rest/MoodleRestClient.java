@@ -13,13 +13,15 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 
 public class MoodleRestClient {
+	
+	private final static String TARGET = "http://localhost";
 
 	private static String getToken(String username, String password) throws JSONException, ClientErrorException {
 
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("https://eportfolio.uni-potsdam.de").path("moodle/login/token.php")
+		WebTarget target = client.target(TARGET).path("moodle/login/token.php")
 				.queryParam("username", username).queryParam("password", password)
-				.queryParam("service", "webservice_coursenews");
+				.queryParam("service", "webservice_recent_course_activities");
 
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
 
@@ -41,8 +43,8 @@ public class MoodleRestClient {
 		String token = getToken(username, password);
 
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("https://eportfolio.uni-potsdam.de").path("moodle/webservice/rest/server.php")
-				.queryParam("wsfunction", "webservice_get_latest_coursenews")
+		WebTarget target = client.target(TARGET).path("moodle/webservice/rest/server.php")
+				.queryParam("wsfunction", "webservice_get_recent_course_activities")
 				.queryParam("wstoken", token)
 				.queryParam("moodlewsrestformat", "json");
 
@@ -51,20 +53,6 @@ public class MoodleRestClient {
 		if (response.getStatus() != 200) 
 			throw new ClientErrorException(response);
 		
-		JSONObject jsonResponse = JSONFactoryUtil.createJSONObject(response.readEntity(String.class));
-		JSONArray courses = jsonResponse.getJSONArray("courses");
-		
-		if (courses == null)
-			throw new JSONException(jsonResponse.toString());
-
-		JSONArray result = JSONFactoryUtil.createJSONArray();
-		for (int i = 0; i < courses.length(); i++){
-			JSONArray courseNews = courses.getJSONObject(i).getJSONArray("coursenews");
-			for (int j = 0; j < courseNews.length(); j++){
-				result.put(courseNews.getJSONObject(j));
-			}
-		}
-		
-		return result;
+		return JSONFactoryUtil.createJSONArray(response.readEntity(String.class));
 	}
 }
