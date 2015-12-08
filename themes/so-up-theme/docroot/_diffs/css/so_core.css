@@ -591,6 +591,7 @@ html.aui {
 
 .portlet-borderless-bar .portlet-options a {
 	background-image: url(../images/portlet/options_borderless.png);
+	background-repeat:no-repeat;
 }
 
 .controls-visible .portlet-borderless-container {

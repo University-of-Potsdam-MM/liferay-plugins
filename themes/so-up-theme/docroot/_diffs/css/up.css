@@ -932,6 +932,8 @@ html.aui
     				padding-top: 20px;
     				font-size: 1.1em;
     				font-weight: bold;
+    				
+    				
 				
 					.icon
 					{
@@ -963,6 +965,8 @@ html.aui
 							a
 							{
 								color: $upDarkBlue;
+								display:inline-block;
+								width:100%;
 							}
 			
 						}
