@@ -143,6 +143,7 @@ function initSortable() {
             });
             A.all('.visit-workspace').on('click', function(a) {
                 window.open(a.currentTarget.one('.url').get('textContent'), "_self");
+                a.target.addClass('loading');
             });
         });
 
