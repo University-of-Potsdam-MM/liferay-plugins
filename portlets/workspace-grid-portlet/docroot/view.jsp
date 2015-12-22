@@ -32,7 +32,7 @@
 		<%
 		String[] workspaceOrder = portletPreferences.getValues("workspaceOrder", new String[]{});
 		%>
-		<div id="<portlet:namespace />workspacegrid">
+		<div class="loading-animation" id="<portlet:namespace />workspacegrid">
 		
         <ul id="<portlet:namespace />workspacegridlist">
         </ul>
@@ -109,7 +109,8 @@ function renderWorkspaceGrid(){
 	else{
 		showMoreLinkContainer.empty(); 
 	}
-	getData();
+	initSortable();
+	workspacegrid.removeClass('loading-animation');
 	});
 }
 
@@ -124,7 +125,7 @@ function renderLess(){
 	renderWorkspaceGrid();
 }
 
-function getData() {
+function initSortable() {
     AUI().use(
         'aui-base',
         function(A) {
@@ -146,10 +147,8 @@ function getData() {
         });
 
     var elements = document.getElementById('<portlet:namespace />workspacegridlist');
-    console.log(elements);
-    var sortable1 = new Sortable(elements, {
+    var sortable = new Sortable(elements, {
         animation: 250
-    });
-			
+    });	
 }
 </aui:script>
