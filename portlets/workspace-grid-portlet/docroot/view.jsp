@@ -16,6 +16,9 @@
 
 <%@ include file="/init.jsp" %>
 
+<script src="<%=request.getContextPath()%>/js/Sortable/Sortable.js">
+</script>
+
 <portlet:resourceURL var="getUserWorkspacesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserWorkspaces" />
 </portlet:resourceURL>
@@ -83,17 +86,9 @@ function renderWorkspaceGrid(){
 		 if (laenge > 20) {
 			var shortstring = completeName.substr(0,20);
 	   		var shortName = shortstring.concat(" ...");
-	   		
-	   	    
-			
 		} else {
 			var shortName = group.name;
-			
 		}
-		
-		
-		
-		
 		
 		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
@@ -129,48 +124,32 @@ function renderLess(){
 	renderWorkspaceGrid();
 }
 
-function getData(){
-AUI().use(
-		  'sortable',
-		  function(A) {
-			  	var currentNodeYuid;
+function getData() {
+    AUI().use(
+        'aui-base',
+        function(A) {
+            var currentNodeYuid;
 
-				A.all('.visit-workspace').on('click',function(a){
-					window.open(a.currentTarget.one('.url').get('textContent'),"_self");});
-				A.all('.move-workspaceslide').on('mousedown',function(a){
-					currentNodeYuid = a.currentTarget.get('_yuid')});
-				A.all('.move-workspaceslide').on('mouseup',function(a){
-					currentNodeYuid = ''});
-				
-			  sortable = new A.Sortable({
-		        container: '#<portlet:namespace />workspacegrid',
-		        nodes: 'li',
-		        opacity: '.5'
-		    	});
-			  sortable.delegate.before("drag:mouseDown", function(e){
-				  	if (sortable.delegate.get('currentNode').one('.move-workspaceslide').get('_yuid') != currentNodeYuid){
-				  		e.preventDefault();
-				  	}
-				}, false);
+            A.all('.workspaceslide').on('mousedown', function(a) {
+                if (!a.target.hasClass('move-workspaceslide')) {
+                    a.preventDefault();
+                }
+            });
+            A.all('.mouseover-actions').on('mousedown', function(a) {
+                if (!a.target.hasClass('move-workspaceslide')) {
+                    a.preventDefault();
+                }
+            });
+            A.all('.visit-workspace').on('click', function(a) {
+                window.open(a.currentTarget.one('.url').get('textContent'), "_self");
+            });
+        });
 
-				sortable.delegate.after("drag:drophit", function(e){
-				sortable.delegate.get('currentNode')
-				AUI().use('aui-base', 'aui-io-request', function(A) {
-		        	var node = sortable.delegate.get('currentNode');
-		            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
-		                dataType: 'text/html',
-		                method: 'post',
-		                data: { <portlet:namespace/>prev : (node.previous() ? node.previous().one('.groupId').get('textContent') : 'null'), 
-		                	<portlet:namespace/>next : (node.next() ? node.next().one('.groupId').get('textContent') : 'null'),
-		                	<portlet:namespace/>current: node.one('.groupId').get('textContent')},
-		                on: {
-		                    success: function() {
-		                    }
-		                }
-		            });
-		        });
-			}, false);
-		  }
-		);
+    var elements = document.getElementById('<portlet:namespace />workspacegridlist');
+    console.log(elements);
+    var sortable1 = new Sortable(elements, {
+        animation: 250
+    });
+			
 }
 </aui:script>
