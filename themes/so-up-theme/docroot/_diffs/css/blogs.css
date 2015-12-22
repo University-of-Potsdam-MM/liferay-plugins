@@ -192,10 +192,6 @@ body .portlet-blogs .edit-actions a:hover {
 	width: 98%;
 }
 
-.portlet-blogs #blogsCommentsPanelContainer .accordion-inner .aui input+br {
-	display: none;
-}
-
 .fieldset.add-comment a {
 	background-color: #d0dae3;
 	padding: 5px;
