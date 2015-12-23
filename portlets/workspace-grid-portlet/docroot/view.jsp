@@ -155,7 +155,22 @@ function initSortable() {
 
     var elements = document.getElementById('<portlet:namespace />workspacegridlist');
     var sortable = new Sortable(elements, {
-        animation: 250
+        animation: 250,
+        onEnd: function (/**Event*/evt) {
+            console.log(evt);
+            AUI().use('aui-base', 'aui-io-request', function(A) {
+	            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>newIndex : evt.newIndex, 
+	                	<portlet:namespace/>oldIndex : evt.oldIndex},
+	                on: {
+	                    success: function() {
+	                    }
+	                }
+	            });
+	        });
+        }
     });	
 }
 </aui:script>

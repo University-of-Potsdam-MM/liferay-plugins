@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -105,17 +107,9 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 		PortletPreferences portletPreferences = resourceRequest.getPreferences();
 		List<String> workspaceOrder = new LinkedList<String>(Arrays.asList(portletPreferences.getValues(
 				"workspaceOrder", new String[] {})));
-		String prev = ParamUtil.getString(resourceRequest, "prev");
-		String next = ParamUtil.getString(resourceRequest, "next");
-		String current = ParamUtil.getString(resourceRequest, "current");
-		workspaceOrder.remove(current);
-		if (prev.equals("null") || prev.equals(current))
-			workspaceOrder.add(0, current);
-		else if (next.equals("null") || next.equals(current))
-			workspaceOrder.add(current);
-		else {
-			workspaceOrder.add(workspaceOrder.indexOf(prev) + 1, current);
-		}
+		int newIndex = ParamUtil.getInteger(resourceRequest, "newIndex");
+		int oldIndex = ParamUtil.getInteger(resourceRequest, "oldIndex");
+		Collections.swap(workspaceOrder, newIndex, oldIndex);
 		portletPreferences.setValues("workspaceOrder", workspaceOrder.toArray(new String[] {}));
 		portletPreferences.store();
 	}
