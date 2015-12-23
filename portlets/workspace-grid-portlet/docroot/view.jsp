@@ -18,6 +18,8 @@
 
 <script src="<%=request.getContextPath()%>/js/Sortable/Sortable.js">
 </script>
+<script src="<%=request.getContextPath()%>/js/hyphenator.js">
+</script>
 
 <portlet:resourceURL var="getUserWorkspacesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserWorkspaces" />
@@ -100,6 +102,10 @@ function renderWorkspaceGrid(){
 				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ group.color +'"></span><span class="numberOfActivities" style="color:'+ group.color +'">' + group.activitiesCount + '</span>') : '' ) +
 	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
 	}
+	
+	var workspacegridlistnew = $('#<portlet:namespace />workspacegridlist').get(0);
+	Hyphenator.hyphenate(workspacegridlistnew, 'de');
+	
 	if (!allVisible){
 		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
 	}
