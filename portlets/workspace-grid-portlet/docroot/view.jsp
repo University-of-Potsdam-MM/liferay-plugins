@@ -85,8 +85,8 @@ function renderWorkspaceGrid(){
 		var completeName= group.name;
 	
 		var laenge = completeName.length;
-		 if (laenge > 20) {
-			var shortstring = completeName.substr(0,20);
+		 if (laenge > 35) {
+			var shortstring = completeName.substr(0,35);
 	   		var shortName = shortstring.concat(" ...");
 		} else {
 			var shortName = group.name;
