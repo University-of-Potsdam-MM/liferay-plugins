@@ -27,3 +27,7 @@
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
+
+<%
+	String visibleWorkspaces = portletPreferences.getValue(WorkspaceGridPortlet.NUMBER_OF_VISIBLE_WORKSPACES, "10");
+%>

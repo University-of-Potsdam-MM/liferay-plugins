@@ -71,8 +71,8 @@ function renderWorkspaceGrid(){
 	workspacegridlist.empty()
 	var end;
 	var allVisible;
-	if (!showAll && data.length > 10){
-		end = 10;
+	if (!showAll && data.length > parseInt("<%= visibleWorkspaces%>")){
+		end = parseInt("<%= visibleWorkspaces%>");
 		allVisible = false;
 	}
 	else {

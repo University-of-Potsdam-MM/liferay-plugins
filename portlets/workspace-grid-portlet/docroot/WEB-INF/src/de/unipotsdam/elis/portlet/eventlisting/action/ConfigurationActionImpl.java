@@ -48,6 +48,8 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     				ParamUtil.get(actionRequest, WorkspaceGridPortlet.WORKSPACE_COLOR + prototype.getUuid(), WorkspaceGridPortlet.DEFAULT_COLOR));
     	}
     	
+    	portletPreferences.setValue(WorkspaceGridPortlet.NUMBER_OF_VISIBLE_WORKSPACES, ParamUtil.get(actionRequest, WorkspaceGridPortlet.NUMBER_OF_VISIBLE_WORKSPACES, "10"));
+    	
     	portletPreferences.store();
     }
 
