@@ -135,8 +135,6 @@ function initSortable() {
     AUI().use(
         'aui-base',
         function(A) {
-            var currentNodeYuid;
-
             A.all('.workspaceslide').on('mousedown', function(a) {
                 if (!a.target.hasClass('move-workspaceslide')) {
                     a.preventDefault();
@@ -148,8 +146,8 @@ function initSortable() {
                 }
             });
             A.all('.visit-workspace').on('click', function(a) {
+                a.target.ancestor('.workspaceslide').addClass('loading');
                 window.open(a.currentTarget.one('.url').get('textContent'), "_self");
-                a.target.addClass('loading');
             });
         });
 
