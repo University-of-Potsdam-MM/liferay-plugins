@@ -49,7 +49,7 @@
 var sortable;
 var showAll = false;
 var data;
-AUI().use('aui-base', 'aui-io-request', function(A) {
+AUI().use('aui-base', 'aui-io-request-deprecated', function(A) {
     A.io.request('<%=getUserWorkspacesURL.toString()%>', {
         dataType: 'text/html',
         method: 'post',
@@ -146,7 +146,7 @@ function initSortable() {
                 }
             });
             A.all('.visit-workspace').on('click', function(a) {
-                a.target.ancestor('.workspaceslide').addClass('loading');
+                a.target.ancestor('.workspaceslide').addClass('loading-animation');
                 window.open(a.currentTarget.one('.url').get('textContent'), "_self");
             });
         });
@@ -156,7 +156,7 @@ function initSortable() {
         animation: 250,
         onEnd: function (/**Event*/evt) {
             console.log(evt);
-            AUI().use('aui-base', 'aui-io-request', function(A) {
+            AUI().use('aui-base', 'aui-io-request-deprecated', function(A) {
 	            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
 	                dataType: 'text/html',
 	                method: 'post',
