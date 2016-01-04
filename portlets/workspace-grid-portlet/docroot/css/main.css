@@ -101,6 +101,10 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
 	display:none;
 }
 
+.loading-animation:hover .mouseover-actions {
+	display:none;
+}
+
 li.workspaceslide:hover div.workspaceName {
 	opacity:.5;
 }
