@@ -53,6 +53,8 @@
   background-color: #F5F8FB !important;
 }
 
+
+
  #portlet_myportfolio_WAR_portfolioportlet .table-col-titleOptions, 
 #portlet_myportfolio_WAR_portfolioportlet .table-col-publishmentOptions, 
 #portlet_myportfolio_WAR_portfolioportlet .table-col-feedbackOptions {
@@ -81,6 +83,9 @@
     /* background-color: #C8D5E0 !important; */
 }
 
+td.table-col-changes.table-sorted {
+    background: #F5F8FB;
+}
 
 
 /*trenner */
