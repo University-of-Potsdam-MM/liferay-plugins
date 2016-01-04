@@ -92,7 +92,11 @@ function renderWorkspaceGrid(){
 			var shortName = group.name;
 		}
 		
-		workspacegridlist.append('<li class="workspaceslide hyphenate" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
+		var additionalClasses = '';
+		if (group.globalWorkspace == 'true')
+			additionalClasses += 'globalWorkspace';
+			
+		workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
 	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
 	    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +

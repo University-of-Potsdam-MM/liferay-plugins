@@ -35,7 +35,10 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.AccountLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
@@ -124,18 +127,19 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 		String[] workspaceOrder = portletPreferences.getValues("workspaceOrder", new String[] {});
 		Map<String, Group> userGroups = getUserGroupMap(themeDisplay.getUser());
 		List<String> newWorkspaceOrder = new ArrayList<String>();
+		String portalName = AccountLocalServiceUtil.getAccounts(0, 1).get(0).getName();
 
 		for (String groupId : workspaceOrder) {
 			if (userGroups.containsKey(groupId)) {
 				groupJSONArray.put(createGroupJSON(userGroups.remove(groupId), themeDisplay, portletPreferences,
-						(LiferayPortletResponse) resourceResponse));
+						(LiferayPortletResponse) resourceResponse, portalName));
 				newWorkspaceOrder.add(groupId);
 			}
 		}
 
 		for (Group group : userGroups.values()) {
 			groupJSONArray.put(createGroupJSON(group, themeDisplay, portletPreferences,
-					(LiferayPortletResponse) resourceResponse));
+					(LiferayPortletResponse) resourceResponse, portalName));
 			newWorkspaceOrder.add(String.valueOf(group.getGroupId()));
 		}
 
@@ -147,7 +151,7 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 	}
 
 	private JSONObject createGroupJSON(Group group, ThemeDisplay themeDisplay, PortletPreferences prefs,
-			LiferayPortletResponse response) throws SystemException, PortalException, WindowStateException {
+			LiferayPortletResponse response, String portalName) throws SystemException, PortalException, WindowStateException {
 		JSONObject groupJSON = JSONFactoryUtil.createJSONObject();
 		groupJSON.put("groupId", group.getGroupId());
 		groupJSON.put("name", group.getDescriptiveName(themeDisplay.getLocale()));
@@ -168,6 +172,11 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 				+ ((prototypeUUID.equals("") ? NO_TEMPLATE : prototypeUUID)), DEFAULT_COLOR));
 		int activitiesCount = SocialActivityLocalServiceUtil.getGroupActivitiesCount(group.getGroupId());
 		groupJSON.put("activitiesCount", (activitiesCount > 0) ? String.valueOf(activitiesCount) : "");
+		
+		if (group.getDescriptiveName().equals(portalName) && UserLocalServiceUtil.getUser(group.getCreatorUserId()).isDefaultUser())
+			groupJSON.put("globalWorkspace", Boolean.TRUE.toString());
+		else
+			groupJSON.put("globalWorkspace", Boolean.FALSE.toString());
 		return groupJSON;
 	}
 
