@@ -46,6 +46,7 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 	public final static String[] INIT_COLORS = new String[] { "#AB94FA", "#F6CE87", "#A7E37A", "#8BCBE6", "#FF8C9F"};
 	public final static String WORKSPACE_COLOR = "workspace_color_";
 	public final static String NO_TEMPLATE = "no_template";
+	public final static String NUMBER_OF_VISIBLE_WORKSPACES = "number_of_visible_workspaces";
 	public final static String DEFAULT_COLOR = "#D0DAE3";
 
 	@Override
