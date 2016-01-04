@@ -92,19 +92,16 @@ function renderWorkspaceGrid(){
 			var shortName = group.name;
 		}
 		
-		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
+		workspacegridlist.append('<li class="workspaceslide hyphenate" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
 	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
-	    		//'<div class="workspaceName">' + group.name + '</div>' +
-	    		'<div class="workspaceName">' + shortName + '</div>' +
-	    	
+	    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
 	    		'<div class="activities">' +
 				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ group.color +'"></span><span class="numberOfActivities" style="color:'+ group.color +'">' + group.activitiesCount + '</span>') : '' ) +
 	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
+
+		Hyphenator.hyphenate($('#name_' + group.groupId).get(0), 'de');
 	}
-	
-	var workspacegridlistnew = $('#<portlet:namespace />workspacegridlist').get(0);
-	Hyphenator.hyphenate(workspacegridlistnew, 'de');
 	
 	if (!allVisible){
 		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
