@@ -20,6 +20,8 @@
 
 @import url(./up-dockbar.css);
 
+@import url(./overlays.css);
+
 
 .container-fluid#wrapper div#content  {
 	width: 76%;
