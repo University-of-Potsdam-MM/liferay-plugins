@@ -162,10 +162,12 @@ body .portlet-blogs .edit-actions a:hover {
 	background-color: #B3C8DA;
     border-radius: 0;
     width: 100%;
+    margin-left:0;
+    text-indent:4px;
 }
 
 .portlet-boundary_33_.portlet-blogs .entry-body {
-	padding-right: 50px;
+	padding-right: 40px;
     text-align: justify;
 }
 
@@ -437,12 +439,12 @@ body .portlet-blogs .edit-actions a:hover {
 
 .portlet-blogs .edit-actions {
 	background-color: transparent;
-    position: absolute;
-    height: 88%;
+    position: absolute !important;
+    height: 86%;
     right: 0;
     top: 0px;
     opacity: .9;
-    padding-top: 40px;
+    padding-top: 40px !important;
     width: auto;
     
 }

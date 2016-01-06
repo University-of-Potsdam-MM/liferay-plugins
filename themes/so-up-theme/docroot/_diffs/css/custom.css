@@ -370,5 +370,10 @@ aui .btn.disabled, .aui .btn[disabled] {
 	
 }
 
+.separator {
+	border-style:solid;
+	border-color:#ededed;
+}
+
 /*--------------*/
 
