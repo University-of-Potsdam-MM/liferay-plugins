@@ -87,7 +87,7 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
     background-repeat: no-repeat;
 }
 
-.loading-animation {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation {
     background: url(../images/progress_bar/loading_animation.gif) no-repeat;
     background-position: center !important;
     text-align: left;
@@ -97,11 +97,11 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
    
 }
 
-.loading-animation div.workspaceName, .loading-animation .activities {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation div.workspaceName, .loading-animation .activities {
 	display:none;
 }
 
-.loading-animation:hover .mouseover-actions {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation:hover .mouseover-actions {
 	display:none;
 }
 
