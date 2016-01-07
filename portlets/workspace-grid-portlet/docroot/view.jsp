@@ -93,15 +93,18 @@ function renderWorkspaceGrid(){
 		}
 		
 		var additionalClasses = '';
-		if (group.globalWorkspace == 'true')
+		var backgroundColor = group.color;
+		if (group.globalWorkspace == 'true'){
 			additionalClasses += 'globalWorkspace';
+			backgroundColor = '#014260'; 
+		}
 			
-		workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + group.color + '; border-color:'+ group.color +'">' +
+		workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
 	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
 	    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
 	    		'<div class="activities">' +
-				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ group.color +'"></span><span class="numberOfActivities" style="color:'+ group.color +'">' + group.activitiesCount + '</span>') : '' ) +
+				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ backgroundColor +'"></span><span class="numberOfActivities" style="color:'+ backgroundColor +'">' + group.activitiesCount + '</span>') : '' ) +
 	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
 
 		Hyphenator.hyphenate($('#name_' + group.groupId).get(0), 'de');
