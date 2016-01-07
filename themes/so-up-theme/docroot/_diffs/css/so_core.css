@@ -1754,6 +1754,8 @@ html.aui {
 
 .taglib-asset-tags-summary .tag {
 	@include tag(false);
+	border-radius:0;
+	background-color:#d0dae3;
 }
 
 /* ---------- Top links component ---------- */

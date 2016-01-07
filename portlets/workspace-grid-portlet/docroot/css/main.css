@@ -23,6 +23,20 @@
 	border-style: solid;
 }
 
+.workspaceslide.globalWorkspace {
+	background-image: url('/so-up-theme/css/../images/up/workspace-fox.png');
+	
+}
+
+.workspaceslide.globalWorkspace .workspaceName {
+    top: 78%;
+    left: 25%;
+    text-transform: uppercase;
+    font-size: 12px;
+   
+}
+
+
 .workspaceName {
 	position: relative;
 	top: 50%;
@@ -87,7 +101,7 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
     background-repeat: no-repeat;
 }
 
-.loading-animation {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation {
     background: url(../images/progress_bar/loading_animation.gif) no-repeat;
     background-position: center !important;
     text-align: left;
@@ -97,11 +111,11 @@ li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
    
 }
 
-.loading-animation div.workspaceName, .loading-animation .activities {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation div.workspaceName, .loading-animation .activities {
 	display:none;
 }
 
-.loading-animation:hover .mouseover-actions {
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation:hover .mouseover-actions {
 	display:none;
 }
 
