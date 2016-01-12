@@ -1,8 +1,8 @@
 body .cke_top, body .cke_bottom {
-	border-bottom: 1px solid #014260;
+	border-bottom: 1px solid #ededed;
 
-  background-color: #014260;
-  border-color: #014260;
+  background-color: #ededed;
+  border-color: #ededed;
 }
 
 
@@ -10,8 +10,7 @@ body .cke_combo_button, a.cke_button {
 	  border: none;
   border-bottom-color: #979797;
  
-  background: #d0dae3;
-
+ 
   color:#014260;
 }
 
@@ -33,8 +32,8 @@ body .cke_toolgroup {
 body .cke_editor__36_editor {
 	margin-bottom:15px;
 	
-   border-left:1px solid #014260 !important;
-    border-right:1px solid #014260 !important;
+   border-left:1px solid #ededed !important;
+    border-right:1px solid #ededed !important;
 }
 
 .cke_editor__36_editor .cke_combo_off a.cke_combo_button:active, .cke_editor__36_editor .cke_combo_on a.cke_combo_button {

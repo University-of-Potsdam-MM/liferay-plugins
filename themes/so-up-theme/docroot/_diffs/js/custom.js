@@ -48,4 +48,23 @@ $('document').ready(function($) {
         sticky();
     });
     
+  
+    
 }); 
+
+
+$(document).ready(function($){
+   
+	function get_height ()
+	{
+		var comp_height= $(".portlet-wiki .wiki-body").height();
+
+		$(".portlet-wiki .page-actions.top-actions").css("height", comp_height+'px');
+	}
+	
+	get_height();
+	
+	$(window).resize(function() {
+		get_height();
+	});
+});
