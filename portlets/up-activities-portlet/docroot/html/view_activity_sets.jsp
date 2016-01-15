@@ -17,11 +17,13 @@
  */
 --%>
 
+
 <%@ include file="/html/init.jsp"%>
 
 <%
-	List<SocialActivitySet> results = null;
-	Map<String,JSONArray> extResults = new HashMap<String,JSONArray>();
+
+List<SocialActivitySet> results = null; 
+ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
 
 int count = 0;
 long total = 0;
@@ -38,14 +40,12 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 				total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(group.getClassPK());
 			}
 			else if (tabs1.equals("portfolio")) {
-				 results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
-				 total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
+				 results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), new String[]{Portfolio.class.getName()}, start, end);
+				 total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), new String[]{Portfolio.class.getName()});
 				}
 			else if (tabs1.equals("moodle")){
-				results = new ArrayList<SocialActivitySet>();
-				JSONArray moodleActivites = MoodleRestClient.getLatestCourseNews(user.getScreenName(), PrincipalThreadLocal.getPassword());
-				extResults.put("moodle", moodleActivites);
-				total = moodleActivites.length();
+				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(user.getUserId(), new String[]{MoodleSocialActivity.class.getName()}, start, end);
+				total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(user.getUserId(), new String[]{MoodleSocialActivity.class.getName()});
 			}
 			else { 
 				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames, start, end);
@@ -76,7 +76,7 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	
 
 
-<c:if test="<%=(results.isEmpty() && extResults.isEmpty()) || (!extResults.isEmpty() && total == 0) %>">
+<c:if test="<%=(results.isEmpty()) %>">
 	<div class="no-activities">
 		<c:choose>
 			<c:when test="<%=total == 0%>">

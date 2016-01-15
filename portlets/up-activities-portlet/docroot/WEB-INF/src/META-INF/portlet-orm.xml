@@ -7,4 +7,27 @@
 			<access>PROPERTY</access>
 		</persistence-unit-defaults>
 	</persistence-unit-metadata>
+	<mapped-superclass class="de.unipotsdam.elis.activities.model.impl.MoodleSocialActivityModelImpl">
+		<attributes>
+			<id name="extSocialActivityId" />
+			<basic name="userId" />
+			<basic name="type">
+				<column name="TYPE_" />
+			</basic>
+			<basic name="extServiceActivityType" />
+			<basic name="extServiceContext" />
+			<basic name="data">
+				<column name="DATA_" />
+			</basic>
+			<basic name="published" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+			<transient name="userUuid" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="de.unipotsdam.elis.activities.model.impl.MoodleSocialActivityImpl" name="MoodleSocialActivity">
+		<table name="Activity_MoodleSocialActivity" />
+		<attributes />
+	</entity>
 </entity-mappings>

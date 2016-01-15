@@ -51,7 +51,7 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
-import de.unipotsdam.elis.activities.moodle.rest.MoodleRestClient;
+import de.unipotsdam.elis.activities.extservice.moodle.rest.MoodleRestClient;
 import de.unipotsdam.elis.activities.util.ActivitiesUtil;
 
 import java.io.IOException;

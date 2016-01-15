@@ -3,5 +3,25 @@
 <service-builder package-path="de.unipotsdam.elis.activities">
 	<author>Matthias</author>
 	<namespace>Activity</namespace>
-    <entity name="ExtSocialActivitySet" remote-service="false" local-service="true"></entity>
+	<entity name="ExtSocialActivitySet" remote-service="false" local-service="true"></entity>
+	<entity name="MoodleSocialActivity" remote-service="false" local-service="true">
+
+
+		<!-- PK fields -->
+
+		<column name="extSocialActivityId" type="long" primary="true"></column>
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+		<column name="userId" type="long"></column>
+		<column name="type" type="int"></column>
+		<column name="extServiceActivityType" type="String"></column>
+		<column name="extServiceContext" type="String"></column>
+		<column name="data" type="String"></column>
+		<column name="published" type="long"></column>
+		<finder name="extSocialActivityId" return-type="ExtSocialActivity">
+			<finder-column name="extSocialActivityId"></finder-column>
+		</finder>
+	</entity>
 </service-builder>

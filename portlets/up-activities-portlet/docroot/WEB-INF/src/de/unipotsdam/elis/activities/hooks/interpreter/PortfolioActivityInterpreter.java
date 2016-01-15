@@ -24,7 +24,6 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
@@ -37,7 +36,6 @@ import com.liferay.util.portlet.PortletProps;
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 import de.unipotsdam.elis.portfolio.model.Portfolio;
-import de.unipotsdam.elis.portfolio.service.PortfolioLocalServiceUtil;
 
 public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter {
 
