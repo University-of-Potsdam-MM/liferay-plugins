@@ -47,7 +47,6 @@ String privateURL = PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay,
 
 <aui:script>
 AUI().use("aui-base", function(A){ 
-	console.log(A.all("#<portlet:namespace />scopeNavigation"));
 	A.all("#<portlet:namespace />scopeNavigation").on('change',function(e){
 		if (e.target.get('value') == 'public'){
 			window.location.href = "<%=publicURL%>"
