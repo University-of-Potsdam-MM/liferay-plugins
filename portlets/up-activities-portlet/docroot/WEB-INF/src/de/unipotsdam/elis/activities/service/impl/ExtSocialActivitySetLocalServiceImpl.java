@@ -16,7 +16,7 @@ package de.unipotsdam.elis.activities.service.impl;
 
 import java.util.List;
 
-import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 

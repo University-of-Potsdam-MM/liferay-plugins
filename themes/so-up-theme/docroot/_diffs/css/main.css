@@ -20,15 +20,19 @@
 
 @import url(./up-dockbar.css);
 
+@import url(./overlays.css);
+
+@import url(./comments.css);
+
 
 .container-fluid#wrapper div#content  {
-	width: 78%;
+	width: 76%;
   
   margin-left: 22%;
 }
 
 .portlet-column {
-	width: 78%;
+	width: 76%;
   
   margin-left: 22%;
 }

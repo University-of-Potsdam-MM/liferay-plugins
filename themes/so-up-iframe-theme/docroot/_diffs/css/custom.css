@@ -5,19 +5,43 @@
 
 @import url(./up.css);
 
+@import url(calendar.css);
+
 @import url(activities.css);
 
-/*@import  url(./login.css);*/
+@import url(wiki.css);
+
+@import url(documents.css);
+
+@import url(microblog.css);
+
+@import url(contacts.css);
+
+@import url(messages.css);
+
+@import url(tasks.css);
+
+@import  url(./blogs.css);
+
+@import  url(./login.css);
+
+
 
 @import url(./up_mobile.css);
 
+@import url(./editor-form.css);
+
 @import url(./search.css);
+
+@import url(./webcontent.css);
 
 @import url(./notification.css);
 
 @import url(./footer.css);
 
-@import url(./iframe.css);
+@import url(./profile.css);
+
+@import url(./pagecomments.css);
 
 /*@import url(media_queries.css);*/
 
@@ -77,7 +101,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 1px auto;
+  margin: 0px
 }
 
 #content  {
@@ -135,11 +159,14 @@ h2.page-title {
 }
 
 /* Breadcrumbs*/
-
+.aui nav#breadcrumbs {
+    background-color: #ededed;
+    transition: all .5s cubic-bezier(.09,1,.8,-0.37);
+}
 .aui .breadcrumb {
   width: 90%;
-  margin: 15px auto 15px auto;
-  padding: 8px 15px;
+  margin: 0px auto 15px auto;
+  padding: 15px 0 15px 0;
   background-color: #ededed;
  }
 
@@ -154,7 +181,7 @@ h2.page-title {
 	
 	width: 40px;
 	height: 40px;
-	background-image: url(../images/up_icons.png);
+	background-image: url(/so-up-theme/css/../images/up_icons.png);
 	background-repeat: no-repeat;
 	background-position: -66px -191px;
 	text-indent: -100px;

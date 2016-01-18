@@ -26,7 +26,7 @@
 <% if (portfolios.size() == 0) {%>
 	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-other-portfolios")%></div>
 <% } else { %>
-	<div id="otherPortfoliosTable"></div>  
+	<div id="otherPortfoliosTable" class="loading-animation"></div>  
 	<a id="visibilityHref" href="javascript:void(0);" onClick="<portlet:namespace />changeShownPortfolioPages()"><%= LanguageUtil.get(pageContext, "portfolio-show-hidden-portfolio-pages")%></a>
 <% } %>
 
@@ -68,7 +68,8 @@ AUI().use(
     'datatable-paginator',
     'datatable-sort',
     function(A) {
-        if (A.one("#otherPortfoliosTable") == null)
+    	var otherPortfoliosTableDiv = A.one("#otherPortfoliosTable");
+        if (otherPortfoliosTableDiv == null)
             return;
         var data = JSON.parse('<%=portfoliosJSON%>');
         otherPortfoliosDataTable = new A.DataTable({
@@ -165,6 +166,7 @@ AUI().use(
             });
             otherPortfoliosDataTable.set('data', filteredData);
         });
+        otherPortfoliosTableDiv.removeClass('loading-animation');
     }
 );
 

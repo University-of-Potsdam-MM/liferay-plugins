@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.liferay.compat.portal.kernel.util.ListUtil;
 import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.compat.portal.kernel.util.StringUtil;
-import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -68,6 +67,7 @@ import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portal.kernel.dao.orm.CustomSQLParam;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.liferay.util.dao.orm.CustomSQLUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserFirstNameComparator;
 
 import de.unipotsdam.elis.portfolio.NoSuchFeedbackException;

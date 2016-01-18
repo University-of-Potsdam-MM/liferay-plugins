@@ -78,7 +78,9 @@
   .aui .popover,
   .yui3-skin-sam .yui3-calendar-content,
   .aui .navbar .container,
-  .aui .breadcrumb {
+  .aui .breadcrumb,
+  .aui .btn-group.open .dropdown-toggle,
+  .textboxlistentry, .textboxlistentry-close {
  
  -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
   -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
@@ -101,7 +103,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 0px auto;
+  margin: 100px auto;
 }
 
 #content  {
@@ -349,6 +351,12 @@ aui .btn.disabled, .aui .btn[disabled] {
   border-width: 2px  !important;
 }
 
+.aui .dropdown-menu > li > a:hover, .aui .dropdown-menu > li > a:focus, .aui .dropdown-submenu:hover > a, .aui .dropdown-submenu:focus > a {
+    background-color: #e2e9ee;
+    background-image: none;
+    color: #014260;
+}
+
 /* Kleiningkeiten */
 
 .textboxlistentry {
@@ -362,6 +370,12 @@ aui .btn.disabled, .aui .btn[disabled] {
 	background: #fff !important;
 
 	
+}
+
+.separator {
+	border-style:solid;
+	border-color:#ededed;
+	border-width:1px 0 0 0;
 }
 
 /*--------------*/

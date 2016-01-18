@@ -43,6 +43,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 .aui .wrapper-portlet-area h2 {
 	font-size:1.5em;
+	line-height:1.2;
 }
 
 .aui .wrapper-portlet-area .navbar {
@@ -106,6 +107,28 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	margin-right:3px;
 }
 
+.aui .btn {
+	font-size:.8em;
+	font-family:"source sans pro", arial, sans-serif;
+	font-weight:bold;
+	color:#014260;
+}
+
+.aui .btn-group > .btn, .aui .btn-group > .dropdown-menu, .aui .btn-group > .popover {
+    font-size: 11px;
+}
+
+.aui .btn-group.open .dropdown-toggle {
+	background-color:#014260;
+	color:#fff;
+}
+
+.aui .btn-primary {
+	background-color:#014260;
+	color:#fff;
+	background-image:none;
+}
+
 .aui .wrapper-portlet-area .accordion-heading .accordion-toggle {
 	background:#d0dae3;
 	border:none;
@@ -129,6 +152,10 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 .aui .wrapper-portlet-area .navbar {
 	margin-bottom:0;
+}
+
+.portlet-wiki .taglib-asset-tags-summary .tag {
+	background-color:transparent;	 
 }
 
 .aui .wrapper-portlet-area .navbar .nav>li.active {
@@ -177,4 +204,11 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 .aui .table-bordered {
 	border:none;
+}
+
+/* tabs */
+
+.aui .nav > li > a:hover, .aui .nav > li > a:focus {
+	background-color:#ededed;
+	color:#014260;
 }

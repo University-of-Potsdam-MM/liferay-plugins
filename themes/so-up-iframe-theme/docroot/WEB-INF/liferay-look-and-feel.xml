@@ -6,6 +6,6 @@
 		<version>6.2.0+</version>
 	</compatibility>
 	<theme id="so-up-iframe" name="Social Office UP IFrame">
-		<template-extension>ftl</template-extension>
+		<template-extension>vm</template-extension>
 	</theme>
 </look-and-feel>

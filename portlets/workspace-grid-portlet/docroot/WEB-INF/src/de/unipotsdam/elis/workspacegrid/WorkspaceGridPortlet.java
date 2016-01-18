@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +13,6 @@ import java.util.Map;
 
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
-import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.RenderRequest;
@@ -34,19 +35,21 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.AccountLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 public class WorkspaceGridPortlet extends MVCPortlet {
 
-	private final String[] INIT_COLORS = new String[] { "#D6C8E4", "#D0DAE3", "#9DE4A2", "#DEE48B", "#D6C8E4",
-			"#E4BBC2", "#E4C8B2" };
+	public final static String[] INIT_COLORS = new String[] { "#AB94FA", "#F6CE87", "#A7E37A", "#8BCBE6", "#FF8C9F"};
 	public final static String WORKSPACE_COLOR = "workspace_color_";
 	public final static String NO_TEMPLATE = "no_template";
+	public final static String NUMBER_OF_VISIBLE_WORKSPACES = "number_of_visible_workspaces";
 	public final static String DEFAULT_COLOR = "#D0DAE3";
 
 	@Override
@@ -65,7 +68,7 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 				color = portletPreferences.getValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), "");
 				if (color.equals("")) {
 					portletPreferences
-							.setValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), INIT_COLORS[(i + 1) % 6]);
+							.setValue(WORKSPACE_COLOR + prototypes.get(i).getUuid(), INIT_COLORS[(i + 1) % (INIT_COLORS.length-1)]);
 				}
 			}
 
@@ -108,17 +111,9 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 		PortletPreferences portletPreferences = resourceRequest.getPreferences();
 		List<String> workspaceOrder = new LinkedList<String>(Arrays.asList(portletPreferences.getValues(
 				"workspaceOrder", new String[] {})));
-		String prev = ParamUtil.getString(resourceRequest, "prev");
-		String next = ParamUtil.getString(resourceRequest, "next");
-		String current = ParamUtil.getString(resourceRequest, "current");
-		workspaceOrder.remove(current);
-		if (prev.equals("null") || prev.equals(current))
-			workspaceOrder.add(0, current);
-		else if (next.equals("null") || next.equals(current))
-			workspaceOrder.add(current);
-		else {
-			workspaceOrder.add(workspaceOrder.indexOf(prev) + 1, current);
-		}
+		int newIndex = ParamUtil.getInteger(resourceRequest, "newIndex");
+		int oldIndex = ParamUtil.getInteger(resourceRequest, "oldIndex");
+		Collections.swap(workspaceOrder, newIndex, oldIndex);
 		portletPreferences.setValues("workspaceOrder", workspaceOrder.toArray(new String[] {}));
 		portletPreferences.store();
 	}
@@ -132,18 +127,19 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 		String[] workspaceOrder = portletPreferences.getValues("workspaceOrder", new String[] {});
 		Map<String, Group> userGroups = getUserGroupMap(themeDisplay.getUser());
 		List<String> newWorkspaceOrder = new ArrayList<String>();
+		String portalName = AccountLocalServiceUtil.getAccounts(0, 1).get(0).getName();
 
 		for (String groupId : workspaceOrder) {
 			if (userGroups.containsKey(groupId)) {
 				groupJSONArray.put(createGroupJSON(userGroups.remove(groupId), themeDisplay, portletPreferences,
-						(LiferayPortletResponse) resourceResponse));
+						(LiferayPortletResponse) resourceResponse, portalName));
 				newWorkspaceOrder.add(groupId);
 			}
 		}
 
 		for (Group group : userGroups.values()) {
 			groupJSONArray.put(createGroupJSON(group, themeDisplay, portletPreferences,
-					(LiferayPortletResponse) resourceResponse));
+					(LiferayPortletResponse) resourceResponse, portalName));
 			newWorkspaceOrder.add(String.valueOf(group.getGroupId()));
 		}
 
@@ -155,7 +151,7 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 	}
 
 	private JSONObject createGroupJSON(Group group, ThemeDisplay themeDisplay, PortletPreferences prefs,
-			LiferayPortletResponse response) throws SystemException, PortalException, WindowStateException {
+			LiferayPortletResponse response, String portalName) throws SystemException, PortalException, WindowStateException {
 		JSONObject groupJSON = JSONFactoryUtil.createJSONObject();
 		groupJSON.put("groupId", group.getGroupId());
 		groupJSON.put("name", group.getDescriptiveName(themeDisplay.getLocale()));
@@ -176,6 +172,11 @@ public class WorkspaceGridPortlet extends MVCPortlet {
 				+ ((prototypeUUID.equals("") ? NO_TEMPLATE : prototypeUUID)), DEFAULT_COLOR));
 		int activitiesCount = SocialActivityLocalServiceUtil.getGroupActivitiesCount(group.getGroupId());
 		groupJSON.put("activitiesCount", (activitiesCount > 0) ? String.valueOf(activitiesCount) : "");
+		
+		if (group.getDescriptiveName().equals(portalName) && UserLocalServiceUtil.getUser(group.getCreatorUserId()).isDefaultUser())
+			groupJSON.put("globalWorkspace", Boolean.TRUE.toString());
+		else
+			groupJSON.put("globalWorkspace", Boolean.FALSE.toString());
 		return groupJSON;
 	}
 

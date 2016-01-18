@@ -566,7 +566,7 @@ html.aui {
 	margin-bottom: -1px;
 
 	.portlet-content, .portlet-topper {
-		padding: 1em;
+		padding: .5em;
 	}
 
 	.portlet-topper {
@@ -591,6 +591,7 @@ html.aui {
 
 .portlet-borderless-bar .portlet-options a {
 	background-image: url(../images/portlet/options_borderless.png);
+	background-repeat:no-repeat;
 }
 
 .controls-visible .portlet-borderless-container {
@@ -1753,6 +1754,8 @@ html.aui {
 
 .taglib-asset-tags-summary .tag {
 	@include tag(false);
+	border-radius:0;
+	background-color:#d0dae3;
 }
 
 /* ---------- Top links component ---------- */

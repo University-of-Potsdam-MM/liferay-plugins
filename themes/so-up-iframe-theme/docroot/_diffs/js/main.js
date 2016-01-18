@@ -26,7 +26,30 @@ AUI().ready(
 			);
 		}
 		
-				
+		/*$(window).scroll(function() {
+		    if ($(window).scrollTop() > 200) {
+		        $('body').addClass('smallhead');
+		    } else {
+		        $('body').removeClass('smallhead');
+		    }
+		});
+		
+		var body = A.one('body');
+		
+		if(body)
+		{
+			A.on('scroll', function(e) {
+				if(window.scrollY > 500)
+				{
+					body.addClass("smallhead");
+				}
+				else
+				{
+					body.removeClass("smallhead");
+				}
+		      });
+		}*/
+		
 		var sidebar = A.one('#sidebar');
 		
 		if(sidebar) {
@@ -41,6 +64,7 @@ AUI().ready(
 			}
 
 		}
+		
 		
 		
 		var up_services = A.one('#up-general .up_services');

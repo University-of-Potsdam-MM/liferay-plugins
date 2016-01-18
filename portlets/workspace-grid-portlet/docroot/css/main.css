@@ -1,47 +1,155 @@
-#workspaceColorForm .colorPickerInput{
+#workspaceColorForm .colorPickerInput {
 	cursor: pointer;
 }
 
-#workspacegrid{
+#workspacegrid {
+	
 }
 
+
+
 .workspaceslide {
-	width: 110px; height : 100px;
-    vertical-align: top;
+	width: 139px;
+	height: 99px;
+	vertical-align: top;
 	margin: 5px;
 	display: inline-block;
 	text-align: center;
 	line-height: 1.1em;
-    cursor: pointer;
+	cursor: pointer;
 	position: relative;
+	background-image: url('/so-up-theme/css/../images/up/workspaces-01.png');
+	border-width:2px;
+	border-style: solid;
 }
+
+.workspaceslide.globalWorkspace {
+	background-image: url('/so-up-theme/css/../images/up/workspace-fox.png');
+	
+}
+
+.workspaceslide.globalWorkspace .workspaceName {
+    top: 78%;
+    left: 25%;
+    text-transform: uppercase;
+    font-size: 12px;
+   
+}
+
 
 .workspaceName {
 	position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+	top: 50%;
+	transform: translateY(-50%);
+/*	white-space: nowrap;
+	text-overflow: ellipsis;*/
+	width: 130px;
+	overflow: hidden;
+	margin: 0 auto;
+	    font-weight: bold;
+    color: #014260;
 }
 
-.numberOfActivities {
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    color: #FFF;
+.activities {
+	width: 40px;
+	height: 20px;
+
+
+	position: absolute;
+	top: 5px;
+	left: 80px;
+	
+}
+
+.activity-icon {
+	background-image: url('/so-up-theme/css/../images/up/schablone-glocke.png') !important;
+	background-repeat:no-repeat;
+	background-position:left;
+	width:20px;
+	height:18px;
+	display:inline-block;
+	
+}
+
+
+li.workspaceslide:hover .mouseover-actions {
+	    width: 129px;
+    height: 99px;
+    background-color: #fff;
+    margin-top: 0;
+    padding-top: 0;
+    opacity: .95;
+    padding-left: 5px;
+    padding-right: 5px;
     position: absolute;
-    top: 5px;
-    left: 85px;
+    top: 0;
+}
+
+li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
+	width: 62px;
+	height: 60px;
+	
+	opacity: .5;
+	/* vertical-align: middle; */
+	margin-top: 20px; 
+	float: left;
+	cursor: move;
+	background-image: url('/so-up-theme/css/../images/up/move.png');
+	border: 1px dashed #949494;
+	
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation {
+    background: url(../images/progress_bar/loading_animation.gif) no-repeat;
+    background-position: center !important;
+    text-align: left;
+    background-color: #fff !important;
+     margin-top: 5px !important;
+    padding-top: 0px !important;
+   
+}
+
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation div.workspaceName, .loading-animation .activities {
+	display:none;
+}
+
+ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation:hover .mouseover-actions {
+	display:none;
+}
+
+li.workspaceslide:hover div.workspaceName {
+	opacity:.5;
+}
+
+li.workspaceslide:hover .mouseover-actions .visit-workspace {
+	width: 62px;
+	height: 60px;
+	
+	opacity: .5;
+	float: right;
+	border: 1px dashed #949494;
+	background-image: url('/so-up-theme/css/../images/up/link.png');
+	margin-top: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+li.workspaceslide:hover .mouseover-actions .visit-workspace:hover, li.workspaceslide:hover .mouseover-actions .move-workspaceslide:hover {
+		opacity: 1;
 }
 
 #demo li {
-    list-style-type: none;
-    padding: 3px;
-    margin: 6px;
-    width: 150px;
-    font-size: 114%;
-    background-color: #B6BFDA;
-    border: 1px solid #7E869D;
-    -moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
-    cursor: move;
+	list-style-type: none;
+	padding: 3px;
+	margin: 6px;
+	width: 150px;
+	font-size: 114%;
+	background-color: #B6BFDA;
+	border: 1px solid #7E869D;
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+	cursor: move;
 }

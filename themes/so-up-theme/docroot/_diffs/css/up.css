@@ -402,13 +402,14 @@ html.aui
     							box-sizing: border-box;
     							line-height:1;
     							text-indent:30px;
-								height: 100%;
+								height: 47px;
 								background-color:#d0dae3;
 								background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
     							background-repeat:no-repeat;
     							background-position: -3px 5px;
-    							transition: all .3s ease-in-out;
+    							transition: width .3s ease-in-out;
     							border:none;
+    						
     							    
 				 	 			
 				 	 		}
@@ -424,6 +425,7 @@ html.aui
 				 	 			    background-color: #fff;
     								border: 2px solid #014260;
     								box-sizing: border-box;
+    								
     							
 				 	 		}
 				 	 		
@@ -464,39 +466,46 @@ html.aui
    						{
    							padding:0;
    							margin:0;
-   							width: 140px;
    							
-   							.portlet-borderless-bar
+   							.portlet-borderless-container
    							{
-   								display:none;
-   							}
+   							border:none;
    							
-   							.portlet-body
-   							{
-   								form
+   							
+   								.portlet-borderless-bar
    								{
-   									margin:0;
-   									
-   									.control-group
+   									display:none;
+   								}
+   							
+   								.portlet-body
+   								{
+   									form
    									{
-   										margin-bottom:0;
-   										width:50px;
-   										
-   										select
+   										margin:0;
+   									
+   										.control-group
    										{
-   										    margin: 0;
-    										height: 50px;
-   											width: 50px;
-   											text-indent:50px;
-   											background: url('/so-up-theme/css/../images/up_icons.png') no-repeat -5px -40px;
-   											background-color:#fff;
+   											margin-bottom:0;
+   											width:50px;
+   										
+   											select
+   											{
+   										  	 	margin: 0;
+    											height: 50px;
+   												width: 50px;
+   												text-indent:50px;
+   												background: url('/so-up-theme/css/../images/up_icons.png') no-repeat -5px -40px;
+   												background-color:#fff;
+   												-webkit-appearance: none;
+												-moz-appearance: none;
+												appearance: none;
+   											}
    										}
    									}
    								}
-   							}
    							
-   						}
-    			 
+   							}
+						}
     			 	 } /*ende languageselect*/
     			
     			
@@ -703,9 +712,10 @@ html.aui
 								 select.aui-field-select
 								{
 									width: 100%;
-   									 color: #fff;
-    								background-color: #014260;
+   									    color: #014260;
+    								background-color: #fff;
     								border: none;
+    								border:2px solid #ededed;
 								}
 							}
 								
@@ -715,6 +725,13 @@ html.aui
     									background-color: transparent;
     									margin-left: 0;
     									padding-left: 0;
+    									position:relative;
+    									
+    									input:nth-of-type(2) {
+    										position: absolute;
+   										     top: 7px;
+  										  right: 4px;
+    									}
 								}
 								
 								.site-list-container
@@ -816,8 +833,8 @@ html.aui
 		{
 			
 			position: absolute;
-			width:100%; 
-			top: 100px;
+			width:99.9%; 
+			top: 80px;
 			color: $upDarkBlue;
 			
 			#admin
@@ -835,6 +852,7 @@ html.aui
 					padding-right: 20px;
 					background: $upLightBlue;
 					margin-left:2px;
+					height: 20px;
 				
 					#toggleDockbar
 					{
@@ -857,7 +875,29 @@ html.aui
 						background-position: 0px -421px;
 						display: inline-block;
 					}
+					
+					
+					 span#requestMemberButton {
+						background-image: url('/so-up-theme/css/../images/ple-icons.png');
+						
+						background-repeat:no-repeat;
+						background-position:0 -30px;
+						width:20px;
+						height:20px;
+						display:inline-block;
+					}
+					
+					.member-link {
+						margin:0;
+						height: 20px;
+    					display: block;
+    					float: right;
+					}
+					
+					
 				} 
+				
+				
 			}
 		}
 		
@@ -900,6 +940,8 @@ html.aui
     				padding-top: 20px;
     				font-size: 1.1em;
     				font-weight: bold;
+    				
+    				
 				
 					.icon
 					{
@@ -931,9 +973,13 @@ html.aui
 							a
 							{
 								color: $upDarkBlue;
+								display:inline-block;
+								width:100%;
 							}
 			
 						}
+						
+						
 					  } /*ende ul */
 				
 					  ul.hidden 
@@ -973,9 +1019,20 @@ html.aui
 				 }
 				 
 				 
-		
-				
-				
+				span.close.icon
+					{
+						position: absolute;
+    					right: 90px;
+    					bottom: 10px;
+    					font-size: .9em;
+    					background-position: -19px -319px;
+    					background-repeat: no-repeat;
+    					text-transform: uppercase;
+    					text-indent: 20px;
+    					line-height: 15px;
+    					color: #333;
+    					opacity: 1;
+					}
 	
 			} /* ende main menu */
 			
@@ -1139,7 +1196,7 @@ background: $upBgColor;
 		{
 			height: 47px;
     		z-index: 3;
-    		width: 310px;
+    		width: 230px;
     		height: 47px;
    			float:right;
    			position:relative;
@@ -1150,6 +1207,8 @@ background: $upBgColor;
 			{
 			 	
 			 	height: 47px;
+			 	width:auto;
+			 	margin:0;
     			
 				
 				/*ab hier dockbar*/
@@ -1209,13 +1268,20 @@ background: $upBgColor;
     					
     					form
     					{
+    						
+    						input[type="text"] {
+    							position: fixed;
+    							right: 180px;
+    						}
+    						
+    						
     						input[type="text"]:focus
     						{
     							width: 100px;
     							width: 250px;
-    							position: fixed;
+    							
     							height: 47px;
-    							right: 140px;
+    							
     						}
 						}
     					
@@ -1253,7 +1319,7 @@ background: $upBgColor;
 			
 	#admin-wrapper
 		{
-			width: 100px;
+			width: 150px;
     		position: relative;
     		float: right;
     		margin-top: -20px;
@@ -1292,6 +1358,10 @@ background: $upBgColor;
     					display: block;
     				}
     				
+    				span#requestMemberButton{
+    					 margin-top: 10px;
+   						 margin-left: 20px;
+    				}
     				
 					
 				} 
@@ -1327,13 +1397,15 @@ background: $upBgColor;
 					line-height: .5em;
 					height:47px; 
     				
-					
-					ul li
+					ul
 					{
-						padding-bottom:3px;
-						padding-top:3px;
+						transition: height .2s ease-in;
+					 	li
+						{
+							padding-bottom:3px;
+							padding-top:3px;
+						}
 					}
-				
 				 } /*ende li */
 				 
 			} /* ende main menu */
