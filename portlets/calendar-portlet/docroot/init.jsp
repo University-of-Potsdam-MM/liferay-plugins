@@ -26,6 +26,7 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.calendar.CalendarBookingDurationException" %><%@
+page import="com.liferay.calendar.CalendarBookingRecurrenceException" %><%@
 page import="com.liferay.calendar.CalendarNameException" %><%@
 page import="com.liferay.calendar.CalendarResourceCodeException" %><%@
 page import="com.liferay.calendar.CalendarResourceNameException" %><%@
@@ -127,7 +128,7 @@ String currentURL = PortalUtil.getCurrentURL(request);
 
 CalendarBooking calendarBooking = (CalendarBooking)request.getAttribute(WebKeys.CALENDAR_BOOKING);
 
-CalendarResource groupCalendarResource = CalendarResourceUtil.getGroupCalendarResource(liferayPortletRequest, scopeGroupId);
+CalendarResource groupCalendarResource = CalendarResourceUtil.getScopedGroupCalendarResource(liferayPortletRequest, scopeGroupId);
 CalendarResource userCalendarResource = CalendarResourceUtil.getUserCalendarResource(liferayPortletRequest, themeDisplay.getUserId());
 
 Calendar userDefaultCalendar = null;

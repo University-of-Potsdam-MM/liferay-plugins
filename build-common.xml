@@ -94,10 +94,10 @@
 	</path>
 
 	<path id="classpath.org.apache.maven.maven.ant.tasks">
-		<fileset dir="${sdk.dir}/dependencies/org.apache.maven.maven.ant.tasks/lib" includes="*.jar"/>
+		<fileset dir="${sdk.dir}/dependencies/org.apache.maven.maven.ant.tasks/lib" includes="*.jar" />
 	</path>
 
-	<taskdef classpathref="classpath.org.apache.maven.maven.ant.tasks" resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant"/>
+	<taskdef classpathref="classpath.org.apache.maven.maven.ant.tasks" resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 
 	<path id="classpath.org.codehaus.groovy">
 		<fileset dir="${sdk.dir}/dependencies/org.codehaus.groovy/lib" includes="*.jar" />
@@ -1154,6 +1154,7 @@ Please find a solution that does not require portal-impl.jar.
 
 	<macrodef name="compile-test-cmd">
 		<attribute name="module.dir" />
+		<attribute name="test.classpathref" default="test.classpath" />
 		<attribute name="test.type" />
 
 		<sequential>
@@ -1202,7 +1203,7 @@ Please find a solution that does not require portal-impl.jar.
 					</path>
 
 					<compile-java
-						javac.classpathref="test.classpath"
+						javac.classpathref="@{test.classpathref}"
 						javac.destdir="@{module.dir}/test-classes/@{test.type}"
 						javac.srcdir="@{module.dir}/test/@{test.type}"
 						module.dir="@{module.dir}"
@@ -1743,33 +1744,6 @@ Please find a solution that does not require portal-impl.jar.
 				<arg value="${app.server.lib.portal.dir}/util-java.jar" />
 				<arg value="${app.server.lib.portal.dir}/util-taglib.jar" />
 			</java>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="gradle-execute">
-		<attribute default="true" name="failonerror" />
-		<attribute name="task" />
-		<element implicit="true" name="args" optional="true" />
-
-		<sequential>
-			<if>
-				<os family="unix" />
-				<then>
-					<property name="gradlew.suffix" value="" />
-
-					<chmod file="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" perm="a+x" />
-				</then>
-				<else>
-					<property name="gradlew.suffix" value=".bat" />
-				</else>
-			</if>
-
-			<exec executable="${sdk.dir}/tools/gradle/gradlew${gradlew.suffix}" failonerror="@{failonerror}">
-				<arg value="-PpluginsExcludes=${plugins.excludes}" />
-				<arg value="-PpluginsIncludes=${plugins.includes}" />
-				<args />
-				<arg value="@{task}" />
-			</exec>
 		</sequential>
 	</macrodef>
 
@@ -2363,16 +2337,6 @@ Please find a solution that does not require portal-impl.jar.
 		</sequential>
 	</macrodef>
 
-	<macrodef name="reset-gradle">
-		<attribute name="module.dir" />
-
-		<sequential>
-			<delete file="@{module.dir}/build.gradle" />
-
-			<touch file="@{module.dir}/build.gradle" />
-		</sequential>
-	</macrodef>
-
 	<macrodef name="run-cpd">
 		<attribute name="module.dir" />
 
@@ -2482,8 +2446,6 @@ Please find a solution that does not require portal-impl.jar.
 					</not>
 				</and>
 				<then>
-					<delete file="${lp.portal.project.dir}/.testable.portal.started" failonerror="false" />
-
 					<ant antfile="${lp.portal.project.dir}/build-test.xml" target="setup-testable-tomcat" inheritAll="false">
 						<property name="project.dir" value="${lp.portal.project.dir}" />
 					</ant>
@@ -2585,6 +2547,7 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="junit.forkmode" />
 		<attribute name="module.dir" />
 		<attribute name="test.class" />
+		<attribute name="test.classpathref" default="test.classpath" />
 		<attribute name="test.type" />
 
 		<sequential>
@@ -2604,6 +2567,7 @@ Please find a solution that does not require portal-impl.jar.
 
 					<compile-test-cmd
 						module.dir="@{module.dir}"
+						test.classpathref="@{test.classpathref}"
 						test.type="@{test.type}"
 					/>
 
@@ -2658,7 +2622,7 @@ Please find a solution that does not require portal-impl.jar.
 								<jvmarg value="-Dtest.class.groups=${TEST_CLASS_GROUPS}" />
 								<jvmarg value="-Duser.timezone=GMT" />
 								<classpath location="@{module.dir}/test-coverage" />
-								<classpath refid="test.classpath" />
+								<classpath refid="@{test.classpathref}" />
 								<formatter type="brief" usefile="false" />
 								<formatter type="xml" />
 								<batchtest todir="@{module.dir}/test-results/@{test.type}">
@@ -2691,12 +2655,14 @@ Please find a solution that does not require portal-impl.jar.
 
 	<macrodef name="test-unit">
 		<attribute name="module.dir" />
+		<attribute name="test.classpathref" default="test.classpath" />
 
 		<sequential>
 			<test-cmd
 				junit.forkmode="perTest"
 				module.dir="@{module.dir}"
 				test.class="**/*Test.class"
+				test.classpathref="@{test.classpathref}"
 				test.type="unit"
 			/>
 		</sequential>
@@ -2887,8 +2853,14 @@ for (String path : paths) {
 								<zip
 									basedir="@{module.dir}/docroot"
 									destfile="${plugin.file}"
-									excludes="_diffs.*,_diffs/**,${plugins.war.excludes}"
-								/>
+									excludes="WEB-INF/liferay-hook.xml*,_diffs.*,_diffs/**,${plugins.war.excludes}"
+								>
+									<zipfileset
+										dir="@{module.dir}/docroot"
+										fullpath="WEB-INF/liferay-hook.xml"
+										includes="WEB-INF/liferay-hook.xml.processed"
+									/>
+								</zip>
 							</then>
 						</elseif>
 						<else>
@@ -3214,10 +3186,6 @@ for (String path : paths) {
 		<delete file="ServiceBuilder.temp" />
 	</target>
 
-	<target name="init-gradle">
-		<gradle-execute task="initGradle" />
-	</target>
-
 	<target name="jar">
 		<loop-macrodef-or-target
 			module.dirs="${plugins.includes.path}"
@@ -3356,33 +3324,6 @@ for (String path : paths) {
 		/>
 	</target>
 
-	<target name="reset-gradle">
-		<path id="reset.gradle.path">
-			<dirset dir="${basedir}" excludes="tools/**" includes="**/docroot" />
-			<dirset dir="${basedir}" excludes="**/docroot/WEB-INF/src" includes="**/src" />
-		</path>
-
-		<pathconvert
-			pathsep=","
-			property="reset.gradle.path"
-			refid="reset.gradle.path"
-			targetos="unix"
-		/>
-
-		<propertyregex
-			input="${reset.gradle.path}"
-			override="true"
-			property="reset.gradle.path"
-			regexp="[\\/](?:docroot|src)(,|$)"
-			replace="\1"
-		/>
-
-		<loop-macrodef-or-target
-			module.dirs="${reset.gradle.path}"
-			target.name="reset-gradle"
-		/>
-	</target>
-
 	<target name="run-cpd">
 		<if>
 			<not>
@@ -3516,5 +3457,61 @@ for (String path : paths) {
 			module.dirs="${plugins.includes.path}"
 			target.name="war"
 		/>
+	</target>
+
+	<target name="watch">
+		<property name="watch.flag.file" location="${sdk.dir}/tmp/watch.flag" />
+
+		<touch file="${watch.flag.file}" mkdirs="true" />
+
+		<antelope:repeat count="-1" interval="2">
+			<outofdate outputsourcespath="watch.sources.path">
+				<sourcefiles>
+					<fileset dir="${basedir}">
+						<include name="**/*.css" />
+						<include name="**/*.ftl" />
+						<include name="**/*.java" />
+						<include name="**/*.js" />
+						<include name="**/*.jsp" />
+						<include name="**/*.jspf" />
+						<include name="**/*.scss" />
+						<include name="**/*.vm" />
+						<exclude name="**/test/unit/**" />
+						<exclude name="**/test/integration/**" />
+						<exclude name="**/classes/**" />
+						<exclude name="**/.sass-cache/**" />
+					</fileset>
+				</sourcefiles>
+				<targetfiles>
+					<pathelement location="${watch.flag.file}" />
+				</targetfiles>
+				<sequential>
+					<property name="watch.sources.path" refid="watch.sources.path" />
+
+					<echo>Detected a modification in ${watch.sources.path}.</echo>
+
+					<propertyregex
+						global="false"
+						input="${watch.sources.path}"
+						override="true"
+						property="watch.deploy.path"
+						regexp="(/|\\)(src.*$|docroot.*$)"
+						replace=""
+					/>
+
+					<echo>Deploying ${watch.deploy.path}.</echo>
+
+					<deploy
+						module.dir="${watch.deploy.path}"
+					/>
+
+					<var name="watch.sources.path" unset="true" />
+
+					<touch file="${watch.flag.file}" />
+
+					<echo>Finished deployment. Watching for additional modifications.</echo>
+				</sequential>
+			</outofdate>
+		</antelope:repeat>
 	</target>
 </project>

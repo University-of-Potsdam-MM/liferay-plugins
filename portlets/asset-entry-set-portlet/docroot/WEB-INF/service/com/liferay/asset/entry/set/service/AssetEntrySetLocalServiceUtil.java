@@ -297,15 +297,24 @@ public class AssetEntrySetLocalServiceUtil {
 		return getService().addFileAttachment(userId, file);
 	}
 
+	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getChildAssetEntrySets(
+		long parentAssetEntrySetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getChildAssetEntrySets(parentAssetEntrySetId);
+	}
+
 	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getNewAssetEntrySets(
-		long userId, long modifiedTime, long parentAssetEntrySetId,
+		long userId, long time, boolean modifiedTime,
+		long parentAssetEntrySetId,
 		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
 		java.lang.String[] assetTagNames, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getNewAssetEntrySets(userId, modifiedTime,
-			parentAssetEntrySetId, sharedToJSONArray, assetTagNames, start, end);
+				   .getNewAssetEntrySets(userId, time, modifiedTime,
+			parentAssetEntrySetId, sharedToJSONArray, includeAssetEntrySetIds,
+			excludeAssetEntrySetIds, assetTagNames, start, end);
 	}
 
 	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getNewChildAssetEntrySets(
@@ -320,14 +329,17 @@ public class AssetEntrySetLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getOldAssetEntrySets(
-		long userId, long modifiedTime, long parentAssetEntrySetId,
+		long userId, long time, boolean modifiedTime,
+		long parentAssetEntrySetId,
 		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
 		java.lang.String[] assetTagNames, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getOldAssetEntrySets(userId, modifiedTime,
-			parentAssetEntrySetId, sharedToJSONArray, assetTagNames, start, end);
+				   .getOldAssetEntrySets(userId, time, modifiedTime,
+			parentAssetEntrySetId, sharedToJSONArray, includeAssetEntrySetIds,
+			excludeAssetEntrySetIds, assetTagNames, start, end);
 	}
 
 	public static java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getOldChildAssetEntrySets(

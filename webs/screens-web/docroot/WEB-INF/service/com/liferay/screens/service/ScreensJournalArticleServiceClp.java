@@ -33,9 +33,19 @@ public class ScreensJournalArticleServiceClp
 
 		_methodParameterTypes1 = new String[] { "java.lang.String" };
 
-		_methodName3 = "getJournalArticle";
+		_methodName3 = "getJournalArticleContent";
 
-		_methodParameterTypes3 = new String[] { "int", "int", "java.util.Locale" };
+		_methodParameterTypes3 = new String[] { "long", "java.util.Locale" };
+
+		_methodName4 = "getJournalArticleContent";
+
+		_methodParameterTypes4 = new String[] { "long", "long", "java.util.Locale" };
+
+		_methodName5 = "getJournalArticleContent";
+
+		_methodParameterTypes5 = new String[] {
+				"long", "java.lang.String", "long", "java.util.Locale"
+			};
 	}
 
 	@Override
@@ -89,7 +99,7 @@ public class ScreensJournalArticleServiceClp
 	}
 
 	@Override
-	public java.lang.String getJournalArticle(int groupId, int classPK,
+	public java.lang.String getJournalArticleContent(long classPK,
 		java.util.Locale locale)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -98,10 +108,88 @@ public class ScreensJournalArticleServiceClp
 		try {
 			returnObj = _invokableService.invokeMethod(_methodName3,
 					_methodParameterTypes3,
+					new Object[] { classPK, ClpSerializer.translateInput(locale) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String getJournalArticleContent(long classPK,
+		long ddmTemplateId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName4,
+					_methodParameterTypes4,
+					new Object[] {
+						classPK,
+						
+					ddmTemplateId,
+						
+					ClpSerializer.translateInput(locale)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String getJournalArticleContent(long groupId,
+		java.lang.String articleId, long ddmTemplateId, java.util.Locale locale)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
 					new Object[] {
 						groupId,
 						
-					classPK,
+					ClpSerializer.translateInput(articleId),
+						
+					ddmTemplateId,
 						
 					ClpSerializer.translateInput(locale)
 					});
@@ -136,4 +224,8 @@ public class ScreensJournalArticleServiceClp
 	private String[] _methodParameterTypes1;
 	private String _methodName3;
 	private String[] _methodParameterTypes3;
+	private String _methodName4;
+	private String[] _methodParameterTypes4;
+	private String _methodName5;
+	private String[] _methodParameterTypes5;
 }

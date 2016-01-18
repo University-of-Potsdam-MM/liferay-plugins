@@ -31,15 +31,15 @@ if (recurrence != null) {
 	frequency = recurrence.getFrequency();
 	interval = recurrence.getInterval();
 
+	if (recurrence.getPositionalWeekday() != null) {
+		positionalWeekday = recurrence.getPositionalWeekday();
+	}
+
 	if (recurrence.getUntilJCalendar() != null) {
 		untilJCalendar = recurrence.getUntilJCalendar();
 	}
 
-	for (PositionalWeekday curPositionalWeekday : recurrence.getPositionalWeekdays()) {
-		weekdays.add(curPositionalWeekday.getWeekday());
-
-		positionalWeekday = curPositionalWeekday;
-	}
+	weekdays = recurrence.getWeekdays();
 
 	if (count > 0) {
 		afterChecked = true;

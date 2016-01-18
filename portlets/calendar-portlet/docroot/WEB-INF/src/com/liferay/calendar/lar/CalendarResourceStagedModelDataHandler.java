@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.lar;
 
+import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
@@ -180,14 +181,25 @@ public class CalendarResourceStagedModelDataHandler
 			}
 		}
 		else {
-			importedCalendarResource =
-				CalendarResourceLocalServiceUtil.addCalendarResource(
-					userId, portletDataContext.getScopeGroupId(),
-					calendarResource.getClassNameId(), classPK,
-					calendarResource.getClassUuid(), calendarResource.getCode(),
-					calendarResourceNameMap,
-					calendarResource.getDescriptionMap(),
-					calendarResource.isActive(), serviceContext);
+			try {
+				importedCalendarResource =
+					CalendarResourceLocalServiceUtil.addCalendarResource(
+						userId, portletDataContext.getScopeGroupId(),
+						calendarResource.getClassNameId(), classPK,
+						calendarResource.getClassUuid(),
+						calendarResource.getCode(), calendarResourceNameMap,
+						calendarResource.getDescriptionMap(),
+						calendarResource.isActive(), serviceContext);
+			}
+			catch (DuplicateCalendarResourceException dcre) {
+
+				// The calendar resource for the site's default calendar is
+				// always generated beforehand, so we only want to add it once
+
+				importedCalendarResource =
+					CalendarResourceLocalServiceUtil.fetchCalendarResource(
+						calendarResource.getClassNameId(), classPK);
+			}
 		}
 
 		updateCalendars(

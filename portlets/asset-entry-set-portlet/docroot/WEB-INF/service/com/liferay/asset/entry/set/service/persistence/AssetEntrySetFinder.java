@@ -23,9 +23,18 @@ public interface AssetEntrySetFinder {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> findByCT_PAESI_CNI(
+		long classNameId, long classPK, long createTime, boolean gtCreateTime,
+		long parentAssetEntrySetId,
+		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
+		java.lang.String[] assetTagNames, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> findByMT_PAESI_CNI(
 		long classNameId, long classPK, long modifiedTime,
 		boolean gtModifiedTime, long parentAssetEntrySetId,
 		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
 		java.lang.String[] assetTagNames, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 }

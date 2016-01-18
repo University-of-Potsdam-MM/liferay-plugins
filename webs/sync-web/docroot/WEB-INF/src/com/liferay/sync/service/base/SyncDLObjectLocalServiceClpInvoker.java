@@ -120,9 +120,10 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				"long", "long", "java.lang.String", "long", "long", "long",
 				"java.lang.String", "java.lang.String", "java.lang.String",
 				"java.lang.String", "java.lang.String", "java.lang.String",
-				"java.lang.String", "long", "long", "java.lang.String",
-				"java.lang.String", "java.util.Date", "long", "java.lang.String",
-				"java.lang.String", "long", "java.lang.String"
+				"java.lang.String", "java.lang.String", "long", "long",
+				"java.lang.String", "java.lang.String", "java.util.Date", "long",
+				"java.lang.String", "java.lang.String", "long",
+				"java.lang.String"
 			};
 
 		_methodName89 = "deleteSyncDLObjects";
@@ -141,7 +142,7 @@ public class SyncDLObjectLocalServiceClpInvoker {
 
 		_methodName92 = "getSyncDLObjects";
 
-		_methodParameterTypes92 = new String[] { "long" };
+		_methodParameterTypes92 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -258,15 +259,16 @@ public class SyncDLObjectLocalServiceClpInvoker {
 				(java.lang.String)arguments[10],
 				(java.lang.String)arguments[11],
 				(java.lang.String)arguments[12],
-				((Long)arguments[13]).longValue(),
+				(java.lang.String)arguments[13],
 				((Long)arguments[14]).longValue(),
-				(java.lang.String)arguments[15],
-				(java.lang.String)arguments[16], (java.util.Date)arguments[17],
-				((Long)arguments[18]).longValue(),
-				(java.lang.String)arguments[19],
+				((Long)arguments[15]).longValue(),
+				(java.lang.String)arguments[16],
+				(java.lang.String)arguments[17], (java.util.Date)arguments[18],
+				((Long)arguments[19]).longValue(),
 				(java.lang.String)arguments[20],
-				((Long)arguments[21]).longValue(),
-				(java.lang.String)arguments[22]);
+				(java.lang.String)arguments[21],
+				((Long)arguments[22]).longValue(),
+				(java.lang.String)arguments[23]);
 		}
 
 		if (_methodName89.equals(name) &&
@@ -290,7 +292,8 @@ public class SyncDLObjectLocalServiceClpInvoker {
 
 		if (_methodName92.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes92, parameterTypes)) {
-			return SyncDLObjectLocalServiceUtil.getSyncDLObjects(((Long)arguments[0]).longValue());
+			return SyncDLObjectLocalServiceUtil.getSyncDLObjects(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
