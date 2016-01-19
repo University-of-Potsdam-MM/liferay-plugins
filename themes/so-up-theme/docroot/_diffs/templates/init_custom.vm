@@ -1,3 +1,14 @@
+
+#set ($default_user_profile_portrait_url = $theme_display.getDefaultUser().getPortraitURL($themeDisplay))
+#set ($is_profile_page = false)
+#set ($so_logo = $images_folder + "/custom/so_logo.png")
+#set ($user_dashboard_portlet_url = $site_default_url)
+#set ($user_dashboard_url = $site_default_url)
+#set ($user_local_service = $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
+#set ($user_profile_url = $community_default_public_url)
+
+#set ($current_user = $user_local_service.getUserById($page_group.getClassPK()))
+
 #if ($is_signed_in)
 	#set ($portal_url = $themeDisplay.getPortalURL())
 	#set ($user_my_sites = $user.getMySiteGroups())
@@ -37,6 +48,8 @@
 		#set ($css_class = $css_class.replaceAll("controls-hidden", "controls-visible"))
 	#end
 	
+	#set ($is_user_dashboard = ($page_group.getGroupId() == $current_user.getGroupId()))
+	
 	## -- get private sites -- ##
 	
 	#set ($group = $user.getGroup())
@@ -60,4 +73,8 @@
 	#set ($user_my_sites = $user.getMySiteGroups())
 	#set ($user_sname = "")
 	#set ($user_account_url = "")
+#end
+
+#if ($is_user_dashboard)
+	#set ($css_class = "${css_class} user-dashboard")
 #end

@@ -4,12 +4,10 @@
 
 <html class="$root_css_class" dir="#language("lang.dir")" lang="$w3c_language_id">
 
-
 <head>
 	<title>$company_name | $the_title</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	$theme.include($top_head_include)
-	
 
 </head>
 <body class="dockbar-split so-strata-theme $css_class">
@@ -53,25 +51,18 @@
 
 		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
 			#if ($is_signed_in)
-			<!-- <ul class="aui-list-truncate">
-				#foreach ($user_site in $user_my_sites)
-					#if ($user_site.hasPrivateLayouts())
-						<li><a href="/group$user_site.friendlyURL">$user_site.descriptiveName</a></li>
-					#elseif ($user_site.hasPublicLayouts())
-						<li><a href="/web$user_site.friendlyURL">$user_site.descriptiveName</a></li>
-					#end
-				#end
-			</ul> -->
 				<ul class="aui-list-truncate">
 					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($portfoliopage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
-								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+						#set ($navigatorpage = false)
+						#set ($organizationalpage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
 							#end
 						#end
 						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($portfoliopage == "false")
+							#if ($navigatorpage == "false" && $organizationalpage == "false" )
 								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 							#end
 						#end
@@ -82,65 +73,57 @@
 
 		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			#if ($is_signed_in)
-				#foreach ($myLayout in $myPrivateLayouts)
-					#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
-						#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
-					#end
-					#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-						#if ($portfoliopage)
-							#if ($portfoliopage == "false")
+				<ul class="aui-list-truncate">
+					#foreach ($myLayout in $myPrivateLayouts)
+						#set ($navigatorpage = false)
+						#set ($organizationalpage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
+							#end
+						#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+							#if ($navigatorpage == "false" && $organizationalpage == "true" )
 								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 							#end
 						#end
 					#end
-				#end
-			</ul>
-			<ul class="aui-list-truncate">
-					<!--
-					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
-					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
-					-->	
 				</ul>
-
 			#end
 		</div>		
 
 		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
-			
 			#if ($is_signed_in)
-			<ul class="aui-list-truncate">
-				
-					#foreach ($myLayout in $myPublicLayouts)
-						#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+				<ul class="aui-list-truncate">
+						#foreach ($myLayout in $myPublicLayouts)
+							#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
 						#end
-					#end
-			</ul>
+				</ul>
 			#end
 		</div>
+		
 		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
 			#if ($is_signed_in)
-			<ul class="aui-list-truncate">
-					
-				#foreach ($myLayout in $myPrivateLayouts)
-					#set ($portfoliopage = false)
-					#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
-						#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
-							#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
+				<ul class="aui-list-truncate">
+					#foreach ($myLayout in $myPrivateLayouts)
+						#set ($navigatorpage = false)
+						#set ($organizationalpage = false)
+						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
+							#end
+						#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+							#if ($navigatorpage == "true" && $organizationalpage == "false" )
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+							#end
 						#end
 					#end
-					#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-						#if ($portfoliopage == "true")
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-						#end
-					#end
-				#end
-				
-			</ul>
+				</ul>
 			#end
 		</div>
 		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
@@ -148,7 +131,7 @@
 				<li></li>
 			</ul>
 		</div>
-	</header>		
+	</header>
 
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
@@ -194,71 +177,139 @@
 			</div>
 		<div class="clear-left"></div>
 		</div><!--end upper toolbar -->
+		
+		
 		#if ($is_signed_in)
-		
-		<div id="admin-wrapper">
-			<ul id="admin">
-		
-				#if ($is_signed_in && !$is_user_page)
-					#set ($group_local_service = $serviceLocator.findService("com.liferay.portal.service.GroupLocalService"))
+		<div id="navigation-wrapper">
+	      		<div class="btn-toolbar">
+	      			<!-- Help Button -->
+	      			<div class="btn-group">
+	      				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/">Hilfethema I</a></li>
+								<li><a href="/">Hilfethema II</a></li>
+							</ul>
+					</div><!-- /btn-group -->
+	      			
+	      			<!-- UP Services -->
+					<div class="btn-group">
+						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
+								<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
+								<!--
+								<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
+								<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
+								<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
+								-->
+							</ul>
+					</div>
+				</div><!-- /btn-toolbar -->
+		</div> <!-- ende navigation-wrapper -->
+		#end       		
 
-					#set ($member = $group_local_service.hasUserGroup($user_id, $page_group.getGroupId()))
-
-					#set ($membership_request_local_service = $serviceLocator.findService("com.liferay.portal.service.MembershipRequestLocalService"))
-
-					#set ($membership_request = $membership_request_local_service.hasMembershipRequest($user_id, $page_group.getGroupId(), 0))
-
-					#if (!$member)
-						#if ($page_group.getType() == 1)
-							#set ($join_url = $portletURLFactory.create($request, "174", $page.getPlid(), "ACTION_PHASE"))
-
-							$join_url.setParameter("struts_action", "/sites_admin/edit_site_assignments")
-							$join_url.setParameter("cmd", "group_users")
-							$join_url.setParameter("redirect", $community_default_url)
-							$join_url.setParameter("groupId", "$page_group.getGroupId()")
-							$join_url.setParameter("addUserIds", "$user_id")
-							$join_url.setWindowState("normal")
-							<li> <span id="requestMemberButton"></span>
-								<a class="action request member-link" href="$join_url" id="memberButton">
-									
-									<span>#language("join-site")</span>
-								</a>
-							</li>
-						#elseif (($page_group.getType() == 2) && !$membership_request)
-							#set ($membership_request_url = $portletURLFactory.create($request, "174", $page.getPlid(), "ACTION_PHASE"))
-
-							$membership_request_url.setParameter("struts_action", "/sites_admin/post_membership_request")
-							$membership_request_url.setParameter("redirect", $community_default_url)
-							$membership_request_url.setParameter("groupId", "$page_group.getGroupId()")
-							$membership_request_url.setWindowState("normal")
-
-							#set ($arguments = [$user_name, $community_name])
-
-							$membership_request_url.setParameter("comments", $languageUtil.format($locale, "x-wishes-to-join-x", $arguments.toArray(), false))
-							<li><span id="requestMemberButton"></span>
-								<a class="action request member-link" href="$membership_request_url" id="memberButton">
-									
-									<span>#language ("request-membership")</span>
-								</a>
-							</li>
-						#elseif ($membership_request)
-							<li> <span id="requestMemberButton"></span>
-								<span class="action request member-link" id="memberButton">
-									
-									<span>#language ("membership-requested")</span>
-								</span>
-							</li>
+		#if ($is_signed_in)
+		<div id="main-menu-wrapper">
+			<ul id="main-menu" class="enabled">		
+				<li>
+					#language("so-up-theme-my-workspace")<span class="icon arrow"></span>
+					<ul class="hidden">
+						#foreach ($myLayout in $myPrivateLayouts)
+							#set ($navigatorpage = false)
+							#set ($organizationalpage = false)
+							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#end
+							#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+								#if ($navigatorpage == "false" && $organizationalpage == "false" )
+									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+								#end
+							#end
 						#end
-					#end
-				#end
+					</ul>
+				</li>
+				<li>
+					#language("so-up-theme-organizational")<span class="icon arrow"></span>
+					<ul class="hidden">
+						#foreach ($myLayout in $myPrivateLayouts)
+							#set ($navigatorpage = false)
+							#set ($organizationalpage = false)
+							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#end
+							#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+								#if ($navigatorpage == "false" && $organizationalpage == "true" )
+									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+								#end
+							#end
+						#end
+					</ul>
+				</li>
+				<li class="last-child">
+					#language("so-up-theme-campus-navigator")<span class="icon arrow"></span>
+					<ul class="hidden">
+						#foreach ($myLayout in $myPrivateLayouts)
+							#set ($navigatorpage = false)
+							#set ($organizationalpage = false)
+							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
+								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
+									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
+									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
+								#end
+							#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
+								#if ($navigatorpage == "true" && $organizationalpage == "false" )
+									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
+								#end
+							#end
+						#end
+					</ul>
+				</li>
+				<span class="icon close hidden">#language("close")</span>
+			</ul>
+		</div><!-- end main menu wrapper -->
+		#else
+		<div id="main-menu-wrapper">
+			<ul id="main-menu" class="disabled">
+				<li>
+					#language("so-up-theme-my-workspace")<span class="icon arrow disabled"></span>
+				</li>
+				<li>
+					#language("so-up-theme-organizational")<span class="icon arrow disabled"></span>
+				</li>
+				<li>
+					#language("so-up-theme-campus-navigator")<span class="icon arrow disabled"></span>
+				</li>
+			</ul>
+		</div> <!-- end main menu wrapper --->
+		#end
+	
+		<nav id="breadcrumbs">#breadcrumbs()</nav>
+	</header>  
+	<div class="wrapper-portlet-area">	
+		<div id="heading">
+			#if (!$is_user_dashboard)
+				<h1 class="site-title">
+					<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
+					</a>
+	
+					<!-- #if ($show_site_name) -->
+						<span class="site-name hideformobile" title="#language_format ("go-to-x", [$site_name])">
+							$site_name
+						</span> 
+					<!-- #end -->		
+				</h1>
+			#end
+			<h2 class="page-title"></h2>		
 		
-		
-		
+			#if ($is_signed_in)
 				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
-			
-			
-			
-		
 				<li>
 					<a href="javascript:;" id="toggleDockbar">
 						<!--<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">-->
@@ -276,111 +327,7 @@
 					</a>
 				</li>
 				#end
-			</ul>
-		</div> <!-- ende admin-wrapper -->	
-		#end       
-
-		
-		#if ($is_signed_in)
-		<div id="main-menu-wrapper">
-		<ul id="main-menu" class="enabled">
-			<li>
-				#language("so-up-theme-private-space")<span class="icon arrow"></span>
-				<ul class="hidden">
-					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($portfoliopage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
-								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
-							#end
-						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($portfoliopage == "false")
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
-						#end
-					#end
-				</ul>
-			</li>
-			<li>
-				#language("so-up-theme-up-services")<span class="icon arrow"></span>
-				<ul class="hidden">
-					<!--
-					<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/boxup/">Box.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/padup/">Pad.UP</a></li>
-					<li><a href="$portal_url/user/$user_sname/puls/">PULS</a></li>
-					<li><a href="$portal_url/user/$user_sname/mediaup/">#language("so-up-theme-library")</a></li>
-					-->	
-				</ul>
-			</li>
-			<li>
-				#language("so-up-theme-public-space")<span class="icon arrow"></span>
-				<ul class="hidden">
-					#foreach ($myLayout in $myPublicLayouts)
-						#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-						#end
-					#end
-				</ul>
-			</li>
-			<li class="last-child">#language("so-up-theme-portfolio")
-				<span class="icon arrow"></span>
-				<ul class="hidden">
-					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($portfoliopage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Portfolio"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Portfolio"))
-								#set ($portfoliopage = $myLayout.getExpandoBridge().getAttribute("Portfolio"))
-							#end
-						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($portfoliopage == "true")
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
-						#end
-					#end
-				</ul>
-			</li>
-			<span class="icon close hidden">#language("close")</span>
-		</ul>
-		</div><!-- end main menu wrapper -->
-		#else
-		<div id="main-menu-wrapper">
-		<ul id="main-menu" class="disabled">
-			<li>
-				#language("so-up-theme-private-space")<span class="icon arrow disabled"></span>
-			</li>
-			<li>
-				#language("so-up-theme-up-services")<span class="icon arrow disabled"></span>
-			</li>
-			<li>
-				#language("my-profile")<span class="icon arrow disabled"></span>
-			</li>
-			<li class="last-child">
-				#language("so-up-theme-portfolio")<span class="icon arrow disabled"></span>
-			</li>
-		</ul>
-		</div> <!-- end main menu wrapper --->
-		#end
-	
-		<nav id="breadcrumbs">#breadcrumbs()</nav>
-	</header>  
-	<div class="wrapper-portlet-area">
-		<div id="heading">
-			<h1 class="site-title">
-				<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-				</a>
-
-				<!-- #if ($show_site_name) -->
-					<span class="site-name hideformobile" title="#language_format ("go-to-x", [$site_name])">
-						$site_name
-					</span> 
-				<!-- #end -->		
-			</h1>
-
-			<h2 class="page-title"></h2>
+			#end
 			
 		</div>
 		
@@ -388,7 +335,6 @@
 		#if ($has_navigation)
 			#parse ("$full_templates_path/navigation.vm")
 		#end
-
 
 		<div id="content">
 			#if ($selectable)
@@ -700,5 +646,3 @@ $theme.include($body_bottom_include)
 </body>
 
 $theme.include($bottom_include)
-<!-- maus maus -->
-

@@ -829,7 +829,7 @@ html.aui
 			float: left;
 		}
 		
-		#admin-wrapper
+		#navigation-wrapper
 		{
 			
 			position: absolute;
@@ -926,7 +926,7 @@ html.aui
 				
 				li
 				{
-					width: 24.91%;
+					width: 32.91%;
     
     				float: left;
     				background: white;
@@ -1317,7 +1317,7 @@ background: $upBgColor;
 			} /*end upper toolbar */
 			
 			
-	#admin-wrapper
+	#navigation-wrapper
 		{
 			width: 150px;
     		position: relative;
