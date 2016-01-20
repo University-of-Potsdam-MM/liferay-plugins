@@ -40,6 +40,12 @@ LayoutSet layoutset = themeDisplay.getLayoutSet();
 String publicURL = PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay, false);
 String privateURL = PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay, true);
 
+String redirectURL;
+if (layoutSetGroup.hasPrivateLayouts())
+	redirectURL= privateURL;
+else
+	redirectURL= publicURL;
+
 if (privateVisible) {
 %>
 
@@ -108,8 +114,7 @@ else{
 								{
 									after: {
 										success: function(event, id, obj) {
-											console.log("<%=PortalUtil.getDisplayURL(layoutset.getGroup(), themeDisplay, true)%>");
-											window.open("<%=privateURL.toString()%>","_self");
+											window.open("<%=redirectURL.toString()%>","_self");
 										}
 								
 									}
