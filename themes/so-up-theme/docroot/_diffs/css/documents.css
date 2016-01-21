@@ -43,8 +43,8 @@
 
 
 .aui .portlet-document-library thead.table-columns, .aui .portlet-document-library thead.table-columns a {
-	background-color: #014260;
-    color: #fff;
+	background-color: #ededed;
+    color: #014260;
 }
 
 
@@ -183,3 +183,21 @@ th.table-sortable-column.table-sorted {
     border-bottom: none;
     padding: 7px 0px;
 }
+
+.portlet-document-library .lfr-app-column-view .context-pane .lfr-header-row-content .select-all-entries {
+    left: 18px;
+    top: 85px;
+}
+.portlet-document-library .lfr-app-column-view .context-pane .navbar .navbar-inner {
+    background: white;
+    padding: 0 10px 0 10px;
+}
+
+.aui .portle-document-library .collapse .navbar-search.pull-right {
+	float:left;
+}
+
+.aui .portlet-document-library .navbar-search {
+	margin-top:0;
+}
+
