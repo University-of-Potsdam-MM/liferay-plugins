@@ -36,16 +36,12 @@
 	#set ($show_preview_controls = $has_layout_update_permission || $groupPermission.contains($permissionChecker, $page_group.getGroupId(), "PREVIEW_IN_DEVICE"))
 	#set ($show_toggle_controls = ((!$page_group.hasStagingGroup()) || $page_group.isStagingGroup()) && ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()) || $portletPermission.hasConfigurationPermission($permissionChecker, $theme_display.getSiteGroupId(), $layout, "CONFIGURATION")))
 
-	#set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", ""))
 	#set ($themeNamespace = "_" + $themeDisplay.getThemeId() + "_")
 
-	#if (!$show_toggle_controls)
-		$sessionClicks.put($request, "liferay_toggle_controls", "hidden")
-
-		#set ($liferay_toggle_controls = "hidden")
-		#set ($css_class = $css_class.replaceAll("controls-visible", "controls-hidden"))
-	#else
-		#set ($css_class = $css_class.replaceAll("controls-hidden", "controls-visible"))
+	#set ($controls_hidden_css_class = "controls-hidden")
+	#set ($css_class = $css_class.replaceAll("controls-visible", ""))
+	#if (!$css_class.contains($controls_hidden_css_class))
+		#set ($css_class = "$css_class $controls_hidden_css_class")
 	#end
 	
 	#set ($is_user_dashboard = ($page_group.getGroupId() == $current_user.getGroupId()))

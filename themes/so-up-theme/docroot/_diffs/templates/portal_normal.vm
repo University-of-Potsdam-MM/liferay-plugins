@@ -310,13 +310,21 @@
 		
 			#if ($is_signed_in)
 				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
-				<li>
-					<a href="javascript:;" id="toggleDockbar">
-						<!--<a class="toggle-controls-link" role="menuitem" href="javascript:void(0);" tabindex="0">-->
-							<span class="icon workspace"></span>#language("so-up-theme-workspace-configure")
-						<!--</a>-->
-					</a>
-				</li>
+				
+					#if ($show_edit_controls)
+						<li style="display: none;">
+							<a id="editPage" href="javascript:;">#language("edit-page")</a>
+						</li>
+					#end
+					#if ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()))
+						<li style="display: none;">
+							<a id="addApplication" href="javascript:;">#language("add-application")</a>
+						</li>
+					#end
+					<li id="toggle-controls-botton" >
+						<a class="toggle-controls" href="javascript:void(0);">#language("so-up-theme-workspace-configure")
+						</a>
+					</li>
 				#end
 				#if ($show_control_panel)
 				<li>
