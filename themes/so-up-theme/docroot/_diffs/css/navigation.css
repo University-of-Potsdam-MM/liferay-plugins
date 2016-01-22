@@ -139,4 +139,25 @@ background-image: url("/so-up-theme/css/../images/up_icons.png");
 }
 
 
+.sort-pages ul#addPage-btn li {list-stlye-type:none}
+
+.sort-pages ul#addPage-btn li a#addPage {
+	background-color:transparent;
+	    font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
+	    text-align:left;
+}
+
+.sort-pages ul#addPage-btn li a#addPage:before {
+	content:"\f055";
+	font-family:"fontawesome-alloy", fontawesome;
+	display:inline-block;
+	    border-radius: 50%;
+    background-color: #d0dae3;
+    width: 20px;
+    height: 20px;
+    text-align:center;
+    padding:2px;
+    font-size: 15px;
+}
+
 

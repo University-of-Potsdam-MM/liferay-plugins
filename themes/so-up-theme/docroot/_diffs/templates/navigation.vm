@@ -88,8 +88,10 @@
 		#end
 	</ul>
 	#if (!$page_group.isControlPanel() && $user.isSetupComplete() && $has_layout_add_permission)
+		<ul id="addPage-btn">
 		<li style="display: none;">
 			<a id="addPage" class="btn" href="javascript:;">#language("add-page")</a>
 		</li>
+		</ul>
 	#end
 </nav>
