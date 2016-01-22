@@ -172,11 +172,7 @@
 	float:none;
 }
 
-#p_p_id_36_ .form-search form input.search-query + button {
-	background-image: url(/so-up-theme/images/common/search.png);
-	background-repeat:no-repeat;
-	background-position:center;
-} 
+
 
 #p_p_id_36_ .form-search form input.search-query {
 	width:89%;

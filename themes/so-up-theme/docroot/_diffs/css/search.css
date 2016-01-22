@@ -63,3 +63,17 @@
 	margin:0;
 	padding: 0 0 8px 0;
 }
+
+/* SUche in an deren Portlets */
+
+.form-search form input.search-query + button, .form-search form input.lfr-input-resource + button {
+	background-image: url(/so-up-theme/images/common/search.png);
+	background-repeat:no-repeat;
+	background-position:center;
+} 
+
+.form-search form input.search-query + button:hover, .form-search form input.lfr-input-resource + button:hover {
+
+	background-position:center;
+} 
+

@@ -175,16 +175,18 @@
 				
 				
 			</div>
-		<div class="clear-left"></div>
-		</div><!--end upper toolbar -->
 		
+		</div><!--end upper toolbar -->
+		<div style="clear:left"></div>
+		
+   
 		
 		#if ($is_signed_in)
 		<div id="navigation-wrapper">
-	      		<div class="btn-toolbar">
+	      		 <div class="btn-toolbar">
 	      			<!-- Help Button -->
 	      			<div class="btn-group">
-	      				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
+	      				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="/">Hilfethema I</a></li>
 								<li><a href="/">Hilfethema II</a></li>
@@ -193,7 +195,7 @@
 	      			
 	      			<!-- UP Services -->
 					<div class="btn-group">
-						<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 								<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
@@ -205,9 +207,12 @@
 							</ul>
 					</div>
 				</div><!-- /btn-toolbar -->
+				
+				
+				
 		</div> <!-- ende navigation-wrapper -->
 		#end       		
-
+		<div style="clear:both"></div>	
 		#if ($is_signed_in)
 		<div id="main-menu-wrapper">
 			<ul id="main-menu" class="enabled">		
@@ -287,10 +292,12 @@
 					#language("so-up-theme-campus-navigator")<span class="icon arrow disabled"></span>
 				</li>
 			</ul>
+			<div style="clear:left"></div>	
 		</div> <!-- end main menu wrapper --->
 		#end
 	
 		<nav id="breadcrumbs">#breadcrumbs()</nav>
+		<div class="clear-left"></div>	
 	</header>  
 	<div class="wrapper-portlet-area">	
 		<div id="heading">
@@ -310,7 +317,7 @@
 		
 			#if ($is_signed_in)
 				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
-				
+				<ul id="workspace-control">
 					#if ($show_edit_controls)
 						<li style="display: none;">
 							<a id="editPage" href="javascript:;">#language("edit-page")</a>
@@ -325,21 +332,23 @@
 						<a class="toggle-controls" href="javascript:void(0);">#language("so-up-theme-workspace-configure")
 						</a>
 					</li>
-				#end
-				#if ($show_control_panel)
-				<li>
-					<a href="$control_panel_url">
-					<div id="adminbox">
-						<span class="icon admin"></span>Administration
-					</div>
-					</a>
-				</li>
+					#end
+					#if ($show_control_panel)
+					<li>
+						<a href="$control_panel_url" class="btn">
+							<div id="adminbox">
+								<span class="admin"></span>Administration
+							</div>
+						</a>
+					</li>
+				</ul>
+				
 				#end
 			#end
 			
 		</div>
 		
-	
+			<div style="clear:both"></div>	
 		#if ($has_navigation)
 			#parse ("$full_templates_path/navigation.vm")
 		#end
