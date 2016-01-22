@@ -186,7 +186,7 @@
 	      		 <div class="btn-toolbar">
 	      			<!-- Help Button -->
 	      			<div class="btn-group">
-	      				<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
+	      				<a class="btn dropdown-toggle help" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="/">Hilfethema I</a></li>
 								<li><a href="/">Hilfethema II</a></li>
@@ -195,7 +195,7 @@
 	      			
 	      			<!-- UP Services -->
 					<div class="btn-group">
-						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
+						<a class="btn dropdown-toggle services" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 								<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
