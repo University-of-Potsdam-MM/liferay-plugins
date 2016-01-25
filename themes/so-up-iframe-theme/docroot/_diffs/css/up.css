@@ -60,8 +60,6 @@ html.aui
 
 		transition-property: margin-right;
 		transition-duration: 0.2s;
-		
-		overflow-y: hidden;
 
 	
 		#up_section_indicator
@@ -119,6 +117,62 @@ html.aui
 			
 			.wrapper-portlet-area
 			{
+				
+				/*seitentitel und buttons - positionierung */
+				
+				#heading
+				{
+					width: 97.7%;
+					position:relative;
+					
+					h1.site-title 
+					{
+						width:70%;
+						float:left;
+					}
+					
+					h2.page-title
+					{
+						display:none;
+					}
+					
+					ul#workspace-control
+					{
+						
+						list-style:none;
+						padding:0;
+						margin:0;
+						float:right;
+						
+						li 
+						{
+							display:inline-block;
+							
+							a
+							{
+								span.workspace:before
+								{
+									@include ple-grafic;
+									background-position: 0px -354px;
+									display:inline-block;
+									content:".";
+								}
+								
+								span.admin:before
+								{
+									@include ple-grafic;
+									background-position: 0px -419px;
+									display:inline-block;
+									content:".";
+								
+								}
+								
+								
+							}
+						}
+					}
+				}
+				
 				#content
 				{
 					min-height:1000px !important;
@@ -404,13 +458,14 @@ html.aui
     							box-sizing: border-box;
     							line-height:1;
     							text-indent:30px;
-								height: 100%;
+								height: 47px;
 								background-color:#d0dae3;
-								background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
+								background-image: url('/so-up-iframe-theme/css/../images/up_icons.png') !important; 
     							background-repeat:no-repeat;
     							background-position: -3px 5px;
-    							transition: all .3s ease-in-out;
+    							transition: width .3s ease-in-out;
     							border:none;
+    						
     							    
 				 	 			
 				 	 		}
@@ -426,6 +481,7 @@ html.aui
 				 	 			    background-color: #fff;
     								border: 2px solid #014260;
     								box-sizing: border-box;
+    								
     							
 				 	 		}
 				 	 		
@@ -467,38 +523,45 @@ html.aui
    							padding:0;
    							margin:0;
    							
-   							
-   							.portlet-borderless-bar
+   							.portlet-borderless-container
    							{
-   								display:none;
-   							}
+   							border:none;
    							
-   							.portlet-body
-   							{
-   								form
+   							
+   								.portlet-borderless-bar
    								{
-   									margin:0;
-   									
-   									.control-group
+   									display:none;
+   								}
+   							
+   								.portlet-body
+   								{
+   									form
    									{
-   										margin-bottom:0;
-   										width:50px;
-   										
-   										select
+   										margin:0;
+   									
+   										.control-group
    										{
-   										    margin: 0;
-    										height: 50px;
-   											width: 50px;
-   											text-indent:50px;
-   											background: url('/so-up-theme/css/../images/up_icons.png') no-repeat -5px -40px;
-   											background-color:#fff;
+   											margin-bottom:0;
+   											width:50px;
+   										
+   											select
+   											{
+   										  	 	margin: 0;
+    											height: 50px;
+   												width: 50px;
+   												text-indent:50px;
+   												background: url('/so-up-iframe-theme/css/../images/up_icons.png') no-repeat -5px -40px;
+   												background-color:#fff;
+   												-webkit-appearance: none;
+												-moz-appearance: none;
+												appearance: none;
+   											}
    										}
    									}
    								}
-   							}
    							
-   						}
-    			 
+   							}
+						}
     			 	 } /*ende languageselect*/
     			
     			
@@ -705,9 +768,10 @@ html.aui
 								 select.aui-field-select
 								{
 									width: 100%;
-   									 color: #fff;
-    								background-color: #014260;
+   									    color: #014260;
+    								background-color: #fff;
     								border: none;
+    								border:2px solid #ededed;
 								}
 							}
 								
@@ -717,6 +781,13 @@ html.aui
     									background-color: transparent;
     									margin-left: 0;
     									padding-left: 0;
+    									position:relative;
+    									
+    									input:nth-of-type(2) {
+    										position: absolute;
+   										     top: 7px;
+  										  right: 4px;
+    									}
 								}
 								
 								.site-list-container
@@ -814,52 +885,75 @@ html.aui
 			float: left;
 		}
 		
-		#admin-wrapper
+		#navigation-wrapper
 		{
 			
 			position: absolute;
-			width:100%; 
-			top: 100px;
+			width:100%;
+			top: 80px;
 			color: $upDarkBlue;
 			
-			#admin
+			.btn-toolbar
 			{
-				width:89%;
-				margin:0 auto;
-				position:relative;
-				list-style: none;
-				display:block;
 				
-				li
+				margin: 0 auto;
+    			position: relative;
+    			list-style: none;
+   				width: 84.7%;
+   				display: block;
+   
+    			font-size: 1em;
+				
+				.btn-group
 				{
-					float: right;
-					padding: 5px;
-					padding-right: 20px;
-					background: $upLightBlue;
-					margin-left:2px;
-				
-					#toggleDockbar
+					 float: right;
+    				background: #d0dae3;
+    				margin-left: 25px;
+    				font-size: 1em;
+					
+					a 
 					{
-						height: auto;
-						width: auto;
-						overflow: hidden;
-						margin: 0;
+						   font-size: 1em;
+    						text-transform: uppercase;
+    						text-align: center;
+    						font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
+    						font-weight: normal;
+    						width: 100%;
+    						
+    						span 
+    						{
+    							margin-left:15px;
+    						}
+					
 					}
+					
+				
+				
 	
-					.workspace
-					{
-						@include ple-grafic;
-						background-position: 0px -354px;
-						display: inline-block;
+					
+					
+					
+					/* span#requestMemberButton {
+						background-image: url('/so-up-theme/css/../images/ple-icons.png');
+						
+						background-repeat:no-repeat;
+						background-position:0 -30px;
+						width:20px;
+						height:20px;
+						display:inline-block;
 					}
-				
-					.admin
-					{
-						@include ple-grafic;
-						background-position: 0px -421px;
-						display: inline-block;
-					}
+					
+					.member-link {
+						margin:0;
+						height: 20px;
+    					display: block;
+    					float: right;
+					}*/
+					
+					
 				} 
+				
+				
 			}
 		}
 		
@@ -888,7 +982,7 @@ html.aui
 				
 				li
 				{
-					width: 24.91%;
+					width: 32.91%;
     
     				float: left;
     				background: white;
@@ -902,6 +996,8 @@ html.aui
     				padding-top: 20px;
     				font-size: 1.1em;
     				font-weight: bold;
+    				
+    				
 				
 					.icon
 					{
@@ -933,9 +1029,13 @@ html.aui
 							a
 							{
 								color: $upDarkBlue;
+								display:inline-block;
+								width:100%;
 							}
 			
 						}
+						
+						
 					  } /*ende ul */
 				
 					  ul.hidden 
@@ -975,9 +1075,20 @@ html.aui
 				 }
 				 
 				 
-		
-				
-				
+				span.close.icon
+					{
+						position: absolute;
+    					right: 90px;
+    					bottom: 10px;
+    					font-size: .9em;
+    					background-position: -19px -319px;
+    					background-repeat: no-repeat;
+    					text-transform: uppercase;
+    					text-indent: 20px;
+    					line-height: 15px;
+    					color: #333;
+    					opacity: 1;
+					}
 	
 			} /* ende main menu */
 			
@@ -1046,7 +1157,26 @@ background: $upBgColor;
 	.wrapper-portlet-area 
 	{
 		width:100%;
-		margin-top:46px;
+		margin-top:80px;
+		
+		#heading
+		{
+		display:none;
+		}
+		
+		nav.sort-pages 
+		{
+			display:none;
+		}
+		
+		#portlet_upiframe_WAR_upiframeportlet 
+		{
+			h1 
+			{
+				font-size:0;
+				height:2px;
+			}
+		}
 	}
 		
 	#line
@@ -1141,7 +1271,7 @@ background: $upBgColor;
 		{
 			height: 47px;
     		z-index: 3;
-    		width: 310px;
+    		width: 230px;
     		height: 47px;
    			float:right;
    			position:relative;
@@ -1152,6 +1282,8 @@ background: $upBgColor;
 			{
 			 	
 			 	height: 47px;
+			 	width:auto;
+			 	margin:0;
     			
 				
 				/*ab hier dockbar*/
@@ -1211,13 +1343,20 @@ background: $upBgColor;
     					
     					form
     					{
+    						
+    						input[type="text"] {
+    							position: fixed;
+    							right: 180px;
+    						}
+    						
+    						
     						input[type="text"]:focus
     						{
     							width: 100px;
     							width: 250px;
-    							position: fixed;
+    							
     							height: 47px;
-    							right: 140px;
+    							
     						}
 						}
     					
@@ -1253,49 +1392,73 @@ background: $upBgColor;
 			} /*end upper toolbar */
 			
 			
-	#admin-wrapper
+	#navigation-wrapper
 		{
-			width: 100px;
-    		position: relative;
-    		float: right;
-    		margin-top: -20px;
-    		height: 47px;
-    		z-index: 2;
-    		top: 0;
-	
+			    width: 100px;
+    			position: relative;
+    			float: right;
+    			margin-top: -20px;
+    			height: 47px;
+    			z-index: 2;
+    			top: 0;
+   
 			
-			#admin
+			.btn-toolbar
 			{
 				width:100%;
 				margin:0;
 				height:47px;
 				display:block;
 				
-				li
+				.btn-group
 				{
-					float: right;
-    				padding: 0;
-    				padding-right: 0;
-   					background: transparent;
-    				margin-left: 2px;
-    				height: 47px;
-    				width: 47px;
-    				overflow: hidden;
-    				cursor:pointer;
+					    float: right;
+   						background: #d0dae3;
+    					margin-left: 0;
+    					font-size: 1em;
+    					width: 50px;
+    					display: block;
+    					height: 47px;
     				
     				a
     				{
-    					overflow: hidden;
-    					margin: 0;
-    					font-size: 0;
-    					padding: 10px;
-    					width: 20px;
-    					height: 20px;
-    					display: block;
+    					    height: 47px;
+    					    font-size:0;
+    					    padding:0;
+    					    width:50px;
+    					    height:47px;
+    					    -webkit-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    						-moz-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    						box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    					    
+    					    span {
+    					    	display:none;
+    					    }
     				}
     				
+    				a.services:after
+					{
+						content:"UP";
+						
+						display: inline-block;
+						margin-top:15px;
+						color:#014260;
+						font-weight:bold;
+						font-size: 25px
+					}
+				
+					a.help:after
+					{
+						content: "\f1cd";
+    					font-family: 'fontawesome-alloy', fontawesome;
+    					font-size: 20px;
+						color:#014260;
+						display: inline-block;
+						margin-top:15px;
+						
+					}
     				
-					
+    								
 				} 
 			}
 		}
@@ -1303,10 +1466,10 @@ background: $upBgColor;
 		#main-menu-wrapper 
 		{
 			position:relative;
-			padding-right:380px;
-			margin-top:-20px;
+			padding-right:280px;
+			
 			background-color:#d0dae3;
-			margin-top:-20px;
+			margin-top:-46px;
 				transition: background-color .7s ease-in-out;
 			
 			
@@ -1329,13 +1492,15 @@ background: $upBgColor;
 					line-height: .5em;
 					height:47px; 
     				
-					
-					ul li
+					ul
 					{
-						padding-bottom:3px;
-						padding-top:3px;
+						transition: height .2s ease-in;
+					 	li
+						{
+							padding-bottom:3px;
+							padding-top:3px;
+						}
 					}
-				
 				 } /*ende li */
 				 
 			} /* ende main menu */
@@ -1417,6 +1582,8 @@ background: $upBgColor;
 		
 		}
 	} /*end header banner */	
+	
+	
 		
 } /*end smallhead*/
 		

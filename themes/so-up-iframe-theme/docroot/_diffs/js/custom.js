@@ -1,4 +1,4 @@
-/* toggle worskpaces navigation dropdown
+// toggle worskpaces navigation dropdown
 
 $('document').ready(clickdropdown); 
 
@@ -24,8 +24,8 @@ function clickdropdown() {
 					$('.clicker').removeClass('active');
 				}
 			});
-}  */
-
+}  
+/*
 $('document').ready(function($) {
 
     function sticky()
@@ -47,4 +47,4 @@ $('document').ready(function($) {
         sticky();
     });
     
-});
+});*/
