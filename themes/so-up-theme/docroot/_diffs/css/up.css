@@ -124,10 +124,13 @@ html.aui
 				{
 					width: 97.7%;
 					position:relative;
+					border-bottom: 1px solid #014260;
+    				height: 40px;
+    				margin-bottom: 10px;
 					
 					h1.site-title 
 					{
-						width:70%;
+						max-width:70%;
 						float:left;
 					}
 					
@@ -143,32 +146,58 @@ html.aui
 						padding:0;
 						margin:0;
 						float:right;
+						margin-top: 8px;
 						
 						li 
 						{
 							display:inline-block;
 							
-							a
-							{
-								span.workspace:before
+							
+								a.workspace:before
 								{
-									@include ple-grafic;
-									background-position: 0px -354px;
+									content:"\f044";
 									display:inline-block;
-									content:".";
+									font-family:"fontawesome-alloy" , fontawesome;
+									font-size:15px;
+									    vertical-align: bottom;
+									    color:#014260;
 								}
 								
-								span.admin:before
+								a#editPage:before
+								{
+									content:"\f009";
+									display:inline-block;
+									font-family:"fontawesome-alloy" , fontawesome;
+									font-size:15px;
+									    vertical-align: bottom;
+									    margin-right:5px;
+								}
+								
+								a#addApplication:before
+								{
+									    background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
+    									background-position: 0px -342px;
+    									display: inline-block;
+    									vertical-align: bottom;
+    									content: ".";
+   								        width: 20px;
+    									height: 15px;
+    									font-size: 0;
+    									margin-right: 2px;
+								}
+								
+								a span.admin:before
 								{
 									@include ple-grafic;
 									background-position: 0px -419px;
 									display:inline-block;
-									content:".";
+									width:15px;
+									height:15px;
+									
 								
 								}
 								
 								
-							}
 						}
 					}
 				}
@@ -407,7 +436,7 @@ html.aui
    												background-position: 4px 379px;
     											background-color: transparent;
     											font-weight: bold;
-  
+  												height:50px;
     											padding-bottom: 0;
     											width: 100%;
 											}
@@ -899,7 +928,7 @@ html.aui
 				margin: 0 auto;
     			position: relative;
     			list-style: none;
-   				width: 84.7%;
+   				width: 86.7%;
    				display: block;
    
     			font-size: 1em;
@@ -908,7 +937,7 @@ html.aui
 				{
 					 float: right;
     				background: #d0dae3;
-    				margin-left: 25px;
+    				margin-left: 1px;
     				font-size: 1em;
 					
 					a 
@@ -935,6 +964,7 @@ html.aui
 						@include ple-grafic;
 						background-position: 0px -354px;
 						display: inline-block;
+						width:auto;
 					}
 				
 					.help
@@ -942,6 +972,7 @@ html.aui
 						@include ple-grafic;
 						background-position: 0px -421px;
 						display: inline-block;
+						width:auto;
 					}
 					
 					
@@ -1324,6 +1355,14 @@ background: $upBgColor;
 										
 									}/*end 145 Navbar Collapse */
 									
+									#_145_navAccountControls 
+									{
+										span.user-notifications-count 
+										{
+											height:47px;
+										}
+									}
+									
 								}/*end .container*/	
 							}/*end navbar.inner */
 						} /* end #_145_dockbar */	
@@ -1604,4 +1643,16 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
 .aui #content .portlet-column .alert.alert-info {
     background-color: #fff091;
     opacity: 1;
+}
+
+
+.aui .controls-visible #heading #workspace-control li a.workspace:before {
+	content:"\f057" !important;
+	display:inline-block;
+	font-size:15px;
+	color:#014260;
+	font-family:"fontawesome-alloy",fontawesome;
+	margin-right: 5px;
+    vertical-align: bottom;
+	
 }

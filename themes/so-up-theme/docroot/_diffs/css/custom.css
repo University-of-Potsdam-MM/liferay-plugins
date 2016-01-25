@@ -101,7 +101,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 #content  {
@@ -113,7 +113,9 @@
 	font-style: italic;
 	font-weight: normal;
 	font-size: .5em;
-	border-bottom: 4px solid #014260;
+	    margin-top: 0;
+    margin-bottom: 0;
+    vertical-align:top;
 }
 
 #heading h1.site-title .default-logo {
