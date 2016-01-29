@@ -3,6 +3,20 @@
 	#if ($is_signed_in && !$isUserPage)
 		$theme.runtime($scopenavigationPortletId, "", "")
 	#end
+	
+	##  -- Custom Logic to seperate different pages -- ##
+	#set ($navigatorpagelayout = false)
+	#if ($layout.getExpandoBridge().hasAttribute("Navigator"))
+		#if ($layout.getExpandoBridge().getAttribute("Navigator"))
+			#set ($navigatorpagelayout = $layout.getExpandoBridge().getAttribute("Navigator"))
+		#end
+	#end
+	#set ($organizationalpagelayout = false)
+	#if ($layout.getExpandoBridge().hasAttribute("Organizational"))
+		#if ($layout.getExpandoBridge().getAttribute("Organizational"))
+			#set ($organizationalpagelayout = $layout.getExpandoBridge().getAttribute("Organizational"))
+		#end
+	#end	
 		
 	<ul aria-label="#language ("site-pages")" role="menubar" class="no-js">
 		<!-- AUI funktioniert in diesem Block nicht -->	
@@ -26,23 +40,29 @@
 				#set ($nav_item_css_class="has-children selected")
 			#end
 
-			## -- Custom Logic to seperate portfolio sites in users private site -- ##
-			#set ($portfoliopage = false)
-			#if ($nav_item.getLayout().getExpandoBridge().hasAttribute("Portfolio"))
-				#if ($nav_item.getLayout().getExpandoBridge().getAttribute("Portfolio"))
-					#set ($portfoliopage = $nav_item.getLayout().getExpandoBridge().getAttribute("Portfolio"))
-				#end
-			#end
-			#set ($currentportfoliopage = false)
-			#if ($layout.getExpandoBridge().hasAttribute("Portfolio"))
-				#if ($layout.getExpandoBridge().getAttribute("Portfolio"))
-					#set ($currentportfoliopage = $layout.getExpandoBridge().getAttribute("Portfolio"))
-				#end
-			#end
-			#if (($currentportfoliopage == "false" && $portfoliopage == "false") || ($currentportfoliopage == "true" && $portfoliopage == "true"))		
 			
+			#*
+				1. First get Layout of current page
+				2.
+			*#
+			#set ($navigatorpage = false)
+			#if ($nav_item.getLayout().getExpandoBridge().hasAttribute("Navigator"))
+				#if ($nav_item.getLayout().getExpandoBridge().getAttribute("Navigator"))
+					#set ($navigatorpage = $nav_item.getLayout().getExpandoBridge().getAttribute("Navigator"))
+				#end
+			#end
+			#set ($organizationalpage = false)
+			#if ($nav_item.getLayout().getExpandoBridge().hasAttribute("Organizational"))
+				#if ($nav_item.getLayout().getExpandoBridge().getAttribute("Organizational"))
+					#set ($organizationalpage = $nav_item.getLayout().getExpandoBridge().getAttribute("Organizational"))
+				#end
+			#end
+			
+			
+			#if (($navigatorpagelayout == true &&  $navigatorpage == true) || ($organizationalpagelayout == true &&  $organizationalpage == true) || ($organizationalpagelayout == false && $navigatorpagelayout == false &&  $organizationalpage == false && $navigatorpage == false))
 			
 				<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
+					<span id="up-arrow"></span>
 					<a aria-labelledby="layout_$nav_item.getLayoutId()" href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
 				
 					#if ($nav_item.hasChildren())
@@ -58,6 +78,7 @@
 	
 								<li class="$nav_child_css_class" id="layout_$nav_child.getLayoutId()" $nav_child_attr_selected role="presentation">
 									<a aria-labelledby="layout_$nav_child.getLayoutId()" href="$nav_child.getURL()" $nav_child.getTarget() role="menuitem">$nav_child.getName()</a>
+								
 								</li>
 							#end
 						</ul>
@@ -66,4 +87,11 @@
 			#end
 		#end
 	</ul>
+	#if (!$page_group.isControlPanel() && $user.isSetupComplete() && $has_layout_add_permission)
+		<ul id="addPage-btn">
+		<li style="display: none;">
+			<a id="addPage" class="btn" href="javascript:;">#language("add-page")</a>
+		</li>
+		</ul>
+	#end
 </nav>

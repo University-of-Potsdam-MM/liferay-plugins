@@ -20,7 +20,9 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.servlet.PortalSessionThreadLocal;
+import com.liferay.portal.kernel.servlet.Range;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FileUtil;
@@ -70,6 +72,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Dennis Ju
@@ -227,7 +232,8 @@ public class DownloadServlet extends HttpServlet {
 	}
 
 	protected DownloadServletInputStream getFileDownloadServletInputStream(
-			long userId, long groupId, String uuid, String version)
+			long userId, long groupId, String uuid, String version,
+			long versionId)
 		throws Exception {
 
 		FileEntry fileEntry = DLAppServiceUtil.getFileEntryByUuidAndGroupId(
@@ -243,15 +249,56 @@ public class DownloadServlet extends HttpServlet {
 					userId, fileEntry.getFileEntryId(), fileEntry.getVersion(),
 					false);
 
-			return new DownloadServletInputStream(
-				inputStream, fileEntry.getMimeType(), fileEntry.getSize());
-		}
-		else {
-			FileVersion fileVersion = fileEntry.getFileVersion(version);
+			String fileName = fileEntry.getTitle();
+
+			String extension = fileEntry.getExtension();
+
+			if (Validator.isNotNull(extension) &&
+				!fileName.endsWith(StringPool.PERIOD + extension)) {
+
+				fileName += StringPool.PERIOD + extension;
+			}
 
 			return new DownloadServletInputStream(
-				fileVersion.getContentStream(false), fileVersion.getMimeType(),
-				fileVersion.getSize());
+				inputStream, fileName, fileEntry.getMimeType(),
+				fileEntry.getSize());
+		}
+		else {
+			if (versionId > 0) {
+				DLFileVersion dlFileVersion =
+					DLFileVersionLocalServiceUtil.fetchDLFileVersion(versionId);
+
+				String fileName = dlFileVersion.getTitle();
+
+				String extension = dlFileVersion.getExtension();
+
+				if (Validator.isNotNull(extension) &&
+					!fileName.endsWith(StringPool.PERIOD + extension)) {
+
+					fileName += StringPool.PERIOD + extension;
+				}
+
+				return new DownloadServletInputStream(
+					dlFileVersion.getContentStream(false), fileName,
+					dlFileVersion.getMimeType(), dlFileVersion.getSize());
+			}
+			else {
+				FileVersion fileVersion = fileEntry.getFileVersion(version);
+
+				String fileName = fileVersion.getTitle();
+
+				String extension = fileVersion.getExtension();
+
+				if (Validator.isNotNull(extension) &&
+					!fileName.endsWith(StringPool.PERIOD + extension)) {
+
+					fileName += StringPool.PERIOD + extension;
+				}
+
+				return new DownloadServletInputStream(
+					fileVersion.getContentStream(false), fileName,
+					fileVersion.getMimeType(), fileVersion.getSize());
+			}
 		}
 	}
 
@@ -340,13 +387,75 @@ public class DownloadServlet extends HttpServlet {
 		throws Exception {
 
 		String version = ParamUtil.getString(request, "version");
+		long versionId = ParamUtil.getLong(request, "versionId");
 
 		DownloadServletInputStream downloadServletInputStream =
-			getFileDownloadServletInputStream(userId, groupId, uuid, version);
+			getFileDownloadServletInputStream(
+				userId, groupId, uuid, version, versionId);
 
-		ServletResponseUtil.write(
-			response, downloadServletInputStream.getInputStream(),
-			downloadServletInputStream.getSize());
+		if (request.getHeader(HttpHeaders.RANGE) != null) {
+			sendFileWithRangeHeader(
+				request, response, downloadServletInputStream.getFileName(),
+				downloadServletInputStream.getInputStream(),
+				downloadServletInputStream.getSize(),
+				downloadServletInputStream.getMimeType());
+		}
+		else {
+			ServletResponseUtil.write(
+				response, downloadServletInputStream.getInputStream(),
+				downloadServletInputStream.getSize());
+		}
+	}
+
+	protected void sendFileWithRangeHeader(
+			HttpServletRequest request, HttpServletResponse response,
+			String fileName, InputStream inputStream, long contentLength,
+			String contentType)
+		throws IOException {
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Accepting ranges for the file " + fileName);
+		}
+
+		response.setHeader(
+			HttpHeaders.ACCEPT_RANGES, HttpHeaders.ACCEPT_RANGES_BYTES_VALUE);
+
+		List<Range> ranges = null;
+
+		try {
+			ranges = ServletResponseUtil.getRanges(
+				request, response, contentLength);
+		}
+		catch (IOException ioe) {
+			if (_log.isErrorEnabled()) {
+				_log.error(ioe);
+			}
+
+			response.setHeader(
+				HttpHeaders.CONTENT_RANGE, "bytes */" + contentLength);
+
+			response.sendError(
+				HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
+
+			return;
+		}
+
+		if ((ranges == null) || ranges.isEmpty()) {
+			ServletResponseUtil.sendFile(
+				request, response, fileName, inputStream, contentLength,
+				contentType);
+		}
+		else {
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					"Request has range header " +
+						request.getHeader(HttpHeaders.RANGE));
+			}
+
+			ServletResponseUtil.write(
+				request, response, fileName, ranges, inputStream, contentLength,
+				contentType);
+		}
 	}
 
 	protected void sendImage(HttpServletResponse response, long imageId)
@@ -435,7 +544,8 @@ public class DownloadServlet extends HttpServlet {
 					DownloadServletInputStream downloadServletInputStream =
 						getFileDownloadServletInputStream(
 							userId, groupId, uuid,
-							zipObjectJSONObject.getString("version"));
+							zipObjectJSONObject.getString("version"),
+							zipObjectJSONObject.getLong("versionId"));
 
 					zipWriter.addEntry(
 						zipFileId, downloadServletInputStream.getInputStream());
@@ -472,5 +582,7 @@ public class DownloadServlet extends HttpServlet {
 	}
 
 	private static final String _ERROR_HEADER = "Sync-Error";
+
+	private static Log _log = LogFactory.getLog(DownloadServlet.class);
 
 }

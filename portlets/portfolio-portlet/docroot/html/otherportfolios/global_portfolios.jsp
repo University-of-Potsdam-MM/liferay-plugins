@@ -9,7 +9,7 @@
 <% if (portfolios.size() == 0){ %>
 	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
 <% } else { %>
-	<div id=globalPortfoliosTable></div>
+	<div id="globalPortfoliosTable" class="loading-animation"></div>
 <% } %>
 
 <% 
@@ -38,7 +38,8 @@ AUI().use(
     'datatable-paginator',
     'datatable-sort',
     function(A) {
-        if (A.one("#globalPortfoliosTable") == null)
+    	var globalPortfoliosDataDiv = A.one("#globalPortfoliosTable");
+        if (globalPortfoliosDataDiv == null)
             return;
         var data = JSON.parse('<%=portfoliosJSON%>');
         globalPortfoliosDataTable = new A.DataTable({
@@ -97,6 +98,7 @@ AUI().use(
             });
             globalPortfoliosDataTable.set('data', filteredData);
         });
+        globalPortfoliosDataDiv.removeClass('loading-animation');
     }
 );
 </aui:script>

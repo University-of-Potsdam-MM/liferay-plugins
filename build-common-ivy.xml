@@ -57,7 +57,7 @@
 						override="true"
 						property="mirrors.src"
 						regexp="http://"
-						replace="http://mirrors/"
+						replace="http://mirrors.lax.liferay.com/"
 					/>
 
 					<if>
@@ -614,15 +614,6 @@ module.snapshot.url=${cdn.sonatype.url}/com/liferay/${bnd.Bundle-SymbolicName}/$
 				<else>
 					<var name="plugin.ivy.resolve.transitive.dependencies" value="${ivy.resolve.transitive.dependencies}" />
 				</else>
-			</if>
-
-			<if>
-				<not>
-					<available file="@{module.dir}/build.gradle" />
-				</not>
-				<then>
-					<touch file="@{module.dir}/build.gradle" />
-				</then>
 			</if>
 		</sequential>
 	</macrodef>

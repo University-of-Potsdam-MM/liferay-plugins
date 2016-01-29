@@ -201,6 +201,7 @@
 	</macrodef>
 
 	<macrodef name="compile-jsp">
+		<attribute name="compile.jsp.delete.generated.files" default="true" />
 		<attribute name="compile.jsp.docroot.dir" />
 		<attribute name="compile.jsp.temp.dir" default="" />
 
@@ -266,7 +267,13 @@
 						</else>
 					</if>
 
-					<delete dir="classes/tomcat" quiet="true" />
+					<tstamp>
+						<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+					</tstamp>
+
+					<var name="compile.jsp.jspc.dir" value="${tstamp.value}" />
+
+					<mkdir dir="${compile.jsp.jspc.dir}" />
 
 					<java
 						classname="com.liferay.jasper.jspc.JspC"
@@ -278,7 +285,7 @@
 					>
 						<sysproperty key="jspc.module.web" value="${jspc.module.web}" />
 						<sysproperty key="jspc.portal.dir" value="${app.server.portal.dir}" />
-						<arg line="-d classes/tomcat -webapp @{compile.jsp.docroot.dir}" />
+						<arg line="-d ${compile.jsp.jspc.dir}/src -webapp @{compile.jsp.docroot.dir}" />
 					</java>
 
 					<echo>${jspc.output}</echo>
@@ -286,29 +293,36 @@
 					<if>
 						<contains string="${jspc.output}" substring="JasperException" />
 						<then>
-							<delete dir="classes/tomcat" quiet="true" />
+							<delete dir="${compile.jsp.jspc.dir}/src" quiet="true" />
 
 							<fail>JSPs failed to compile.</fail>
 						</then>
 					</if>
 
 					<if>
-						<available file="classes/tomcat" type="dir" />
+						<available file="${compile.jsp.jspc.dir}/src" type="dir" />
 						<then>
+							<mkdir dir="${compile.jsp.jspc.dir}/classes" />
+
 							<javac
 								classpathref="jspc.classpath"
 								compiler="${javac.compiler}"
 								deprecation="${javac.deprecation}"
-								destdir="classes/tomcat"
+								destdir="${compile.jsp.jspc.dir}/classes"
 								encoding="${javac.encoding}"
 								errorProperty="jspc.javac.fail"
 								failonerror="false"
 								includeAntRuntime="false"
 								nowarn="on"
-								srcdir="classes/tomcat"
+								srcdir="${compile.jsp.jspc.dir}/src"
 							/>
 
-							<delete dir="classes/tomcat" quiet="true" />
+							<if>
+								<istrue value="@{compile.jsp.delete.generated.files}" />
+								<then>
+									<delete dir="${compile.jsp.jspc.dir}" quiet="true" />
+								</then>
+							</if>
 						</then>
 					</if>
 
@@ -931,33 +945,5 @@ Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
 			test.class="**/${test.package.dir}/*Test.class"
 			test.type="unit"
 		/>
-	</target>
-
-	<target name="watch" depends="deploy">
-		<antelope:repeat count="-1" interval="2">
-			<outofdate verbose="true">
-				<sourcefiles>
-					<fileset dir="${basedir}">
-						<include name="**/*.css" />
-						<include name="**/*.ftl" />
-						<include name="**/*.java" />
-						<include name="**/*.jsp" />
-						<include name="**/*.jspf" />
-						<include name="**/*.scss" />
-						<include name="**/*.vm" />
-						<exclude name="**/classes/**" />
-						<exclude name="**/.sass-cache/**" />
-					</fileset>
-				</sourcefiles>
-				<targetfiles>
-					<pathelement location="${plugin.file}" />
-				</targetfiles>
-				<sequential>
-					<deploy
-						module.dir="${basedir}"
-					/>
-				</sequential>
-			</outofdate>
-		</antelope:repeat>
 	</target>
 </project>

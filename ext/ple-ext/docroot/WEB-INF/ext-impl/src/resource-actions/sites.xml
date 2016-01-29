@@ -87,6 +87,7 @@
 		<weight>2</weight>
 		<permissions>
 			<supports>
+				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>ASSIGN_MEMBERS</action-key>
 				<action-key>DELETE</action-key>
 				<action-key>PERMISSIONS</action-key>

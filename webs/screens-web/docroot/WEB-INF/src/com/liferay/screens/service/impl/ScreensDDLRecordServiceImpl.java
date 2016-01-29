@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.dynamicdatalists.model.DDLRecord;
 import com.liferay.portlet.dynamicdatamapping.storage.Field;
 import com.liferay.portlet.dynamicdatamapping.storage.FieldConstants;
@@ -42,8 +43,6 @@ public class ScreensDDLRecordServiceImpl
 	public JSONObject getDDLRecord(long ddlRecordId, Locale locale)
 		throws PortalException, SystemException {
 
-		Map<String, Object> ddlRecordMap = new HashMap<String, Object>();
-
 		DDLRecord ddlRecord = ddlRecordPersistence.findByPrimaryKey(
 			ddlRecordId);
 
@@ -55,16 +54,7 @@ public class ScreensDDLRecordServiceImpl
 			locale = fields.getDefaultLocale();
 		}
 
-		for (Field field : fields) {
-			Object fieldValue = getFieldValue(field, locale);
-
-			if (fieldValue != null) {
-				ddlRecordMap.put(field.getName(), fieldValue);
-			}
-		}
-
-		return JSONFactoryUtil.createJSONObject(
-			JSONFactoryUtil.looseSerialize(ddlRecordMap));
+		return getDDLRecordJSONObject(ddlRecord, locale);
 	}
 
 	@Override
@@ -101,6 +91,44 @@ public class ScreensDDLRecordServiceImpl
 		return ddlRecordPersistence.countByR_U(ddlRecordSetId, userId);
 	}
 
+	protected JSONObject getDDLRecordJSONObject(
+			DDLRecord ddlRecord, Locale locale)
+		throws PortalException, SystemException {
+
+		JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
+
+		ddlRecordJSONObject.put(
+			"modelAttributes",
+			JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(
+					ddlRecord.getModelAttributes())));
+
+		Map<String, Object> ddlRecordMap = new HashMap<String, Object>();
+
+		Fields fields = ddlRecord.getFields();
+
+		Set<Locale> availableLocales = fields.getAvailableLocales();
+
+		if ((locale == null) || !availableLocales.contains(locale)) {
+			locale = fields.getDefaultLocale();
+		}
+
+		for (Field field : fields) {
+			Object fieldValue = getFieldValue(field, locale);
+
+			if (fieldValue != null) {
+				ddlRecordMap.put(field.getName(), fieldValue);
+			}
+		}
+
+		ddlRecordJSONObject.put(
+			"modelValues",
+			JSONFactoryUtil.createJSONObject(
+				JSONFactoryUtil.looseSerialize(ddlRecordMap)));
+
+		return ddlRecordJSONObject;
+	}
+
 	protected JSONArray getDDLRecordsJSONArray(
 			List<DDLRecord> ddlRecords, Locale locale)
 		throws PortalException, SystemException {
@@ -108,16 +136,8 @@ public class ScreensDDLRecordServiceImpl
 		JSONArray ddlRecordsJSONArray = JSONFactoryUtil.createJSONArray();
 
 		for (DDLRecord ddlRecord : ddlRecords) {
-			JSONObject ddlRecordJSONObject = JSONFactoryUtil.createJSONObject();
-
-			ddlRecordJSONObject.put(
-				"modelAttributes",
-				JSONFactoryUtil.createJSONObject(
-					JSONFactoryUtil.looseSerialize(
-						ddlRecord.getModelAttributes())));
-			ddlRecordJSONObject.put(
-				"modelValues",
-				getDDLRecord(ddlRecord.getRecordId(), locale));
+			JSONObject ddlRecordJSONObject = getDDLRecordJSONObject(
+				ddlRecord, locale);
 
 			ddlRecordsJSONArray.put(ddlRecordJSONObject);
 		}
@@ -153,15 +173,31 @@ public class ScreensDDLRecordServiceImpl
 		else if (dataType.equals(FieldConstants.FLOAT) ||
 				 dataType.equals(FieldConstants.NUMBER)) {
 
+			if (Validator.isNull(fieldValueString)) {
+				return null;
+			}
+
 			return Float.valueOf(fieldValueString);
 		}
 		else if (dataType.equals(FieldConstants.INTEGER)) {
+			if (Validator.isNull(fieldValueString)) {
+				return null;
+			}
+
 			return Integer.valueOf(fieldValueString);
 		}
 		else if (dataType.equals(FieldConstants.LONG)) {
+			if (Validator.isNull(fieldValueString)) {
+				return null;
+			}
+
 			return Long.valueOf(fieldValueString);
 		}
 		else if (dataType.equals(FieldConstants.SHORT)) {
+			if (Validator.isNull(fieldValueString)) {
+				return null;
+			}
+
 			return Short.valueOf(fieldValueString);
 		}
 

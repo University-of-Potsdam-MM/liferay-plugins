@@ -117,6 +117,91 @@ html.aui
 			
 			.wrapper-portlet-area
 			{
+				
+				/*seitentitel und buttons - positionierung */
+				
+				#heading
+				{
+					width: 97.7%;
+					position:relative;
+					border-bottom: 1px solid #014260;
+    				height: 40px;
+    				margin-bottom: 10px;
+					
+					h1.site-title 
+					{
+						max-width:70%;
+						float:left;
+					}
+					
+					h2.page-title
+					{
+						display:none;
+					}
+					
+					ul#workspace-control
+					{
+						
+						list-style:none;
+						padding:0;
+						margin:0;
+						float:right;
+						margin-top: 8px;
+						
+						li 
+						{
+							display:inline-block;
+							
+							
+								a.workspace:before
+								{
+									content:"\f044";
+									display:inline-block;
+									font-family:"fontawesome-alloy" , fontawesome;
+									font-size:15px;
+									    vertical-align: bottom;
+									    color:#014260;
+								}
+								
+								a#editPage:before
+								{
+									content:"\f009";
+									display:inline-block;
+									font-family:"fontawesome-alloy" , fontawesome;
+									font-size:15px;
+									    vertical-align: bottom;
+									    margin-right:5px;
+								}
+								
+								a#addApplication:before
+								{
+									    background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
+    									background-position: 0px -342px;
+    									display: inline-block;
+    									vertical-align: bottom;
+    									content: ".";
+   								        width: 20px;
+    									height: 15px;
+    									font-size: 0;
+    									margin-right: 2px;
+								}
+								
+								a span.admin:before
+								{
+									@include ple-grafic;
+									background-position: 0px -419px;
+									display:inline-block;
+									width:15px;
+									height:15px;
+									
+								
+								}
+								
+								
+						}
+					}
+				}
+				
 				#content
 				{
 					min-height:1000px !important;
@@ -351,7 +436,7 @@ html.aui
    												background-position: 4px 379px;
     											background-color: transparent;
     											font-weight: bold;
-  
+  												height:50px;
     											padding-bottom: 0;
     											width: 100%;
 											}
@@ -712,9 +797,10 @@ html.aui
 								 select.aui-field-select
 								{
 									width: 100%;
-   									 color: #fff;
-    								background-color: #014260;
+   									    color: #014260;
+    								background-color: #fff;
     								border: none;
+    								border:2px solid #ededed;
 								}
 							}
 								
@@ -724,6 +810,13 @@ html.aui
     									background-color: transparent;
     									margin-left: 0;
     									padding-left: 0;
+    									position:relative;
+    									
+    									input:nth-of-type(2) {
+    										position: absolute;
+   										     top: 7px;
+  										  right: 4px;
+    									}
 								}
 								
 								.site-list-container
@@ -821,55 +914,69 @@ html.aui
 			float: left;
 		}
 		
-		#admin-wrapper
+		#navigation-wrapper
 		{
 			
 			position: absolute;
-			width:99.9%; 
-			top: 100px;
+			width:100%;
+			top: 80px;
 			color: $upDarkBlue;
 			
-			#admin
+			.btn-toolbar
 			{
-				width:89%;
-				margin:0 auto;
-				position:relative;
-				list-style: none;
-				display:block;
 				
-				li
+				margin: 0 auto;
+    			position: relative;
+    			list-style: none;
+   				width: 86.7%;
+   				display: block;
+   
+    			font-size: 1em;
+				
+				.btn-group
 				{
-					float: right;
-					padding: 5px;
-					padding-right: 20px;
-					background: $upLightBlue;
-					margin-left:2px;
-					height: 20px;
-				
-					#toggleDockbar
+					 float: right;
+    				background: #d0dae3;
+    				margin-left: 1px;
+    				font-size: 1em;
+					
+					a 
 					{
-						height: auto;
-						width: auto;
-						overflow: hidden;
-						margin: 0;
+						   font-size: 1em;
+    						text-transform: uppercase;
+    						text-align: center;
+    						font-family: "Source Sans Pro","Helvetica",Helvetica,Arial,sans-serif;
+    						font-weight: normal;
+    						width: 100%;
+    						
+    						span 
+    						{
+    							margin-left:15px;
+    						}
+					
 					}
+					
+				
+				
 	
-					.workspace
+					.services
 					{
 						@include ple-grafic;
 						background-position: 0px -354px;
 						display: inline-block;
+						width:auto;
 					}
 				
-					.admin
+					.help
 					{
 						@include ple-grafic;
 						background-position: 0px -421px;
 						display: inline-block;
+						width:auto;
 					}
 					
 					
-					 span#requestMemberButton {
+					/* span#requestMemberButton {
 						background-image: url('/so-up-theme/css/../images/ple-icons.png');
 						
 						background-repeat:no-repeat;
@@ -884,7 +991,7 @@ html.aui
 						height: 20px;
     					display: block;
     					float: right;
-					}
+					}*/
 					
 					
 				} 
@@ -918,7 +1025,7 @@ html.aui
 				
 				li
 				{
-					width: 24.91%;
+					width: 32.91%;
     
     				float: left;
     				background: white;
@@ -932,6 +1039,8 @@ html.aui
     				padding-top: 20px;
     				font-size: 1.1em;
     				font-weight: bold;
+    				
+    				
 				
 					.icon
 					{
@@ -963,6 +1072,8 @@ html.aui
 							a
 							{
 								color: $upDarkBlue;
+								display:inline-block;
+								width:100%;
 							}
 			
 						}
@@ -1244,6 +1355,14 @@ background: $upBgColor;
 										
 									}/*end 145 Navbar Collapse */
 									
+									#_145_navAccountControls 
+									{
+										span.user-notifications-count 
+										{
+											height:47px;
+										}
+									}
+									
 								}/*end .container*/	
 							}/*end navbar.inner */
 						} /* end #_145_dockbar */	
@@ -1305,53 +1424,73 @@ background: $upBgColor;
 			} /*end upper toolbar */
 			
 			
-	#admin-wrapper
+	#navigation-wrapper
 		{
-			width: 150px;
-    		position: relative;
-    		float: right;
-    		margin-top: -20px;
-    		height: 47px;
-    		z-index: 2;
-    		top: 0;
-	
+			    width: 100px;
+    			position: relative;
+    			float: right;
+    			margin-top: -20px;
+    			height: 47px;
+    			z-index: 2;
+    			top: 0;
+   
 			
-			#admin
+			.btn-toolbar
 			{
 				width:100%;
 				margin:0;
 				height:47px;
 				display:block;
 				
-				li
+				.btn-group
 				{
-					float: right;
-    				padding: 0;
-    				padding-right: 0;
-   					background: transparent;
-    				margin-left: 2px;
-    				height: 47px;
-    				width: 47px;
-    				overflow: hidden;
-    				cursor:pointer;
+					    float: right;
+   						background: #d0dae3;
+    					margin-left: 0;
+    					font-size: 1em;
+    					width: 50px;
+    					display: block;
+    					height: 47px;
     				
     				a
     				{
-    					overflow: hidden;
-    					margin: 0;
-    					font-size: 0;
-    					padding: 10px;
-    					width: 20px;
-    					height: 20px;
-    					display: block;
+    					    height: 47px;
+    					    font-size:0;
+    					    padding:0;
+    					    width:50px;
+    					    height:47px;
+    					    -webkit-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    						-moz-box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    						box-shadow: inset 0 0px 0 rgba(255, 255, 255, 0.2), 0 0px 0px rgba(0, 0, 0, 0.05);
+    					    
+    					    span {
+    					    	display:none;
+    					    }
     				}
     				
-    				span#requestMemberButton{
-    					 margin-top: 10px;
-   						 margin-left: 20px;
-    				}
+    				a.services:after
+					{
+						content:"UP";
+						
+						display: inline-block;
+						margin-top:15px;
+						color:#014260;
+						font-weight:bold;
+						font-size: 25px
+					}
+				
+					a.help:after
+					{
+						content: "\f1cd";
+    					font-family: 'fontawesome-alloy', fontawesome;
+    					font-size: 20px;
+						color:#014260;
+						display: inline-block;
+						margin-top:15px;
+						
+					}
     				
-					
+    								
 				} 
 			}
 		}
@@ -1359,10 +1498,10 @@ background: $upBgColor;
 		#main-menu-wrapper 
 		{
 			position:relative;
-			padding-right:380px;
-			margin-top:-20px;
+			padding-right:280px;
+		
 			background-color:#d0dae3;
-			margin-top:-20px;
+			margin-top:-46px;
 				transition: background-color .7s ease-in-out;
 			
 			
@@ -1504,4 +1643,16 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
 .aui #content .portlet-column .alert.alert-info {
     background-color: #fff091;
     opacity: 1;
+}
+
+
+.aui .controls-visible #heading #workspace-control li a.workspace:before {
+	content:"\f057" !important;
+	display:inline-block;
+	font-size:15px;
+	color:#014260;
+	font-family:"fontawesome-alloy",fontawesome;
+	margin-right: 5px;
+    vertical-align: bottom;
+	
 }

@@ -37,7 +37,6 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     
     private void saveColors(PortletConfig portletConfig, ActionRequest actionRequest,
             ActionResponse actionResponse) throws Exception{
-    	System.out.println("saveColors");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
 		
@@ -49,13 +48,14 @@ public class ConfigurationActionImpl extends DefaultConfigurationAction {
     				ParamUtil.get(actionRequest, WorkspaceGridPortlet.WORKSPACE_COLOR + prototype.getUuid(), WorkspaceGridPortlet.DEFAULT_COLOR));
     	}
     	
+    	portletPreferences.setValue(WorkspaceGridPortlet.NUMBER_OF_VISIBLE_WORKSPACES, ParamUtil.get(actionRequest, WorkspaceGridPortlet.NUMBER_OF_VISIBLE_WORKSPACES, "10"));
+    	
     	portletPreferences.store();
     }
 
     
     private void resetColors(PortletConfig portletConfig, ActionRequest actionRequest,
             ActionResponse actionResponse) throws Exception{
-    	System.out.println("resetColors");
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
 		

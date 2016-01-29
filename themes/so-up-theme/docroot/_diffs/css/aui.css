@@ -43,6 +43,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 .aui .wrapper-portlet-area h2 {
 	font-size:1.5em;
+	line-height:1.2;
 }
 
 .aui .wrapper-portlet-area .navbar {
@@ -100,10 +101,33 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
   font-family: georgia, serif;
   font-weight: bold;
   color: #666;
+  font-size:.9em;
 }
 
 .wrapper-portlet-area .btn-group button.btn {
 	margin-right:3px;
+}
+
+.aui .btn {
+	font-size:.8em;
+	font-family:"source sans pro", arial, sans-serif;
+	font-weight:bold;
+	color:#014260;
+}
+
+.aui .btn-group > .btn, .aui .btn-group > .dropdown-menu, .aui .btn-group > .popover {
+    font-size: 11px;
+}
+
+.aui .btn-group.open .dropdown-toggle {
+	background-color:#014260;
+	color:#fff;
+}
+
+.aui .btn-primary {
+	background-color:#014260;
+	color:#fff;
+	background-image:none;
 }
 
 .aui .wrapper-portlet-area .accordion-heading .accordion-toggle {
@@ -129,6 +153,10 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 .aui .wrapper-portlet-area .navbar {
 	margin-bottom:0;
+}
+
+.portlet-wiki .taglib-asset-tags-summary .tag {
+	background-color:transparent;	 
 }
 
 .aui .wrapper-portlet-area .navbar .nav>li.active {
@@ -177,4 +205,61 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 .aui .table-bordered {
 	border:none;
+	border-radius:0;
+}
+
+.aui .table-bordered thead:first-child tr:first-child > th:first-child, .aui .table-bordered tbody:first-child tr:first-child > td:first-child, .aui .table-bordered tbody:first-child tr:first-child > th:first-child {
+    -webkit-border-top-left-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    border-top-left-radius: 0px;
+}
+
+.aui .table-bordered thead:first-child tr:first-child > th:last-child, .aui .table-bordered tbody:first-child tr:first-child > td:last-child, .aui .table-bordered tbody:first-child tr:first-child > th:last-child {
+    -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    border-top-right-radius: 0px;
+}
+
+.aui .table tbody tr.info > td {
+    background-color: #dedede;
+}
+
+.aui a:hover, .aui a:focus {
+	color:#014260;
+}
+
+/* tabs */
+
+.aui .nav > li > a:hover, .aui .nav > li > a:focus {
+	background-color:#ededed;
+	color:#014260;
+}
+
+.aui .navbar .nav > li > a:focus, .aui .navbar .nav > li > a:hover {
+	color:#014260;
+}
+
+/* navbar dropdown */
+
+.aui .navbar .nav > li > a.dropdown-toggle {
+   
+    color: #014260;
+   
+    background-color: #d0dae3;
+    margin-right: 2px;
+}
+
+.aui .navbar .nav li.dropdown.open > .dropdown-toggle, .aui .navbar .nav li.dropdown.active > .dropdown-toggle, .aui .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #014260;
+    color: #fff;
+    text-shadow:none;
+}
+
+.aui .navbar .nav li.dropdown.open > .dropdown-toggle, .aui .navbar .nav li.dropdown.active > .dropdown-toggle, .aui .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background-color: #dedede;
+    color: #014260;
+}
+
+.aui .btn-group.open .btn.dropdown-toggle {
+    background-color: #dedede;
 }

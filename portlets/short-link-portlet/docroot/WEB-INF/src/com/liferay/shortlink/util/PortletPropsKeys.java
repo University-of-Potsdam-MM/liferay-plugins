@@ -26,4 +26,7 @@ public interface PortletPropsKeys {
 
 	public static final String SHORT_URL_LIFETIME = "short.url.lifetime";
 
+	public static final String SHORT_URL_NOT_FOUND_REDIRECT =
+		"short.url.not.found.redirect";
+
 }

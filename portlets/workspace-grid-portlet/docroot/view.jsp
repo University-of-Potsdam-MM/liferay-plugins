@@ -16,6 +16,11 @@
 
 <%@ include file="/init.jsp" %>
 
+<script src="<%=request.getContextPath()%>/js/Sortable/Sortable.js">
+</script>
+<script src="<%=request.getContextPath()%>/js/hyphenator.js">
+</script>
+
 <portlet:resourceURL var="getUserWorkspacesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserWorkspaces" />
 </portlet:resourceURL>
@@ -29,7 +34,7 @@
 		<%
 		String[] workspaceOrder = portletPreferences.getValues("workspaceOrder", new String[]{});
 		%>
-		<div id="<portlet:namespace />workspacegrid">
+		<div class="loading-animation" id="<portlet:namespace />workspacegrid">
 		
         <ul id="<portlet:namespace />workspacegridlist">
         </ul>
@@ -44,7 +49,7 @@
 var sortable;
 var showAll = false;
 var data;
-AUI().use('aui-base', 'aui-io-request', function(A) {
+AUI().use('aui-base', 'aui-io-request-deprecated', function(A) {
     A.io.request('<%=getUserWorkspacesURL.toString()%>', {
         dataType: 'text/html',
         method: 'post',
@@ -66,8 +71,8 @@ function renderWorkspaceGrid(){
 	workspacegridlist.empty()
 	var end;
 	var allVisible;
-	if (!showAll && data.length > 10){
-		end = 10;
+	if (!showAll && data.length > parseInt("<%= visibleWorkspaces%>")){
+		end = parseInt("<%= visibleWorkspaces%>");
 		allVisible = false;
 	}
 	else {
@@ -76,13 +81,35 @@ function renderWorkspaceGrid(){
 	}
 	for (var i = 0; i < end; i++) {
 		var group = data[i];
-		workspacegridlist.append('<li class="workspaceslide" style="background-color:' + group.color + '">' +
+		
+		var completeName= group.name;
+	
+		var laenge = completeName.length;
+		 if (laenge > 35) {
+			var shortstring = completeName.substr(0,35);
+	   		var shortName = shortstring.concat(" ...");
+		} else {
+			var shortName = group.name;
+		}
+		
+		var additionalClasses = '';
+		var backgroundColor = group.color;
+		if (group.globalWorkspace == 'true'){
+			additionalClasses += 'globalWorkspace';
+			backgroundColor = '#014260'; 
+		}
+			
+		workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
 	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
-	    		'<span hidden="true" class="url">' + group.url + '</span>' +
-	    		'<div class="workspaceName">' + group.name + '</div>' +
-				((group.activitiesCount.length > 0) ? ('<span class="numberOfActivities">' + group.activitiesCount + '</span>') : '' ) +
-	    		'</li>');
+	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
+	    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
+	    		'<div class="activities">' +
+				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ backgroundColor +'"></span><span class="numberOfActivities" style="color:'+ backgroundColor +'">' + group.activitiesCount + '</span>') : '' ) +
+	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
+
+		Hyphenator.hyphenate($('#name_' + group.groupId).get(0), 'de');
 	}
+	
 	if (!allVisible){
 		showMoreLinkContainer.setHTML('<a id="moreWorkspacesLink" href="javascript:;" onClick="renderMore()">'+ '<%= LanguageUtil.get(pageContext, "show-more")%>' +'</a>');
 	}
@@ -92,7 +119,8 @@ function renderWorkspaceGrid(){
 	else{
 		showMoreLinkContainer.empty(); 
 	}
-	getData();
+	initSortable();
+	workspacegrid.removeClass('loading-animation');
 	});
 }
 
@@ -107,43 +135,44 @@ function renderLess(){
 	renderWorkspaceGrid();
 }
 
-function getData(){
-AUI().use(
-		  'sortable',
-		  function(A) {    
-			  sortable = new A.Sortable({
-		        container: '#<portlet:namespace />workspacegrid',
-		        nodes: 'li',
-		        opacity: '.5'
-		    });
-			  var button = 1;
-			  sortable.delegate.after("drag:mouseDown", function(e){
-				  	button = e.ev.button;
-				}, false);
-		  
-			sortable.delegate.after("drag:mouseup", function(e){
-				if (button == 1)
-					window.open(sortable.delegate.get('currentNode').one('.url').get('textContent'),"_self");
-			}, false);
+function initSortable() {
+    AUI().use(
+        'aui-base',
+        function(A) {
+            A.all('.workspaceslide').on('mousedown', function(a) {
+                if (!a.target.hasClass('move-workspaceslide')) {
+                    a.preventDefault();
+                }
+            });
+            A.all('.mouseover-actions').on('mousedown', function(a) {
+                if (!a.target.hasClass('move-workspaceslide')) {
+                    a.preventDefault();
+                }
+            });
+            A.all('.visit-workspace').on('click', function(a) {
+                a.target.ancestor('.workspaceslide').addClass('loading-animation');
+                window.open(a.currentTarget.one('.url').get('textContent'), "_self");
+            });
+        });
 
-			sortable.delegate.after("drag:drophit", function(e){
-				sortable.delegate.get('currentNode')
-				AUI().use('aui-base', 'aui-io-request', function(A) {
-		        	var node = sortable.delegate.get('currentNode');
-		            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
-		                dataType: 'text/html',
-		                method: 'post',
-		                data: { <portlet:namespace/>prev : (node.previous() ? node.previous().one('.groupId').get('textContent') : 'null'), 
-		                	<portlet:namespace/>next : (node.next() ? node.next().one('.groupId').get('textContent') : 'null'),
-		                	<portlet:namespace/>current: node.one('.groupId').get('textContent')},
-		                on: {
-		                    success: function() {
-		                    }
-		                }
-		            });
-		        });
-			}, false);
-		  }
-		);
+    var elements = document.getElementById('<portlet:namespace />workspacegridlist');
+    var sortable = new Sortable(elements, {
+        animation: 250,
+        onEnd: function (/**Event*/evt) {
+            console.log(evt);
+            AUI().use('aui-base', 'aui-io-request-deprecated', function(A) {
+	            A.io.request('<%=saveWorkspaceOrderURL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>newIndex : evt.newIndex, 
+	                	<portlet:namespace/>oldIndex : evt.oldIndex},
+	                on: {
+	                    success: function() {
+	                    }
+	                }
+	            });
+	        });
+        }
+    });	
 }
 </aui:script>

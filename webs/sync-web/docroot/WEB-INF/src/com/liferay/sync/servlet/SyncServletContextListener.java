@@ -37,12 +37,13 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLSyncEvent;
 import com.liferay.portlet.documentlibrary.service.DLSyncEventLocalServiceUtil;
+import com.liferay.sync.messaging.DLSyncEventMessageListener;
 import com.liferay.sync.messaging.SyncDLFileVersionDiffMessageListener;
-import com.liferay.sync.messaging.SyncDLObjectMessageListener;
 import com.liferay.sync.service.SyncDLObjectLocalServiceUtil;
 import com.liferay.sync.service.SyncPreferencesLocalServiceUtil;
 import com.liferay.sync.util.PortletPropsKeys;
 import com.liferay.sync.util.PortletPropsValues;
+import com.liferay.sync.util.VerifyUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +94,7 @@ public class SyncServletContextListener
 
 				values.put("event", dlSyncEvent.getEvent());
 				values.put("modifiedTime", dlSyncEvent.getModifiedTime());
+				values.put("syncEventId", dlSyncEvent.getSyncEventId());
 				values.put("type", dlSyncEvent.getType());
 				values.put("typePK", dlSyncEvent.getTypePK());
 
@@ -102,8 +104,6 @@ public class SyncServletContextListener
 					DestinationNames.DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR,
 					message);
 			}
-
-			DLSyncEventLocalServiceUtil.deleteDLSyncEvents();
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -112,11 +112,9 @@ public class SyncServletContextListener
 
 	@Override
 	protected void doPortalDestroy() throws Exception {
-		DLSyncEventLocalServiceUtil.deleteDLSyncEvents();
-
 		MessageBusUtil.unregisterMessageListener(
 			DestinationNames.DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR,
-			_syncDLObjectMessageListener);
+			_dlSyncEventMessageListener);
 
 		if (PortletPropsValues.SYNC_FILE_DIFF_CACHE_ENABLED) {
 			MessageBusUtil.unregisterMessageListener(
@@ -132,6 +130,10 @@ public class SyncServletContextListener
 	@Override
 	protected void doPortalInit() {
 		try {
+			if (PortletPropsValues.SYNC_VERIFY) {
+				VerifyUtil.verify();
+			}
+
 			List<Company> companies = CompanyLocalServiceUtil.getCompanies();
 
 			for (Company company : companies) {
@@ -174,10 +176,10 @@ public class SyncServletContextListener
 			_log.error(e, e);
 		}
 
-		_syncDLObjectMessageListener = new SyncDLObjectMessageListener();
+		_dlSyncEventMessageListener = new DLSyncEventMessageListener();
 
 		registerMessageListener(
-			_syncDLObjectMessageListener,
+			_dlSyncEventMessageListener,
 			DestinationNames.DOCUMENT_LIBRARY_SYNC_EVENT_PROCESSOR);
 
 		if (PortletPropsValues.SYNC_FILE_DIFF_CACHE_ENABLED) {
@@ -232,7 +234,7 @@ public class SyncServletContextListener
 	private static Log _log = LogFactoryUtil.getLog(
 		SyncServletContextListener.class);
 
+	private MessageListener _dlSyncEventMessageListener;
 	private MessageListener _syncDLFileVersionDiffMessageListener;
-	private MessageListener _syncDLObjectMessageListener;
 
 }

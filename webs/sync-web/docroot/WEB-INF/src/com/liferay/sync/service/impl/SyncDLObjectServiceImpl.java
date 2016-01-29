@@ -28,9 +28,11 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.transaction.Transactional;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MapUtil;
@@ -44,13 +46,15 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.zip.ZipReader;
 import com.liferay.portal.kernel.zip.ZipReaderFactoryUtil;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Organization;
-import com.liferay.portal.model.Repository;
+import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.security.auth.CompanyThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.comparator.GroupNameComparator;
 import com.liferay.portlet.documentlibrary.DuplicateFileException;
@@ -79,7 +83,9 @@ import java.io.InputStream;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +114,12 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			SyncUtil.checkSyncEnabled(group.getGroupId());
 
 			if (!group.isUser() &&
-				(serviceContext.getGroupPermissions() == null)) {
+				ArrayUtil.isEmpty(serviceContext.getGroupPermissions())) {
 
 				SyncUtil.setFilePermissions(group, false, serviceContext);
 			}
+
+			serviceContext.setCommand(Constants.ADD);
 
 			FileEntry fileEntry = dlAppService.addFileEntry(
 				repositoryId, folderId, sourceFileName, mimeType, title,
@@ -127,13 +135,10 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 					FileEntry fileEntry = dlAppService.getFileEntry(
 						repositoryId, folderId, title);
 
-					fileEntry = dlAppService.updateFileEntry(
+					return updateFileEntry(
 						fileEntry.getFileEntryId(), sourceFileName, mimeType,
-						title, description, changeLog, false, file,
+						title, description, changeLog, false, file, checksum,
 						serviceContext);
-
-					return toSyncDLObject(
-						fileEntry, SyncConstants.EVENT_UPDATE);
 				}
 			}
 
@@ -153,7 +158,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			SyncUtil.checkSyncEnabled(group.getGroupId());
 
 			if (!group.isUser() &&
-				(serviceContext.getGroupPermissions() == null)) {
+				ArrayUtil.isEmpty(serviceContext.getGroupPermissions())) {
 
 				SyncUtil.setFilePermissions(group, true, serviceContext);
 			}
@@ -172,11 +177,9 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 					Folder folder = dlAppService.getFolder(
 						repositoryId, parentFolderId, name);
 
-					folder = dlAppService.updateFolder(
+					return updateFolder(
 						folder.getFolderId(), name, description,
 						serviceContext);
-
-					return toSyncDLObject(folder, SyncConstants.EVENT_UPDATE);
 				}
 			}
 
@@ -284,16 +287,20 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			FileEntry sourceFileEntry = dlAppLocalService.getFileEntry(
 				sourceFileEntryId);
 
+			FileVersion fileVersion = sourceFileEntry.getLatestFileVersion();
+
 			if (!group.isUser() &&
-				(serviceContext.getGroupPermissions() == null)) {
+				ArrayUtil.isEmpty(serviceContext.getGroupPermissions())) {
 
 				SyncUtil.setFilePermissions(group, false, serviceContext);
 			}
 
+			serviceContext.setCommand(Constants.ADD);
+
 			FileEntry fileEntry = dlAppService.addFileEntry(
 				repositoryId, folderId, sourceFileName,
 				sourceFileEntry.getMimeType(), title, null, null,
-				sourceFileEntry.getContentStream(), sourceFileEntry.getSize(),
+				fileVersion.getContentStream(false), sourceFileEntry.getSize(),
 				serviceContext);
 
 			return toSyncDLObject(fileEntry, SyncConstants.EVENT_ADD);
@@ -304,8 +311,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	@Override
-	public List<SyncDLObject> getAllFolderSyncDLObjects(
-			long companyId, long repositoryId)
+	public List<SyncDLObject> getAllFolderSyncDLObjects(long repositoryId)
 		throws PortalException, SystemException {
 
 		try {
@@ -314,49 +320,11 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			repositoryService.checkRepository(repositoryId);
 
 			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_R_T(
-					companyId, repositoryId, SyncConstants.TYPE_FOLDER);
+				syncDLObjectFinder.findByModifiedTime(
+					-1, repositoryId, 0, SyncConstants.TYPE_FOLDER,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-			return checkSyncDLObjects(syncDLObjects, companyId, repositoryId);
-		}
-		catch (PortalException pe) {
-			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
-		}
-	}
-
-	/**
-	 * @deprecated As of 7.0.0, with no direct replacement
-	 */
-	@Deprecated
-	@Override
-	public SyncDLObjectUpdate getAllSyncDLObjects(
-			long repositoryId, long folderId)
-		throws PortalException, SystemException {
-
-		try {
-			SyncUtil.checkSyncEnabled(repositoryId);
-
-			long lastAccessTime = System.currentTimeMillis();
-
-			long companyId = 0;
-
-			Repository repository = repositoryLocalService.fetchRepository(
-				repositoryId);
-
-			if (repository != null) {
-				companyId = repository.getCompanyId();
-			}
-			else {
-				Group group = groupLocalService.getGroup(repositoryId);
-
-				companyId = group.getCompanyId();
-			}
-
-			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_M_R(companyId, 0, repositoryId);
-
-			return new SyncDLObjectUpdate(
-				syncDLObjects, syncDLObjects.size(), lastAccessTime);
+			return checkSyncDLObjects(syncDLObjects, repositoryId, 0);
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -365,14 +333,14 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 	@Override
 	public SyncDLObject getFileEntrySyncDLObject(
-			long groupId, long folderId, String title)
+			long repositoryId, long folderId, String title)
 		throws PortalException, SystemException {
 
 		try {
-			SyncUtil.checkSyncEnabled(groupId);
+			SyncUtil.checkSyncEnabled(repositoryId);
 
 			FileEntry fileEntry = dlAppService.getFileEntry(
-				groupId, folderId, title);
+				repositoryId, folderId, title);
 
 			return toSyncDLObject(fileEntry, SyncConstants.EVENT_GET);
 		}
@@ -573,64 +541,18 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		}
 	}
 
-	/**
-	 * @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
-	 */
-	@Deprecated
 	@Override
-	public SyncContext getSyncContext(String uuid)
+	public String getSyncDLObjectUpdate(
+			long repositoryId, long lastAccessTime, int max)
 		throws PortalException, SystemException {
 
-		return getSyncContext();
+		return getSyncDLObjectUpdate(repositoryId, lastAccessTime, max, true);
 	}
 
 	@Override
-	public SyncDLObjectUpdate getSyncDLObjectUpdate(
-			long companyId, long repositoryId, long lastAccessTime)
-		throws PortalException, SystemException {
-
-		try {
-			SyncUtil.checkSyncEnabled(repositoryId);
-
-			String[] events = null;
-
-			if (lastAccessTime == -1) {
-				events = new String[] {
-					SyncConstants.EVENT_DELETE, SyncConstants.EVENT_TRASH
-				};
-			}
-			else {
-				events = new String[0];
-			}
-
-			List<SyncDLObject> syncDLObjects =
-				syncDLObjectPersistence.findByC_M_R_NotE(
-					companyId, lastAccessTime, repositoryId, events, 0,
-					PortletPropsValues.SYNC_PAGINATION_DELTA,
-					new SyncDLObjectModifiedTimeComparator());
-
-			if (syncDLObjects.isEmpty()) {
-				return new SyncDLObjectUpdate(syncDLObjects, 0, lastAccessTime);
-			}
-
-			int count = syncDLObjectPersistence.countByC_M_R_NotE(
-				companyId, lastAccessTime, repositoryId, events);
-
-			SyncDLObject syncDLObject = syncDLObjects.get(
-				syncDLObjects.size() - 1);
-
-			return new SyncDLObjectUpdate(
-				checkSyncDLObjects(syncDLObjects, companyId, repositoryId),
-				count, syncDLObject.getModifiedTime());
-		}
-		catch (PortalException pe) {
-			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
-		}
-	}
-
-	public SyncDLObjectUpdate getSyncDLObjectUpdate(
-			long companyId, long repositoryId, long parentFolderId,
-			long lastAccessTime)
+	public String getSyncDLObjectUpdate(
+			long repositoryId, long lastAccessTime, int max,
+			boolean retrieveFromCache)
 		throws PortalException, SystemException {
 
 		try {
@@ -638,31 +560,88 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 			repositoryService.checkRepository(repositoryId);
 
-			List<SyncDLObject> syncDLObjects = new ArrayList<SyncDLObject>();
+			String[] events = null;
 
-			if (parentFolderId > 0) {
-				PermissionChecker permissionChecker = getPermissionChecker();
-
-				if (permissionChecker.hasPermission(
-						repositoryId, DLFolderConstants.getClassName(),
-						parentFolderId, ActionKeys.VIEW)) {
-
-					SyncDLObject syncDLObject =
-						syncDLObjectPersistence.fetchByT_T(
-							SyncConstants.TYPE_FOLDER, parentFolderId);
-
-					if (syncDLObject != null) {
-						syncDLObjects.add(syncDLObject);
-					}
-				}
+			if (retrieveFromCache) {
+				events = new String[0];
+			}
+			else {
+				events = new String[] {
+					SyncConstants.EVENT_DELETE, SyncConstants.EVENT_TRASH
+				};
 			}
 
-			syncDLObjects = getSyncDLObjects(
-				syncDLObjects, companyId, repositoryId, parentFolderId,
-				lastAccessTime);
+			int count = syncDLObjectPersistence.countByM_R_NotE(
+				lastAccessTime, repositoryId, events);
+
+			if (count == 0) {
+				SyncDLObjectUpdate syncDLObjectUpdate = new SyncDLObjectUpdate(
+					Collections.<SyncDLObject>emptyList(), 0, lastAccessTime);
+
+				return syncDLObjectUpdate.toString();
+			}
+
+			int start = 0;
+			int end = 0;
+
+			if (max == QueryUtil.ALL_POS) {
+				start = QueryUtil.ALL_POS;
+				end = QueryUtil.ALL_POS;
+			}
+			else if (max == 0) {
+				end = PortletPropsValues.SYNC_PAGINATION_DELTA;
+			}
+			else {
+				end = max;
+			}
+
+			List<SyncDLObject> syncDLObjects = null;
+
+			if (retrieveFromCache) {
+				syncDLObjects = syncDLObjectPersistence.findByM_R_NotE(
+					lastAccessTime, repositoryId, events, start, end,
+					new SyncDLObjectModifiedTimeComparator());
+			}
+			else {
+				syncDLObjects = syncDLObjectFinder.findByModifiedTime(
+					lastAccessTime, repositoryId, 0, null, start, end);
+			}
+
+			SyncDLObject syncDLObject = syncDLObjects.get(
+				syncDLObjects.size() - 1);
+
+			SyncDLObjectUpdate syncDLObjectUpdate = new SyncDLObjectUpdate(
+				checkSyncDLObjects(syncDLObjects, repositoryId, lastAccessTime),
+				count, syncDLObject.getModifiedTime());
+
+			return syncDLObjectUpdate.toString();
+		}
+		catch (PortalException pe) {
+			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
+		}
+	}
+
+	@Override
+	public SyncDLObjectUpdate getSyncDLObjectUpdate(
+			long repositoryId, long parentFolderId, long lastAccessTime)
+		throws PortalException, SystemException {
+
+		try {
+			SyncUtil.checkSyncEnabled(repositoryId);
+
+			repositoryService.checkRepository(repositoryId);
+
+			List<SyncDLObject> syncDLObjects =
+				syncDLObjectFinder.findByModifiedTime(
+					lastAccessTime, repositoryId, parentFolderId, null,
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			SyncDLObject syncDLObject = syncDLObjects.get(
+				syncDLObjects.size() - 1);
 
 			return new SyncDLObjectUpdate(
-				syncDLObjects, syncDLObjects.size(), lastAccessTime);
+				checkSyncDLObjects(syncDLObjects, repositoryId, lastAccessTime),
+				syncDLObjects.size(), syncDLObject.getModifiedTime());
 		}
 		catch (PortalException pe) {
 			throw new PortalException(SyncUtil.buildExceptionMessage(pe), pe);
@@ -733,6 +712,13 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 					PortletPropsValues.SYNC_ALLOW_USER_PERSONAL_SITES)) {
 
 				groups.add(user.getGroup());
+			}
+
+			Group companyGroup = groupLocalService.getCompanyGroup(
+				user.getCompanyId());
+
+			if (SyncUtil.isSyncEnabled(companyGroup)) {
+				groups.add(companyGroup);
 			}
 
 			Collections.sort(groups, new GroupNameComparator());
@@ -968,6 +954,12 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				catch (Exception e) {
 					String message = e.getMessage();
 
+					if (message == null) {
+						_log.error(e, e);
+
+						message = e.toString();
+					}
+
 					if (!message.startsWith(StringPool.QUOTE) &&
 						!message.endsWith(StringPool.QUOTE)) {
 
@@ -1001,6 +993,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			FileEntry fileEntry = dlAppLocalService.getFileEntry(fileEntryId);
 
 			SyncUtil.checkSyncEnabled(fileEntry.getGroupId());
+
+			serviceContext.setCommand(Constants.UPDATE);
 
 			fileEntry = dlAppService.updateFileEntry(
 				fileEntryId, sourceFileName, mimeType, title, description,
@@ -1057,7 +1051,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	protected List<SyncDLObject> checkSyncDLObjects(
-			List<SyncDLObject> syncDLObjects, long companyId, long repositoryId)
+			List<SyncDLObject> syncDLObjects, long repositoryId,
+			long lastAccessTime)
 		throws PortalException, SystemException {
 
 		PermissionChecker permissionChecker = getPermissionChecker();
@@ -1066,31 +1061,65 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			return syncDLObjects;
 		}
 
-		List<Long> typePKs = new ArrayList<Long>();
+		boolean hasFileModelPermission = hasModelPermission(
+			repositoryId, DLFileEntryConstants.getClassName());
+		boolean hasFolderModelPermission = hasModelPermission(
+			repositoryId, DLFolderConstants.getClassName());
+
+		if (hasFileModelPermission && hasFolderModelPermission) {
+			return syncDLObjects;
+		}
+
+		Set<Long> typePKs = new HashSet<Long>();
 
 		for (SyncDLObject syncDLObject : syncDLObjects) {
 			typePKs.add(syncDLObject.getTypePK());
+
+			if (!hasFolderModelPermission &&
+				_PERMISSIONS_VIEW_DYNAMIC_INHERITANCE) {
+
+				long[] parentFolderIds = StringUtil.split(
+					syncDLObject.getTreePath(), StringPool.SLASH, 0L);
+
+				for (long parentFolderId : parentFolderIds) {
+					if (parentFolderId > 0) {
+						typePKs.add(parentFolderId);
+					}
+				}
+			}
 		}
 
 		Set<Long> checkedTypePKs = SetUtil.fromList(
 			checkTypePKs(
-				companyId, repositoryId, permissionChecker.getUserId(),
-				typePKs));
+				repositoryId, permissionChecker.getUserId(),
+				new ArrayList(typePKs)));
 
 		List<SyncDLObject> checkedSyncDLObjects = new ArrayList<SyncDLObject>();
+
+		Date lastAccessDate = new Date(lastAccessTime);
 
 		for (SyncDLObject syncDLObject : syncDLObjects) {
 			String event = syncDLObject.getEvent();
 
 			if (event.equals(SyncConstants.EVENT_DELETE) ||
-				event.equals(SyncConstants.EVENT_TRASH)) {
+				event.equals(SyncConstants.EVENT_TRASH) ||
+				hasPermission(
+					checkedTypePKs, syncDLObject, hasFileModelPermission,
+					hasFolderModelPermission)) {
 
 				checkedSyncDLObjects.add(syncDLObject);
 
 				continue;
 			}
 
-			if (checkedTypePKs.contains(syncDLObject.getTypePK())) {
+			Date lastPermissionChangeDate =
+				syncDLObject.getLastPermissionChangeDate();
+
+			if ((lastPermissionChangeDate != null) &&
+				lastPermissionChangeDate.after(lastAccessDate)) {
+
+				syncDLObject.setEvent(SyncConstants.EVENT_DELETE);
+
 				checkedSyncDLObjects.add(syncDLObject);
 			}
 		}
@@ -1099,26 +1128,23 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	protected List<Long> checkTypePKs(
-			long companyId, long repositoryId, long userId, List<Long> typePKs)
+			long repositoryId, long userId, List<Long> typePKs)
 		throws SystemException {
 
 		if (typePKs.size() <= _SQL_DATA_MAX_PARAMETERS) {
-			return syncDLObjectFinder.filterFindByC_R_U_T(
-				companyId, repositoryId, userId,
-				ArrayUtil.toLongArray(typePKs));
+			return syncDLObjectFinder.filterFindByR_U_T(
+				repositoryId, userId, ArrayUtil.toLongArray(typePKs));
 		}
 		else {
 			List<Long> subListTypePKs = typePKs.subList(
 				0, _SQL_DATA_MAX_PARAMETERS);
 
-			List<Long> checkedTypePKs = syncDLObjectFinder.filterFindByC_R_U_T(
-				companyId, repositoryId, userId,
-				ArrayUtil.toLongArray(subListTypePKs));
+			List<Long> checkedTypePKs = syncDLObjectFinder.filterFindByR_U_T(
+				repositoryId, userId, ArrayUtil.toLongArray(subListTypePKs));
 
 			subListTypePKs.clear();
 
-			checkedTypePKs.addAll(
-				checkTypePKs(companyId, repositoryId, userId, typePKs));
+			checkedTypePKs.addAll(checkTypePKs(repositoryId, userId, typePKs));
 
 			return checkedTypePKs;
 		}
@@ -1131,6 +1157,15 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			new HashMap<String, String>();
 
 		User user = getUser();
+
+		int batchFileMaxSize = PrefsPropsUtil.getInteger(
+			user.getCompanyId(),
+			PortletPropsKeys.SYNC_CLIENT_BATCH_FILE_MAX_SIZE,
+			PortletPropsValues.SYNC_CLIENT_BATCH_FILE_MAX_SIZE);
+
+		portletPreferencesMap.put(
+			PortletPropsKeys.SYNC_CLIENT_BATCH_FILE_MAX_SIZE,
+			String.valueOf(batchFileMaxSize));
 
 		int maxConnections = PrefsPropsUtil.getInteger(
 			user.getCompanyId(), PortletPropsKeys.SYNC_CLIENT_MAX_CONNECTIONS,
@@ -1151,33 +1186,70 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		return portletPreferencesMap;
 	}
 
-	protected List<SyncDLObject> getSyncDLObjects(
-			List<SyncDLObject> syncDLObjects, long companyId, long repositoryId,
-			long parentFolderId, long lastAccessTime)
+	protected boolean hasModelPermission(long groupId, String name)
 		throws PortalException, SystemException {
 
-		List<SyncDLObject> curSyncDLObjects =
-			syncDLObjectPersistence.findByC_M_R_P(
-				companyId, lastAccessTime, repositoryId, parentFolderId);
+		PermissionChecker permissionChecker = getPermissionChecker();
 
-		curSyncDLObjects = checkSyncDLObjects(
-			curSyncDLObjects, companyId, repositoryId);
+		long[] roleIds = permissionChecker.getRoleIds(
+			permissionChecker.getUserId(), groupId);
 
-		syncDLObjects.addAll(curSyncDLObjects);
-
-		for (SyncDLObject curSyncDLObject : curSyncDLObjects) {
-			String type = curSyncDLObject.getType();
-
-			if (!type.equals(SyncConstants.TYPE_FOLDER)) {
-				continue;
-			}
-
-			getSyncDLObjects(
-				syncDLObjects, companyId, repositoryId,
-				curSyncDLObject.getTypePK(), lastAccessTime);
+		if (roleIds.length == 0) {
+			return false;
 		}
 
-		return syncDLObjects;
+		if (ResourcePermissionLocalServiceUtil.hasResourcePermission(
+				permissionChecker.getCompanyId(), name,
+				ResourceConstants.SCOPE_COMPANY,
+				String.valueOf(permissionChecker.getCompanyId()), roleIds,
+				ActionKeys.VIEW) ||
+			ResourcePermissionLocalServiceUtil.hasResourcePermission(
+				permissionChecker.getCompanyId(), name,
+				ResourceConstants.SCOPE_GROUP_TEMPLATE,
+				String.valueOf(GroupConstants.DEFAULT_PARENT_GROUP_ID), roleIds,
+				ActionKeys.VIEW) ||
+			ResourcePermissionLocalServiceUtil.hasResourcePermission(
+				permissionChecker.getCompanyId(), name,
+				ResourceConstants.SCOPE_GROUP, String.valueOf(groupId), roleIds,
+				ActionKeys.VIEW)) {
+
+			return true;
+		}
+
+		return false;
+	}
+
+	protected boolean hasPermission(
+		Set<Long> checkedTypePKs, SyncDLObject syncDLObject,
+		boolean hasFileModelPermission, boolean hasFolderModelPermission) {
+
+		String type = syncDLObject.getType();
+
+		if ((!type.equals(SyncConstants.TYPE_FILE) ||
+			 !hasFileModelPermission) &&
+			(!type.equals(SyncConstants.TYPE_FOLDER) ||
+			 !hasFolderModelPermission) &&
+			!checkedTypePKs.contains(syncDLObject.getTypePK())) {
+
+			return false;
+		}
+
+		if (!hasFolderModelPermission &&
+			_PERMISSIONS_VIEW_DYNAMIC_INHERITANCE) {
+
+			long[] parentFolderIds = StringUtil.split(
+				syncDLObject.getTreePath(), StringPool.SLASH, 0L);
+
+			for (long parentFolderId : parentFolderIds) {
+				if ((parentFolderId > 0) &&
+					!checkedTypePKs.contains(parentFolderId)) {
+
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	protected SyncDLObject toSyncDLObject(FileEntry fileEntry, String event)
@@ -1252,7 +1324,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				String checksum = MapUtil.getString(
 					jsonWebServiceActionParametersMap, "checksum");
 
-				return addFileEntry(
+				return syncDLObjectService.addFileEntry(
 					repositoryId, folderId, sourceFileName, mimeType, title,
 					description, changeLog, tempFile, checksum, serviceContext);
 			}
@@ -1270,7 +1342,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			String description = MapUtil.getString(
 				jsonWebServiceActionParametersMap, "description");
 
-			return addFolder(
+			return syncDLObjectService.addFolder(
 				repositoryId, parentFolderId, name, description,
 				serviceContext);
 		}
@@ -1286,7 +1358,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			String title = MapUtil.getString(
 				jsonWebServiceActionParametersMap, "title");
 
-			return copyFileEntry(
+			return syncDLObjectService.copyFileEntry(
 				sourceFileEntryId, repositoryId, folderId, sourceFileName,
 				title, serviceContext);
 		}
@@ -1296,13 +1368,14 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			long newFolderId = MapUtil.getLong(
 				jsonWebServiceActionParametersMap, "newFolderId");
 
-			return moveFileEntry(fileEntryId, newFolderId, serviceContext);
+			return syncDLObjectService.moveFileEntry(
+				fileEntryId, newFolderId, serviceContext);
 		}
 		else if (urlPath.endsWith("/move-file-entry-to-trash")) {
 			long fileEntryId = MapUtil.getLong(
 				jsonWebServiceActionParametersMap, "fileEntryId");
 
-			return moveFileEntryToTrash(fileEntryId);
+			return syncDLObjectService.moveFileEntryToTrash(fileEntryId);
 		}
 		else if (urlPath.endsWith("/move-folder")) {
 			long folderId = MapUtil.getLong(
@@ -1310,13 +1383,14 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			long parentFolderId = MapUtil.getLong(
 				jsonWebServiceActionParametersMap, "parentFolderId");
 
-			return moveFolder(folderId, parentFolderId, serviceContext);
+			return syncDLObjectService.moveFolder(
+				folderId, parentFolderId, serviceContext);
 		}
 		else if (urlPath.endsWith("/move-folder-to-trash")) {
 			long folderId = MapUtil.getLong(
 				jsonWebServiceActionParametersMap, "folderId");
 
-			return moveFolderToTrash(folderId);
+			return syncDLObjectService.moveFolderToTrash(folderId);
 		}
 		else if (urlPath.endsWith("/patch-file-entry")) {
 			long fileEntryId = MapUtil.getLong(
@@ -1347,7 +1421,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				String checksum = MapUtil.getString(
 					jsonWebServiceActionParametersMap, "checksum");
 
-				return patchFileEntry(
+				return syncDLObjectService.patchFileEntry(
 					fileEntryId, sourceVersionId, sourceFileName, mimeType,
 					title, description, changeLog, majorVersion, tempFile,
 					checksum, serviceContext);
@@ -1385,7 +1459,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 				String checksum = MapUtil.getString(
 					jsonWebServiceActionParametersMap, "checksum");
 
-				return updateFileEntry(
+				return syncDLObjectService.updateFileEntry(
 					fileEntryId, sourceFileName, mimeType, title, description,
 					changeLog, majorVersion, tempFile, checksum,
 					serviceContext);
@@ -1402,13 +1476,18 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			String description = MapUtil.getString(
 				jsonWebServiceActionParametersMap, "description");
 
-			return updateFolder(folderId, name, description, serviceContext);
+			return syncDLObjectService.updateFolder(
+				folderId, name, description, serviceContext);
 		}
 		else {
 			throw new RuntimeException(
 				"No JSON web service action with path " + urlPath);
 		}
 	}
+
+	private static final boolean _PERMISSIONS_VIEW_DYNAMIC_INHERITANCE =
+		GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.PERMISSIONS_VIEW_DYNAMIC_INHERITANCE));
 
 	private static final int _SQL_DATA_MAX_PARAMETERS = GetterUtil.getInteger(
 		PropsUtil.get(PropsKeys.SQL_DATA_MAX_PARAMETERS));

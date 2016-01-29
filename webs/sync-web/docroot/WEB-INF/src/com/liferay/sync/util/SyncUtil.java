@@ -303,7 +303,7 @@ public class SyncUtil {
 		}
 
 		return GetterUtil.getBoolean(
-			group.getTypeSettingsProperty("syncEnabled"), true);
+			group.getTypeSettingsProperty("syncEnabled"), !group.isCompany());
 	}
 
 	public static void patchFile(
@@ -431,27 +431,13 @@ public class SyncUtil {
 		SyncDLObject syncDLObject = new SyncDLObjectImpl();
 
 		syncDLObject.setCompanyId(dlFileVersion.getCompanyId());
-
-		long userId = 0;
-		String userName = StringPool.BLANK;
-
-		PermissionChecker permissionChecker =
-			PermissionThreadLocal.getPermissionChecker();
-
-		if (permissionChecker != null) {
-			User user = permissionChecker.getUser();
-
-			userId = user.getUserId();
-			userName = user.getFullName();
-		}
-
-		syncDLObject.setUserId(userId);
-		syncDLObject.setUserName(userName);
-
+		syncDLObject.setUserId(dlFileVersion.getUserId());
+		syncDLObject.setUserName(dlFileVersion.getUserName());
 		syncDLObject.setCreateDate(dlFileVersion.getCreateDate());
 		syncDLObject.setModifiedDate(dlFileVersion.getModifiedDate());
 		syncDLObject.setRepositoryId(dlFileVersion.getRepositoryId());
 		syncDLObject.setParentFolderId(dlFileVersion.getFolderId());
+		syncDLObject.setTreePath(dlFileVersion.getTreePath());
 		syncDLObject.setName(dlFileVersion.getTitle());
 		syncDLObject.setExtension(dlFileVersion.getExtension());
 		syncDLObject.setMimeType(dlFileVersion.getMimeType());
@@ -506,6 +492,7 @@ public class SyncUtil {
 		syncDLObject.setModifiedDate(dlFolder.getModifiedDate());
 		syncDLObject.setRepositoryId(dlFolder.getRepositoryId());
 		syncDLObject.setParentFolderId(dlFolder.getParentFolderId());
+		syncDLObject.setTreePath(dlFolder.getTreePath());
 		syncDLObject.setName(dlFolder.getName());
 		syncDLObject.setExtension(StringPool.BLANK);
 		syncDLObject.setMimeType(StringPool.BLANK);

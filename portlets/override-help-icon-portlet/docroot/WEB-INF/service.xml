@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="de.unipotsdam.elis.language">
+	<author>Matthias</author>
+	<namespace>Language</namespace>
+
+	<entity name="LanguageKey" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+        <column name="key" type="String" primary="true"></column>
+        <column name="value" type="String"></column>
+	</entity>
+</service-builder>

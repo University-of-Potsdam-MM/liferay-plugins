@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.servlet.BaseFilter;
-import com.liferay.shortlink.model.ShortLinkEntryConstants;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.shortlink.util.PortletPropsValues;
 
 import java.io.IOException;
@@ -54,27 +54,10 @@ public abstract class BaseShortLinkFilter extends BaseFilter {
 
 		String shortUrl = servletPath.substring(1);
 
-		if (shortUrl.length() <
-				ShortLinkEntryConstants.SHORT_URL_MINIMUM_SIZE) {
-
-			processFilter(getClass(), request, response, filterChain);
-
-			return;
-		}
+		String originalURL = null;
 
 		try {
-			String originalURL = getOriginalURL(shortUrl);
-
-			response.sendRedirect(originalURL);
-
-			return;
-		}
-		catch (IOException ioe) {
-			Log log = getLog();
-
-			if (log.isWarnEnabled()) {
-				log.warn("Unable to redirect to long URL", ioe);
-			}
+			originalURL = getOriginalURL(shortUrl);
 		}
 		catch (PortalException pe) {
 			Log log = getLog();
@@ -89,6 +72,28 @@ public abstract class BaseShortLinkFilter extends BaseFilter {
 			if (log.isWarnEnabled()) {
 				log.warn(
 					"Unable to get short link entry for URL " + shortUrl, se);
+			}
+		}
+
+		if (Validator.isNull(originalURL) &&
+			Validator.isNotNull(
+				PortletPropsValues.SHORT_URL_NOT_FOUND_REDIRECT)) {
+
+			originalURL = PortletPropsValues.SHORT_URL_NOT_FOUND_REDIRECT;
+		}
+
+		if (Validator.isNotNull(originalURL)) {
+			try {
+				response.sendRedirect(originalURL);
+
+				return;
+			}
+			catch (IOException ioe) {
+				Log log = getLog();
+
+				if (log.isWarnEnabled()) {
+					log.warn("Unable to redirect to long URL", ioe);
+				}
 			}
 		}
 

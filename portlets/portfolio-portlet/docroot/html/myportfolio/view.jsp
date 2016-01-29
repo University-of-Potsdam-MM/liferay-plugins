@@ -65,7 +65,7 @@ AUI().use('aui-base',
 </portlet:resourceURL>
 
 <div style="display: none;" id="<%=themeDisplay.getPortletDisplay().getNamespace()%>noPortfolioPages" class="alert alert-info" ><%=LanguageUtil.get(pageContext,"portfolio-no-portfolios")%></div>
-<div style="display: none;" id="myPortfolioTable"></div>
+<div id="myPortfolioTable" class="loading-animation"></div>
 
 <div id="iconMenuDiv" style="display: none;">
 	<liferay-ui:icon-menu extended="false" id="iconMenu">
@@ -322,6 +322,7 @@ AUI().use(
         });
 
         tableCreated = true;
+        tableDiv.removeClass("loading-animation");
     }
 );}
 

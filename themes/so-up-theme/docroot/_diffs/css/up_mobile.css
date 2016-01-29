@@ -680,17 +680,19 @@
 					}/*end position wrapper */
 				}/*end uppertoolbar*/
 				
-				#admin-wrapper
+				#navigation-wrapper
 				{ 	
 				
 					top:80px;
-				
+					width: 40px;
+    				right: 10px;
+    				
 					#admin li 
 					{
 						display:none;
 					}
 				
-					#admin li:first-child 
+					#admin li:nth-of-type(3) 
 					{
 						display:block;
 						top:80px;

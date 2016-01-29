@@ -40,9 +40,18 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 	Liferay.CalendarUtil.PORTLET_NAMESPACE = '<portlet:namespace />';
 	Liferay.CalendarUtil.USER_TIME_ZONE = '<%= HtmlUtil.escapeJS(userTimeZone.getID()) %>';
 
+	var showMoreStrings = {
+		close: '<liferay-ui:message key="close" />',
+		more: '<%= StringUtil.toLowerCase(LanguageUtil.get(pageContext, "more")) %>',
+		show: '<liferay-ui:message key="show" />'
+	};
+
 	<c:if test="<%= !hideDayView %>">
 		window.<portlet:namespace />dayView = new A.SchedulerDayView(
 			{
+				headerViewConfig: {
+					strings: showMoreStrings
+				},
 				height: 700,
 				isoTime: <%= isoTimeFormat %>,
 				readOnly: <%= readOnly %>,
@@ -56,6 +65,10 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 	<c:if test="<%= !hideWeekView %>">
 		window.<portlet:namespace />weekView = new A.SchedulerWeekView(
 			{
+				headerViewConfig: {
+					displayDaysInterval: A.DataType.DateMath.WEEK_LENGTH,
+					strings: showMoreStrings
+				},
 				height: 700,
 				isoTime: <%= isoTimeFormat %>,
 				readOnly: <%= readOnly %>,
@@ -72,11 +85,7 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 				height: 700,
 				isoTime: <%= isoTimeFormat %>,
 				readOnly: <%= readOnly %>,
-				strings: {
-					close: '<liferay-ui:message key="close" />',
-					more: '<%= StringUtil.toLowerCase(LanguageUtil.get(pageContext, "more")) %>',
-					show: '<liferay-ui:message key="show" />'
-				}
+				strings: showMoreStrings
 			}
 		);
 	</c:if>
@@ -110,6 +119,9 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 					width: width
 				},
 				portletNamespace: '<portlet:namespace />',
+				strings: {
+					'description-hint': '<liferay-ui:message key="description-hint" />'
+				},
 				viewCalendarBookingURL: '<%= HtmlUtil.escapeJS(viewCalendarBookingURL) %>'
 			}
 		);
@@ -132,6 +144,20 @@ String viewCalendarBookingURL = ParamUtil.getString(request, "viewCalendarBookin
 	<c:if test="<%= !hideAgendaView %>">
 		views.push(window.<portlet:namespace />agendaView);
 	</c:if>
+
+	for (var i in views) {
+		views[i].after('render', function() {
+			var instance = this;
+
+			if (instance.eventsOverlay) {
+				instance.eventsOverlay.setAttrs(
+					{
+						constrain: '#p_p_id<portlet:namespace />'
+					}
+				);
+			}
+		});
+	}
 
 	window.<portlet:namespace />scheduler = new Liferay.Scheduler(
 		{

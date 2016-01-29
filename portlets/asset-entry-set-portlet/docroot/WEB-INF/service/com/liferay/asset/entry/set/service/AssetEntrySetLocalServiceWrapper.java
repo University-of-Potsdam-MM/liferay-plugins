@@ -312,15 +312,25 @@ public class AssetEntrySetLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getChildAssetEntrySets(
+		long parentAssetEntrySetId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _assetEntrySetLocalService.getChildAssetEntrySets(parentAssetEntrySetId);
+	}
+
+	@Override
 	public java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getNewAssetEntrySets(
-		long userId, long modifiedTime, long parentAssetEntrySetId,
+		long userId, long time, boolean modifiedTime,
+		long parentAssetEntrySetId,
 		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
 		java.lang.String[] assetTagNames, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _assetEntrySetLocalService.getNewAssetEntrySets(userId,
+		return _assetEntrySetLocalService.getNewAssetEntrySets(userId, time,
 			modifiedTime, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			includeAssetEntrySetIds, excludeAssetEntrySetIds, assetTagNames,
+			start, end);
 	}
 
 	@Override
@@ -336,14 +346,17 @@ public class AssetEntrySetLocalServiceWrapper
 
 	@Override
 	public java.util.List<com.liferay.asset.entry.set.model.AssetEntrySet> getOldAssetEntrySets(
-		long userId, long modifiedTime, long parentAssetEntrySetId,
+		long userId, long time, boolean modifiedTime,
+		long parentAssetEntrySetId,
 		com.liferay.portal.kernel.json.JSONArray sharedToJSONArray,
+		long[] includeAssetEntrySetIds, long[] excludeAssetEntrySetIds,
 		java.lang.String[] assetTagNames, int start, int end)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _assetEntrySetLocalService.getOldAssetEntrySets(userId,
+		return _assetEntrySetLocalService.getOldAssetEntrySets(userId, time,
 			modifiedTime, parentAssetEntrySetId, sharedToJSONArray,
-			assetTagNames, start, end);
+			includeAssetEntrySetIds, excludeAssetEntrySetIds, assetTagNames,
+			start, end);
 	}
 
 	@Override
