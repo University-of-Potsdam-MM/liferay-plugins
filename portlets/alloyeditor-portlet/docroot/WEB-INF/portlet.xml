@@ -4,7 +4,7 @@
 	<portlet>
 		<portlet-name>alloyeditor</portlet-name>
 		<display-name>Alloyeditor</display-name>
-		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
+		<portlet-class>de.unipotsdam.elis.alloyeditor.AlloyeditorPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
 			<value>/view.jsp</value>
