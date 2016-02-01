@@ -29,7 +29,6 @@ import com.liferay.portal.util.PortalUtil;
 
 import de.unipotsdam.elis.language.model.LanguageKey;
 import de.unipotsdam.elis.language.service.LanguageKeyLocalServiceUtil;
-import de.unipotsdam.elis.language.service.impl.LanguageKeyLocalServiceImpl;
 
 public class OverrideHelpIconPortlet extends MVCPortlet {
 

@@ -14,20 +14,15 @@
 
 package de.unipotsdam.elis.language.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.service.ServiceContext;
 
 import de.unipotsdam.elis.language.model.LanguageKey;
 import de.unipotsdam.elis.language.service.base.LanguageKeyLocalServiceBaseImpl;
-import de.unipotsdam.elis.portfolio.model.PortfolioFeedback;
-import de.unipotsdam.elis.portfolio.service.persistence.PortfolioFeedbackPK;
 
 /**
  * The implementation of the language key local service.
