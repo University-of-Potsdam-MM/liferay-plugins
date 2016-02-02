@@ -1,4 +1,6 @@
-
+@import "up";
+@import "mixins";
+@import "compass";
 
 #p_p_id_33_ .navbar-inner .collapse .nav li a {
 	color: #014260;
@@ -157,8 +159,9 @@ body #p_p_id_33_ .edit-actions a:hover {
 }
 
 #p_p_id_33_ .entry-body {
-	padding-right: 40px;
+	margin-left: 40px;
 	text-align: justify;
+	    min-height: 100px;
 }
 
 #p_p_id_33_ .entry-body .lfr-editable {
@@ -174,6 +177,7 @@ body #p_p_id_33_ .edit-actions a:hover {
 	font-family: georgia;
 	font-style: italic;
 	color: #014260;
+	font-size:.8em;
 }
 
 #p_p_id_33_ .entry-body .lfr-editable:hover:after {
@@ -184,6 +188,14 @@ body #p_p_id_33_ .edit-actions a:hover {
 	background-color: #fff;
 	border-top: 0px;
 	color: #014260;
+}
+
+#p_p_id_33_ .entry-footer {
+	margin-top:3em;
+}
+
+.portlet-blogs .taglib-ratings.stars {
+    margin-top: 2em;
 }
 
 #blogsCommentsPanelContainer {
@@ -208,11 +220,11 @@ body #p_p_id_33_ .edit-actions a:hover {
 #p_p_id_33_ .edit-actions {
 	background-color: transparent;
 	position: absolute !important;
-	height: 86%;
-	right: 0;
+	height: 76%;
+	left: 0;
 	top: 0px;
 	opacity: .9;
-	padding-top: 40px !important;
+	padding-top: 90px !important;
 	width: auto;
 }
 
@@ -233,4 +245,49 @@ body #p_p_id_33_ .edit-actions a:hover {
 	border-radius: 4px;
 	border-left: 1px solid #ededed;
 	padding-left: 10px;
+}
+
+/*smallcol and handheld*/
+
+.smallcol #p_p_id_33_ .navbar .container .btn-navbar:nth-of-type(1) {
+    display: none;
+}
+
+.smallcol #p_p_id_33_ .navbar .container .nav-collapse:nth-of-type(1) {
+	display:block;
+}
+
+.aui .smallcol #p_p_id_33_ .nav-collapse {
+	clear:none;
+}
+
+.smallcol #p_p_id_33_ .edit-actions:hover {
+    background-color: #d0dae3;
+    opacity: .9;
+    width: 50%;
+    transition: width, background-color .2s ease-in-out;
+}
+
+@include respond-to(tablet, phone){ 
+	
+	 #p_p_id_33_ .navbar .container .btn-navbar:nth-of-type(1) {
+    display: none;
+}
+
+ #p_p_id_33_ .navbar .container .nav-collapse:nth-of-type(1) {
+	display:block;
+}
+
+.aui  #p_p_id_33_ .nav-collapse {
+	clear:none;
+}
+
+ #p_p_id_33_ .edit-actions:hover {
+    background-color: #d0dae3;
+    opacity: .9;
+    width: 50%;
+    transition: width, background-color .2s ease-in-out;
+}
+	
+	
 }

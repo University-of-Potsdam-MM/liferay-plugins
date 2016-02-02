@@ -143,12 +143,13 @@ background-image: url("/so-up-theme/css/../images/up_icons.png");
 
 .sort-pages ul#addPage-btn li a#addPage {
 	background-color:transparent;
-	    font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
-	    text-align:left;
+	font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
+	text-align:left;
+	border-bottom:none;
 }
 
 .sort-pages ul#addPage-btn li a#addPage:before {
-	content:"\f055";
+	content:"\f067";
 	font-family:"fontawesome-alloy", fontawesome;
 	display:inline-block;
 	    border-radius: 50%;
@@ -158,6 +159,8 @@ background-image: url("/so-up-theme/css/../images/up_icons.png");
     text-align:center;
     padding:2px;
     font-size: 15px;
+    margin-right:10px;
+    vertical-align: middle;
 }
 
 

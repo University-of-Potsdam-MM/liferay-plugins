@@ -43,6 +43,8 @@
 
 @import url(./pagecomments.css);
 
+@import url(./small-column.css);
+
 /*@import url(media_queries.css);*/
 
 /* no radius, no shadow, no background-image */
@@ -96,6 +98,11 @@
   border-radius: 0px;
 }
 
+
+#_20_show-sync-message
+{
+	display:none;
+}
 /*Layout*/
 
 

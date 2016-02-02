@@ -1,6 +1,6 @@
 @import "up";
 
-/*smallhead ab 1006*/
+/*smallhead ab 1247*/
 
 html.aui 
 {
@@ -125,7 +125,7 @@ html.aui
 					width: 97.7%;
 					position:relative;
 					border-bottom: 1px solid #014260;
-    				height: 40px;
+    				height: 45px;
     				margin-bottom: 10px;
 					
 					h1.site-title 
@@ -151,50 +151,101 @@ html.aui
 						li 
 						{
 							display:inline-block;
-							
+								
+								a 
+								{
+									background-color:transparent;
+									font-size:0;
+									padding-left: 5px;
+    								padding-right: 5px;
+								}
 							
 								a.workspace:before
 								{
 									content:"\f044";
 									display:inline-block;
 									font-family:"fontawesome-alloy" , fontawesome;
-									font-size:15px;
+									font-size:18px;
 									    vertical-align: bottom;
 									    color:#014260;
+									    border-radius: 50%;
+    								width: 30px;
+    								height: 30px;
+    								background-color: #d0dae3;
+    								line-height: 30px;
+    								vertical-align: middle;
+    								text-align: center;
 								}
 								
 								a#editPage:before
 								{
-									content:"\f009";
-									display:inline-block;
-									font-family:"fontawesome-alloy" , fontawesome;
-									font-size:15px;
-									    vertical-align: bottom;
-									    margin-right:5px;
+									content: "\f009";
+    								display: inline-block;
+    								font-family: "fontawesome-alloy" , fontawesome;
+    								font-size: 15px;
+    								vertical-align: bottom;
+   								 /* margin-right: 5px; */
+   	 								border-radius: 50%;
+    								width: 30px;
+    								height: 30px;
+    								background-color: #d0dae3;
+    								line-height: 33px;
+    								vertical-align: middle;
+    								text-align: center;
 								}
 								
 								a#addApplication:before
 								{
 									    background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    									background-position: 0px -342px;
+    									    background-position:1px -338px;
     									display: inline-block;
-    									vertical-align: bottom;
+    									
     									content: ".";
-   								        width: 20px;
-    									height: 15px;
+   								      
     									font-size: 0;
-    									margin-right: 2px;
+    									border-radius: 50%;
+    								width: 20px;
+    								height: 20px;
+    								background-color: #d0dae3;
+    								line-height: 30px;
+    								vertical-align: middle;
+    								border:5px solid #d0dae3;
+    								text-align: center;
 								}
 								
 								a span.admin:before
 								{
 									@include ple-grafic;
-									background-position: 0px -419px;
+									background-position: 3px -419px;
 									display:inline-block;
-									width:15px;
-									height:15px;
+									
+									border-radius: 50%;
+    								width: 22px;
+    								height: 22px;
+    								background-color: #d0dae3;
+    								line-height: 30px;
+    								vertical-align: middle;
+    								text-align: center;
+    								content: ".";
+    								border: 4px solid #d0dae3
 									
 								
+								}
+								
+								a:hover span 
+								{
+								    font-size: 13px;
+    								display: block;
+    								position: absolute;
+    								color: #014260;
+    								top: -20px;
+								    right: 0;
+								    text-align: center;
+								    background-color: #ededed;
+								    padding: 5px;
+								    border-radius: 5px;
+								    width: 200px;
+								    margin: 0 auto;
 								}
 								
 								
@@ -678,7 +729,7 @@ html.aui
 				cursor: pointer;
 				font-weight: bold;
 				text-transform:uppercase;
-				
+				box-sizing:content-box;
 				text-align:center;
 				
 				.arrow
@@ -1652,7 +1703,7 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
 	font-size:15px;
 	color:#014260;
 	font-family:"fontawesome-alloy",fontawesome;
-	margin-right: 5px;
-    vertical-align: bottom;
+	
+   
 	
 }

@@ -583,6 +583,10 @@ html.aui {
 			display: none;
 		}
 	}
+	
+	.portlet-content .portlet-body {
+		position:relative;
+	}
 }
 
 .portlet-borderless-container {
@@ -1656,6 +1660,7 @@ html.aui {
 
 	.taglib-header {
 		border-bottom-width: 0;
+		margin-top:0;
 	}
 
 	.top-links-container {

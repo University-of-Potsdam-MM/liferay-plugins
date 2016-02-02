@@ -322,16 +322,16 @@
 				<ul id="workspace-control">
 					#if ($show_edit_controls)
 						<li style="display: none;">
-							<a id="editPage" class="btn" href="javascript:;">#language("edit-page")</a>
+							<a id="editPage" class="btn" href="javascript:;"><span>#language("edit-page")</span></a>
 						</li>
 					#end
 					#if ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()))
 						<li style="display: none;">
-							<a id="addApplication" class="btn" href="javascript:;">#language("add-application")</a>
+							<a id="addApplication" class="btn" href="javascript:;"><span>#language("add-application")</span></a>
 						</li>
 					#end
 					<li id="toggle-controls-botton" >
-						<a class="toggle-controls btn workspace" href="javascript:void(0);">#language("so-up-theme-workspace-configure")
+						<a class="toggle-controls btn workspace" href="javascript:void(0);"><span>#language("so-up-theme-workspace-configure")</span>
 						</a>
 					</li>
 					#end
