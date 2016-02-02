@@ -62,35 +62,14 @@ function clickdropdown() {
 /* unternavigationspunkte klick auf pfeil */
 
 function showSubnavi() {		
-	
 
-	$('li.has-children ul').hide();
-	$('li.has-children span').click(function(e) {
-		
-		
-		
-		$('li.has-children ul').slideToggle(200);
+	$('li.has-children span').click(function(e) {		
+		$('ul',e.target.parentElement).slideToggle(200);
 	
-		$('li.has-children span').toggleClass('active');
-		
-		
-		
+		$(e.target).toggleClass('active');
 		
 		e.stopPropagation();
 	});
-	$('li.has-children').click(function() {
-		
-	
-		if ($('li.has-children ul').is(':visible')) {
-			$('li.has-children ul', this).slideUp();
-	
-			
-			$('li.has-children span').removeClass('active');
-		}
-	});
-	
-
-		
 	
 }
 
