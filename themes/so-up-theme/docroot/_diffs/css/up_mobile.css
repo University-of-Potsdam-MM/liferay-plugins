@@ -293,7 +293,7 @@
 											a
 											{
 												
-												color:#fff;
+												color:#014260;
 												font-weight: bold;
     											font-size: .7em;
     											text-align: left;
@@ -318,6 +318,8 @@
 													{
 														padding-left:2px;
 														border-bottom:0;
+														color:#555;
+														border-bottom: 1px solid #ededed
 													}
 												}
 												
@@ -751,6 +753,7 @@
     			margin: 0px ;
     			padding: 5px 0px 5px 5px;
     			background-color: #ededed;
+    			text-align:left;
     			
     			li, li.active
     			{
@@ -842,12 +845,21 @@
 		html.aui body header#banner #main-menu-wrapper ul#main-menu li {
 			font-size:90%;
 		}
+		
+		html.aui body #up_logo #up_logo_wrapper #up_logo_title span.clicker {
+			margin-top:60px;
+		}
+		
+		html.aui body .wrapper-portlet-area {
+    
+    		margin-top: 170px;
+		}
 	
 } /* end max width 540 */
 				
 @media (max-width: 727px) and (min-width:541px) {		
 	html.aui body header#banner #main-menu-wrapper ul#main-menu li {
-		text-indent:50000px;
+		text-indent:-50000px;
 		
 	}
 	

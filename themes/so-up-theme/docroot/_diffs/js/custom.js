@@ -85,7 +85,7 @@ function showSubnavi() {
 			$('li.has-children ul', this).slideUp();
 	
 			
-			$('li.has-children span').removeClass('active');
+			$('li.has-children').removeClass('active');
 		}
 	});
 	
