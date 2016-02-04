@@ -1,4 +1,4 @@
-<nav class="$nav_css_class click-nav" id="navigation" role="navigation">
+<nav class="$nav_css_class click-nav" id="navigation2" role="navigation">
 	##-- portlet to change to the public or private area of a workspace -- ##
 	
 	<ul aria-label="#language ("site-pages")" role="menubar" class="mainmenu">
