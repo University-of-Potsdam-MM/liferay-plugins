@@ -9,7 +9,7 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.service.WikiNodeLocalServiceUtil;
 
-import de.unipotsdam.elis.portfolio.permission.PermissionHelper;
+import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
 public class WikiNodePermission {
 

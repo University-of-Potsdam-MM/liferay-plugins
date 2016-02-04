@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="de.unipotsdam.elis.custompages.model.CustomPageFeedback">
+		<field name="plid" type="long" />
+		<field name="userId" type="long" />
+		<field name="feedbackStatus" type="int" />
+		<field name="hidden" type="boolean" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+	</model>
+</model-hints>

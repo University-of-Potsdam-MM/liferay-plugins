@@ -11,7 +11,7 @@ import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 
-import de.unipotsdam.elis.portfolio.permission.PermissionHelper;
+import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
 public class BlogsEntryPermission {
 
