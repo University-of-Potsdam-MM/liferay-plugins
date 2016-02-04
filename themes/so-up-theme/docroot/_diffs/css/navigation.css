@@ -75,7 +75,7 @@
 
 
 
-#navigation ul li.has-children #up-arrow, #navigation ul li ul li.has-children #up-arrow, #navigation .has-children #up-arrow,  {
+#navigation ul li.has-children #up-arrow, #navigation ul li ul li.has-children #up-arrow, #navigation .has-children #up-arrow  {
 	  
     display: inline-block;
    width: 29px;
@@ -84,8 +84,8 @@
     right: 0;
  
    
-background-color: rgba(238, 238, 238, 0.38);
-background-image: url("/so-up-theme/css/../images/up_icons.png");
+	background-color: rgba(238, 238, 238, 0.38);
+	background-image: url("/so-up-theme/css/../images/up_icons.png");
     background-position: -51px -1183px;
 	
 }
@@ -138,14 +138,23 @@ background-image: url("/so-up-theme/css/../images/up_icons.png");
 	
 }
 
+#navigation ul li.has-children.selected:hover #up-arrow, #navigation ul li ul li.has-children:hover #up-arrow, #navigation .has-children:hover #up-arrow.active {
+	  
+    
+	background-position: -99px -1183px;
+	
+}
+
 
 .sort-pages ul#addPage-btn li {list-stlye-type:none}
 
 .sort-pages ul#addPage-btn li a#addPage {
-	background-color:transparent;
+	background-color:#d0dae3;
 	font-family: 'Source Sans Pro', Helvetica, Helvetica, Arial, sans-serif;
 	text-align:left;
 	border-bottom:none;
+	font-size:.9em;
+	line-height:1;
 }
 
 .sort-pages ul#addPage-btn li a#addPage:before {

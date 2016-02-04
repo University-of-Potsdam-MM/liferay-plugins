@@ -150,7 +150,7 @@
 	        	<div id="up_logo_title">
 	            	<a title="Zur Startseite" href="$company_url">$company_name</a>
 	            	<!--<span class="hideformobile">$the_title</span>-->
-	            	<span class="site-name-mobile clicker"><span>$site_name</span></span>
+	            	<span class="site-name-mobile clicker"><span>$site_name</span><span style="color:#555"> ($the_title)</span><span class="up-arrow"></span></span>
 	            	
 	            	<div id="subnav-mobile">
 						#if ($has_navigation)
@@ -281,7 +281,7 @@
 				<span class="icon close hidden">#language("close")</span>
 			</ul>
 		</div><!-- end main menu wrapper -->
-		#else
+		#else <!--signed out -->
 		<div id="main-menu-wrapper">
 			<ul id="main-menu" class="disabled">
 				<li>

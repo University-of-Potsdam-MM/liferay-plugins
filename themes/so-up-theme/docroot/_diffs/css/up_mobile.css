@@ -189,7 +189,7 @@
 			    span.clicker 
 			    {
 			    	display: block;
-				    margin: 40px auto;
+				    margin: 20px auto;
 				    position: relative;
 				    margin-bottom:0;
 				    background-color: #d0dae3;
@@ -207,8 +207,27 @@
 				    	line-height: 30px;
     					font-size: .6em;
 				    }
+				    
+				    span.up-arrow 
+				    {
+				    
+				    	display: inline-block;
+					    width: 29px;
+					    height: 100%;
+					    background-color: red;
+					    float: right;
+					    background-color: rgba(238, 238, 238, 0.38);
+						background-image: url("/so-up-theme/css/../images/up_icons.png");
+						background-position: -50px -1228px;
+				    }
 			    }
 			    
+			    
+			    span.clicker.active span.up-arrow
+			    {
+			    	background-position: -97px -1188px;
+			    
+			    } 
 			    #subnav-mobile 
 							{
 							    display: block;
@@ -290,46 +309,49 @@
 											width:100%;
 											min-height: 40px;
 											
-											a
-											{
-												
-												color:#014260;
-												font-weight: bold;
-    											font-size: .7em;
-    											text-align: left;
-    											display:block;
-											
-											}
-								
-											a:hover
-											{
-												background-color:#d0dae3;
-											}
-								
-											ul
-											{
-												border:none;
-												margin-left: 20px;
-												
-												li 
+												a
 												{
-													border-bottom:none;
-													a 
+												
+													color:#014260;
+													font-weight: bold;
+	    											font-size: .7em;
+	    											text-align: left;
+	    											display:block;
+												
+												}
+								
+												a:hover
+												{
+													background-color:#d0dae3;
+												}
+								
+												ul
+												{
+													border:none;
+													margin-left: 0px;
+													padding-left:20px;
+													margin-right:0;
+													display:none;
+												
+													li 
 													{
-														padding-left:2px;
-														border-bottom:0;
-														color:#555;
-														border-bottom: 1px solid #ededed
+														border-bottom:none;
+														a 
+														{
+															padding-left:2px;
+															border-bottom:0;
+															color:#555;
+															border-bottom: 1px solid #ededed
+														}
 													}
+												
+													li:last-child 
+													{
+														border-bottom:none;
+													}
+												
+												
 												}
-												
-												li:last-child 
-												{
-													border-bottom:none;
-												}
-												
-												
-											}
 										} /* end li*/
 							
 										li.selected 
@@ -348,7 +370,23 @@
 												{
 													a 
 													{
-														background-color:#fff;
+														background-color:transparent;
+														color:#555;
+													}
+												}
+												
+												li.selected
+												{
+													a 
+													{
+														background-color:#ededed;
+														color:#555;
+													}
+													
+													
+													a:hover 
+													{
+														background-color:#d0dae3;
 														color:#555;
 													}
 												}
@@ -356,20 +394,23 @@
 									
 										}
 							
-										li.selected:hover 
-										{
-											background-color:#014260;
-											color:#fff;
-											
-										}
-							
+										
 										span.delete-tab
 										{
-											display:block;
-											float:right;
-											margin-right: 5px;
-    										margin-top: -31px;
-   											cursor: alias;
+											display:none;
+										}
+										
+										li.has-children #up-arrow
+										{
+										
+											display: inline-block;
+										    width: 29px;
+										    height: 43px;
+										    position: absolute;
+										    right: 0;
+											background-color: rgba(238, 238, 238, 0.38);
+											background-image: url("/so-up-theme/css/../images/up_icons.png");
+										    background-position: -51px -1183px;
 										}
 									}/*end ul*/
 								}/*end navigation*/
@@ -442,6 +483,7 @@
 								{
 									li
 									{
+										border-right:1px solid #B3BFCA;
 									
 										a.user-notification-link
 										{
@@ -450,7 +492,11 @@
 												margin:0;
 												height:47px !important;
 											}
+										
 										}
+									ul li {
+										border-right:none;
+									}	
 										
 										a.user-avatar-link
 										{
@@ -572,7 +618,7 @@
 			
 	#navigation-wrapper
 		{
-			    width: 100px;
+			    width: 102px;
     			position: relative;
     			float: right;
     			margin-top: -20px;
@@ -598,6 +644,7 @@
     					width: 50px;
     					display: block;
     					height: 47px;
+    					border-right: 1px solid #B3BFCA;
     				
     				a
     				{
@@ -728,7 +775,7 @@
 								color: $upWhite;
 								-webkit-transition: background-color 0.2s ease-out;
     							transition: background-color 0.2s ease-out;
-    							padding: 3px 5px;
+    							
 							}
 						}	
 						
@@ -745,6 +792,7 @@
 		
 		nav#breadcrumbs
 		{
+			display:none;
 			margin-left:-40px;
       		  	
     		.breadcrumb
@@ -783,6 +831,10 @@
 		
 		html.aui body #sidebar .title {
 			    height: 27px;
+		}
+		
+		html.aui body #sidebar.show-sidebar {
+			    height: 100%;
 		}
 		
 		html.aui body header#banner {
@@ -847,12 +899,12 @@
 		}
 		
 		html.aui body #up_logo #up_logo_wrapper #up_logo_title span.clicker {
-			margin-top:60px;
+			margin-top:40px;
 		}
 		
 		html.aui body .wrapper-portlet-area {
     
-    		margin-top: 170px;
+    		margin-top: 150px;
 		}
 	
 } /* end max width 540 */
