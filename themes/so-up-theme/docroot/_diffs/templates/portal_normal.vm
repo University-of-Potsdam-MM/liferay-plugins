@@ -8,9 +8,6 @@
 	<title>$company_name | $the_title</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	$theme.include($top_head_include)
-	<!--
-	<link href="$css_folder/bootstrap.min.css" rel="stylesheet" type="text/css>
-	-->
 </head>
 <body class="dockbar-split so-strata-theme $css_class">
 
@@ -197,7 +194,7 @@
 	      			
 	      			<!-- UP Services -->
 					<div class="btn-group">
-						<a class="btn dropdown-toggle services" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
+						<a class="btn dropdown-toggle services" data-toggle="dropdown" href="#" data-target="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 								<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
@@ -209,8 +206,6 @@
 							</ul>
 					</div>
 				</div><!-- /btn-toolbar -->
-				
-				
 				
 		</div> <!-- ende navigation-wrapper -->
 		#end       		
@@ -643,9 +638,9 @@ $theme.include($body_bottom_include)
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script> 
 	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
-	<!--
+
 	<script type="text/javascript" src="$javascript_folder/bootstrap.min.js"></script>
-	-->
+
 	
 	
 	<!-- $(window).on('resize',clickdropdown);	-->
