@@ -155,7 +155,7 @@ html.aui
 								a 
 								{
 									background-color:#d0dae3;
-									font-size:.9em;
+									font-size:11px;
 									padding-left: 5px;
     								padding-right: 5px;
 								}
@@ -288,7 +288,12 @@ html.aui
 					{
 						color: $upDarkBlue;
 					}
-			
+					
+					.clicker 
+					{
+						display:none;
+					}
+					
 					#subnav-mobile
 					{
 						display:none;
@@ -993,6 +998,37 @@ html.aui
 					
 					}
 					
+					.dropdown-menu 
+					{
+						border: none;
+    					margin-top: 2px;
+						
+						a 
+						{
+							text-transform: none;
+						    color: #014260;
+						    text-align: left;
+						    font-size: 110%; 
+						    margin-left: 0;
+						    padding-left: 5px;
+						    width: auto;
+						    display: block;
+						    margin-left: 8px;
+						    margin-right: 8px;
+						    border-bottom: 1px solid #fff;
+						    
+						    .caret
+						    {
+						    	border-top-color:#014260;
+						    }
+						}	
+						
+						a:last-child
+						{
+							border-bottom:none;
+						}
+					}
+					
 				
 				
 	
@@ -1002,6 +1038,7 @@ html.aui
 						background-position: 0px -354px;
 						display: inline-block;
 						width:auto;
+						color:#014260;
 					}
 				
 					.help
@@ -1010,6 +1047,7 @@ html.aui
 						background-position: 0px -421px;
 						display: inline-block;
 						width:auto;
+						color:#014260;
 					}
 					
 					
@@ -1032,6 +1070,23 @@ html.aui
 					
 					
 				} 
+				
+				.btn-group.open
+				
+				{
+					border-bottom:2px solid #d0dae3;
+					
+					a
+					{
+						.caret 
+						{
+							border-top: none;
+							border-bottom: 4px solid #014260;
+						   
+						    
+						}
+					}
+				}
 				
 				
 			}
@@ -1309,6 +1364,8 @@ background: $upBgColor;
     		img {
     			display:none;
     		}
+    		
+    	
 	} /*ende up logo */
 			
 	header#banner
