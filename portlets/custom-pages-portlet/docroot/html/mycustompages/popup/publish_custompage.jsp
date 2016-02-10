@@ -5,6 +5,7 @@
 
 <%
 String customPagePlid = renderRequest.getParameter("customPagePlid"); 
+boolean isPrivate = renderRequest.getParameter("isPrivate").equals("1");
 String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPublishment()";
 %>
 
@@ -17,6 +18,9 @@ String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPubl
 <div id="alertFeedbackRequested"></div>
 
 <div id="<portlet:namespace />inviteMembersContainer">
+	<% if (isPrivate) { %>
+		<span class="alert alert-info"><%= LanguageUtil.get(pageContext, "custompages-page-will-be-moved-to-public-area-message") %></span>
+	<% } %>
 	<div class="user-search-wrapper">
 		<h2>
 			<liferay-ui:message key="find-members" />
@@ -50,6 +54,7 @@ String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPubl
 			<portlet:renderURL var="redirectHereURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 				<portlet:param name="mvcPath" value="/html/mycustompages/popup/publish_custompage.jsp" />
 				<portlet:param name="customPagePlid" value="<%= customPagePlid %>" />
+				<portlet:param name="isPrivate" value="<%= String.valueOf(isPrivate) %>" />
 			</portlet:renderURL>
 
 			

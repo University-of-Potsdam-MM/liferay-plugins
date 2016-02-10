@@ -155,10 +155,10 @@ public class CustomPageUtil {
 	
 	public static void setCustomPagePageType(long plid, int pageType) throws SystemException, PortalException {
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
-		layout.getExpandoBridge().setAttribute("PageType", pageType);
+		setCustomPagePageType(layout, pageType);
 	}
 	
 	public static void setCustomPagePageType(Layout layout, int pageType) throws SystemException, PortalException {
-		layout.getExpandoBridge().setAttribute("PageType", pageType);
+		layout.getExpandoBridge().setAttribute(CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, pageType);
 	}
 }

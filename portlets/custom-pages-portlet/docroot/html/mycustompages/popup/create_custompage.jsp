@@ -33,6 +33,14 @@
 				
 			</aui:field-wrapper>
 		</div>
+		
+		<div id="customPageTypeChoice">
+			<aui:field-wrapper name="customPageType" label="custompages-page-type" >
+				<aui:input id="pageTypeNormalPage" inlineLabel="right"  checked="<%= true %>" name="customPageType" type="radio" value="<%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>" label="custompages-page-type-normal-page" />
+				<aui:input id="pageTypePortfolioPage" inlineLabel="right" checked="<%= false %>" name="customPageType" type="radio" value="<%= CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE%>" label="custompages-page-type-portfolio-page" />
+			</aui:field-wrapper>
+		</div>
+		
 		<div id="description">
 			<div><%= LanguageUtil.get(pageContext, "description") %></div>
 			<div id="descriptionContent"></div>
@@ -58,7 +66,7 @@ AUI().use('aui-base',
 	
 function setDescription(){
 	AUI().use('aui-base',function(A){
-	var inputs = A.all('input');
+	var inputs = A.one('div#templateChoice').all('input');
 	for (var i = 0; i < inputs.size(); i++){
 		var item = inputs.item(i);
 		if (item.get("type") === 'radio' && item.get("checked") === true){

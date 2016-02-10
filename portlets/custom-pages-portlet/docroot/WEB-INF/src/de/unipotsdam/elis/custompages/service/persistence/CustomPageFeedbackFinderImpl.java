@@ -64,6 +64,7 @@ public class CustomPageFeedbackFinderImpl extends BasePersistenceImpl<CustomPage
 			QueryPos qPos = QueryPos.getInstance(q);
 			qPos.add(pageType);
 			qPos.add(userId);
+			qPos.add(userId);
 
 			return (List<Layout>) QueryUtil.list(q, getDialect(), begin, end);
 		} catch (Exception e) {
@@ -80,6 +81,39 @@ public class CustomPageFeedbackFinderImpl extends BasePersistenceImpl<CustomPage
 	
 	public List<Layout> findCustomPagesByPageTypeAndLayoutUserId(int pageType, long userId) {
 		return findCustomPagesByPageTypeAndLayoutUserId(pageType, userId,  QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	}
+	
+	public List<Layout> findCustomPagesByLayoutUserId(long userId, int begin, int end) {
+		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+
+			String sql = CustomSQLUtil.get("findCustomPagesByLayoutUserId");
+
+			SQLQuery q = session.createSQLQuery(sql);
+			q.setCacheable(false);
+	        q.addEntity("Layout", PortalClassLoaderUtil.getClassLoader().loadClass("com.liferay.portal.model.impl.LayoutImpl"));
+
+			QueryPos qPos = QueryPos.getInstance(q);
+			qPos.add(userId);
+			qPos.add(userId);
+
+			return (List<Layout>) QueryUtil.list(q, getDialect(), begin, end);
+		} catch (Exception e) {
+			try {
+				throw new SystemException(e);
+			} catch (SystemException se) {
+				se.printStackTrace();
+			}
+		} finally {
+			closeSession(session);
+		}
+		return null;
+	}
+	
+	public List<Layout> findCustomPagesByLayoutUserId(long userId) {
+		return findCustomPagesByLayoutUserId(userId,  QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 
@@ -116,13 +150,13 @@ public class CustomPageFeedbackFinderImpl extends BasePersistenceImpl<CustomPage
 		return findCustomPagesByPageTypeAndCustomPageFeedbackUserId(pageType, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 	
-	public List<Layout> findCustomPagesPublishedGlobalAndNotPublishedToUser(int pageType, long userId, int begin, int end) {
+	public List<Layout> findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(int pageType, long userId, int begin, int end) {
 		SessionFactory sessionFactory = (SessionFactory) PortalBeanLocatorUtil.locate("liferaySessionFactory");
 		Session session = null;
 		try {
 			session = sessionFactory.openSession();
 
-			String sql = CustomSQLUtil.get("findCustomPagesPublishedGlobalAndNotPublishedToUser");
+			String sql = CustomSQLUtil.get("findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser");
 
 			SQLQuery q = session.createSQLQuery(sql);
 			q.setCacheable(false);
@@ -147,8 +181,8 @@ public class CustomPageFeedbackFinderImpl extends BasePersistenceImpl<CustomPage
 	}
 	
 
-	public List<Layout> findCustomPagesPublishedGlobalAndNotPublishedToUser(int pageType, long userId) {
-		return findCustomPagesPublishedGlobalAndNotPublishedToUser(pageType, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+	public List<Layout> findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(int pageType, long userId) {
+		return findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(pageType, userId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 	}
 
 }

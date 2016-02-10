@@ -39,6 +39,16 @@ public class CustomPageFeedbackFinderUtil {
 				   .findCustomPagesByPageTypeAndLayoutUserId(pageType, userId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesByLayoutUserId(
+		long userId, int begin, int end) {
+		return getFinder().findCustomPagesByLayoutUserId(userId, begin, end);
+	}
+
+	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesByLayoutUserId(
+		long userId) {
+		return getFinder().findCustomPagesByLayoutUserId(userId);
+	}
+
 	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesByPageTypeAndCustomPageFeedbackUserId(
 		int pageType, long userId, int begin, int end) {
 		return getFinder()
@@ -53,17 +63,17 @@ public class CustomPageFeedbackFinderUtil {
 			userId);
 	}
 
-	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndNotPublishedToUser(
+	public static java.util.List<com.liferay.portal.model.Layout> findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(
 		int pageType, long userId, int begin, int end) {
 		return getFinder()
-				   .findCustomPagesPublishedGlobalAndNotPublishedToUser(pageType,
+				   .findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(pageType,
 			userId, begin, end);
 	}
 
-	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndNotPublishedToUser(
+	public static java.util.List<com.liferay.portal.model.Layout> findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(
 		int pageType, long userId) {
 		return getFinder()
-				   .findCustomPagesPublishedGlobalAndNotPublishedToUser(pageType,
+				   .findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(pageType,
 			userId);
 	}
 

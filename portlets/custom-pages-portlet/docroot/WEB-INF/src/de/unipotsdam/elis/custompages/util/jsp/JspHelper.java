@@ -1,14 +1,20 @@
 package de.unipotsdam.elis.custompages.util.jsp;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.portlet.ActionRequest;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.ReadOnlyException;
+import javax.portlet.ValidatorException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
+import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -21,14 +27,19 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
@@ -95,8 +106,8 @@ public class JspHelper {
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
 
 		}
-		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
-		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPageURL, portletId);
+		//createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+		//createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPageURL, portletId);
 	}
 
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -130,11 +141,14 @@ public class JspHelper {
 				"lastChanges",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPage.getModifiedDate()));
+		customPageJSON.put("customPageType", (Short)customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageJSON.put("lastChangesInMilliseconds", customPage.getModifiedDate().getTime());
 		customPageJSON.put("isGlobal", CustomPageUtil.isPublishedGlobal(customPage.getPlid()));
+		customPageJSON.put("isPrivate", customPage.isPrivateLayout());
 		JSONArray customPageFeedbackJSONArray = JSONFactoryUtil.createJSONArray();
 		JSONObject customPageFeedbackJSON = null;
 		boolean inFeedbackProcess = false;
+		boolean feedbackDelivered = false;
 		for (CustomPageFeedback customPageFeedback : CustomPageUtil.getCustomPageFeedbacks(customPage.getPlid())) {
 			customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
 			customPageFeedbackJSON.put("userId", customPageFeedback.getUserId());
@@ -151,8 +165,11 @@ public class JspHelper {
 			customPageFeedbackJSONArray.put(customPageFeedbackJSON);
 			if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED)
 				inFeedbackProcess = true;
+			else if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_DELIVERED)
+				feedbackDelivered = true;
 		}
 		customPageJSON.put("inFeedbackProcess", inFeedbackProcess);
+		customPageJSON.put("feedbackDelivered", feedbackDelivered);
 		customPageJSON.put("customPageFeedbacks", customPageFeedbackJSONArray);
 		customPageJSONArray.put(customPageJSON);
 	}
@@ -245,5 +262,43 @@ public class JspHelper {
 			}
 		}
 		return result;
+	}
+	
+	public static Layout getLayoutByNameOrCreate(PortletRequest request, String pageNameLocalizationString) throws SystemException, PortalException, ReadOnlyException, ValidatorException, IOException{
+		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
+		Layout layout = null;
+		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), pageNameLocalizationString);;
+		for (Layout l : layouts) {
+			if (l.getName(themeDisplay.getLocale()).equals(parentPageName))
+				layout = l;
+		}
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), request);
+
+		// create custom pages parent page if none exists
+		if (layout == null) {
+			Map<Locale, String> localeMap = JspHelper.getLocaleMap(pageNameLocalizationString, portletConfig);
+			layout = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
+					.getGroupId(), false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET,
+					null, false, new HashMap<Locale, String>(), serviceContext);
+
+			String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
+			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
+			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
+			Layout parentLayout = LayoutLocalServiceUtil.updateLayout(layout);
+			
+			CustomPageUtil.setCustomPagePageType(parentLayout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
+
+			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+					layout, portletId);
+			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
+			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
+			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
+			portletSetup.store();
+		}
+		return layout;
 	}
 }

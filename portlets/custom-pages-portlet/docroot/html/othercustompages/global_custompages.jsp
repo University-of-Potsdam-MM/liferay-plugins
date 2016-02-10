@@ -2,13 +2,13 @@
 
 <% 
 	List<Layout> customPages = CustomPageFeedbackLocalServiceUtil
-		.getCustomPagesPublishedGlobalAndNotPublishedToUser(CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId());
+		.getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId());
 %>
 
 <aui:input class="filterInput" id="otherCustomPagesFilterInput" name=""  placeholder="custompages-filter-placeholder"></aui:input>
 
 <% if (customPages.size() == 0){ %>
-	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"custompages-no-customPages")%></div>
+	<div class="alert alert-info" ><%=LanguageUtil.get(pageContext,"custompages-no-custom-pages")%></div>
 <% } else { %>
 	<div id="globalCustomPagesTable" class="loading-animation"></div>
 <% } %>

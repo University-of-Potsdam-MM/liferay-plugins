@@ -1,7 +1,7 @@
 <%@ include file="/html/init.jsp"%>
 
 <% 
-	List<Layout> customPages =CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId()); 
+	List<Layout> customPages =CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId()); 
 %>
 
 <portlet:resourceURL var="getCustomPagesForUserURL">

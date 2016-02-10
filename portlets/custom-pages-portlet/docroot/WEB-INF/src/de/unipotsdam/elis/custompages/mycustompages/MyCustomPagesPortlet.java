@@ -3,25 +3,23 @@ package de.unipotsdam.elis.custompages.mycustompages;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
-import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.ValidatorException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.compat.portal.kernel.util.ListUtil;
-import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -51,7 +49,6 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutFriendlyURL;
 import com.liferay.portal.model.LayoutPrototype;
-import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
@@ -63,7 +60,6 @@ import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portal.kernel.dao.orm.CustomSQLParam;
 import com.liferay.util.bridges.mvc.MVCPortlet;
@@ -119,6 +115,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				getAvailableUsers(resourceRequest, resourceResponse);
 			else if (cmd.equals("getUsersCustomPagePublishedTo"))
 				getUsersCustomPagePublishedTo(resourceRequest, resourceResponse);
+			else if (cmd.equals("changeCustomPageType"))
+				changeCustomPageType(resourceRequest, resourceResponse);
 			else
 				super.serveResource(resourceRequest, resourceResponse);
 
@@ -234,16 +232,20 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		boolean privatePersonalPage = ParamUtil.getBoolean(resourceRequest, "privatePersonalPage");
 		if (themeDisplay.getSiteGroup().isUser()) {
-			List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndLayoutUserId(
-					CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getSiteGroup().getClassPK());
+			List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByLayoutUserId(themeDisplay
+					.getSiteGroup().getClassPK());
 			JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
 			if (privatePersonalPage) {
 				for (Layout customPage : customPages) {
-					JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
+					if (((Short) customPage.getExpandoBridge().getAttribute(
+							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE)
+						JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 			} else {
 				for (Layout customPage : customPages) {
-					if (CustomPageUtil.userHasViewPermission(customPage.getPlid(), themeDisplay.getUserId()))
+					if (CustomPageUtil.userHasViewPermission(customPage.getPlid(), themeDisplay.getUserId())
+							&& ((Short) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE)
 						JspHelper.publicAddToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 
@@ -281,15 +283,17 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = Long.valueOf(ParamUtil.getString(resourceRequest, "customPagePlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
-		deletecustomPageFeedback(customPage, themeDisplay, userId);
+		deleteCustomPageFeedback(customPage, themeDisplay, userId);
 	}
 
-	private void deletecustomPageFeedback(Layout customPage, ThemeDisplay themeDisplay, long userId)
+	private void deleteCustomPageFeedback(Layout customPage, ThemeDisplay themeDisplay, long userId)
 			throws NoSuchCustomPageFeedbackException, PortalException, SystemException, Exception {
 
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
-				ActionKeys.CUSTOMIZE) && !CustomPageUtil.feedbackRequested(customPage.getPlid(), userId))
+				ActionKeys.CUSTOMIZE) && !CustomPageUtil.feedbackRequested(customPage.getPlid(), userId)) {
 			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPage.getPlid(), userId);
+			movePageToPrivateAreaIfNecessary(customPage, themeDisplay.getUserId());
+		}
 	}
 
 	/**
@@ -352,6 +356,44 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId,
 					CustomPageStatics.FEEDBACK_UNREQUESTED);
 		}
+	}
+
+	private void changeCustomPageType(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		long plid = ParamUtil.getLong(resourceRequest, "customPagePlid");
+		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
+		int customPageType = ParamUtil.getInteger(resourceRequest, "customPageType");
+		movePageToParentPage(customPage, resourceRequest, customPageType, themeDisplay.getUser());
+	}
+
+	private void movePageToParentPage(Layout customPage, PortletRequest request, int customPageType, User user)
+			throws PortalException, SystemException, ReadOnlyException, ValidatorException, IOException, Exception {
+		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(user), customPage, ActionKeys.CUSTOMIZE))
+			if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE
+					|| customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
+				System.out.println("movePageToParentPage");
+				Layout parentPage = null;
+				System.out.println(customPageType);
+				if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE)
+					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-custom-pages");
+				else if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
+					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-portfolio-pages");
+				}
+				CustomPageUtil.setCustomPagePageType(customPage, customPageType);
+				if (customPage.isPrivateLayout()) {
+					customPage.setPrivateLayout(false);
+					LayoutLocalServiceUtil.updateLayout(customPage);
+					for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(customPage.getPlid())){
+						layoutFriendlyURL.setPrivateLayout(false);
+						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
+					}
+				}
+
+				// LayoutLocalServiceUtil.updateParentLayoutId(customPage.getGroupId(),
+				// false, customPage.getLayoutId(), parentPage.getLayoutId());
+				LayoutLocalServiceUtil.updateParentLayoutId(customPage.getPlid(), parentPage.getPlid());
+			}
 	}
 
 	private void renameCustomPage(ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
@@ -430,41 +472,18 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		UploadPortletRequest uploadRequest = PortalUtil.getUploadPortletRequest(actionRequest);
 		String customPageName = ParamUtil.getString(uploadRequest, "customPageName");
 		String template = ParamUtil.getString(uploadRequest, "template");
+		int customPageType = ParamUtil.getInteger(uploadRequest, "customPageType");
 
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) actionRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-
-		// Get custom page parent page
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
-		Layout customPagesParentPage = null;
-		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "custompages-custom-pages");
-		for (Layout layout : layouts) {
-			if (layout.getName(themeDisplay.getLocale()).equals(parentPageName))
-				customPagesParentPage = layout;
-		}
-
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Layout.class.getName(), actionRequest);
 
-		// create custom pages parent page if none exists
-		if (customPagesParentPage == null) {
-			Map<Locale, String> localeMap = JspHelper.getLocaleMap("custompages-custom-pages", portletConfig);
-			customPagesParentPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
-					.getGroupId(), false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET,
-					null, false, new HashMap<Locale, String>(), serviceContext);
-
-			String portletId = (String) actionRequest.getAttribute(WebKeys.PORTLET_ID);
-			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) customPagesParentPage.getLayoutType();
-			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
-			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
-			LayoutLocalServiceUtil.updateLayout(customPagesParentPage);
-
-			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(
-					customPagesParentPage, portletId);
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
-			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
-			portletSetup.store();
-		}
+		// Get custom page parent page
+		Layout customPagesParentPage = null;
+		if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE)
+			customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-custom-pages");
+		else
+			customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-portfolio-pages");
 
 		Layout newCustomPage = null;
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
@@ -475,8 +494,6 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			serviceContext.setAttribute("layoutPrototypeLinkEnabled", false);
 
 			serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
-
-			System.out.print(customPagesParentPage.getLayoutId());
 
 			newCustomPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
 					customPagesParentPage.getGroupId(), false, customPagesParentPage.getLayoutId(), customPageName,
@@ -490,7 +507,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			writeJSON(actionRequest, actionResponse, jsonObject);
 			throw new SystemException("Could not find layout prototype with the name " + template);
 		}
-		CustomPageUtil.setCustomPagePageType(newCustomPage, CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE);
+		CustomPageUtil.setCustomPagePageType(newCustomPage, CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE);
 
 		jsonObject.put("success", Boolean.TRUE);
 		writeJSON(actionRequest, actionResponse, jsonObject);
@@ -654,43 +671,61 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 	 * @throws Exception
 	 */
 	public void publishCustomPage(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		long customPagePlid = ParamUtil.getLong(actionRequest, "customPagePlid");
-		Layout customPage = LayoutLocalServiceUtil.getLayout(customPagePlid);
-		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
-				ActionKeys.CUSTOMIZE)) {
+		try {
+			ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			long customPagePlid = ParamUtil.getLong(actionRequest, "customPagePlid");
+			Layout customPage = LayoutLocalServiceUtil.getLayout(customPagePlid);
+			if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
+					ActionKeys.CUSTOMIZE)) {
 
-			if (!ParamUtil.getBoolean(actionRequest, "globalPublishment")) {
-				if (CustomPageUtil.isPublishedGlobal(customPagePlid))
-					CustomPageUtil.deleteCustomPageGlobalPubishment(customPagePlid);
-			} else {
-				if (!CustomPageUtil.isPublishedGlobal(customPagePlid))
-					CustomPageUtil.publishCustomPageGlobal(customPagePlid);
-				return;
-			}
+				if (!ParamUtil.getBoolean(actionRequest, "globalPublishment")) {
+					if (CustomPageUtil.isPublishedGlobal(customPagePlid))
+						CustomPageUtil.deleteCustomPageGlobalPubishment(customPagePlid);
+				} else {
+					if (!CustomPageUtil.isPublishedGlobal(customPagePlid))
+						CustomPageUtil.publishCustomPageGlobal(customPagePlid);
+					return;
+				}
 
-			List<Long> newUserIds = ListUtil.toList(getLongArray(actionRequest, "receiverUserIds"));
-			List<CustomPageFeedback> publishments = CustomPageFeedbackLocalServiceUtil
-					.getCustomPageFeedbackByPlid(customPagePlid);
-			List<Long> oldUserIds = new ArrayList<Long>();
-			for (CustomPageFeedback publishment : publishments) {
-				oldUserIds.add(publishment.getUserId());
-				if (!newUserIds.contains(publishment.getUserId())
-						&& publishment.getFeedbackStatus() != CustomPageStatics.FEEDBACK_REQUESTED)
-					CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(publishment);
-			}
+				List<Long> newUserIds = ListUtil.toList(getLongArray(actionRequest, "receiverUserIds"));
+				List<CustomPageFeedback> publishments = CustomPageFeedbackLocalServiceUtil
+						.getCustomPageFeedbackByPlid(customPagePlid);
+				List<Long> oldUserIds = new ArrayList<Long>();
+				for (CustomPageFeedback publishment : publishments) {
+					oldUserIds.add(publishment.getUserId());
+					if (!newUserIds.contains(publishment.getUserId())
+							&& publishment.getFeedbackStatus() != CustomPageStatics.FEEDBACK_REQUESTED)
+						CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(publishment);
+				}
 
-			for (Long userId : newUserIds) {
-				if (!oldUserIds.contains(userId) && userId != themeDisplay.getUserId()) {
-					User user = UserLocalServiceUtil.fetchUser(userId);
-					if (user != null) {
-						CustomPageUtil.publishCustomPageToUser(customPagePlid, user.getUserId());
-						JspHelper.handleSocialActivities(customPage, actionRequest, user,
-								CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED);
+				for (Long userId : newUserIds) {
+					if (!oldUserIds.contains(userId) && userId != themeDisplay.getUserId()) {
+						User user = UserLocalServiceUtil.fetchUser(userId);
+						if (user != null) {
+							CustomPageUtil.publishCustomPageToUser(customPagePlid, user.getUserId());
+							JspHelper.handleSocialActivities(customPage, actionRequest, user,
+									CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED);
+						}
 					}
 				}
 			}
+
+			movePageToPrivateAreaIfNecessary(customPage, themeDisplay.getUserId());
+			if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0
+					&& customPage.isPrivateLayout())
+				System.out.println("jooo");
+			movePageToParentPage(customPage, actionRequest,
+					(Short) customPage.getExpandoBridge().getAttribute(CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME),
+					themeDisplay.getUser());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+
+	}
+
+	private void movePageToPrivateAreaIfNecessary(Layout layout, long userId) throws PortalException, SystemException {
+		if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(layout.getPlid()).size() == 0)
+			LayoutLocalServiceUtil.updateParentLayoutId(layout.getGroupId(), true, layout.getLayoutId(), 0);
 	}
 
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {

@@ -70,7 +70,7 @@ public class OtherCustomPagesPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) resourceRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<Layout> customPages = CustomPageFeedbackLocalServiceUtil
-				.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE,
+				.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE,
 						themeDisplay.getUserId());
 		JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
 		for (Layout customPage : customPages) {
@@ -113,7 +113,7 @@ public class OtherCustomPagesPortlet extends MVCPortlet {
 	private void getGlobalCustomPages(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws IOException, PortletException, SystemException, PortalException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId());
+		List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE, themeDisplay.getUserId());
 		JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
 		for (Layout customPage : customPages) {
 			JspHelper.addGlobalCustomPageToJSONArray(customPageJSONArray, customPage, themeDisplay);

@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.util.SessionClicks"%>
 <%@ include file="/html/init.jsp"%>
 
 <%
@@ -14,6 +15,81 @@
 
 <aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
 
+<div class="navbar-search">
+   <div class="taglib-search-toggle">
+      <div class="form-search">
+         <div class="input-append" id="<portlet:namespace />searchsimple">
+            <div class="advanced-search"> 
+	            <input class="search-query span9" id="<portlet:namespace />filterInput" name="_127_keywords" placeholder="<%= LanguageUtil.get(pageContext, "custompages-filter-placeholder") %>" type="text" value=""> 
+	            <span class="toggle-advanced" id="<portlet:namespace />searchtoggleAdvanced"> 
+		            <i class="icon-search"></i> 
+		            <i class="caret"></i> 
+	            </span> 
+            </div>
+         </div>
+      </div>
+      <div class="popover taglib-search-toggle-advanced yui3-widget yui3-widget-positioned yui3-widget-modal bottom yui3-widget-stacked" id="<portlet:namespace />searchadvanced" style="display: none; width: 248px; left: -17px; top: 19.8281px; z-index: 430;">
+         <span><%= LanguageUtil.get(pageContext, "custompages-page-type") %></span>
+         <aui:input id="inputPageTypeNone" name="custompages-page-type-normal-page" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypeNoneCheckbox\", \"true\") %>"></aui:input>
+         <aui:input id="inputPageTypePortfolioPage" name="custompages-page-type-portfolio-page" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypePortfolioPageCheckbox\", \"true\") %>"></aui:input>
+         <span><%= LanguageUtil.get(pageContext, "custompages-publishment-column") %></span>
+         <aui:input id="inputPublishmentNone" name="custompages-no-publishment" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentNoneCheckbox\", \"true\") %>"></aui:input>
+         <aui:input id="inputPublishmentGlobal" name="global" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentGlobalCheckbox\", \"true\") %>"></aui:input>
+         <aui:input id="inputPublishmentIndividuel" name="custompages-individual" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentIndividuelCheckbox\", \"true\") %>"></aui:input>
+         <span><%= LanguageUtil.get(pageContext, "custompages-feedback-column") %></span>
+         <aui:input id="inputFeedbackNone" name="none" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackNoneCheckbox\", \"true\") %>"></aui:input>
+         <aui:input id="inputFeedbackRequested" name="custompages-requested" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackRequestedCheckbox\", \"true\") %>"></aui:input>
+         <aui:input id="inputFeedbackDelivered" name="custompages-delivered" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackDeliveredCheckbox\", \"true\") %>"></aui:input>
+         <div class="arrow"></div>
+      </div>
+   </div>
+   <script type="text/javascript">
+   AUI().use("aui-popover", "event-key", function(a) {
+	    (function() {
+	        var e;
+	        var h = a.one("#<portlet:namespace />searchsimple");
+	        var g = a.one("#<portlet:namespace />searchadvanced");
+	        var b = a.one("#<portlet:namespace />searchtoggleAdvanced");
+	        var f = a.one("#<portlet:namespace />filterInput");
+
+	        function i() {
+	            if (!e) {
+	                e = new a.Popover({
+	                    align: {
+	                        node: b,
+	                        points: [a.WidgetPositionAlign.TL, a.WidgetPositionAlign.BL]
+	                    },
+	                    boundingBox: g,
+	                    position: "bottom",
+	                    visible: false,
+	                    width: 248,
+	                    zIndex: Liferay.zIndex.ALERT
+	                })
+	            }
+	            return e
+	        }
+
+	        function c(k) {
+	            e = i().render();
+	            var m = e.get("visible");
+	            e.set("visible", !m);
+	            if (m) {
+	                f.focus()
+	            } else {
+	                var l = g.one("input[type=text]");
+	                if (l) {
+	                    l.focus()
+	                }
+	            }
+	            k.preventDefault()
+	        }
+	        b.on("click", c);
+	        f.on("key", c, "down:38,40")
+	    })()
+	});
+
+   </script> 
+</div>
 <aui:script>
 AUI().use('aui-base',
 	    'liferay-portlet-url',
@@ -39,7 +115,6 @@ AUI().use('aui-base',
 	<span id="portletTitle"><%= LanguageUtil.format(pageContext, "custompages-from-user-for-me-published-pages", new Object[] {UserLocalServiceUtil.getUser(scopeGroup.getClassPK()).getFullName()}) %></span>
 	
 <% } %>
-<aui:input id="filterInput" class="filterInput" name="" placeholder="custompages-filter-placeholder"/>
 
 <portlet:resourceURL var="getUserCustomPagesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserCustomPages" />
@@ -63,14 +138,18 @@ AUI().use('aui-base',
 <portlet:resourceURL var="renameCustomPageURL">
 	<portlet:param name="<%=Constants.CMD%>" value="renameCustomPage" />
 </portlet:resourceURL>
+<portlet:resourceURL var="changeCustomPageTypeURL">
+	<portlet:param name="<%=Constants.CMD%>" value="changeCustomPageType" />
+</portlet:resourceURL>
 
-<div style="display: none;" id="<%=themeDisplay.getPortletDisplay().getNamespace()%>noCustomPagePages" class="alert alert-info" ><%=LanguageUtil.get(pageContext,"custompages-no-customPages")%></div>
+<div style="display: none;" id="<%=themeDisplay.getPortletDisplay().getNamespace()%>noCustomPagePages" class="alert alert-info" ><%=LanguageUtil.get(pageContext,"custompages-no-custom-pages")%></div>
 <div id="myCustomPageTable" class="loading-animation"></div>
 
 <div id="iconMenuDiv" style="display: none;">
 	<liferay-ui:icon-menu extended="false" id="iconMenu">
 		<liferay-ui:icon image="delete" url="javascript:void(0);" id="deleteIcon"/>
 		<liferay-ui:icon image="configuration" url="javascript:void(0);" message="edit" id="configurationIcon"></liferay-ui:icon>
+		<liferay-ui:icon image="category" url="javascript:void(0);" message="edit" id="categoryIcon"></liferay-ui:icon>
 	</liferay-ui:icon-menu>
 </div>
 <div id="helpIconDiv" style="display: none;">
@@ -89,6 +168,28 @@ var tableCreated = false;
 
 var noCustomPagePagesMessageDiv;
 var tableDiv;
+
+var inputPageTypeNone;
+var inputPageTypePortfolioPage;
+var inputPublishmentNone;
+var inputPublishmentGlobal;
+var inputPublishmentIndividuel;
+var inputFeedbackNone;
+var inputFeedbackRequested;
+var inputFeedbackDelivered;
+var filterInput;
+
+AUI().use('aui-base', function(A) {
+	inputPageTypeNone = A.one('#<portlet:namespace />inputPageTypeNone');
+	inputPageTypePortfolioPage = A.one('#<portlet:namespace />inputPageTypePortfolioPage');
+	inputPublishmentNone = A.one('#<portlet:namespace />inputPublishmentNone');
+	inputPublishmentGlobal = A.one('#<portlet:namespace />inputPublishmentGlobal');
+	inputPublishmentIndividuel = A.one('#<portlet:namespace />inputPublishmentIndividuel');
+	inputFeedbackNone = A.one('#<portlet:namespace />inputFeedbackNone');
+	inputFeedbackRequested = A.one('#<portlet:namespace />inputFeedbackRequested');
+	inputFeedbackDelivered = A.one('#<portlet:namespace />inputFeedbackDelivered');
+	filterInput = A.one('#<portlet:namespace />filterInput');
+});
 
 AUI().use('aui-base','aui-io-request', function(A){
 noCustomPagePagesMessageDiv = A.one("#<portlet:namespace />noCustomPagePages");
@@ -191,6 +292,14 @@ AUI().use(
     	            var iconMenuId = '<portlet:namespace />iconMenu_' + o.data.plid;
     	            iconMenuDiv.one('#<portlet:namespace />deleteIcon').setAttribute('onClick','<portlet:namespace />deleteCustomPage(' + o.data.plid + ');');
     	            iconMenuDiv.one('#<portlet:namespace />configurationIcon').setAttribute('href',o.data.url);
+    	            var categoryIcon = iconMenuDiv.one('#<portlet:namespace />categoryIcon');
+    	            if (o.data.customPageType === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>){
+    	            	categoryIcon.one('span').set('innerHTML','<%= LanguageUtil.get(pageContext, "custompages-change-to-portfolio-page") %>');
+    	            	categoryIcon.setAttribute('onClick','<portlet:namespace />changeCustomPageType(' + o.data.plid + ',' + '<%= CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE %>' + ');');
+    	            } else {
+    	            	categoryIcon.one('span').set('innerHTML','<%= LanguageUtil.get(pageContext, "custompages-change-to-normal-page") %>');
+    	            	categoryIcon.setAttribute('onClick','<portlet:namespace />changeCustomPageType(' + o.data.plid + ',' + '<%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE %>' + ');');
+    	            }
     	            iconMenu.setAttribute('id',iconMenuId);
     	            if (!(iconMenuId in iconMenuIdlist)) {
     	                iconMenuIdlist.push(iconMenuId);
@@ -215,7 +324,7 @@ AUI().use(
     	            o.cell.setHTML('<%=LanguageUtil.get(pageContext, "custompages-portalwide-publishment") %>');
     	        } else {
     	            o.cell.setHTML(
-    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openPublishCustomPagePopup(' + o.data.plid + ');">' +
+    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openPublishCustomPagePopup(' + o.data.plid + ',' + o.data.isPrivate +');">' +
     	                '<%= LanguageUtil.get(pageContext, "custompages-setup-publishment")%>' +
     	                '</a>');
     	        }
@@ -311,20 +420,56 @@ AUI().use(
         myCustomPageDataTable.sort('changes');
        	
         myCustomPageData = myCustomPageDataTable.data;
-        A.one('#<portlet:namespace />filterInput').on('keyup', function(e) {
-            var filteredData = myCustomPageData.filter({
-                asList: true
-            }, function(list) {
-
-                return list.get('title').toLowerCase().includes(e.currentTarget.get("value").toLowerCase());
-            });
-            myCustomPageDataTable.set('data', filteredData);
+        filterInput.on('keyup', function(e) {
+        	filterTable();
         });
+        
+        filterTable();
 
         tableCreated = true;
         tableDiv.removeClass("loading-animation");
+        
     }
 );}
+
+function filterTable(element){
+	AUI().use('aui-base', function(A) {
+		var checkbox = A.one(element);
+		if (checkbox != null){
+			Liferay.Store(element.id,checkbox.attr('checked').toString());
+		}
+        var filteredData = myCustomPageData.filter({
+            asList: true
+        }, function(list) {
+        	var hasCustomPageTypeNone = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>;
+        	var hasCustomPageTypePortfolioPage = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE%>;
+        	var isPublishGlobal = list.get('isGlobal');
+        	var isPublishIndividual = list.get('customPageFeedbacks').length != 0 && !isPublishGlobal;
+        	var isPublishNone = !isPublishGlobal && !isPublishIndividual;
+        	var feedbackRequested = list.get('inFeedbackProcess');
+        	var feedbackDelivered = list.get('feedbackDelivered');
+        	var feedbackUnrequested = !feedbackRequested && !feedbackDelivered;
+        	var result = true;
+        	result = result && 
+				((hasCustomPageTypeNone && (inputPageTypeNone.get('value') === 'true')) ||
+				(hasCustomPageTypePortfolioPage && (inputPageTypePortfolioPage.get('value') === 'true')));
+        	result = result && 
+    			((isPublishNone && (inputPublishmentNone.get('value') === 'true')) || 
+        		(isPublishGlobal &&(inputPublishmentGlobal.get('value') === 'true')) || 
+        		(isPublishIndividual && (inputPublishmentIndividuel.get('value') === 'true')));
+        	result = result && 
+				((feedbackUnrequested && (inputFeedbackNone.get('value') === 'true')) || 
+	    		(feedbackRequested &&(inputFeedbackRequested.get('value') === 'true')) || 
+	    		(feedbackDelivered && (inputFeedbackDelivered.get('value') === 'true')));
+        	var filterInputValue = filterInput.get("value").toLowerCase();
+        	if (filterInputValue !== ""){
+        		result = result && list.get('title').toLowerCase().includes(filterInputValue);
+        	}
+            return result;
+        });
+        myCustomPageDataTable.set('data', filteredData);
+	});
+}
 
 Liferay.provide(window, '<portlet:namespace />deleteCustomPage',
     function(plid) {
@@ -344,6 +489,24 @@ Liferay.provide(window, '<portlet:namespace />deleteCustomPage',
         });
 	}
     });
+    
+Liferay.provide(window, '<portlet:namespace />changeCustomPageType',
+	    function(plid,type) {
+	        AUI().use('aui-base', 'aui-io-request', function(A) {
+	            A.io.request('<%=changeCustomPageTypeURL.toString()%>', {
+	                dataType: 'text/html',
+	                method: 'post',
+	                data: { <portlet:namespace/>customPagePlid: plid,
+	                	<portlet:namespace/>customPageType: type
+	                },
+	                on: {
+	                    success: function() {
+	                        updateTableData(A);
+	                    }
+	                }
+	            });
+	        });
+	    });
 
 Liferay.provide(window, '<portlet:namespace />deletePublishment',
     function(plid, userId) {
@@ -455,11 +618,12 @@ function refreshPortlet() {
 }
 
 Liferay.provide(window, '<portlet:namespace />openPublishCustomPagePopup',
-    function(plid) {
+    function(plid,isPrivate) {
         var renderURL = Liferay.PortletURL.createRenderURL();
         renderURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString() %>");
         renderURL.setParameter("mvcPath", "/html/mycustompages/popup/publish_custompage.jsp");
         renderURL.setParameter("customPagePlid", plid);
+        renderURL.setParameter("isPrivate", isPrivate);
         renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
         openInvitePopUp(renderURL,"<%=LanguageUtil.get(pageContext, "custompages-publish-custom-page")%>", true);
     }
