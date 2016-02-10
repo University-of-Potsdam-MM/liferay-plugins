@@ -1286,7 +1286,7 @@ background: $upBgColor;
 	.wrapper-portlet-area 
 	{
 		width: 91%;
-		margin-top:300px;
+		margin-top:300px !important;
 	}
 		
 	#line
