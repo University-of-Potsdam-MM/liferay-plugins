@@ -62,7 +62,7 @@ public class PermissionHelper {
 	}
 	
 	public static boolean isCustomPage(Layout layout){
-		Serializable pageType = layout.getExpandoBridge().getAttribute("PageType");
+		Serializable pageType = layout.getExpandoBridge().getAttribute("CustomPageType");
 		if (pageType != null && ((Short)pageType) != 0)
 			return true;
 		return false;
