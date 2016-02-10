@@ -59,7 +59,7 @@
 			#end
 			
 			
-			#if (($navigatorpagelayout == true &&  $navigatorpage == true) || ($organizationalpagelayout == true &&  $organizationalpage == true) || ($organizationalpagelayout == false && $navigatorpagelayout == false &&  $organizationalpage == false && $navigatorpage == false))
+			#if (($isPublicPage) || ($navigatorpagelayout == true &&  $navigatorpage == true) || ($organizationalpagelayout == true &&  $organizationalpage == true) || ($organizationalpagelayout == false && $navigatorpagelayout == false &&  $organizationalpage == false && $navigatorpage == false))
 			
 				<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
 					<span id="up-arrow"></span>

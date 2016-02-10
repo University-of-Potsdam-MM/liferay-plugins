@@ -64,6 +64,7 @@
 	#set ($scopenavigationportletSetup = $portletPreferencesFactory.getLayoutPortletSetup($layout, $scopenavigationPortletId))
 	
 	#set ($isUserPage = $layout.getGroup().isUser())
+	#set ($isPublicPage = $layout.isPublicLayout())
 
 #else
 	#set ($user_my_sites = $user.getMySiteGroups())
