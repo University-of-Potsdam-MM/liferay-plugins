@@ -68,8 +68,7 @@ html.aui
 			background-color: $upDarkBlue;
 			height: 20px;
 		}
-		
-		
+	
 		
 		.windowdiv
 		{
@@ -698,7 +697,7 @@ html.aui
 			.title 
 			{
 				background: $upMenuColor;
-				 transition: all .5s cubic-bezier(.09,1,.8,-0.37);
+				/*transition: all .5s cubic-bezier(.09,1,.8,-0.37);*/
 				-moz-transform: rotate(-90deg);
 				-ms-transform: rotate(-90deg);
 				-o-transform: rotate(-90deg);
@@ -723,7 +722,6 @@ html.aui
 					@include up-grafic;
 					background-position: -14px -505px;
 					display: inline-block;
-					
 					-moz-transform: rotate(90deg);
 					-ms-transform: rotate(90deg);
 					-o-transform: rotate(90deg);
@@ -790,12 +788,7 @@ html.aui
 				width: 100%;
 				background: $upMenuColor;
 				height: 100%;
-				
-				h2 
-				{
-				
-					
-				}
+
 				
 				.so-portlet-sites .portlet
 				{
@@ -972,7 +965,7 @@ html.aui
 				
 				.btn-group
 				{
-					 float: right;
+					float: right;
     				background: #d0dae3;
     				margin-left: 1px;
     				font-size: 1em;
@@ -1237,8 +1230,8 @@ background: $upBgColor;
 		
 	.wrapper-portlet-area 
 	{
-		width:99%;
-		margin-top:100px;
+		width: 91%;
+		margin-top:300px;
 	}
 		
 	#line
@@ -1268,7 +1261,7 @@ background: $upBgColor;
 			-ms-transform: rotate(0deg);
 			-o-transform: rotate(0deg);
 			-webkit-transform: rotate(0deg);
-			transform:rotate(0deg);			
+			transform:rotate(0deg);
 		}
 	
 		.arrow.down
@@ -1277,7 +1270,7 @@ background: $upBgColor;
 			-ms-transform: rotate(180deg);
 			-o-transform: rotate(180deg);
 			-webkit-transform: rotate(180deg);
-			transform:rotate(180deg);			
+			transform:rotate(180deg);		
 		}
 	
 	}
@@ -1540,7 +1533,7 @@ background: $upBgColor;
 		
 			background-color:#d0dae3;
 			margin-top:-46px;
-				transition: background-color .7s ease-in-out;
+			transition: background-color .7s ease-in-out;
 			
 			
 		
@@ -1690,7 +1683,4 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
 	font-size:15px;
 	color:#014260;
 	font-family:"fontawesome-alloy",fontawesome;
-	
-   
-	
 }
