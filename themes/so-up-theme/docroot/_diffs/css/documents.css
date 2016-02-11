@@ -2,13 +2,15 @@
 	border-bottom:none;
 }
 
+
 .aui .document-library-breadcrumb ul.breadcrumb {
-	    width: 90%;
+/*	    width: 90%; */
     padding-left: 0px;
     background-color: transparent;
-    margin-top: 0 !important;
-    margin-left: 30px;
+    margin-top: 10 !important;
+    margin-left: 0px;
     padding-top: 3px;
+    padding-bottom:0;
 }
 	
 
@@ -18,16 +20,25 @@
 
 
 .portlet-document-library .show-sync-message-icon-container {
-	position: relative;
-    width: 20px;
+	width: 30px;
+    height: 30px;
+    text-align: left;
     float: left;
-    margin-left: 10px;
+   
 }
 
 .portlet-document-library .subscribe-action  { 
-	position: absolute;
+	/*position: absolute;
     right: 0;
-       margin-top: -35px;
+       margin-top: -35px;*/
+}
+
+.portlet-document-library .lfr-app-column-view .context-pane .lfr-search-container {
+	margin:0;
+}
+
+.aui .portlet-document-library #_20_ocerSearchContainerSearchContainer .table th {
+	padding: 8px 5px 5px 8px;
 }
 
 .portlet-document-library .lfr-app-column-view .context-pane .navbar .nav>li.open>a{
@@ -35,12 +46,6 @@
     -moz-box-shadow: inset 0 0px 0px rgba(0,0,0,0.25);
     box-shadow: inset 0 0px 0px rgba(0,0,0,0.25);
 }
-
-.aui .portlet-document-library .nav-collapse .dropdown-menu {
-	margin:0 0 0 25px;
-	top: 35px;
-}
-
 
 .aui .portlet-document-library thead.table-columns, .aui .portlet-document-library thead.table-columns a {
 	background-color: #ededed;
@@ -68,12 +73,12 @@
 
 .portlet-document-library .row-fluid .span10 {
     
-    width: 85.33333%;
+ /*   width: 85.33333%;*/
 }
 
 .portlet-document-library .row-fluid .span2 {
-    width: 12.66667%;
-    margin-right: 20px;
+  /*  width: 12.66667%;
+    margin-right: 10px;*/
 }
 
 .portlet-document-library .lfr-app-column-view .context-pane {
@@ -118,21 +123,29 @@ th.table-sortable-column.table-sorted {
     padding-left: 0;
 }
 
-.portlet-document-library .taglib-discussion, 
-.portlet-document-library-display .taglib-discussion, 
-.portlet-trash .taglib-discussion {
-    width: 97%;
-    margin: 0;
-}
+
 
 .portlet-document-library fieldset {
     border-width: 0;
-    padding: 10px 0 0 0;
+    padding: 0px 0 0 0;
+}
+
+.aui .portlet-document-library .form-search .input-append .search-query {
+	height:40px;
+}
+
+.aui .portlet-document-library .form-search .input-append .btn {
+	width:40px;
+ 	height:40px;
+}
+
+.aui .portlet-document-library .navbar-search {
+	margin-top:0;
 }
 
 .aui .wrapper-portlet-area .lfr-document-library-comments .alert-success {
-    width: 96%;
-    margin-left: 0;
+  /*  width: 96%;
+    margin-left: 0; */
     margin-bottom: 10px;
 }
 
@@ -190,14 +203,98 @@ th.table-sortable-column.table-sorted {
 }
 .portlet-document-library .lfr-app-column-view .context-pane .navbar .navbar-inner {
     background: white;
-    padding: 0 10px 0 10px;
+    padding: 0;
 }
 
 .aui .portle-document-library .collapse .navbar-search.pull-right {
-	float:left;
+	/*float:left;*/
 }
 
 .aui .portlet-document-library .navbar-search {
-	margin-top:0;
+	/*margin-top:0;*/
 }
 
+/* layout */
+
+.portlet-document-library .row-fluid .span2 {
+	width:100% !important;
+	margin:0 0 10px 0;
+}
+
+.portlet-document-library .lfr-app-column-view .navigation-pane .nav {
+	padding:0;
+}
+
+
+.portlet-document-library .navigation-pane .app-view-navigation-entry {
+	width: 32%;
+    display: inline-block;
+}
+
+.portlet-document-library .navigation-pane .app-view-navigation-entry.folder.file-entry-type {
+	display:none;
+}
+
+.aui .portlet-document-library .nav-list > li > a {
+	margin-left:0;
+	margin-right:0;
+}
+
+.navigation-pane .app-view-navigation-entry .overlay.entry-action {
+	right:0;
+}
+
+.portlet-document-library .row-fluid .span10 {
+	width:100% !important;
+}
+
+
+@media (max-width: 1200px) {
+	html.aui .portlet-document-library .row-fluid .span10 {
+    	width: 100% !important;
+	}
+}
+
+
+.aui .portlet-document-library .navbar-search {
+	max-width:40%;
+}
+
+.aui .portlet-document-library .navbar .nav.pull-right.nav-display-style-buttons {
+	float: left;
+    margin-right: 2px;
+    margin-left: 0;
+}
+
+.aui .portlet-document-library .navbar .nav.pull-right.nav-display-style-buttons .btn-group {
+		margin-top:0;
+}
+
+
+.aui .portlet-document-library .navbar .nav.pull-right.nav-display-style-buttons a {
+	    padding: 10px;
+}
+
+.aui .portlet-document-library .navbar .nav.pull-right.nav-display-style-buttons .dropdown-toggle .caret {
+	margin-left:5px;
+}
+
+.aui .portlet-document-library  .portlet-body .so-breadcrumbs .breadcrumb {
+	    width: 100%;
+    margin: 0;
+    padding: 5px 0 5px 5px;
+    background-color: #fff;
+}
+
+.portlet-document-library .document-info .entry-links {
+	display:none;
+}
+
+.portlet-document-library #_20_fileEntryToolbar button.btn {
+    width: 19%;
+    white-space: nowrap;
+    overflow: hidden;
+    height: 30px;
+    text-overflow: ellipsis;
+    padding: 4px 12px 4px 12px;
+}

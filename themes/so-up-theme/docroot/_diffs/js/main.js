@@ -29,29 +29,6 @@ AUI().ready(
 			);
 		}
 		
-		/*$(window).scroll(function() {
-		    if ($(window).scrollTop() > 200) {
-		        $('body').addClass('smallhead');
-		    } else {
-		        $('body').removeClass('smallhead');
-		    }
-		});
-		
-		var body = A.one('body');
-		
-		if(body)
-		{
-			A.on('scroll', function(e) {
-				if(window.scrollY > 500)
-				{
-					body.addClass("smallhead");
-				}
-				else
-				{
-					body.removeClass("smallhead");
-				}
-		      });
-		}*/
 		
 		var sidebar = A.one('#sidebar');
 		
@@ -68,26 +45,24 @@ AUI().ready(
 
 		}
 		
-		
-		
 		var up_services = A.one('#up-general .up_services');
 		
-		if(up_services)
-		{
+		if(up_services){
 			up_services.on('click', function(event){
 				event.preventDefault();
 				up_services.siblings('ul').toggleClass('hidden');
-			})
+			});
 		}
+		
 		
 		var search = A.all('#up-general .search-img');
 		var searchfield = A.one('#up-general #searchfield')
-		if(search && searchfield)
-		{
+		
+		if(search && searchfield){
 			search.on('click', function(event){
 				event.preventDefault();
 				searchfield.toggleClass('hidden');
-			})
+			});
 		}
 		
 	
@@ -98,10 +73,11 @@ AUI().ready(
 				mainMenu.toggleClass("open");
 				mainMenu.all('li ul, span.close').each(function(){
 					this.toggleClass("hidden");
-				})
-			})
+				});
+			});
 		}
 
+		
 		var messageBoard = A.one('.portlet-message-boards');
 
 		if (messageBoard) {
@@ -116,7 +92,9 @@ AUI().ready(
 			);
 		}
 		
+		
 		var body = A.one('body');
+		
 		body.on('click',function(e){
 			if (e.target.getAttribute('id') == '_145_closePanelAdd' || e.target.getAttribute('id') == '_145_closePanelEdit'){
 				body.removeClass('show-dockbar');
@@ -131,6 +109,9 @@ AUI().ready(
 			toggleNodeLink = toggleNode.one('.toggle-controls');
 		}
 		
+		/**
+		 * 		Button addApplication - Dockbar
+		 */
 		var addApplication = A.one('#addApplication')
 		
 		if (addApplication){
@@ -148,6 +129,10 @@ AUI().ready(
 				);
 		}
 		
+		
+		/**
+		 * 		Button editPage - Dockbar
+		 */
 		var editPage = A.one('#editPage')
 		
 		if (editPage){
@@ -162,6 +147,10 @@ AUI().ready(
 				);
 		}
 		
+		
+		/**
+		 * 		Button addPage - Dockbar
+		 */
 		var addPage = A.one('#addPage')
 		
 		if (addPage){
@@ -249,8 +238,7 @@ function toogleDockbarClass(body,newTab){
 	if (currentDockbarState == newTab){
 		body.removeClass('show-dockbar');
 		currentDockbarState = '';
-	}
-	else{
+	}else{
 		body.addClass('show-dockbar');
 		currentDockbarState = newTab;
 	}

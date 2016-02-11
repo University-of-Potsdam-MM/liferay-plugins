@@ -1,7 +1,7 @@
-<nav class="$nav_css_class click-nav" id="navigation" role="navigation">
+<nav class="$nav_css_class click-nav" id="navigation2" role="navigation">
 	##-- portlet to change to the public or private area of a workspace -- ##
 	
-	<ul aria-label="#language ("site-pages")" role="menubar">
+	<ul aria-label="#language ("site-pages")" role="menubar" class="mainmenu">
 		#foreach ($nav_item in $nav_items)
 
 			#set ($nav_item_attr_has_popup = "")
@@ -39,6 +39,7 @@
 			
 			
 				<li class="$nav_item_css_class" id="layout_$nav_item.getLayoutId()" $nav_item_attr_selected role="presentation">
+					<span id="up-arrow"></span>
 					<a aria-labelledby="layout_$nav_item.getLayoutId()" href="$nav_item.getURL()" $nav_item_attr_has_popup $nav_item.getTarget() role="menuitem"><span>$nav_item.icon() $nav_item.getName()</span></a>
 				
 					#if ($nav_item.hasChildren())

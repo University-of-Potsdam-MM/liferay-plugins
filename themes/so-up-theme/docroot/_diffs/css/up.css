@@ -68,8 +68,7 @@ html.aui
 			background-color: $upDarkBlue;
 			height: 20px;
 		}
-		
-		
+	
 		
 		.windowdiv
 		{
@@ -125,7 +124,7 @@ html.aui
 					width: 97.7%;
 					position:relative;
 					border-bottom: 1px solid #014260;
-    				height: 45px;
+    				height: 55px;
     				margin-bottom: 10px;
 					
 					h1.site-title 
@@ -154,8 +153,8 @@ html.aui
 								
 								a 
 								{
-									background-color:transparent;
-									font-size:0;
+									background-color:#d0dae3;
+									font-size:11px;
 									padding-left: 5px;
     								padding-right: 5px;
 								}
@@ -168,7 +167,7 @@ html.aui
 									font-size:18px;
 									    vertical-align: bottom;
 									    color:#014260;
-									    border-radius: 50%;
+									  
     								width: 30px;
     								height: 30px;
     								background-color: #d0dae3;
@@ -184,8 +183,8 @@ html.aui
     								font-family: "fontawesome-alloy" , fontawesome;
     								font-size: 15px;
     								vertical-align: bottom;
-   								 /* margin-right: 5px; */
-   	 								border-radius: 50%;
+   								
+   	 								
     								width: 30px;
     								height: 30px;
     								background-color: #d0dae3;
@@ -203,7 +202,7 @@ html.aui
     									content: ".";
    								      
     									font-size: 0;
-    									border-radius: 50%;
+    									
     								width: 20px;
     								height: 20px;
     								background-color: #d0dae3;
@@ -216,10 +215,10 @@ html.aui
 								a span.admin:before
 								{
 									@include ple-grafic;
-									background-position: 3px -419px;
+									background-position: 0px -419px;
 									display:inline-block;
 									
-									border-radius: 50%;
+									
     								width: 22px;
     								height: 22px;
     								background-color: #d0dae3;
@@ -232,21 +231,7 @@ html.aui
 								
 								}
 								
-								a:hover span 
-								{
-								    font-size: 13px;
-    								display: block;
-    								position: absolute;
-    								color: #014260;
-    								top: -20px;
-								    right: 0;
-								    text-align: center;
-								    background-color: #ededed;
-								    padding: 5px;
-								    border-radius: 5px;
-								    width: 200px;
-								    margin: 0 auto;
-								}
+								
 								
 								
 						}
@@ -302,7 +287,12 @@ html.aui
 					{
 						color: $upDarkBlue;
 					}
-			
+					
+					.clicker 
+					{
+						display:none;
+					}
+					
 					#subnav-mobile
 					{
 						display:none;
@@ -543,7 +533,7 @@ html.aui
 								background-image: url('/so-up-theme/css/../images/up_icons.png') !important; 
     							background-repeat:no-repeat;
     							background-position: -3px 5px;
-    							transition: width .3s ease-in-out;
+    							/*transition: width .3s ease-in-out;*/
     							border:none;
     						
     							    
@@ -557,7 +547,7 @@ html.aui
 				 	 		
 				 	 		input:focus 
 				 	 		{
-				 	 			    width: 140px;
+				 	 			    width: 240px;
 				 	 			    background-color: #fff;
     								border: 2px solid #014260;
     								box-sizing: border-box;
@@ -712,7 +702,7 @@ html.aui
 			.title 
 			{
 				background: $upMenuColor;
-				 transition: all .5s cubic-bezier(.09,1,.8,-0.37);
+				/*transition: all .5s cubic-bezier(.09,1,.8,-0.37);*/
 				-moz-transform: rotate(-90deg);
 				-ms-transform: rotate(-90deg);
 				-o-transform: rotate(-90deg);
@@ -737,7 +727,6 @@ html.aui
 					@include up-grafic;
 					background-position: -14px -505px;
 					display: inline-block;
-					
 					-moz-transform: rotate(90deg);
 					-ms-transform: rotate(90deg);
 					-o-transform: rotate(90deg);
@@ -804,12 +793,7 @@ html.aui
 				width: 100%;
 				background: $upMenuColor;
 				height: 100%;
-				
-				h2 
-				{
-				
-					
-				}
+
 				
 				.so-portlet-sites .portlet
 				{
@@ -986,7 +970,7 @@ html.aui
 				
 				.btn-group
 				{
-					 float: right;
+					float: right;
     				background: #d0dae3;
     				margin-left: 1px;
     				font-size: 1em;
@@ -1007,6 +991,37 @@ html.aui
 					
 					}
 					
+					.dropdown-menu 
+					{
+						border: none;
+    					margin-top: 2px;
+						
+						a 
+						{
+							text-transform: none;
+						    color: #014260;
+						    text-align: left;
+						    font-size: 110%; 
+						    margin-left: 0;
+						    padding-left: 5px;
+						    width: auto;
+						    display: block;
+						    margin-left: 8px;
+						    margin-right: 8px;
+						    border-bottom: 1px solid #fff;
+						    
+						    .caret
+						    {
+						    	border-top-color:#014260;
+						    }
+						}	
+						
+						a:last-child
+						{
+							border-bottom:none;
+						}
+					}
+					
 				
 				
 	
@@ -1016,6 +1031,7 @@ html.aui
 						background-position: 0px -354px;
 						display: inline-block;
 						width:auto;
+						color:#014260;
 					}
 				
 					.help
@@ -1024,6 +1040,7 @@ html.aui
 						background-position: 0px -421px;
 						display: inline-block;
 						width:auto;
+						color:#014260;
 					}
 					
 					
@@ -1046,6 +1063,23 @@ html.aui
 					
 					
 				} 
+				
+				.btn-group.open
+				
+				{
+					border-bottom:2px solid #d0dae3;
+					
+					a
+					{
+						.caret 
+						{
+							border-top: none;
+							border-bottom: 4px solid #014260;
+						   
+						    
+						}
+					}
+				}
 				
 				
 			}
@@ -1104,7 +1138,7 @@ html.aui
 						height: 205px;
 						list-style: none;
 						overflow: hidden;
-						padding: 10px 0px;
+						
 						margin: 10px;
 						transition: height .2s ease-in;
 					
@@ -1180,8 +1214,9 @@ html.aui
     					text-transform: uppercase;
     					text-indent: 20px;
     					line-height: 15px;
-    					color: #333;
+    					color: #908f8f;
     					opacity: 1;
+    					text-shadow:none;
 					}
 	
 			} /* ende main menu */
@@ -1224,7 +1259,7 @@ html.aui
 								color: $upWhite;
 								-webkit-transition: background-color 0.2s ease-out;
     							transition: background-color 0.2s ease-out;
-    							padding: 3px 5px;
+    							
 							}
 						}	
 						
@@ -1250,8 +1285,8 @@ background: $upBgColor;
 		
 	.wrapper-portlet-area 
 	{
-		width:99%;
-		margin-top:100px;
+		width: 91%;
+		margin-top:300px !important;
 	}
 		
 	#line
@@ -1281,7 +1316,7 @@ background: $upBgColor;
 			-ms-transform: rotate(0deg);
 			-o-transform: rotate(0deg);
 			-webkit-transform: rotate(0deg);
-			transform:rotate(0deg);			
+			transform:rotate(0deg);
 		}
 	
 		.arrow.down
@@ -1290,7 +1325,7 @@ background: $upBgColor;
 			-ms-transform: rotate(180deg);
 			-o-transform: rotate(180deg);
 			-webkit-transform: rotate(180deg);
-			transform:rotate(180deg);			
+			transform:rotate(180deg);		
 		}
 	
 	}
@@ -1322,6 +1357,8 @@ background: $upBgColor;
     		img {
     			display:none;
     		}
+    		
+    	
 	} /*ende up logo */
 			
 	header#banner
@@ -1553,7 +1590,7 @@ background: $upBgColor;
 		
 			background-color:#d0dae3;
 			margin-top:-46px;
-				transition: background-color .7s ease-in-out;
+			transition: background-color .7s ease-in-out;
 			
 			
 		
@@ -1626,7 +1663,7 @@ background: $upBgColor;
 								color: $upWhite;
 								-webkit-transition: background-color 0.2s ease-out;
     							transition: background-color 0.2s ease-out;
-    							padding: 3px 5px;
+    							
 							}
 						}	
 						
@@ -1703,7 +1740,4 @@ body.lfr-has-add-content  #admin li:first-child, body.lfr-has-edit-layout #admin
 	font-size:15px;
 	color:#014260;
 	font-family:"fontawesome-alloy",fontawesome;
-	
-   
-	
 }
