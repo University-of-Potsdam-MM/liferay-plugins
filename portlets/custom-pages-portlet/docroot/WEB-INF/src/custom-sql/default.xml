@@ -38,13 +38,13 @@
         WHERE
         	(CustomPages_CustomPageFeedback.userId = ?)
     </sql>
-    <sql id="findCustomPagesByCustomPageFeedbackUserId">
+    <sql id="findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId">
         SELECT Layout.*
         FROM Layout
         INNER JOIN
             CustomPages_CustomPageFeedback ON Layout.plid = CustomPages_CustomPageFeedback.plid
         WHERE
-        	(CustomPages_CustomPageFeedback.userId = ?)
+        	(CustomPages_CustomPageFeedback.userId = ? || CustomPages_CustomPageFeedback.userId = 0)
     </sql>
      <sql id="findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser">
         SELECT Layout.*

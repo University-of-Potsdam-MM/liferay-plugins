@@ -39,6 +39,19 @@ public class CustomPageFeedbackFinderUtil {
 				   .findCustomPagesByPageTypeAndLayoutUserId(pageType, userId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+		long userId, int begin, int end) {
+		return getFinder()
+				   .findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(userId,
+			begin, end);
+	}
+
+	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+		long userId) {
+		return getFinder()
+				   .findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(userId);
+	}
+
 	public static java.util.List<com.liferay.portal.model.Layout> findCustomPagesByLayoutUserId(
 		long userId, int begin, int end) {
 		return getFinder().findCustomPagesByLayoutUserId(userId, begin, end);

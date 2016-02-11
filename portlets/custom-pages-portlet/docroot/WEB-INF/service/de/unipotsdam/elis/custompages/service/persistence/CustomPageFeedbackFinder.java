@@ -27,6 +27,12 @@ public interface CustomPageFeedbackFinder {
 	public java.util.List<com.liferay.portal.model.Layout> findCustomPagesByPageTypeAndLayoutUserId(
 		int pageType, long userId);
 
+	public java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+		long userId, int begin, int end);
+
+	public java.util.List<com.liferay.portal.model.Layout> findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+		long userId);
+
 	public java.util.List<com.liferay.portal.model.Layout> findCustomPagesByLayoutUserId(
 		long userId, int begin, int end);
 

@@ -384,10 +384,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				if (customPage.isPrivateLayout()) {
 					customPage.setPrivateLayout(false);
 					LayoutLocalServiceUtil.updateLayout(customPage);
-					for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(customPage.getPlid())){
+					/*for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(customPage.getPlid())){
 						layoutFriendlyURL.setPrivateLayout(false);
 						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
-					}
+					}*/
 				}
 
 				// LayoutLocalServiceUtil.updateParentLayoutId(customPage.getGroupId(),

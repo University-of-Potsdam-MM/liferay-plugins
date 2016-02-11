@@ -106,8 +106,10 @@ public class JspHelper {
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
 
 		}
-		//createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
-		//createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPageURL, portletId);
+		// createCustomPageActivity(customPage, themeDisplay.getUserId(),
+		// receiver.getUserId(), socialActivityType);
+		// createCustomPageNotification(themeDisplay.getUser(), receiver,
+		// notificationMessage, customPageURL, portletId);
 	}
 
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -131,8 +133,8 @@ public class JspHelper {
 		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(receiver.getUserId(), notificationEvent);
 	}
 
-	public static void addToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage, ThemeDisplay themeDisplay)
-			throws PortalException, SystemException {
+	public static void addToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
+			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
 		customPageJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
 		customPageJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
@@ -141,15 +143,17 @@ public class JspHelper {
 				"lastChanges",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPage.getModifiedDate()));
-		customPageJSON.put("customPageType", (Short)customPage.getExpandoBridge().getAttribute("CustomPageType"));
+		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageJSON.put("lastChangesInMilliseconds", customPage.getModifiedDate().getTime());
-		customPageJSON.put("isGlobal", CustomPageUtil.isPublishedGlobal(customPage.getPlid()));
+		boolean isGlobal = CustomPageUtil.isPublishedGlobal(customPage.getPlid());
+		customPageJSON.put("isGlobal", isGlobal);
 		customPageJSON.put("isPrivate", customPage.isPrivateLayout());
+		List<CustomPageFeedback> customPageFeedbacks = CustomPageUtil.getCustomPageFeedbacks(customPage.getPlid());
 		JSONArray customPageFeedbackJSONArray = JSONFactoryUtil.createJSONArray();
 		JSONObject customPageFeedbackJSON = null;
 		boolean inFeedbackProcess = false;
 		boolean feedbackDelivered = false;
-		for (CustomPageFeedback customPageFeedback : CustomPageUtil.getCustomPageFeedbacks(customPage.getPlid())) {
+		for (CustomPageFeedback customPageFeedback : customPageFeedbacks) {
 			customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
 			customPageFeedbackJSON.put("userId", customPageFeedback.getUserId());
 			customPageFeedbackJSON.put("userName", customPageFeedback.getUser().getFullName());
@@ -171,6 +175,7 @@ public class JspHelper {
 		customPageJSON.put("inFeedbackProcess", inFeedbackProcess);
 		customPageJSON.put("feedbackDelivered", feedbackDelivered);
 		customPageJSON.put("customPageFeedbacks", customPageFeedbackJSONArray);
+		customPageJSON.put("isIndividual", customPageFeedbacks.size() != 0 && !isGlobal);
 		customPageJSONArray.put(customPageJSON);
 	}
 
@@ -178,6 +183,9 @@ public class JspHelper {
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
 		customPageJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
+		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
+		customPageJSON.put("isGlobal", CustomPageUtil.isPublishedGlobal(customPage.getPlid()));
+		customPageJSON.put("isPrivate", customPage.isPrivateLayout());
 		customPageJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
 		customPageJSON.put(
 				"lastChanges",
@@ -193,26 +201,41 @@ public class JspHelper {
 	}
 
 	public static void addToCustomPageFeedbackJSONArray(JSONArray customPageFeedbackJSONArray, Layout customPage,
-			ThemeDisplay themeDisplay, PortletConfig portletConfig) throws PortalException, SystemException {
+			ThemeDisplay themeDisplay, PortletConfig portletConfig, List<String> hiddenLayouts,
+			List<String> newHiddenLayouts) throws PortalException, SystemException {
 		JSONObject customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
 		customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
+		boolean isHidden = hiddenLayouts.contains(String.valueOf(customPage.getPlid()));
+		customPageFeedbackJSON.put("hidden", isHidden);
+		if (isHidden)
+			newHiddenLayouts.add(String.valueOf(customPage.getPlid()));
 		customPageFeedbackJSON.put("plid", customPage.getPlid());
 		customPageFeedbackJSON.put("userId", customPage.getUserId());
 		customPageFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(customPage.getUserId()).getFullName());
 		customPageFeedbackJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
+		customPageFeedbackJSON.put("customPageType",
+				(Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageFeedbackJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
+		boolean isGlobal = CustomPageUtil.isPublishedGlobal(customPage.getPlid());
+		customPageFeedbackJSON.put("isGlobal", isGlobal);
+		customPageFeedbackJSON.put("isIndividual", !isGlobal);
 		CustomPageFeedback customPageFeedback = CustomPageUtil.getCustomPageFeedback(customPage.getPlid(),
 				themeDisplay.getUserId());
+		if (customPageFeedback == null)
+			customPageFeedback = CustomPageUtil.getCustomPageFeedback(customPage.getPlid(), 0);
 		customPageFeedbackJSON.put("feedbackStatus", customPageFeedback.getFeedbackStatus());
 		customPageFeedbackJSON
 				.put("feedbackStatusString",
 						getFeedbackStatusString(portletConfig, themeDisplay.getLocale(),
 								customPageFeedback.getFeedbackStatus()));
-		customPageFeedbackJSON.put("hidden", customPageFeedback.isHidden());
 		customPageFeedbackJSON.put(
 				"createDate",
 				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPageFeedback.getCreateDate()));
+		customPageFeedbackJSON.put("inFeedbackProcess",
+				customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
+		customPageFeedbackJSON.put("feedbackDelivered",
+				customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_DELIVERED);
 		customPageFeedbackJSONArray.put(customPageFeedbackJSON);
 	}
 
@@ -263,13 +286,15 @@ public class JspHelper {
 		}
 		return result;
 	}
-	
-	public static Layout getLayoutByNameOrCreate(PortletRequest request, String pageNameLocalizationString) throws SystemException, PortalException, ReadOnlyException, ValidatorException, IOException{
+
+	public static Layout getLayoutByNameOrCreate(PortletRequest request, String pageNameLocalizationString)
+			throws SystemException, PortalException, ReadOnlyException, ValidatorException, IOException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
 		Layout layout = null;
-		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), pageNameLocalizationString);;
+		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), pageNameLocalizationString);
+		;
 		for (Layout l : layouts) {
 			if (l.getName(themeDisplay.getLocale()).equals(parentPageName))
 				layout = l;
@@ -280,20 +305,19 @@ public class JspHelper {
 		// create custom pages parent page if none exists
 		if (layout == null) {
 			Map<Locale, String> localeMap = JspHelper.getLocaleMap(pageNameLocalizationString, portletConfig);
-			layout = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser()
-					.getGroupId(), false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET,
-					null, false, new HashMap<Locale, String>(), serviceContext);
+			layout = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser().getGroupId(),
+					false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null, false,
+					new HashMap<Locale, String>(), serviceContext);
 
 			String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
 			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
 			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
 			Layout parentLayout = LayoutLocalServiceUtil.updateLayout(layout);
-			
+
 			CustomPageUtil.setCustomPagePageType(parentLayout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
 
-			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(
-					layout, portletId);
+			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, portletId);
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
 			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));

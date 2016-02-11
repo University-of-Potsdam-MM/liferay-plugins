@@ -2,12 +2,17 @@ package de.unipotsdam.elis.custompages.othercustompages;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.ReadOnlyException;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.ValidatorException;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -70,12 +75,16 @@ public class OtherCustomPagesPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) resourceRequest.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		List<Layout> customPages = CustomPageFeedbackLocalServiceUtil
-				.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE,
-						themeDisplay.getUserId());
+				.getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(themeDisplay.getUserId());
 		JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
+	    PortletPreferences prefs = resourceRequest.getPreferences();
+	    String[] hiddenLayouts = prefs.getValues("hiddenLayouts", new String[]{});
+	    List<String> newHiddenLayouts = new ArrayList<String>();
 		for (Layout customPage : customPages) {
-			JspHelper.addToCustomPageFeedbackJSONArray(customPageJSONArray, customPage, themeDisplay, portletConfig);
+			JspHelper.addToCustomPageFeedbackJSONArray(customPageJSONArray, customPage, themeDisplay, portletConfig,Arrays.asList(hiddenLayouts),newHiddenLayouts);
 		}
+		prefs.setValues("hiddenLayouts", newHiddenLayouts.toArray(new String[newHiddenLayouts.size()]));
+		prefs.store();
 		PrintWriter out = resourceResponse.getWriter();
 		out.println(customPageJSONArray.toString());
 	}
@@ -123,12 +132,16 @@ public class OtherCustomPagesPortlet extends MVCPortlet {
 	}
 
 	private void changeVisibility(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
-			throws SystemException, PortalException {
-		long plid = Long.parseLong(ParamUtil.getString(resourceRequest, "customPagePlid"));
-		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
-		CustomPageFeedback customPageFeedback = CustomPageFeedbackLocalServiceUtil.getCustomPageFeedback(new CustomPageFeedbackPK(plid, themeDisplay.getUserId()));
-		customPageFeedback.setHidden(!customPageFeedback.getHidden());
-		CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedback(customPageFeedback);
+			throws SystemException, PortalException, ValidatorException, IOException, ReadOnlyException {
+		String plid = ParamUtil.getString(resourceRequest, "customPagePlid");
+	    PortletPreferences prefs = resourceRequest.getPreferences();
+	    List<String> hiddenLayouts = new ArrayList<String>(Arrays.asList(prefs.getValues("hiddenLayouts", new String[]{})));
+	    if (hiddenLayouts.contains(plid))
+	    	hiddenLayouts.remove(plid);
+	    else
+	    	hiddenLayouts.add(plid);
+		prefs.setValues("hiddenLayouts", hiddenLayouts.toArray(new String[hiddenLayouts.size()]));
+		prefs.store();
 	}
 
 }
