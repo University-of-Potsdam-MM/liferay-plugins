@@ -606,6 +606,7 @@ span.email {
     font-weight: normal;
 }
 
-#myPortfolioTable table{
+#myPortfolioTable table,
+#otherPortfoliosTable table{
 	width: 100%;
 }
