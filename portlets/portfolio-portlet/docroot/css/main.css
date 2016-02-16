@@ -605,3 +605,7 @@ span.email {
 .aui  #portlet_myportfolio_WAR_portfolioportlet div#description #descriptionContent{
     font-weight: normal;
 }
+
+#myPortfolioTable table{
+	width: 100%;
+}
