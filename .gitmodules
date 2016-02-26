@@ -4,3 +4,6 @@
 [submodule "hooks/base-hook"]
 	path = hooks/base-hook
 	url = https://gitup.uni-potsdam.de/elis/base-hook.git
+[submodule "themes/so-up-theme"]
+	path = themes/so-up-theme
+	url = https://gitup.uni-potsdam.de/elis/so-up-theme.git
