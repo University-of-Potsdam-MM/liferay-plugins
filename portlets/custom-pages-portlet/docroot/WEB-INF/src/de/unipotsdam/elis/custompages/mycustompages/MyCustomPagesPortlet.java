@@ -391,19 +391,16 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				CustomPageUtil.setCustomPagePageType(customPage, customPageType);
 				if (customPage.isPrivateLayout()) {
 					customPage.setPrivateLayout(false);
-					LayoutLocalServiceUtil.updateLayout(customPage);
-					/*
-					 * for (LayoutFriendlyURL layoutFriendlyURL :
-					 * LayoutFriendlyURLLocalServiceUtil
-					 * .getLayoutFriendlyURLs(customPage.getPlid())){
-					 * layoutFriendlyURL.setPrivateLayout(false);
-					 * LayoutFriendlyURLLocalServiceUtil
-					 * .updateLayoutFriendlyURL(layoutFriendlyURL); }
-					 */
-				}
 
-				// LayoutLocalServiceUtil.updateParentLayoutId(customPage.getGroupId(),
-				// false, customPage.getLayoutId(), parentPage.getLayoutId());
+					for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil
+							.getLayoutFriendlyURLs(customPage.getPlid())) {
+						layoutFriendlyURL.setPrivateLayout(false);
+						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
+					}
+					
+					LayoutLocalServiceUtil.updateLayout(customPage);
+				}
+				
 				LayoutLocalServiceUtil.updateParentLayoutId(customPage.getPlid(), parentPage.getPlid());
 			}
 	}
@@ -725,7 +722,6 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			movePageToPrivateAreaIfNecessary(customPage, themeDisplay.getUserId());
 			if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0
 					&& customPage.isPrivateLayout())
-				System.out.println("jooo");
 			movePageToParentPage(customPage, actionRequest,
 					(Short) customPage.getExpandoBridge().getAttribute(CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME),
 					themeDisplay.getUser());
