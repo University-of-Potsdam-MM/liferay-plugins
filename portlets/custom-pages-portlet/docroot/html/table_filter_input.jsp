@@ -2,6 +2,17 @@
 
 <div class="navbar-search">
    <div class="taglib-search-toggle">
+
+  	<% if (layout.isPublicLayout()) { %>
+      <div class="form-search">
+         <div class="input-append" id="<portlet:namespace />searchsimple">
+            <div class="advanced-search"> 
+	            <input class="search-query span9" id="<portlet:namespace />filterInput" name="_127_keywords" placeholder="<%= LanguageUtil.get(pageContext, "custompages-filter-placeholder") %>" type="text" value=""> 
+            </div>
+         </div>
+      </div>
+  	
+  	<% } else { %>
       <div class="form-search">
          <div class="input-append" id="<portlet:namespace />searchsimple">
             <div class="advanced-search"> 
@@ -28,10 +39,10 @@
 			<span id="<portlet:namespace />inputVisibilitySpan"><%= LanguageUtil.get(pageContext, "custompages-visible") %></span>
 			<aui:input id="inputVisibility" name="custompages-hidden" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputVisibilityCheckbox\", \"false\") %>"></aui:input>
 			<div class="arrow"></div>
-	</div>
+	  </div>
+<% } %>
    </div>
 </div>
-
 
 <script type="text/javascript">
    AUI().use("aui-popover", "event-key", function(a) {
@@ -73,7 +84,8 @@
 	            }
 	            k.preventDefault()
 	        }
-	        b.on("click", c);
+	        if (b)
+	        	b.on("click", c);
 	        f.on("key", c, "down:38,40")
 	    })()
 	});
@@ -118,11 +130,14 @@ function initFilter(customPageTable, myCustomPagesTable){
 	tableData = customPageTable.data;
 	this.isMyCustomPagesTable = myCustomPagesTable;
 	if (!myCustomPagesTable){
-		inputPublishmentNone.ancestor().hide();
+		if (inputPublishmentNone.ancestor())
+			inputPublishmentNone.ancestor().hide();
 	}
 	else{
-		inputVisibilitySpan.hide();
-		inputVisibility.ancestor().hide();
+		if (inputVisibilitySpan){
+			inputVisibilitySpan.hide();
+			inputVisibility.ancestor().hide();
+		}
 	}
 }
 
@@ -139,29 +154,31 @@ function filterTable(element){
         var filteredData = tableData.filter({
             asList: true
         }, function(list) {
-        	var hasCustomPageTypeNone = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>;
-        	var hasCustomPageTypePortfolioPage = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE%>;
-        	var isPublishGlobal = list.get('isGlobal');
-        	var isPublishIndividual = list.get('isIndividual') && !isPublishGlobal;
-        	var isPublishNone = !isPublishGlobal && !isPublishIndividual;
-        	var feedbackRequested = list.get('inFeedbackProcess');
-        	var feedbackDelivered = list.get('feedbackDelivered');
-        	var feedbackUnrequested = !feedbackRequested && !feedbackDelivered;
         	var result = true;
-        	result = result && 
-				((hasCustomPageTypeNone && (inputPageTypeNone.get('value') === 'true')) ||
-				(hasCustomPageTypePortfolioPage && (inputPageTypePortfolioPage.get('value') === 'true')));
-        	result = result && 
-    			((isPublishNone && (inputPublishmentNone.get('value') === 'true')) || 
-        		(isPublishGlobal &&(inputPublishmentGlobal.get('value') === 'true')) || 
-        		(isPublishIndividual && (inputPublishmentIndividuel.get('value') === 'true')));
-        	result = result && 
-				((feedbackUnrequested && (inputFeedbackNone.get('value') === 'true')) || 
-	    		(feedbackRequested &&(inputFeedbackRequested.get('value') === 'true')) || 
-	    		(feedbackDelivered && (inputFeedbackDelivered.get('value') === 'true')));
-        	if (!isMyCustomPagesTable){
-        		result = result && (list.get('hidden') === (inputVisibility.get('value') === 'true'));
-        	}
+        	<% if (!layout.isPublicLayout()) {%>
+	        	var hasCustomPageTypeNone = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>;
+	        	var hasCustomPageTypePortfolioPage = list.get('customPageType') === <%= CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE%>;
+	        	var isPublishGlobal = list.get('isGlobal');
+	        	var isPublishIndividual = list.get('isIndividual') && !isPublishGlobal;
+	        	var isPublishNone = !isPublishGlobal && !isPublishIndividual;
+	        	var feedbackRequested = list.get('inFeedbackProcess');
+	        	var feedbackDelivered = list.get('feedbackDelivered');
+	        	var feedbackUnrequested = !feedbackRequested && !feedbackDelivered;
+	        	result = result && 
+					((hasCustomPageTypeNone && (inputPageTypeNone.get('value') === 'true')) ||
+					(hasCustomPageTypePortfolioPage && (inputPageTypePortfolioPage.get('value') === 'true')));
+	        	result = result && 
+	    			((isPublishNone && (inputPublishmentNone.get('value') === 'true')) || 
+	        		(isPublishGlobal &&(inputPublishmentGlobal.get('value') === 'true')) || 
+	        		(isPublishIndividual && (inputPublishmentIndividuel.get('value') === 'true')));
+	        	result = result && 
+					((feedbackUnrequested && (inputFeedbackNone.get('value') === 'true')) || 
+		    		(feedbackRequested &&(inputFeedbackRequested.get('value') === 'true')) || 
+		    		(feedbackDelivered && (inputFeedbackDelivered.get('value') === 'true')));
+	        	if (!isMyCustomPagesTable){
+	        		result = result && (list.get('hidden') === (inputVisibility.get('value') === 'true'));
+	        	}
+	        <% } %>
         	var filterInputValue = filterInput.get("value").toLowerCase();
         	if (filterInputValue !== ""){
         		result = result && list.get('title').toLowerCase().includes(filterInputValue);

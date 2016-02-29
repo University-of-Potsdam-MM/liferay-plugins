@@ -242,10 +242,20 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 						JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 			} else {
+				String layoutName = themeDisplay.getLayout().getName(themeDisplay.getLocale());
+				PortletConfig portletConfig = (PortletConfig) resourceRequest
+						.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+				int customPageType = -1;
+				if (layoutName.equals(LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
+						"custompages-custom-pages")))
+					customPageType = CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE;
+				else if (layoutName.equals(LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
+						"custompages-portfolio-pages")))
+					customPageType = CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE;
 				for (Layout customPage : customPages) {
 					if (CustomPageUtil.userHasViewPermission(customPage.getPlid(), themeDisplay.getUserId())
-							&& ((Short) customPage.getExpandoBridge().getAttribute(
-									CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE)
+							&& (customPageType == -1 || ((Short) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() == customPageType))
 						JspHelper.publicAddToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 
@@ -384,10 +394,14 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				if (customPage.isPrivateLayout()) {
 					customPage.setPrivateLayout(false);
 					LayoutLocalServiceUtil.updateLayout(customPage);
-					/*for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(customPage.getPlid())){
-						layoutFriendlyURL.setPrivateLayout(false);
-						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
-					}*/
+					/*
+					 * for (LayoutFriendlyURL layoutFriendlyURL :
+					 * LayoutFriendlyURLLocalServiceUtil
+					 * .getLayoutFriendlyURLs(customPage.getPlid())){
+					 * layoutFriendlyURL.setPrivateLayout(false);
+					 * LayoutFriendlyURLLocalServiceUtil
+					 * .updateLayoutFriendlyURL(layoutFriendlyURL); }
+					 */
 				}
 
 				// LayoutLocalServiceUtil.updateParentLayoutId(customPage.getGroupId(),

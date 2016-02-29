@@ -7,40 +7,50 @@
 	
 	boolean personalSite = scopeGroup.isUser();
 	boolean publicPage = layout.isPublicLayout();
-	boolean privatePersonalPage = personalSite &&  !publicPage;
+	boolean privatePersonalPage = personalSite && !publicPage;
+	
 	if (personalSite) {
 		if (!publicPage) {
 %>
 
-<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
+			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
+			
+			<%@ include file="/html/table_filter_input.jsp" %>
+			
+			<aui:script>
+			AUI().use('aui-base',
+				    'liferay-portlet-url',
+				    function(A) {
+				        A.one('#<portlet:namespace />createPageButton').on('click', function(event) {
+				            var renderURL = Liferay.PortletURL.createRenderURL();
+				            renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
+				            renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+				            renderURL.setParameter("mvcPath", "/html/mycustompages/popup/create_custompage.jsp");
+				            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+				            renderURL.setParameter("currentRedirect", "<%=redirect%>");
+				            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "custompages-add-custom-page")%>");
+				        });
+				    });
+			</aui:script>
 
-<%@ include file="/html/table_filter_input.jsp" %>
+<% } else { %>
 
-<aui:script>
-AUI().use('aui-base',
-	    'liferay-portlet-url',
-	    function(A) {
-	        A.one('#<portlet:namespace />createPageButton').on('click', function(event) {
-	            var renderURL = Liferay.PortletURL.createRenderURL();
-	            renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
-	            renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
-	            renderURL.setParameter("mvcPath", "/html/mycustompages/popup/create_custompage.jsp");
-	            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
-	            renderURL.setParameter("currentRedirect", "<%=redirect%>");
-	            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "custompages-add-custom-page")%>");
-	        });
-	    });
-</aui:script>
-
-<% } else if (scopeGroup.getClassPK() == user.getUserId()){%>
+			<%@ include file="/html/table_filter_input.jsp" %>
+			
+<% if (scopeGroup.getClassPK() == user.getUserId()){
+	
+		if (layout.getName(locale).equals(LanguageUtil.get(pageContext, "custompages-my-custom-pages")) ||
+				layout.getName(locale).equals(LanguageUtil.get(pageContext, "custompages-portfolio-pages"))){%>
+			<span id="portletTitle"><%= layout.getName(locale) %></span>
+		<% } else { %>
 
 	<span id="portletTitle"><%= LanguageUtil.get(pageContext, "custompages-my-custom-pages") %></span>
 	
-<% } else {%>
+<% }} else {%>
 
 	<span id="portletTitle"><%= LanguageUtil.format(pageContext, "custompages-from-user-for-me-published-pages", new Object[] {UserLocalServiceUtil.getUser(scopeGroup.getClassPK()).getFullName()}) %></span>
 	
-<% } %>
+<% }} %>
 
 <portlet:resourceURL var="getUserCustomPagesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserCustomPages" />

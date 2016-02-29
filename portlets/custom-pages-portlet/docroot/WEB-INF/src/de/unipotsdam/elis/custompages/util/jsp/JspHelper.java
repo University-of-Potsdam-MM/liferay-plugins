@@ -181,6 +181,7 @@ public class JspHelper {
 
 	public static void publicAddToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
+		PortletConfig portletConfig = (PortletConfig) themeDisplay.getRequest().getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
 		customPageJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
 		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
@@ -192,11 +193,12 @@ public class JspHelper {
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPage.getModifiedDate()));
 		customPageJSON.put("lastChangesInMilliseconds", customPage.getModifiedDate().getTime());
-		customPageJSON.put(
-				"templateName",
-				LayoutPrototypeLocalServiceUtil.getLayoutPrototypeByUuidAndCompanyId(
-						customPage.getLayoutPrototypeUuid(), themeDisplay.getCompanyId()).getName(
-						themeDisplay.getLocale()));
+		LayoutPrototype layoutPrototype = LayoutPrototypeLocalServiceUtil.fetchLayoutPrototypeByUuidAndCompanyId(
+				customPage.getLayoutPrototypeUuid(), themeDisplay.getCompanyId());
+		String templateName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), "custompages-no-template");
+		if (layoutPrototype != null)
+			templateName = layoutPrototype.getName(themeDisplay.getLocale());
+		customPageJSON.put("templateName", templateName);
 		customPageJSONArray.put(customPageJSON);
 	}
 
