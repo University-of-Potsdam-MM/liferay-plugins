@@ -106,10 +106,8 @@ public class JspHelper {
 			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
 
 		}
-		// createCustomPageActivity(customPage, themeDisplay.getUserId(),
-		// receiver.getUserId(), socialActivityType);
-		// createCustomPageNotification(themeDisplay.getUser(), receiver,
-		// notificationMessage, customPageURL, portletId);
+		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPageURL, portletId);
 	}
 
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -181,7 +179,8 @@ public class JspHelper {
 
 	public static void publicAddToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
-		PortletConfig portletConfig = (PortletConfig) themeDisplay.getRequest().getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
+		PortletConfig portletConfig = (PortletConfig) themeDisplay.getRequest().getAttribute(
+				JavaConstants.JAVAX_PORTLET_CONFIG);
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
 		customPageJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
 		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));

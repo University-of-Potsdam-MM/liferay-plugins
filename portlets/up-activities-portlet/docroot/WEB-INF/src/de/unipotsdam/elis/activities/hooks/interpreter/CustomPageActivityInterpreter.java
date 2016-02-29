@@ -36,7 +36,7 @@ import com.liferay.util.portlet.PortletProps;
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 
-public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter {
+public class CustomPageActivityInterpreter extends BaseSocialActivityInterpreter {
 
 	@Override
 	public String getSelector() {
@@ -76,12 +76,12 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 			ServiceContext serviceContext, PortletConfig portletConfig) throws PortalException, SystemException,
 			PortletException {
 		User sender = UserLocalServiceUtil.getUser(userId);
-		String portfolioTitle = LocalizationUtil.getLocalization(extraData.getString("title"),
+		String pageTitle = LocalizationUtil.getLocalization(extraData.getString("title"),
 				LocaleUtil.toLanguageId(serviceContext.getLocale()));
 		Layout layout = LayoutLocalServiceUtil.fetchLayout(plid);
 		if (layout != null) {
 			String url = PortalUtil.getLayoutFullURL(layout, serviceContext.getThemeDisplay());
-			portfolioTitle = "<a href=\"" + url + "\">" + portfolioTitle + "</a>";
+			pageTitle = "<a href=\"" + url + "\">" + pageTitle + "</a>";
 		}
 
 		StringBundler sb = new StringBundler(8);
@@ -89,7 +89,7 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 		sb.append("<div class=\"activity-header\">");
 		sb.append("<div class=\"activity-user-name\">");
 
-		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "portfolio-in-portfolio-area",
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "custom-pages-in-custom-page-area",
 				new String[] { getUserName(sender.getUserId(), serviceContext) }));
 
 		sb.append("</div><div class=\"activity-time\" title=\"");
@@ -113,8 +113,8 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 
 		sb.append("</div></div><div class=\"activity-action\">");
 
-		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "portfolio-changes-to-portfolio-page",
-				new String[] { portfolioTitle }));
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "custom-pages-changes-to-custom-page-page",
+				new String[] { pageTitle }));
 
 		sb.append("</div>");
 
@@ -125,26 +125,26 @@ public class PortfolioActivityInterpreter extends BaseSocialActivityInterpreter 
 			throws PortalException, SystemException {
 		StringBundler sb = new StringBundler("<div class=\"activity-body\">");
 		for (SocialActivity activity : activities) {
-			if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED
+			if (activity.getType() == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_DELETED
 					|| activity.getUserId() == serviceContext.getUserId()
 					|| activity.getReceiverUserId() == serviceContext.getUserId()) {
-				if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED) {
+				if (activity.getType() == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_PUBLISHED) {
 					sb.append("<div class=\"title portfolioPublished\">");
 					sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-							"portfolio-portfolio-page-published-activity",
+							"custom-pages-custom-page-page-published-activity",
 							new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
-				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED) {
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED) {
 					sb.append("<div class=\"title feedbackRequested\">");
 					sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-							"portfolio-feedback-requested-activity",
+							"custom-pages-feedback-requested-activity",
 							new String[] { getUserName(activity.getReceiverUserId(), serviceContext) }));
-				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED) {
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_DELIVERED) {
 					sb.append("<div class=\"title feedbackDelivered\">");
 					sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(),
-							"portfolio-feedback-delivered-activity"));
-				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED) {
+							"custom-pages-feedback-delivered-activity"));
+				} else if (activity.getType() == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_DELETED) {
 					sb.append("<div class=\"title portfolioDeleted\">");
-					sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(), "portfolio-deleted"));
+					sb.append(LanguageUtil.get(portletConfig, serviceContext.getLocale(), "custom-pages-deleted"));
 				}
 				sb.append("</div>");
 			}

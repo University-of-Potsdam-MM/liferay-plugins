@@ -382,9 +382,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(user), customPage, ActionKeys.CUSTOMIZE))
 			if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE
 					|| customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
-				System.out.println("movePageToParentPage");
 				Layout parentPage = null;
-				System.out.println(customPageType);
 				if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE)
 					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-custom-pages");
 				else if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
