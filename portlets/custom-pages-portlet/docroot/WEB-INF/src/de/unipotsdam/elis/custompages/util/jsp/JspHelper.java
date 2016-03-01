@@ -309,6 +309,9 @@ public class JspHelper {
 			layout = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser().getGroupId(),
 					false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null, false,
 					new HashMap<Locale, String>(), serviceContext);
+			
+			if (layout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+				layout.getExpandoBridge().setAttribute("PersonalAreaSection", "0");
 
 			String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();

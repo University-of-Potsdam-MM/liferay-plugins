@@ -507,6 +507,12 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			newCustomPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
 					customPagesParentPage.getGroupId(), false, customPagesParentPage.getLayoutId(), customPageName,
 					customPageName, "", LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
+			
+
+			if (newCustomPage.getExpandoBridge().hasAttribute("PersonalAreaSection")){
+				newCustomPage.getExpandoBridge().setAttribute("PersonalAreaSection", "0");
+				LayoutLocalServiceUtil.updateLayout(newCustomPage);
+			}
 
 			SitesUtil.mergeLayoutPrototypeLayout(newCustomPage.getGroup(), newCustomPage);
 		} else {
