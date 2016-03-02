@@ -4,19 +4,15 @@ import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.PropsKeys;
-import com.liferay.portal.kernel.util.PropsUtil;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.ResourcePermission;
-import com.liferay.portal.model.ResourcePermissionConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.expando.DuplicateColumnNameException;
 import com.liferay.portlet.expando.DuplicateTableNameException;
 import com.liferay.portlet.expando.model.ExpandoColumn;
@@ -34,14 +30,13 @@ public class CustomPageStartupAction extends SimpleAction {
 	public void run(String[] ids) throws ActionException {
 		try {
 
-			Company company = CompanyLocalServiceUtil.getCompanyByMx(PropsUtil.get(PropsKeys.COMPANY_DEFAULT_WEB_ID));
-			Role userRole = RoleLocalServiceUtil.getRole(company.getCompanyId(), RoleConstants.USER);
+			Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.USER);
 
-			ExpandoColumn expandoColumn = addExpandoAttribute(company.getCompanyId(),
+			ExpandoColumn expandoColumn = addExpandoAttribute(PortalUtil.getDefaultCompanyId(),
 					CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, ExpandoColumnConstants.INTEGER, Layout.class.getName());
 
 			ResourcePermission resourcePermission = ResourcePermissionLocalServiceUtil.fetchResourcePermission(
-					company.getCompanyId(), ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
+					PortalUtil.getDefaultCompanyId(), ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
 					String.valueOf(expandoColumn.getPrimaryKey()), userRole.getRoleId());
 
 			if (resourcePermission != null) {
@@ -52,7 +47,7 @@ public class CustomPageStartupAction extends SimpleAction {
 				}
 			} else {
 				// Add resourcePermission if not existent
-				ResourcePermissionLocalServiceUtil.setResourcePermissions(company.getCompanyId(),
+				ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
 						ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
 						String.valueOf(expandoColumn.getPrimaryKey()), userRole.getRoleId(),
 						new String[] { ActionKeys.VIEW });
