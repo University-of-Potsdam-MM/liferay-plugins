@@ -5,7 +5,7 @@
 	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<bean id="com.liferay.portal.service.permission.LayoutPermissionImpl" class="de.unipotsdam.elis.portfolio.permission.CustomLayoutPermissionImpl" />
+	<bean id="com.liferay.portal.service.permission.LayoutPermissionImpl" class="de.unipotsdam.elis.custompages.permission.CustomLayoutPermissionImpl" />
 	<bean id="com.liferay.portal.service.permission.LayoutPermissionUtil" class="com.liferay.portal.service.permission.LayoutPermissionUtil">
 		<property name="layoutPermission" ref="com.liferay.portal.service.permission.LayoutPermissionImpl">
 
@@ -14,7 +14,7 @@
 	
 	<bean id="com.liferay.portal.service.permission.PortletPermissionUtil" class="com.liferay.portal.service.permission.PortletPermissionUtil">
 		<property name="portletPermission">
-			<bean class="de.unipotsdam.elis.portfolio.permission.CustomPortletPermissionImpl" />
+			<bean class="de.unipotsdam.elis.custompages.permission.CustomPortletPermissionImpl" />
 		</property>
 	</bean>
 

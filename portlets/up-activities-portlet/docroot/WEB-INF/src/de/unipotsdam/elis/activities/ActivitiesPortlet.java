@@ -73,7 +73,7 @@ import javax.portlet.ResourceResponse;
  */
 public class ActivitiesPortlet extends MVCPortlet {
 
-	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "portfolio" };
+	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "custom-pages" };
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
