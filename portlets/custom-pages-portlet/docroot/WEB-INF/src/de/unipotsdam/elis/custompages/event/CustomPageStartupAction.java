@@ -38,7 +38,7 @@ public class CustomPageStartupAction extends SimpleAction {
 			Role userRole = RoleLocalServiceUtil.getRole(company.getCompanyId(), RoleConstants.USER);
 
 			ExpandoColumn expandoColumn = addExpandoAttribute(company.getCompanyId(),
-					CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, ExpandoColumnConstants.SHORT, Layout.class.getName());
+					CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, ExpandoColumnConstants.INTEGER, Layout.class.getName());
 
 			ResourcePermission resourcePermission = ResourcePermissionLocalServiceUtil.fetchResourcePermission(
 					company.getCompanyId(), ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,

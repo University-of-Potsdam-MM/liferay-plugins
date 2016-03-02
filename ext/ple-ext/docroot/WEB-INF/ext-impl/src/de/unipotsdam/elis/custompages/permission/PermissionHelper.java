@@ -1,6 +1,7 @@
 package de.unipotsdam.elis.custompages.permission;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -22,7 +23,8 @@ public class PermissionHelper {
 			group = GroupLocalServiceUtil.getGroup(groupId);
 			if (group.isLayout()) {
 				Layout layout = LayoutLocalServiceUtil.getLayout(group.getClassPK());
-				if (isCustomPage(layout) && PermissionHelper.feedbackRequested(layout.getPlid()) && actionId != ActionKeys.VIEW) {
+				if (isCustomPage(layout) && PermissionHelper.feedbackRequested(layout.getPlid())
+						&& actionId != ActionKeys.VIEW) {
 					return false;
 				}
 			}
@@ -60,10 +62,14 @@ public class PermissionHelper {
 		return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlidAndFeedbackStatus(plid,
 				CustomPageStatics.FEEDBACK_REQUESTED).size() != 0;
 	}
-	
-	public static boolean isCustomPage(Layout layout){
-		Serializable pageType = layout.getExpandoBridge().getAttribute("CustomPageType");
-		if (pageType != null && ((Short)pageType) != 0)
+
+	public static boolean isCustomPage(Layout layout) {
+		Serializable pageType = layout.getExpandoBridge().getAttribute(CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME);
+		Serializable personalAreaSection = layout.getExpandoBridge().getAttribute(
+				CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME);
+		if (pageType != null && personalAreaSection != null
+				&& ((Integer) pageType).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE
+				&& ((Integer) personalAreaSection).intValue() != 0 && layout.getSourcePrototypeLayoutUuid().isEmpty())
 			return true;
 		return false;
 	}

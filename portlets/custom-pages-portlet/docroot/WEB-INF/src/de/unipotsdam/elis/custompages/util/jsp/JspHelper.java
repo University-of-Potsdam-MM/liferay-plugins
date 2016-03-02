@@ -141,7 +141,7 @@ public class JspHelper {
 				"lastChanges",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPage.getModifiedDate()));
-		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
+		customPageJSON.put("customPageType", (Integer) customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageJSON.put("lastChangesInMilliseconds", customPage.getModifiedDate().getTime());
 		boolean isGlobal = CustomPageUtil.isPublishedGlobal(customPage.getPlid());
 		customPageJSON.put("isGlobal", isGlobal);
@@ -183,7 +183,7 @@ public class JspHelper {
 				JavaConstants.JAVAX_PORTLET_CONFIG);
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
 		customPageJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
-		customPageJSON.put("customPageType", (Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
+		customPageJSON.put("customPageType", (Integer) customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageJSON.put("isGlobal", CustomPageUtil.isPublishedGlobal(customPage.getPlid()));
 		customPageJSON.put("isPrivate", customPage.isPrivateLayout());
 		customPageJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
@@ -215,7 +215,7 @@ public class JspHelper {
 		customPageFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(customPage.getUserId()).getFullName());
 		customPageFeedbackJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
 		customPageFeedbackJSON.put("customPageType",
-				(Short) customPage.getExpandoBridge().getAttribute("CustomPageType"));
+				(Integer) customPage.getExpandoBridge().getAttribute("CustomPageType"));
 		customPageFeedbackJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
 		boolean isGlobal = CustomPageUtil.isPublishedGlobal(customPage.getPlid());
 		customPageFeedbackJSON.put("isGlobal", isGlobal);
@@ -288,14 +288,15 @@ public class JspHelper {
 		return result;
 	}
 
-	public static Layout getLayoutByNameOrCreate(PortletRequest request, String pageNameLocalizationString)
-			throws SystemException, PortalException, ReadOnlyException, ValidatorException, IOException {
+	public static Layout getLayoutByNameOrCreate(PortletRequest request, String pageNameLocalizationString,
+			boolean isHidden, boolean isPrivate, boolean addPortlet) throws SystemException, PortalException,
+			ReadOnlyException, ValidatorException, IOException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), false);
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(themeDisplay.getUser().getGroupId(), isPrivate);
 		Layout layout = null;
 		String parentPageName = LanguageUtil.get(portletConfig, themeDisplay.getLocale(), pageNameLocalizationString);
-		;
+
 		for (Layout l : layouts) {
 			if (l.getName(themeDisplay.getLocale()).equals(parentPageName))
 				layout = l;
@@ -307,25 +308,29 @@ public class JspHelper {
 		if (layout == null) {
 			Map<Locale, String> localeMap = JspHelper.getLocaleMap(pageNameLocalizationString, portletConfig);
 			layout = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(), themeDisplay.getUser().getGroupId(),
-					false, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null, false,
-					new HashMap<Locale, String>(), serviceContext);
-			
-			if (layout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
-				layout.getExpandoBridge().setAttribute("PersonalAreaSection", "0");
+					isPrivate, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null,
+					isHidden, new HashMap<Locale, String>(), serviceContext);
 
-			String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
-			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
-			layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
-			layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
-			Layout parentLayout = LayoutLocalServiceUtil.updateLayout(layout);
+			if (layout.getExpandoBridge().hasAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME))
+				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "0");
 
-			CustomPageUtil.setCustomPagePageType(parentLayout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
+			CustomPageUtil.setCustomPagePageType(layout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
 
-			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, portletId);
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
-			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
-			portletSetup.store();
+			if (addPortlet) {
+				String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
+				LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
+				layoutTypePortlet.setLayoutTemplateId(themeDisplay.getUserId(), "1_column");
+				layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
+
+				LayoutLocalServiceUtil.updateLayout(layout);
+
+				PortletPreferences portletSetup = PortletPreferencesFactoryUtil
+						.getLayoutPortletSetup(layout, portletId);
+				portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
+				portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
+				portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
+				portletSetup.store();
+			}
 		}
 		return layout;
 	}

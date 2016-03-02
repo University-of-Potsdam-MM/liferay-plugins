@@ -3,4 +3,8 @@
 
 <hook>
 	<portal-properties>portal.properties</portal-properties>
+    <service>
+        <service-type>com.liferay.portal.service.UserLocalService</service-type>
+        <service-impl>de.unipotsdam.elis.custompages.CustomUserLocalServiceWrapper</service-impl>
+    </service>
 </hook>

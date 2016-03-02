@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.LiferayRenderResponse;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -237,8 +238,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
 			if (privatePersonalPage) {
 				for (Layout customPage : customPages) {
-					if (((Short) customPage.getExpandoBridge().getAttribute(
-							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE)
+					if (((Integer) customPage.getExpandoBridge().getAttribute(
+							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE
+							&& ((Integer) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0)
 						JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 			} else {
@@ -254,8 +257,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					customPageType = CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE;
 				for (Layout customPage : customPages) {
 					if (CustomPageUtil.userHasViewPermission(customPage.getPlid(), themeDisplay.getUserId())
-							&& (customPageType == -1 || ((Short) customPage.getExpandoBridge().getAttribute(
-									CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() == customPageType))
+							&& (customPageType == -1 || ((Integer) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() == customPageType)
+							&& ((Integer) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0)
 						JspHelper.publicAddToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 
@@ -293,16 +298,16 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = Long.valueOf(ParamUtil.getString(resourceRequest, "customPagePlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
-		deleteCustomPageFeedback(customPage, themeDisplay, userId);
+		deleteCustomPageFeedback(resourceRequest, customPage, themeDisplay, userId);
 	}
 
-	private void deleteCustomPageFeedback(Layout customPage, ThemeDisplay themeDisplay, long userId)
-			throws NoSuchCustomPageFeedbackException, PortalException, SystemException, Exception {
+	private void deleteCustomPageFeedback(PortletRequest request, Layout customPage, ThemeDisplay themeDisplay,
+			long userId) throws NoSuchCustomPageFeedbackException, PortalException, SystemException, Exception {
 
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE) && !CustomPageUtil.feedbackRequested(customPage.getPlid(), userId)) {
 			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPage.getPlid(), userId);
-			movePageToPrivateAreaIfNecessary(customPage, themeDisplay.getUserId());
+			movePageToPrivateAreaIfNecessary(request, customPage, themeDisplay.getUserId());
 		}
 	}
 
@@ -374,7 +379,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = ParamUtil.getLong(resourceRequest, "customPagePlid");
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
 		int customPageType = ParamUtil.getInteger(resourceRequest, "customPageType");
-		movePageToParentPage(customPage, resourceRequest, customPageType, themeDisplay.getUser());
+		if (customPage.isPublicLayout())
+			movePageToParentPage(customPage, resourceRequest, customPageType, themeDisplay.getUser());
 	}
 
 	private void movePageToParentPage(Layout customPage, PortletRequest request, int customPageType, User user)
@@ -384,9 +390,11 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					|| customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
 				Layout parentPage = null;
 				if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE)
-					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-custom-pages");
+					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-custom-pages", false, false,
+							true);
 				else if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE) {
-					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-portfolio-pages");
+					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-portfolio-pages", false,
+							false, true);
 				}
 				CustomPageUtil.setCustomPagePageType(customPage, customPageType);
 				if (customPage.isPrivateLayout()) {
@@ -397,10 +405,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 						layoutFriendlyURL.setPrivateLayout(false);
 						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
 					}
-					
+
 					LayoutLocalServiceUtil.updateLayout(customPage);
 				}
-				
+
 				LayoutLocalServiceUtil.updateParentLayoutId(customPage.getPlid(), parentPage.getPlid());
 			}
 	}
@@ -489,10 +497,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 
 		// Get custom page parent page
 		Layout customPagesParentPage = null;
-		if (customPageType == CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE)
-			customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-custom-pages");
-		else
-			customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-portfolio-pages");
+		customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-page-storage", true,
+				true, false);
 
 		Layout newCustomPage = null;
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
@@ -505,14 +511,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			serviceContext.setAttribute("layoutPrototypeUuid", lp.getUuid());
 
 			newCustomPage = LayoutLocalServiceUtil.addLayout(themeDisplay.getUserId(),
-					customPagesParentPage.getGroupId(), false, customPagesParentPage.getLayoutId(), customPageName,
-					customPageName, "", LayoutConstants.TYPE_PORTLET, false, null, serviceContext);
-			
-
-			if (newCustomPage.getExpandoBridge().hasAttribute("PersonalAreaSection")){
-				newCustomPage.getExpandoBridge().setAttribute("PersonalAreaSection", "0");
-				LayoutLocalServiceUtil.updateLayout(newCustomPage);
-			}
+					customPagesParentPage.getGroupId(), true, customPagesParentPage.getLayoutId(), customPageName,
+					customPageName, "", LayoutConstants.TYPE_PORTLET, true, null, serviceContext);
 
 			SitesUtil.mergeLayoutPrototypeLayout(newCustomPage.getGroup(), newCustomPage);
 		} else {
@@ -522,7 +522,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			writeJSON(actionRequest, actionResponse, jsonObject);
 			throw new SystemException("Could not find layout prototype with the name " + template);
 		}
-		CustomPageUtil.setCustomPagePageType(newCustomPage, CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE);
+		CustomPageUtil.setCustomPagePageType(newCustomPage, customPageType);
 
 		jsonObject.put("success", Boolean.TRUE);
 		writeJSON(actionRequest, actionResponse, jsonObject);
@@ -718,6 +718,9 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 						User user = UserLocalServiceUtil.fetchUser(userId);
 						if (user != null) {
 							CustomPageUtil.publishCustomPageToUser(customPagePlid, user.getUserId());
+							if (customPage.isHidden())
+								customPage.getExpandoBridge().setAttribute(
+										CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "20");
 							JspHelper.handleSocialActivities(customPage, actionRequest, user,
 									CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED);
 						}
@@ -725,21 +728,45 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				}
 			}
 
-			movePageToPrivateAreaIfNecessary(customPage, themeDisplay.getUserId());
+			movePageToPrivateAreaIfNecessary(actionRequest, customPage, themeDisplay.getUserId());
 			if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0
 					&& customPage.isPrivateLayout())
-			movePageToParentPage(customPage, actionRequest,
-					(Short) customPage.getExpandoBridge().getAttribute(CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME),
-					themeDisplay.getUser());
+				movePageToParentPage(
+						customPage,
+						actionRequest,
+						(Integer) customPage.getExpandoBridge().getAttribute(
+								CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME), themeDisplay.getUser());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	private void movePageToPrivateAreaIfNecessary(Layout layout, long userId) throws PortalException, SystemException {
-		if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(layout.getPlid()).size() == 0)
-			LayoutLocalServiceUtil.updateParentLayoutId(layout.getGroupId(), true, layout.getLayoutId(), 0);
+	private void movePageToPrivateAreaIfNecessary(PortletRequest request, Layout layout, long userId)
+			throws PortalException, SystemException, ReadOnlyException, ValidatorException, IOException {
+		boolean createdInPrivateArea = false;
+		if (layout.getExpandoBridge().hasAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME))
+			createdInPrivateArea = ((Integer) layout.getExpandoBridge().getAttribute(
+					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0;
+		if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(layout.getPlid()).size() == 0
+				&& createdInPrivateArea) {
+
+			layout.setPrivateLayout(true);
+			for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(layout
+					.getPlid())) {
+				layoutFriendlyURL.setPrivateLayout(true);
+				LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
+			}
+			LayoutLocalServiceUtil.updateLayout(layout);
+			if (((Integer) layout.getExpandoBridge().getAttribute(
+					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() == 20) {
+				Layout parentLayout = JspHelper.getLayoutByNameOrCreate(request, "custompages-page-storage", true,
+						true, false);
+				LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), parentLayout.getPlid());
+				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "2");
+			} else
+				LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), 0);
+		}
 	}
 
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {
