@@ -6,7 +6,7 @@ import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.util.PortletKeys;
 
-import de.unipotsdam.elis.portfolio.permission.PermissionHelper;
+import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
 public class BlogsPermission {
 

@@ -18,7 +18,6 @@
 --%>
 
 <%@page import="de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil"%>
-<%@page import="de.unipotsdam.elis.portfolio.model.Portfolio"%>
 <%@page
 	import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"
 %>
@@ -36,12 +35,12 @@ int end = start + _DELTA;
 while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 	if (group.isUser()) {
 		if (layout.isPrivateLayout()) {
-			String[] classNames = new String[]{Portfolio.class.getName()};
+			String[] classNames = new String[]{Layout.class.getName()};
 			if (tabs1.equals("my-sites")) {
 				results = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySets(group.getClassPK(), start, end);
 				total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(group.getClassPK());
 			}
-			else if (tabs1.equals("portfolio")) {
+			else if (tabs1.equals("custom-pages")) {
 				 results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
 				 total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
 				}

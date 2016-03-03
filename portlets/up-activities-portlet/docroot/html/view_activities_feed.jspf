@@ -68,9 +68,9 @@ for (SocialActivity activity : results) {
 		User curUser = null;
 
 		try {
-			if (activity.getType() == ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO)
-				curUser = UserLocalServiceUtil.getUserById(Long.parseLong(activity.getExtraDataValue("userId")));
-			else
+			//if (activity.getType() == ExtendedSocialActivityKeyConstants.TYPE_PORTFOLIO)
+			//	curUser = UserLocalServiceUtil.getUserById(Long.parseLong(activity.getExtraDataValue("userId")));
+			//else
 				curUser = UserLocalServiceUtil.getUserById(activity.getUserId());
 		}
 		catch (Exception e) {
