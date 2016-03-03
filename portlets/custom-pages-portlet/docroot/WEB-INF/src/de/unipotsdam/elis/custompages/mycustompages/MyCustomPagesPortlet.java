@@ -379,6 +379,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = ParamUtil.getLong(resourceRequest, "customPagePlid");
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
 		int customPageType = ParamUtil.getInteger(resourceRequest, "customPageType");
+		CustomPageUtil.setCustomPagePageType(customPage, customPageType);
 		if (customPage.isPublicLayout())
 			movePageToParentPage(customPage, resourceRequest, customPageType, themeDisplay.getUser());
 	}
@@ -396,7 +397,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-portfolio-pages", false,
 							false, true);
 				}
-				CustomPageUtil.setCustomPagePageType(customPage, customPageType);
+				
 				if (customPage.isPrivateLayout()) {
 					customPage.setPrivateLayout(false);
 
