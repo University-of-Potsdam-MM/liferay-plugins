@@ -33,29 +33,31 @@ public class CustomPageStartupAction extends SimpleAction {
 			Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.USER);
 
 			ExpandoColumn expandoColumn = addExpandoAttribute(PortalUtil.getDefaultCompanyId(),
-					CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, ExpandoColumnConstants.INTEGER, Layout.class.getName());
-			
-			if (!expandoColumn.getDefaultData().equals("1")){
+					CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME, ExpandoColumnConstants.INTEGER,
+					Layout.class.getName());
+
+			if (!expandoColumn.getDefaultData().equals("1")) {
 				expandoColumn.setDefaultData("1");
 				ExpandoColumnLocalServiceUtil.updateExpandoColumn(expandoColumn);
 			}
 
 			ResourcePermission resourcePermission = ResourcePermissionLocalServiceUtil.fetchResourcePermission(
-					PortalUtil.getDefaultCompanyId(), ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
-					String.valueOf(expandoColumn.getPrimaryKey()), userRole.getRoleId());
+					PortalUtil.getDefaultCompanyId(), ExpandoColumn.class.getName(),
+					ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(expandoColumn.getPrimaryKey()),
+					userRole.getRoleId());
 
 			if (resourcePermission != null) {
 				// Set (only) view permission if not yet set
-				if (resourcePermission.getActionIds() != 1) {
-					resourcePermission.setActionIds(1);
+				if (resourcePermission.getActionIds() != 9) {
+					resourcePermission.setActionIds(9);
 					ResourcePermissionLocalServiceUtil.updateResourcePermission(resourcePermission);
 				}
 			} else {
 				// Add resourcePermission if not existent
 				ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
 						ExpandoColumn.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
-						String.valueOf(expandoColumn.getPrimaryKey()), userRole.getRoleId(),
-						new String[] { ActionKeys.VIEW });
+						String.valueOf(expandoColumn.getPrimaryKey()), userRole.getRoleId(), new String[] {
+								ActionKeys.VIEW, ActionKeys.UPDATE });
 			}
 		} catch (PortalException e) {
 			e.printStackTrace();
