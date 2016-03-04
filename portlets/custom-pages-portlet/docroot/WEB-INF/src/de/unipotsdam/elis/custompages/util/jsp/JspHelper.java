@@ -93,17 +93,17 @@ public class JspHelper {
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"custompages-custom-page-published-message", new Object[] { themeDisplay.getUser().getFullName(),
 							customPage.getName(themeDisplay.getLocale()) });
-			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_PUBLISHED;
+			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_PUBLISHED;
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"custompages-custom-page-feedback-requested-message", new Object[] {
 							themeDisplay.getUser().getFullName(), customPage.getName(themeDisplay.getLocale()) });
-			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_REQUESTED;
+			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED;
 		} else {
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"custompages-custom-page-feedback-delivered", new Object[] { themeDisplay.getUser().getFullName(),
 							customPage.getName(themeDisplay.getLocale()) });
-			socialActivityType = ExtendedSocialActivityKeyConstants.PORTFOLIO_FEEDBACK_DELIVERED;
+			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_DELIVERED;
 
 		}
 		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
