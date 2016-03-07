@@ -160,7 +160,9 @@ AUI().use(
     	    label: '<%= LanguageUtil.get(pageContext, "custompages-title-column")%>',
     	    key: 'title',
     	    nodeFormatter: function(o) {
-    	        var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + '">'
+    	    	var customPageType = ((o.data.customPageType === parseInt("<%=CustomPageStatics.CUSTOM_PAGE_TYPE_PORTFOLIO_PAGE%>")) ? 'portfolio-page' : 'custom-page');
+    	        var trStartTag = '<tr class="' + (((o.rowIndex % 2) == 0) ? 'table-even' : 'table-odd') + ' ' + customPageType + '">';
+    	       	o.cell.ancestor().addClass(customPageType);
     	        o.td.setAttribute('rowspan', (o.data.customPageFeedbacks.length + 1));
     	        o.td.setAttribute('onclick', 'currentPlid=' + o.data.plid + ';');
     	        o.cell.setHTML('<a id="nameTag_' + o.data.plid + '" target="_blank" href="' + o.data.url + '">' + o.data.title + '</a>');
