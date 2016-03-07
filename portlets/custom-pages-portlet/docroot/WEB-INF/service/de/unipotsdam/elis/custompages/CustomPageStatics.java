@@ -5,6 +5,7 @@ public class CustomPageStatics {
 	//public final static List<String> CUSTOM_PAGE_TEMPLATE_NAMES = Arrays.asList(new String[] { "CustomPage" });
 	
 	public final static String PAGE_TYPE_CUSTOM_FIELD_NAME = "CustomPageType";
+	public final static String CREATED_DYNAMICAL_CUSTOM_FIELD_NAME = "CreatedDynamical";
 	public final static String PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME = "PersonalAreaSection";
 	
 	public final static int FEEDBACK_UNREQUESTED = 0;
