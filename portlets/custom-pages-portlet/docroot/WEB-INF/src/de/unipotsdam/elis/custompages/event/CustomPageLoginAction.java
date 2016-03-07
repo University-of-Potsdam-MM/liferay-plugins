@@ -59,15 +59,7 @@ public class CustomPageLoginAction extends Action {
 	@Override
 	public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
 		try {
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
-					"mycustompages_WAR_custompagesportlet");
-
-			PortletConfig portletConfig = PortletConfigFactoryUtil.create(portlet, request.getSession()
-					.getServletContext());
-			System.out.println(LanguageUtil.get(portletConfig, Locale.GERMAN, "custompages-page-management"));
 			creatLayoutIfNecessary(request, "custompages-page-management");
-			// Layout layout = JspHelper.getLayoutByNameOrCreate(request,
-			// "custompages-page-management", false, true, true);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,6 +110,11 @@ public class CustomPageLoginAction extends Action {
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
 			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
 			portletSetup.store();	
+		}
+		
+		if (layout.getPriority() != -1){
+			layout.setPriority(-1);
+			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 
 		Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.OWNER);
