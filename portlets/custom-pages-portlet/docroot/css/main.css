@@ -4,6 +4,29 @@
 	  font-weight: bold;
 }
 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search {
+ 	float:none;
+ 	margin-bottom: 10px;
+    margin-top: 20px;
+    margin-left:11%;
+ }
+ 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .popover.bottom {
+    margin-top: 15px;
+    margin-left: -97px;
+}
+ 
+ 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search .icon-search:before {
+ 
+    visibility: hidden;
+}
+
+#portlet_mycustompages_WAR_custompagesportlet .navbar-search .form-search .input-append .advanced-search .toggle-advanced .caret {
+	
+	    border-top: 4px solid #919FAB;
+}
+
 .aui  #p_p_id_othercustompages_WAR_custompagesportlet_ .nav-tabs ul li a {
 	color:#555;
 }
@@ -356,6 +379,8 @@ form.yui3-datatable-paginator-group #itemsPerPage {
 	background-color:#d0dae3;
 	color:#014260;
 	text-shadow: 0 0px 0px transparent;
+	cursor:pointer;
+	width:11%;
 }
 
 #_mycustompages_WAR_custompagesportlet_createPageButton:hover {
@@ -366,8 +391,11 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
-    text-indent: 20px;
+   
 }
+
+
+
 
 #templateChoice {
     float: left;
