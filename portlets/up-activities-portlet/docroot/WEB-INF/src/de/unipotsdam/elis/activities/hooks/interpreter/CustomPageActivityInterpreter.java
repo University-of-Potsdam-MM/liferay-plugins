@@ -113,8 +113,8 @@ public class CustomPageActivityInterpreter extends BaseSocialActivityInterpreter
 
 		sb.append("</div></div><div class=\"activity-action\">");
 
-		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(), "custom-pages-changes-to-custom-page-page",
-				new String[] { pageTitle }));
+		sb.append(LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+				"custom-pages-changes-to-custom-page-page", new String[] { pageTitle }));
 
 		sb.append("</div>");
 

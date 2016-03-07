@@ -30,9 +30,16 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutTypePortlet;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.ResourcePermission;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -315,6 +322,7 @@ public class JspHelper {
 				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "0");
 
 			CustomPageUtil.setCustomPagePageType(layout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
+			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME, new Boolean(true));
 
 			if (addPortlet) {
 				String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);
@@ -332,6 +340,26 @@ public class JspHelper {
 				portletSetup.store();
 			}
 		}
+
+		Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.OWNER);
+
+		ResourcePermission resourcePermission = ResourcePermissionLocalServiceUtil.fetchResourcePermission(
+				PortalUtil.getDefaultCompanyId(), Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(layout.getPlid()), userRole.getRoleId());
+
+		if (resourcePermission != null) {
+			// Set (only) view permission if not yet set
+			if (resourcePermission.getActionIds() != 1) {
+				resourcePermission.setActionIds(1);
+				ResourcePermissionLocalServiceUtil.updateResourcePermission(resourcePermission);
+			}
+		} else {
+			// Add resourcePermission if not existent
+			ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
+					Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(layout.getPlid()),
+					userRole.getRoleId(), new String[] { ActionKeys.VIEW });
+		}
+
 		return layout;
 	}
 }

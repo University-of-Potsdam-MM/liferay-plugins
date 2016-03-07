@@ -148,7 +148,7 @@ public class CustomPageUtil {
 	public static void removeCustomPage(long plid) throws SystemException, PortalException {
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 		//ExtSocialActivitySetLocalServiceUtil.deleteActivitySetsByClassPK(plid);
-		JspHelper.createCustomPageActivity(layout, layout.getUserId(),0, ExtendedSocialActivityKeyConstants.PORTFOLIO_DELETED);
+		JspHelper.createCustomPageActivity(layout, layout.getUserId(),0, ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_DELETED);
 		CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByPlid(plid);
 		LayoutLocalServiceUtil.deleteLayout(layout, true, new ServiceContext());
 	}

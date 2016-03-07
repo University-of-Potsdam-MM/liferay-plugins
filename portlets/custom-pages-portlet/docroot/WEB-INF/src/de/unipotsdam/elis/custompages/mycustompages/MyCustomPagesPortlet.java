@@ -761,8 +761,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			LayoutLocalServiceUtil.updateLayout(layout);
 			if (((Integer) layout.getExpandoBridge().getAttribute(
 					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() == 20) {
-				Layout parentLayout = JspHelper.getLayoutByNameOrCreate(request, "custompages-page-storage", true,
-						true, false);
+				Layout parentLayout = JspHelper.getLayoutByNameOrCreate(request, "custompages-page-management", false,
+						true, true);
 				LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), parentLayout.getPlid());
 				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "2");
 			} else
