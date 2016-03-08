@@ -4,6 +4,29 @@
 	  font-weight: bold;
 }
 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search {
+ 	float:none;
+ 	margin-bottom: 10px;
+    margin-top: 20px;
+    margin-left:11%;
+ }
+ 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .popover.bottom {
+    margin-top: 15px;
+    margin-left: -97px;
+}
+
+ 
+ .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search .icon-search:before {
+ 
+    visibility: hidden;
+}
+
+#portlet_mycustompages_WAR_custompagesportlet .navbar-search .form-search .input-append .advanced-search .toggle-advanced .caret {
+	
+	    border-top: 4px solid #919FAB;
+}
+
 .aui  #p_p_id_othercustompages_WAR_custompagesportlet_ .nav-tabs ul li a {
 	color:#555;
 }
@@ -356,6 +379,8 @@ form.yui3-datatable-paginator-group #itemsPerPage {
 	background-color:#d0dae3;
 	color:#014260;
 	text-shadow: 0 0px 0px transparent;
+	cursor:pointer;
+	width:11%;
 }
 
 #_mycustompages_WAR_custompagesportlet_createPageButton:hover {
@@ -366,13 +391,13 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
-    text-indent: 20px;
+   
 }
 
-#templateChoice {
-    float: left;
-    width: 50%;
-}
+
+
+
+
 
 #addcustompageButton {
     clear: left;
@@ -416,6 +441,10 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	
 .aui .invite-members:hover, .aui .invite-members:focus {
 	background-image:none !important;
+}
+
+div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
+	margin-left:20px;
 }
 
 .user-search-wrapper  {
@@ -609,4 +638,55 @@ span.email {
 #myPortfolioTable table,
 #otherPortfoliosTable table{
 	width: 100%;
+}
+
+
+/* Dialog */
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #templateChoice {
+	width: 50%;
+    background: #ededed;
+    padding: .5em;
+    /* float: left; */
+    position: absolute;
+	
+}
+
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #customPageTypeChoice {
+     margin-top: 12em;
+    background: #ededed;
+    padding: .5em;
+    float: none;
+}
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #description{
+      margin-top: .5em;
+    background: #d0dae3;
+    padding: .5em;
+    float: right;
+    width: 42%;
+    position: absolute;
+    right: 0;
+    top: 78px;
+}
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #description:after{
+		content: '';
+		position: absolute;
+		border-style: solid;
+		border-width: 15px 15px 15px 0;
+		border-color: transparent #d0dae3;
+		display: block;
+		width: 0;
+		z-index: 1;
+		margin-top: -15px;
+		left: -15px;
+		top: 28%;
+}
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #addCustomPageButton button {
+	    margin-top: .5em;
+    margin-left: 0;
+	
 }
