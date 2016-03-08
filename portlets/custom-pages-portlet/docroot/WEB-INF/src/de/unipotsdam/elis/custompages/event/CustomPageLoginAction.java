@@ -1,6 +1,5 @@
 package de.unipotsdam.elis.custompages.event;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -8,23 +7,20 @@ import java.util.Map;
 
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.ReadOnlyException;
-import javax.portlet.ValidatorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.events.Action;
 import com.liferay.portal.kernel.events.ActionException;
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
+import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.ResourceConstants;
@@ -37,18 +33,15 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
 import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
-import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.service.permission.LayoutPermissionUtil;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletConfigFactoryUtil;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
-import com.liferay.portlet.expando.model.ExpandoColumn;
 
 import de.unipotsdam.elis.custompages.CustomPageStatics;
 import de.unipotsdam.elis.custompages.util.CustomPageUtil;
@@ -132,8 +125,15 @@ public class CustomPageLoginAction extends Action {
 			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 
-		if (layout.getPriority() != -1) {
-			layout.setPriority(-1);
+		List<?> dashboardLayouts = LayoutLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil.forClass(Layout.class)
+				.add(PropertyFactoryUtil.forName("friendlyURL").eq("/so/dashboard"))
+				.add(PropertyFactoryUtil.forName("sourcePrototypeLayoutUuid").eq("")));
+
+		if (!dashboardLayouts.isEmpty()) {
+			layout.setPriority(((Layout) dashboardLayouts.get(0)).getPriority() + 1);
+			LayoutLocalServiceUtil.updateLayout(layout);
+		} else if (layout.getPriority() != 0) {
+			layout.setPriority(10);
 			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 
@@ -157,6 +157,15 @@ public class CustomPageLoginAction extends Action {
 		}
 
 		return layout;
+	}
+
+	// TODO: maybe there is a better way to get the LayoutSetPrototype
+	private static LayoutSetPrototype getUserHomeLayoutSetPrototype() throws SystemException {
+		for (LayoutSetPrototype layoutSetPrototype : LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototypes(-1, -1)) {
+			if (layoutSetPrototype.getDescription().equals("Social Office User Home"))
+				return layoutSetPrototype;
+		}
+		return null;
 	}
 
 }
