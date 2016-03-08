@@ -177,8 +177,8 @@ AUI().use(
         otherCustomPagesDataTable.sort('title');
         otherCustomPagesData = otherCustomPagesDataTable.data;
         
-        initFilter(otherCustomPagesDataTable,false);
-        filterTable();
+        <portlet:namespace />initFilter(otherCustomPagesDataTable,false);
+        <portlet:namespace />filterTable();
         
         otherCustomPagesTableDiv.removeClass('loading-animation');
     }
@@ -195,8 +195,8 @@ function updateOtherCustomPagesData(A) {
                 otherCustomPagesData = JSON.parse(result);
                 otherCustomPagesDataTable.set('data', otherCustomPagesData);
                 otherCustomPagesDataTable.get('paginatorModel').set('page',currentPage);
-                updateFilter(otherCustomPagesDataTable.data);
-                filterTable();
+                <portlet:namespace />updateFilter(otherCustomPagesDataTable.data);
+                <portlet:namespace />filterTable();
             }
         }
     });

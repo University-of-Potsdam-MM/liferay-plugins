@@ -474,6 +474,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				super.processAction(actionRequest, actionResponse);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new PortletException(e);
 		}
 	}

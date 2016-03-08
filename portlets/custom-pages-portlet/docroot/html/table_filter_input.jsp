@@ -26,18 +26,18 @@
       </div>
       <div class="popover taglib-search-toggle-advanced yui3-widget yui3-widget-positioned yui3-widget-modal bottom yui3-widget-stacked" id="<portlet:namespace />searchadvanced" style="display: none; width: 248px; left: -17px; top: 19.8281px; z-index: 430;">
 			<span><%= LanguageUtil.get(pageContext, "custompages-page-type") %></span>
-			<aui:input id="inputPageTypeNone" name="custompages-page-type-normal-page" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypeNoneCheckbox\", \"true\") %>"></aui:input>
-			<aui:input id="inputPageTypePortfolioPage" name="custompages-page-type-portfolio-page" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypePortfolioPageCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputPageTypeNone" name="custompages-page-type-normal-page" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypeNoneCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputPageTypePortfolioPage" name="custompages-page-type-portfolio-page" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypePortfolioPageCheckbox\", \"true\") %>"></aui:input>
 			<span><%= LanguageUtil.get(pageContext, "custompages-publishment-column") %></span>
-			<aui:input id="inputPublishmentNone" name="custompages-no-publishment" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentNoneCheckbox\", \"true\") %>"></aui:input>
-			<aui:input id="inputPublishmentGlobal" name="global" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentGlobalCheckbox\", \"true\") %>"></aui:input>
-			<aui:input id="inputPublishmentIndividuel" name="custompages-individual" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentIndividuelCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputPublishmentNone" name="custompages-no-publishment" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentNoneCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputPublishmentGlobal" name="global" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentGlobalCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputPublishmentIndividuel" name="custompages-individual" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPublishmentIndividuelCheckbox\", \"true\") %>"></aui:input>
 			<span><%= LanguageUtil.get(pageContext, "custompages-feedback-column") %></span>
-			<aui:input id="inputFeedbackNone" name="none" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackNoneCheckbox\", \"true\") %>"></aui:input>
-			<aui:input id="inputFeedbackRequested" name="custompages-requested" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackRequestedCheckbox\", \"true\") %>"></aui:input>
-			<aui:input id="inputFeedbackDelivered" name="custompages-delivered" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackDeliveredCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputFeedbackNone" name="custompages-no-publishment" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackNoneCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputFeedbackRequested" name="custompages-requested" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackRequestedCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputFeedbackDelivered" name="custompages-delivered" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackDeliveredCheckbox\", \"true\") %>"></aui:input>
 			<span id="<portlet:namespace />inputVisibilitySpan"><%= LanguageUtil.get(pageContext, "custompages-visible") %></span>
-			<aui:input id="inputVisibility" name="custompages-hidden" type="checkbox" onChange="filterTable(this)" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputVisibilityCheckbox\", \"false\") %>"></aui:input>
+			<aui:input id="inputVisibility" name="custompages-hidden" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputVisibilityCheckbox\", \"false\") %>"></aui:input>
 			<div class="arrow"></div>
 	  </div>
 <% } %>
@@ -93,65 +93,68 @@
 </script> 
 <aui:script>
 var isMyCustomPagesTable = false;
-var tableData;
-var inputPageTypeNone;
-var inputPageTypePortfolioPage;
-var inputPublishmentNone;
-var inputPublishmentGlobal;
-var inputPublishmentIndividuel;
-var inputFeedbackNone;
-var inputFeedbackRequested;
-var inputFeedbackDelivered;
-var inputVisibility;
-var inputVisibilitySpan;
-var filterInput;
+var <portlet:namespace />tableData;
+var <portlet:namespace />table;
+var <portlet:namespace />inputPageTypeNone;
+var <portlet:namespace />inputPageTypePortfolioPage;
+var <portlet:namespace />inputPublishmentNone;
+var <portlet:namespace />inputPublishmentGlobal;
+var <portlet:namespace />inputPublishmentIndividuel;
+var <portlet:namespace />inputFeedbackNone;
+var <portlet:namespace />inputFeedbackRequested;
+var <portlet:namespace />inputFeedbackDelivered;
+var <portlet:namespace />inputVisibility;
+var <portlet:namespace />inputVisibilitySpan;
+var <portlet:namespace />filterInput;
 
 AUI().use('aui-base', function(A) {
-	inputPageTypeNone = A.one('#<portlet:namespace />inputPageTypeNone');
-	inputPageTypePortfolioPage = A.one('#<portlet:namespace />inputPageTypePortfolioPage');
-	inputPublishmentNone = A.one('#<portlet:namespace />inputPublishmentNone');
-	inputPublishmentGlobal = A.one('#<portlet:namespace />inputPublishmentGlobal');
-	inputPublishmentIndividuel = A.one('#<portlet:namespace />inputPublishmentIndividuel');
-	inputFeedbackNone = A.one('#<portlet:namespace />inputFeedbackNone');
-	inputFeedbackRequested = A.one('#<portlet:namespace />inputFeedbackRequested');
-	inputFeedbackDelivered = A.one('#<portlet:namespace />inputFeedbackDelivered');
-	inputVisibility = A.one('#<portlet:namespace />inputVisibility');
-	inputVisibilitySpan = A.one('#<portlet:namespace />inputVisibilitySpan');
-	filterInput = A.one('#<portlet:namespace />filterInput');
+	<portlet:namespace />inputPageTypeNone = A.one('#<portlet:namespace />inputPageTypeNone');
+	<portlet:namespace />inputPageTypePortfolioPage = A.one('#<portlet:namespace />inputPageTypePortfolioPage');
+	<portlet:namespace />inputPublishmentNone = A.one('#<portlet:namespace />inputPublishmentNone');
+	<portlet:namespace />inputPublishmentGlobal = A.one('#<portlet:namespace />inputPublishmentGlobal');
+	<portlet:namespace />inputPublishmentIndividuel = A.one('#<portlet:namespace />inputPublishmentIndividuel');
+	<portlet:namespace />inputFeedbackNone = A.one('#<portlet:namespace />inputFeedbackNone');
+	<portlet:namespace />inputFeedbackRequested = A.one('#<portlet:namespace />inputFeedbackRequested');
+	<portlet:namespace />inputFeedbackDelivered = A.one('#<portlet:namespace />inputFeedbackDelivered');
+	<portlet:namespace />inputVisibility = A.one('#<portlet:namespace />inputVisibility');
+	<portlet:namespace />inputVisibilitySpan = A.one('#<portlet:namespace />inputVisibilitySpan');
+	<portlet:namespace />filterInput = A.one('#<portlet:namespace />filterInput');
 	
-	  filterInput.on('keyup', function(e) {
-    	filterTable();
+	<portlet:namespace />filterInput.on('keyup', function(e) {
+		<portlet:namespace />filterTable();
     });
 	  
 });
 
-function initFilter(customPageTable, myCustomPagesTable){
-	table = customPageTable;
-	tableData = customPageTable.data;
+function <portlet:namespace />initFilter(customPageTable, myCustomPagesTable){
+	<portlet:namespace />table = customPageTable;
+	<portlet:namespace />tableData = customPageTable.data;
 	this.isMyCustomPagesTable = myCustomPagesTable;
 	if (!myCustomPagesTable){
-		if (inputPublishmentNone.ancestor())
-			inputPublishmentNone.ancestor().hide();
+		<portlet:namespace />inputFeedbackRequested.ancestor().get('lastChild').set('textContent','<%= LanguageUtil.get(pageContext, "custompages-feedback-requested-filter") %>');
+		<portlet:namespace />inputFeedbackDelivered.ancestor().get('lastChild').set('textContent','<%= LanguageUtil.get(pageContext, "custompages-feedback-delivered-filter") %>');
+		if (<portlet:namespace />inputPublishmentNone.ancestor())
+			<portlet:namespace />inputPublishmentNone.ancestor().hide();
 	}
 	else{
-		if (inputVisibilitySpan){
-			inputVisibilitySpan.hide();
-			inputVisibility.ancestor().hide();
+		if (<portlet:namespace />inputVisibilitySpan){
+			<portlet:namespace />inputVisibilitySpan.hide();
+			<portlet:namespace />inputVisibility.ancestor().hide();
 		}
 	}
 }
 
-function updateFilter(data){
-	tableData = data;
+function <portlet:namespace />updateFilter(data){
+	<portlet:namespace />tableData = data;
 }
 
-function filterTable(element){
+function <portlet:namespace />filterTable(element){
 	AUI().use('aui-base', function(A) {
 		var checkbox = A.one(element);
 		if (checkbox != null){
 			Liferay.Store(element.id,checkbox.attr('checked').toString());
 		}
-        var filteredData = tableData.filter({
+        var filteredData = <portlet:namespace />tableData.filter({
             asList: true
         }, function(list) {
         	var result = true;
@@ -165,27 +168,27 @@ function filterTable(element){
 	        	var feedbackDelivered = list.get('feedbackDelivered');
 	        	var feedbackUnrequested = !feedbackRequested && !feedbackDelivered;
 	        	result = result && 
-					((hasCustomPageTypeNone && (inputPageTypeNone.get('value') === 'true')) ||
-					(hasCustomPageTypePortfolioPage && (inputPageTypePortfolioPage.get('value') === 'true')));
+					((hasCustomPageTypeNone && (<portlet:namespace />inputPageTypeNone.get('value') === 'true')) ||
+					(hasCustomPageTypePortfolioPage && (<portlet:namespace />inputPageTypePortfolioPage.get('value') === 'true')));
 	        	result = result && 
-	    			((isPublishNone && (inputPublishmentNone.get('value') === 'true')) || 
-	        		(isPublishGlobal &&(inputPublishmentGlobal.get('value') === 'true')) || 
-	        		(isPublishIndividual && (inputPublishmentIndividuel.get('value') === 'true')));
+	    			((isPublishNone && (<portlet:namespace />inputPublishmentNone.get('value') === 'true')) || 
+	        		(isPublishGlobal &&(<portlet:namespace />inputPublishmentGlobal.get('value') === 'true')) || 
+	        		(isPublishIndividual && (<portlet:namespace />inputPublishmentIndividuel.get('value') === 'true')));
 	        	result = result && 
-					((feedbackUnrequested && (inputFeedbackNone.get('value') === 'true')) || 
-		    		(feedbackRequested &&(inputFeedbackRequested.get('value') === 'true')) || 
-		    		(feedbackDelivered && (inputFeedbackDelivered.get('value') === 'true')));
+					((feedbackUnrequested && (<portlet:namespace />inputFeedbackNone.get('value') === 'true')) || 
+		    		(feedbackRequested &&(<portlet:namespace />inputFeedbackRequested.get('value') === 'true')) || 
+		    		(feedbackDelivered && (<portlet:namespace />inputFeedbackDelivered.get('value') === 'true')));
 	        	if (!isMyCustomPagesTable){
-	        		result = result && (list.get('hidden') === (inputVisibility.get('value') === 'true'));
+	        		result = result && (list.get('hidden') === (<portlet:namespace />inputVisibility.get('value') === 'true'));
 	        	}
 	        <% } %>
-        	var filterInputValue = filterInput.get("value").toLowerCase();
+        	var filterInputValue = <portlet:namespace />filterInput.get("value").toLowerCase();
         	if (filterInputValue !== ""){
         		result = result && list.get('title').toLowerCase().includes(filterInputValue);
         	}
             return result;
         });
-        table.set('data', filteredData);
+        <portlet:namespace />table.set('data', filteredData);
 	});
 }
 </aui:script>

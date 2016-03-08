@@ -335,8 +335,8 @@ AUI().use(
         myCustomPageDataTable.render("#customPageTable");
         myCustomPageDataTable.sort('changes');
         
-        initFilter(myCustomPageDataTable,true);
-        filterTable();
+        <portlet:namespace />initFilter(myCustomPageDataTable,true);
+        <portlet:namespace />filterTable();
        	
         myCustomPageData = myCustomPageDataTable.data;
 
@@ -482,8 +482,8 @@ function updateTableData(A) {
 
                 myCustomPageDataTable.set('data', myCustomPageData);
                 myCustomPageDataTable.get('paginatorModel').set('page',currentPage);
-                updateFilter(myCustomPageDataTable.data);
-                filterTable();
+                <portlet:namespace />updateFilter(myCustomPageDataTable.data);
+                <portlet:namespace />filterTable();
             }
         }
     });
