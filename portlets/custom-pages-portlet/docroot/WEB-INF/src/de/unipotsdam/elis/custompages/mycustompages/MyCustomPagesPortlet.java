@@ -498,7 +498,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 
 		// Get custom page parent page
 		Layout customPagesParentPage = null;
-		customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-page-storage", true,
+		customPagesParentPage = JspHelper.getLayoutByNameOrCreate(actionRequest, "custompages-page-management", false,
 				true, false);
 
 		Layout newCustomPage = null;
