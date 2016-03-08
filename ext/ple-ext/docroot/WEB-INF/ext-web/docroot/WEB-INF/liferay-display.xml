@@ -35,7 +35,6 @@
 		<portlet id="20" />
 	</category>
 	<category name="category.notification">
-		<portlet id="1" />
 		<portlet id="116" />
 		<portlet id="upactivities_WAR_upactivitiesportlet" />
 		<portlet id="2_WAR_microblogsportlet" />
