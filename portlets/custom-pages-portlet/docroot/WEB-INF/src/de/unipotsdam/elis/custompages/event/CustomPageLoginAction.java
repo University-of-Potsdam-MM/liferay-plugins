@@ -63,7 +63,7 @@ public class CustomPageLoginAction extends Action {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	private static Layout creatLayoutIfNecessary(HttpServletRequest request, String pageNameLocalizationString)
@@ -78,25 +78,26 @@ public class CustomPageLoginAction extends Action {
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(user.getGroupId(), true);
 		Layout layout = null;
 		String pageName = LanguageUtil.get(portletConfig, request.getLocale(), pageNameLocalizationString);
-		
+
 		for (Layout l : layouts) {
-			Boolean createdDynamical = (Boolean)l.getExpandoBridge().getAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME);
+			Boolean createdDynamical = (Boolean) l.getExpandoBridge().getAttribute(
+					CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME);
 			if (l.getName(request.getLocale()).equals(pageName) && createdDynamical.booleanValue())
 				layout = l;
 		}
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(request);
-		
 
 		// create custom pages parent page if none exists
 		if (layout == null) {
 			Map<Locale, String> localeMap = JspHelper.getLocaleMap(pageNameLocalizationString, portletConfig);
-			layout = LayoutLocalServiceUtil.addLayout(user.getUserId(), user.getGroupId(),
-					true, 0l, localeMap, localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null, false,
+			layout = LayoutLocalServiceUtil.addLayout(user.getUserId(), user.getGroupId(), true, 0l, localeMap,
+					localeMap, null, null, null, LayoutConstants.TYPE_PORTLET, null, false,
 					new HashMap<Locale, String>(), serviceContext);
 
 			layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "2");
-			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME, new Boolean(true));
+			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME,
+					new Boolean(true));
 			CustomPageUtil.setCustomPagePageType(layout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
 
 			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
@@ -105,20 +106,39 @@ public class CustomPageLoginAction extends Action {
 
 			LayoutLocalServiceUtil.updateLayout(layout);
 
-			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout, portlet.getPortletId());
+			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout,
+					portlet.getPortletId());
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
 			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
 			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
-			portletSetup.store();	
+			portletSetup.store();
 		}
-		
-		if (layout.getPriority() != -1){
+
+		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
+		if (!layoutTypePortlet.getLayoutTemplateId().equals("1_column")) {
+			layoutTypePortlet.setLayoutTemplateId(user.getUserId(), "1_column");
+		}
+
+		if (!layoutTypePortlet.hasPortletId(portlet.getPortletId())) {
+			layoutTypePortlet.addPortletId(user.getUserId(), portlet.getPortletId());
+			LayoutLocalServiceUtil.updateLayout(layout);
+		}
+
+		portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				"othercustompages_WAR_custompagesportlet");
+
+		if (!layoutTypePortlet.hasPortletId(portlet.getPortletId())) {
+			layoutTypePortlet.addPortletId(user.getUserId(), portlet.getPortletId());
+			LayoutLocalServiceUtil.updateLayout(layout);
+		}
+
+		if (layout.getPriority() != -1) {
 			layout.setPriority(-1);
 			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 
 		Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.OWNER);
-		
+
 		ResourcePermission resourcePermission = ResourcePermissionLocalServiceUtil.fetchResourcePermission(
 				PortalUtil.getDefaultCompanyId(), Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
 				String.valueOf(layout.getPlid()), userRole.getRoleId());
@@ -132,11 +152,10 @@ public class CustomPageLoginAction extends Action {
 		} else {
 			// Add resourcePermission if not existent
 			ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
-					Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
-					String.valueOf(layout.getPlid()), userRole.getRoleId(), new String[] {
-							ActionKeys.VIEW});
+					Layout.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL, String.valueOf(layout.getPlid()),
+					userRole.getRoleId(), new String[] { ActionKeys.VIEW });
 		}
-		
+
 		return layout;
 	}
 
