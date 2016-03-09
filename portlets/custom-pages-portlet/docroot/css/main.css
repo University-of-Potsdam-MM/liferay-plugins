@@ -690,3 +690,76 @@ span.email {
     margin-left: 0;
 	
 }
+
+/* Icons portfolioseite / seite */
+
+tr.portfolio-page td.table-col-title:before {
+    content: "\f19d";
+    font-family: "fontawesome";
+    color: #014260;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+        -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+}
+
+tr.custom-page td.table-col-title:before {
+    content: "\f108";
+    font-family: "fontawesome";
+    color: #014260;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin-right: 10px;
+    font-size: 14px;
+        -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+}
+
+th.table-col-publishment:before {
+    content: "\f234 ";
+    color: #fff;
+    font-family: fontawesome;
+    margin-right: 5px;
+    font-size: 14px;
+    text-shadow: none;
+    outline: none;
+        -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+}
+
+th.table-col-feedback:before {
+    content: "\f19c ";
+    color: #fff;
+    font-family: fontawesome;
+    margin-right: 5px;
+    font-size: 14px;
+    text-shadow: none;
+    outline: none;
+        -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+}
+
+
+
+th.table-col-changes:before {
+    content: "\f017 ";
+    color: #fff;
+    font-family: fontawesome;
+    margin-right: 5px;
+    font-size: 14px;
+    text-shadow: none;
+    outline: none;
+        -webkit-font-smoothing: antialiased;
+    text-rendering: auto;
+}
+
