@@ -92,7 +92,7 @@
 
 </script> 
 <aui:script>
-var isMyCustomPagesTable = false;
+var <portlet:namespace />isMyCustomPagesTable = false;
 var <portlet:namespace />tableData;
 var <portlet:namespace />table;
 var <portlet:namespace />inputPageTypeNone;
@@ -129,7 +129,7 @@ AUI().use('aui-base', function(A) {
 function <portlet:namespace />initFilter(customPageTable, myCustomPagesTable){
 	<portlet:namespace />table = customPageTable;
 	<portlet:namespace />tableData = customPageTable.data;
-	this.isMyCustomPagesTable = myCustomPagesTable;
+	<portlet:namespace />isMyCustomPagesTable = myCustomPagesTable;
 	if (!myCustomPagesTable){
 		<portlet:namespace />inputFeedbackRequested.ancestor().get('lastChild').set('textContent','<%= LanguageUtil.get(pageContext, "custompages-feedback-requested-filter") %>');
 		<portlet:namespace />inputFeedbackDelivered.ancestor().get('lastChild').set('textContent','<%= LanguageUtil.get(pageContext, "custompages-feedback-delivered-filter") %>');
@@ -178,7 +178,7 @@ function <portlet:namespace />filterTable(element){
 					((feedbackUnrequested && (<portlet:namespace />inputFeedbackNone.get('value') === 'true')) || 
 		    		(feedbackRequested &&(<portlet:namespace />inputFeedbackRequested.get('value') === 'true')) || 
 		    		(feedbackDelivered && (<portlet:namespace />inputFeedbackDelivered.get('value') === 'true')));
-	        	if (!isMyCustomPagesTable){
+	        	if (!<portlet:namespace />isMyCustomPagesTable){
 	        		result = result && (list.get('hidden') === (<portlet:namespace />inputVisibility.get('value') === 'true'));
 	        	}
 	        <% } %>
