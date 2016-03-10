@@ -397,9 +397,11 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					parentPage = JspHelper.getLayoutByNameOrCreate(request, "custompages-portfolio-pages", false,
 							false, true);
 				}
-				
+
 				if (customPage.isPrivateLayout()) {
 					customPage.setPrivateLayout(false);
+
+					customPage.setHidden(true);
 
 					for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil
 							.getLayoutFriendlyURLs(customPage.getPlid())) {
@@ -753,21 +755,28 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(layout.getPlid()).size() == 0
 				&& createdInPrivateArea) {
 
-			layout.setPrivateLayout(true);
 			for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(layout
 					.getPlid())) {
 				layoutFriendlyURL.setPrivateLayout(true);
 				LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
 			}
-			LayoutLocalServiceUtil.updateLayout(layout);
-			if (((Integer) layout.getExpandoBridge().getAttribute(
-					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() == 20) {
+
+			int personalAreSection = ((Integer) layout.getExpandoBridge().getAttribute(
+					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue();
+			if (personalAreSection == 20) {
 				Layout parentLayout = JspHelper.getLayoutByNameOrCreate(request, "custompages-page-management", false,
 						true, true);
-				LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), parentLayout.getPlid());
+				layout = LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), parentLayout.getPlid());
 				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "2");
-			} else
-				LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), 0);
+			} else {
+				layout = LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), 0);
+			}
+
+			if (personalAreSection == 1 || personalAreSection == 2 || personalAreSection == 3)
+				layout.setHidden(false);
+			layout.setPrivateLayout(true);
+
+			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 	}
 

@@ -159,13 +159,4 @@ public class CustomPageLoginAction extends Action {
 		return layout;
 	}
 
-	// TODO: maybe there is a better way to get the LayoutSetPrototype
-	private static LayoutSetPrototype getUserHomeLayoutSetPrototype() throws SystemException {
-		for (LayoutSetPrototype layoutSetPrototype : LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototypes(-1, -1)) {
-			if (layoutSetPrototype.getDescription().equals("Social Office User Home"))
-				return layoutSetPrototype;
-		}
-		return null;
-	}
-
 }
