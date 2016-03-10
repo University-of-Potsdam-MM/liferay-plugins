@@ -723,7 +723,7 @@ span.email {
 
 tr.portfolio-page td.table-col-title:before {
     content: "\f19d";
-    font-family: "fontawesome";
+    font-family: "fontawesome-alloy";
     color: #014260;
     background-color: #fff;
     border-radius: 50%;
@@ -739,7 +739,7 @@ tr.portfolio-page td.table-col-title:before {
 
 tr.custom-page td.table-col-title:before {
     content: "\f108";
-    font-family: "fontawesome";
+    font-family: "fontawesome-alloy";
     color: #014260;
     background-color: #fff;
     border-radius: 50%;
@@ -756,7 +756,7 @@ tr.custom-page td.table-col-title:before {
 th.table-col-publishment:before {
     content: "\f234 ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -768,7 +768,7 @@ th.table-col-publishment:before {
  #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-publishment div:before {
     content: "\f234 ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -781,7 +781,7 @@ th.table-col-publishment:before {
 th.table-col-feedback:before {
     content: "\f19c ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -795,7 +795,7 @@ th.table-col-feedback:before {
 th.table-col-changes div:before {
     content: "\f017 ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -808,7 +808,7 @@ th.table-col-changes div:before {
 {
 	content: "\f007 ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -821,7 +821,7 @@ th.table-col-changes div:before {
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-publishedTo div:before {
 	content: "\f0c0 ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -835,7 +835,7 @@ th.table-col-changes div:before {
 	
 	content: "\f0ad ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -848,7 +848,7 @@ th.table-col-changes div:before {
 	
 	content: "\f06e ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
@@ -860,7 +860,7 @@ th.table-col-changes div:before {
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-feedback div:before {
     content: "\f19c ";
     color: #fff;
-    font-family: fontawesome;
+    font-family: fontawesome-alloy;
     margin-right: 5px;
     font-size: 14px;
     text-shadow: none;
