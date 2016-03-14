@@ -331,13 +331,6 @@ public class JspHelper {
 				layoutTypePortlet.addPortletId(themeDisplay.getUserId(), portletId);
 
 				LayoutLocalServiceUtil.updateLayout(layout);
-
-				PortletPreferences portletSetup = PortletPreferencesFactoryUtil
-						.getLayoutPortletSetup(layout, portletId);
-				portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
-				portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
-				portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
-				portletSetup.store();
 			}
 		}
 

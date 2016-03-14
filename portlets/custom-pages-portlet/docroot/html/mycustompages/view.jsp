@@ -35,22 +35,9 @@
 
 <% } else { %>
 
-			<%@ include file="/html/table_filter_input.jsp" %>
-			
-<% if (scopeGroup.getClassPK() == user.getUserId()){
+		<%@ include file="/html/table_filter_input.jsp" %>
 	
-		if (layout.getName(locale).equals(LanguageUtil.get(pageContext, "custompages-my-custom-pages")) ||
-				layout.getName(locale).equals(LanguageUtil.get(pageContext, "custompages-portfolio-pages"))){%>
-			<span id="portletTitle"><%= layout.getName(locale) %></span>
-		<% } else { %>
-
-	<span id="portletTitle"><%= LanguageUtil.get(pageContext, "custompages-my-custom-pages") %></span>
-	
-<% }} else {%>
-
-	<span id="portletTitle"><%= LanguageUtil.format(pageContext, "custompages-from-user-for-me-published-pages", new Object[] {UserLocalServiceUtil.getUser(scopeGroup.getClassPK()).getFullName()}) %></span>
-	
-<% }} %>
+<% } %>
 
 <portlet:resourceURL var="getUserCustomPagesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserCustomPages" />
