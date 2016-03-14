@@ -105,7 +105,7 @@ public class CustomPageUtil {
 				CustomPageStatics.FEEDBACK_UNREQUESTED);
 	}
 
-	public static void deleteCustomPageGlobalPubishment(long plid) throws PortalException, SystemException {
+	public static void deleteCustomPageGlobalPublishment(long plid) throws PortalException, SystemException {
 		CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(plid, CustomPageStatics.PUBLISHMENT_TYPE_GLOBAL);
 	}
 

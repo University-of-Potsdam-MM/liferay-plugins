@@ -264,6 +264,10 @@ public interface CustomPageFeedbackLocalService extends BaseLocalService,
 		long userId) throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesByLayoutUserIdAndCustomPageFeedback(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException;
 

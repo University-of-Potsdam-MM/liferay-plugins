@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.portlet.LiferayRenderResponse;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
@@ -233,10 +232,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		boolean privatePersonalPage = ParamUtil.getBoolean(resourceRequest, "privatePersonalPage");
 		if (themeDisplay.getSiteGroup().isUser()) {
-			List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByLayoutUserId(themeDisplay
-					.getSiteGroup().getClassPK());
 			JSONArray customPageJSONArray = JSONFactoryUtil.createJSONArray();
 			if (privatePersonalPage) {
+				List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByLayoutUserId(themeDisplay
+						.getSiteGroup().getClassPK());
 				for (Layout customPage : customPages) {
 					if (((Integer) customPage.getExpandoBridge().getAttribute(
 							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE
@@ -245,6 +244,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 						JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 			} else {
+				List<Layout> customPages = CustomPageFeedbackLocalServiceUtil
+						.getCustomPagesByLayoutUserIdAndCustomPageFeedback(themeDisplay.getSiteGroup().getClassPK());
 				String layoutName = themeDisplay.getLayout().getName(themeDisplay.getLocale());
 				PortletConfig portletConfig = (PortletConfig) resourceRequest
 						.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
@@ -325,7 +326,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE))
-			CustomPageUtil.deleteCustomPageGlobalPubishment(plid);
+			CustomPageUtil.deleteCustomPageGlobalPublishment(plid);
+		movePageToPrivateAreaIfNecessary(resourceRequest, customPage, themeDisplay.getUserId());
 	}
 
 	/**
@@ -409,10 +411,11 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 						LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
 					}
 
-					LayoutLocalServiceUtil.updateLayout(customPage);
 				}
+				
+				customPage.setParentLayoutId(parentPage.getLayoutId());
 
-				LayoutLocalServiceUtil.updateParentLayoutId(customPage.getPlid(), parentPage.getPlid());
+				LayoutLocalServiceUtil.updateLayout(customPage);
 			}
 	}
 
@@ -696,45 +699,47 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			Layout customPage = LayoutLocalServiceUtil.getLayout(customPagePlid);
 			if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 					ActionKeys.CUSTOMIZE)) {
-
-				if (!ParamUtil.getBoolean(actionRequest, "globalPublishment")) {
-					if (CustomPageUtil.isPublishedGlobal(customPagePlid))
-						CustomPageUtil.deleteCustomPageGlobalPubishment(customPagePlid);
-				} else {
+				if (ParamUtil.getBoolean(actionRequest, "globalPublishment")) {
 					if (!CustomPageUtil.isPublishedGlobal(customPagePlid))
 						CustomPageUtil.publishCustomPageGlobal(customPagePlid);
-					return;
-				}
+					if (customPage.isHidden())
+						customPage.getExpandoBridge().setAttribute(
+								CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "20");
+				} else {
+					if (CustomPageUtil.isPublishedGlobal(customPagePlid))
+						CustomPageUtil.deleteCustomPageGlobalPublishment(customPagePlid);
 
-				List<Long> newUserIds = ListUtil.toList(getLongArray(actionRequest, "receiverUserIds"));
-				List<CustomPageFeedback> publishments = CustomPageFeedbackLocalServiceUtil
-						.getCustomPageFeedbackByPlid(customPagePlid);
-				List<Long> oldUserIds = new ArrayList<Long>();
-				for (CustomPageFeedback publishment : publishments) {
-					oldUserIds.add(publishment.getUserId());
-					if (!newUserIds.contains(publishment.getUserId())
-							&& publishment.getFeedbackStatus() != CustomPageStatics.FEEDBACK_REQUESTED)
-						CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(publishment);
-				}
+					List<Long> newUserIds = ListUtil.toList(getLongArray(actionRequest, "receiverUserIds"));
+					List<CustomPageFeedback> publishments = CustomPageFeedbackLocalServiceUtil
+							.getCustomPageFeedbackByPlid(customPagePlid);
+					List<Long> oldUserIds = new ArrayList<Long>();
+					for (CustomPageFeedback publishment : publishments) {
+						oldUserIds.add(publishment.getUserId());
+						if (!newUserIds.contains(publishment.getUserId())
+								&& publishment.getFeedbackStatus() != CustomPageStatics.FEEDBACK_REQUESTED)
+							CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(publishment);
+					}
 
-				for (Long userId : newUserIds) {
-					if (!oldUserIds.contains(userId) && userId != themeDisplay.getUserId()) {
-						User user = UserLocalServiceUtil.fetchUser(userId);
-						if (user != null) {
-							CustomPageUtil.publishCustomPageToUser(customPagePlid, user.getUserId());
-							if (customPage.isHidden())
-								customPage.getExpandoBridge().setAttribute(
-										CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "20");
-							JspHelper.handleSocialActivities(customPage, actionRequest, user,
-									CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED);
+					for (Long userId : newUserIds) {
+						if (!oldUserIds.contains(userId) && userId != themeDisplay.getUserId()) {
+							User user = UserLocalServiceUtil.fetchUser(userId);
+							if (user != null) {
+								CustomPageUtil.publishCustomPageToUser(customPagePlid, user.getUserId());
+								if (customPage.isHidden())
+									customPage.getExpandoBridge().setAttribute(
+											CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "20");
+								JspHelper.handleSocialActivities(customPage, actionRequest, user,
+										CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED);
+							}
 						}
 					}
 				}
-			}
 
+			}
+			
 			movePageToPrivateAreaIfNecessary(actionRequest, customPage, themeDisplay.getUserId());
-			if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0
-					&& customPage.isPrivateLayout())
+			if ((CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0 || CustomPageUtil
+					.isPublishedGlobal(customPagePlid)) && customPage.isPrivateLayout())
 				movePageToParentPage(
 						customPage,
 						actionRequest,
@@ -753,7 +758,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 			createdInPrivateArea = ((Integer) layout.getExpandoBridge().getAttribute(
 					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0;
 		if (CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(layout.getPlid()).size() == 0
-				&& createdInPrivateArea) {
+				&& !CustomPageUtil.isPublishedGlobal(layout.getPlid()) && createdInPrivateArea) {
 
 			for (LayoutFriendlyURL layoutFriendlyURL : LayoutFriendlyURLLocalServiceUtil.getLayoutFriendlyURLs(layout
 					.getPlid())) {
@@ -761,21 +766,21 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				LayoutFriendlyURLLocalServiceUtil.updateLayoutFriendlyURL(layoutFriendlyURL);
 			}
 
-			int personalAreSection = ((Integer) layout.getExpandoBridge().getAttribute(
+			int personalAreaSection = ((Integer) layout.getExpandoBridge().getAttribute(
 					CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue();
-			if (personalAreSection == 20) {
+			if (personalAreaSection == 20) {
 				Layout parentLayout = JspHelper.getLayoutByNameOrCreate(request, "custompages-page-management", false,
 						true, true);
-				layout = LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), parentLayout.getPlid());
+				layout.setParentLayoutId(parentLayout.getLayoutId());
+				LayoutLocalServiceUtil.updateLayout(layout);
 				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "2");
 			} else {
 				layout = LayoutLocalServiceUtil.updateParentLayoutId(layout.getPlid(), 0);
 			}
 
-			if (personalAreSection == 1 || personalAreSection == 2 || personalAreSection == 3)
+			if (personalAreaSection == 1 || personalAreaSection == 2 || personalAreaSection == 3)
 				layout.setHidden(false);
 			layout.setPrivateLayout(true);
-
 			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 	}
