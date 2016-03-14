@@ -71,6 +71,10 @@ public class CustomPageFeedbackLocalServiceImpl extends CustomPageFeedbackLocalS
 		return CustomPageFeedbackFinderUtil.findCustomPagesByLayoutUserId(userId);
 	}
 	
+	public List<Layout> getCustomPagesByLayoutUserIdAndCustomPageFeedback(long userId) throws SystemException {
+		return CustomPageFeedbackFinderUtil.findCustomPagesByLayoutUserIdAndCustomPageFeedback(userId);
+	}
+	
 	public List<Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(long userId) throws SystemException {
 		return CustomPageFeedbackFinderUtil.findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(userId);
 	}

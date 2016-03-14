@@ -24,6 +24,18 @@
         WHERE
         	(Layout.userId = ? AND Layout.sourcePrototypeLayoutUuid = "")
     </sql>
+     <sql id="findCustomPagesByLayoutUserIdAndCustomPageFeedback">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+        	Group_ ON (Group_.groupId = Layout.groupId AND
+        	Group_.classPK = ?)
+        INNER JOIN
+            CustomPages_CustomPageFeedback ON Layout.plid = CustomPages_CustomPageFeedback.plid
+        WHERE
+        	(Layout.userId = ? AND 
+        	Layout.sourcePrototypeLayoutUuid = "")
+    </sql>
     <sql id="findCustomPagesByPageTypeAndCustomPageFeedbackUserId">
         SELECT Layout.*
         FROM Layout

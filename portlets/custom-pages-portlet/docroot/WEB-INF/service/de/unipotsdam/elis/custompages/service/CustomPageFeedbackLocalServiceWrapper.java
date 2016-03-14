@@ -304,6 +304,12 @@ public class CustomPageFeedbackLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesByLayoutUserIdAndCustomPageFeedback(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return _customPageFeedbackLocalService.getCustomPagesByLayoutUserIdAndCustomPageFeedback(userId);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _customPageFeedbackLocalService.getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(userId);

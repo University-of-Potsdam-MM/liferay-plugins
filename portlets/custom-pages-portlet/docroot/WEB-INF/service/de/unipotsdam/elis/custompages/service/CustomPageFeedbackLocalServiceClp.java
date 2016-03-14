@@ -132,73 +132,77 @@ public class CustomPageFeedbackLocalServiceClp
 
 		_methodParameterTypes20 = new String[] { "long" };
 
-		_methodName21 = "getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId";
+		_methodName21 = "getCustomPagesByLayoutUserIdAndCustomPageFeedback";
 
 		_methodParameterTypes21 = new String[] { "long" };
 
-		_methodName22 = "getCustomPagesByPageTypeAndCustomPageFeedbackUserId";
+		_methodName22 = "getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId";
 
-		_methodParameterTypes22 = new String[] { "int", "long" };
+		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser";
+		_methodName23 = "getCustomPagesByPageTypeAndCustomPageFeedbackUserId";
 
 		_methodParameterTypes23 = new String[] { "int", "long" };
 
-		_methodName24 = "addCustomPageFeedback";
+		_methodName24 = "getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser";
 
-		_methodParameterTypes24 = new String[] { "long", "long", "int" };
+		_methodParameterTypes24 = new String[] { "int", "long" };
 
 		_methodName25 = "addCustomPageFeedback";
 
-		_methodParameterTypes25 = new String[] { "long", "long" };
+		_methodParameterTypes25 = new String[] { "long", "long", "int" };
 
-		_methodName26 = "updateCustomPageFeedbackStatus";
+		_methodName26 = "addCustomPageFeedback";
 
-		_methodParameterTypes26 = new String[] { "long", "long", "int" };
+		_methodParameterTypes26 = new String[] { "long", "long" };
 
-		_methodName27 = "deleteCustomPageFeedback";
+		_methodName27 = "updateCustomPageFeedbackStatus";
 
-		_methodParameterTypes27 = new String[] { "long", "long" };
+		_methodParameterTypes27 = new String[] { "long", "long", "int" };
 
-		_methodName28 = "deleteCustomPageFeedbackByPlid";
+		_methodName28 = "deleteCustomPageFeedback";
 
-		_methodParameterTypes28 = new String[] { "long" };
+		_methodParameterTypes28 = new String[] { "long", "long" };
 
-		_methodName29 = "deleteCustomPageFeedbackByUserId";
+		_methodName29 = "deleteCustomPageFeedbackByPlid";
 
 		_methodParameterTypes29 = new String[] { "long" };
 
-		_methodName30 = "deleteCustomPageFeedbackByPlidAndFeedbackStatus";
+		_methodName30 = "deleteCustomPageFeedbackByUserId";
 
-		_methodParameterTypes30 = new String[] { "long", "int" };
+		_methodParameterTypes30 = new String[] { "long" };
 
-		_methodName31 = "getCustomPageFeedback";
+		_methodName31 = "deleteCustomPageFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes31 = new String[] { "long", "long" };
+		_methodParameterTypes31 = new String[] { "long", "int" };
 
-		_methodName32 = "fetchCustomPageFeedback";
+		_methodName32 = "getCustomPageFeedback";
 
 		_methodParameterTypes32 = new String[] { "long", "long" };
 
-		_methodName33 = "getCustomPageFeedbackByPlid";
+		_methodName33 = "fetchCustomPageFeedback";
 
-		_methodParameterTypes33 = new String[] { "long" };
+		_methodParameterTypes33 = new String[] { "long", "long" };
 
-		_methodName34 = "getCustomPageFeedbackByUserId";
+		_methodName34 = "getCustomPageFeedbackByPlid";
 
 		_methodParameterTypes34 = new String[] { "long" };
 
-		_methodName35 = "getCustomPageFeedbackByPlidAndFeedbackStatus";
+		_methodName35 = "getCustomPageFeedbackByUserId";
 
-		_methodParameterTypes35 = new String[] { "long", "int" };
+		_methodParameterTypes35 = new String[] { "long" };
 
-		_methodName36 = "getCustomPagePlidsByUserId";
+		_methodName36 = "getCustomPageFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes36 = new String[] { "long" };
+		_methodParameterTypes36 = new String[] { "long", "int" };
 
-		_methodName37 = "getUsersByCustomPageFeedback";
+		_methodName37 = "getCustomPagePlidsByUserId";
 
 		_methodParameterTypes37 = new String[] { "long" };
+
+		_methodName38 = "getUsersByCustomPageFeedback";
+
+		_methodParameterTypes38 = new String[] { "long" };
 	}
 
 	@Override
@@ -827,7 +831,7 @@ public class CustomPageFeedbackLocalServiceClp
 	}
 
 	@Override
-	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesByLayoutUserIdAndCustomPageFeedback(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
@@ -855,14 +859,42 @@ public class CustomPageFeedbackLocalServiceClp
 	}
 
 	@Override
+	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22, new Object[] { userId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.portal.model.Layout>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<com.liferay.portal.model.Layout> getCustomPagesByPageTypeAndCustomPageFeedbackUserId(
 		int pageType, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22, new Object[] { pageType, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { pageType, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -889,8 +921,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23, new Object[] { pageType, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { pageType, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -914,8 +946,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] { plid, userId, feedbackStatus });
 		}
 		catch (Throwable t) {
@@ -944,8 +976,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25, new Object[] { plid, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26, new Object[] { plid, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -974,8 +1006,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
 					new Object[] { plid, userId, feedbackStatus });
 		}
 		catch (Throwable t) {
@@ -1009,8 +1041,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27, new Object[] { plid, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28, new Object[] { plid, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1039,8 +1071,8 @@ public class CustomPageFeedbackLocalServiceClp
 	public void deleteCustomPageFeedbackByPlid(long plid)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName28,
-				_methodParameterTypes28, new Object[] { plid });
+			_invokableLocalService.invokeMethod(_methodName29,
+				_methodParameterTypes29, new Object[] { plid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1063,8 +1095,8 @@ public class CustomPageFeedbackLocalServiceClp
 	public void deleteCustomPageFeedbackByUserId(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName29,
-				_methodParameterTypes29, new Object[] { userId });
+			_invokableLocalService.invokeMethod(_methodName30,
+				_methodParameterTypes30, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1088,8 +1120,8 @@ public class CustomPageFeedbackLocalServiceClp
 		int feedbackStatus)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName30,
-				_methodParameterTypes30, new Object[] { plid, feedbackStatus });
+			_invokableLocalService.invokeMethod(_methodName31,
+				_methodParameterTypes31, new Object[] { plid, feedbackStatus });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1116,8 +1148,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31, new Object[] { plid, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32, new Object[] { plid, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1149,8 +1181,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32, new Object[] { plid, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName33,
+					_methodParameterTypes33, new Object[] { plid, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1177,8 +1209,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33, new Object[] { plid });
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34, new Object[] { plid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1205,8 +1237,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1234,8 +1266,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35,
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
 					new Object[] { plid, feedbackStatus });
 		}
 		catch (Throwable t) {
@@ -1263,8 +1295,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36, new Object[] { userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37, new Object[] { userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1291,8 +1323,8 @@ public class CustomPageFeedbackLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName37,
-					_methodParameterTypes37, new Object[] { plid });
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38, new Object[] { plid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1384,4 +1416,6 @@ public class CustomPageFeedbackLocalServiceClp
 	private String[] _methodParameterTypes36;
 	private String _methodName37;
 	private String[] _methodParameterTypes37;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
 }

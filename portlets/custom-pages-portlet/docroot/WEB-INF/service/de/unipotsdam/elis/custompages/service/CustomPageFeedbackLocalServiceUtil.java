@@ -287,6 +287,12 @@ public class CustomPageFeedbackLocalServiceUtil {
 		return getService().getCustomPagesByLayoutUserId(userId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.Layout> getCustomPagesByLayoutUserIdAndCustomPageFeedback(
+		long userId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getCustomPagesByLayoutUserIdAndCustomPageFeedback(userId);
+	}
+
 	public static java.util.List<com.liferay.portal.model.Layout> getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()

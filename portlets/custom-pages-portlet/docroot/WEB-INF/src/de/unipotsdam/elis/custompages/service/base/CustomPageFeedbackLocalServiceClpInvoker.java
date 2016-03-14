@@ -130,79 +130,83 @@ public class CustomPageFeedbackLocalServiceClpInvoker {
 
 		_methodParameterTypes43 = new String[] { "long" };
 
-		_methodName44 = "getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId";
+		_methodName44 = "getCustomPagesByLayoutUserIdAndCustomPageFeedback";
 
 		_methodParameterTypes44 = new String[] { "long" };
 
-		_methodName45 = "getCustomPagesByPageTypeAndCustomPageFeedbackUserId";
+		_methodName45 = "getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId";
 
-		_methodParameterTypes45 = new String[] { "int", "long" };
+		_methodParameterTypes45 = new String[] { "long" };
 
-		_methodName46 = "getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser";
+		_methodName46 = "getCustomPagesByPageTypeAndCustomPageFeedbackUserId";
 
 		_methodParameterTypes46 = new String[] { "int", "long" };
 
-		_methodName47 = "addCustomPageFeedback";
+		_methodName47 = "getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser";
 
-		_methodParameterTypes47 = new String[] { "long", "long", "int" };
+		_methodParameterTypes47 = new String[] { "int", "long" };
 
 		_methodName48 = "addCustomPageFeedback";
 
-		_methodParameterTypes48 = new String[] { "long", "long" };
+		_methodParameterTypes48 = new String[] { "long", "long", "int" };
 
-		_methodName49 = "updateCustomPageFeedbackStatus";
+		_methodName49 = "addCustomPageFeedback";
 
-		_methodParameterTypes49 = new String[] { "long", "long", "int" };
+		_methodParameterTypes49 = new String[] { "long", "long" };
 
-		_methodName50 = "deleteCustomPageFeedback";
+		_methodName50 = "updateCustomPageFeedbackStatus";
 
-		_methodParameterTypes50 = new String[] {
-				"de.unipotsdam.elis.custompages.model.CustomPageFeedback"
-			};
+		_methodParameterTypes50 = new String[] { "long", "long", "int" };
 
 		_methodName51 = "deleteCustomPageFeedback";
 
-		_methodParameterTypes51 = new String[] { "long", "long" };
+		_methodParameterTypes51 = new String[] {
+				"de.unipotsdam.elis.custompages.model.CustomPageFeedback"
+			};
 
-		_methodName52 = "deleteCustomPageFeedbackByPlid";
+		_methodName52 = "deleteCustomPageFeedback";
 
-		_methodParameterTypes52 = new String[] { "long" };
+		_methodParameterTypes52 = new String[] { "long", "long" };
 
-		_methodName53 = "deleteCustomPageFeedbackByUserId";
+		_methodName53 = "deleteCustomPageFeedbackByPlid";
 
 		_methodParameterTypes53 = new String[] { "long" };
 
-		_methodName54 = "deleteCustomPageFeedbackByPlidAndFeedbackStatus";
+		_methodName54 = "deleteCustomPageFeedbackByUserId";
 
-		_methodParameterTypes54 = new String[] { "long", "int" };
+		_methodParameterTypes54 = new String[] { "long" };
 
-		_methodName55 = "getCustomPageFeedback";
+		_methodName55 = "deleteCustomPageFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes55 = new String[] { "long", "long" };
+		_methodParameterTypes55 = new String[] { "long", "int" };
 
-		_methodName56 = "fetchCustomPageFeedback";
+		_methodName56 = "getCustomPageFeedback";
 
 		_methodParameterTypes56 = new String[] { "long", "long" };
 
-		_methodName57 = "getCustomPageFeedbackByPlid";
+		_methodName57 = "fetchCustomPageFeedback";
 
-		_methodParameterTypes57 = new String[] { "long" };
+		_methodParameterTypes57 = new String[] { "long", "long" };
 
-		_methodName58 = "getCustomPageFeedbackByUserId";
+		_methodName58 = "getCustomPageFeedbackByPlid";
 
 		_methodParameterTypes58 = new String[] { "long" };
 
-		_methodName59 = "getCustomPageFeedbackByPlidAndFeedbackStatus";
+		_methodName59 = "getCustomPageFeedbackByUserId";
 
-		_methodParameterTypes59 = new String[] { "long", "int" };
+		_methodParameterTypes59 = new String[] { "long" };
 
-		_methodName60 = "getCustomPagePlidsByUserId";
+		_methodName60 = "getCustomPageFeedbackByPlidAndFeedbackStatus";
 
-		_methodParameterTypes60 = new String[] { "long" };
+		_methodParameterTypes60 = new String[] { "long", "int" };
 
-		_methodName61 = "getUsersByCustomPageFeedback";
+		_methodName61 = "getCustomPagePlidsByUserId";
 
 		_methodParameterTypes61 = new String[] { "long" };
+
+		_methodName62 = "getUsersByCustomPageFeedback";
+
+		_methodParameterTypes62 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -319,109 +323,114 @@ public class CustomPageFeedbackLocalServiceClpInvoker {
 
 		if (_methodName44.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(((Long)arguments[0]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.getCustomPagesByLayoutUserIdAndCustomPageFeedback(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName45.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(((Integer)arguments[0]).intValue(),
-				((Long)arguments[1]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.getCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName46.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(((Integer)arguments[0]).intValue(),
+			return CustomPageFeedbackLocalServiceUtil.getCustomPagesByPageTypeAndCustomPageFeedbackUserId(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName47.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.addCustomPageFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				((Integer)arguments[2]).intValue());
+			return CustomPageFeedbackLocalServiceUtil.getGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser(((Integer)arguments[0]).intValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName48.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return CustomPageFeedbackLocalServiceUtil.addCustomPageFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue());
 		}
 
 		if (_methodName49.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			return CustomPageFeedbackLocalServiceUtil.addCustomPageFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
 			return CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback((de.unipotsdam.elis.custompages.model.CustomPageFeedback)arguments[0]);
-		}
-
 		if (_methodName51.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback((de.unipotsdam.elis.custompages.model.CustomPageFeedback)arguments[0]);
 		}
 
 		if (_methodName52.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
-			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByPlid(((Long)arguments[0]).longValue());
-
-			return null;
+			return CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName53.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
-			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByUserId(((Long)arguments[0]).longValue());
+			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByPlid(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
 		if (_methodName54.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByUserId(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
 		if (_methodName55.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedback(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
+
+			return null;
 		}
 
 		if (_methodName56.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.fetchCustomPageFeedback(((Long)arguments[0]).longValue(),
+			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedback(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName57.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(((Long)arguments[0]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.fetchCustomPageFeedback(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName58.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByUserId(((Long)arguments[0]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName59.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
-				((Integer)arguments[1]).intValue());
+			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByUserId(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName60.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes60, parameterTypes)) {
-			return CustomPageFeedbackLocalServiceUtil.getCustomPagePlidsByUserId(((Long)arguments[0]).longValue());
+			return CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlidAndFeedbackStatus(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName61.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes61, parameterTypes)) {
+			return CustomPageFeedbackLocalServiceUtil.getCustomPagePlidsByUserId(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName62.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
 			return CustomPageFeedbackLocalServiceUtil.getUsersByCustomPageFeedback(((Long)arguments[0]).longValue());
 		}
 
@@ -504,4 +513,6 @@ public class CustomPageFeedbackLocalServiceClpInvoker {
 	private String[] _methodParameterTypes60;
 	private String _methodName61;
 	private String[] _methodParameterTypes61;
+	private String _methodName62;
+	private String[] _methodParameterTypes62;
 }
