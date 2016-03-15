@@ -299,17 +299,18 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = Long.valueOf(ParamUtil.getString(resourceRequest, "customPagePlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
-		deleteCustomPageFeedback(resourceRequest, customPage, themeDisplay, userId);
-	}
-
-	private void deleteCustomPageFeedback(PortletRequest request, Layout customPage, ThemeDisplay themeDisplay,
-			long userId) throws NoSuchCustomPageFeedbackException, PortalException, SystemException, Exception {
-
+		
+		boolean movedToPrivateArea = false;
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE) && !CustomPageUtil.feedbackRequested(customPage.getPlid(), userId)) {
 			CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPage.getPlid(), userId);
-			movePageToPrivateAreaIfNecessary(request, customPage, themeDisplay.getUserId());
+			movedToPrivateArea = movePageToPrivateAreaIfNecessary(resourceRequest, customPage, themeDisplay.getUserId());
 		}
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("movedToPrivateArea", movedToPrivateArea);
+		PrintWriter out = resourceResponse.getWriter();
+		out.println(jsonObject.toString());
 	}
 
 	/**
@@ -327,7 +328,12 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE))
 			CustomPageUtil.deleteCustomPageGlobalPublishment(plid);
-		movePageToPrivateAreaIfNecessary(resourceRequest, customPage, themeDisplay.getUserId());
+		boolean movedToPrivateArea = movePageToPrivateAreaIfNecessary(resourceRequest, customPage, themeDisplay.getUserId());
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		jsonObject.put("movedToPrivateArea", movedToPrivateArea);
+		PrintWriter out = resourceResponse.getWriter();
+		out.println(jsonObject.toString());
 	}
 
 	/**
@@ -751,7 +757,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 
 	}
 
-	private void movePageToPrivateAreaIfNecessary(PortletRequest request, Layout layout, long userId)
+	private boolean movePageToPrivateAreaIfNecessary(PortletRequest request, Layout layout, long userId)
 			throws PortalException, SystemException, ReadOnlyException, ValidatorException, IOException {
 		boolean createdInPrivateArea = false;
 		if (layout.getExpandoBridge().hasAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME))
@@ -782,7 +788,9 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				layout.setHidden(false);
 			layout.setPrivateLayout(true);
 			LayoutLocalServiceUtil.updateLayout(layout);
+			return true;
 		}
+		return false;
 	}
 
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {
