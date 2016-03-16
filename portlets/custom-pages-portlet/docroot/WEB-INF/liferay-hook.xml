@@ -7,4 +7,8 @@
         <service-type>com.liferay.portal.service.UserLocalService</service-type>
         <service-impl>de.unipotsdam.elis.custompages.CustomUserLocalServiceWrapper</service-impl>
     </service>
+    <service>
+        <service-type>com.liferay.portal.service.LayoutLocalService</service-type>
+        <service-impl>de.unipotsdam.elis.custompages.CustomLayoutLocalServiceWrapper</service-impl>
+    </service>
 </hook>
