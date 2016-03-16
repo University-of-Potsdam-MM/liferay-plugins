@@ -92,19 +92,6 @@ public class CustomPageLoginAction extends Action {
 			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME,
 					new Boolean(true));
 			CustomPageUtil.setCustomPagePageType(layout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
-
-			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
-			layoutTypePortlet.setLayoutTemplateId(user.getUserId(), "1_column");
-			layoutTypePortlet.addPortletId(user.getUserId(), portlet.getPortletId());
-
-			LayoutLocalServiceUtil.updateLayout(layout);
-
-			PortletPreferences portletSetup = PortletPreferencesFactoryUtil.getLayoutPortletSetup(layout,
-					portlet.getPortletId());
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.GERMAN), "");
-			portletSetup.setValue("portletSetupTitle_" + LocaleUtil.toLanguageId(LocaleUtil.ENGLISH), "");
-			portletSetup.setValue("portletSetupUseCustomTitle", String.valueOf(true));
-			portletSetup.store();
 		}
 
 		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
@@ -113,7 +100,7 @@ public class CustomPageLoginAction extends Action {
 		}
 
 		if (!layoutTypePortlet.hasPortletId(portlet.getPortletId())) {
-			layoutTypePortlet.addPortletId(user.getUserId(), portlet.getPortletId());
+			layoutTypePortlet.addPortletId(user.getUserId(), portlet.getPortletId(), "column-1", 0);
 			LayoutLocalServiceUtil.updateLayout(layout);
 		}
 
