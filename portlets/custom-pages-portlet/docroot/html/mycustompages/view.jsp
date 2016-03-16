@@ -12,8 +12,6 @@
 	if (personalSite) {
 		if (!publicPage) {
 %>
-<div style="display: none; position: absolute; left: 0px; top: 0px; right: 0px; z-index: 1;" class="portlet-msg-success" id="myAlert">wegrerh</div>
-
 			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
 			
 			<%@ include file="/html/table_filter_input.jsp" %>
@@ -84,8 +82,8 @@
 </div>
 
 <aui:script>
-var dialog;
 var messageOnDialogClose = '';
+var dialog;
 var iconMenuIdlist = [];
 var myCustomPageDataTable;
 var myCustomPageData;
@@ -368,10 +366,10 @@ Liferay.provide(window, '<portlet:namespace />changeCustomPageType',
 	                    success: function() {
 	                        updateTableData(A);
 	                        if (type === parseInt('<%=CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE %>')){
-		                        fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-type-changed-to-normal-page") %>');
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-type-changed-to-normal-page") %>');
 	                        }
 	                        else {
-		                        fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-added-to-portfolio") %>');
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-added-to-portfolio") %>');
 	                        }
 	                    }
 	                }
@@ -393,7 +391,7 @@ Liferay.provide(window, '<portlet:namespace />deletePublishment',
                         updateTableData(A);
                         var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
                         if (movedToPrivateArea)
-                        	fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
+                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
                     }
                 }
             });
@@ -415,7 +413,7 @@ Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
 	                        updateTableData(A);
 	                        var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
 	                        if (movedToPrivateArea)
-	                        	fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
 	                    }
 	                }
 	            });
@@ -582,19 +580,6 @@ function openInvitePopUp(renderURL, title, forPublishment){
 	});
 }
 
-function setMessageOnDialogClose(message){
-	messageOnDialogClose = message;
-}
-
-function closeDialog(){
-	dialog.hide();
-	refreshPortlet();
-	if (messageOnDialogClose != ''){
-		fadeInAlert(messageOnDialogClose);
-		messageOnDialogClose = '';
-	}
-}
-
 AUI().use('aui-base',
     'liferay-menu',
     function(A) {
@@ -603,14 +588,17 @@ AUI().use('aui-base',
         }
     });
     
-function fadeInAlert(text){   
-	var alertDiv = $( "div#myAlert" );
-	alertDiv.text(text);
-	alertDiv.fadeIn( 300 ).delay( 3500 ).fadeOut( 400 );
+function setMessageOnDialogClose(message){
+	messageOnDialogClose = message;
 }
 
-function fadeOutAlert(){
-	$( "div#myAlert" ).fadeOut( 400 );
+function closeDialog(){
+	dialog.hide();
+	refreshPortlet();
+	if (messageOnDialogClose != ''){
+		<portlet:namespace />fadeInAlert(messageOnDialogClose);
+		messageOnDialogClose = '';
+	}
 }
 </aui:script>
 

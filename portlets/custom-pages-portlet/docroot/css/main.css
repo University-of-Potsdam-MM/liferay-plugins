@@ -868,3 +868,12 @@ th.table-col-changes div:before {
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
 }
+
+#portlet_mycustompages_WAR_custompagesportlet .portlet-msg-success , #portlet_othercustompages_WAR_custompagesportlet .portlet-msg-success{
+    display: none; 
+    position: absolute; 
+    left: 0px; 
+    top: 0px; 
+    right: 0px; 
+    z-index: 1;
+}
