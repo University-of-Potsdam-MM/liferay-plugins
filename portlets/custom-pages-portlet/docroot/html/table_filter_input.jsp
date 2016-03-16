@@ -36,8 +36,9 @@
 			<aui:input id="inputFeedbackNone" name="custompages-no-publishment" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackNoneCheckbox\", \"true\") %>"></aui:input>
 			<aui:input id="inputFeedbackRequested" name="custompages-requested" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackRequestedCheckbox\", \"true\") %>"></aui:input>
 			<aui:input id="inputFeedbackDelivered" name="custompages-delivered" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputFeedbackDeliveredCheckbox\", \"true\") %>"></aui:input>
-			<span id="<portlet:namespace />inputVisibilitySpan"><%= LanguageUtil.get(pageContext, "custompages-visible") %></span>
-			<aui:input id="inputVisibility" name="custompages-hidden" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputVisibilityCheckbox\", \"false\") %>"></aui:input>
+			<span id="<portlet:namespace />inputVisibleSpan"><%= LanguageUtil.get(pageContext, "custompages-visible") %></span>
+			<aui:input id="inputVisible" name="custompages-visible" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputVisibleCheckbox\", \"true\") %>"></aui:input>
+			<aui:input id="inputInvisible" name="custompages-hidden" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputInvisibleCheckbox\", \"false\") %>"></aui:input>
 			<div class="arrow"></div>
 	  </div>
 <% } %>
@@ -103,8 +104,9 @@ var <portlet:namespace />inputPublishmentIndividuel;
 var <portlet:namespace />inputFeedbackNone;
 var <portlet:namespace />inputFeedbackRequested;
 var <portlet:namespace />inputFeedbackDelivered;
-var <portlet:namespace />inputVisibility;
-var <portlet:namespace />inputVisibilitySpan;
+var <portlet:namespace />inputVisible;
+var <portlet:namespace />inputVisibleSpan;
+var <portlet:namespace />inputInvisible;
 var <portlet:namespace />filterInput;
 
 AUI().use('aui-base', function(A) {
@@ -116,8 +118,10 @@ AUI().use('aui-base', function(A) {
 	<portlet:namespace />inputFeedbackNone = A.one('#<portlet:namespace />inputFeedbackNone');
 	<portlet:namespace />inputFeedbackRequested = A.one('#<portlet:namespace />inputFeedbackRequested');
 	<portlet:namespace />inputFeedbackDelivered = A.one('#<portlet:namespace />inputFeedbackDelivered');
-	<portlet:namespace />inputVisibility = A.one('#<portlet:namespace />inputVisibility');
-	<portlet:namespace />inputVisibilitySpan = A.one('#<portlet:namespace />inputVisibilitySpan');
+	<portlet:namespace />inputVisible = A.one('#<portlet:namespace />inputVisible');
+	<portlet:namespace />inputVisibleSpan = A.one('#<portlet:namespace />inputVisibleSpan');
+	<portlet:namespace />inputInvisible = A.one('#<portlet:namespace />inputInvisible');
+	<portlet:namespace />inputInvisibleSpan = A.one('#<portlet:namespace />inputInvisibleSpan');
 	<portlet:namespace />filterInput = A.one('#<portlet:namespace />filterInput');
 	
 	<portlet:namespace />filterInput.on('keyup', function(e) {
@@ -137,9 +141,10 @@ function <portlet:namespace />initFilter(customPageTable, myCustomPagesTable){
 			<portlet:namespace />inputPublishmentNone.ancestor().hide();
 	}
 	else{
-		if (<portlet:namespace />inputVisibilitySpan){
-			<portlet:namespace />inputVisibilitySpan.hide();
-			<portlet:namespace />inputVisibility.ancestor().hide();
+		if (<portlet:namespace />inputVisibleSpan){
+			<portlet:namespace />inputVisibleSpan.hide();
+			<portlet:namespace />inputVisible.ancestor().hide();
+			<portlet:namespace />inputInvisible.ancestor().hide();
 		}
 	}
 }
@@ -167,6 +172,7 @@ function <portlet:namespace />filterTable(element){
 	        	var feedbackRequested = list.get('inFeedbackProcess');
 	        	var feedbackDelivered = list.get('feedbackDelivered');
 	        	var feedbackUnrequested = !feedbackRequested && !feedbackDelivered;
+	        	var isHidden = list.get('hidden');
 	        	result = result && 
 					((hasCustomPageTypeNone && (<portlet:namespace />inputPageTypeNone.get('value') === 'true')) ||
 					(hasCustomPageTypePortfolioPage && (<portlet:namespace />inputPageTypePortfolioPage.get('value') === 'true')));
@@ -179,7 +185,9 @@ function <portlet:namespace />filterTable(element){
 		    		(feedbackRequested &&(<portlet:namespace />inputFeedbackRequested.get('value') === 'true')) || 
 		    		(feedbackDelivered && (<portlet:namespace />inputFeedbackDelivered.get('value') === 'true')));
 	        	if (!<portlet:namespace />isMyCustomPagesTable){
-	        		result = result && (list.get('hidden') === (<portlet:namespace />inputVisibility.get('value') === 'true'));
+	        		result = result && 
+	        		((isHidden && (<portlet:namespace />inputInvisible.get('value') === 'true')) ||
+	        		(!isHidden && (<portlet:namespace />inputVisible.get('value') === 'true')));
 	        	}
 	        <% } %>
         	var filterInputValue = <portlet:namespace />filterInput.get("value").toLowerCase();
