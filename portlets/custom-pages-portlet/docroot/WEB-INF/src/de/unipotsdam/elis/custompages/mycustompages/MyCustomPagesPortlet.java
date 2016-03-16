@@ -299,7 +299,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		long plid = Long.valueOf(ParamUtil.getString(resourceRequest, "customPagePlid"));
 		long userId = Long.parseLong(ParamUtil.getString(resourceRequest, "userId"));
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
-		
+
 		boolean movedToPrivateArea = false;
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE) && !CustomPageUtil.feedbackRequested(customPage.getPlid(), userId)) {
@@ -328,8 +328,9 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE))
 			CustomPageUtil.deleteCustomPageGlobalPublishment(plid);
-		boolean movedToPrivateArea = movePageToPrivateAreaIfNecessary(resourceRequest, customPage, themeDisplay.getUserId());
-		
+		boolean movedToPrivateArea = movePageToPrivateAreaIfNecessary(resourceRequest, customPage,
+				themeDisplay.getUserId());
+
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("movedToPrivateArea", movedToPrivateArea);
 		PrintWriter out = resourceResponse.getWriter();
@@ -418,7 +419,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					}
 
 				}
-				
+
 				customPage.setParentLayoutId(parentPage.getLayoutId());
 
 				LayoutLocalServiceUtil.updateLayout(customPage);
@@ -676,14 +677,16 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 
 		for (CustomPageFeedback customPageFeedback : CustomPageFeedbackLocalServiceUtil
 				.getCustomPageFeedbackByPlid(customPagePlid)) {
-			JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
-			userJSONObject.put("userEmailAddress", customPageFeedback.getUser().getEmailAddress());
-			userJSONObject.put("userFullName", customPageFeedback.getUser().getFullName());
-			userJSONObject.put("userId", customPageFeedback.getUser().getUserId());
-			userJSONObject.put("feedbackRequested",
-					customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
+			if (UserLocalServiceUtil.fetchUser(customPageFeedback.getUserId()) != null) {
+				JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
+				userJSONObject.put("userEmailAddress", customPageFeedback.getUser().getEmailAddress());
+				userJSONObject.put("userFullName", customPageFeedback.getUser().getFullName());
+				userJSONObject.put("userId", customPageFeedback.getUser().getUserId());
+				userJSONObject.put("feedbackRequested",
+						customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
 
-			jsonArray.put(userJSONObject);
+				jsonArray.put(userJSONObject);
+			}
 		}
 
 		jsonObject.put("users", jsonArray);
@@ -742,7 +745,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				}
 
 			}
-			
+
 			movePageToPrivateAreaIfNecessary(actionRequest, customPage, themeDisplay.getUserId());
 			if ((CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0 || CustomPageUtil
 					.isPublishedGlobal(customPagePlid)) && customPage.isPrivateLayout())

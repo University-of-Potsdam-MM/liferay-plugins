@@ -1,4 +1,4 @@
-<%@ include file="/html/init_view.jsp"%>
+<%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />

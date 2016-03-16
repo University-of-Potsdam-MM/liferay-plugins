@@ -1,6 +1,6 @@
 <%@ include file="/html/init.jsp"%>
 
-<div class="portlet-msg-success" id="<portlet:namespace />myAlert">wegrerh</div>
+<div class="portlet-msg-success" id="<portlet:namespace />myAlert"></div>
 
 <portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 <liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>" var="privateMessagingURL">

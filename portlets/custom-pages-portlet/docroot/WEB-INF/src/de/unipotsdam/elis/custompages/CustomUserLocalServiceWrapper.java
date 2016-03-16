@@ -22,5 +22,14 @@ public class CustomUserLocalServiceWrapper extends UserLocalServiceWrapper {
 		
 		return deletedUser;
 	}
+	
+	@Override
+	public User deleteUser(long userId) throws PortalException, SystemException {
+		User deletedUser = super.deleteUser(userId);
+		
+		CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedbackByUserId(userId);
+		
+		return deletedUser;
+	}
 
 }
