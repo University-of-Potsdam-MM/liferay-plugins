@@ -735,6 +735,9 @@ tr.portfolio-page td.table-col-title:before {
     font-size: 14px;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 tr.custom-page td.table-col-title:before {
@@ -751,6 +754,9 @@ tr.custom-page td.table-col-title:before {
     font-size: 14px;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 th.table-col-publishment:before {
@@ -763,6 +769,9 @@ th.table-col-publishment:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
  #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-publishment div:before {
@@ -775,10 +784,13 @@ th.table-col-publishment:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 
-th.table-col-feedback:before {
+#p_p_id_mycustompages_WAR_custompagesportlet_ th.table-col-feedback:before {
     content: "\f19c ";
     color: #fff;
     font-family: FontAwesome;
@@ -788,6 +800,9 @@ th.table-col-feedback:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 
@@ -802,6 +817,9 @@ th.table-col-changes div:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-creator div:before
@@ -815,6 +833,9 @@ th.table-col-changes div:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 	
 }
 
@@ -828,6 +849,9 @@ th.table-col-changes div:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 	
 }
 
@@ -842,6 +866,9 @@ th.table-col-changes div:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-visible:before  {
@@ -855,6 +882,9 @@ th.table-col-changes div:before {
     outline: none;
         -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-feedback div:before {
@@ -865,6 +895,12 @@ th.table-col-changes div:before {
     font-size: 14px;
     text-shadow: none;
     outline: none;
-        -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
     text-rendering: auto;
+    font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
 }
+
+
+
