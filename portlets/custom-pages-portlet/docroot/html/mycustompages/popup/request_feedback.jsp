@@ -1,10 +1,11 @@
-<%@ include file="/html/init_view.jsp"%>
+<%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
 
 <%
 String customPagePlid = renderRequest.getParameter("customPagePlid"); 
+String finished = renderRequest.getParameter("finished");
 %>
 
 <c:if test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
@@ -47,6 +48,7 @@ String customPagePlid = renderRequest.getParameter("customPagePlid");
 			<portlet:renderURL var="redirectHereURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 				<portlet:param name="mvcPath" value="/html/mycustompages/popup/request_feedback.jsp" />
 				<portlet:param name="customPagePlid" value="<%= customPagePlid %>" />
+				<portlet:param name="finished" value="true" />
 			</portlet:renderURL>
 
 			
@@ -62,8 +64,9 @@ String customPagePlid = renderRequest.getParameter("customPagePlid");
 </div>
 
 <aui:script use="aui-base,datasource-io,datatype-number,liferay-so-invite-members-list">
-	var closeButton = A.one('.close');
-	closeButton.on("click",function(){Liferay.Util.getOpener().refreshPortlet()});
+	if ('<%=finished%>' === 'true'){
+		Liferay.Util.getOpener().closeDialog();
+	}
 	
 	var inviteMembersContainer = A.one('#<portlet:namespace />inviteMembersContainer');
 

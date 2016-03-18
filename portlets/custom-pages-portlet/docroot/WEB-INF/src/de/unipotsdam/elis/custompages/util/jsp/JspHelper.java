@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.portlet.ActionRequest;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
-import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -46,7 +43,6 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
@@ -159,23 +155,25 @@ public class JspHelper {
 		boolean inFeedbackProcess = false;
 		boolean feedbackDelivered = false;
 		for (CustomPageFeedback customPageFeedback : customPageFeedbacks) {
-			customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
-			customPageFeedbackJSON.put("userId", customPageFeedback.getUserId());
-			customPageFeedbackJSON.put("userName", customPageFeedback.getUser().getFullName());
-			customPageFeedbackJSON.put("feedbackStatus", customPageFeedback.getFeedbackStatus());
-			customPageFeedbackJSON.put(
-					"creationDate",
-					FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
-							customPageFeedback.getCreateDate()));
-			customPageFeedbackJSON.put(
-					"modifiedDate",
-					FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
-							customPageFeedback.getModifiedDate()));
-			customPageFeedbackJSONArray.put(customPageFeedbackJSON);
-			if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED)
-				inFeedbackProcess = true;
-			else if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_DELIVERED)
-				feedbackDelivered = true;
+			if (UserLocalServiceUtil.fetchUser(customPageFeedback.getUserId()) != null) {
+				customPageFeedbackJSON = JSONFactoryUtil.createJSONObject();
+				customPageFeedbackJSON.put("userId", customPageFeedback.getUserId());
+				customPageFeedbackJSON.put("userName", customPageFeedback.getUser().getFullName());
+				customPageFeedbackJSON.put("feedbackStatus", customPageFeedback.getFeedbackStatus());
+				customPageFeedbackJSON.put(
+						"creationDate",
+						FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+								customPageFeedback.getCreateDate()));
+				customPageFeedbackJSON.put(
+						"modifiedDate",
+						FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+								customPageFeedback.getModifiedDate()));
+				customPageFeedbackJSONArray.put(customPageFeedbackJSON);
+				if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED)
+					inFeedbackProcess = true;
+				else if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_DELIVERED)
+					feedbackDelivered = true;
+			}
 		}
 		customPageJSON.put("inFeedbackProcess", inFeedbackProcess);
 		customPageJSON.put("feedbackDelivered", feedbackDelivered);
@@ -322,7 +320,8 @@ public class JspHelper {
 				layout.getExpandoBridge().setAttribute(CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "0");
 
 			CustomPageUtil.setCustomPagePageType(layout, CustomPageStatics.CUSTOM_PAGE_TYPE_NONE);
-			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME, new Boolean(true));
+			layout.getExpandoBridge().setAttribute(CustomPageStatics.CREATED_DYNAMICAL_CUSTOM_FIELD_NAME,
+					new Boolean(true));
 
 			if (addPortlet) {
 				String portletId = (String) request.getAttribute(WebKeys.PORTLET_ID);

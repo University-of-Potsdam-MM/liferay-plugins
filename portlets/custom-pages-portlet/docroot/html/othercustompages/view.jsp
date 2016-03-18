@@ -230,6 +230,7 @@ Liferay.provide(window, '<portlet:namespace />changeVisibility',
                 on: {
                     success: function() {
                         updateOtherCustomPagesData(A);
+                        <portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-visibility-changed") %>');
                     }
                 }
             });

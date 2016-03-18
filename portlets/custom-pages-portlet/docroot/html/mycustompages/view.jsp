@@ -12,7 +12,6 @@
 	if (personalSite) {
 		if (!publicPage) {
 %>
-
 			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
 			
 			<%@ include file="/html/table_filter_input.jsp" %>
@@ -83,6 +82,8 @@
 </div>
 
 <aui:script>
+var messageOnDialogClose = '';
+var dialog;
 var iconMenuIdlist = [];
 var myCustomPageDataTable;
 var myCustomPageData;
@@ -364,6 +365,12 @@ Liferay.provide(window, '<portlet:namespace />changeCustomPageType',
 	                on: {
 	                    success: function() {
 	                        updateTableData(A);
+	                        if (type === parseInt('<%=CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE %>')){
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-type-changed-to-normal-page") %>');
+	                        }
+	                        else {
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-added-to-portfolio") %>');
+	                        }
 	                    }
 	                }
 	            });
@@ -382,6 +389,9 @@ Liferay.provide(window, '<portlet:namespace />deletePublishment',
                 on: {
                     success: function() {
                         updateTableData(A);
+                        var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
+                        if (movedToPrivateArea)
+                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
                     }
                 }
             });
@@ -401,6 +411,9 @@ Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
 	                on: {
 	                    success: function() {
 	                        updateTableData(A);
+	                        var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
+	                        if (movedToPrivateArea)
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
 	                    }
 	                }
 	            });
@@ -507,7 +520,7 @@ Liferay.provide(window, '<portlet:namespace />openRequestFeedbackPopup',
 
 
 function openPopUp(renderURL, title) {
-    Liferay.Util.openWindow({
+    dialog = Liferay.Util.openWindow({
         dialog: {
             after: {
                 destroy: function(event) {
@@ -530,7 +543,7 @@ function openPopUp(renderURL, title) {
 
 function openInvitePopUp(renderURL, title, forPublishment){
     AUI().use('aui-base','aui-io-plugin-deprecated','liferay-so-invite-members','liferay-util-window', function(A) {
-	var dialog = Liferay.Util.Window.getWindow(
+	dialog = Liferay.Util.Window.getWindow(
 			{
 				dialog: {
 					align: {
@@ -574,6 +587,19 @@ AUI().use('aui-base',
             Liferay.Menu.register(iconMenuIdlist[menu]);
         }
     });
+    
+function setMessageOnDialogClose(message){
+	messageOnDialogClose = message;
+}
+
+function closeDialog(){
+	dialog.hide();
+	refreshPortlet();
+	if (messageOnDialogClose != ''){
+		<portlet:namespace />fadeInAlert(messageOnDialogClose);
+		messageOnDialogClose = '';
+	}
+}
 </aui:script>
 
 <% } else { %>

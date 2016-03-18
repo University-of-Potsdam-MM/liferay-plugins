@@ -209,6 +209,9 @@
 			<struts-path>site_memberships_admin</struts-path>
 			<parent-struts-path>sites_admin</parent-struts-path>
 			<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+			<control-panel-entry-category>site_administration.users</control-panel-entry-category>
+			<control-panel-entry-weight>1.0</control-panel-entry-weight>
+			<control-panel-entry-class>com.liferay.portlet.sitesadmin.SiteMembershipsControlPanelEntry</control-panel-entry-class>
 			<preferences-owned-by-group>true</preferences-owned-by-group>
 			<use-default-template>false</use-default-template>
 			<private-request-attributes>false</private-request-attributes>
@@ -219,10 +222,9 @@
 			<css-class-wrapper>portlet-communities</css-class-wrapper>
 			<add-default-resource>true</add-default-resource>
 			<system>false</system>
-			<include>false</include>
 		</portlet>
 		<portlet>
-		<portlet-name>175</portlet-name>
+			<portlet-name>175</portlet-name>
 			<icon>/html/icons/asset_publisher.png</icon>
 			<parent-struts-path>asset_publisher</parent-struts-path>
 			<configuration-action-class>com.liferay.portlet.assetpublisher.action.ConfigurationActionImpl</configuration-action-class>
@@ -262,7 +264,7 @@
 			<include>false</include>
 		</portlet>
 		<portlet>
-		<portlet-name>184</portlet-name>
+			<portlet-name>184</portlet-name>
 			<icon>/html/icons/navigation.png</icon>
 			<struts-path>sites_directory</struts-path>
 			<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
@@ -275,6 +277,20 @@
 			<render-weight>50</render-weight>
 			<css-class-wrapper>portlet-sites-directory</css-class-wrapper>
 			<add-default-resource>true</add-default-resource>
+			<include>false</include>
+		</portlet>
+		<portlet>
+			<portlet-name>188</portlet-name>
+			<icon>/html/icons/directory.png</icon>
+			<parent-struts-path>directory</parent-struts-path>
+			<portlet-url-class>com.liferay.portal.struts.StrutsActionPortletURL</portlet-url-class>
+			<preferences-owned-by-group>true</preferences-owned-by-group>
+			<use-default-template>false</use-default-template>
+			<private-request-attributes>false</private-request-attributes>
+			<private-session-attributes>false</private-session-attributes>
+			<render-weight>50</render-weight>
+			<header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css>
+			<css-class-wrapper>portlet-directory</css-class-wrapper>
 			<include>false</include>
 		</portlet>
 </liferay-portlet-app>

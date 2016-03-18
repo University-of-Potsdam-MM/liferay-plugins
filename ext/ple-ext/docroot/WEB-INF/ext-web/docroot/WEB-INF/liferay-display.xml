@@ -8,6 +8,7 @@
 		<portlet id="1_WAR_privatemessagingportlet" />
 	</category>
 	<category name="category.workspaces">
+		<portlet id="workspacegrid_WAR_workspacegridportlet" />
 		<portlet id="29" />
 		<portlet id="174" />
 		<portlet id="187" />

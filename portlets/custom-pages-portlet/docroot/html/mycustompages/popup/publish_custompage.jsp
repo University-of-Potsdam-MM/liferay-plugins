@@ -1,4 +1,4 @@
-<%@ include file="/html/init_view.jsp"%>
+<%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
 <liferay-theme:defineObjects />
@@ -7,6 +7,7 @@
 String customPagePlid = renderRequest.getParameter("customPagePlid"); 
 boolean isPrivate = renderRequest.getParameter("isPrivate").equals("1");
 String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPublishment()";
+String published = renderRequest.getParameter("published");
 %>
 
 <c:if test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
@@ -55,12 +56,13 @@ String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPubl
 				<portlet:param name="mvcPath" value="/html/mycustompages/popup/publish_custompage.jsp" />
 				<portlet:param name="customPagePlid" value="<%= customPagePlid %>" />
 				<portlet:param name="isPrivate" value="<%= String.valueOf(isPrivate) %>" />
+				<portlet:param name="published" value="true" />
 			</portlet:renderURL>
 
 			
 			<aui:button value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
 				
-			<aui:form action="<%= publishCustomPageURL %>" id="<portlet:namespace />fm" method="post" name="<portlet:namespace />fm">
+			<aui:form action="<%= publishCustomPageURL %>" id="fm" method="post" name="fm">
 				<aui:input name="redirect" type="hidden" value="<%= redirectHereURL %>" />
 				<aui:input name="receiverUserIds" type="hidden" value="" />
 				<aui:input name="customPagePlid" type="hidden" value="<%= customPagePlid %>" />
@@ -74,8 +76,23 @@ String globalPubllishmentMethod = renderResponse.getNamespace() + "addGlobalPubl
 </div>
 
 <aui:script use="aui-base,datasource-io,datatype-number,liferay-so-invite-members-list">
-	var closeButton = A.one('.close');
-	closeButton.on("click",function(){Liferay.Util.getOpener().refreshPortlet()});
+	if ('<%=published%>' === 'true'){
+		Liferay.Util.getOpener().closeDialog();
+	}
+
+	var publishState = 0;
+	A.one('#<portlet:namespace />fm').after("submit",function(){
+		if (invitedMembersList.all('.user').size() > 0 || invitedMembersList.one('.global')){
+			if ('<%= isPrivate %>' === 'true'){
+				Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-public-area") %>');
+				publishState = 1;
+			}
+		}
+		else if ('<%= isPrivate %>' === 'false'){
+			Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
+			publishState = 2;
+		}
+	});
 	
 	var inviteMembersContainer = A.one('#<portlet:namespace />inviteMembersContainer');
 

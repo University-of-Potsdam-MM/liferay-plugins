@@ -1,5 +1,7 @@
 <%@ include file="/html/init.jsp"%>
 
+<div class="portlet-msg-success" id="<portlet:namespace />myAlert"></div>
+
 <portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 <liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>" var="privateMessagingURL">
 	<portlet:param name="mvcPath" value="/new_message.jsp"/>
@@ -87,5 +89,11 @@ AUI().use(
     
 function confirmDeletion(){
 	return confirm("<%=LanguageUtil.get(pageContext, "custompages-confirm-deletion")%>");
+}
+    
+function <portlet:namespace />fadeInAlert(text){   
+	var alertDiv = $( "div#<portlet:namespace />myAlert" );
+	alertDiv.text(text);
+	alertDiv.fadeIn( 300 ).delay( 3500 ).fadeOut( 400 );
 }
 </aui:script>
