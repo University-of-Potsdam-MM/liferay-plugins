@@ -203,21 +203,15 @@ td.table-col-changes.table-sorted {
 	    text-decoration: underline !important; 
 }
 /*feedback icons */
-/*
+
 td.feedback-unrequested:before {
-	position:absolute;
-	content:".";
-	color:red;
-	background-color:red;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	text-indent:-999999px;
-	margin-top: .3em;
-}*/
+	content:"\f0da";
+	font-family:fontawesome;
+	color:#014260;
+}
 
 td.feedback-unrequested a {
-	margin-left:1.1em;
+	margin-left:8px;
 }
 
 
@@ -230,44 +224,26 @@ td.feedback-unrequested a {
 }
 
 td.feedback-requested:before {
-	position:absolute;
-	content:".";
-	text-indent:-999999px;
-	color:orange;
-	background-color:orange;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	margin-left: -1.1em;
-	margin-top: .2em;
+	color: orange;
+    border-radius: 50%;
+	content: "\f017";
+    font-family: fontawesome;
+    margin-right: .3em;
 }
 
-td.feedback-requested {
-	text-indent:1em;
-}
+
 
 td.feedback-requested span img  {
 	display:none;
 }
 
 td.feedback-delivered:before {
-	position:absolute;
-	content:".";
-	text-indent:-999999px;
-	color:green;
-	background-color:green;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	    margin-left: -1.2em;
-	    margin-top: .3em;
-	
+	    content: "\f164;";
+    font-family: fontawesome;
+    color: #014260;
+    color:green;
 }
 
-
-td.feedback-delivered {
-	text-indent:1em;
-}
 
 td.feedback-delivered span img {
 	display:none;
@@ -298,6 +274,8 @@ td.feedback-delivered span img {
 .aui #portlet_mycustompages_WAR_custompagesportlet .table td.feedback-unrequested {
     border-right: none !important;
 }
+
+
 
 .aui #portlet_mycustompages_WAR_custompagesportlet .table td.feedback-unrequested +td {
     border-left: none !important;
@@ -954,4 +932,20 @@ th.table-col-changes div:before {
     z-index: 1;
     font-weight: bold;
     text-align: center;
+}
+
+
+/* Portlets auf Profilseiten */
+
+.aui body.public-page #portlet_mycustompages_WAR_custompagesportlet .navbar-search, .aui body.public-page #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search {
+	margin-left:0;
+	margin-top:0;
+}
+
+body.public-page input#_mycustompages_WAR_custompagesportlet_filterInput, body.public-page input#_othercustompages_WAR_custompagesportlet_filterInput {
+	    margin-left: 3px;
+}
+
+table*:focus {
+	outline:none;
 }
