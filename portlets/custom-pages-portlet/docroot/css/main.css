@@ -419,13 +419,26 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
+    margin-left:31px;
    
 }
 
+#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced {
+	    width: 10px;
+    height: 13px !important;
+    background-color:#d0dae3;
+}
+
+#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search 
+{
+	
+	display: none !important;
+}
 
 
-
-
+.aui  #_mycustompages_WAR_custompagesportlet_searchadvanced .popover.bottom .arrow, .aui  #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .popover.bottom .arrow  {
+	left:12px;
+}
 
 #addcustompageButton {
     clear: left;
@@ -570,8 +583,8 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 
 .invited-users-wrapper .invite-actions .btn{
 	   display: block;
-    text-align: right;
-    float: right;
+    text-align: center;
+  
     width: 50%;
     margin: 0 auto;
 }
