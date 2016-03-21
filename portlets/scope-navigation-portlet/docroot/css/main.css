@@ -9,9 +9,12 @@
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet .portlet-content {
-	    background-color: #ededed;
+	    background-color: #fff;
     color: #014260;
-    padding: .3em 0 0 .3em;
+    padding:1em .3em 1em .3em;
+    border: 2px solid  #d0dae3;
+    text-align: center;
+    font-weight: bold;
 	
 }
 
@@ -21,7 +24,7 @@
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
 	margin-bottom: 0;
-    width: 85%;
+    width: 100%;
     display: inline-block;
     margin-right: 20px;
 }
@@ -33,6 +36,10 @@
 
 .aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
 	    width: 100%;
+	        border-color: #014260;
+    border-width: 1px;
+    font-weight: bold;
+    color: #014260;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
@@ -49,4 +56,16 @@ option.private:before {
 	
 }
 
+
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
+	    background-color: #d0dae3;
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align:center;
+    font-weight:bold;
+}
 
