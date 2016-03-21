@@ -472,7 +472,15 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 }
 
 div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
-	margin-left:20px;
+	    min-height: 50px;
+    padding-top: 40px;
+    font-weight: bold;
+    color: #014260;
+    text-shadow: none;
+    font-size: 1.3em;
+    width: 95%;
+    display: block;
+    text-align: center;
 }
 
 .user-search-wrapper  {
@@ -480,8 +488,17 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
     	border: none;
     	float: left;
     	padding: 0 12px 12px 12px; 
+    	    max-height: 500px;
+    overflow: scroll;
 }
     
+.user-search-wrapper .invite-user-search {
+		background-image: url('/so-up-theme/css/../images/ple-icons.png');
+		background-repeat:no-repeat;
+		background-position: 20px -91px;
+    	text-indent: 30px;
+	
+}
 .user-search-wrapper h2{
 	margin-top: 0;
 	font-size: 1.5em;
@@ -547,7 +564,7 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 	border: none;
 	margin: 2.5em 0;
 	padding: 5px;
-	text-align: right;
+	text-align: center;
 
 }
 
@@ -555,12 +572,23 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 	   display: block;
     text-align: right;
     float: right;
+    width: 50%;
+    margin: 0 auto;
+}
+
+form#_mycustompages_WAR_custompagesportlet_fm:before {
+	    content: "ODER";
+    display: block;
+    width: 100%;
+    /* background: red; */
+    text-align: center;
+    margin-bottom: 10px;
+        padding-top: 10px;
 }
 
 .invited-users-wrapper .invite-actions form .btn {
-	display: block;
-    float: right;
-    margin-right: 10px;
+	    width: 50%;
+    margin: 0 auto;
 }
 
 
@@ -911,4 +939,6 @@ th.table-col-changes div:before {
     top: 0px; 
     right: 0px; 
     z-index: 1;
+    font-weight: bold;
+    text-align: center;
 }
