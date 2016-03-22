@@ -203,21 +203,15 @@ td.table-col-changes.table-sorted {
 	    text-decoration: underline !important; 
 }
 /*feedback icons */
-/*
+
 td.feedback-unrequested:before {
-	position:absolute;
-	content:".";
-	color:red;
-	background-color:red;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	text-indent:-999999px;
-	margin-top: .3em;
-}*/
+	content:"\f0da";
+	font-family:fontawesome;
+	color:#014260;
+}
 
 td.feedback-unrequested a {
-	margin-left:1.1em;
+	margin-left:8px;
 }
 
 
@@ -230,44 +224,26 @@ td.feedback-unrequested a {
 }
 
 td.feedback-requested:before {
-	position:absolute;
-	content:".";
-	text-indent:-999999px;
-	color:orange;
-	background-color:orange;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	margin-left: -1.1em;
-	margin-top: .2em;
+	color: orange;
+    border-radius: 50%;
+	content: "\f017";
+    font-family: fontawesome;
+    margin-right: .3em;
 }
 
-td.feedback-requested {
-	text-indent:1em;
-}
+
 
 td.feedback-requested span img  {
 	display:none;
 }
 
 td.feedback-delivered:before {
-	position:absolute;
-	content:".";
-	text-indent:-999999px;
-	color:green;
-	background-color:green;
-	width:1em;
-	height:1em;
-	border-radius:50%;
-	    margin-left: -1.2em;
-	    margin-top: .3em;
-	
+	    content: "\f164;";
+    font-family: fontawesome;
+    color: #014260;
+    color:green;
 }
 
-
-td.feedback-delivered {
-	text-indent:1em;
-}
 
 td.feedback-delivered span img {
 	display:none;
@@ -298,6 +274,8 @@ td.feedback-delivered span img {
 .aui #portlet_mycustompages_WAR_custompagesportlet .table td.feedback-unrequested {
     border-right: none !important;
 }
+
+
 
 .aui #portlet_mycustompages_WAR_custompagesportlet .table td.feedback-unrequested +td {
     border-left: none !important;
@@ -419,13 +397,26 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
+    margin-left:31px;
    
 }
 
+#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced {
+	    width: 10px;
+    height: 13px !important;
+    background-color:#d0dae3;
+}
+
+#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search 
+{
+	
+	display: none !important;
+}
 
 
-
-
+.aui  #_mycustompages_WAR_custompagesportlet_searchadvanced .popover.bottom .arrow, .aui  #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .popover.bottom .arrow  {
+	left:12px;
+}
 
 #addcustompageButton {
     clear: left;
@@ -472,7 +463,15 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 }
 
 div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
-	margin-left:20px;
+	    min-height: 50px;
+    padding-top: 40px;
+    font-weight: bold;
+    color: #014260;
+    text-shadow: none;
+    font-size: 1.3em;
+    width: 95%;
+    display: block;
+    text-align: center;
 }
 
 .user-search-wrapper  {
@@ -480,8 +479,17 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
     	border: none;
     	float: left;
     	padding: 0 12px 12px 12px; 
+    	    max-height: 500px;
+    overflow: scroll;
 }
     
+.user-search-wrapper .invite-user-search {
+		background-image: url('/so-up-theme/css/../images/ple-icons.png');
+		background-repeat:no-repeat;
+		background-position: 20px -91px;
+    	text-indent: 30px;
+	
+}
 .user-search-wrapper h2{
 	margin-top: 0;
 	font-size: 1.5em;
@@ -547,20 +555,31 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 	border: none;
 	margin: 2.5em 0;
 	padding: 5px;
-	text-align: right;
+	text-align: center;
 
 }
 
 .invited-users-wrapper .invite-actions .btn{
 	   display: block;
-    text-align: right;
-    float: right;
+    text-align: center;
+  
+    width: 50%;
+    margin: 0 auto;
+}
+
+form#_mycustompages_WAR_custompagesportlet_fm:before {
+	    content: "ODER";
+    display: block;
+    width: 100%;
+    /* background: red; */
+    text-align: center;
+    margin-bottom: 10px;
+        padding-top: 10px;
 }
 
 .invited-users-wrapper .invite-actions form .btn {
-	display: block;
-    float: right;
-    margin-right: 10px;
+	    width: 50%;
+    margin: 0 auto;
 }
 
 
@@ -911,4 +930,22 @@ th.table-col-changes div:before {
     top: 0px; 
     right: 0px; 
     z-index: 1;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* Portlets auf Profilseiten */
+
+.aui body.public-page #portlet_mycustompages_WAR_custompagesportlet .navbar-search, .aui body.public-page #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search {
+	margin-left:0;
+	margin-top:0;
+}
+
+body.public-page input#_mycustompages_WAR_custompagesportlet_filterInput, body.public-page input#_othercustompages_WAR_custompagesportlet_filterInput {
+	    margin-left: 3px;
+}
+
+table*:focus {
+	outline:none;
 }
