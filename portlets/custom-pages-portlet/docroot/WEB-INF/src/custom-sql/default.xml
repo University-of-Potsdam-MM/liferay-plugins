@@ -25,7 +25,7 @@
         	(Layout.userId = ? AND Layout.sourcePrototypeLayoutUuid = "")
     </sql>
      <sql id="findCustomPagesByLayoutUserIdAndCustomPageFeedback">
-        SELECT Layout.*
+        SELECT DISTINCT Layout.*
         FROM Layout
         INNER JOIN
         	Group_ ON (Group_.groupId = Layout.groupId AND
