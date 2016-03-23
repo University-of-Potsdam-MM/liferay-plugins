@@ -89,7 +89,6 @@ public class JspHelper {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		PortletConfig portletConfig = (PortletConfig) request.getAttribute(JavaConstants.JAVAX_PORTLET_CONFIG);
 		String portletId = PortalUtil.getPortletId(request);
-		String customPageURL = PortalUtil.getLayoutFullURL(customPage, themeDisplay);
 		String notificationMessage;
 		int socialActivityType;
 		if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED) {
@@ -110,9 +109,12 @@ public class JspHelper {
 
 		}
 		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
-		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPageURL, portletId);
+		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
 	}
 
+	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest im JSON
+	// kodiert werden, sondern dynamisch abgefragt werden, wenn die Activity
+	// angezeigt wird
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
 			throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
@@ -122,11 +124,14 @@ public class JspHelper {
 				socialActivityType, jsonObject.toString(), receiverUserId);
 	}
 
-	private static void createCustomPageNotification(User sender, User receiver, String message, String customPageURL,
+	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest in der
+	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
+	// Nachricht angezeigt wird
+	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
 			String portletId) throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("userId", sender.getUserId());
-		jsonObject.put("url", customPageURL);
+		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
 		NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
 				System.currentTimeMillis(), portletId, jsonObject);

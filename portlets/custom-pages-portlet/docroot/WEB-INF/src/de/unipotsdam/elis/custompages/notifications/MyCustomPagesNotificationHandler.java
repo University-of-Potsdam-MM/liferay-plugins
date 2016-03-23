@@ -5,8 +5,11 @@ import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortalUtil;
 
 public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandler {
 	
@@ -37,9 +40,14 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(userNotificationEvent.getPayload());
 
-		String url = jsonObject.getString("url");
+		long plid = jsonObject.getLong("plid");
+		
+		Layout layout = LayoutLocalServiceUtil.fetchLayout(plid);
+		
+		if (layout != null)
+			return PortalUtil.getLayoutFullURL(layout, serviceContext.getThemeDisplay());
 
-		return url;
+		return "";
 	}
 
 	protected String getBodyTemplate() throws Exception {
