@@ -167,11 +167,11 @@ public class JspHelper {
 				customPageFeedbackJSON.put("feedbackStatus", customPageFeedback.getFeedbackStatus());
 				customPageFeedbackJSON.put(
 						"creationDate",
-						FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+						FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 								customPageFeedback.getCreateDate()));
 				customPageFeedbackJSON.put(
 						"modifiedDate",
-						FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+						FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 								customPageFeedback.getModifiedDate()));
 				customPageFeedbackJSONArray.put(customPageFeedbackJSON);
 				if (customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED)
@@ -241,7 +241,7 @@ public class JspHelper {
 								customPageFeedback.getFeedbackStatus()));
 		customPageFeedbackJSON.put(
 				"createDate",
-				FastDateFormatFactoryUtil.getDate(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
+				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
 						customPageFeedback.getCreateDate()));
 		customPageFeedbackJSON.put("inFeedbackProcess",
 				customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
