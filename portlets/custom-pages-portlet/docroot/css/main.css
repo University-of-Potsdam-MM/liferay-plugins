@@ -238,7 +238,7 @@ td.feedback-requested span img  {
 }
 
 td.feedback-delivered:before {
-	    content: "\f164;";
+	    content: "\f164";
     font-family: fontawesome;
     color: #014260;
     color:green;
@@ -383,10 +383,16 @@ form.yui3-datatable-paginator-group #itemsPerPage {
 	color:#014260;
 	text-shadow: 0 0px 0px transparent;
 	cursor:pointer;
-	width:11%;
-	    white-space: nowrap;
+    font-size: 1.2em;
+    max-width: 30%;
+	white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+#_mycustompages_WAR_custompagesportlet_createPageButton:before {
+    content: "+";
+    font-weight: bold;
 }
 
 #_mycustompages_WAR_custompagesportlet_createPageButton:hover {
@@ -397,8 +403,13 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
-    margin-left:31px;
+  
+    margin-left: 200px;
    
+}
+
+input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages_WAR_custompagesportlet_filterInput {
+	margin-left:160px;
 }
 
 #_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced {
@@ -948,4 +959,14 @@ body.public-page input#_mycustompages_WAR_custompagesportlet_filterInput, body.p
 
 table*:focus {
 	outline:none;
+}
+
+/* aui icons */
+
+.aui .icon-envelope:before, .aui .icon-eye-open:before,.aui .icon-eye-close:before {
+    
+    color: #014260;
+    font-size: 1.7em;
+    font-family: fontAwesome;
+    font-weight: bold;
 }
