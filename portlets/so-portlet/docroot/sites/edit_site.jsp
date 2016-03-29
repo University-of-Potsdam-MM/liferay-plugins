@@ -72,97 +72,120 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 				   }
 				%>
 
-				<aui:select id="layoutSetPrototypeSelect" label="default-pages" name="layoutSetPrototypeId">
-					<aui:option label="none" selected="<%= true %>" value="0" />
-
-					<%
-					for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
-						UnicodeProperties settingsProperties = layoutSetPrototype.getSettingsProperties();
-
-						String customJspServletContextName = settingsProperties.getProperty("customJspServletContextName", StringPool.BLANK);
-
-						if (!customJspServletContextName.equals("so-hook")) {
-							continue;
-						}
-						/*
-						String layoutSetPrototypeKey = (String)layoutSetPrototype.getExpandoBridge().getAttribute(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY);
-						
-						boolean layoutSetPrototypeSite = layoutSetPrototypeKey.equals(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
-
-						if (layoutSetPrototypeSite) {
-							defaultLayoutSetPrototype = layoutSetPrototype;
-						}*/
-					%>
-
-						<aui:option selected="<%= (defaultLayoutSetPrototype == null) %>" value="<%= layoutSetPrototype.getLayoutSetPrototypeId() %>"><%= layoutSetPrototype.getName(user.getLanguageId()) %></aui:option>
-
-					<%
-						if (defaultLayoutSetPrototype == null){
-							defaultLayoutSetPrototype = layoutSetPrototype;
-						}
-					}
-					%>
-
-				</aui:select>
-
-				<aui:select id="typeSelect" label="type" name="type">
-					<c:if test="<%= enableOpenSites %>">
-						<aui:option label="open-site" value="<%= GroupConstants.TYPE_SITE_OPEN %>" />
-					</c:if>
-
-					<c:if test="<%= enablePublicRestrictedSites %>">
-						<aui:option label="<%= GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_PUBLIC_RESTRICTED) %>" value="<%= GroupConstants.TYPE_SITE_PUBLIC_RESTRICTED %>" />
-					</c:if>
-
-					<c:if test="<%= enablePrivateRestrictedSites %>">
-						<aui:option label="restricted" value="<%= GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED %>" />
-					</c:if>
-
-					<c:if test="<%= enablePrivateSites %>">
-						<aui:option label="hidden-site" value="<%= GroupConstants.TYPE_SITE_PRIVATE %>" />
-					</c:if>
-				</aui:select>
-			</div>
-
-			<div class="template-details">
-				<h3 class="name"><%= defaultLayoutSetPrototype.getName(locale) %></h3>
-
-				<p class="description">
-					<%= defaultLayoutSetPrototype.getDescription() %>
-				</p>
-
 				<aui:layout>
-					<aui:column columnWidth="<%= 30 %>" first="<%= true %>">
-						<span class="included-pages"><liferay-ui:message key="included-pages" />:</span>
-
-						<aui:input name="deleteLayoutIds" type="hidden" />
-
-						<div class="delete-layouts-container">
-							<c:if test="<%= defaultLayoutSetPrototype != null %>">
-
-								<%
-								Group layoutSetPrototypeGroup = defaultLayoutSetPrototype.getGroup();
-
-								List<Layout> prototypeLayouts = LayoutLocalServiceUtil.getLayouts(layoutSetPrototypeGroup.getGroupId(), true, 0);
-
-								for (Layout prototypeLayout : prototypeLayouts) {
-								%>
-
-									<div class="page">
-										<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
-
-										<label for="layout<%= prototypeLayout.getLayoutId() %>"><%= prototypeLayout.getName(locale) %></label>
-									</div>
-
-								<%
+					<aui:column columnWidth="<%= 40 %>" first="<%= true %>">
+						<aui:select id="layoutSetPrototypeSelect" label="template" name="layoutSetPrototypeId">
+							<aui:option label="none" selected="<%= true %>" value="0" />
+		
+							<%
+							for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
+								UnicodeProperties settingsProperties = layoutSetPrototype.getSettingsProperties();
+		
+								String customJspServletContextName = settingsProperties.getProperty("customJspServletContextName", StringPool.BLANK);
+		
+								if (!customJspServletContextName.equals("so-hook")) {
+									continue;
 								}
-								%>
+								/*
+								String layoutSetPrototypeKey = (String)layoutSetPrototype.getExpandoBridge().getAttribute(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY);
+								
+								boolean layoutSetPrototypeSite = layoutSetPrototypeKey.equals(SocialOfficeConstants.LAYOUT_SET_PROTOTYPE_KEY_SITE);
+		
+								if (layoutSetPrototypeSite) {
+									defaultLayoutSetPrototype = layoutSetPrototype;
+								}*/
+							%>
+		
+								<aui:option selected="<%= (defaultLayoutSetPrototype == null) %>" value="<%= layoutSetPrototype.getLayoutSetPrototypeId() %>"><%= layoutSetPrototype.getName(user.getLanguageId()) %></aui:option>
+		
+							<%
+								if (defaultLayoutSetPrototype == null){
+									defaultLayoutSetPrototype = layoutSetPrototype;
+								}
+							}
+							%>
+		
+						</aui:select>
+					</aui:column>
+					
+					<aui:column columnWidth="<%= 60 %>">
+						<div class="template-details">
+							<div class="name">
+								<liferay-ui:message key="<%= defaultLayoutSetPrototype.getName(user.getLanguageId()) %>" translateArguments="false" />:
+							</div>
 
-							</c:if>
+							<div class="description">
+								<liferay-ui:message key="<%= defaultLayoutSetPrototype.getDescription() %>" translateArguments="false" />
+							</div>
 						</div>
 					</aui:column>
+				</aui:layout>
 
-					<aui:column columnWidth="<%= 70 %>">
+				<div class="template-pages">
+				<!-- <div class="template-details">
+					
+					<h3 class="name"><%= defaultLayoutSetPrototype.getName(locale) %></h3>
+	
+					<p class="description">
+						<%= defaultLayoutSetPrototype.getDescription() %>
+					</p>
+	 				
+					<aui:layout>
+						<aui:column columnWidth="<%= 30 %>" first="<%= true %>">-->
+							<liferay-ui:message key="included-pages" />
+	
+							<aui:input name="deleteLayoutIds" type="hidden" />
+	
+							<div class="delete-layouts-container">
+								<c:if test="<%= defaultLayoutSetPrototype != null %>">
+	
+									<%
+									Group layoutSetPrototypeGroup = defaultLayoutSetPrototype.getGroup();
+	
+									List<Layout> prototypeLayouts = LayoutLocalServiceUtil.getLayouts(layoutSetPrototypeGroup.getGroupId(), true, 0);
+	
+									for (Layout prototypeLayout : prototypeLayouts) {
+									%>
+	
+										<div class="page">
+											<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
+	
+											<label for="layout<%= prototypeLayout.getLayoutId() %>"><%= prototypeLayout.getName(locale) %></label>
+										</div>
+	
+									<%
+									}
+									%>
+	
+								</c:if>
+							</div>
+						<!--</aui:column>
+	
+						
+					</aui:layout>-->
+				</div>
+
+				<aui:layout>
+					<aui:column columnWidth="<%= 40 %>">
+						<aui:select id="typeSelect" label="type" name="type">
+							<c:if test="<%= enableOpenSites %>">
+								<aui:option label="open-site" value="<%= GroupConstants.TYPE_SITE_OPEN %>" />
+							</c:if>
+		
+							<c:if test="<%= enablePublicRestrictedSites %>">
+								<aui:option label="<%= GroupConstants.getTypeLabel(GroupConstants.TYPE_SITE_PUBLIC_RESTRICTED) %>" value="<%= GroupConstants.TYPE_SITE_PUBLIC_RESTRICTED %>" />
+							</c:if>
+		
+							<c:if test="<%= enablePrivateRestrictedSites %>">
+								<aui:option label="restricted" value="<%= GroupConstants.TYPE_SITE_PRIVATE_RESTRICTED %>" />
+							</c:if>
+		
+							<c:if test="<%= enablePrivateSites %>">
+								<aui:option label="hidden-site" value="<%= GroupConstants.TYPE_SITE_PRIVATE %>" />
+							</c:if>
+						</aui:select>
+					</aui:column>
+					<aui:column columnWidth="<%= 60 %>">
 						<div class="type-details">
 							<div class="permission">
 								<liferay-ui:message key="permissions" />:
@@ -369,7 +392,9 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 	var name = descriptionContainer.one('.name');
 	var description = descriptionContainer.one('.description');
-	var pages = descriptionContainer.one('.pages');
+	
+	var pagesContainer = A.one('.so-portlet-sites-dialog .template-pages');
+	var pages = pagesContainer.one('.pages');
 
 	var deleteLayoutsContainer = A.one('.so-portlet-sites-dialog .delete-layouts-container');
 
