@@ -40,7 +40,7 @@ String published = renderRequest.getParameter("published");
 				<liferay-ui:message key="custompages-manage-publishments" />
 
 				<span>
-					<liferay-ui:message key="to-add,-click-members-on-the-left" />
+					<liferay-ui:message key="custompages-add-users-from-list" />
 				</span>
 			</h2>
 

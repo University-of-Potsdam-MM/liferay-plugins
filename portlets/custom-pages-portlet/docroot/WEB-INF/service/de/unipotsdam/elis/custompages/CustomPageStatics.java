@@ -20,7 +20,7 @@ public class CustomPageStatics {
 	
 	public final static String WIKI_LAYOUT_PROTOTYPE = "Seite mit einem Wiki";
 	public final static String BLOG_LAYOUT_PROTOTYPE = "Seite mit einem Blog";
-	public final static String CDP_LAYOUT_PROTOTYPE = "Seite mit beliebigem Inhalt";
+	public final static String CDP_LAYOUT_PROTOTYPE = "Seite mit Text-Bild-Editor";
 	public final static String EMPTY_LAYOUT_PROTOTYPE = "Frei gestaltbare Seite";
 	
 	public final static int MESSAGE_TYPE_CUSTOM_PAGE_CREATED = 0;

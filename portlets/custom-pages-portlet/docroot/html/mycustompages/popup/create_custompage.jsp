@@ -46,7 +46,7 @@
 			<div id="descriptionContent"></div>
 		</div>
 		<div id="addCustomPageButton">
-			<aui:button type="submit" value="custompages-add-custom-page" />
+			<aui:button type="submit" value="custompages-create-page" />
 		</div>
 	</aui:form> 
 	

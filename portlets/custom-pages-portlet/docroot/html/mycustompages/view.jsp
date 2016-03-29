@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.LocalizationUtil"%>
 <%@ include file="/html/init_view.jsp"%>
 
 <%
@@ -27,16 +28,34 @@
 				            renderURL.setParameter("mvcPath", "/html/mycustompages/popup/create_custompage.jsp");
 				            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
 				            renderURL.setParameter("currentRedirect", "<%=redirect%>");
-				            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "custompages-add-custom-page")%>");
+				            openPopUp(renderURL, "<%=LanguageUtil.get(pageContext, "custompages-create-page")%>");
 				        });
 				    });
 			</aui:script>
 
-<% } else { %>
+<% 
+		} else if (user.getUserId() == layout.getUserId()){
+			if (layout.getName(themeDisplay.getLocale()).equals(LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
+					"custompages-portfolio-pages"))){%>
+				<span class="title"><%= LanguageUtil.get(pageContext, "custompages-portfolio-pages-shared-with-other-users") %></span>
+<%
+			} else {%>
+				<span class="title"><%= LanguageUtil.get(pageContext, "custompages-normal-pages-shared-with-other-users") %></span>
+<%			} %>
 
 		<%@ include file="/html/table_filter_input.jsp" %>
-	
-<% } %>
+
+<%		} else {
+			if (layout.getName(themeDisplay.getLocale()).equals(LanguageUtil.get(portletConfig, themeDisplay.getLocale(),
+					"custompages-portfolio-pages"))){%>
+				<span class="title"><%= LanguageUtil.format(pageContext, "custompages-portfolio-pages-shared-by-x-with-you", UserLocalServiceUtil.getUser(layout.getUserId()).getFullName()) %></span>
+<%		
+			} else {%>
+				<span class="title"><%= LanguageUtil.format(pageContext, "custompages-normal-pages-shared-by-x-with-you", UserLocalServiceUtil.getUser(layout.getUserId()).getFullName()) %></span>	
+<%			} %>
+		
+		<%@ include file="/html/table_filter_input.jsp" %>
+<%		} %>
 
 <portlet:resourceURL var="getUserCustomPagesURL">
 	<portlet:param name="<%=Constants.CMD%>" value="getUserCustomPages" />

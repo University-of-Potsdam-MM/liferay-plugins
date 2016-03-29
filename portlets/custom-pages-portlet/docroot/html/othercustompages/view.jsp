@@ -154,7 +154,7 @@ AUI().use(
                 },
                 allowHTML: true
             }, {
-                label: '<%= LanguageUtil.get(pageContext, "custompages-visible")%>',
+                label: '<%= LanguageUtil.get(pageContext, "custompages-hidden-column")%>',
                 key: 'visible',
                 formatter: function(o) {
                     var result = "";
