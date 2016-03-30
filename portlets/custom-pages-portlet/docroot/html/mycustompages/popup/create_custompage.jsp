@@ -45,6 +45,10 @@
 			<div><%= LanguageUtil.get(pageContext, "description") %></div>
 			<div id="descriptionContent"></div>
 		</div>
+		<div id="pageTypeDescription">
+			<div><%= LanguageUtil.get(pageContext, "description") %></div>
+			<div id="pageTypeDescriptionContent"></div>
+		</div>
 		<div id="addCustomPageButton">
 			<aui:button type="submit" value="custompages-create-page" />
 		</div>
@@ -59,20 +63,42 @@ AUI().use('aui-base',
 	    'datatable-paginator',
 	    'liferay-menu',
 	    function(A) {    
-			var fieldWrapper = A.one('.field-wrapper');
-			fieldWrapper.on('click',function(){setDescription();});
+			var templateChoice = A.all('#templateChoice');
+			templateChoice.on('click',function(){setTemplateDescription();});
+			var customPageTypeChoice = A.all('#customPageTypeChoice');
+			customPageTypeChoice.on('click',function(){setPageTypeDescription();});
 	    }
 	);
 	
-function setDescription(){
+function setTemplateDescription(){
 	AUI().use('aui-base',function(A){
 	var inputs = A.one('div#templateChoice').all('input');
 	for (var i = 0; i < inputs.size(); i++){
+		console.log("jo1");
 		var item = inputs.item(i);
 		if (item.get("type") === 'radio' && item.get("checked") === true){
 			var descriptionDiv = A.one('#descriptionContent');
 			var description = A.one('#' + item.get("id") + '_description').get("value");
 			descriptionDiv.set('innerHTML',description);
+		}
+	}});
+}
+
+function setPageTypeDescription(){
+	console.log("test");
+	AUI().use('aui-base',function(A){
+	var inputs = A.one('div#customPageTypeChoice').all('input');
+	for (var i = 0; i < inputs.size(); i++){
+		console.log("jo2");
+		var item = inputs.item(i);
+		if (item.get("type") === 'radio' && item.get("checked") === true){console.log(item.get("value"));
+			var pageTypeDescriptionContent = A.one('#pageTypeDescriptionContent');
+			if (item.get("value") == "<%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>"){
+				pageTypeDescriptionContent.set('innerHTML','<%= LanguageUtil.get(pageContext, "custompages-normal-pages-description") %>');
+			}
+			else {
+				pageTypeDescriptionContent.set('innerHTML','<%= LanguageUtil.get(pageContext, "custompages-portfolio-pages-description") %>');				
+			}
 		}
 	}});
 }
@@ -119,5 +145,6 @@ function createCustomPage(event) {
     });
 }
 
-setDescription();
+setTemplateDescription();
+setPageTypeDescription();
 </aui:script>
