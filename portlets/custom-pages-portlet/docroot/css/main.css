@@ -705,31 +705,43 @@ span.email {
 	width: 50%;
     background: #ededed;
     padding: .5em;
-    /* float: left; */
-    position: absolute;
+    float: left;
 	
 }
 
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #customPageTypeChoice {
-     margin-top: 12em;
+       margin-top: 2em;
     background: #ededed;
     padding: .5em;
-    float: none;
+    float: left;
+    width: 50%;
 }
 
+#p_p_id_mycustompages_WAR_custompagesportlet_ div#pageTypeDescription {
+    width: 42%;
+    float: right;
+    margin-top: 2em;
+    background-color: #d0dae3;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #014260;
+     position:relative;
+}
+
+
 #p_p_id_mycustompages_WAR_custompagesportlet_ #description{
-      margin-top: .5em;
+   
     background: #d0dae3;
     padding: .5em;
     float: right;
     width: 42%;
-    position: absolute;
-    right: 0;
-    top: 78px;
+    box-sizing: border-box;
+    padding: 10px;
+    position:relative;
 }
 
-#p_p_id_mycustompages_WAR_custompagesportlet_ #description:after{
+#p_p_id_mycustompages_WAR_custompagesportlet_ #description:after, #p_p_id_mycustompages_WAR_custompagesportlet_ div#pageTypeDescription:after{
 		content: '';
 		position: absolute;
 		border-style: solid;
@@ -737,10 +749,17 @@ span.email {
 		border-color: transparent #d0dae3;
 		display: block;
 		width: 0;
-		z-index: 1;
-		margin-top: -15px;
-		left: -15px;
-		top: 28%;
+		    z-index: 1;
+   
+    margin-left: -24px;
+    top: 12px;
+}
+
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #pageTypeDescription h2, #p_p_id_mycustompages_WAR_custompagesportlet_ #description h2  {
+    font-size: 1.2em;
+        line-height: 1;
+    margin-top: 0;
 }
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #addCustomPageButton button {
@@ -969,4 +988,8 @@ table*:focus {
     font-size: 1.7em;
     font-family: fontAwesome;
     font-weight: bold;
+}
+
+.#portlet_mycustompages_WAR_custompagesportlet .label-required,  #portlet_othercustompages_WAR_custompagesportlet .label-required {
+    color: red;
 }

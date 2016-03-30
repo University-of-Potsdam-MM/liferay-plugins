@@ -34,6 +34,15 @@
 			</aui:field-wrapper>
 		</div>
 		
+	
+		
+		<div id="description">
+			<h2><%= LanguageUtil.get(pageContext, "description") %></h2>
+			<p id="descriptionContent"></p>
+		</div>
+		
+			<div style="clear:both"></div>
+		
 		<div id="customPageTypeChoice">
 			<aui:field-wrapper name="customPageType" label="custompages-page-type" >
 				<aui:input id="pageTypeNormalPage" inlineLabel="right"  checked="<%= true %>" name="customPageType" type="radio" value="<%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>" label="custompages-page-type-normal-page" />
@@ -41,14 +50,15 @@
 			</aui:field-wrapper>
 		</div>
 		
-		<div id="description">
-			<div><%= LanguageUtil.get(pageContext, "description") %></div>
-			<div id="descriptionContent"></div>
-		</div>
+		
+		
+		
 		<div id="pageTypeDescription">
-			<div><%= LanguageUtil.get(pageContext, "description") %></div>
-			<div id="pageTypeDescriptionContent"></div>
+			<h2><%= LanguageUtil.get(pageContext, "description") %></h2>
+			<p id="pageTypeDescriptionContent"></p>
 		</div>
+		
+		<div style="clear:both"></div>
 		<div id="addCustomPageButton">
 			<aui:button type="submit" value="custompages-create-page" />
 		</div>
