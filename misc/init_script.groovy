@@ -21,7 +21,7 @@ String USER_HOME_LAYOUT_SET_PROTOTYPE_NAME = "Social Office User Home";
 String USER_PROFILE_LAYOUT_SET_PROTOTYPE_NAME = "Social Office User Profile";
 
 String GROUP_WORK_WORKSPACE_TEMPLATE_NAME = "Group Work";
-String GROUP_WORK_WORKSPACE_TEMPLATE_DESCRIPTION = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+String GROUP_WORK_WORKSPACE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nützlichen Anwendungen für die Zusammenarbeit aus. Standardmäßig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es können aber auch weitere Seiten und Anwendungen hinzugefügt werden.";
 
 String BLOG_PAGE_TEMPLATE_NAME = "Page with Blog";
 String BLOG_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Blog, der z.B. als Lerntagebuch oder für Berichte genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
