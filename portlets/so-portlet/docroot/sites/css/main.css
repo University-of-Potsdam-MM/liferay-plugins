@@ -321,7 +321,7 @@ $defaultTextColor: #202020;
 		color: #AAA;
 		display: inline-block;
 		font-weight: bold;
-		text-shadow: 1px 1px 1px #DDD;
+		
 
 		span {
 			display: block;
@@ -349,7 +349,10 @@ $defaultTextColor: #202020;
 		padding: 10px 0 10px;
 
 		.name {
-			padding-top: 20px;
+			
+			color:#014260;
+			font-weight:bold;
+    		font-size: 1.3em;
 		}
 
 		.included-pages, .permission {
@@ -637,4 +640,71 @@ $defaultTextColor: #202020;
 	&, li:hover {
 		@include border-radius(4px);
 	}
+}
+
+/* ---------- custom ---------- */
+
+.so-portlet-sites-dialog .site-settings .layout label {
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    color: #014260;
+    font-weight: bold;
+}
+
+.so-portlet-sites-dialog .template-details,  .so-portlet-sites-dialog .type-details {
+	position:relative;
+}
+
+.so-portlet-sites-dialog .template-details:after,  .so-portlet-sites-dialog .type-details:after{
+		content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 15px 15px 15px 0;
+    border-color: transparent #d0dae3;
+    display: block;
+    width: 0;
+    z-index: 1;
+    margin-top: -15px;
+      left: -14px;
+    top: 25px;
+}
+
+
+
+.so-portlet-sites-dialog .template-details, .so-portlet-sites-dialog .type-details {
+    background-color: #d0dae3;
+    color: #014260;
+        padding: 10px;
+}
+
+ .so-portlet-sites-dialog .type-details .permission {
+ 		    font-weight: bold;
+    font-size: 1.3em;
+    color: #014260;
+ }
+
+.so-portlet-sites-dialog .template-pages {
+    border-top: 2px solid #ededed;
+    border-bottom: 2px solid #ededed;
+        margin-top: 15px;
+    margin-bottom: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+
+.so-portlet-sites-dialog .template-pages h2 {
+    color: #014260;
+    font-size: 1.6em;
+    font-weight: bold;
+}	
+
+.so-portlet-sites-dialog button#save {
+    background-color: #014260;
+    color: #fff;
+    text-shadow: none;
+}
+
+.so-portlet-sites-dialog .delete-layouts-container .page input[type="checkbox"] {
+	margin:0;
 }
