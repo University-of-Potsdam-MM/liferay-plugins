@@ -75,7 +75,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 				<aui:layout>
 					<aui:column columnWidth="<%= 40 %>" first="<%= true %>">
 						<aui:select id="layoutSetPrototypeSelect" label="template" name="layoutSetPrototypeId">
-							<aui:option label="none" selected="<%= true %>" value="0" />
+							<aui:option label="empty" selected="<%= true %>" value="0" />
 		
 							<%
 							for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
@@ -427,6 +427,10 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 										'<input checked data-layoutId="' + layout.layoutId + '" id="layout' + layout.layoutId + '" type="checkbox" />' +
 										'<label for="layout' + layout.layoutId + '">' + layout.name + '</label>' +
 									'</div>');
+							}
+							
+							if (layouts.length == 0){
+								inputBuffer.push('<span>' + '<%= UnicodeLanguageUtil.get(pageContext, "none") %>' + '<span>')
 							}
 
 							deleteLayoutsContainer.html(inputBuffer.join(''));
