@@ -554,7 +554,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
 
 		for (LayoutPrototype lp : layoutPrototypes) {
-			if (lp.getName(Locale.GERMAN).equals(name)) {
+			if (lp.getName(Locale.GERMANY).equals(name)) {
 				return lp;
 			}
 		}

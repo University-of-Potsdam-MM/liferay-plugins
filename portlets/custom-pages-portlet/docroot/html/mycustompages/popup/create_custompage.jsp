@@ -19,16 +19,16 @@
 	 	<div id="templateChoice">
 			<aui:field-wrapper name="template" >
 				<% LayoutPrototype lp = customPageTemplates.get(CustomPageStatics.BLOG_LAYOUT_PROTOTYPE); %>
-					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMAN) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
+					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMANY) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
 					<input id="<%= portletDisplay.getNamespace() + lp.getLayoutPrototypeId() + "_description" %>" hidden="true" value ="<%= lp.getDescription() %>"/>
 				<% lp = customPageTemplates.get(CustomPageStatics.WIKI_LAYOUT_PROTOTYPE); %>
-					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMAN) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
+					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMANY) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
 					<input id="<%= portletDisplay.getNamespace() + lp.getLayoutPrototypeId() + "_description" %>" hidden="true" value ="<%= lp.getDescription() %>"/>
 				<% lp = customPageTemplates.get(CustomPageStatics.CDP_LAYOUT_PROTOTYPE); %>
-					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMAN) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
+					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMANY) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
 					<input id="<%= portletDisplay.getNamespace() + lp.getLayoutPrototypeId() + "_description" %>" hidden="true" value ="<%= lp.getDescription() %>"/>
 				<% lp = customPageTemplates.get(CustomPageStatics.EMPTY_LAYOUT_PROTOTYPE); %>
-					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMAN) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
+					<aui:input id="<%= String.valueOf(lp.getLayoutPrototypeId()) %>" checked="<%= true %>" inlineLabel="right" name="template" type="radio" value="<%= lp.getName(Locale.GERMANY) %>" label="<%= lp.getName(themeDisplay.getLocale()) %>" />
 					<input id="<%= portletDisplay.getNamespace() + lp.getLayoutPrototypeId() + "_description" %>" hidden="true" value ="<%= lp.getDescription() %>"/>
 				
 			</aui:field-wrapper>

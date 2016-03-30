@@ -288,11 +288,11 @@ public class JspHelper {
 				LayoutPrototypeLocalServiceUtil.getLayoutPrototypesCount());
 
 		for (LayoutPrototype lp : layoutPrototypes) {
-			if (lp.getName(Locale.GERMAN).equals(CustomPageStatics.BLOG_LAYOUT_PROTOTYPE)
-					|| lp.getName(Locale.GERMAN).equals(CustomPageStatics.CDP_LAYOUT_PROTOTYPE)
-					|| lp.getName(Locale.GERMAN).equals(CustomPageStatics.WIKI_LAYOUT_PROTOTYPE)
-					|| lp.getName(Locale.GERMAN).equals(CustomPageStatics.EMPTY_LAYOUT_PROTOTYPE)) {
-				result.put(lp.getName(Locale.GERMAN), lp);
+			if (lp.getName(Locale.GERMANY).equals(CustomPageStatics.BLOG_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMANY).equals(CustomPageStatics.CDP_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMANY).equals(CustomPageStatics.WIKI_LAYOUT_PROTOTYPE)
+					|| lp.getName(Locale.GERMANY).equals(CustomPageStatics.EMPTY_LAYOUT_PROTOTYPE)) {
+				result.put(lp.getName(Locale.GERMANY), lp);
 			}
 		}
 		return result;
