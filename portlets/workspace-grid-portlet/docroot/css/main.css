@@ -86,7 +86,7 @@ li.workspaceslide:hover .mouseover-actions {
 }
 
 li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
-	width: 62px;
+	width: 45%;
 	height: 60px;
 	
 	opacity: .5;
@@ -124,7 +124,7 @@ li.workspaceslide:hover div.workspaceName {
 }
 
 li.workspaceslide:hover .mouseover-actions .visit-workspace {
-	width: 62px;
+	width: 45%;
 	height: 60px;
 	
 	opacity: .5;
