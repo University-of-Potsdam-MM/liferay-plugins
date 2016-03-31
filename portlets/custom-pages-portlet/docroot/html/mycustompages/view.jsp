@@ -13,7 +13,7 @@
 	if (personalSite) {
 		if (!publicPage) {
 %>
-			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-create-page"/>
+			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-new-page"/>
 			
 			<%@ include file="/html/table_filter_input.jsp" %>
 			
