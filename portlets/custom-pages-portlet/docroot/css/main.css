@@ -18,10 +18,20 @@
  }
  
  .aui #portlet_mycustompages_WAR_custompagesportlet .popover.bottom {
-    margin-top: 15px;
-    margin-left: -97px;
+    margin-top: 25px;
+    margin-left: -177px;
 }
 
+ 
+ .aui .popover.bottom .arrow:after {
+    top: 1px;
+    margin-left: -10px;
+    border-top-width: 0;
+    border-bottom-color: #d0dae3;
+}
+
+.aui .popover {border:none;}
+ 
  
  .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search .icon-search:before,
 .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search .icon-search:before  {
@@ -32,7 +42,7 @@
 #portlet_mycustompages_WAR_custompagesportlet .navbar-search .form-search .input-append .advanced-search .toggle-advanced .caret,
 #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search .form-search .input-append .advanced-search .toggle-advanced .caret {
 	
-	    border-top: 4px solid #919FAB;
+	    border-top: 4px solid #000;
 }
 
 #_othercustompages_WAR_custompagesportlet_searchadvanced span,
@@ -409,13 +419,24 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 }
 
 input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages_WAR_custompagesportlet_filterInput {
-	margin-left:160px;
+	margin-left:111px;
 }
 
 #_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced {
-	    width: 10px;
+	    width: auto;
     height: 13px !important;
     background-color:#d0dae3;
+        font-size: 12px;
+    color: #014260;
+    font-weight: bold;
+    
+    font-family: "source sans pro", arial, sans-serif;
+}
+
+#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced span, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced span {
+
+        font-size: 1.4em;
+   
 }
 
 #_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search 
@@ -768,7 +789,7 @@ span.email {
 	
 }
 
-/* Icons portfolioseite / seite */
+/* Icons portfolioseite und  seite */
 
 tr.portfolio-page td.table-col-title:before {
     content: "\f19d";
@@ -976,13 +997,33 @@ body.public-page input#_mycustompages_WAR_custompagesportlet_filterInput, body.p
 	    margin-left: 3px;
 }
 
-table*:focus {
+table *:focus {
 	outline:none;
+}
+
+.aui body.public-page #portlet_mycustompages_WAR_custompagesportlet header.portlet-topper, .aui body.public-page #p_p_id_othercustompages_WAR_custompagesportlet_  header.portlet-topper {
+	display:none;
+}
+
+.aui body.public-page #portlet_mycustompages_WAR_custompagesportlet .portlet-body span.title, .aui body.public-page #p_p_id_othercustompages_WAR_custompagesportlet_ .portlet-body span.title {
+	display: block;
+    width: 100%;
+    height: 30px;
+    background-color: #ededed;
+    margin-bottom: 10px;
+    color: #014260;
+    padding: 5px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.aui body.public-page #portlet_mycustompages_WAR_custompagesportlet .portlet-content, .aui body.public-page #p_p_id_othercustompages_WAR_custompagesportlet_ .portlet-content {
+	padding:0;
 }
 
 /* aui icons */
 
-.aui .icon-envelope:before, .aui .icon-eye-open:before,.aui .icon-eye-close:before {
+.aui .icon-envelope:before, .aui .icon-eye-open:before, .aui .icon-eye-close:before {
     
     color: #014260;
     font-size: 1.7em;
@@ -990,6 +1031,6 @@ table*:focus {
     font-weight: bold;
 }
 
-.#portlet_mycustompages_WAR_custompagesportlet .label-required,  #portlet_othercustompages_WAR_custompagesportlet .label-required {
+#portlet_mycustompages_WAR_custompagesportlet .label-required,  #portlet_othercustompages_WAR_custompagesportlet .label-required {
     color: red;
 }
