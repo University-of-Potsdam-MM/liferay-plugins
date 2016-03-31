@@ -81,7 +81,7 @@ void setLayoutSetPrototypeUneditable(String layoutSetPrototypeName) throws Excep
 
 	out.println("Try to make layouts of the LayoutSetPrototype " + layoutSetPrototypeName + " uneditable");
 	for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
-		if (layoutSetPrototype.getName(Locale.ENGLISH).equals(layoutSetPrototypeName)) {
+		if (layoutSetPrototype.getName(Locale.US).equals(layoutSetPrototypeName)) {
 			out.println("Found LayoutSetPrototype " + layoutSetPrototypeName + ". layoutSetPrototypeId: "
 					+ layoutSetPrototype.getLayoutSetPrototypeId());
 
@@ -96,7 +96,7 @@ void setLayoutSetPrototypeUneditable(String layoutSetPrototypeName) throws Excep
 			for (Layout layout : layouts) {
 				layout.getLayoutType().setTypeSettingsProperty("layoutUpdateable", "false");
 				LayoutLocalServiceUtil.updateLayout(layout);
-				out.println("Set property layoutUpdateable of the layout " + layout.getName(Locale.ENGLISH)
+				out.println("Set property layoutUpdateable of the layout " + layout.getName(Locale.US)
 						+ " to false");
 			}
 			out.println();
@@ -123,7 +123,7 @@ void setLayoutSetPrototypeDescription(String layoutSetPrototypeName, String layo
 
 	out.println("Try to set description of the LayoutSetPrototype " + layoutSetPrototypeName);
 	for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
-		if (layoutSetPrototype.getName(Locale.ENGLISH).equals(layoutSetPrototypeName)) {
+		if (layoutSetPrototype.getName(Locale.US).equals(layoutSetPrototypeName)) {
 			out.println("Found LayoutSetPrototype " + layoutSetPrototypeName + ". layoutSetPrototypeId: "
 					+ layoutSetPrototype.getLayoutSetPrototypeId());
 
@@ -155,7 +155,7 @@ void setLayoutPrototypeDescription(String layoutPrototypeName, String layoutProt
 
 	out.println("Try to set description of the LayoutPrototype " + layoutPrototypeName);
 	for (LayoutPrototype layoutPrototype : layoutPrototypes) {
-		if (layoutPrototype.getName(Locale.ENGLISH).equals(layoutPrototypeName)) {
+		if (layoutPrototype.getName(Locale.US).equals(layoutPrototypeName)) {
 			out.println("Found LayoutPrototype " + layoutPrototypeName + ". layoutPrototypeId: "
 					+ layoutPrototype.getLayoutPrototypeId());
 
