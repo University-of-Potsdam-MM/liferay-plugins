@@ -112,11 +112,11 @@
 				<li></li>
 			</ul>
 		</div>
-	</header> <! -- ende mobile menu, kann das weg? -->
+	</header>
 
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
-		
+	
  		<div id="uppertoolbar">
  			<div id="position-wrapper">
  				#dockbar()
@@ -235,7 +235,42 @@
 		<div class="clear-left"></div>	
 	</header>  
 	<div class="wrapper-portlet-area">	
-	
+		<div id="heading">
+			
+			<h2 class="page-title">	$site_name</h2>		
+		
+			#if ($is_signed_in)
+				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
+				<ul id="workspace-control">
+					#if ($show_edit_controls)
+						<li style="display: none;">
+							<a id="editPage" class="btn" href="javascript:;"><span>#language("edit-page")</span></a>
+						</li>
+					#end
+					#if ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()))
+						<li style="display: none;">
+							<a id="addApplication" class="btn" href="javascript:;"><span>#language("add-application")</span></a>
+						</li>
+					#end
+					<li id="toggle-controls-botton" >
+						<a class="toggle-controls btn workspace" href="javascript:void(0);"><span>#language("so-up-theme-workspace-configure")</span>
+						</a>
+					</li>
+					#end
+					#if ($isOmniAdmin)
+					<li>
+						<a href="$control_panel_url" class="btn">
+							<div id="adminbox">
+								<span class="admin"></span>Administration
+							</div>
+						</a>
+					</li>
+				</ul>
+				
+				#end
+			#end
+			
+		</div>
 		
 			<div style="clear:both"></div>	
 		
@@ -257,7 +292,10 @@
  
 				
 	#if (!$is_signed_in)
-	
+	<!-- Startpage  -->
+	<div id="wrapper-indexpage">
+		hallo
+	</div>
 		<!-- OE Footer -->
 	<div id="up_oe_footer_wrapper">
 		<div id="up_oe_footer" class="row-f up-smooth-box">
