@@ -63,21 +63,6 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 			</div>
 		</div>
 
-		<div class="email-invited">
-			<h2>
-				<liferay-ui:message key="invite-by-email" />
-			</h2>
-
-			<div class="list">
-			</div>
-
-			<div class="controls">
-				<input id="new-member-email-address" name="<portlet:namespace />emailAddress" size="50" type="text" />
-
-				<input id="so-add-email-address" type="button" value="<liferay-ui:message key="add-email-address" />" />
-			</div>
-		</div>
-
 		<%
 		List<Role> roles = RoleLocalServiceUtil.search(layout.getCompanyId(), null, null, new Integer[] {RoleConstants.TYPE_SITE}, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new RoleNameComparator(false));
 
@@ -85,7 +70,7 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 		%>
 
 		<c:if test="<%= !roles.isEmpty() && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ASSIGN_USER_ROLES) %>">
-			<div class="invite-to">
+			<div style="display:none;" class="invite-to">
 				<h2>
 					<liferay-ui:message key="invite-to-role" />
 				</h2>
@@ -95,11 +80,13 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 
 					<%
 					for (Role role : roles) {
+						if (role.getName().equals("Editor")){
 					%>
-
-						<option value="<%= role.getRoleId() %>"><%= HtmlUtil.escape(role.getTitle(locale)) %></option>
+						
+						<option selected value="<%= role.getRoleId() %>"><%= HtmlUtil.escape(role.getTitle(locale)) %></option>
 
 					<%
+						}
 					}
 					%>
 
