@@ -5,6 +5,10 @@
 .lfr-admin-panel h1 {
 	color:#d0dae3;	
 }
+/*
+.aui .lfr-admin-panel.lfr-edit-layout-panel{
+	z-index:7100 !important;
+}*/
 
 .aui .lfr-admin-panel .navbar .nav>li {
 	  margin-right: 3px;
@@ -70,6 +74,7 @@
 
 div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
     background-color: #fff;
+    height:50px;
 }
 
 
@@ -98,11 +103,9 @@ div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
 .aui .dockbar-split .dockbar .navbar-inner .nav-add-controls>li>a.toggle-controls-link  {
     background: #d0dae3;
 }
-/*smallhead*/
 
-.smallhead #_145_navAddControls {
-    margin-top: 10px;
-}
+
+
 
 #_145_navAddControlsNavbarCollapse i:hover {
     background-color: #014260;
@@ -110,4 +113,51 @@ div#_145_navAddControlsNavbarCollapse #_145_navAddControls li {
 
 #_145_navAddControls a:hover {
     color: #fff;
+}
+
+
+/* Filter Icon */
+#_145_searchApplication {
+		background-image: url('/so-up-theme/css/../images/ple-icons.png');
+		background-repeat:no-repeat;
+		background-position: 20px -91px;
+    	text-indent: 30px;
+}
+
+/* unnötiges ausblenden */
+
+.aui #_145_addPanelSidebar .nav-pills > li.active {
+   
+    display: block;
+}
+
+.aui #_145_addPanelSidebar .nav-pills > li {
+   display:none;
+}
+
+.aui #_145_addPanelSidebar .nav-pills > .active > a, .aui #_145_addPanelSidebar .nav-pills > .active > a:hover, .aui #_145_addPanelSidebar .nav-pills > .active > a:focus {
+    background-color: #fff;
+    color: #014260;
+    font-size: 2em;
+    padding-left: 0;
+    border:none;
+}
+
+
+div#_145_editLayoutContainer .nav li:first-child,  div#_145_editLayoutContainer .nav li:last-child {
+	
+	display:none;
+   
+}
+
+div#_145_editLayoutContainer .nav li a .icon-remove:before {
+	color:red;
+}
+
+div#_145_typeOptions .control-group #_145_type {
+    display: none;
+}
+
+div#_145_customizationSettings {
+    display: none;
 }

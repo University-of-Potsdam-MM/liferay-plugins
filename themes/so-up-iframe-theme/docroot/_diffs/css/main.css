@@ -1,10 +1,16 @@
+/*
+@import url(./bootstrap-up.css);
+*/
+
+@import url(./bootstrap-responsive.css); 
+
+@import url(./responsive-tabs.css); 
+
 @import url(base.css); 
 
 @import url(application.css);
 
 @import url(layout.css);
-
-
 
 @import url(dockbar.css);
 
@@ -20,17 +26,30 @@
 
 @import url(./up-dockbar.css);
 
+@import url(./overlays.css);
+
+@import url(./comments.css);
+
+@import url(./app_view_toolbar.css);
+
+@import url(./navbar.css); 
+
+/*@import url(./startpage.css);*/
+
+/*
+@import url(./font-awesome.min.css); */
+
 
 .container-fluid#wrapper div#content  {
-	width: 100%;
+	width: 76%;
   
-  margin-left: 0;
+  margin-left: 22%;
 }
 
 .portlet-column {
-	width: 100%;
+	width: 76%;
   
-  margin-left: 0;
+  margin-left: 22%;
 }
 
 li.info-link-container {

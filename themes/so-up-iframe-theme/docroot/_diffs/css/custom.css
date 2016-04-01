@@ -25,8 +25,6 @@
 
 @import  url(./login.css);
 
-
-
 @import url(./up_mobile.css);
 
 @import url(./editor-form.css);
@@ -42,6 +40,8 @@
 @import url(./profile.css);
 
 @import url(./pagecomments.css);
+
+@import url(./small-column.css);
 
 /*@import url(media_queries.css);*/
 
@@ -76,9 +76,16 @@
   .aui button,
   .aui .modal,
   .aui .popover,
+  .aui .btn,
   .yui3-skin-sam .yui3-calendar-content,
   .aui .navbar .container,
-  .aui .breadcrumb {
+  .aui .breadcrumb,
+  .aui .btn-group.open .dropdown-toggle,
+  .textboxlistentry, .textboxlistentry-close,
+  .app-view-entry:hover, .app-view-entry.hover,
+  #main-content,
+  .aui .navbar .nav>.active>a,.aui .navbar .nav>.active>a:hover,.aui .navbar .nav>.active>a:focus,
+  .aui .alert, .aui .portlet-msg-alert, .aui .portlet-msg-error, .aui .portlet-msg-help, .aui .portlet-msg-info, .aui .portlet-msg-progress, .aui .portlet-msg-success {
  
  -moz-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
   -webkit-box-shadow: 0 0px 0 rgba(255,255,255,.5),0 0 0px rgba(255,255,255,.15) inset,0 0px 0 rgba(255,255,255,.15) inset;
@@ -89,19 +96,17 @@
   border-radius: 0px;
 }
 
+
+#_20_show-sync-message
+{
+	display:none;
+}
 /*Layout*/
 
 
-#main-content {
-	
-  -webkit-box-shadow: 0px 0 0px 0px rgba(0,0,0,0.6);
-  -moz-box-shadow: 0px 0 0px 0px rgba(0,0,0,0);
-  box-shadow: 0px 0 0px 0px rgba(0,0,0,0);
-}
-
 .wrapper-portlet-area {
   width: 91%;
-  margin: 0px
+  margin: 20px auto;
 }
 
 #content  {
@@ -113,7 +118,9 @@
 	font-style: italic;
 	font-weight: normal;
 	font-size: .5em;
-	border-bottom: 4px solid #014260;
+	    margin-top: 0;
+    margin-bottom: 0;
+    vertical-align:top;
 }
 
 #heading h1.site-title .default-logo {
@@ -126,6 +133,11 @@
 
 h2.page-title {
 	display: none;
+}
+
+.js .controls-hidden .portlet-borderless-bar {
+	display:block;
+	    margin-bottom: 10px;
 }
 
 /*Popups*/
@@ -150,6 +162,7 @@ h2.page-title {
 	border-bottom:none;
 	font-style:italic;
 	font-family:"Source Sans Pro",Helvetica, Arial, sans-serif;
+	min-height:30px;
 }
 /*popups adminbereich*/
 
@@ -161,7 +174,7 @@ h2.page-title {
 /* Breadcrumbs*/
 .aui nav#breadcrumbs {
     background-color: #ededed;
-    transition: all .5s cubic-bezier(.09,1,.8,-0.37);
+   
 }
 .aui .breadcrumb {
   width: 90%;
@@ -215,9 +228,7 @@ h2.page-title {
 
 .aui .navbar .nav>.active>a,.aui .navbar .nav>.active>a:hover,.aui .navbar .nav>.active>a:focus
 	{
-	-webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
-	-moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
-	box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
+	
 	background-color: #fff;
 }
 
@@ -324,6 +335,10 @@ aui .btn.disabled, .aui .btn[disabled] {
 .aui .well {
 	background-color:#fff;
 }
+
+.app-view-entry:hover, .app-view-entry.hover {
+    background-color: #d0dae3;
+}
 /*dropdown*/
 
 
@@ -349,6 +364,12 @@ aui .btn.disabled, .aui .btn[disabled] {
   border-width: 2px  !important;
 }
 
+.aui .dropdown-menu > li > a:hover, .aui .dropdown-menu > li > a:focus, .aui .dropdown-submenu:hover > a, .aui .dropdown-submenu:focus > a {
+    background-color: #e2e9ee;
+    background-image: none;
+    color: #014260;
+}
+
 /* Kleiningkeiten */
 
 .textboxlistentry {
@@ -364,5 +385,14 @@ aui .btn.disabled, .aui .btn[disabled] {
 	
 }
 
+.separator {
+	border-style:solid;
+	border-color:#ededed;
+	border-width:1px 0 0 0;
+}
+
 /*--------------*/
 
+.sortable-layout-drag-indicator {
+    background: #014260 !important;
+}

@@ -24,13 +24,13 @@ div#p_p_id_145_ {
     margin-right: 2px;
 }
 
-html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li.lang:hover {
+html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li.lang:hover {
     background-color: #d0dae3;
 }
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li>a {
     color: #014260;
-    line-height: 30px;
+    line-height: 10px;
 
     text-transform: uppercase;
 }
@@ -104,8 +104,21 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li>a.user-notification-link {
 	    padding: 0;
-    height: 50px;
+  
     width: 45px;
+}
+
+.aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-notification-link:hover {
+	background-color:#ededed;
+}
+
+.aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-notification-link {
+	height:47px !important;
+}
+
+html.aui body.signed-in .smallhead header#banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls a.user-notification-link span.user-notifications-count 
+{
+	height:47px;
 }
 
 
@@ -115,6 +128,16 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
     padding: 0;
     padding-left: 3px;
     padding-right: 3px;
+   
+}
+
+.aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-avatar-link {
+	 width:50px;
+}
+
+.aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-avatar-link:hover {
+   background-color:#ededed;
+  
 }
 
 .aui .dockbar-split .dockbar .navbar-inner .nav>li.dockbar-user-notifications span.user-notifications-count {
@@ -238,7 +261,7 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 }
 
 
-html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
+html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
     color: #fff !important;
 }
 
@@ -266,7 +289,3 @@ html.aui body header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account
 	height: 40px;
 }
 
-
-.aui .signed-out .user-avatar .icon-caret-down:before {
-	color:#fff;
-}
