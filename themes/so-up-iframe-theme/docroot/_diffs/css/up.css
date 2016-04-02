@@ -1398,13 +1398,14 @@ background: $upBgColor;
 			
 	#navigation-wrapper
 		{
-			    width: 100px;
+			    width: 102px;
     			position: relative;
     			float: right;
     			margin-top: -20px;
     			height: 47px;
     			z-index: 2;
     			top: 0;
+    			
    
 			
 			.btn-toolbar
@@ -1423,11 +1424,13 @@ background: $upBgColor;
     					width: 50px;
     					display: block;
     					height: 47px;
+    					border-right: 1px solid #B3BFCA;
     				
     				a
     				{
     					    height: 47px;
     					    font-size:0;
+    					    margin-top:0;
     					    padding:0;
     					    width:50px;
     					    height:47px;
@@ -1438,6 +1441,8 @@ background: $upBgColor;
     					    span {
     					    	display:none;
     					    }
+    					    
+    					    
     				}
     				
     				a.services:after
@@ -1461,14 +1466,51 @@ background: $upBgColor;
 						margin-top:15px;
 						font-style: normal;
 						font-variant: normal;
-						font-weight: normal;
+						ont-weight: normal;
 						
+					}
+					
+					.dropdown-menu
+					{
+					
+						border-right: 1px solid #fff;
+    					border-bottom: 1px solid #fff;
+    					margin-top:4px;
+					}
+					
+					
+					.dropdown-menu li
+					{
+					    font-size: 0.9em;
+					    text-align: left;
+					    cursor: pointer;
+					    
+					    a
+					    {
+					    	font-size: 1.5em;
+						    height: 100%;
+						    width: 80%;
+						    margin: 0 auto;
+						    padding: 0.26667em 0.66667em;
+						    border-bottom: 1px solid #e2e9ee;
+					    }
 					}
     				
     								
+				}
+				
+				.btn-group.open
+				{
+					a 
+					{
+						    border-bottom:4px solid #d0dae3;
+						    box-sizing:content-box;
+					}
+				
 				} 
 			}
 		}
+		
 		
 		#main-menu-wrapper 
 		{
