@@ -62,6 +62,21 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 			<div class="list">
 			</div>
 		</div>
+		
+		<div style="display:none" class="email-invited">
+			<h2>
+				<liferay-ui:message key="invite-by-email" />
+			</h2>
+
+			<div class="list">
+			</div>
+
+			<div class="controls">
+				<input id="new-member-email-address" name="<portlet:namespace />emailAddress" size="50" type="text" />
+
+				<input id="so-add-email-address" type="button" value="<liferay-ui:message key="add-email-address" />" />
+			</div>
+		</div>		
 
 		<%
 		List<Role> roles = RoleLocalServiceUtil.search(layout.getCompanyId(), null, null, new Integer[] {RoleConstants.TYPE_SITE}, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new RoleNameComparator(false));

@@ -387,17 +387,9 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 	);
 
 	var templateSelect = A.one('.so-portlet-sites-dialog #<portlet:namespace />layoutSetPrototypeSelect');
-	console.log(templateSelect);
 
 	var descriptionContainer = A.one('.so-portlet-sites-dialog .template-details');
 	
-	var templateDetails = A.one('.template-details');
-	
-	var sitesDialog = A.one('.<portlet:namespace />so-portlet-sites-dialog');
-	
-	console.log(templateDetails);
-	console.log(sitesDialog);
-
 	var name = descriptionContainer.one('.name');
 	var description = descriptionContainer.one('.description');
 	
