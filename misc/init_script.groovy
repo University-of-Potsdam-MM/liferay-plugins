@@ -383,6 +383,22 @@ editorRolePermissions.put(PortletKeys.WIKI_DISPLAY, [ ActionKeys.ADD_TO_PAGE,
 editorRolePermissions.put("workspacedescription_WAR_workspacedescriptionportlet", [
 		ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
 		ActionKeys.VIEW ] as String[] );
+		
+// names of the roles permissions will be removed from
+String[] roleNamesForPermissionDeletion = ["User", "Power User", "Guest" ] as String[];
+// name ids for permission deletion
+String[] namesForPermissionDeletion = [ PortletKeys.REQUESTS, PortletKeys.ANNOUNCEMENTS,
+		PortletKeys.ASSET_PUBLISHER, "4_WAR_contactsportlet", "3_WAR_contactsportlet", "2_WAR_contactsportlet",
+		PortletKeys.LOGIN, PortletKeys.IFRAME, PortletKeys.ASSET_TAGS_NAVIGATION, "143", PortletKeys.ALERTS,
+		"2_WAR_tasksportlet", "mycustompages_WAR_custompagesportlet",
+		"othercustompages_WAR_custompagesportlet", PortletKeys.ACTIVITIES,
+		"upactivities_WAR_upactivitiesportlet", "1_WAR_notificationsportlet", "1_WAR_eventsdisplayportlet",
+		"2_WAR_microblogsportlet", PortletKeys.RSS, "97", PortletKeys.MEDIA_GALLERY_DISPLAY,
+		"upiframe_WAR_upiframeportlet", "1_WAR_wysiwygportlet",
+		"workspacedescription_WAR_workspacedescriptionportlet", "1_WAR_privatemessagingportlet",
+		PortletKeys.SITE_MEMBERS_DIRECTORY ] as String[];
+// action ids for permission deletion
+String[] actionIdsForPermissionDeletion = [ ActionKeys.ADD_TO_PAGE ] as String[];
 
 try {
 
@@ -412,9 +428,13 @@ try {
 	// Create or update editor role and set permissions
 	Role role = createOrUpdateRole(editorRoleTitleMap, editorRoleDescriptionMap, RoleConstants.TYPE_SITE);
 	setRolePermissions(role, editorRolePermissions, ResourceConstants.SCOPE_GROUP_TEMPLATE);
+	
+	// Removes given permissions
+	removePermissions(roleNamesForPermissionDeletion, namesForPermissionDeletion,
+			actionIdsForPermissionDeletion);	
 
 } catch (Exception e) {
-	e.printStackTrace();
+	e.printStackTrace(out);
 }
 
 
@@ -569,4 +589,30 @@ void setRolePermissions(Role role, Map<String, String[]> permissions, int scope)
 	}
 
 	out.println("Set the permissions for the role " + role.getName());
+	out.println();
+}
+
+/**
+ * Removes the given permissions
+ * 
+ * @param roleNames
+ *            role names
+ * @param names
+ *            name ids
+ * @param actionIds
+ *            action ids
+ * @throws Exception
+ */
+void removePermissions(String[] roleNames, String[] names, String[] actionIds) throws Exception {
+	for (String roleName : roleNames) {
+		Role role = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), roleName);
+		for (String name : names) {
+			for (String actionId : actionIds) {
+				ResourcePermissionLocalServiceUtil.removeResourcePermissions(PortalUtil.getDefaultCompanyId(),
+						name, ResourceConstants.SCOPE_COMPANY, role.getRoleId(), actionId);
+			}
+		}
+		out.println("Removed permissions for the role " + roleName);
+	}
+	out.println();
 }
