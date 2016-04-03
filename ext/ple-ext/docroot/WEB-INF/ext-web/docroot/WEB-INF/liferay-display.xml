@@ -6,6 +6,7 @@
 		<portlet id="19" />
 		<portlet id="107" />
 		<portlet id="1_WAR_privatemessagingportlet" />
+		<portlet id="1_WAR_microblogsportlet" />
 	</category>
 	<category name="category.workspaces">
 		<portlet id="workspacegrid_WAR_workspacegridportlet" />
@@ -25,7 +26,6 @@
 		<portlet id="56" />
 		<portlet id="33" />
 		<portlet id="36" />
-		<portlet id="1_WAR_microblogsportlet" />
 		<portlet id="1_WAR_wysiwygportlet" />
 		<portlet id="31" />
 		<portlet id="97" />
