@@ -19,6 +19,7 @@ import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Team;
 import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
@@ -400,6 +401,21 @@ String[] namesForPermissionDeletion = [ PortletKeys.REQUESTS, PortletKeys.ANNOUN
 // action ids for permission deletion
 String[] actionIdsForPermissionDeletion = [ ActionKeys.ADD_TO_PAGE ] as String[];
 
+// names of the roles permissions will be added to
+String[] roleNamesForPermissionAdditionCompany = [ "User" ] as String[];
+// name ids for permission addition
+String[] namesForPermissionAdditionCompany = [ "com.liferay.portlet.documentlibrary" ] as String[];
+// action ids for permission addition
+String[] actionIdsForPermissionAdditionCompany = [ ActionKeys.VIEW ] as String[];
+
+// names of the roles permissions will be added to
+String[] roleNamesForPermissionAdditionPersonal = [ "User" ] as String[];
+// name ids for permission addition
+String[] namesForPermissionAdditionPersonal = [ "mycustompages_WAR_custompagesportlet",
+		"othercustompages_WAR_custompagesportlet" ] as String[];
+// action ids for permission addition
+String[] actionIdsForPermissionAdditionPersonal = [ ActionKeys.ADD_TO_PAGE ] as String[];
+
 try {
 
 	// Make predefined pages in users personal area uneditable
@@ -431,7 +447,18 @@ try {
 	
 	// Removes given permissions
 	removePermissions(roleNamesForPermissionDeletion, namesForPermissionDeletion,
-			actionIdsForPermissionDeletion);	
+			actionIdsForPermissionDeletion);
+
+	// Adds given permissions
+	addPermissions(roleNamesForPermissionAdditionCompany, namesForPermissionAdditionCompany,
+			actionIdsForPermissionAdditionCompany, ResourceConstants.SCOPE_COMPANY,
+			String.valueOf(PortalUtil.getDefaultCompanyId()));
+
+	// Adds given permissions
+	addPermissions(roleNamesForPermissionAdditionPersonal, namesForPermissionAdditionPersonal,
+			actionIdsForPermissionAdditionPersonal, ResourceConstants.SCOPE_GROUP,
+			String.valueOf(GroupLocalServiceUtil.getUserPersonalSiteGroup(PortalUtil.getDefaultCompanyId())
+					.getGroupId()));			
 
 } catch (Exception e) {
 	e.printStackTrace(out);
@@ -613,6 +640,40 @@ void removePermissions(String[] roleNames, String[] names, String[] actionIds) t
 			}
 		}
 		out.println("Removed permissions for the role " + roleName);
+	}
+	out.println();
+}
+
+/**
+ * Adds the given permissions
+ * 
+ * @param roleNames
+ *            role names
+ * @param names
+ *            names
+ * @param actionIds
+ *            action ids
+ * @param scope
+ *            scope
+ * @param primKey
+ *            prim key
+ * @throws Exception
+ */
+void addPermissions(String[] roleNames, String[] names, String[] actionIds, int scope, String primKey)
+		throws Exception {
+	for (String roleName : roleNames) {
+		Role role = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), roleName);
+		if (role != null) {
+			for (String name : names) {
+				for (String actionId : actionIds) {
+					ResourcePermissionLocalServiceUtil.addResourcePermission(PortalUtil.getDefaultCompanyId(),
+							name, scope, primKey, role.getRoleId(), actionId);
+				}
+			}
+			out.println("Added permissions for the role " + roleName);
+		} else {
+			out.println("WARNING: Couldn't find role " + roleName);
+		}
 	}
 	out.println();
 }
