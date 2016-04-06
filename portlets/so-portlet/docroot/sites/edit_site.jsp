@@ -75,7 +75,6 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 				<aui:layout>
 					<aui:column columnWidth="<%= 40 %>" first="<%= true %>">
 						<aui:select id="layoutSetPrototypeSelect" label="template" name="layoutSetPrototypeId">
-							<aui:option label="empty" selected="<%= true %>" value="0" />
 		
 							<%
 							for (LayoutSetPrototype layoutSetPrototype : layoutSetPrototypes) {
