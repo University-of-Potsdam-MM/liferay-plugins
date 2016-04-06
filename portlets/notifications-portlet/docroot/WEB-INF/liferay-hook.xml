@@ -4,7 +4,6 @@
 <hook>
 	<portal-properties>portal.properties</portal-properties>
 	<language-properties>content/Language*.properties</language-properties>
-	<custom-jsp-dir>/META-INF/custom_jsps</custom-jsp-dir>
 	<service>
 		<service-type>com.liferay.portlet.announcements.service.AnnouncementsEntryLocalService</service-type>
 		<service-impl>com.liferay.notifications.hook.service.impl.AnnouncementsEntryLocalServiceImpl</service-impl>
