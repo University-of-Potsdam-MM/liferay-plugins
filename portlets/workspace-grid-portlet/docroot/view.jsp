@@ -79,35 +79,40 @@ function renderWorkspaceGrid(){
 		end = data.length;
 		allVisible = true;
 	}
-	for (var i = 0; i < end; i++) {
-		var group = data[i];
-		
-		var completeName= group.name;
-	
-		var laenge = completeName.length;
-		 if (laenge > 35) {
-			var shortstring = completeName.substr(0,35);
-	   		var shortName = shortstring.concat(" ...");
-		} else {
-			var shortName = group.name;
-		}
-		
-		var additionalClasses = '';
-		var backgroundColor = group.color;
-		if (group.globalWorkspace == 'true'){
-			additionalClasses += 'globalWorkspace';
-			backgroundColor = '#014260'; 
-		}
+	if (data.length <= 1){
+		workspacegridlist.append('<div class="alert alert-info"><%= LanguageUtil.get(pageContext, "empty-workspace-list")%></div>')
+	}
+	else {
+		for (var i = 0; i < end; i++) {
+			var group = data[i];
 			
-		workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
-	    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
-	    		'<span hidden="true" class="url">' + group.url + '</span>' + 
-	    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
-	    		'<div class="activities">' +
-				((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ backgroundColor +'"></span><span class="numberOfActivities" style="color:'+ backgroundColor +'">' + group.activitiesCount + '</span>') : '' ) +
-	    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
-
-		Hyphenator.hyphenate($('#name_' + group.groupId).get(0), 'de');
+			var completeName= group.name;
+		
+			var laenge = completeName.length;
+			 if (laenge > 35) {
+				var shortstring = completeName.substr(0,35);
+		   		var shortName = shortstring.concat(" ...");
+			} else {
+				var shortName = group.name;
+			}
+			
+			var additionalClasses = '';
+			var backgroundColor = group.color;
+			if (group.globalWorkspace == 'true'){
+				additionalClasses += 'globalWorkspace';
+				backgroundColor = '#014260'; 
+			}
+				
+			workspacegrid.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
+		    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
+		    		'<span hidden="true" class="url">' + group.url + '</span>' + 
+		    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
+		    		'<div class="activities">' +
+					((group.activitiesCount.length > 0) ? ('<span class="activity-icon" style="background-color:'+ backgroundColor +'"></span><span class="numberOfActivities" style="color:'+ backgroundColor +'">' + group.activitiesCount + '</span>') : '' ) +
+		    		'</div><div class="mouseover-actions"><div class="move-workspaceslide"></div><div class="visit-workspace"><span hidden="true" class="url">' + group.url + '</span></div></div></li>');
+	
+			Hyphenator.hyphenate($('#name_' + group.groupId).get(0), 'de');
+		}
 	}
 	
 	if (!allVisible){
