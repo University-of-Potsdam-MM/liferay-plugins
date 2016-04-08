@@ -266,7 +266,16 @@ editorRolePermissions.put("191", [] as String[] );
 // Workspace Administration -> Applications -> Activities -> Application
 // Permissions
 editorRolePermissions.put("upactivities_WAR_upactivitiesportlet", [ ActionKeys.ADD_TO_PAGE,
-		ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES, ActionKeys.VIEW ] as String[] );
+ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES, ActionKeys.VIEW ] as String[] );
+// Workspace Administration -> Applications -> Announcements ->
+// Application Permissions
+editorRolePermissions.put(PortletKeys.ANNOUNCEMENTS, [ ActionKeys.ADD_TO_PAGE,
+		ActionKeys.ADD_ENTRY, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
+		ActionKeys.VIEW ] as String[] );
+// Workspace Administration -> Applications -> Announcements ->
+// Application Permissions
+editorRolePermissions.put("com.liferay.portlet.announcements.model.AnnouncementsEntry", [
+		ActionKeys.DELETE, ActionKeys.PERMISSIONS, ActionKeys.UPDATE, ActionKeys.VIEW ] as String[] );
 // Workspace Administration -> Applications -> Asset Publisher ->
 // Application Permissions
 editorRolePermissions.put(PortletKeys.ASSET_PUBLISHER, [ ActionKeys.ADD_PORTLET_DISPLAY_TEMPLATE,
