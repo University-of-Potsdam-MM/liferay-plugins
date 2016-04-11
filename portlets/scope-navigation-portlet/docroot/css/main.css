@@ -100,3 +100,18 @@ a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
     font-weight:bold;
 }
 
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before {
+	background-image: url('/so-up-theme/css/../images/ple-icons.png') !important; 
+	background-repeat:no-repeat;
+	background-position: 0 -33px;
+	display:inline-block;
+	position:relative;
+	width:15px;
+	height:15px;
+	content: "";
+	float: left;
+    margin-top: 2px;
+	
+}
+
+
