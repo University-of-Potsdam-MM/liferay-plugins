@@ -103,7 +103,7 @@ function renderWorkspaceGrid(){
 				backgroundColor = '#014260'; 
 			}
 				
-			workspacegrid.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
+			workspacegridlist.append('<li class="workspaceslide ' + additionalClasses + '" style="background-color:' + backgroundColor + '; border-color:'+ backgroundColor +'">' +
 		    		'<span hidden="true" class="groupId">' + group.groupId + '</span>' +
 		    		'<span hidden="true" class="url">' + group.url + '</span>' + 
 		    		'<div class="workspaceName" id="name_' + group.groupId + '">' + shortName + '</div>' +
