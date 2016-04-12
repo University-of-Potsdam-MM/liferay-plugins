@@ -79,7 +79,7 @@ function renderWorkspaceGrid(){
 		end = data.length;
 		allVisible = true;
 	}
-	if (data.length <= 1){
+	if (data.length == 0){
 		workspacegridlist.append('<div class="alert alert-info"><%= LanguageUtil.get(pageContext, "empty-workspace-list")%></div>')
 	}
 	else {
