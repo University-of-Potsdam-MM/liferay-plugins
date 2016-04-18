@@ -169,7 +169,7 @@
 	.wrapper-portlet-area 
 	{
 		width:100%;
-		margin-top: 70px;
+		margin-top: 47px;
 		
 		.row-fluid .span4 
 		{
@@ -234,7 +234,7 @@
 			    line-height: 1.2em;
 			    font-family: arial;
 			    position: relative;
-			    background-color:#fff;
+			    background-color:transparent;
 			    margin:0 auto;
 			    
 			    a 
@@ -878,6 +878,7 @@
 						{
 							padding-bottom:3px;
 							padding-top:3px;
+							width:100%;
 						}
 					}
 				 } /*ende li */
@@ -923,6 +924,7 @@
 							color: $upWhite;
 							font-size: 0.9em;
 							border-bottom: 1px solid #598497;
+							width:100%;
 						
 							a
 							{
@@ -980,22 +982,18 @@
 	
 	
 	html.aui body.signed-in .wrapper-portlet-area {
-		margin-top:120px;
+		margin-top:47px;
 	}
 	
-	html.aui body.signed-in .wrapper-portlet-area #left-nav-col {
-		float:none;
-		width:95%;
-		margin:0 auto;
+	html.aui body.signed-in header#banner #main-menu-wrapper #main-menu.open li ul li {
+    width: 100%;
 	}
-	
-	html.aui body.signed-in .wrapper-portlet-area #navigation ul {display:none;}
 	
 	
 	html.aui body.signed-in .container-fluid#wrapper div#content  {
-		width: 95%;
+		width: 100%;
 	    margin-left: 0;
-	    margin: 0 auto;
+	    margin: 0;
 	}
 	
 	html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title span.clicker {
@@ -1117,7 +1115,7 @@
 		
 		html.aui body.signed-in .wrapper-portlet-area {
     
-    		margin-top: 150px;
+    		margin-top: 76px;
 		}
 		
 		

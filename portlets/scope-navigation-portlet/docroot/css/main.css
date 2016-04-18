@@ -23,6 +23,7 @@
     float: left;
     display: block !important;
         margin: 0 !important;
+	
 	}
 	
 	#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
@@ -39,13 +40,15 @@
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet .portlet-content {
-	    background-color: #fff;
+   	background-color: #fff;
     color: #014260;
     padding:1em .3em 1em .3em;
-    border: 2px solid  #d0dae3;
+    border-bottom: 1px solid #ededed;
+    border-top: 1px solid #ededed;
     text-align: center;
     font-weight: bold;
-        min-height: 25px;
+    min-height: 25px;
+    padding: .7em 0em 1em 0em !important;
 	
 }
 
@@ -55,9 +58,10 @@
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
 	margin-bottom: 0;
-    width: 100%;
+    width: 80%;
     display: inline-block;
-    margin-right: 20px;
+
+    float:left;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label {
@@ -67,8 +71,8 @@
 
 .aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
 	    width: 100%;
-	        border-color: #014260;
-    border-width: 1px;
+	     border:none;
+   
     font-weight: bold;
     color: #014260;
 }
@@ -82,10 +86,6 @@
 }
 
 
-option.private:before {
-	content:"dsahjds";
-	
-}
 
 
 a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
@@ -112,6 +112,10 @@ a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before {
 	float: left;
     margin-top: 2px;
 	
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership .membershipRequested {
+    color: red;
 }
 
 

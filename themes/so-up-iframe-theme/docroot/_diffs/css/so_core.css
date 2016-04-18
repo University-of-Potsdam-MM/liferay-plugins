@@ -219,7 +219,7 @@ body {
 #content {
 	background: $navigationBgColor;
 	border-left: 1px solid $defaultBorderColor;
-	padding-left: 155px;
+	padding-left:0px;
 }
 
 #main-content {

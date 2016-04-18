@@ -26,16 +26,12 @@
 
 
 .container-fluid#wrapper div#content  {
-	width: 76%;
+	width: 100%;
   
-  margin-left: 22%;
+ 
 }
 
-.portlet-column {
-	width: 76%;
-  
-  margin-left: 22%;
-}
+
 
 li.info-link-container {
     display: none;

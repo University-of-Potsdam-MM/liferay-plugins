@@ -1,18 +1,14 @@
  @import "compass"; 
 /*custom*/
-.container-fluid#wrapper div#content  {
-	width: 78%;
-  
-  margin-left: 22%;
-  padding-left: 0px;
+
+#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title span {
+	visibility:hidden;
 }
 
-.portlet-column {
-	width: 78%;
-  
-  margin-left: 22%;
+#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title {
+	    background: #014260;
+    height: 5px;
 }
-
 
 .portlet-column .portlet-column-content {
 	border-width: 0 0px 0 0 !important;
@@ -43,6 +39,9 @@ body.signed-in.controls-visible .portlet-dropzone.empty:after {
       font-size: 2em;
        color: #d0dae3;
     text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    display: inline-block;
 }
 /* ---------- Portlet wrapper and icons ---------- */
 

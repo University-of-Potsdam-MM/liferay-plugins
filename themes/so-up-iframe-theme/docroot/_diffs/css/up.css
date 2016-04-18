@@ -368,6 +368,7 @@ html.aui
     							background-position: -3px 5px;
     							/*transition: width .3s ease-in-out;*/
     							border:none;
+    							text-indent:100000px;
     						
     							    
 				 	 			
@@ -384,6 +385,7 @@ html.aui
 				 	 			    background-color: #fff;
     								border: 2px solid #014260;
     								box-sizing: border-box;
+    								text-indent:0;
     								
     							
 				 	 		}
@@ -657,7 +659,7 @@ html.aui
 		}
 			
 		#sidebar.show-sidebar {
-			width: 300px;
+			min-width: 300px;
 			
 			.content 
 			{
@@ -728,8 +730,8 @@ html.aui
     									{
     										background-image: url("/so-up-theme/css/../images/ple-icons.png");
 										    background-repeat: no-repeat;
-										    background-position: 20px -91px;
-										    text-indent: 30px;
+										    background-position: 6px -93px;
+										    text-indent: 20px;
     									}
 								}
 								
@@ -780,7 +782,6 @@ html.aui
     							{
     								margin-top:10px;
     								padding-top:10px;
-    								
     								padding-bottom:10px;
     								
     								
@@ -790,6 +791,9 @@ html.aui
     										color: #fff;
    											text-shadow: none;
    											margin-right: 10px;
+   											margin-bottom: 20px;
+										    font-size: 17px;
+										    padding: 4px 12px 4px 12px;
     								}
     							}
 									
@@ -1149,8 +1153,8 @@ background: $upBgColor;
 		
 	.wrapper-portlet-area 
 	{
-		width: 91%;
-		margin-top:300px !important;
+		width: 100%;
+		margin-top:47px !important;
 	}
 		
 	#line
@@ -1217,6 +1221,7 @@ background: $upBgColor;
 	{
 		left: 300px;
 		border-radius:0;
+		
 	}
 	 
 /*begin page */
@@ -1601,25 +1606,8 @@ background: $upBgColor;
 		
 		nav#breadcrumbs
 		{
-			margin-left:-140px;
-      		  	
-    		.breadcrumb
-    		{
-    			
-    			margin: 0px ;
-    			padding: 5px 0px 5px 5px;
-    			background-color: #ededed;
-    			
-    			li, li.active
-    			{
-    				text-shadow:none;
-    				
-    				a
-    				{
-    					color:#014260;
-    				}
-    			}
-    		}
+			display:none;
+      		  		
 		
 		}
 	} /*end header banner */	

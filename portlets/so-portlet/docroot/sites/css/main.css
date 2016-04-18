@@ -95,7 +95,7 @@ $defaultTextColor: #202020;
 
 			&.empty {
 				background-image: url(@theme_image_path@/messages/alert.png);
-				padding-left: 25px;
+				text-indent: 30px;
 
 				&:hover {
 					background-color: transparent;
