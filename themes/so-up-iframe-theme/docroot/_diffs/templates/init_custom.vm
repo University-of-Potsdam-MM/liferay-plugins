@@ -1,3 +1,14 @@
+
+#set ($default_user_profile_portrait_url = $theme_display.getDefaultUser().getPortraitURL($themeDisplay))
+#set ($is_profile_page = false)
+#set ($so_logo = $images_folder + "/custom/so_logo.png")
+#set ($user_dashboard_portlet_url = $site_default_url)
+#set ($user_dashboard_url = $site_default_url)
+#set ($user_local_service = $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
+#set ($user_profile_url = $community_default_public_url)
+
+#set ($current_user = $user_local_service.getUserById($page_group.getClassPK()))
+
 #if ($is_signed_in)
 	#set ($portal_url = $themeDisplay.getPortalURL())
 	#set ($user_my_sites = $user.getMySiteGroups())
@@ -25,15 +36,15 @@
 	#set ($show_preview_controls = $has_layout_update_permission || $groupPermission.contains($permissionChecker, $page_group.getGroupId(), "PREVIEW_IN_DEVICE"))
 	#set ($show_toggle_controls = ((!$page_group.hasStagingGroup()) || $page_group.isStagingGroup()) && ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()) || $portletPermission.hasConfigurationPermission($permissionChecker, $theme_display.getSiteGroupId(), $layout, "CONFIGURATION")))
 
-	#set ($liferay_toggle_controls = $sessionClicks.get($request, "liferay_toggle_controls", ""))
 	#set ($themeNamespace = "_" + $themeDisplay.getThemeId() + "_")
 
-	#if ($liferay_toggle_controls == "" && !$show_toggle_controls)
-		$sessionClicks.put($request, "liferay_toggle_controls", "hidden")
-
-		#set ($liferay_toggle_controls = "hidden")
-		#set ($css_class = $css_class.replaceAll("controls-visible", "controls-hidden"))
+	#set ($controls_hidden_css_class = "controls-hidden")
+	#set ($css_class = $css_class.replaceAll("controls-visible", ""))
+	#if (!$css_class.contains($controls_hidden_css_class))
+		#set ($css_class = "$css_class $controls_hidden_css_class")
 	#end
+	
+	#set ($is_user_dashboard = ($page_group.getGroupId() == $current_user.getGroupId()))
 	
 	## -- get private sites -- ##
 	
@@ -53,9 +64,16 @@
 	#set ($scopenavigationportletSetup = $portletPreferencesFactory.getLayoutPortletSetup($layout, $scopenavigationPortletId))
 	
 	#set ($isUserPage = $layout.getGroup().isUser())
+	#set ($isPublicPage = $layout.isPublicLayout())
+	
+	#set ($isOmniAdmin = $permissionChecker.isOmniadmin())
 
 #else
 	#set ($user_my_sites = $user.getMySiteGroups())
 	#set ($user_sname = "")
 	#set ($user_account_url = "")
+#end
+
+#if ($is_user_dashboard)
+	#set ($css_class = "${css_class} user-dashboard")
 #end

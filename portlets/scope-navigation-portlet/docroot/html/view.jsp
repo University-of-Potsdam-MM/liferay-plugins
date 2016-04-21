@@ -47,13 +47,8 @@ else
 	redirectURL= publicURL;
 
 if (privateVisible) {
-%>
-
-	<portlet:actionURL name="changeScope" var="changeScopeURL" >
-	    <portlet:param name="mvcPath" value="/html/myportfolio/view.jsp" />
-	</portlet:actionURL>
-	
-	<aui:form action="<%= changeScopeURL %>" method="post" name="changeScopeForm" >
+%>	
+	<aui:form name="changeScopeForm" >
 		<aui:select name="scopeNavigation" label="">
 			<aui:option label="private-space" value="private" class="private" selected="<%= layout.isPrivateLayout() %>" />
 			<aui:option label="public-space" value="public" class="public" selected="<%= !layout.isPrivateLayout() %>"/>

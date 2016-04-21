@@ -15,7 +15,7 @@ import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.model.WikiPage;
 import com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil;
 
-import de.unipotsdam.elis.portfolio.permission.PermissionHelper;
+import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
 public class WikiPagePermission {
 

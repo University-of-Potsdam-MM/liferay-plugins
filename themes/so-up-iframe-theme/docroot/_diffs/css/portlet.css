@@ -1,31 +1,55 @@
  @import "compass"; 
 /*custom*/
-.container-fluid#wrapper div#content  {
-	width: 78%;
-  
-  margin-left: 22%;
-  padding-left: 0px;
+
+#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title span {
+	visibility:hidden;
 }
 
-.portlet-column {
-	width: 78%;
-  
-  margin-left: 22%;
+#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title {
+	    background: #014260;
+    height: 5px;
 }
-
 
 .portlet-column .portlet-column-content {
 	border-width: 0 0px 0 0 !important;
 	padding-right:1em;
 }
 
+/*hightlight portlet dropzone if empty */
+
+body.signed-in.controls-visible .portlet-dropzone {
+
+   
+ 
+    display: inline-block;
+ 
+    display: block;
+
+    border: 2px dashed #d0dae3!important;
+    min-height: 500px;
+}
+
+
+
+body.signed-in.controls-visible .portlet-dropzone.empty:after {
+    content: "Drag Application Here";
+    line-height: 1.2;
+    padding-top: 50px;
+    display: inline-block;
+      font-size: 2em;
+       color: #d0dae3;
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    display: inline-block;
+}
 /* ---------- Portlet wrapper and icons ---------- */
 
 
 
 .portlet {
-	border:none;
-	border-bottom:none;
+	border: 1px solid #ededed;
+	border-bottom:1px solid #ededed !important;
 }
 
 
@@ -38,14 +62,14 @@
 
 .portlet-boundary {
 	
-	margin-bottom: 0px;
-	padding-bottom: 0px;
+	margin-bottom: 10px;
+	padding-bottom: 10px;
 	
 }
 
 
 .portlet .portlet-content, .portlet .portlet-topper {
-	padding-top:0em;
+	padding-top: .5em;
 }
 
 .portlet-title {
@@ -60,26 +84,17 @@
   min-width: 100px;
  
   
-background: #014260; /* Old browsers */
-/*
-background: -moz-linear-gradient(left,  #014260 0%, #d0dae3 100%); 
-background: -webkit-gradient(linear, left top, right top, color-stop(0%,#014260), color-stop(100%,#d0dae3)); 
-background: -webkit-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
-background: -o-linear-gradient(left,  #014260 0%,#d0dae3 100%);
-background: -ms-linear-gradient(left,  #014260 0%,#d0dae3 100%); 
-background: linear-gradient(to right,  #014260 0%,#d0dae3 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', endColorstr='#d0dae3',GradientType=1 ); 
-*/
+background: #ededed; 
 }
 
 .aui .portlet-topper-toolbar .caret {
    
     vertical-align: top;
-    border-top: 4px solid white !important;
+    border-top: 4px solid #014260 !important;
 }
    
    .aui .portlet-topper-toolbar .icon-cog {
-    color: #fff;
+    color: #014260;
 }
 
 
@@ -106,7 +121,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 /* portlet edit mode */
 
 .portlet-borderless-bar {
-	background-color: #FFF;
+	background-color: #ededed;
   padding: 0px;
   margin-bottom: 3px;
     text-align:left;
@@ -114,7 +129,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
  	font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
 	font-weight: 300;
 	font-size: 1.6em;
-	color: #014260;
+	color: #fff;
 	
 }
 
@@ -146,8 +161,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
   text-overflow: ellipsis;
   vertical-align: top;
   white-space: nowrap;
-  color: #fff;
+  color: #014260;
   font-family: "source sans pro", arial, helvetica, sans-serif;
+  font-weight:bold;
 }
 .portlet-title-editable {
   cursor: pointer;
@@ -159,7 +175,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 
 /* borderless portlet */
 
-
+.controls-visible .portlet-borderless-container, .portlet-borderless-container
+{
+	border:1px solid #ededed;
+	
+}
 
 .portlet-borderless:hover {
 	-webkit-box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
@@ -167,12 +187,74 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#014260', end
 box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
 }
 
+.portlet-borderless-bar {
+	background-color: #ededed;
+    padding: 0px;
+    margin-bottom: 3px;
+    text-align: left;
+    padding-right: 0px;
+    font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 1.6em;
+    color: #014260;
+    position: relative;
+    height: 25px;
+    font-weight:bold;
+	
+}
+
+.portlet-borderless-bar .portlet-title-text, .portlet-borderless-bar .portlet-title-default {
+	isplay: block;
+    width: 88%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+    min-width: 100px;
+    text-align: left;
+    text-indent: 10px;
+    font-size: .6em;
+    float: left;
+    line-height: 2;
+    height: 25px;
+}
 
 .portlet-borderless-bar span.portlet-actions {
-	position: absolute;
+	border-radius: 0;
+   
+    display: block !important;
+    position: relative;
+        overflow: visible !important;
+    float: right;
+    max-width:50px !important;
+    text-align: right;
+}
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group {
+	height:23px;
+}
 
-  margin-right: 10px;
-  right:0;
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group a {
+	display: block;
+    width: 25px;
+    height: 19px;
+    z-index: 100;
+    position: absolute;
+    color: #fff;
+        right: 5px;
+    background-color: transparent; 	
+    margin-top: 5px;
+}
+
+.portlet-borderless-bar span.portlet-actions .portlet-options .btn-group a i.caret {
+	    border-top: 4px solid #014260;
+}
+
+.portlet-borderless-bar span.portlet-actions .portlet-close {
+	display:none;
+}
+
+.aui .portlet-borderless-bar .btn-group.open .dropdown-toggle {
+	    background-image: url(../images/portlet/options_borderless.png);
 }
 
 .portlet-borderless-bar span.portlet-actions span div a li.caret {

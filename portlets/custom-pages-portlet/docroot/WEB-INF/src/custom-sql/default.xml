@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom-sql>
+    <sql id="findCustomPagesByPageTypeAndLayoutUserId">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+            ExpandoValue ON (Layout.plid = ExpandoValue.classPK AND
+            ExpandoValue.data_ = ?)
+		INNER JOIN
+			ExpandoColumn ON (ExpandoColumn.name = "CustomPageType" AND 
+            ExpandoValue.columnId = ExpandoColumn.columnId)
+        INNER JOIN
+        	Group_ ON (Group_.groupId = Layout.groupId AND
+        	Group_.classPK = ?)
+        WHERE
+        	(Layout.userId = ? AND Layout.sourcePrototypeLayoutUuid = "")
+    </sql>
+    <sql id="findCustomPagesByLayoutUserId">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+        	Group_ ON (Group_.groupId = Layout.groupId AND
+        	Group_.classPK = ?)
+        WHERE
+        	(Layout.userId = ? AND Layout.sourcePrototypeLayoutUuid = "")
+    </sql>
+     <sql id="findCustomPagesByLayoutUserIdAndCustomPageFeedback">
+        SELECT DISTINCT Layout.*
+        FROM Layout
+        INNER JOIN
+        	Group_ ON (Group_.groupId = Layout.groupId AND
+        	Group_.classPK = ?)
+        INNER JOIN
+            CustomPages_CustomPageFeedback ON Layout.plid = CustomPages_CustomPageFeedback.plid
+        WHERE
+        	(Layout.userId = ? AND 
+        	Layout.sourcePrototypeLayoutUuid = "")
+    </sql>
+    <sql id="findCustomPagesByPageTypeAndCustomPageFeedbackUserId">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+            ExpandoValue ON (Layout.plid = ExpandoValue.classPK AND
+            ExpandoValue.data_ = ?)
+		INNER JOIN
+			ExpandoColumn ON (ExpandoColumn.name = "CustomPageType" AND 
+            ExpandoValue.columnId = ExpandoColumn.columnId)
+        INNER JOIN
+            CustomPages_CustomPageFeedback ON Layout.plid = CustomPages_CustomPageFeedback.plid
+        WHERE
+        	(CustomPages_CustomPageFeedback.userId = ?)
+    </sql>
+    <sql id="findCustomPagesPublishedGlobalAndByCustomPageFeedbackUserId">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+            CustomPages_CustomPageFeedback ON Layout.plid = CustomPages_CustomPageFeedback.plid
+        WHERE
+        	(CustomPages_CustomPageFeedback.userId = ? || CustomPages_CustomPageFeedback.userId = 0)
+    </sql>
+     <sql id="findGlobalPublishedCustomPagesByPageTypeAndNotPublishedToUser">
+        SELECT Layout.*
+        FROM Layout
+        INNER JOIN
+            ExpandoValue ON (Layout.plid = ExpandoValue.classPK AND
+            ExpandoValue.data_ = ?)
+		INNER JOIN
+			ExpandoColumn ON (ExpandoColumn.name = "CustomPageType" AND 
+            ExpandoValue.columnId = ExpandoColumn.columnId)
+		INNER JOIN
+			CustomPages_CustomPageFeedback ON (Layout.plid = CustomPages_CustomPageFeedback.plid AND
+			CustomPages_CustomPageFeedback.userId = 0)
+        WHERE
+        	((Layout.plid NOT IN 
+				(SELECT CustomPages_CustomPageFeedback.plid
+        		 FROM CustomPages_CustomPageFeedback
+        		 WHERE CustomPages_CustomPageFeedback.userId = ?)) AND 
+        	(Layout.userId != ?))
+    </sql>
+     <sql id="findGlobalPublishedCustomPagesByNotPublishedToUser">
+        SELECT Layout.*
+        FROM Layout
+		INNER JOIN
+			CustomPages_CustomPageFeedback ON (Layout.plid = CustomPages_CustomPageFeedback.plid AND
+			CustomPages_CustomPageFeedback.userId = 0)
+        WHERE
+        	((Layout.plid NOT IN 
+				(SELECT CustomPages_CustomPageFeedback.plid
+        		 FROM CustomPages_CustomPageFeedback
+        		 WHERE CustomPages_CustomPageFeedback.userId = ?)) AND 
+        	(Layout.userId != ?))
+    </sql>
+     <sql id="findUsersByCustomPageFeedback">
+        SELECT User_.*
+        FROM User_
+        WHERE
+        	(User_.userId IN
+        		(SELECT CustomPages_CustomPageFeedback.userId
+        		 FROM CustomPages_CustomPageFeedback
+        		 WHERE CustomPages_CustomPageFeedback.plid = ?))
+    </sql>
+    <sql id="filterByUserId">
+        WHERE User_.userId != ?
+    </sql>
+</custom-sql>

@@ -1,16 +1,14 @@
+/*
+@import url(./bootstrap-up.css);
+*/
+
 @import url(base.css); 
 
 @import url(application.css);
 
 @import url(layout.css);
 
-
-
 @import url(dockbar.css);
-
-@import url(admin-panel.css);
-
-@import url(navigation.css);
 
 @import url(portlet.css);
 
@@ -20,18 +18,20 @@
 
 @import url(./up-dockbar.css);
 
+@import url(./overlays.css);
+
+@import url(./app_view_toolbar.css);
+
+@import url(./navbar.css); 
+
 
 .container-fluid#wrapper div#content  {
 	width: 100%;
   
-  margin-left: 0;
+ 
 }
 
-.portlet-column {
-	width: 100%;
-  
-  margin-left: 0;
-}
+
 
 li.info-link-container {
     display: none;

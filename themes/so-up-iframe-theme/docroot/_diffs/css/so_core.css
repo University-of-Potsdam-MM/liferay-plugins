@@ -219,7 +219,7 @@ body {
 #content {
 	background: $navigationBgColor;
 	border-left: 1px solid $defaultBorderColor;
-	padding-left: 155px;
+	padding-left:0px;
 }
 
 #main-content {
@@ -566,7 +566,7 @@ html.aui {
 	margin-bottom: -1px;
 
 	.portlet-content, .portlet-topper {
-		padding: 0em;
+		padding: .5em;
 	}
 
 	.portlet-topper {
@@ -583,6 +583,10 @@ html.aui {
 			display: none;
 		}
 	}
+	
+	.portlet-content .portlet-body {
+		position:relative;
+	}
 }
 
 .portlet-borderless-container {
@@ -591,6 +595,7 @@ html.aui {
 
 .portlet-borderless-bar .portlet-options a {
 	background-image: url(../images/portlet/options_borderless.png);
+	background-repeat:no-repeat;
 }
 
 .controls-visible .portlet-borderless-container {
@@ -1655,6 +1660,7 @@ html.aui {
 
 	.taglib-header {
 		border-bottom-width: 0;
+		margin-top:0;
 	}
 
 	.top-links-container {
@@ -1753,6 +1759,8 @@ html.aui {
 
 .taglib-asset-tags-summary .tag {
 	@include tag(false);
+	border-radius:0;
+	background-color:#d0dae3;
 }
 
 /* ---------- Top links component ---------- */
@@ -1817,9 +1825,6 @@ html.aui {
 			padding-left: 0;
 		}
 
-		#navigation {
-			display: none;
-		}
 
 		.portlet-layout, .portlet-column {
 			display: block;

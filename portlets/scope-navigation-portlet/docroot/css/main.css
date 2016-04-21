@@ -1,6 +1,37 @@
-.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ {
-	margin-bottom:0;
+
+
+.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ header {
+    display: none;
+}
+
+
+@media only screen and (max-width: 979px) {
 	
+	
+	.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
+    width: 100%;
+    font-size: .9em;
+	}
+}
+
+@media only screen and (max-width: 800px) { 
+
+	
+	#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
+		   
+    width: 90% !important;
+    float: left;
+    display: block !important;
+        margin: 0 !important;
+	
+	}
+	
+	#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
+	    display: block;
+	    text-align: right;
+	    margin-right: 10px
+	    
+	}
 }
 
 .portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet {
@@ -9,9 +40,15 @@
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet .portlet-content {
-	    background-color: #ededed;
+   	background-color: #fff;
     color: #014260;
-    padding: .3em 0 0 .3em;
+    padding:1em .3em 1em .3em;
+    border-bottom: 1px solid #ededed;
+    border-top: 1px solid #ededed;
+    text-align: center;
+    font-weight: bold;
+    min-height: 25px;
+    padding: .7em 0em 1em 0em !important;
 	
 }
 
@@ -21,9 +58,10 @@
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
 	margin-bottom: 0;
-    width: 85%;
+    width: 80%;
     display: inline-block;
-    margin-right: 20px;
+
+    float:left;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label {
@@ -33,6 +71,10 @@
 
 .aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
 	    width: 100%;
+	     border:none;
+   
+    font-weight: bold;
+    color: #014260;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
@@ -44,9 +86,36 @@
 }
 
 
-option.private:before {
-	content:"dsahjds";
+
+
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
+	    background-color: #d0dae3;
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align:center;
+    font-weight:bold;
+}
+
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before {
+	background-image: url('/so-up-theme/css/../images/ple-icons.png') !important; 
+	background-repeat:no-repeat;
+	background-position: 0 -33px;
+	display:inline-block;
+	position:relative;
+	width:15px;
+	height:15px;
+	content: "";
+	float: left;
+    margin-top: 2px;
 	
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership .membershipRequested {
+    color: red;
 }
 
 

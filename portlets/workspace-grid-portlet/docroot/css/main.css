@@ -86,7 +86,7 @@ li.workspaceslide:hover .mouseover-actions {
 }
 
 li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
-	width: 62px;
+	width: 45%;
 	height: 60px;
 	
 	opacity: .5;
@@ -124,7 +124,7 @@ li.workspaceslide:hover div.workspaceName {
 }
 
 li.workspaceslide:hover .mouseover-actions .visit-workspace {
-	width: 62px;
+	width: 45%;
 	height: 60px;
 	
 	opacity: .5;
@@ -152,4 +152,26 @@ li.workspaceslide:hover .mouseover-actions .visit-workspace:hover, li.workspaces
 	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
 	cursor: move;
+}
+
+/* temporär mal */
+
+li.workspaceslide:hover .mouseover-actions .move-workspaceslide:hover:after {
+    content: "Move";
+    z-index: 300;
+    vertical-align: sub;
+    margin-top: 1.2em;
+    display: inline-block;
+    background-color: #fff;
+    font-size: 1.2em;
+}
+
+li.workspaceslide:hover .mouseover-actions .visit-workspace:hover:after {
+    content: "Go to";
+    z-index: 300;
+    vertical-align: sub;
+    margin-top: 1.2em;
+    display: inline-block;
+    background-color: #fff;
+    font-size: 1.2em;
 }

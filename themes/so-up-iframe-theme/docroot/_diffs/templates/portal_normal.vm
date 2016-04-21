@@ -8,7 +8,6 @@
 	<title>$company_name | $the_title</title>
 	<meta content="initial-scale=1.0, width=device-width" name="viewport" />
 	$theme.include($top_head_include)
-
 </head>
 <body class="dockbar-split so-strata-theme $css_class">
 
@@ -24,7 +23,7 @@
 <div class="container-fluid smallhead" id="wrapper">
 	#if ($is_signed_in)
 		<div id="sidebar">
-			<div class="title"><span>Workspaces</span><span class="arrow"></span></div>
+			<div class="title"><span class="arrow">Workspaces</span></div>
 			<div class="content">
 				<h2>Workspaces</h2>
 				$theme.runtime($sitesPortletId, "", "") 
@@ -53,18 +52,12 @@
 			#if ($is_signed_in)
 				<ul class="aui-list-truncate">
 					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($navigatorpage = false)
-						#set ($organizationalpage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-							#end
+						#set ($personalAreaSection = 0)
+						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($navigatorpage == "false" && $organizationalpage == "false" )
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 1)
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 						#end
 					#end
 				</ul>
@@ -75,18 +68,12 @@
 			#if ($is_signed_in)
 				<ul class="aui-list-truncate">
 					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($navigatorpage = false)
-						#set ($organizationalpage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-							#end
+						#set ($personalAreaSection = 0)
+						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($navigatorpage == "false" && $organizationalpage == "true" )
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 2)
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 						#end
 					#end
 				</ul>
@@ -109,18 +96,12 @@
 			#if ($is_signed_in)
 				<ul class="aui-list-truncate">
 					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($navigatorpage = false)
-						#set ($organizationalpage = false)
-						#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-							#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-								#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-							#end
+						#set ($personalAreaSection = 0)
+						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-							#if ($navigatorpage == "true" && $organizationalpage == "false" )
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
+						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 3)
+							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 						#end
 					#end
 				</ul>
@@ -135,33 +116,7 @@
 
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
-		<div id="up_logo">
-
-			<div id="up_logo_wrapper">
-	            <div id="up_logo_indicator"></div>
-    	        	<div id="up_logo_image">
-        	       		<a title="Zur Startseite" href="/">
-            	    	<img alt="Logo Universit&auml;t Potsdam" src="/so-up-theme/images/up/up_logo_university_2.png">
-            	    	</a>
-            		</div>
-	        
-	        	<div id="up_logo_title">
-	            	<a title="Zur Startseite" href="$company_url">$company_name</a>
-	            	<!--<span class="hideformobile">$the_title</span>-->
-	            	<span class="site-name-mobile clicker"><span>$site_name</span></span>
-	            	
-	            	<div id="subnav-mobile">
-						#if ($has_navigation)
-							#parse ("$full_templates_path/navigation-mobile.vm")
-						#end
-					</div>
-
-          		</div><!-- ende logo title -->
-          		
-            	<div id="up_logo_footer">
-            	</div>
-            	</div>
-            </div> <!-- ende logo wrapper -->
+	
  		<div id="uppertoolbar">
  			<div id="position-wrapper">
  				#dockbar()
@@ -195,7 +150,7 @@
 	      			
 	      			<!-- UP Services -->
 					<div class="btn-group">
-						<a class="btn dropdown-toggle services" data-toggle="dropdown" href="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
+						<a class="btn dropdown-toggle services" data-toggle="dropdown" href="#" data-target="#">#language("so-up-theme-up-services")<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="$portal_url/user/$user_sname/mediaup/">Media.UP</a></li>
 								<li><a href="$portal_url/user/$user_sname/moodle/">Moodle.UP</a></li>
@@ -208,8 +163,6 @@
 					</div>
 				</div><!-- /btn-toolbar -->
 				
-				
-				
 		</div> <!-- ende navigation-wrapper -->
 		#end       		
 		<div style="clear:both"></div>	
@@ -220,18 +173,12 @@
 					#language("so-up-theme-my-workspace")<span class="icon arrow"></span>
 					<ul class="hidden">
 						#foreach ($myLayout in $myPrivateLayouts)
-							#set ($navigatorpage = false)
-							#set ($organizationalpage = false)
-							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#end
+							#set ($personalAreaSection = 0)
+							#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+								#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 							#end
-							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-								#if ($navigatorpage == "false" && $organizationalpage == "false" )
-									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-								#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 1)
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 							#end
 						#end
 					</ul>
@@ -240,18 +187,12 @@
 					#language("so-up-theme-organizational")<span class="icon arrow"></span>
 					<ul class="hidden">
 						#foreach ($myLayout in $myPrivateLayouts)
-							#set ($navigatorpage = false)
-							#set ($organizationalpage = false)
-							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#end
+							#set ($personalAreaSection = 0)
+							#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+								#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 							#end
-							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-								#if ($navigatorpage == "false" && $organizationalpage == "true" )
-									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-								#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 2)
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 							#end
 						#end
 					</ul>
@@ -260,18 +201,12 @@
 					#language("so-up-theme-campus-navigator")<span class="icon arrow"></span>
 					<ul class="hidden">
 						#foreach ($myLayout in $myPrivateLayouts)
-							#set ($navigatorpage = false)
-							#set ($organizationalpage = false)
-							#if ($myLayout.getExpandoBridge().hasAttribute("Navigator") && $myLayout.getExpandoBridge().hasAttribute("Organizational"))
-								#if ($myLayout.getExpandoBridge().getAttribute("Navigator") || $myLayout.getExpandoBridge().getAttribute("Organizational"))
-									#set ($navigatorpage = $myLayout.getExpandoBridge().getAttribute("Navigator"))
-									#set ($organizationalpage = $myLayout.getExpandoBridge().getAttribute("Organizational"))
-								#end
+							#set ($personalAreaSection = 0)
+							#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
+								#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
 							#end
-							#if ($myLayout.isRootLayout() && !$myLayout.isHidden())
-								#if ($navigatorpage == "true" && $organizationalpage == "false" )
-									<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-								#end
+							#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 3)
+								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
 							#end
 						#end
 					</ul>
@@ -279,7 +214,7 @@
 				<span class="icon close hidden">#language("close")</span>
 			</ul>
 		</div><!-- end main menu wrapper -->
-		#else
+		#else <!--signed out -->
 		<div id="main-menu-wrapper">
 			<ul id="main-menu" class="disabled">
 				<li>
@@ -301,30 +236,48 @@
 	</header>  
 	<div class="wrapper-portlet-area">	
 		<div id="heading">
-			#if (!$is_user_dashboard)
-				<h1 class="site-title">
-					<a class="$logo_css_class" href="$site_default_url" title="#language_format ("go-to-x", [$site_name])">
-					</a>
-	
-					<!-- #if ($show_site_name) -->
-						<span class="site-name hideformobile" title="#language_format ("go-to-x", [$site_name])">
-							$site_name
-						</span> 
-					<!-- #end -->		
-				</h1>
+			
+			<h2 class="page-title">	$site_name</h2>		
+		
+			#if ($is_signed_in)
+				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
+				<ul id="workspace-control">
+					#if ($show_edit_controls)
+						<li style="display: none;">
+							<a id="editPage" class="btn" href="javascript:;"><span>#language("edit-page")</span></a>
+						</li>
+					#end
+					#if ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()))
+						<li style="display: none;">
+							<a id="addApplication" class="btn" href="javascript:;"><span>#language("add-application")</span></a>
+						</li>
+					#end
+					<li id="toggle-controls-botton" >
+						<a class="toggle-controls btn workspace" href="javascript:void(0);"><span>#language("so-up-theme-workspace-configure")</span>
+						</a>
+					</li>
+					#end
+					#if ($isOmniAdmin)
+					<li>
+						<a href="$control_panel_url" class="btn">
+							<div id="adminbox">
+								<span class="admin"></span>Administration
+							</div>
+						</a>
+					</li>
+				</ul>
+				
+				#end
 			#end
-			<h2 class="page-title"></h2>		
-		
-		
 			
 		</div>
 		
 			<div style="clear:both"></div>	
-		#if ($has_navigation)
-			#parse ("$full_templates_path/navigation.vm")
-		#end
+		
 
 		<div id="content">
+		
+		
 			#if ($selectable)
 				$theme.include($content_include)
 			#else
@@ -339,6 +292,10 @@
  
 				
 	#if (!$is_signed_in)
+	<!-- Startpage  -->
+	<div id="wrapper-indexpage">
+		hallo
+	</div>
 		<!-- OE Footer -->
 	<div id="up_oe_footer_wrapper">
 		<div id="up_oe_footer" class="row-f up-smooth-box">
@@ -352,23 +309,23 @@
 					<p class="bodytext">
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="https://www.facebook.com/unipotsdam"
-							title="Unsere Facebook-Fanpage im neuen Fenster �ffnen"
+							title="Unsere Facebook-Fanpage im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-facebook">Facebook</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="http://www.youtube.com/user/PresseUniPotsdam"
-							title="Unseren YouTube-Kanal im neuen Fenster �ffnen"
+							title="Unseren YouTube-Kanal im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-youtube">YouTube</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="http://www.xing.com/companies/universit%C3%84tpotsdam"
-							title="Unsere XING-Seite im neuen Fenster �ffnen" target="_blank"
+							title="Unsere XING-Seite im neuen Fenster ï¿½ffnen" target="_blank"
 							class="up-sm-xing">XING</a></span><br />
 						<span style="font-weight: normal; line-height: 20.296875px;"><a
 							href="https://twitter.com/unipotsdam"
-							title="Unsere Twitter-Seite im neuen Fenster �ffnen"
+							title="Unsere Twitter-Seite im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-twitter">Twitter</a><br /></span><span
 							style="font-family: inherit; line-height: 1.45em;"><a
-							href="http://www.researchgate.net/institution/Universit�Potsdam"
-							title="Unsere Research Gate-Seite im neuen Fenster �ffnen"
+							href="http://www.researchgate.net/institution/Universitï¿½Potsdam"
+							title="Unsere Research Gate-Seite im neuen Fenster ï¿½ffnen"
 							target="_blank" class="up-sm-researchgate">Research Gate</a><br />
 						<br /></span>
 					</p>
@@ -391,7 +348,7 @@
 					<p class="bodytext">
 						<a href="http://www.zeik.uni-potsdam.de/etc/impressum.html">Impressum</a><br />
 						<a href="http://www.uni-potsdam.de/presse/ansprechpartner.html"
-							title="Referat f�r Presse- und �ffentlichkeitsarbeit"
+							title="Referat fï¿½r Presse- und ï¿½ffentlichkeitsarbeit"
 							target="_blank">Presse</a>
 					</p>
 				</div>
@@ -473,17 +430,17 @@
 					<p class="bodytext">
 						<span style="line-height: 20.296875px;"><a
 							href="http://www.hrk.de/themen/internationales/arbeitsfelder/nationaler-kodex-fuer-das-auslaenderstudium/"
-							title="Nationaler Kodex f�r das Ausl�nderstudium an deutschen Hochschulen"
+							title="Nationaler Kodex fï¿½r das Auslï¿½nderstudium an deutschen Hochschulen"
 							target="_blank">Code of Conduct</a><br />
 						<a
 							href="http://www.stifterverband.org/wissenschaft_und_hochschule/lehre/exzellenz_in_der_lehre/index.html"
 							title="Wettbewerb exzellente Lehre" target="_blank">Exzellenz
 								der Lehre</a><br />
 						<a href="http://www.hrk.de/audit/"
-							title="Audit �Internationalisierung der Hochschulen� (HRK)"
+							title="Audit ï¿½Internationalisierung der Hochschulenï¿½ (HRK)"
 							target="_blank">HRK-Audit</a><br />
 						<a href="http://www.uni-potsdam.de/zfq/index.html"
-							title="Zentrum f�r Qualit�tsentwicklung in Lehre und Studium"
+							title="Zentrum fï¿½r Qualitï¿½tsentwicklung in Lehre und Studium"
 							target="_blank">Systemakkreditiert</a><br />
 						<a href="http://www.total-e-quality.de/"
 							title="Homepage Total E-Quality" target="_blank">Total
@@ -500,10 +457,10 @@
 					<p class="bodytext">
 						<span style="line-height: 20.296875px;"> <a
 							href="http://www.pearlsofscience.de/ueber-pearls.html"
-							title="Homepage pearls � Potsdam Research Network"
+							title="Homepage pearls ï¿½ Potsdam Research Network"
 							target="_blank">pearls - Potsdam Research Network</a><br /> <a
 							href="http://www.mittelgrosse-universitaeten.de/"
-							title="Homepage Netzwerk Mittelgro�e Universit�ten"
+							title="Homepage Netzwerk Mittelgroï¿½e Universitï¿½ten"
 							target="_blank">Netzwerk Mittelgro&szlig;e Universit&auml;ten</a><br />
 						<a href="http://www.blrk.de/"
 							title="Homepage Brandenburgische Landesrektorenkonferenz"
@@ -523,16 +480,16 @@
 							title="Fristen und Termine rund um das Studium" target="_blank">Fristen
 								&amp; Termine</a><br />
 						<a href="http://www.uni-potsdam.de/uni-a-z/index-a-z.html"
-							title="Schlagw�rter�bersicht von A-Z" target="_blank">Index
+							title="Schlagwï¿½rterï¿½bersicht von A-Z" target="_blank">Index
 								A-Z</a><br />
 						<a href="http://www.uni-potsdam.de/presse/"
-							title="Referat f�r Presse- und �ffentlichkeitsarbeit"
+							title="Referat fï¿½r Presse- und ï¿½ffentlichkeitsarbeit"
 							target="_blank">Presse</a><br />
 						<a href="http://www.uni-potsdam.de/verwaltung/dezernat3/stellen/"
-							title="�bersicht der offenen Stellenanzeigen" target="_blank">Stellenausschreibungen</a><br />
+							title="ï¿½bersicht der offenen Stellenanzeigen" target="_blank">Stellenausschreibungen</a><br />
 						<a
 							href="http://www.uni-potsdam.de/studium/konkret/vorlesungsverzeichnisse.html"
-							title="�bersicht der Vorlesungsverzeichnisse der Uni Potsdam"
+							title="ï¿½bersicht der Vorlesungsverzeichnisse der Uni Potsdam"
 							target="_blank">Vorlesungsverzeichnis</a></span><br />
 						<a href="http://www.VBB.de/FahrplanBerlinPotsdam"
 							title="Unifahrplan des VBB" target="_blank">Unifahrplan des
@@ -612,25 +569,31 @@ $theme.include($body_bottom_include)
 	<script type="text/javascript"
 		src="$javascript_folder/files/jquery.dlmenu-4e5fe3ebab920f69e7449f2c1eaccf81.min.js"></script> 
 	<script type="text/javascript" src="$javascript_folder/custom.js"></script>
+
+	<script type="text/javascript" src="$javascript_folder/bootstrap.min.js"></script>
+	<script type="text/javascript" src="$javascript_folder/responsive-tabs.js"></script>
 	
+
 	
 	
 	<!-- $(window).on('resize',clickdropdown);	-->
 	<!-- Piwik -->
 	<script type="text/javascript">
 	  var _paq = _paq || [];
+	  _paq.push(["setDomains", ["*.campusup.uni-potsdam.de","*.campusup.uni-potsdam.de"]]);
 	  _paq.push(['trackPageView']);
 	  _paq.push(['enableLinkTracking']);
 	  (function() {
-	    var u="//campusup.uni-potsdam.de/piwik/";
+	    var u="//elis.soft.cs.uni-potsdam.de/piwik/";
 	    _paq.push(['setTrackerUrl', u+'piwik.php']);
-	    _paq.push(['setSiteId', 1]);
+	    _paq.push(['setSiteId', 4]);
 	    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
 	    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
 	  })();
 	</script>
-	<noscript><p><img src="//campusup.uni-potsdam.de/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
-	<!-- End Piwik Code -->	
+	<noscript><p><img src="//elis.soft.cs.uni-potsdam.de/piwik/piwik.php?idsite=4" style="border:0;" alt="" /></p></noscript>
+	<!-- End Piwik Code -->
+
 </body>
 
 $theme.include($bottom_include)
