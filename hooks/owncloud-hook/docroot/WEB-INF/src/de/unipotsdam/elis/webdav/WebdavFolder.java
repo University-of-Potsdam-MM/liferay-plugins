@@ -16,8 +16,8 @@ public class WebdavFolder extends WebdavObject implements ExtRepositoryFolder {
 		super(davResource);
 	}
 
-	public WebdavFolder(String encodedId) {
-		super(encodedId);
+	public WebdavFolder(String id) {
+		super(id);
 	}
 	
 	public String getAbsolutePath() {

@@ -1,18 +1,12 @@
 package de.unipotsdam.elis.webdav;
 
-import java.math.BigInteger;
-import java.util.GregorianCalendar;
-
-import org.apache.chemistry.opencmis.commons.data.ContentStream;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
-
 import com.github.sardine.DavResource;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryFileEntry;
 
-import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
+import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
 public class WebdavFile extends WebdavObject implements ExtRepositoryFileEntry{
 	
@@ -37,7 +31,10 @@ public class WebdavFile extends WebdavObject implements ExtRepositoryFileEntry{
 	
 	@Override
 	public String getName() {
-		return WebdavIdDecoderAndEncoder.encodedIdToName(getExtRepositoryModelKey());
+		log.debug("start getName");
+		String name = WebdavIdUtil.getNameFromId(getExtRepositoryModelKey());;
+		log.debug("end getName");
+		return name;
 	}
 
 	@Override
@@ -57,6 +54,6 @@ public class WebdavFile extends WebdavObject implements ExtRepositoryFileEntry{
 	}
 	
 	public String getDownloadURL(){
-		return WebdavIdDecoderAndEncoder.createDownloadlink(getExtRepositoryModelKey());
+		return WebdavIdUtil.getDownloadLinkFromId(getExtRepositoryModelKey());
 	}
 }

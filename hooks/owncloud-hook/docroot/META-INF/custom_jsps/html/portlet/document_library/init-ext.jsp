@@ -13,8 +13,21 @@
  * details.
  */
 --%>
+<%@page import="com.liferay.portal.kernel.bean.PortletBeanLocatorUtil"%>
+<%@page import="java.lang.reflect.Method"%>
+
 <%
 	 boolean isOwncloudRepository = false;
 	 if (request.getAttribute("isOwncloudRepository") != null) 
 		isOwncloudRepository = Boolean.parseBoolean(request.getAttribute("isOwncloudRepository").toString());
+		 
+	Object owncloudRepositoryObject = null;
+	Method getDownloadLinkMethod = null;
+		 
+	if (isOwncloudRepository){
+		ClassLoader classLoader = PortletBeanLocatorUtil.getBeanLocator("owncloud-hook").getClassLoader();
+		Class owncloudRepositoryClass = classLoader.loadClass("de.unipotsdam.elis.owncloud.repository.OwncloudRepository");
+		getDownloadLinkMethod = owncloudRepositoryClass.getMethod("getDownloadLink", long.class);
+		owncloudRepositoryObject = owncloudRepositoryClass.newInstance();
+	}
 %>

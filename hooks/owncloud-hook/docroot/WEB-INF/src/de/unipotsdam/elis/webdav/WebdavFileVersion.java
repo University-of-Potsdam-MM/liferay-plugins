@@ -7,6 +7,8 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryFileVersion;
 
+import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
+
 public class WebdavFileVersion extends WebdavModel implements ExtRepositoryFileVersion{
 	
 	private String _mimeType;
@@ -31,7 +33,7 @@ public class WebdavFileVersion extends WebdavModel implements ExtRepositoryFileV
 	}
 
 	public String getDownloadURL(){
-		return WebdavIdDecoderAndEncoder.createDownloadlink(StringUtils.removeEnd(getExtRepositoryModelKey(), "_v"));
+		return WebdavIdUtil.getDownloadLinkFromId(StringUtils.removeEnd(getExtRepositoryModelKey(), "_v"));
 	}
 
 }
