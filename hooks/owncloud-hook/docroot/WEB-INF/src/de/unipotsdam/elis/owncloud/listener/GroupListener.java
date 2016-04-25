@@ -8,6 +8,7 @@ import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
 
@@ -21,10 +22,8 @@ public class GroupListener implements ModelListener<Group> {
 			try {
 				User user = UserLocalServiceUtil.getUser((Long) associationClassPK);
 				long groupId = (Long) classPK;
-				OwncloudRepositoryUtil.getWebdavRepository().createFolder(
-						OwncloudRepositoryUtil.getRootFolderFromGroupId(groupId));
 				OwncloudShareCreator.createShare(user, groupId,
-						OwncloudRepositoryUtil.getRootFolderFromGroupId(groupId));
+						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId));
 			} catch (PortalException e) {
 				e.printStackTrace();
 			} catch (SystemException e) {
@@ -36,8 +35,6 @@ public class GroupListener implements ModelListener<Group> {
 
 	@Override
 	public void onAfterCreate(Group model) throws ModelListenerException {
-		System.out.println("site created: " + model.getName());
-
 	}
 
 	@Override
@@ -75,8 +72,8 @@ public class GroupListener implements ModelListener<Group> {
 
 	@Override
 	public void onBeforeRemove(Group model) throws ModelListenerException {
-		// TODO Auto-generated method stub
-
+		OwncloudRepositoryUtil.getWebdavRepository().createFolder(
+				OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model.getGroupId()));
 	}
 
 	@Override

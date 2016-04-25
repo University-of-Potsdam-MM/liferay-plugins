@@ -76,19 +76,28 @@ public class WebdavObjectStore {
 		String webdavPath = endpoint.getEndpoint() + id;
 		try {
 			if (!endpoint.getSardine().exists(webdavPath)) {
-				// TODO: exist nötig?
+				// TODO: exist nÃ¶tig?
 				endpoint.getSardine().createDirectory(webdavPath);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-	public Boolean exists(String parentName, String folderName) {
-
-		String path = parentName + folderName;
+	
+	public void move (String sourceId, String destinationId){
+		log.debug("move " + sourceId + " to " + destinationId);
 		try {
-			return endpoint.getSardine().exists(endpoint.getEndpoint() + path);
+			createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
+			endpoint.getSardine().move(endpoint.getEndpoint() + sourceId, endpoint.getEndpoint() + destinationId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public Boolean exists(String id) {
+		try {
+			return endpoint.getSardine().exists(endpoint.getEndpoint() + id);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

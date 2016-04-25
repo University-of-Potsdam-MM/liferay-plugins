@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012 TomÃƒÂ¡Ã…Â¡ PoleÃ…Â¡ovskÃƒÂ½
+ * Copyright (c) 2012 TomÃƒÆ’Ã‚Â¡Ãƒâ€¦Ã‚Â¡ PoleÃƒâ€¦Ã‚Â¡ovskÃƒÆ’Ã‚Â½
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -167,16 +167,20 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public InputStream getContentStream(ExtRepositoryFileEntry extRepositoryFileEntry) throws PortalException,
 			SystemException {
-		/*for (StackTraceElement s : Thread.currentThread().getStackTrace())
-			System.out.println("   " + s);*/
+		/*
+		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
+		 * System.out.println("   " + s);
+		 */
 		return OwncloudRepositoryUtil.getWebdavRepository().get(extRepositoryFileEntry);
 	}
 
 	@Override
 	public InputStream getContentStream(ExtRepositoryFileVersion extRepositoryFileVersion) throws PortalException,
 			SystemException {
-		/*for (StackTraceElement s : Thread.currentThread().getStackTrace())
-			System.out.println("   " + s);*/
+		/*
+		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
+		 * System.out.println("   " + s);
+		 */
 		return OwncloudRepositoryUtil.getWebdavRepository().get(extRepositoryFileVersion);
 	}
 
@@ -208,7 +212,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 
 	@Override
 	public String getRootFolderKey() {
-		return OwncloudRepositoryUtil.getRootFolderFromGroupId(getGroupId());
+		return OwncloudRepositoryUtil.getRootFolderIdFromGroupId(getGroupId());
 	}
 
 	@Override
@@ -247,41 +251,42 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	private WebdavFile createFileWithInputStream(String title, InputStream is, WebdavFile dstFile)
 			throws PortalException, SystemException {
 		_log.debug("start createFileWithInputStream");
-		OwncloudRepositoryUtil.getWebdavRepository().createFile(title, dstFile.getParentFolder().getExtRepositoryModelKey(), is);
+		OwncloudRepositoryUtil.getWebdavRepository().createFile(title,
+				dstFile.getParentFolder().getExtRepositoryModelKey(), is);
 		_log.debug("end createFileWithInputStream");
 		return dstFile;
 	}
- /*
-	private synchronized void createShareInOwncloud() throws SystemException, PortalException {
-		_log.debug("start createShareInOwncloud");
 
-		final List<User> users = UserLocalServiceUtil.getGroupUsers(this.getGroupId());
-		final Set<String> userStrings = new HashSet<String>();
-
-		for (User user : users) {
-			userStrings.add(user.getLogin());
-		}
-
-		//final String username = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
-		//final String password = PrincipalThreadLocal.getPassword();
-		final WebdavObjectStore objectStore = getWebdavRepository();
-
-		Thread shareCreatorthread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				_log.debug("start runnable");
-				OwncloudShareCreator owncloudService = new OwncloudShareCreator();
-				owncloudService.createShare(users, siteGroupId, WebdavConfigurationLoader.getRootUsername(), WebdavConfigurationLoader.getRootPassword(), filePath);
-						.createShare(getRepositoryId() + "", getRootFolderKey(), userStrings, username, password);
-				_log.debug("end runnable");
-			}
-		});
-		shareCreatorthread.start();
-
-		_log.debug("stop createShareInOwncloud");
-	}*/
+	/*
+	 * private synchronized void createShareInOwncloud() throws SystemException,
+	 * PortalException { _log.debug("start createShareInOwncloud");
+	 * 
+	 * final List<User> users =
+	 * UserLocalServiceUtil.getGroupUsers(this.getGroupId()); final Set<String>
+	 * userStrings = new HashSet<String>();
+	 * 
+	 * for (User user : users) { userStrings.add(user.getLogin()); }
+	 * 
+	 * //final String username =
+	 * UserLocalServiceUtil.getUser(PrincipalThreadLocal
+	 * .getUserId()).getLogin(); //final String password =
+	 * PrincipalThreadLocal.getPassword(); final WebdavObjectStore objectStore =
+	 * getWebdavRepository();
+	 * 
+	 * Thread shareCreatorthread = new Thread(new Runnable() {
+	 * 
+	 * @Override public void run() {
+	 * 
+	 * _log.debug("start runnable"); OwncloudShareCreator owncloudService = new
+	 * OwncloudShareCreator(); owncloudService.createShare(users, siteGroupId,
+	 * WebdavConfigurationLoader.getRootUsername(),
+	 * WebdavConfigurationLoader.getRootPassword(), filePath);
+	 * .createShare(getRepositoryId() + "", getRootFolderKey(), userStrings,
+	 * username, password); _log.debug("end runnable"); } });
+	 * shareCreatorthread.start();
+	 * 
+	 * _log.debug("stop createShareInOwncloud"); }
+	 */
 
 	@Override
 	public ExtRepositoryFileVersion cancelCheckOut(String arg0) throws PortalException, SystemException {
@@ -360,7 +365,8 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			return children;
 		}
 
-		List<T> childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepository().getChildrenFromId(1000, 0, extRepositoryFolderKey);
+		List<T> childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepository().getChildrenFromId(1000, 0,
+				extRepositoryFolderKey);
 
 		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey,
 				childrens);
