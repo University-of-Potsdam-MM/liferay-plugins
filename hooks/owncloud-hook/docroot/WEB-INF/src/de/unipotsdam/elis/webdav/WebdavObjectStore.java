@@ -60,6 +60,19 @@ public class WebdavObjectStore {
 
 	public WebdavFolder createFolder(String id) {
 		log.debug("start create Folder " + id);
+		
+		createFolderRec(id);
+		WebdavFolder result = new WebdavFolder(id);
+
+		log.debug("finish create Folder");
+		return result;
+	}
+	
+	private void createFolderRec(String id){
+		String parentId = WebdavIdUtil.getParentIdFromChildId(id);
+		if (!parentId.equals("/"))
+			createFolder(parentId);
+
 		String webdavPath = endpoint.getEndpoint() + id;
 		try {
 			if (!endpoint.getSardine().exists(webdavPath)) {
@@ -69,10 +82,6 @@ public class WebdavObjectStore {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		WebdavFolder result = new WebdavFolder(id);
-
-		log.debug("finish create Folder");
-		return result;
 	}
 
 	public Boolean exists(String parentName, String folderName) {
