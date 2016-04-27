@@ -61,8 +61,8 @@ public class WebdavObjectStore {
 	public WebdavFolder createFolder(String id) {
 		log.debug("start create Folder " + id);
 		
-		createFolderRec(id);
-		WebdavFolder result = new WebdavFolder(id);
+		createFolderRec(id +"/");
+		WebdavFolder result = new WebdavFolder(id+"/");
 
 		log.debug("finish create Folder");
 		return result;
@@ -71,7 +71,7 @@ public class WebdavObjectStore {
 	private void createFolderRec(String id){
 		String parentId = WebdavIdUtil.getParentIdFromChildId(id);
 		if (!parentId.equals("/"))
-			createFolder(parentId);
+			createFolderRec(parentId);
 
 		String webdavPath = endpoint.getEndpoint() + id;
 		try {

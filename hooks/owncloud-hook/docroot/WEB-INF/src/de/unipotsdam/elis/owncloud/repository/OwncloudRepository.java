@@ -18,16 +18,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.liferay.compat.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Query;
 import com.liferay.portal.kernel.search.SearchContext;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.RepositoryEntry;
+import com.liferay.portal.service.RepositoryEntryLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.RepositoryEntryUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.repository.external.CredentialsProvider;
 import com.liferay.repository.external.ExtRepository;
 import com.liferay.repository.external.ExtRepositoryAdapter;
@@ -38,6 +46,8 @@ import com.liferay.repository.external.ExtRepositoryFolder;
 import com.liferay.repository.external.ExtRepositoryObject;
 import com.liferay.repository.external.ExtRepositoryObjectType;
 import com.liferay.repository.external.ExtRepositorySearchResult;
+import com.liferay.repository.external.model.ExtRepositoryFolderAdapter;
+import com.liferay.repository.external.model.ExtRepositoryObjectAdapterType;
 import com.liferay.repository.external.search.ExtRepositoryQueryMapper;
 
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
@@ -316,21 +326,43 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public Object[] getRepositoryEntryIds(String objectId) throws SystemException {
 		_log.debug("objectId: " + objectId);
+		for (StackTraceElement s : Thread.currentThread().getStackTrace())
+			 System.out.println("   " + s);
 		boolean newRepositoryEntry = false;
-		RepositoryEntry repositoryEntry = RepositoryEntryUtil.fetchByR_M(getRepositoryId(), objectId);
+		List<RepositoryEntry> results = RepositoryEntryLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil
+				.forClass(RepositoryEntry.class).add(PropertyFactoryUtil.forName("repositoryId").eq(getRepositoryId()))
+				.add(PropertyFactoryUtil.forName("mappedId").eq(objectId)));
+		// RepositoryEntry repositoryEntry =
+		// RepositoryEntryUtil.fetchByR_M(getRepositoryId(), objectId);
+		RepositoryEntry repositoryEntry = null;
+		
+		System.out.println("objectId: " + objectId);
 
-		if (repositoryEntry == null) {
-			long repositoryEntryId = counterLocalService.increment();
+		if (results.isEmpty()) {
 
-			repositoryEntry = RepositoryEntryUtil.create(repositoryEntryId);
-
-			repositoryEntry.setGroupId(getGroupId());
-			repositoryEntry.setRepositoryId(getRepositoryId());
-			repositoryEntry.setMappedId(objectId);
-
-			RepositoryEntryUtil.update(repositoryEntry);
+			try {
+				repositoryEntry = RepositoryEntryLocalServiceUtil.addRepositoryEntry(
+						UserLocalServiceUtil.getDefaultUserId(PortalUtil.getDefaultCompanyId()), getGroupId(),
+						getRepositoryId(), objectId, new ServiceContext());
+			} catch (PortalException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/*
+			 * long repositoryEntryId = counterLocalService.increment();
+			 * 
+			 * repositoryEntry = RepositoryEntryUtil.create(repositoryEntryId);
+			 * 
+			 * repositoryEntry.setGroupId(getGroupId());
+			 * repositoryEntry.setRepositoryId(getRepositoryId());
+			 * repositoryEntry.setMappedId(objectId);
+			 * 
+			 * RepositoryEntryUtil.update(repositoryEntry);
+			 */
 
 			newRepositoryEntry = true;
+		} else {
+			repositoryEntry = results.get(0);
 		}
 
 		return new Object[] { repositoryEntry.getRepositoryEntryId(), repositoryEntry.getUuid(), newRepositoryEntry };
@@ -423,5 +455,16 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 				getExtRepositoryObjectKey(fileEntryId));
 		return ((WebdavFile) file).getDownloadURL();
 	}
+	
+	@Override
+	public List<Folder> getFolders(
+			long parentFolderId, boolean includeMountFolders, int start,
+			int end, OrderByComparator obc) throws PortalException, SystemException{
+		System.out.println(getExtRepositoryObjectKey(parentFolderId));
+		List<Folder> result = super.getFolders(parentFolderId, includeMountFolders, start, end, obc);
+
+		return result;
+	}
+
 
 }
