@@ -78,11 +78,10 @@
 		}
 
 		.invite-actions {
-			background: #EEE;
-			border: 1px solid #CCC;
-			margin: 2.5em 0;
-			padding: 5px;
-			text-align: center;
+		
+			
+			
+			text-align: right;
 
 			h2 {
 				margin: 0 0 0.5em;
