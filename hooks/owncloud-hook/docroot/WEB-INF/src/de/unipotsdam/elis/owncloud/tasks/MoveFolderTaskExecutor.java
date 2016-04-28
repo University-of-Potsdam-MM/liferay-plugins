@@ -22,7 +22,7 @@ public class MoveFolderTaskExecutor extends BaseBackgroundTaskExecutor {
 		User user = UserLocalServiceUtil.getUser(backgroundTask.getUserId());
 		for (Group group : user.getGroups()) {
 			if (group.isSite()) {
-				String folderId = OwncloudRepositoryUtil.getFolderIdNameFromGroupId(group.getGroupId());
+				String folderId = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(group.getGroupId());
 				String username = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
 				String password = PrincipalThreadLocal.getPassword();
 				if (OwncloudRepositoryUtil.getWebdavRepository(username, password).exists(folderId)) {

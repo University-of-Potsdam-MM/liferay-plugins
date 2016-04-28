@@ -17,10 +17,6 @@ public class OwncloudRepositoryUtil {
 	private static Log _log = LogFactoryUtil.getLog(OwncloudRepositoryUtil.class);
 
 	public static String getRootFolderIdFromGroupId(long groupId) {
-		return "/" + WebdavConfigurationLoader.getRootFolder() + getFolderIdNameFromGroupId(groupId);
-	}
-
-	public static String getFolderIdNameFromGroupId(long groupId) {
 		try {
 			Group group = GroupLocalServiceUtil.getGroup(groupId);
 			if (group.getParentGroupId() != 0)

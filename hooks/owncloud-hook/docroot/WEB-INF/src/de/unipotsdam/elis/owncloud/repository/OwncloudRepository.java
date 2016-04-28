@@ -326,43 +326,21 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public Object[] getRepositoryEntryIds(String objectId) throws SystemException {
 		_log.debug("objectId: " + objectId);
-		for (StackTraceElement s : Thread.currentThread().getStackTrace())
-			 System.out.println("   " + s);
 		boolean newRepositoryEntry = false;
-		List<RepositoryEntry> results = RepositoryEntryLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil
-				.forClass(RepositoryEntry.class).add(PropertyFactoryUtil.forName("repositoryId").eq(getRepositoryId()))
-				.add(PropertyFactoryUtil.forName("mappedId").eq(objectId)));
-		// RepositoryEntry repositoryEntry =
-		// RepositoryEntryUtil.fetchByR_M(getRepositoryId(), objectId);
-		RepositoryEntry repositoryEntry = null;
-		
-		System.out.println("objectId: " + objectId);
+		RepositoryEntry repositoryEntry = RepositoryEntryUtil.fetchByR_M(getRepositoryId(), objectId);
 
-		if (results.isEmpty()) {
+		if (repositoryEntry == null) {
+			long repositoryEntryId = counterLocalService.increment();
 
-			try {
-				repositoryEntry = RepositoryEntryLocalServiceUtil.addRepositoryEntry(
-						UserLocalServiceUtil.getDefaultUserId(PortalUtil.getDefaultCompanyId()), getGroupId(),
-						getRepositoryId(), objectId, new ServiceContext());
-			} catch (PortalException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			/*
-			 * long repositoryEntryId = counterLocalService.increment();
-			 * 
-			 * repositoryEntry = RepositoryEntryUtil.create(repositoryEntryId);
-			 * 
-			 * repositoryEntry.setGroupId(getGroupId());
-			 * repositoryEntry.setRepositoryId(getRepositoryId());
-			 * repositoryEntry.setMappedId(objectId);
-			 * 
-			 * RepositoryEntryUtil.update(repositoryEntry);
-			 */
+			repositoryEntry = RepositoryEntryUtil.create(repositoryEntryId);
+
+			repositoryEntry.setGroupId(getGroupId());
+			repositoryEntry.setRepositoryId(getRepositoryId());
+			repositoryEntry.setMappedId(objectId);
+
+			RepositoryEntryUtil.update(repositoryEntry);
 
 			newRepositoryEntry = true;
-		} else {
-			repositoryEntry = results.get(0);
 		}
 
 		return new Object[] { repositoryEntry.getRepositoryEntryId(), repositoryEntry.getUuid(), newRepositoryEntry };
