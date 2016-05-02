@@ -9,10 +9,22 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.sardine.DavResource;
+import com.github.sardine.SardineFactory;
+import com.github.sardine.impl.SardineException;
+import com.github.sardine.util.SardineUtil;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
+import com.liferay.portal.kernel.portlet.LiferayPortletRequestDispatcher;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.repository.external.ExtRepositoryModel;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
+import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
+import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
 import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
 public class WebdavObjectStore {
@@ -39,6 +51,7 @@ public class WebdavObjectStore {
 			endpoint.getSardine().put(completePath, contentStream);
 		} catch (IOException e) {
 			e.printStackTrace();
+			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR, e);
 		}
 
 		return newFileId;
@@ -53,38 +66,34 @@ public class WebdavObjectStore {
 		return completePath;
 	}
 
-	public WebdavFolder createFolder(String folderName, String parentId) {
+	public WebdavFolder createFolder(String folderName, String parentId) throws IOException {
 		log.debug("createFolder " + parentId + WebdavIdUtil.encode(folderName));
 		return createFolder(parentId + WebdavIdUtil.encode(folderName));
 	}
 
-	public WebdavFolder createFolder(String id) {
+	public WebdavFolder createFolder(String id) throws IOException {
 		log.debug("start create Folder " + id);
-		
-		createFolderRec(id +"/");
-		WebdavFolder result = new WebdavFolder(id+"/");
+
+		createFolderRec(id + "/");
+		WebdavFolder result = new WebdavFolder(id + "/");
 
 		log.debug("finish create Folder");
 		return result;
 	}
-	
-	private void createFolderRec(String id){
+
+	private void createFolderRec(String id) throws IOException {
 		String parentId = WebdavIdUtil.getParentIdFromChildId(id);
 		if (!parentId.equals("/"))
 			createFolderRec(parentId);
 
 		String webdavPath = endpoint.getEndpoint() + id;
-		try {
-			if (!endpoint.getSardine().exists(webdavPath)) {
-				// TODO: exist nÃ¶tig?
-				endpoint.getSardine().createDirectory(webdavPath);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!endpoint.getSardine().exists(webdavPath)) {
+			// TODO: exist nÃ¶tig?
+			endpoint.getSardine().createDirectory(webdavPath);
 		}
 	}
-	
-	public void move (String sourceId, String destinationId){
+
+	public void move(String sourceId, String destinationId) {
 		log.debug("move " + sourceId + " to " + destinationId);
 		try {
 			createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
@@ -118,7 +127,7 @@ public class WebdavObjectStore {
 	 * maxItems, skipCount, user, false); }
 	 */
 
-	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id) {
+	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id, long groupId) {
 		/*
 		 * for (StackTraceElement s : Thread.currentThread().getStackTrace()) {
 		 * System.out.println(s.toString()); } System.out.println(" ");
@@ -130,32 +139,47 @@ public class WebdavObjectStore {
 		List<WebdavObject> folderChildren = new ArrayList<WebdavObject>();
 
 		// converts webdav result to CMIS type of files
+		List<DavResource> resources;
 		try {
-			List<DavResource> resources = getResourcesFromId(id, false);
-			// List<DavResource> resources = getResourcesForIDintern(path,
-			// false);
-			Iterator<DavResource> it = resources.iterator();
-
-			while (it.hasNext()) {
-				DavResource davResource = it.next();
-				log.info("iterate getChildrenForName " + davResource.getName());
-				if (davResource.isDirectory()) {
-					WebdavFolder folderResult = new WebdavFolder(davResource);
-					folderChildren.add(folderResult);
-					log.info("name: " + folderResult.getName());
-				} else {
-					WebdavFile documentImpl = new WebdavFile(davResource);
-					folderChildren.add(documentImpl);
-					log.info("name: " + documentImpl.getName());
-				}
-				log.info("end iterate getChildrenForName " + davResource.getName());
-			}
-
+			resources = getResourcesFromId(id, false);
 		} catch (IOException e) {
-			handleStartUpErrors(e);
+			if (e instanceof SardineException) {
+				int statusCode = ((SardineException) e).getStatusCode();
+				if (statusCode == 404) {
+					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
+					if (!OwncloudRepositoryUtil.getWebdavRepository().exists(rootFolder)) {
+						OwncloudRepositoryUtil.createAndShareRootfolder(groupId);
+					} else {
+						OwncloudShareCreator.createShare(groupId, rootFolder);
+						if (OwncloudRepositoryUtil.getWebdavRepository().exists(id))
+							return getChildrenFromId(maxItems, skipCount, id, groupId);
+						else
+							handleException(e);
+					}
+				}
+			}
 			return folderChildren;
+		}
+		// List<DavResource> resources = getResourcesForIDintern(path,
+		// false);
+		Iterator<DavResource> it = resources.iterator();
 
-		}/*
+		while (it.hasNext()) {
+			DavResource davResource = it.next();
+			log.info("iterate getChildrenForName " + davResource.getName());
+			if (davResource.isDirectory()) {
+				WebdavFolder folderResult = new WebdavFolder(davResource);
+				folderChildren.add(folderResult);
+				log.info("name: " + folderResult.getName());
+			} else {
+				WebdavFile documentImpl = new WebdavFile(davResource);
+				folderChildren.add(documentImpl);
+				log.info("name: " + documentImpl.getName());
+			}
+			log.info("end iterate getChildrenForName " + davResource.getName());
+		}
+
+		/*
 		 * catch (ExecutionException e) { e.printStackTrace(); }
 		 */
 
@@ -167,30 +191,20 @@ public class WebdavObjectStore {
 	 * we assume that objectId is the URLEncoded path after the
 	 * owncloud-server-path or 100 for root
 	 */
-	public WebdavObject getObjectById(String id) {
-		if (id == null || id.equals(WebdavIdUtil.LIFERAYROOTID)) {
-			WebdavFolder result = createRootFolderResult();
-			return result;
-		} else {
-			try {
-				// entweder ist es ein folder oder ein document
-				if (id.endsWith("/")) {
-					WebdavFolder result = new WebdavFolder(id);
-					return result;
-				} else {
-					WebdavFile result = new WebdavFile(id);
-
-					// endpoint.getSardine().shutdown();
-					return result;
-				}
-			} catch (Exception e) {
-				log.error("error occurred whilst getting the resource for: " + id);
-				e.printStackTrace();
-			}
-
-		}
-		return null;
-	}
+	/*
+	 * public WebdavObject getObjectById(String id) { if (id == null ||
+	 * id.equals(WebdavIdUtil.LIFERAYROOTID)) { WebdavFolder result =
+	 * createRootFolderResult(); return result; } else { try { // entweder ist
+	 * es ein folder oder ein document if (id.endsWith("/")) { WebdavFolder
+	 * result = new WebdavFolder(id); return result; } else { WebdavFile result
+	 * = new WebdavFile(id);
+	 * 
+	 * // endpoint.getSardine().shutdown(); return result; } } catch (Exception
+	 * e) { log.error("error occurred whilst getting the resource for: " + id);
+	 * e.printStackTrace(); }
+	 * 
+	 * } return null; }
+	 */
 
 	public static final WebdavFolder createRootFolderResult() {
 		// objectId = "/" ??
@@ -220,7 +234,7 @@ public class WebdavObjectStore {
 	 * log.info("end getResourcesForIdCached " +path); return result; }
 	 */
 
-	public List<DavResource> getResourcesFromId(String id, Boolean getDirectory) throws IOException {
+	private List<DavResource> getResourcesFromId(String id, Boolean getDirectory) throws IOException {
 
 		String listedPath = WebdavIdUtil.getWebdavURIfromId(id);
 		long before = System.currentTimeMillis();
@@ -302,5 +316,26 @@ public class WebdavObjectStore {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * Caches an exception to allow an appropriate message in the gui. TODO:
+	 * maybe is there is a better way to dedect and communicate problems with
+	 * the webDAV connection
+	 * 
+	 * @param e
+	 *            Exception
+	 */
+	private void handleException(Exception e) {
+		e.printStackTrace();
+		if (e instanceof SardineException) {
+			if (((SardineException) e).getStatusCode() == 404) {
+				OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR,
+						"folder-does-not-exist");
+				return;
+			}
+		}
+		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR,
+				"no-owncloud-connection");
 	}
 }

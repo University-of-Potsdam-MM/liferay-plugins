@@ -8,6 +8,7 @@ public class OwncloudCacheManager {
 
 	public final static String WEBDAV_MODEL_CACHE_NAME = "WebdavModelCache";
 	public final static String WEBDAV_CHILDREN_CACHE_NAME = "WebdavChildrenCache";
+	public final static String WEBDAV_ERROR = "WebdavError";
 
 	public static Object getFromCache(String cacheName, String cacheKey) {
 		ThreadLocalCache<Object> threadLocalCache = ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.REQUEST,

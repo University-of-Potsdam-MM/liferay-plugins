@@ -14,9 +14,11 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 
@@ -32,34 +34,56 @@ public class OwncloudShareCreator {
 
 	private static Log log = LogFactoryUtil.getLog(OwncloudShareCreator.class);
 
-	public static void createShare(List<User> users, long siteGroupId, final String filePath) throws PortalException, SystemException {
+	public static void createShare(List<User> users, long siteGroupId, final String filePath) {
 		// users.remove(authorName);
 		// users.remove("anyone");
 		// ssssusers.remove("test");
 		for (User user : users) {
 			// store.rename(sharepath, sharepath+"backup"+new
 			// Date(System.currentTimeMillis()));
-			final String userName = user.getLogin();
-			final int permissions = deriveOwncloudPermissions(user, siteGroupId);
-			Thread t = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					createShare(userName, filePath, permissions);
-					log.debug("finished creating shares" + filePath + "User: " + userName);
-				}
-			});
-			t.start();
+			try {
+				final String userName = user.getLogin();
+				final int permissions = deriveOwncloudPermissions(user, siteGroupId);
+				Thread t = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						createShare(userName, filePath, permissions);
+						log.debug("finished creating shares" + filePath + "User: " + userName);
+					}
+				});
+				t.start();
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void createShare(long siteGroupId, final String filePath) {
+		try {
+			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
+			createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public static void createShare(User user, long siteGroupId,	final String filePath) throws PortalException, SystemException {
-		createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
+	public static void createShare(User user, long siteGroupId, final String filePath) {
+		try {
+			createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private static void createShare(String userName, String filePath,
-			int permissions) {
+	private static void createShare(String userName, String filePath, int permissions) {
 		HttpClient client = new HttpClient();
-		String auth = WebdavConfigurationLoader.getRootUsername()  + ":" + WebdavConfigurationLoader.getRootPassword();
+		String auth = WebdavConfigurationLoader.getRootUsername() + ":" + WebdavConfigurationLoader.getRootPassword();
 		String encoding = Base64.encodeBase64String(auth.getBytes());
 
 		BufferedReader br = null;

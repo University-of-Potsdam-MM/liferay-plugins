@@ -339,9 +339,18 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 	</c:if>
 </div>
 
+<% 
+	String owncloudError = null;
+	if (isOwncloudRepository && (getFromCacheMethod.invoke(null, "WebdavError", "WebdavError") != null)) 
+		owncloudError = getFromCacheMethod.invoke(null, "WebdavError", "WebdavError").toString();
+%>
+
 <c:if test="<%= results.isEmpty() %>">
 	<div class="entries-empty alert alert-info">
 		<c:choose>
+			<c:when test="<%= owncloudError != null%>">
+				<liferay-ui:message key="<%= owncloudError %>" />
+			</c:when>
 			<c:when test="<%= (fileEntryTypeId >= 0) %>">
 				<liferay-ui:message arguments="<%= HtmlUtil.escape(dlFileEntryTypeName) %>" key="there-are-no-documents-or-media-files-of-type-x" />
 			</c:when>

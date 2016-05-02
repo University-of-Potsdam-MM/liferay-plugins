@@ -13,6 +13,7 @@
  */
 package de.unipotsdam.elis.owncloud.repository;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,9 @@ import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.RepositoryEntry;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RepositoryEntryLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -74,7 +77,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			throws PortalException, SystemException {
 		try {
 			_log.debug("initRepository: " + getRootFolderKey());
-			OwncloudRepositoryUtil.getWebdavRepository().createFolder(getRootFolderKey());
+			// OwncloudRepositoryUtil.getWebdavRepository().createFolder(getRootFolderKey());
 			_log.debug("initRepository finished");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,7 +111,12 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public ExtRepositoryFolder addExtRepositoryFolder(String extRepositoryParentFolderKey, String name,
 			String description) throws PortalException, SystemException {
-		return OwncloudRepositoryUtil.getWebdavRepository().createFolder(name, extRepositoryParentFolderKey);
+		try {
+			return OwncloudRepositoryUtil.getWebdavRepository().createFolder(name, extRepositoryParentFolderKey);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new SystemException(e);
+		}
 	}
 
 	@Override
@@ -223,6 +231,21 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public String getRootFolderKey() {
 		return OwncloudRepositoryUtil.getRootFolderIdFromGroupId(getGroupId());
+	}
+
+	@Override
+	public long getGroupId() {
+		try {
+			Group group = GroupLocalServiceUtil.getGroup(super.getGroupId());
+			if (group.getParentGroupId() != 0)
+				group = group.getParentGroup();
+			return group.getGroupId();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		} catch (PortalException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
@@ -376,7 +399,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		}
 
 		List<T> childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepository().getChildrenFromId(1000, 0,
-				extRepositoryFolderKey);
+				extRepositoryFolderKey, getGroupId());
 
 		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey,
 				childrens);
@@ -433,16 +456,14 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 				getExtRepositoryObjectKey(fileEntryId));
 		return ((WebdavFile) file).getDownloadURL();
 	}
-	
+
 	@Override
-	public List<Folder> getFolders(
-			long parentFolderId, boolean includeMountFolders, int start,
-			int end, OrderByComparator obc) throws PortalException, SystemException{
+	public List<Folder> getFolders(long parentFolderId, boolean includeMountFolders, int start, int end,
+			OrderByComparator obc) throws PortalException, SystemException {
 		System.out.println(getExtRepositoryObjectKey(parentFolderId));
 		List<Folder> result = super.getFolders(parentFolderId, includeMountFolders, start, end, obc);
 
 		return result;
 	}
-
 
 }

@@ -80,6 +80,12 @@ public class WebdavIdUtil {
 		_log.debug(withoutEndingSlash.substring(0, withoutEndingSlash.lastIndexOf("/") + 1));
 		return childId.substring(0, withoutEndingSlash.lastIndexOf("/") + 1);
 	}
+	
+	public static String getRootFolder(String childId){
+		if (childId.equals("/")) 
+			return null;
+		return "/" + StringUtils.split(childId, "/")[0] + "/";
+	}
 
 	public static String encode(String s) {
 		_log.debug("encode: " + HttpUtil.encodePath(s));
