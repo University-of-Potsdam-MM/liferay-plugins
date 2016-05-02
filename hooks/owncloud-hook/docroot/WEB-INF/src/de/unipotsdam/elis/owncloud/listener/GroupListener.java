@@ -11,12 +11,14 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.service.RepositoryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.GroupUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 
 import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
+import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
 
 public class GroupListener implements ModelListener<Group> {
 
@@ -42,16 +44,18 @@ public class GroupListener implements ModelListener<Group> {
 	@Override
 	public void onAfterCreate(Group model) throws ModelListenerException {
 		try {
-			RepositoryServiceUtil.addRepository(
-					model.getGroupId(), PortalUtil.getClassNameId(OwncloudRepository.class.getName()), 0, "Box.UP",
-					StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY, new UnicodeProperties(),
-					new ServiceContext());
-			OwncloudRepositoryUtil.getWebdavRepository().createFolder(
-					OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model.getGroupId()));
+			if (model.isSite()) {
+				RepositoryServiceUtil.addRepository(model.getGroupId(),
+						PortalUtil.getClassNameId(OwncloudRepository.class.getName()), 0,
+						WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
+						new UnicodeProperties(), new ServiceContext());
+				OwncloudRepositoryUtil.getWebdavRepository().createFolder(
+						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model.getGroupId()));
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	@Override

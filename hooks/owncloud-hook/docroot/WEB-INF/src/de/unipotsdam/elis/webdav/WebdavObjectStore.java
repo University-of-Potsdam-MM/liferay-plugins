@@ -148,7 +148,7 @@ public class WebdavObjectStore {
 				if (statusCode == 404) {
 					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
 					if (!OwncloudRepositoryUtil.getWebdavRepository().exists(rootFolder)) {
-						OwncloudRepositoryUtil.createAndShareRootfolder(groupId);
+						OwncloudRepositoryUtil.createAndShareRootfolder(groupId,false);
 					} else {
 						OwncloudShareCreator.createShare(groupId, rootFolder);
 						if (OwncloudRepositoryUtil.getWebdavRepository().exists(id))

@@ -2,7 +2,11 @@ package de.unipotsdam.elis.owncloud.repository;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
@@ -11,17 +15,25 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONArray;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.service.BackgroundTaskLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 
+import de.unipotsdam.elis.owncloud.tasks.MoveFolderTaskExecutor;
+import de.unipotsdam.elis.owncloud.tasks.ShareFolderTaskExecutor;
 import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
 
 public class OwncloudShareCreator {
@@ -34,32 +46,29 @@ public class OwncloudShareCreator {
 
 	private static Log log = LogFactoryUtil.getLog(OwncloudShareCreator.class);
 
-	public static void createShare(List<User> users, long siteGroupId, final String filePath) {
-		// users.remove(authorName);
-		// users.remove("anyone");
-		// ssssusers.remove("test");
+	public static void createShare(List<User> users, long siteGroupId, final String filePath, boolean excludeCurrentUser) {
+		List<String> userIds = new ArrayList<String>();
 		for (User user : users) {
-			// store.rename(sharepath, sharepath+"backup"+new
-			// Date(System.currentTimeMillis()));
-			try {
-				final String userName = user.getLogin();
-				final int permissions = deriveOwncloudPermissions(user, siteGroupId);
-				Thread t = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						createShare(userName, filePath, permissions);
-						log.debug("finished creating shares" + filePath + "User: " + userName);
-					}
-				});
-				t.start();
-			} catch (PortalException e) {
-				e.printStackTrace();
-			} catch (SystemException e) {
-				e.printStackTrace();
-			}
+			userIds.add(String.valueOf(user.getUserId()));
+		}
+		
+		Map<String, Serializable> taskContextMap = new HashMap<String, Serializable>();
+		taskContextMap.put("userIds", (Serializable) userIds);
+		taskContextMap.put("excludeCurrentUser", excludeCurrentUser);
+		taskContextMap.put("siteGroupId", String.valueOf(siteGroupId));
+		taskContextMap.put("filePath", filePath);
+
+		try {
+			BackgroundTaskLocalServiceUtil.addBackgroundTask(PrincipalThreadLocal.getUserId(), siteGroupId,
+					StringPool.BLANK, new String[] { "owncloud-hook" }, ShareFolderTaskExecutor.class, taskContextMap,
+					new ServiceContext());
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 	public static void createShare(long siteGroupId, final String filePath) {
 		try {
 			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());

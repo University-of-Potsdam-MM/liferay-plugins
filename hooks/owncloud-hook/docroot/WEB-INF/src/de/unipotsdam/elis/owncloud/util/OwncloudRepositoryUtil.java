@@ -7,13 +7,20 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.RepositoryServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.GroupUtil;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portal.util.PortletKeys;
 
 import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
+import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
 import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
 import de.unipotsdam.elis.webdav.WebdavObjectStore;
@@ -35,17 +42,32 @@ public class OwncloudRepositoryUtil {
 		}
 		return StringPool.BLANK;
 	}
-	
-	public static void createAndShareRootfolder(long groupId){
+
+	public static void createAndShareRootfolder(long groupId, boolean shareWithMembers) {
 		try {
 			String folderId = getRootFolderIdFromGroupId(groupId);
 			getWebdavRepository().createFolder(folderId);
 			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
 			OwncloudShareCreator.createShare(user, groupId, folderId);
+			if (shareWithMembers)
+				OwncloudShareCreator.createShare(GroupUtil.getUsers(groupId), groupId, folderId, true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR, e);
+			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR, "no-owncloud-connection");
 		}
+	}
+
+	public static void createRepository(long groupId, boolean shareWithMembers) {
+			try {
+				RepositoryServiceUtil.addRepository(groupId, PortalUtil.getClassNameId(OwncloudRepository.class.getName()),
+						0, WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
+						new UnicodeProperties(), new ServiceContext());
+			} catch (PortalException e) {
+				e.printStackTrace();
+			} catch (SystemException e) {
+				e.printStackTrace();
+			}
+			createAndShareRootfolder(groupId, shareWithMembers);
 	}
 
 	public static synchronized WebdavObjectStore getWebdavRepository() {
