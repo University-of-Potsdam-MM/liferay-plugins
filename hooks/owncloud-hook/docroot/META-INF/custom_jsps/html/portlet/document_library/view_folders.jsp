@@ -114,7 +114,7 @@ else {
 				<c:when test='<%= (((folderId == rootFolderId) && !expandFolder) || ((folder != null) && (folder.isRoot() && !folder.isDefaultRepository() && !expandFolder))) && !browseBy.equals("file-entry-type") %>'>
 					
 					<%
-					String navigation = ParamUtil.getString(request, "navigation", "home");
+					String navigation = ParamUtil.getString(request, "navigation", "");
 					
 					Map<String, Object> dataView = new HashMap<String, Object>();
 					

@@ -66,15 +66,22 @@ public class WebdavObjectStore {
 		return completePath;
 	}
 
-	public WebdavFolder createFolder(String folderName, String parentId) throws IOException {
+	public WebdavFolder createFolder(String folderName, String parentId){
 		log.debug("createFolder " + parentId + WebdavIdUtil.encode(folderName));
 		return createFolder(parentId + WebdavIdUtil.encode(folderName));
 	}
 
-	public WebdavFolder createFolder(String id) throws IOException {
+	public WebdavFolder createFolder(String id){
 		log.debug("start create Folder " + id);
 
-		createFolderRec(id + "/");
+		try {
+			createFolderRec(id + "/");
+		}
+		catch (Exception e){
+			handleException(e);
+			return null;
+		}
+		
 		WebdavFolder result = new WebdavFolder(id + "/");
 
 		log.debug("finish create Folder");
@@ -157,6 +164,9 @@ public class WebdavObjectStore {
 							handleException(e);
 					}
 				}
+			}
+			else{
+				handleException(e);
 			}
 			return folderChildren;
 		}
@@ -327,6 +337,7 @@ public class WebdavObjectStore {
 	 *            Exception
 	 */
 	private void handleException(Exception e) {
+		System.out.println("jo exception");
 		e.printStackTrace();
 		if (e instanceof SardineException) {
 			if (((SardineException) e).getStatusCode() == 404) {

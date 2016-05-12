@@ -111,12 +111,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public ExtRepositoryFolder addExtRepositoryFolder(String extRepositoryParentFolderKey, String name,
 			String description) throws PortalException, SystemException {
-		try {
-			return OwncloudRepositoryUtil.getWebdavRepository().createFolder(name, extRepositoryParentFolderKey);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new SystemException(e);
-		}
+		return OwncloudRepositoryUtil.getWebdavRepository().createFolder(name, extRepositoryParentFolderKey);
 	}
 
 	@Override

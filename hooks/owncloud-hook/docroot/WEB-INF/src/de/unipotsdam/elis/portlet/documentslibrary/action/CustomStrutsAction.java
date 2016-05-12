@@ -2,8 +2,11 @@ package de.unipotsdam.elis.portlet.documentslibrary.action;
 
 import java.io.FileNotFoundException;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import javax.el.MapELResolver;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
@@ -32,6 +35,8 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
+import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderFinderUtil;
 
@@ -57,7 +62,9 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	@Override
 	public void processAction(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
 		createRepositoryIfNotExistent(actionRequest, actionResponse);
+		setProperties(actionRequest, actionResponse);
 		originalStrutsPortletAction.processAction(portletConfig, actionRequest, actionResponse);
 		System.out.println("keks");
 
@@ -72,8 +79,12 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	@Override
 	public String render(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
+		System.out.println("test navigation: " + ParamUtil.getString(renderRequest, "navigation", "keks"));
+		for (Map.Entry<String, String[]> entry : renderRequest.getParameterMap().entrySet()) {
+			System.out.println(entry.getKey() + " / " + entry.getValue());
+		}
+		System.out.println("jooo");
 		createRepositoryIfNotExistent(renderRequest, renderResponse);
-		renderRequest.setAttribute("RepositoryClassName", OwncloudRepository.class.getName());
 		setProperties(renderRequest, renderResponse);
 
 		return originalStrutsPortletAction.render(portletConfig, renderRequest, renderResponse);
@@ -88,6 +99,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	@Override
 	public void serveResource(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
+		System.out.println("test navigation: " + ParamUtil.getString(resourceRequest, "navigation", "keks"));
 		createRepositoryIfNotExistent(resourceRequest, resourceResponse);
 		setProperties(resourceRequest, resourceResponse);
 
@@ -116,7 +128,8 @@ public class CustomStrutsAction implements StrutsPortletAction {
 			}
 		}
 
-		request.setAttribute("isOwncloudRepository", isOwncloudRepository);
+		// request.setAttribute("isOwncloudRepository", isOwncloudRepository);
+		request.setAttribute("isOwncloudRepository", true);
 	}
 
 	private void createRepositoryIfNotExistent(PortletRequest request, PortletResponse response) {
