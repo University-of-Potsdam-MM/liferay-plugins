@@ -78,16 +78,8 @@ public class WebdavObject extends WebdavModel implements ExtRepositoryObject {
 		return _modifiedDate;
 	}
 
-	public boolean exists() {
-		return OwncloudRepositoryUtil.getWebdavRepository().exists(this);
-	}
-
-	public void delete() {
-		OwncloudRepositoryUtil.getWebdavRepository().deleteDirectory(this.getExtRepositoryModelKey());
-	}
-
 	public void renameTo(WebdavObject dstFile) {
-		OwncloudRepositoryUtil.getWebdavRepository().rename(this.getExtRepositoryModelKey(),
+		OwncloudRepositoryUtil.getWebdavRepositoryAsUser().rename(this.getExtRepositoryModelKey(),
 				dstFile.getExtRepositoryModelKey());
 	}
 

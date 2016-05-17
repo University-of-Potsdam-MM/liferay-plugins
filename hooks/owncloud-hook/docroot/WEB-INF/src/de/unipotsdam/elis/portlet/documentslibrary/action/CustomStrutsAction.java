@@ -10,6 +10,7 @@ import javax.el.MapELResolver;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.RenderRequest;
@@ -26,9 +27,11 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.repository.LocalRepository;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.struts.StrutsPortletAction;
+import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.RepositoryEntryLocalServiceUtil;
 import com.liferay.portal.service.RepositoryLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -62,9 +65,15 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	@Override
 	public void processAction(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		System.out.println("pw1: " + PrincipalThreadLocal.getPassword());
 
 		createRepositoryIfNotExistent(actionRequest, actionResponse);
 		setProperties(actionRequest, actionResponse);
+
+		if (ParamUtil.getString(actionRequest, Constants.CMD, "null").equals("submitPassword")){
+			OwncloudRepositoryUtil.saveUserPasswort(ParamUtil.getString(actionRequest, "password"));
+		}
+
 		originalStrutsPortletAction.processAction(portletConfig, actionRequest, actionResponse);
 		System.out.println("keks");
 
@@ -79,11 +88,18 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	@Override
 	public String render(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
+		System.out.println("pw: " + PrincipalThreadLocal.getPassword());
 		System.out.println("test navigation: " + ParamUtil.getString(renderRequest, "navigation", "keks"));
 		for (Map.Entry<String, String[]> entry : renderRequest.getParameterMap().entrySet()) {
 			System.out.println(entry.getKey() + " / " + entry.getValue());
 		}
 		System.out.println("jooo");
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		String actionName = ParamUtil.getString(renderRequest, Constants.CMD);
+		
+		System.out.println("actionName: " + actionName); 
 		createRepositoryIfNotExistent(renderRequest, renderResponse);
 		setProperties(renderRequest, renderResponse);
 
@@ -100,6 +116,9 @@ public class CustomStrutsAction implements StrutsPortletAction {
 	public void serveResource(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
 		System.out.println("test navigation: " + ParamUtil.getString(resourceRequest, "navigation", "keks"));
+		String actionName = ParamUtil.getString(resourceRequest, Constants.CMD);
+		
+		System.out.println("actionName: " + actionName); 
 		createRepositoryIfNotExistent(resourceRequest, resourceResponse);
 		setProperties(resourceRequest, resourceResponse);
 

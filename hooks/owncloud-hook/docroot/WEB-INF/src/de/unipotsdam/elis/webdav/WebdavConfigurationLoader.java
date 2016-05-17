@@ -3,10 +3,19 @@ package de.unipotsdam.elis.webdav;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.util.Encryptor;
+import com.liferay.util.EncryptorException;
 import com.liferay.util.portlet.PortletProps;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
+
 public class WebdavConfigurationLoader {
-	
+
 	private static final String _ownCloudWebdavAddress = "http://localhost/owncloud/remote.php/webdav";
 	private static final String _ownCloudDownloadAddress = "http://localhost/owncloud/index.php/apps/files/ajax/download.php";
 	private static final String _ownCloudShareAddress = "http://localhost/owncloud/ocs/v1.php/apps/files_sharing/api/v1/shares";

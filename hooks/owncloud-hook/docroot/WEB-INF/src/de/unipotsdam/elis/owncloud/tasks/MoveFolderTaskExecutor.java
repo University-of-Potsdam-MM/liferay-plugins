@@ -22,6 +22,7 @@ public class MoveFolderTaskExecutor extends BaseBackgroundTaskExecutor {
 		User user = UserLocalServiceUtil.getUser(backgroundTask.getUserId());
 		for (Group group : user.getGroups()) {
 			if (group.isSite()) {
+				// TODO: Passwort steht bei SSO nicht zur verfügung
 				String folderId = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(group.getGroupId());
 				String username = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
 				String password = PrincipalThreadLocal.getPassword();

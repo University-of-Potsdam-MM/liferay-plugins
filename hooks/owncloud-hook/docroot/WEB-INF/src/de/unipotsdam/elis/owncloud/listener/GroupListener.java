@@ -49,7 +49,7 @@ public class GroupListener implements ModelListener<Group> {
 						PortalUtil.getClassNameId(OwncloudRepository.class.getName()), 0,
 						WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
 						new UnicodeProperties(), new ServiceContext());
-				OwncloudRepositoryUtil.getWebdavRepository().createFolder(
+				OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().createFolder(
 						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model.getGroupId()));
 			}
 		} catch (Exception e) {

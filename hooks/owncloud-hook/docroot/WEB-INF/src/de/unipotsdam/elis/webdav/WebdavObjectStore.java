@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequestDispatcher;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -51,7 +52,8 @@ public class WebdavObjectStore {
 			endpoint.getSardine().put(completePath, contentStream);
 		} catch (IOException e) {
 			e.printStackTrace();
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR, e);
+			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+					OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, e);
 		}
 
 		return newFileId;
@@ -66,22 +68,21 @@ public class WebdavObjectStore {
 		return completePath;
 	}
 
-	public WebdavFolder createFolder(String folderName, String parentId){
+	public WebdavFolder createFolder(String folderName, String parentId) {
 		log.debug("createFolder " + parentId + WebdavIdUtil.encode(folderName));
 		return createFolder(parentId + WebdavIdUtil.encode(folderName));
 	}
 
-	public WebdavFolder createFolder(String id){
+	public WebdavFolder createFolder(String id) {
 		log.debug("start create Folder " + id);
 
 		try {
 			createFolderRec(id + "/");
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			handleException(e);
 			return null;
 		}
-		
+
 		WebdavFolder result = new WebdavFolder(id + "/");
 
 		log.debug("finish create Folder");
@@ -154,20 +155,18 @@ public class WebdavObjectStore {
 				int statusCode = ((SardineException) e).getStatusCode();
 				if (statusCode == 404) {
 					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
-					if (!OwncloudRepositoryUtil.getWebdavRepository().exists(rootFolder)) {
-						OwncloudRepositoryUtil.createAndShareRootfolder(groupId,false);
+					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(rootFolder)) {
+						OwncloudRepositoryUtil.createAndShareRootfolder(groupId, false);
+						// TODO: hier müsste auch getChildrenFromId nochmal
+						// aufgerufen werden oder?
 					} else {
 						OwncloudShareCreator.createShare(groupId, rootFolder);
-						if (OwncloudRepositoryUtil.getWebdavRepository().exists(id))
+						if (OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(id))
 							return getChildrenFromId(maxItems, skipCount, id, groupId);
-						else
-							handleException(e);
 					}
 				}
 			}
-			else{
-				handleException(e);
-			}
+			handleException(e);
 			return folderChildren;
 		}
 		// List<DavResource> resources = getResourcesForIDintern(path,
@@ -340,13 +339,25 @@ public class WebdavObjectStore {
 		System.out.println("jo exception");
 		e.printStackTrace();
 		if (e instanceof SardineException) {
-			if (((SardineException) e).getStatusCode() == 404) {
-				OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR,
-						"folder-does-not-exist");
+			SardineException sardineException = ((SardineException) e);
+			if (sardineException.getStatusCode() == 404) {
+				OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+						OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "folder-does-not-exist");
+				return;
+			} else if (sardineException.getStatusCode() == 401) {
+				System.out.println("test");
+				if (OwncloudCacheManager.getFromCache(OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME,
+						OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME) == null) {
+					OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+							OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "enter-password");
+				} else {
+					OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+							OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "wrong-password");
+				}
 				return;
 			}
 		}
-		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR, OwncloudCacheManager.WEBDAV_ERROR,
-				"no-owncloud-connection");
+		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+				OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
 	}
 }
