@@ -3,6 +3,7 @@ package de.unipotsdam.elis.owncloud.repository;
 import com.liferay.portal.kernel.cache.Lifecycle;
 import com.liferay.portal.kernel.cache.ThreadLocalCache;
 import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 
 public class OwncloudCacheManager {
 

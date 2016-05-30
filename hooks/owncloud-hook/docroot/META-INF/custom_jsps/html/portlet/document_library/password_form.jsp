@@ -5,12 +5,17 @@
 	<portlet:param name="<%= Constants.CMD %>" value="submitPassword" />
 </liferay-portlet:actionURL>
 
+<aui:input name="struts_action" type="hidden" value="/document_library/view" />
+<aui:input name="<%= Constants.CMD %>" type="hidden" value="submitPassword" />
+<aui:input name="password" type="password" />
 
-<aui:form action="<%= submitPasswordURL.toString() %>" method="post" name="passwordForm" id="passwordForm">
-	<aui:input name="struts_action" type="hidden" value="/document_library/view" />
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="submitPassword" />
-	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
-	<aui:input name="password" type="password" />
-	
-	<aui:button name="submit" type="submit" />
-</aui:form>
+<aui:button name="submit" type="submit" />
+
+<aui:script>
+AUI().use('aui-base',function(A){
+	// the method and the action of the ancestor form (in view.jsp) has to be overwritten 
+	var ancestorForm = A.one('#<portlet:namespace />password').ancestor('#<portlet:namespace />fm2');
+	ancestorForm.set('method','post');
+	ancestorForm.set('action','<%= submitPasswordURL.toString() %>');
+});
+</aui:script>

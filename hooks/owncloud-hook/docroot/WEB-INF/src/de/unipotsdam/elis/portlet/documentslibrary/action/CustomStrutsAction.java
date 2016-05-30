@@ -43,6 +43,7 @@ import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFolderLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.persistence.DLFolderFinderUtil;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
 import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
 import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
@@ -71,7 +72,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 		setProperties(actionRequest, actionResponse);
 
 		if (ParamUtil.getString(actionRequest, Constants.CMD, "null").equals("submitPassword")){
-			OwncloudRepositoryUtil.saveUserPasswort(ParamUtil.getString(actionRequest, "password"));
+			OwncloudCache.getInstance().putPassword(ParamUtil.getString(actionRequest, "password"));
 		}
 
 		originalStrutsPortletAction.processAction(portletConfig, actionRequest, actionResponse);
@@ -94,6 +95,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 			System.out.println(entry.getKey() + " / " + entry.getValue());
 		}
 		System.out.println("jooo");
+		System.out.println(PortalUtil.getUserPassword(renderRequest));
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
 

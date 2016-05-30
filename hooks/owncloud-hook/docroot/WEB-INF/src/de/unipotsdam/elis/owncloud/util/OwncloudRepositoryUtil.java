@@ -22,6 +22,7 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.util.Encryptor;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
@@ -56,8 +57,9 @@ public class OwncloudRepositoryUtil {
 				OwncloudShareCreator.createShare(GroupUtil.getUsers(groupId), groupId, folderId, true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-					OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
+			OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
+			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+			//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
 		}
 	}
 
@@ -74,33 +76,6 @@ public class OwncloudRepositoryUtil {
 		createAndShareRootfolder(groupId, shareWithMembers);
 	}
 
-	public static String getUserPassword() {
-		String encryptedUserPassword = (String) OwncloudCacheManager.getFromCache(
-				OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME, OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME);
-		
-		if (encryptedUserPassword == StringPool.BLANK || encryptedUserPassword == null)
-			return encryptedUserPassword;
-		
-		try {
-			Company company = CompanyLocalServiceUtil.getCompany(PortalUtil.getDefaultCompanyId());
-			return Encryptor.decrypt(company.getKeyObj(), encryptedUserPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public static void saveUserPasswort(String password) {
-		try {
-			Company company = CompanyLocalServiceUtil.getCompany(PortalUtil.getDefaultCompanyId());
-			String encryptedPassword = Encryptor.encrypt(company.getKeyObj(), password);
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME,
-					OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME, encryptedPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public static synchronized WebdavObjectStore getWebdavRepositoryAsRoot() {
 		_log.debug("start getWebdavRepository");
 		WebdavObjectStore result = getWebdavRepository(WebdavConfigurationLoader.getRootUsername(),
@@ -113,7 +88,8 @@ public class OwncloudRepositoryUtil {
 		_log.debug("start getWebdavRepository");
 		try {
 			String userLogin = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
-			WebdavObjectStore result = getWebdavRepository(userLogin, OwncloudRepositoryUtil.getUserPassword());
+			System.out.println("passoooord: " + OwncloudCache.getInstance().getPassword());
+			WebdavObjectStore result = getWebdavRepository(userLogin, OwncloudCache.getInstance().getPassword());
 			_log.debug("end getWebdavRepository");
 			return result;
 		} catch (Exception e) {

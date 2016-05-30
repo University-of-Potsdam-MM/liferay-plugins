@@ -23,6 +23,7 @@ import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.repository.external.ExtRepositoryModel;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
@@ -52,8 +53,10 @@ public class WebdavObjectStore {
 			endpoint.getSardine().put(completePath, contentStream);
 		} catch (IOException e) {
 			e.printStackTrace();
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-					OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, e);
+			// TODO: fehler hier richtig?
+			OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
+			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+			//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, e);
 		}
 
 		return newFileId;
@@ -341,18 +344,20 @@ public class WebdavObjectStore {
 		if (e instanceof SardineException) {
 			SardineException sardineException = ((SardineException) e);
 			if (sardineException.getStatusCode() == 404) {
-				OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-						OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "folder-does-not-exist");
+				OwncloudCache.getInstance().putWebdavError("folder-does-not-exist");
+				//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+				//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "folder-does-not-exist");
 				return;
 			} else if (sardineException.getStatusCode() == 401) {
 				System.out.println("test");
-				if (OwncloudCacheManager.getFromCache(OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME,
-						OwncloudCacheManager.WEBDAV_PASSWORD_CACHE_NAME) == null) {
-					OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-							OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "enter-password");
+				if (OwncloudCache.getInstance().getPassword() == null) {
+					OwncloudCache.getInstance().putWebdavError("enter-password");
+					//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+				//			OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "enter-password");
 				} else {
-					OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-							OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "wrong-password");
+					OwncloudCache.getInstance().putWebdavError("wrong-password");
+					//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+				//			OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "wrong-password");
 				}
 				return;
 			}

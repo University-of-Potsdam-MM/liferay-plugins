@@ -342,8 +342,8 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 
 <% 
 	String owncloudError = null;
-	if (isOwncloudRepository && (getFromCacheMethod.invoke(null, "WebdavError", "WebdavError") != null)) 
-		owncloudError = getFromCacheMethod.invoke(null, "WebdavError", "WebdavError").toString();
+	if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)) 
+		owncloudError = getErrorMethod.invoke(owncloudCacheObject).toString();
 	System.out.println(isOwncloudRepository);
 	System.out.println(owncloudError);
 	System.out.println("results: " + results.isEmpty());
@@ -367,6 +367,11 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<c:choose>
+		<c:when test="<%= (owncloudError != null) && (owncloudError.equals(\"enter-password\") || owncloudError.equals(\"wrong-password\")) %>">
+			<liferay-util:include page="/html/portlet/document_library/password_form.jsp" />
+		</c:when>
+	</c:choose>
 </c:if>
 
 <%

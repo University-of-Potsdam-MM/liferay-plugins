@@ -10,6 +10,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryModel;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
@@ -24,8 +25,12 @@ public class WebdavModel implements ExtRepositoryModel {
 
 	public WebdavModel(String extRepositoryModelKey) {
 		_log.debug("create by key: " + extRepositoryModelKey);
-		WebdavModel cachedWebdavModel = (WebdavModel) OwncloudCacheManager.getFromCache(
-				OwncloudCacheManager.WEBDAV_MODEL_CACHE_NAME, StringUtils.removeEnd(extRepositoryModelKey, "_v"));
+		// WebdavModel cachedWebdavModel = (WebdavModel)
+		// OwncloudCacheManager.getFromCache(
+		// OwncloudCacheManager.WEBDAV_MODEL_CACHE_NAME,
+		// StringUtils.removeEnd(extRepositoryModelKey, "_v"));
+		WebdavModel cachedWebdavModel = (WebdavModel) OwncloudCache.getInstance().getWebdavModel(
+				StringUtils.removeEnd(extRepositoryModelKey, "_v"));
 		if (cachedWebdavModel != null) {
 			_log.debug("create by key jo");
 			_createDate = cachedWebdavModel.getCreateDate();
@@ -43,7 +48,7 @@ public class WebdavModel implements ExtRepositoryModel {
 		_createDate = davResource.getModified();
 		_size = davResource.getContentLength();
 		_extRepositoryModelKey = WebdavIdUtil.getIdFromDavResource(davResource);
-		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_MODEL_CACHE_NAME, _extRepositoryModelKey, this);
+		OwncloudCache.getInstance().putWebdavModel(this);
 	}
 
 	@Override

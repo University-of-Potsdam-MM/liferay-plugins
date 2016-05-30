@@ -25,7 +25,8 @@
 		 
 	Object owncloudRepositoryObject = null;
 	Method getDownloadLinkMethod = null;
-	Method getFromCacheMethod = null;
+	Object owncloudCacheObject = null;
+	Method getErrorMethod = null;
 		 
 	if (isOwncloudRepository){		
 		ClassLoader classLoader = PortletBeanLocatorUtil.getBeanLocator("owncloud-hook").getClassLoader();
@@ -33,7 +34,9 @@
 		getDownloadLinkMethod = owncloudRepositoryClass.getMethod("getDownloadLink", long.class);
 		owncloudRepositoryObject = owncloudRepositoryClass.newInstance();
 		
-		Class owncloudCacheManagerClass = classLoader.loadClass("de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager");
-		getFromCacheMethod = owncloudCacheManagerClass.getMethod("getFromCache", String.class, String.class);
+		Class owncloudCacheClass = classLoader.loadClass("de.unipotsdam.elis.owncloud.repository.OwncloudCache");
+		Method getInstanceMethod = owncloudCacheClass.getMethod("getInstance");
+		owncloudCacheObject = getInstanceMethod.invoke(null);
+		getErrorMethod = owncloudCacheClass.getMethod("getError");
 	}
 %>

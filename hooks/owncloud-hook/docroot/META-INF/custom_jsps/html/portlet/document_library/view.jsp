@@ -166,17 +166,6 @@ request.setAttribute("view.jsp-repositoryId", String.valueOf(repositoryId));
 
 				<div class="document-entries-pagination"></div>
 			</aui:form>
-			<!-- BEGIN HOOK CHANGE -->
-			<% 
-				// check if there is an owncloud error to show enter password form
-				String owncloudError = null;
-				if (isOwncloudRepository && (getFromCacheMethod.invoke(null, "WebdavError", "WebdavError") != null)) 
-					owncloudError = getFromCacheMethod.invoke(null, "WebdavError", "WebdavError").toString();
-			%>
-			<c:if test="<%= owncloudError != null && (owncloudError.equals(\"enter-password\") || owncloudError.equals(\"wrong-password\")) %>">
-				<liferay-util:include page="/html/portlet/document_library/password_form.jsp" />
-			</c:if>
-			<!-- END HOOK CHANGE -->
 		</aui:col>
 	</aui:row>
 </div>

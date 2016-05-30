@@ -387,15 +387,19 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			SystemException {
 		_log.debug("start getFoldersAndFileEntries");
 
-		List<T> childrens = (List<T>) OwncloudCacheManager.getFromCache(
-				OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey);
+		//List<T> childrens = (List<T>) OwncloudCacheManager.getFromCache(
+			//	OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey);
+		List<T> childrens = (List<T>) OwncloudCache.getInstance().getWebdavFiles(extRepositoryFolderKey);
+		
 
 		if (childrens == null) {
 			childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepositoryAsUser().getChildrenFromId(1000, 0,
 					extRepositoryFolderKey, getGroupId());
+			
 
-			OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey,
-					childrens);
+			OwncloudCache.getInstance().putWebdavFiles(childrens, extRepositoryFolderKey);
+			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey,
+			//		childrens);
 		}
 
 		long startTime = System.nanoTime();
