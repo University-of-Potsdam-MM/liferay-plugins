@@ -24,12 +24,10 @@ public class MoveFolderTaskExecutor extends BaseBackgroundTaskExecutor {
 			if (group.isSite()) {
 				// TODO: Passwort steht bei SSO nicht zur verfügung
 				String folderId = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(group.getGroupId());
-				String username = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
-				String password = PrincipalThreadLocal.getPassword();
-				if (OwncloudRepositoryUtil.getWebdavRepository(username, password).exists(folderId)) {
-					OwncloudRepositoryUtil.getWebdavRepository(username, password).move(folderId,
+				if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(folderId)) {
+					OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(folderId,
 							OwncloudRepositoryUtil.getRootFolderIdFromGroupId(group.getGroupId()));
-					log.debug("move: " + folderId + " user: " + username);
+					log.debug("move: " + folderId + " user: " + PrincipalThreadLocal.getName());
 				}
 			}
 		}

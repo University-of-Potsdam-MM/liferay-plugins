@@ -8,6 +8,7 @@ public class WebdavEndpoint {
 	private String endpoint;
 	private String username;
 	private String password;
+	private boolean _isRoot;
 	
 	public WebdavEndpoint(String username, String password, String endpoint) {
 		this.sardine = SardineFactory.begin();
@@ -15,6 +16,7 @@ public class WebdavEndpoint {
 		this.password = password;
 		this.sardine.setCredentials(username,password);		
 		this.endpoint = endpoint;
+		this._isRoot = username.equals(WebdavConfigurationLoader.getRootUsername());
 	}
 	public WebdavEndpoint(String username, String password) {		
 		this(username,password,WebdavConfigurationLoader.getOwnCloudWebdavAddress());	
@@ -31,6 +33,10 @@ public class WebdavEndpoint {
 	public String getUser() {
 		return username;
 	}	
+	
+	public boolean isRoot(){
+		return _isRoot;
+	}
 	
 	public Boolean isValidCredentialinDebug() {
 		if (username == null || password == null) {

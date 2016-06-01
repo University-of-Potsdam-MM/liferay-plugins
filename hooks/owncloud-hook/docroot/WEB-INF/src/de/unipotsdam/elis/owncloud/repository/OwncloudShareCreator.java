@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -21,6 +22,9 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.xml.Document;
+import com.liferay.portal.kernel.xml.Node;
+import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -51,7 +55,7 @@ public class OwncloudShareCreator {
 		for (User user : users) {
 			userIds.add(String.valueOf(user.getUserId()));
 		}
-		
+
 		Map<String, Serializable> taskContextMap = new HashMap<String, Serializable>();
 		taskContextMap.put("userIds", (Serializable) userIds);
 		taskContextMap.put("excludeCurrentUser", excludeCurrentUser);
@@ -69,33 +73,29 @@ public class OwncloudShareCreator {
 		}
 	}
 
-	public static void createShare(long siteGroupId, final String filePath) {
+	public static int createShareForCurrentUser(long siteGroupId, final String filePath) {
 		try {
 			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
-			createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
-		} catch (PortalException e) {
+			return createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
+		} 
+		return 0;
 	}
 
-	public static void createShare(User user, long siteGroupId, final String filePath) {
+	public static int createShare(User user, long siteGroupId, final String filePath) {
 		try {
-			createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
-		} catch (PortalException e) {
-			e.printStackTrace();
-		} catch (SystemException e) {
+			return createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
-	private static void createShare(String userName, String filePath, int permissions) {
+	private static int createShare(String userName, String filePath, int permissions) {
 		HttpClient client = new HttpClient();
 		String auth = WebdavConfigurationLoader.getRootUsername() + ":" + WebdavConfigurationLoader.getRootPassword();
 		String encoding = Base64.encodeBase64String(auth.getBytes());
-
-		BufferedReader br = null;
 
 		PostMethod method = new PostMethod(WebdavConfigurationLoader.getOwncloudShareAddress());
 
@@ -107,30 +107,63 @@ public class OwncloudShareCreator {
 		method.addParameter("permissions", String.valueOf(permissions));
 
 		try {
-			int returnCode = client.executeMethod(method);
-
-			if (returnCode == HttpStatus.SC_NOT_IMPLEMENTED) {
-				log.error("The Post method is not implemented by this URI");
-				// still consume the response body
-				method.getResponseBodyAsString();
-			} else {
-				br = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
-				String readLine;
-				while (((readLine = br.readLine()) != null)) {
-					log.warn(readLine);
-				}
+			client.executeMethod(method);
+			
+			if (log.isInfoEnabled()){
+				log.info("Create share for folder " + filePath + " and user " + userName + ". Response:");
+				log.info(method.getResponseBodyAsString());
 			}
+			Document document = SAXReaderUtil.read(method.getResponseBodyAsString());
+			
+			return Integer.parseInt(document.selectSingleNode("/ocs/meta/statuscode").getText());
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
 		} finally {
 			method.releaseConnection();
-			if (br != null)
-				try {
-					br.close();
-				} catch (Exception fe) {
-					log.error("The reader could not be closed after creating share");
-				}
 		}
+		return 0;
+	}
+	
+	public static String getSharedFolder(String userName, String path){
+		HttpClient client = new HttpClient();
+		String auth = WebdavConfigurationLoader.getRootUsername() + ":" + WebdavConfigurationLoader.getRootPassword();
+		String encoding = Base64.encodeBase64String(auth.getBytes());
+
+		GetMethod method = new GetMethod(WebdavConfigurationLoader.getOwncloudShareAddress());
+
+		method.setRequestHeader("Authorization", "Basic " + encoding);
+		
+		method.setQueryString("path=" + path);
+		
+		System.out.println("method: " + method.getQueryString());
+		
+		try {
+			int returnCode = client.executeMethod(method);
+			String response = method.getResponseBodyAsString();
+			
+			if (log.isInfoEnabled()){
+				log.info("Getting shares for folder " + path + ". Response:");
+				log.info(response);
+			}
+			
+			if (returnCode == HttpStatus.SC_OK){
+				Document document = SAXReaderUtil.read(response);
+				List<Node> elementNodes = document.selectNodes("/ocs/data/element");
+				System.out.println(elementNodes.size());
+				for(Node elementNode : elementNodes){
+					Node shareWithNode = elementNode.selectSingleNode("/ocs/data/element/share_with");
+					System.out.println(shareWithNode.getText());
+					if (shareWithNode.getText().equals(userName))
+						return elementNode.selectSingleNode("/ocs/data/element/file_target").getText() + StringPool.FORWARD_SLASH;
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			method.releaseConnection();
+		}
+		return null;
 	}
 
 	private static int deriveOwncloudPermissions(User user, long siteGroupId) {

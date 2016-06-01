@@ -21,8 +21,8 @@ public class WebdavObject extends WebdavModel implements ExtRepositoryObject {
 	private String _description = StringPool.BLANK;
 	private String _extension;
 
-	public WebdavObject(DavResource davResource) {
-		super(davResource);
+	public WebdavObject(DavResource davResource, String originalId) {
+		super(davResource, originalId);
 		_name = davResource.getName();
 		_parentId = WebdavIdUtil.getParentIdFromChildId(getExtRepositoryModelKey());
 		_modifiedDate = davResource.getModified();

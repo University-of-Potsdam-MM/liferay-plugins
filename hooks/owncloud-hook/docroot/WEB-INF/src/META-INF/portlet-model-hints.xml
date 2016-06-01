@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder">
+		<field name="userId" type="long" />
+		<field name="originalPath" type="String" />
+		<field name="customPath" type="String" />
+	</model>
+</model-hints>

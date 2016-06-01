@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.sardine.DavResource;
 import com.github.sardine.SardineFactory;
 import com.github.sardine.impl.SardineException;
 import com.github.sardine.util.SardineUtil;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -23,47 +25,42 @@ import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.repository.external.ExtRepositoryModel;
 
+import de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
+import de.unipotsdam.elis.owncloud.service.CustomSiteRootFolderLocalServiceUtil;
+import de.unipotsdam.elis.owncloud.service.persistence.CustomSiteRootFolderPK;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
 import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
 public class WebdavObjectStore {
 
-	private static Log log = LogFactoryUtil.getLog(WebdavObjectStore.class);
+	private static Log _log = LogFactoryUtil.getLog(WebdavObjectStore.class);
 
 	private WebdavEndpoint endpoint;
 
-	// private static LoadingCache<WebdavResourceKey, List<DavResource>> cache =
-	// CacheBuilder.newBuilder().maximumSize(10000).recordStats().expireAfterWrite(10,
-	// TimeUnit.MINUTES).expireAfterAccess(1, TimeUnit.MINUTES).build(new
-	// WebdavCacheLoader());
-
 	public WebdavObjectStore(String username, String password) {
-		// TODO init endpoint
 		endpoint = new WebdavEndpoint(username, password);
 	}
 
-	public String createFile(String documentName, String parentId, InputStream contentStream) {
-		String newFileId = parentId + WebdavIdUtil.encode(documentName);
-		String completePath = endpoint.getEndpoint() + newFileId;
+	public void createFile(String documentName, String parentId, InputStream contentStream) {
+		String url = endpoint.getEndpoint() + correctRootFolder(parentId + WebdavIdUtil.encode(documentName));
 		try {
-			completePath = solveDuplicateFiles(endpoint, completePath);
-			endpoint.getSardine().put(completePath, contentStream);
+			url = solveDuplicateFiles(endpoint, url);
+			_log.debug("creating file with url " + url);
+			endpoint.getSardine().put(url, contentStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 			// TODO: fehler hier richtig?
 			OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
-			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-			//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, e);
 		}
-
-		return newFileId;
 	}
 
 	private String solveDuplicateFiles(WebdavEndpoint endpoint, String completePath) throws IOException {
 		int i = 1;
+		// TODO: können die Klammern so unkodiert hinzugefügt werden? Man datei
+		// mit gleichen Namen hochladen und gucken
 		while (endpoint.getSardine().exists(completePath)) {
 			completePath += "(" + i + ")";
 			i++;
@@ -72,79 +69,56 @@ public class WebdavObjectStore {
 	}
 
 	public WebdavFolder createFolder(String folderName, String parentId) {
-		log.debug("createFolder " + parentId + WebdavIdUtil.encode(folderName));
-		return createFolder(parentId + WebdavIdUtil.encode(folderName));
+		String id = correctRootFolder(parentId + WebdavIdUtil.encode(folderName));
+		return createFolder(id);
 	}
 
 	public WebdavFolder createFolder(String id) {
-		log.debug("start create Folder " + id);
+		String folderId = (StringUtils.endsWith(id, StringPool.FORWARD_SLASH)) ? id : (id + StringPool.FORWARD_SLASH);
+		_log.debug("creating folder " + folderId);
 
 		try {
-			createFolderRec(id + "/");
+			createFolderRec(folderId);
 		} catch (Exception e) {
 			handleException(e);
 			return null;
 		}
 
-		WebdavFolder result = new WebdavFolder(id + "/");
-
-		log.debug("finish create Folder");
-		return result;
+		return new WebdavFolder(folderId);
 	}
 
 	private void createFolderRec(String id) throws IOException {
 		String parentId = WebdavIdUtil.getParentIdFromChildId(id);
-		if (!parentId.equals("/"))
+		if (!parentId.equals(StringPool.FORWARD_SLASH))
 			createFolderRec(parentId);
 
 		String webdavPath = endpoint.getEndpoint() + id;
 		if (!endpoint.getSardine().exists(webdavPath)) {
-			// TODO: exist nÃƒÂ¶tig?
+			// TODO: exist nÃƒoetig?
 			endpoint.getSardine().createDirectory(webdavPath);
 		}
 	}
 
 	public void move(String sourceId, String destinationId) {
-		log.debug("move " + sourceId + " to " + destinationId);
+		String customDestinationId = correctRootFolder(destinationId);
+		String customSourceId = correctRootFolder(sourceId);
+		_log.debug("moving " + customSourceId + " to " + customDestinationId);
 		try {
 			createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
-			endpoint.getSardine().move(endpoint.getEndpoint() + sourceId, endpoint.getEndpoint() + destinationId);
+			endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId,
+					endpoint.getEndpoint() + customDestinationId);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO: fehler abfangen?
 			e.printStackTrace();
 		}
 	}
-
-	public Boolean exists(String id) {
-		try {
-			return endpoint.getSardine().exists(endpoint.getEndpoint() + id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	/*
-	 * public List<WebdavObject> getChildren(WebdavFolder folder, int maxItems,
-	 * int skipCount, String user, boolean usePwc) {
-	 * 
-	 * // hack root folder String name = folder.getName(); // String path =
-	 * folder.getPathSegment(); String id = folder.getExtRepositoryModelKey();
-	 * if (name.equals("RootFolder") || name.equals("Liferay%20Home")) { id =
-	 * "/"; } return getChildrenFromId(maxItems, skipCount, id); }
-	 * 
-	 * public List<WebdavObject> getFolderChildren(WebdavFolder folder, int
-	 * maxItems, int skipCount, String user) { return getChildren(folder,
-	 * maxItems, skipCount, user, false); }
-	 */
 
 	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id, long groupId) {
-		/*
-		 * for (StackTraceElement s : Thread.currentThread().getStackTrace()) {
-		 * System.out.println(s.toString()); } System.out.println(" ");
-		 */
-		log.info("start getChildrenForName " + id);
-		long start = System.nanoTime();
+		long start = 0;
+		if (_log.isDebugEnabled()) {
+			_log.debug("Getting childrens from id " + correctRootFolder(id));
+			start = System.nanoTime();
+		}
 
 		// resultSet contains folders and files
 		List<WebdavObject> folderChildren = new ArrayList<WebdavObject>();
@@ -152,143 +126,103 @@ public class WebdavObjectStore {
 		// converts webdav result to CMIS type of files
 		List<DavResource> resources;
 		try {
-			resources = getResourcesFromId(id, false);
+			resources = getResourcesFromId(correctRootFolder(id), false);
 		} catch (IOException e) {
 			if (e instanceof SardineException) {
 				int statusCode = ((SardineException) e).getStatusCode();
-				if (statusCode == 404) {
+				_log.debug("Status code of webdav list request: " + statusCode);
+				if (statusCode == HttpStatus.SC_NOT_FOUND) {
 					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
 					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(rootFolder)) {
+						_log.debug("Root folder does not exist");
 						OwncloudRepositoryUtil.createAndShareRootfolder(groupId, false);
 						// TODO: hier müsste auch getChildrenFromId nochmal
 						// aufgerufen werden oder?
 					} else {
-						OwncloudShareCreator.createShare(groupId, rootFolder);
-						if (OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(id))
-							return getChildrenFromId(maxItems, skipCount, id, groupId);
+						statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, rootFolder);
+						_log.debug("Status code of share request: " + statusCode);
+						if (statusCode == HttpStatus.SC_FORBIDDEN)
+							OwncloudRepositoryUtil.setUserFolderName(rootFolder);
+						return getChildrenFromId(maxItems, skipCount, id, groupId);
 					}
 				}
 			}
 			handleException(e);
 			return folderChildren;
 		}
-		// List<DavResource> resources = getResourcesForIDintern(path,
-		// false);
+
 		Iterator<DavResource> it = resources.iterator();
 
 		while (it.hasNext()) {
 			DavResource davResource = it.next();
-			log.info("iterate getChildrenForName " + davResource.getName());
+			String originalId = OwncloudRepositoryUtil.replaceCustomRootWithOriginalRoot(
+					WebdavIdUtil.getIdFromDavResource(davResource), groupId);
+			_log.debug("iterate childrens " + davResource.getName() + " " + originalId);
 			if (davResource.isDirectory()) {
-				WebdavFolder folderResult = new WebdavFolder(davResource);
+				WebdavFolder folderResult = new WebdavFolder(davResource, originalId);
 				folderChildren.add(folderResult);
-				log.info("name: " + folderResult.getName());
+				_log.debug("name: " + folderResult.getName());
 			} else {
-				WebdavFile documentImpl = new WebdavFile(davResource);
+				WebdavFile documentImpl = new WebdavFile(davResource, originalId);
 				folderChildren.add(documentImpl);
-				log.info("name: " + documentImpl.getName());
+				_log.debug("name: " + documentImpl.getName());
 			}
-			log.info("end iterate getChildrenForName " + davResource.getName());
 		}
 
-		/*
-		 * catch (ExecutionException e) { e.printStackTrace(); }
-		 */
-
-		log.info("end getChildrenForName " + id + " time:" + (System.nanoTime() - start));
+		if (_log.isDebugEnabled()) {
+			_log.info("Getting childrens from id " + correctRootFolder(id) + " finished. Time: "
+					+ (System.nanoTime() - start));
+		}
 		return folderChildren;
 	}
 
-	/**
-	 * we assume that objectId is the URLEncoded path after the
-	 * owncloud-server-path or 100 for root
-	 */
-	/*
-	 * public WebdavObject getObjectById(String id) { if (id == null ||
-	 * id.equals(WebdavIdUtil.LIFERAYROOTID)) { WebdavFolder result =
-	 * createRootFolderResult(); return result; } else { try { // entweder ist
-	 * es ein folder oder ein document if (id.endsWith("/")) { WebdavFolder
-	 * result = new WebdavFolder(id); return result; } else { WebdavFile result
-	 * = new WebdavFile(id);
-	 * 
-	 * // endpoint.getSardine().shutdown(); return result; } } catch (Exception
-	 * e) { log.error("error occurred whilst getting the resource for: " + id);
-	 * e.printStackTrace(); }
-	 * 
-	 * } return null; }
-	 */
+	private List<DavResource> getResourcesFromId(String id, Boolean getDirectory) throws IOException {
+		String url = WebdavIdUtil.getWebdavURIfromId(id);
+
+		long start = 0;
+		if (_log.isDebugEnabled()) {
+			start = System.currentTimeMillis();
+			_log.debug("Getting resources from: " + url);
+		}
+
+		List<DavResource> resources = endpoint.getSardine().list(url);
+
+		// the first element is always the directory itself
+		if (resources.get(0).isDirectory() && !getDirectory) {
+			resources.remove(0);
+		}
+
+		if (_log.isDebugEnabled()) {
+			_log.debug("Getting resources took: " + (System.currentTimeMillis() - start));
+		}
+
+		return resources;
+	}
 
 	public static final WebdavFolder createRootFolderResult() {
-		// objectId = "/" ??
 		WebdavFolder result = new WebdavFolder(WebdavIdUtil.LIFERAYROOTID);
 		result.setRepositoryId("A1");
 		return result;
 	}
 
-	/*
-	 * private List<DavResource> getResourcesForIdCached(String path, Boolean
-	 * isDirectory) throws IOException, ExecutionException {
-	 * 
-	 * log.info("start getResourcesForIdCached " +path); String encodedPath =
-	 * WebdavIdDecoderAndEncoder.encode(path); WebdavResourceKey key = new
-	 * WebdavResourceKey(encodedPath, isDirectory, endpoint.getUser());
-	 * List<DavResource> result = cache.get(key);
-	 * 
-	 * if (isDirectory) { for (DavResource davResource : result) { final String
-	 * encodedId = WebdavIdDecoderAndEncoder .webdavToIdEncoded(davResource);
-	 * final WebdavResourceKey webdavResourceKey = new WebdavResourceKey(
-	 * encodedId, davResource.isDirectory(), endpoint.getUser()); Thread t = new
-	 * Thread(new Runnable() {
-	 * 
-	 * @Override public void run() { try { cache.get(webdavResourceKey); } catch
-	 * (ExecutionException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } } }); t.start(); } } log.debug(cache.stats());
-	 * log.info("end getResourcesForIdCached " +path); return result; }
-	 */
-
-	private List<DavResource> getResourcesFromId(String id, Boolean getDirectory) throws IOException {
-
-		String listedPath = WebdavIdUtil.getWebdavURIfromId(id);
-		long before = System.currentTimeMillis();
-		log.debug("showing resources for: " + listedPath);
-
-		List<DavResource> resources = endpoint.getSardine().list(listedPath);
-		// the first element is always the directory itself
-		if (resources.get(0).isDirectory() && !getDirectory) {
-			resources.remove(0);
-		}
-		long now = System.currentTimeMillis();
-		log.debug("getting resource listing took: " + (now - before));
-		// endpoint.getSardine().shutdown();
-		return resources;
-	}
-
-	private void handleStartUpErrors(IOException e) {
-		if (endpoint.isValidCredentialinDebug()) {
-			log.error("problems with webdav authentication at owncloud", e);
-		} else {
-			log.debug("the user credentials are not valid");
-		}
-	}
-
 	public void deleteDirectory(String objectId) {
 		try {
-			String finalPath = endpoint.getEndpoint() + objectId;
-			// endpoint.getSardine().exists(finalPath);
-			endpoint.getSardine().delete(finalPath);
+			String url = endpoint.getEndpoint() + correctRootFolder(objectId);
+			_log.debug("Deleting entry with the url " + url);
+			endpoint.getSardine().delete(url);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			// cache.invalidateAll();
 		}
 	}
 
 	public void rename(String oldId, String newId) {
-
-		String oldUrl = endpoint.getEndpoint() + oldId;
-		String newUrl = endpoint.getEndpoint() + newId;
+		String oldUrl = endpoint.getEndpoint() + correctRootFolder(oldId);
+		String newUrl = endpoint.getEndpoint() + correctRootFolder(newId);
 		try {
+			// TODO: exists noetig?
 			if (endpoint.getSardine().exists(oldUrl)) {
+				if (_log.isDebugEnabled())
+					_log.debug("Renaming entry with the url " + oldUrl + " to " + newUrl);
 				endpoint.getSardine().move(oldUrl, newUrl);
 			}
 		} catch (IOException e) {
@@ -297,22 +231,28 @@ public class WebdavObjectStore {
 	}
 
 	public void copy(String oldId, String newId) {
-		String oldNameUrl = endpoint.getEndpoint() + oldId;
-		String newNameUrl = endpoint.getEndpoint() + newId;
+		String oldUrl = endpoint.getEndpoint() + correctRootFolder(oldId);
+		String newUrl = endpoint.getEndpoint() + correctRootFolder(newId);
 		try {
-			if (endpoint.getSardine().exists(oldNameUrl)) {
-				endpoint.getSardine().copy(oldNameUrl, newNameUrl);
+			if (endpoint.getSardine().exists(oldUrl)) {
+				if (_log.isDebugEnabled())
+					_log.debug("Copying entry with the url " + oldUrl + " to " + newUrl);
+				endpoint.getSardine().copy(oldUrl, newUrl);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			// cache.invalidateAll();
 		}
 	}
 
 	public boolean exists(WebdavObject folder) {
+		return exists(folder.getExtRepositoryModelKey());
+	}
+
+	public boolean exists(String id) {
 		try {
-			return endpoint.getSardine().exists(endpoint.getEndpoint() + folder.getExtRepositoryModelKey());
+			String url = endpoint.getEndpoint() + correctRootFolder(id);
+			_log.debug("Checking whether entry exists with url " + url);
+			return endpoint.getSardine().exists(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -321,9 +261,10 @@ public class WebdavObjectStore {
 
 	public InputStream get(ExtRepositoryModel extRepositoryModel) {
 		try {
-			return endpoint.getSardine()
-					.get(endpoint.getEndpoint()
-							+ StringUtils.removeEnd(extRepositoryModel.getExtRepositoryModelKey(), "_v"));
+			String url = endpoint.getEndpoint()
+					+ correctRootFolder(StringUtils.removeEnd(extRepositoryModel.getExtRepositoryModelKey(), "_v"));
+			_log.debug("Getting file with the url " + url);
+			return endpoint.getSardine().get(url);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -332,37 +273,53 @@ public class WebdavObjectStore {
 
 	/**
 	 * Caches an exception to allow an appropriate message in the gui. TODO:
-	 * maybe is there is a better way to dedect and communicate problems with
-	 * the webDAV connection
+	 * maybe there is a better way to detect and communicate problems with the
+	 * webDAV connection
 	 * 
 	 * @param e
 	 *            Exception
 	 */
 	private void handleException(Exception e) {
-		System.out.println("jo exception");
+		_log.debug("Handle Exception");
 		e.printStackTrace();
 		if (e instanceof SardineException) {
 			SardineException sardineException = ((SardineException) e);
+			_log.debug("Sardine exception status code: " + sardineException.getStatusCode());
 			if (sardineException.getStatusCode() == 404) {
 				OwncloudCache.getInstance().putWebdavError("folder-does-not-exist");
-				//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-				//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "folder-does-not-exist");
 				return;
 			} else if (sardineException.getStatusCode() == 401) {
-				System.out.println("test");
 				if (OwncloudCache.getInstance().getPassword() == null) {
 					OwncloudCache.getInstance().putWebdavError("enter-password");
-					//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-				//			OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "enter-password");
 				} else {
 					OwncloudCache.getInstance().putWebdavError("wrong-password");
-					//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-				//			OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "wrong-password");
 				}
 				return;
 			}
 		}
 		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
 				OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
+	}
+
+	private String correctRootFolder(String id) {
+		_log.debug("Correct root folder");
+		if (endpoint.isRoot())
+			return id;
+
+		try {
+			String originalRootPath = WebdavIdUtil.getRootFolder(id);
+			CustomSiteRootFolder userOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
+					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
+							originalRootPath));
+			if (userOwncloudDirectory != null) {
+				String correctedId = id.replace(originalRootPath, userOwncloudDirectory.getCustomPath());
+				_log.debug("Corrected id: " + correctedId);
+				return correctedId;
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+
+		return id;
 	}
 }

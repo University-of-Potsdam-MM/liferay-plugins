@@ -15,8 +15,8 @@ public class WebdavFile extends WebdavObject implements ExtRepositoryFileEntry{
 	private static Log log = LogFactoryUtil
 			.getLog(WebdavFile.class);
 
-	public WebdavFile(DavResource davResource) {
-		super(davResource);	
+	public WebdavFile(DavResource davResource, String originalId) {
+		super(davResource,originalId);	
 		
 	}
 

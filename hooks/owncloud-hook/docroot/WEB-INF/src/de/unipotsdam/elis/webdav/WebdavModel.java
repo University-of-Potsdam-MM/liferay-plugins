@@ -25,10 +25,6 @@ public class WebdavModel implements ExtRepositoryModel {
 
 	public WebdavModel(String extRepositoryModelKey) {
 		_log.debug("create by key: " + extRepositoryModelKey);
-		// WebdavModel cachedWebdavModel = (WebdavModel)
-		// OwncloudCacheManager.getFromCache(
-		// OwncloudCacheManager.WEBDAV_MODEL_CACHE_NAME,
-		// StringUtils.removeEnd(extRepositoryModelKey, "_v"));
 		WebdavModel cachedWebdavModel = (WebdavModel) OwncloudCache.getInstance().getWebdavModel(
 				StringUtils.removeEnd(extRepositoryModelKey, "_v"));
 		if (cachedWebdavModel != null) {
@@ -43,11 +39,11 @@ public class WebdavModel implements ExtRepositoryModel {
 		}
 	}
 
-	public WebdavModel(DavResource davResource) {
-		_log.debug("create by davResource: " + WebdavIdUtil.getIdFromDavResource(davResource));
+	public WebdavModel(DavResource davResource, String originalId) {
+		_log.debug("create by davResource: " + originalId);
 		_createDate = davResource.getModified();
 		_size = davResource.getContentLength();
-		_extRepositoryModelKey = WebdavIdUtil.getIdFromDavResource(davResource);
+		_extRepositoryModelKey = originalId;
 		OwncloudCache.getInstance().putWebdavModel(this);
 	}
 

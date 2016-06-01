@@ -1,18 +1,14 @@
 package de.unipotsdam.elis.owncloud.util;
 
-import java.io.IOException;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.UnicodeProperties;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RepositoryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -20,12 +16,13 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.GroupUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.util.Encryptor;
 
+import de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
-import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.repository.OwncloudShareCreator;
+import de.unipotsdam.elis.owncloud.service.CustomSiteRootFolderLocalServiceUtil;
+import de.unipotsdam.elis.owncloud.service.persistence.CustomSiteRootFolderPK;
 import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
 import de.unipotsdam.elis.webdav.WebdavObjectStore;
 import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
@@ -38,13 +35,28 @@ public class OwncloudRepositoryUtil {
 		try {
 			Group group = GroupLocalServiceUtil.getGroup(groupId);
 			String groupName = WebdavIdUtil.encode(group.getDescriptiveName());
-			return "/" + groupName + "/";
+			return StringPool.FORWARD_SLASH + groupName + StringPool.FORWARD_SLASH;
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
 		return StringPool.BLANK;
+	}
+
+	public static String getCustomRootFolderFromOriginalRoot(String originalPath) {
+		try {
+			CustomSiteRootFolder userOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
+					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
+							originalPath));
+
+			if (userOwncloudDirectory != null) {
+				return userOwncloudDirectory.getCustomPath();
+			}
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return originalPath;
 	}
 
 	public static void createAndShareRootfolder(long groupId, boolean shareWithMembers) {
@@ -58,8 +70,9 @@ public class OwncloudRepositoryUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
-			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-			//		OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
+			// OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+			// OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
+			// "no-owncloud-connection");
 		}
 	}
 
@@ -103,5 +116,40 @@ public class OwncloudRepositoryUtil {
 		WebdavObjectStore result = new WebdavObjectStore(username, password);
 		_log.debug("end getWebdavRepository");
 		return result;
+	}
+
+	public static void setUserFolderName(String originalPath) {
+		try {
+			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
+			String userPath = OwncloudShareCreator.getSharedFolder(user.getLogin(), originalPath);
+
+			if (_log.isInfoEnabled()) {
+				CustomSiteRootFolder oldUserOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
+						.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
+								originalPath));
+				String oldUserOwncloudDirectoryPath = (oldUserOwncloudDirectory == null) ? "null"
+						: oldUserOwncloudDirectory.getCustomPath();
+				_log.info("Set custom path for the folder " + originalPath + " and the user " + user.getLogin()
+						+ " from " + oldUserOwncloudDirectoryPath + " to " + userPath);
+			}
+			if (userPath != null)
+				CustomSiteRootFolderLocalServiceUtil.updateCustomSiteRootFolder(user.getUserId(), originalPath, userPath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String replaceCustomRootWithOriginalRoot(String id, long groupId) {
+		try {
+			String originalRoot = getRootFolderIdFromGroupId(groupId);
+			CustomSiteRootFolder customSiteRootFolder = CustomSiteRootFolderLocalServiceUtil
+					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
+							originalRoot));
+			if (customSiteRootFolder != null)
+				return id.replace(customSiteRootFolder.getCustomPath(), originalRoot);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }
