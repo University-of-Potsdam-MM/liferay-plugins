@@ -96,24 +96,20 @@ public class WebdavObjectStore {
 		}
 	}
 
-	public void move(String sourceId, String destinationId, boolean correctRoot, boolean solveDuplicates) {
+	public void move(String sourceId, String destinationId, boolean correctRoot, boolean solveDuplicates)
+			throws IOException {
 		String customDestinationId = destinationId;
 		String customSourceId = sourceId;
 		if (correctRoot) {
 			customDestinationId = correctRootFolder(destinationId);
 			customSourceId = correctRootFolder(sourceId);
 		}
-		try {
-			createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
-			String customDestinationUrl = endpoint.getEndpoint() + customDestinationId;
-			if (solveDuplicates)
-				customDestinationUrl = solveDuplicateFiles(endpoint.getEndpoint() + customDestinationId);
-			_log.debug("moving " + customSourceId + " to " + customDestinationUrl);
-			endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId, customDestinationUrl);
-		} catch (IOException e) {
-			// TODO: fehler abfangen?
-			e.printStackTrace();
-		}
+		createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
+		String customDestinationUrl = endpoint.getEndpoint() + customDestinationId;
+		if (solveDuplicates)
+			customDestinationUrl = solveDuplicateFiles(endpoint.getEndpoint() + customDestinationId);
+		_log.debug("moving " + customSourceId + " to " + customDestinationUrl);
+		endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId, customDestinationUrl);
 	}
 
 	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id, long groupId) {
@@ -294,8 +290,7 @@ public class WebdavObjectStore {
 				return;
 			}
 		}
-		OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-				OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME, "no-owncloud-connection");
+		OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
 	}
 
 	private String correctRootFolder(String id) {

@@ -71,11 +71,17 @@ public class OwncloudRepositoryUtil {
 		_log.debug("Status code of share request: " + statusCode);
 		if (statusCode == HttpStatus.SC_FORBIDDEN)
 			setCustomFolder(folderId);
-		else
-			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(
-					folderId,
-					StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder())
-							+ folderId, false, true);
+		else {
+			try {
+
+				OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(
+						folderId,
+						StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder())
+								+ folderId, false, true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 

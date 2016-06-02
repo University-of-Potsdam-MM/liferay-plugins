@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012 TomÃƒÆ’Ã‚Â¡Ãƒâ€¦Ã‚Â¡ PoleÃƒâ€¦Ã‚Â¡ovskÃƒÆ’Ã‚Â½
+ * Copyright (c) 2012 TomÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ PoleÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ovskÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â½
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpStatus;
+
+import com.github.sardine.impl.SardineException;
 import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
@@ -39,6 +42,9 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.persistence.RepositoryEntryUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.documentlibrary.DuplicateFileException;
+import com.liferay.portlet.documentlibrary.NoSuchFileEntryException;
+import com.liferay.portlet.documentlibrary.NoSuchFolderException;
 import com.liferay.repository.external.CredentialsProvider;
 import com.liferay.repository.external.ExtRepository;
 import com.liferay.repository.external.ExtRepositoryAdapter;
@@ -58,6 +64,7 @@ import de.unipotsdam.elis.webdav.WebdavFile;
 import de.unipotsdam.elis.webdav.WebdavFileVersion;
 import de.unipotsdam.elis.webdav.WebdavFolder;
 import de.unipotsdam.elis.webdav.WebdavObject;
+import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
 /**
  * @author Tomas Polesovsky
@@ -262,16 +269,31 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		WebdavFolder parentFolder = new WebdavFolder(newExtRepositoryFolderKey);
 		WebdavFile dstFile = new WebdavFile(parentFolder.getExtRepositoryModelKey() + fileToMove.getName());
 
-		if (!OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(fileToMove)) {
-			throw new SystemException("Source file doesn't exist: " + fileToMove);
-		}
 		if (!parentFolder.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
-			throw new SystemException("Destination parent folder doesn't exist: " + parentFolder);
+			_log.debug("Target parent folder does not exist. Id: " + newExtRepositoryFolderKey);
+			throw new NoSuchFolderException("Target parent folder doesn't exist: " + newExtRepositoryFolderKey);
 		}
 		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(dstFile)) {
-			throw new SystemException("Destination file does exist: " + dstFile);
+			_log.debug("Destination file does already exist: " + fileToMove.getName());
+			throw new DuplicateFileException("Destination file does already exist: " + fileToMove.getName());
 		}
-		fileToMove.renameTo(dstFile);
+
+		try {
+			OwncloudRepositoryUtil.getWebdavRepositoryAsUser()
+					.move(extRepositoryObjectKey,
+							newExtRepositoryFolderKey
+									+ WebdavIdUtil.encode(WebdavIdUtil.getNameFromId(extRepositoryObjectKey)), true,
+							false);
+		} catch (Exception e) {
+			if (e instanceof SardineException) {
+				int statusCode = ((SardineException) e).getStatusCode();
+				_log.debug("Status code of webdav move request: " + statusCode);
+				if (statusCode == HttpStatus.SC_NOT_FOUND) {
+					_log.debug("File does not exist. Id: " + extRepositoryObjectKey);
+					throw new NoSuchFileEntryException(e);
+				}
+			}
+		}
 
 		return (T) dstFile;
 	}
@@ -387,19 +409,19 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			SystemException {
 		_log.debug("start getFoldersAndFileEntries");
 
-		//List<T> childrens = (List<T>) OwncloudCacheManager.getFromCache(
-			//	OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey);
+		// List<T> childrens = (List<T>) OwncloudCacheManager.getFromCache(
+		// OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME,
+		// extRepositoryFolderKey);
 		List<T> childrens = (List<T>) OwncloudCache.getInstance().getWebdavFiles(extRepositoryFolderKey);
-		
 
 		if (childrens == null) {
 			childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepositoryAsUser().getChildrenFromId(1000, 0,
 					extRepositoryFolderKey, getGroupId());
-			
 
 			OwncloudCache.getInstance().putWebdavFiles(childrens, extRepositoryFolderKey);
-			//OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME, extRepositoryFolderKey,
-			//		childrens);
+			// OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME,
+			// extRepositoryFolderKey,
+			// childrens);
 		}
 
 		long startTime = System.nanoTime();

@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portal.kernel.cache.Lifecycle;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
+import com.liferay.portal.kernel.cache.ThreadLocalCacheManager;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.repository.external.ExtRepositoryObject;
 import com.liferay.util.Encryptor;
 
 import de.unipotsdam.elis.webdav.WebdavModel;
@@ -27,7 +28,6 @@ public class OwncloudCache implements Cloneable {
 	public OwncloudCache clone() {
 		if (_log.isInfoEnabled()) {
 			Thread currentThread = Thread.currentThread();
-
 			_log.info("Create " + currentThread.getName());
 		}
 
@@ -74,8 +74,9 @@ public class OwncloudCache implements Cloneable {
 		return googleDriveFile;
 	}
 
-	public String getError() {
-		if (_webdavError != null) {
+	public static String getError() {
+		String webdavError = (String)ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.SESSION, _errorCacheName).get(_errorCacheName);
+		if (webdavError != null) {
 			if (_log.isDebugEnabled()) {
 				_log.debug("Hit Error");
 			}
@@ -85,7 +86,7 @@ public class OwncloudCache implements Cloneable {
 			}
 		}
 
-		return _webdavError;
+		return webdavError;
 	}
 
 	public String getPassword() {
@@ -132,13 +133,13 @@ public class OwncloudCache implements Cloneable {
 		webdavFiles.put(webdavFolderId, webdavModel);
 	}
 
-	public void putWebdavError(String webdavError) {
+	public static void putWebdavError(String webdavError) {
 
 		if (_log.isInfoEnabled()) {
 			_log.info("Put " + webdavError);
 		}
 
-		_webdavError = webdavError;
+		ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.SESSION, _errorCacheName).put(_errorCacheName, webdavError);
 	}
 
 	public void putPassword(String password) {
@@ -190,8 +191,9 @@ public class OwncloudCache implements Cloneable {
 
 	private Map<String, WebdavModel> _webdavModels;
 	private Map<String, List<?>> _webdavFiles;
-	private String _webdavError;
 	private String _passwordCacheName = "PasswordCache";
 	private int _passwordCacheTimeToLive = 60*60*24;
+	
+	private static String _errorCacheName = "ErrorCache";
 
 }
