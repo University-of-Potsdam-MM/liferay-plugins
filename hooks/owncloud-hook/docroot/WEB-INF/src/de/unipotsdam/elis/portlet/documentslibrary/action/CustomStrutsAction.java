@@ -157,7 +157,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 		System.out.println("has repo: " + hasOwncloudRepository(themeDisplay.getSiteGroupId()));
 		if (!hasOwncloudRepository(themeDisplay.getSiteGroupId()))
-			OwncloudRepositoryUtil.createRepository(themeDisplay.getSiteGroupId(), true);
+			OwncloudRepositoryUtil.createRepository(themeDisplay.getSiteGroupId());
 
 	}
 

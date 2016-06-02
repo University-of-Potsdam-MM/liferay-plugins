@@ -1,5 +1,7 @@
 package de.unipotsdam.elis.owncloud.util;
 
+import org.apache.commons.httpclient.HttpStatus;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -13,7 +15,6 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RepositoryServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.service.persistence.GroupUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 
@@ -59,24 +60,26 @@ public class OwncloudRepositoryUtil {
 		return originalPath;
 	}
 
-	public static void createAndShareRootfolder(long groupId, boolean shareWithMembers) {
-		try {
-			String folderId = getRootFolderIdFromGroupId(groupId);
-			getWebdavRepositoryAsRoot().createFolder(folderId);
-			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
-			OwncloudShareCreator.createShare(user, groupId, folderId);
-			if (shareWithMembers)
-				OwncloudShareCreator.createShare(GroupUtil.getUsers(groupId), groupId, folderId, true);
-		} catch (Exception e) {
-			e.printStackTrace();
-			OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
-			// OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-			// OwncloudCacheManager.WEBDAV_ERROR_CACHE_NAME,
-			// "no-owncloud-connection");
-		}
+	public static void createRootFolder(long groupId) {
+		String folderId = getRootFolderIdFromGroupId(groupId);
+		getWebdavRepositoryAsRoot().createFolder(folderId);
 	}
 
-	public static void createRepository(long groupId, boolean shareWithMembers) {
+	public static void shareRootFolderWithCurrentUser(long groupId) {
+		String folderId = getRootFolderIdFromGroupId(groupId);
+		int statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, folderId);
+		_log.debug("Status code of share request: " + statusCode);
+		if (statusCode == HttpStatus.SC_FORBIDDEN)
+			setCustomFolder(folderId);
+		else
+			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(
+					folderId,
+					StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder())
+							+ folderId, false, true);
+
+	}
+
+	public static void createRepository(long groupId) {
 		try {
 			RepositoryServiceUtil.addRepository(groupId, PortalUtil.getClassNameId(OwncloudRepository.class.getName()),
 					0, WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
@@ -86,7 +89,7 @@ public class OwncloudRepositoryUtil {
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		createAndShareRootfolder(groupId, shareWithMembers);
+		createRootFolder(groupId);
 	}
 
 	public static synchronized WebdavObjectStore getWebdavRepositoryAsRoot() {
@@ -118,38 +121,57 @@ public class OwncloudRepositoryUtil {
 		return result;
 	}
 
-	public static void setUserFolderName(String originalPath) {
+	public static void setCustomFolder(String originalPath) {
 		try {
 			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
 			String userPath = OwncloudShareCreator.getSharedFolder(user.getLogin(), originalPath);
+			CustomSiteRootFolder oldUserOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
+					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
+							originalPath));
 
-			if (_log.isInfoEnabled()) {
-				CustomSiteRootFolder oldUserOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
-						.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
-								originalPath));
-				String oldUserOwncloudDirectoryPath = (oldUserOwncloudDirectory == null) ? "null"
-						: oldUserOwncloudDirectory.getCustomPath();
-				_log.info("Set custom path for the folder " + originalPath + " and the user " + user.getLogin()
-						+ " from " + oldUserOwncloudDirectoryPath + " to " + userPath);
+			if (userPath != null) {
+				if (oldUserOwncloudDirectory != null
+						&& userPath.equals(StringPool.FORWARD_SLASH
+								+ WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder()) + originalPath)) {
+					CustomSiteRootFolderLocalServiceUtil.deleteCustomSiteRootFolder(oldUserOwncloudDirectory);
+					if (_log.isInfoEnabled())
+						_log.info("Removed custom path for folder " + originalPath);
+				} else {
+					CustomSiteRootFolderLocalServiceUtil.updateCustomSiteRootFolder(user.getUserId(), originalPath,
+							userPath);
+					if (_log.isInfoEnabled()) {
+						String oldUserOwncloudDirectoryPath = (oldUserOwncloudDirectory == null) ? "null"
+								: oldUserOwncloudDirectory.getCustomPath();
+						_log.info("Set custom path for the folder " + originalPath + " and the user " + user.getLogin()
+								+ " from " + oldUserOwncloudDirectoryPath + " to " + userPath);
+					}
+				}
+			} else if (oldUserOwncloudDirectory != null) {
+				CustomSiteRootFolderLocalServiceUtil.deleteCustomSiteRootFolder(oldUserOwncloudDirectory);
+				if (_log.isInfoEnabled())
+					_log.info("Removed custom path for folder " + originalPath);
 			}
-			if (userPath != null)
-				CustomSiteRootFolderLocalServiceUtil.updateCustomSiteRootFolder(user.getUserId(), originalPath, userPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static String replaceCustomRootWithOriginalRoot(String id, long groupId) {
+		String originalRoot = getRootFolderIdFromGroupId(groupId);
+		return id.replace(getCustomRoot(originalRoot), originalRoot);
+	}
+
+	public static String getCustomRoot(String originalRoot) {
 		try {
-			String originalRoot = getRootFolderIdFromGroupId(groupId);
 			CustomSiteRootFolder customSiteRootFolder = CustomSiteRootFolderLocalServiceUtil
 					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
 							originalRoot));
 			if (customSiteRootFolder != null)
-				return id.replace(customSiteRootFolder.getCustomPath(), originalRoot);
-		} catch (Exception e) {
+				return customSiteRootFolder.getCustomPath();
+		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		return id;
+		return StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder()) + originalRoot;
+
 	}
 }

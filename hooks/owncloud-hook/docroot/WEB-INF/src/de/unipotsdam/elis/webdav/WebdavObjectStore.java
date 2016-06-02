@@ -10,19 +10,12 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.sardine.DavResource;
-import com.github.sardine.SardineFactory;
 import com.github.sardine.impl.SardineException;
-import com.github.sardine.util.SardineUtil;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
-import com.liferay.portal.kernel.portlet.LiferayPortletRequestDispatcher;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.model.User;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.repository.external.ExtRepositoryModel;
 
 import de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder;
@@ -47,7 +40,7 @@ public class WebdavObjectStore {
 	public void createFile(String documentName, String parentId, InputStream contentStream) {
 		String url = endpoint.getEndpoint() + correctRootFolder(parentId + WebdavIdUtil.encode(documentName));
 		try {
-			url = solveDuplicateFiles(endpoint, url);
+			url = solveDuplicateFiles(url);
 			_log.debug("creating file with url " + url);
 			endpoint.getSardine().put(url, contentStream);
 		} catch (IOException e) {
@@ -57,15 +50,19 @@ public class WebdavObjectStore {
 		}
 	}
 
-	private String solveDuplicateFiles(WebdavEndpoint endpoint, String completePath) throws IOException {
-		int i = 1;
-		// TODO: können die Klammern so unkodiert hinzugefügt werden? Man datei
-		// mit gleichen Namen hochladen und gucken
-		while (endpoint.getSardine().exists(completePath)) {
-			completePath += "(" + i + ")";
-			i++;
+	private String solveDuplicateFiles(String url) throws IOException {
+		String newUrl = url;
+		String urlWithoutLastSlash = StringUtils.removeEnd(url, StringPool.FORWARD_SLASH);
+		_log.debug("urlWithoutLastSlash:" + urlWithoutLastSlash);
+
+		for (int i = 2; endpoint.getSardine().exists(newUrl); i++) {
+			_log.debug("newUrl:" + newUrl);
+			newUrl = urlWithoutLastSlash
+					+ WebdavIdUtil.encode(StringPool.SPACE + StringPool.OPEN_PARENTHESIS + i
+							+ StringPool.CLOSE_PARENTHESIS);
 		}
-		return completePath;
+		_log.debug("Solved duplicate files. New url:" + newUrl);
+		return newUrl;
 	}
 
 	public WebdavFolder createFolder(String folderName, String parentId) {
@@ -99,14 +96,20 @@ public class WebdavObjectStore {
 		}
 	}
 
-	public void move(String sourceId, String destinationId) {
-		String customDestinationId = correctRootFolder(destinationId);
-		String customSourceId = correctRootFolder(sourceId);
-		_log.debug("moving " + customSourceId + " to " + customDestinationId);
+	public void move(String sourceId, String destinationId, boolean correctRoot, boolean solveDuplicates) {
+		String customDestinationId = destinationId;
+		String customSourceId = sourceId;
+		if (correctRoot) {
+			customDestinationId = correctRootFolder(destinationId);
+			customSourceId = correctRootFolder(sourceId);
+		}
 		try {
 			createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
-			endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId,
-					endpoint.getEndpoint() + customDestinationId);
+			String customDestinationUrl = endpoint.getEndpoint() + customDestinationId;
+			if (solveDuplicates)
+				customDestinationUrl = solveDuplicateFiles(endpoint.getEndpoint() + customDestinationId);
+			_log.debug("moving " + customSourceId + " to " + customDestinationUrl);
+			endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId, customDestinationUrl);
 		} catch (IOException e) {
 			// TODO: fehler abfangen?
 			e.printStackTrace();
@@ -135,16 +138,10 @@ public class WebdavObjectStore {
 					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
 					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(rootFolder)) {
 						_log.debug("Root folder does not exist");
-						OwncloudRepositoryUtil.createAndShareRootfolder(groupId, false);
-						// TODO: hier müsste auch getChildrenFromId nochmal
-						// aufgerufen werden oder?
-					} else {
-						statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, rootFolder);
-						_log.debug("Status code of share request: " + statusCode);
-						if (statusCode == HttpStatus.SC_FORBIDDEN)
-							OwncloudRepositoryUtil.setUserFolderName(rootFolder);
-						return getChildrenFromId(maxItems, skipCount, id, groupId);
+						OwncloudRepositoryUtil.createRootFolder(groupId);
 					}
+					OwncloudRepositoryUtil.shareRootFolderWithCurrentUser(groupId);
+					return getChildrenFromId(maxItems, skipCount, id, groupId);
 				}
 			}
 			handleException(e);
@@ -302,24 +299,13 @@ public class WebdavObjectStore {
 	}
 
 	private String correctRootFolder(String id) {
-		_log.debug("Correct root folder");
+		_log.debug("Correct root folder of id " + id);
 		if (endpoint.isRoot())
 			return id;
 
-		try {
-			String originalRootPath = WebdavIdUtil.getRootFolder(id);
-			CustomSiteRootFolder userOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
-					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
-							originalRootPath));
-			if (userOwncloudDirectory != null) {
-				String correctedId = id.replace(originalRootPath, userOwncloudDirectory.getCustomPath());
-				_log.debug("Corrected id: " + correctedId);
-				return correctedId;
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-
-		return id;
+		String originalRootPath = WebdavIdUtil.getRootFolder(id);
+		String correctedId = id.replace(originalRootPath, OwncloudRepositoryUtil.getCustomRoot(originalRootPath));
+		_log.debug("Corrected id: " + correctedId);
+		return correctedId;
 	}
 }
