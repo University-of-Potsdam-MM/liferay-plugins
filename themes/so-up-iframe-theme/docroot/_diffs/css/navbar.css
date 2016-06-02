@@ -88,7 +88,7 @@ ul.nav.nav-tabs {
     background-color: #d0dae3 !important;
     background-image: url("/so-up-theme/css/../images/up_icons.png") !important;
     background-repeat:no-repeat;
-    background-position:-3px -2395px;
+    background-position:-3px -2395px !important;
     border-radius: 50% !important;
     width: 30px;
     height: 30px;
@@ -101,6 +101,8 @@ ul.nav.nav-tabs {
         line-height:20px;
 
 }
+
+
 
 .nav-tabs li.active a.next {
     border: none;

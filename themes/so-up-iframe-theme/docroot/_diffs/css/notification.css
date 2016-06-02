@@ -1,5 +1,5 @@
 ul.dropdown-menu.pull-right.user-notifications-list {
-    background-color: #014260 !important;
+    background-color: #d0dae3 !important;
     border: none;
     margin-top: 21px;
 }
@@ -21,8 +21,8 @@ ul.dropdown-menu.pull-right.user-notifications-list {
     box-shadow: 0 0 0 2px #d0dae3;
 }
 
-.notifications-portlet .non-actionable .user-notification {
-    /*background-color: #fff;*/
+.dockbar-user-notifications .actionable .user-notifications-header, .dockbar-user-notifications .non-actionable .user-notifications-header {
+	background-color:#d0dae3 !important;
 }
 
 .notifications-portlet .user-notifications-list .user-notification {
@@ -47,17 +47,17 @@ ul.dropdown-menu.pull-right.user-notifications-list {
 }
 
 .aui .user-notifications-header a, .aui .user-notifications-header a:visited {
-    color: #fff;
+    color: #014260;
     text-decoration:underline;
 }
 
 .aui .user-notifications-header a:hover {
-    color: #d0dae3;
+    color: #014260;
 }
 
 
 .dockbar-user-notifications .user-notifications-header {
-    border-bottom: 1px solid #598497;
+    border-bottom: 1px solid #e2e9ee;
     min-height: 21px;
     padding: 0 10px 0px 10px;
     margin-bottom: 10px;
@@ -76,7 +76,7 @@ ul.dropdown-menu.pull-right.user-notifications-list {
   
 .dockbar-user-notifications .user-notifications-list .message, .notifications-portlet .user-notifications-list .message {
     margin: 10px 0;
-    color: #fff;
+    color: #014260;
   
 }
 
@@ -85,7 +85,7 @@ ul.dropdown-menu.pull-right.user-notifications-list {
     padding: 10px;
     position: relative;
     background-color: #fff;
-    border-bottom: 2px solid #014260 !important;
+    border-bottom: 2px solid #d0dae3 !important;
 }
 
 .aui .dockbar .nav li.dropdown.dockbar-user-notifications .dropdown-menu {

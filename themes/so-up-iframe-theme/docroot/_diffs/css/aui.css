@@ -29,8 +29,14 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 	margin: 0;
 }
 
+
+.aui .btn:hover, .aui .btn:focus {
+    color: #014260;
+}
+
 .aui body {
 	background:#fff !important;
+	color:#014260;
 }
 
 .aui .wrapper-portlet-area a {
@@ -120,10 +126,11 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 }
 
 .aui .btn {
-	font-size:.8em;
+	font-size:.9em;
 	font-family:"source sans pro", arial, sans-serif;
-	font-weight:bold;
+	font-weight:normal;
 	color:#014260;
+	text-shadow: none !important;
 }
 
 .aui .btn-group > .btn, .aui .btn-group > .dropdown-menu, .aui .btn-group > .popover {
@@ -132,7 +139,11 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 .aui .btn-group.open .dropdown-toggle {
 	background-color:#014260;
-	color:#fff;
+	
+}
+
+.aui [class^="icon-"], .aui [class*=" icon-"] {
+	font-size:14px;
 }
 
 .aui .btn-primary {
@@ -235,9 +246,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
     background-color: #dedede;
 }
 
-.aui a:hover, .aui a:focus {
-	color:#014260;
-}
+
 
 /* tabs */
 
@@ -253,19 +262,37 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 .aui .nav-tabs > .active > a, .aui .nav-tabs > .active > a:hover, .aui .nav-tabs > .active > a:focus {
     color: #014260;
     background-color: white;
-    border: 1px solid #ddd;
-    border-bottom-color: transparent;
+  	border:none;
     cursor: default;
-    font-weight: bold;
+    font-weight: bold; 
+        border-radius: 0;
+}
+
+
+.aui .nav-tabs > li:hover a {
+    background: #fff !important;
+ 
 }
 
 .aui .nav-tabs > li > a:hover, .aui .nav-tabs > li > a:focus {
     border-color: transparent;
-    font-weight: bold;
+   
+   
+}
+
+.aui .nav-tabs > li > a, .aui .nav-pills > li > a {
+	margin-right:0;
 }
 
 .aui .nav-tabs > li > a {
 	line-height:30px;
+}
+
+.aui .navbar .nav > li > a {
+
+    color: #014260;
+    font-weight: normal;
+    padding: 10px 5px 10px
 }
 
 /* navbar dropdown */
@@ -303,7 +330,7 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
 
 .aui .btn:hover, .aui .btn:focus, .aui .btn:active, .aui .btn.active, .aui .btn.disabled, .aui .btn[disabled] 
 {
-	background-color:#d0dae3;
+	background-color:#e2e9ee;
 	
 }
 
@@ -319,3 +346,25 @@ $FontAwesomePath: "aui/alloy-font-awesome/font" !default;
     box-shadow: 0 0px 0 rgba(0, 0, 0, 0.25);
 }
 
+
+/* pagination */
+
+.aui .pager li > a, .aui .pager li > span {
+	border-radius:0;
+}
+
+/* Tooltipp */
+
+.aui .tooltip-help .tooltip-inner {
+	    background-color: #fff;
+    border: 4px solid #d0dae3;
+    padding:18px;
+    color:#014260;
+}
+
+
+/* accordeaon */
+
+.aui .accordion-inner {
+	padding:0;
+}

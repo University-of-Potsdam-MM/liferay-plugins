@@ -5,17 +5,49 @@
 
 @import url(./up.css);
 
+@import url(./smallhead.css);
+
+@import url(calendar.css);
 
 @import url(activities.css);
 
+@import url(wiki.css);
+
+@import url(documents.css);
+
+@import url(microblog.css);
+
+@import url(invite_members.css);
+
+@import url(contacts.css);
+
+@import url(messages.css);
+
+@import url(tasks.css);
+
+@import  url(./blogs.css);
+
+@import  url(./login.css);
+
 @import url(./up_mobile.css);
 
+@import url(./editor-form.css);
+
 @import url(./search.css);
+
+@import url(./webcontent.css);
 
 @import url(./notification.css);
 
 @import url(./footer.css);
 
+@import url(./profile.css);
+
+@import url(./pagecomments.css);
+
+@import url(./small-column.css);
+
+/*@import url(media_queries.css);*/
 
 /* no radius, no shadow, no background-image */
 .cke_toolbar_separator, 
@@ -78,7 +110,7 @@
 
 .wrapper-portlet-area {
   width: 91%;
-  margin: 20px auto;
+  margin: 22px auto;
 }
 
 #content  {
@@ -149,7 +181,7 @@ h2.page-title {
    
 }
 .aui .breadcrumb {
-  width: 90%;
+ 
   margin: 0px auto 15px auto;
   padding: 15px 0 15px 0;
   background-color: #ededed;
@@ -215,7 +247,10 @@ h2.page-title {
 }
 
 .aui .nav-tabs>li>a {
-	border-radius: 0;
+	border:none;
+	border-radius:0;
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
 }
 /*buttons*/
 .aui .btn-primary {
@@ -252,7 +287,8 @@ h2.page-title {
 	-moz-border-radius: 0 0px 0px 0;
 	border-radius: 0 0px 0px 0;
 	border: 0px solid #D0DAE3;
-	margin-top:1px;
+    height: 30px;
+	font-size:14px;
 }
 
 .aui .btn-group>.btn:last-child,.aui .btn-group>.dropdown-toggle {
@@ -367,4 +403,8 @@ aui .btn.disabled, .aui .btn[disabled] {
 
 .sortable-layout-drag-indicator {
     background: #014260 !important;
+}
+
+.taglib-asset-tags-summary .tag {
+    background: none !important;
 }

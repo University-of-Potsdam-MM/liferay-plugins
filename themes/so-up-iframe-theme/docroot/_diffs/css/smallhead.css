@@ -1,40 +1,9 @@
 @import "up";
-@import "mixins";
-@import "compass";
 
-.mobile-only {display:none;}
+@media (min-width: 978px) {
 
 
-/* spalten 1/3 und 2/3 */
-@media only screen and (max-width: 979px) {
-
-		.aui body.signed-in #content .portlet-column.portlet-column-last {
-		float:right;
-		}
-	
-}
-
-
-@media (max-width: 767px) {
-	.aui body.signed-in #content .portlet-column.portlet-column-last {
-		float:none;
-		}
-		
-	 .aui [class*="span"], .aui .uneditable-input[class*="span"], .aui .row-fluid [class*="span"] {
-	 	width:100% !important;
-	 }
-	
-}
-
-@include respond-to(tablet, phone){
-	/* seitenpanel rechts ausblenden/nicht verfügbar */
-
-	
-	html.aui body.signed-in .dockbar-split.show-dockbar
-	{
-	
-		margin-right:0;
-	}
+	 /* html.aui body.signed-in .container-fluid.smallhead*/
 	
 	.dockbar .navbar-inner .nav > li > a.user-notification-link {
 		width:50px;
@@ -46,25 +15,27 @@
 		display:none;
 	}
 	
-	html.aui body.signed-in
+	html.aui body.signed-in .container-fluid.smallhead
 	{
+	
+	
 	
 		#sidebar
 		{
 			top:-1px;
-			border-right:none;	
+			border-right:none;
 			
 			.title
 			{
 				height:30px;
 			}
 			
-			.title:hover 
+			.title:hover
 			{
-				background-color:#e2e9ee;
+				background-color:#e3e9ee;
 			}
 			
-			
+				
 		}
 		#sidebar.show-sidebar 
 		{
@@ -154,46 +125,25 @@
 
 /*begin page */
 	
-	#wrapper
-	{
-		overflow: visible;
-		width: 100%;
-		min-height: 100%;
-		position: relative;
-		background: $upBgColor;
 	
+		
 		
 	
 		
 	.wrapper-portlet-area 
 	{
 		width:100%;
-		margin-top: 22px;
+		
 		
 		.row-fluid .span4 
 		{
 			margin-left:0;
 		}
 		
-		#heading 
-		{
-			margin-bottom: 0;
-		    width: 98%;
-		    position: absolute;
-		    right: .5em;
-		    top: 50px;
-		    
-		    h2.page-title {
-		    	margin-right:10px;
-		    }
-		    
-		    #workspace-control {
-		    	margin-top: 16px;
-		    }
-		}
+		
 		
 		#left-nav-col {
-			
+			margin-left:.6em;
 			
 			#navigation {
 				display:block;
@@ -205,15 +155,11 @@
 			padding:.3em .1em .1em .3em;
 		}
 		
-		/*.aui .portlet-column-content .portlet-body.signed-in .navbar .btn-navbar {
-			margin-top:.5em;
-		}*/
-		
-		
+				
 		
 	}/*ende wrapper portlet area*/
 	
-	} /* ende wrapper */
+
 		
 	
 	#up_logo 
@@ -566,8 +512,7 @@
 													background-color:#fff;
 												}
 												
-												span.user-notifications-count:hover
-												{
+												span.user-notifications-count:hover {
 													background-color:#d0dae3;
 												}
 											
@@ -589,21 +534,19 @@
 										 	background-color: white;
     										border-right: 1px solid #ededed;
     										margin-right:0;
-    										height:30px;
 										 	
 										 	.dockbar-user-notifications-container.open 
 										 	{
 										 		ul.dropdown-menu
 										 		{
-										 			
-										 		    margin-top: 19px !important;
+										 			width:360px;
+										 			margin-top: 6px !important;
 										 			
 										 			div 
 										 			{
 										 				li.user-notification 
 										 				{
 										 					padding: 0.26667em 0.66667em;
-										 					background-color: white;
 										 				}
 										 			}
 										 			
@@ -631,7 +574,7 @@
 								
 												} /*end a */
 												
-												a.user-avatar-link:hover 
+												a.user-avatar-link:hover
 												{
 													background-color:#d0dae3;
 												}
@@ -702,14 +645,9 @@
 	    					  						
 	    						input[type="text"]
 	    						{
-	    							
-	    						
 								    background-color: #fff;
 								    height:48px;
-								        border-right: 1px solid #ededed;
-								   
-	    						
-	    							
+								    border-right: 1px solid #ededed;
 	    						}
 	    						
 	    						
@@ -717,6 +655,7 @@
 	    						{
 	    							background-color:#d0dae3;
 	    						}
+	    						
 	    						
 	    						
 	    						input[type="text"]:focus, input[type="text"]:active
@@ -770,8 +709,8 @@
 								    border: none;
 								    border-left: 1px solid #B3BFCA;
 								    
-								    option.taglib-language-option
-								    {
+								    option {
+								    
 								    	color:#014260;
 								    	background-color:#d0dae3;
 								    }
@@ -848,7 +787,6 @@
 	    					background-color:#d0dae3;
 	    				}
 	    				
-	    				
 	    				a.services:after
 						{
 							content:"UP";
@@ -877,7 +815,7 @@
 						.dropdown-menu
 						{
 						
-							
+						
 	    					margin-top:1px;
 						}
 						
@@ -906,9 +844,9 @@
 					{
 						a 
 						{
-							  background-color:#d0dae3;
-							  border-bottom:1px solid #d0dae3;
-							  box-sizing:content-box;
+							   background-color:#d0dae3;
+							   border-bottom: 1px solid #d0dae3;
+    							box-sizing: content-box;
 						}
 					
 					} 
@@ -922,6 +860,7 @@
 				    margin-left: 8px;
 				background-color:#ededed;
 				margin-top:-46px;
+				
 				
 				
 			
@@ -1057,529 +996,4 @@
 		
 } /*end smallhead*/
 	
-
-} /*ende mobile rule */
-	
-@media (max-width: 800px) {
-	
-	
-	html.aui .lfr-admin-panel {
-		position:fixed;
-	}
-	
-	html.aui body.signed-in .wrapper-banner #up_logo {display:block; padding-top:0;}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper #main-menu.open li ul li {
-    width: 100%;
-	}
-	
-	
-	.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
-		border:none;
-	}
-	
-	html.aui body.signed-in .wrapper-portlet-area #navigation ul {display:none;}
-	
-	
-	html.aui body.signed-in .container-fluid#wrapper div#content  {
-		width: 100%;
-	    margin-left: 0;
-	    margin: 0 auto;
-	}
-	
-	html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title span.clicker {
-		display:block;
-	}
-	
-	html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title #subnav-mobile #navigation2 {
-		display:block;
-	}
-	
-	.mobile-only 
-	{
-		display:block;
-	}
-	
-	h3.mobile-only
-	{
-		color: #003f60;
-	    font-weight: normal;
-	    font-size: 2em;
-	    /* font-size: 3.4rem; */
-	    line-height: 1.4em;
-	    padding: 0px 0 15px 0;
-	    margin: 0;
-	}
-	
-	html.aui body #wrapper .wrapper-portlet-area #heading {
-		border-bottom:0;
-	}
-	
-	html.aui body #wrapper .wrapper-portlet-area #heading h2.page-title {
-		display:none;
-	}
-	
-	html.aui body.signed-in #wrapper .wrapper-portlet-area #heading ul#workspace-control {
-	
-		position: fixed;
-	    bottom: 50px;
-	    width: 100%;
-	    text-align: center;
-	    background-color: #014260;
-	    padding: 10px;
-	    box-shadow: 10px 10px 10px #ccc;
-	    z-index:1;
-	    left:0;
-	}
-}	
-	
-
-@media (max-width: 650px) {
-	
-		html.aui body.signed-in #sidebar {
-			
-		}
-		
-		html.aui body.signed-in #sidebar .title {
-			    height: 27px;
-		}
-		
-		html.aui body.signed-in #sidebar .title .arrow {
-			margin:0 auto;
-		}
-		
-		html.aui body.signed-in #sidebar.show-sidebar {
-			    height: 100%;
-			    min-width:300px;
-		}
-		
-		html.aui body.signed-in #sidebar.show-sidebar .title {
-			width:40px;
-			margin-top:0;
-		}
-		
-		html.aui body.signed-in #sidebar.show-sidebar .title span:after {
-			margin-top:0;
-		}
-		
-		html.aui body.signed-in #sidebar.show-sidebar .title .arrow {
-			margin-left:0;
-		}
-		
-		html.aui body.signed-in header#banner {
-			background-color:#ededed;
-			padding-left:0;
-		}
-	
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar {
-			float:none;
-			padding-left:0;
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar {
-			float:left;
-		}
-		
-		html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title {
-			background-color:#fff;
-		}
-		
-		 html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch input[type="text"].focus:focus
-		{
-
-			right:0;
-			z-index:20000;
-			width:73%;
-
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.dockbar-user-notifications .dockbar-user-notifications-container.open ul.dropdown-menu
-		{
-			margin-top:0 !important;
-		}
-		
-	
-		
-		html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper {
-			margin-top:-50px;
-		}
-		
-		.aui .portlet-dockbar .dockbar .navbar-inner .container .dockbar-user-notifications .user-notification {
-			background-color:#fff;
-		}
-		
-		html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title {
-			background-color:#ededed;
-			padding-bottom:20px;
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper {
-			padding-right:0;
-			margin-top:0;
-			width:auto;
-			padding-left:47px;
-			background-color:#fff;
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #languageselect #p_p_id_82_ .portlet-borderless-container .portlet-body.signed-in form .control-group select {
-			backrgound-color:#ededed;
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper ul#main-menu {
-			
-			
-			min-width: 257px;
-		}
-		
-		.aui .dockbar-split .dockbar .navbar-inner .nav > li, 
-		.aui .navbar .nav > li > a.dropdown-toggle,
-		.aui .dockbar-split .dockbar .navbar-inner .nav > li,
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #languageselect #p_p_id_82_ .portlet-borderless-container .portlet-body.signed-in form .control-group select,
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch form input[type="text"],
-		.aui .dockbar-split .dockbar .navbar-inner .nav > li,
-		html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group,
-		html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group .aui .btn,
-		html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group a,
-		.aui .dockbar-split .dockbar .navbar-inner .nav > li
-		 {
-			background-color:#ededed !important;
-		}
-		
-		
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li a.user-notification-link span.user-notifications-count
-		{
-			background-color:#d0dae3;
-		}
-		
-		html.aui body.signed-in header#banner .wrapper-banner nav#breadcrumbs {
-			margin-left:0;
-			text-align:left;
-		}
-		
-		
-		html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper ul#main-menu li {
-			font-size:90%;
-		}
-		
-		html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title span.clicker {
-			margin-top:40px;
-		}
-		
-		html.aui body.signed-in #wrapper .wrapper-portlet-area {
-    
-    		margin-top: 51px;
-		}
-		
-		
-		
-		
-	
-} /* end max width 540 */
-				
-@media (max-width: 727px) and (min-width:651px) {		
-	html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper ul#main-menu li {
-		text-indent:-50000px;
-		
-	}
-	
-	
-	html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper ul#main-menu li ul li {
-		text-indent:0px;
-		
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.dockbar-user-notifications {
-		border-left:0;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(1):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:1px -138px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		     width: 23px;
-		     height: 26px;
-		     float: left;
-		     margin-left: 30%;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:hover:nth-of-type(1):before {
-		 background-position:-58px -138px;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(2):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:-1px -184px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		     width: 20px;
-		    height: 27px;
-		    margin-left: 34%;
-		    float:left;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:hover:nth-of-type(2):before {
-		background-position:-61px -184px;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(3):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:0px -233px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		    width: 25px;
-    		height: 25px;
-    		margin-left: 32%;
-		     float: left;
-		    
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:hover:nth-of-type(3):before {
-		background-position:-60px -232px;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(1) ul li:before,
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(2) ul li:before,
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(3) ul li:before
-	{
-		display:none;
-	}
-}
-
-
-
-@media (max-width: 651px) {
-	
-	html.aui body.signed-in #sidebar {
-    margin-top: 0;
-    width:26%;
-    height:31px;
-    background-color:#d0dae3;
-    border-right:1px solid #fff;
-	}
-	
-	html.aui body.signed-in #sidebar .title {
-	    margin-top: 2px;
-	    padding: 0;
-	    width: 100%;
-	    text-align:center;
-	  
-	}	
-	
-	html.aui body.signed-in header#banner {
-	    background-color: transparent;
-	    padding-left: 0px;
-	}
-	
-	html.aui body.signed-in #up_logo #up_logo_wrapper #up_logo_title {
-		padding-top:40px;
-		background-color:#fff;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar {
-		height:30px;
-		width:75%;
-		margin-left: 25%;
-	}
-	
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper {
-		
-		height:30px;
-		width:100%;
-		padding-left: 0;
-		
-  
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ {
-		width:66%;
-		float:right;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar {
-    	width: 100%;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li {
-    	width: 50%;
-    	margin-right: 0;
-        box-sizing: border-box;
-    	border-right: 1px solid #fff;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.user-notification {
-    	width: 100%; /* muss hier important **/
-	}
-	
-	.aui .dockbar-split .dockbar .navbar-inner .nav > li > a.user-notification-link {
-		width:100% !important;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li a.user-notification-link span.user-notifications-count {
-		padding:0;
-		text-indent: 20%;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li a.user-avatar-link {
-		width: 100% !important;
-	}
-	
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.dockbar-user-notifications a.user-notification-link:after {
-   
-	    left: 30%;
-	   
-	    top: 6px;
-	}
-	
-	.aui .user-avatar .icon-caret-down:before {
-		margin-top:7px !important;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #languageselect {
-		display:none;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch {
-    	height: 30px;
-    	min-width:33%;
-    	float:none;
-    	margin-left: 1%;
-	    box-sizing: border-box;
-	    border-right: 1px solid #fff;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch form input[type="text"] {
-		width:auto;
-		height:30px;
-		background-position: center;
-		background-image: url('/so-up-theme/css/../images/search.png') !important; 
-	}
-	
-		html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch form input[type="text"].focus {
-		background-position: left;
-	
-	}
-	
-	.aui .dockbar-split .dockbar .navbar-inner .nav > li, 
-	.aui .navbar .nav > li > a.dropdown-toggle,
-	.aui .dockbar-split .dockbar .navbar-inner .nav > li,
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #languageselect #p_p_id_82_ .portlet-borderless-container .portlet-body.signed-in form .control-group select,
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #globalsearch form input[type="text"],
-	.aui .dockbar-split .dockbar .navbar-inner .nav > li,
-	html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group,
-	html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group .aui .btn,
-	html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper .btn-toolbar .btn-group a,
-	.aui .dockbar-split .dockbar .navbar-inner .nav > li{
-		background-color:#d0dae3 !important;
-	}
-	
-	
-	
-	html.aui body.signed-in header#banner .wrapper-banner #navigation-wrapper {
-		display:none;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li a.user-notification-link span.user-notifications-count,
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li a.user-avatar-link
-	 {
-		height:30px !important;
-	}
-	
-	
-	
-	
-	html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper {
-		padding-left:0;
-		margin-left:0;
-	}
-	
-	
-	html.aui body.signed-in .wrapper-portlet-area #content 
-		 {
-			width: 95%;
-    		margin: 0 auto;
-		}
-
-}
-
-
-@media (max-width: 500px) { 
-	
-	/*ab hier kein bearbeitungsmodus mehr */
-	html.aui body.signed-in #wrapper .wrapper-portlet-area #heading ul#workspace-control {
-		display:none;
-	}
-	
-}
-
-
-@media (max-width: 400px) {
-	
-		html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(1):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:1px -138px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		     width: 23px;
-		     height: 26px;
-		     float: left;
-		     margin-left: 30%;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(2):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:-1px -184px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		     width: 20px;
-		    height: 27px;
-		    margin-left: 34%;
-		    float:left;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(3):before {
-			 background-image: url("/so-up-theme/css/../images/ple-icons.png") !important;
-    		 background-position:0px -233px;
-    		 background-repeat:no-repeat;
-    		 content: ".";
-		     display: block;
-		    width: 25px;
-    		height: 25px;
-    		margin-left: 32%;
-		     float: left;
-		    
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #main-menu-wrapper ul#main-menu li {
-		font-size:0px;
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li ul li:nth-of-type(1):before,
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li ul li:nth-of-type(2):before,
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li ul li:nth-of-type(3):before
-	{
-		
-		display:none;
-		
-	}
-	
-	html.aui body.signed-in #main-menu-wrapper ul#main-menu li ul li a
-	{
-		font-size:12px;
-	}
-	
-	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.dockbar-user-notifications .dockbar-user-notifications-container.open ul.dropdown-menu{
-		width:100%;
-	}
-	
-	
-	
-}
-			
+} /*ende min width */

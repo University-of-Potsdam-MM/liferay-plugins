@@ -1,18 +1,49 @@
  @import "compass"; 
 /*custom*/
+.container-fluid#wrapper div#content  {
+	width: !00%;
+  
 
-#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title span {
-	visibility:hidden;
+  padding-left: 0px;
 }
 
-#p_p_id_upiframe_WAR_upiframeportlet_ h1.portlet-title {
-	    background: #014260;
-    height: 5px;
+.portlet-column {
+	width: 78%;
+  
+  margin-left: 22%;
 }
+
 
 .portlet-column .portlet-column-content {
 	border-width: 0 0px 0 0 !important;
 	padding-right:1em;
+}
+
+.controls-visible header.portlet-topper .portlet-info
+{
+	display:none;
+	
+}
+
+header.portlet-topper .portlet-info {
+	    line-height: .5em;
+    font-size: 1.5em;
+    /* background-color: rgba(237, 237, 237, 0.52); */
+    display: inline-block;
+    height: 100%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    /* margin: 4px; */
+    float: right;
+}
+
+header.portlet-topper .portlet-info img {
+	display:inline-block;
+	width:12px;
+	height:12px;
+	    margin-left: 8px;
+    margin-top: 4px;
 }
 
 /*hightlight portlet dropzone if empty */
@@ -25,7 +56,7 @@ body.signed-in.controls-visible .portlet-dropzone {
  
     display: block;
 
-    border: 2px dashed #d0dae3!important;
+    border: 1px dashed #d0dae3!important;
     min-height: 500px;
 }
 
@@ -35,21 +66,24 @@ body.signed-in.controls-visible .portlet-dropzone.empty:after {
     content: "Drag Application Here";
     line-height: 1.2;
     padding-top: 50px;
-    display: inline-block;
-      font-size: 2em;
-       color: #d0dae3;
+    display: block;
+    font-size: 2em;
+    color: #d0dae3;
     text-align: center;
-    width: 90%;
-    margin: 0 auto;
-    display: inline-block;
+        width: 95%;
+    height: 400px;
+    border: 1px solid #d0dae3;
+    margin: 10px auto;
+    border-top: 30px solid #d0dae3;
+        opacity: .6;
 }
 /* ---------- Portlet wrapper and icons ---------- */
 
 
 
 .portlet {
-	border: 1px solid #ededed;
-	border-bottom:1px solid #ededed !important;
+	border: none !important;
+	
 }
 
 
@@ -57,6 +91,7 @@ body.signed-in.controls-visible .portlet-dropzone.empty:after {
 	padding-left:0 !important;
 	padding-top:0 !important;
 	padding:0 !important;
+
 }
 
 
@@ -68,8 +103,19 @@ body.signed-in.controls-visible .portlet-dropzone.empty:after {
 }
 
 
-.portlet .portlet-content, .portlet .portlet-topper {
-	padding-top: .5em;
+.portlet .portlet-topper {
+	padding: .1em;
+}
+
+.portlet .portlet-content {
+	
+	    padding: 0px 0 10px 0 !important;
+    border: 1px solid #ededed;
+} 
+
+
+.aui .portlet-content .nav-tabs > .active > a:first-child {
+    border-left: 0;
 }
 
 .portlet-title {
@@ -84,7 +130,7 @@ body.signed-in.controls-visible .portlet-dropzone.empty:after {
   min-width: 100px;
  
   
-background: #ededed; 
+background: #fff; 
 }
 
 .aui .portlet-topper-toolbar .caret {
@@ -109,11 +155,7 @@ background: #ededed;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
-
-  min-width: 100px;
   text-align: left;
-  text-indent: 10px;
- 
   font-size: .6em;
   line-height: 2;
 }
@@ -155,18 +197,19 @@ background: #ededed;
 }
 
 .portlet-title-text {
-  display: inline-block;
-  max-width: 95%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  color: #014260;
-  font-family: "source sans pro", arial, helvetica, sans-serif;
-  font-weight:bold;
+      display: inline-block;
+    max-width: 95%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+    white-space: nowrap;
+    color: #014260;
+    font-family: arial, helvetica, sans-serif;
+ 
+    text-shadow: none;
 }
 .portlet-title-editable {
-  cursor: pointer;
+  cursor: text;
 }
 
 .portlet-topper .portlet-topper-toolbar a i {
@@ -265,3 +308,7 @@ box-shadow: 0px 0px 0px 0px rgba(194,192,194,1);
 	visibility:hidden;
 }
 
+
+body:first-of-type .portlet-borderless-bar .portlet-actions, body:first-of-type .portlet-content .lfr-icon-actions .taglib-text {
+	overflow:visible !important;
+}

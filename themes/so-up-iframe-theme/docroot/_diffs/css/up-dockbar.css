@@ -21,7 +21,7 @@ div#p_p_id_145_ {
     
     position: relative;
     text-align: center;
-    margin-right: 2px;
+    margin-right: 1px;
 }
 
 html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li.lang:hover {
@@ -57,7 +57,7 @@ html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.n
     position: absolute;
     z-index: 100;
     min-width: 13.33333em;
-    margin-top: 2px !important;
+    margin-top: 0px !important;
     padding: 5px 10px 10px 10px !important;
     background-color: #cfdae3;
     left:0
@@ -85,9 +85,6 @@ html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.n
     padding:0;
 }
 
-.aui .dockbar .open {
-    border-bottom: 2px solid #d0dae3;
-}
 
 .aui .dockbar li.open:last-child .dropdown-menu {
 	right:0;
@@ -106,6 +103,10 @@ html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.n
 	    padding: 0;
   
     width: 45px;
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav > li > a.user-notification-link:focus {
+    background-color:#d0dae3;
 }
 
 .aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-notification-link:hover {
@@ -129,6 +130,10 @@ html.aui body.signed-in .smallhead header#banner #uppertoolbar #position-wrapper
     padding-left: 3px;
     padding-right: 3px;
    
+}
+
+.aui .dockbar-split .dockbar .navbar-inner .nav>li>a.user-avatar-link:hover, .aui .dockbar-split .dockbar .navbar-inner .nav>li.user-avatar:hover {
+	background-color:#e2e9ee;
 }
 
 .aui .smallhead .dockbar-split .dockbar .navbar-inner .nav>li>a.user-avatar-link {
@@ -262,7 +267,7 @@ html.aui body.signed-in .smallhead header#banner #uppertoolbar #position-wrapper
 
 
 html.aui body.signed-in header#banner #p_p_id_145_ .navbar-inner ul.navbar-nav.nav-account-controls li .user-notifications-header span {
-    color: #fff !important;
+    color: #014260 !important;
 }
 
 
