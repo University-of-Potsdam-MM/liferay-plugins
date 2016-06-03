@@ -83,7 +83,7 @@ editorRolePermissions.put(PortletKeys.GROUP_PAGES, [ ActionKeys.ACCESS_IN_CONTRO
 // Resource Permissions
 editorRolePermissions.put(Group.class.getName(), [ ActionKeys.ADD_COMMUNITY,
 		ActionKeys.ADD_LAYOUT, ActionKeys.ADD_LAYOUT_BRANCH, ActionKeys.ADD_LAYOUT_SET_BRANCH,
-		ActionKeys.CONFIGURE_PORTLETS, ActionKeys.DELETE, ActionKeys.EXPORT_IMPORT_LAYOUTS,
+		ActionKeys.CONFIGURE_PORTLETS, ActionKeys.EXPORT_IMPORT_LAYOUTS,
 		ActionKeys.EXPORT_IMPORT_PORTLET_INFO, ActionKeys.MANAGE_ANNOUNCEMENTS,
 		ActionKeys.MANAGE_ARCHIVED_SETUPS, ActionKeys.MANAGE_LAYOUTS, ActionKeys.MANAGE_STAGING,
 		ActionKeys.PERMISSIONS, ActionKeys.PREVIEW_IN_DEVICE, ActionKeys.PUBLISH_STAGING,
