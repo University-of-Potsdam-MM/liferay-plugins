@@ -265,9 +265,11 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			ExtRepositoryObjectType<T> extRepositoryObjectType, String extRepositoryObjectKey,
 			String newExtRepositoryFolderKey, String newTitle) throws PortalException, SystemException {
 		_log.debug("start moveFileEntry");
+		_log.debug("newTitle " + newTitle);
+		_log.debug("newExtRepositoryFolderKey " + newExtRepositoryFolderKey);
 		WebdavObject fileToMove = new WebdavObject(extRepositoryObjectKey);
 		WebdavFolder parentFolder = new WebdavFolder(newExtRepositoryFolderKey);
-		WebdavFile dstFile = new WebdavFile(parentFolder.getExtRepositoryModelKey() + fileToMove.getName());
+		WebdavFile dstFile = new WebdavFile(parentFolder.getExtRepositoryModelKey() + WebdavIdUtil.encode(newTitle));
 
 		if (!parentFolder.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
 			_log.debug("Target parent folder does not exist. Id: " + newExtRepositoryFolderKey);
@@ -275,15 +277,13 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		}
 		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(dstFile)) {
 			_log.debug("Destination file does already exist: " + fileToMove.getName());
-			throw new DuplicateFileException("Destination file does already exist: " + fileToMove.getName());
+			throw new DuplicateFileException("Destination file does already exist: "
+					+ dstFile.getExtRepositoryModelKey());
 		}
 
 		try {
-			OwncloudRepositoryUtil.getWebdavRepositoryAsUser()
-					.move(extRepositoryObjectKey,
-							newExtRepositoryFolderKey
-									+ WebdavIdUtil.encode(WebdavIdUtil.getNameFromId(extRepositoryObjectKey)), true,
-							false);
+			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(extRepositoryObjectKey,
+					dstFile.getExtRepositoryModelKey(), true, false);
 		} catch (Exception e) {
 			if (e instanceof SardineException) {
 				int statusCode = ((SardineException) e).getStatusCode();
@@ -453,7 +453,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	public List<String> getSubfolderKeys(String arg0, boolean arg1) throws PortalException, SystemException {
 		List<String> result = new ArrayList<String>();
 		List<ExtRepositoryFolder> subfolders = getExtRepositoryObjects(ExtRepositoryObjectType.FOLDER, arg0);
-		for (ExtRepositoryFolder subfolder : subfolders){
+		for (ExtRepositoryFolder subfolder : subfolders) {
 			result.add(subfolder.getExtRepositoryModelKey());
 		}
 		return result;
