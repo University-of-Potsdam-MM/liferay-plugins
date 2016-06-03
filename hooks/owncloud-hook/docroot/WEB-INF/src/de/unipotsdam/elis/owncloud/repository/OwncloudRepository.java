@@ -404,14 +404,12 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public <T extends ExtRepositoryObject> List<T> getExtRepositoryObjects(
 			ExtRepositoryObjectType<T> extRepositoryObjectType, String extRepositoryFolderKey) throws PortalException,
 			SystemException {
 		_log.debug("start getFoldersAndFileEntries");
 
-		// List<T> childrens = (List<T>) OwncloudCacheManager.getFromCache(
-		// OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME,
-		// extRepositoryFolderKey);
 		List<T> childrens = (List<T>) OwncloudCache.getInstance().getWebdavFiles(extRepositoryFolderKey);
 
 		if (childrens == null) {
@@ -419,9 +417,6 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 					extRepositoryFolderKey, getGroupId());
 
 			OwncloudCache.getInstance().putWebdavFiles(childrens, extRepositoryFolderKey);
-			// OwncloudCacheManager.putToCache(OwncloudCacheManager.WEBDAV_CHILDREN_CACHE_NAME,
-			// extRepositoryFolderKey,
-			// childrens);
 		}
 
 		long startTime = System.nanoTime();
@@ -456,7 +451,12 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 
 	@Override
 	public List<String> getSubfolderKeys(String arg0, boolean arg1) throws PortalException, SystemException {
-		throw new UnsupportedOperationException();
+		List<String> result = new ArrayList<String>();
+		List<ExtRepositoryFolder> subfolders = getExtRepositoryObjects(ExtRepositoryObjectType.FOLDER, arg0);
+		for (ExtRepositoryFolder subfolder : subfolders){
+			result.add(subfolder.getExtRepositoryModelKey());
+		}
+		return result;
 	}
 
 	@Override
