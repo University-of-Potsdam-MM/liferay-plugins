@@ -124,14 +124,12 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public void checkInExtRepositoryFileEntry(String extRepositoryFileEntryKey, boolean createMajorVersion,
 			String changeLog) {
-
-		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public ExtRepositoryFileEntry checkOutExtRepositoryFileEntry(String extRepositoryFileEntryKey) {
 
-		throw new UnsupportedOperationException();
+		return new WebdavFile(extRepositoryFileEntryKey);
 	}
 
 	@Override
