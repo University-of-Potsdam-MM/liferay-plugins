@@ -269,21 +269,25 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		_log.debug("newExtRepositoryFolderKey " + newExtRepositoryFolderKey);
 		WebdavObject fileToMove = new WebdavObject(extRepositoryObjectKey);
 		WebdavFolder parentFolder = new WebdavFolder(newExtRepositoryFolderKey);
-		WebdavFile dstFile = new WebdavFile(parentFolder.getExtRepositoryModelKey() + WebdavIdUtil.encode(newTitle));
+		ExtRepositoryObject dstObject = null;
+		if (extRepositoryObjectType == ExtRepositoryObjectType.FOLDER)
+			dstObject = new WebdavFolder(parentFolder.getExtRepositoryModelKey() + WebdavIdUtil.encode(newTitle));
+		else 
+			dstObject = new WebdavFile(parentFolder.getExtRepositoryModelKey() + WebdavIdUtil.encode(newTitle));
 
 		if (!parentFolder.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
 			_log.debug("Target parent folder does not exist. Id: " + newExtRepositoryFolderKey);
 			throw new NoSuchFolderException("Target parent folder doesn't exist: " + newExtRepositoryFolderKey);
 		}
-		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(dstFile)) {
+		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(dstObject)) {
 			_log.debug("Destination file does already exist: " + fileToMove.getName());
 			throw new DuplicateFileException("Destination file does already exist: "
-					+ dstFile.getExtRepositoryModelKey());
+					+ dstObject.getExtRepositoryModelKey());
 		}
 
 		try {
 			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(extRepositoryObjectKey,
-					dstFile.getExtRepositoryModelKey(), true, false);
+					dstObject.getExtRepositoryModelKey(), true, false);
 		} catch (Exception e) {
 			if (e instanceof SardineException) {
 				int statusCode = ((SardineException) e).getStatusCode();
@@ -295,7 +299,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			}
 		}
 
-		return (T) dstFile;
+		return (T) dstObject;
 	}
 
 	private WebdavFile createFileWithInputStream(String title, InputStream is, WebdavFile dstFile)

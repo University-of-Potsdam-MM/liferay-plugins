@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.repository.external.ExtRepositoryModel;
+import com.liferay.repository.external.ExtRepositoryObject;
 
 import de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder;
 import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
@@ -237,7 +238,7 @@ public class WebdavObjectStore {
 		}
 	}
 
-	public boolean exists(WebdavObject folder) {
+	public boolean exists(ExtRepositoryObject folder) {
 		return exists(folder.getExtRepositoryModelKey());
 	}
 
