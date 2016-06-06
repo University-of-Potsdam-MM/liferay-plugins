@@ -97,7 +97,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 
 		WebdavFolder directory = new WebdavFolder(extRepositoryParentFolderKey);
 
-		if (directory.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
+		if (directory.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()))) {
 			// Fileable file = new File(directory, sourceFileName);
 			WebdavFile documentImpl = new WebdavFile(directory.getExtRepositoryModelKey() + title);
 			try {
@@ -118,7 +118,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public ExtRepositoryFolder addExtRepositoryFolder(String extRepositoryParentFolderKey, String name,
 			String description) throws PortalException, SystemException {
-		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser().createFolder(name, extRepositoryParentFolderKey);
+		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).createFolder(name, extRepositoryParentFolderKey);
 	}
 
 	@Override
@@ -138,16 +138,16 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			String newExtRepositoryFolderKey, String newTitle) throws PortalException, SystemException {
 		WebdavObject srcFile = (WebdavFile) new WebdavObject(extRepositoryFileEntryKey);
 		WebdavFolder destDir = (WebdavFolder) new WebdavFolder(newExtRepositoryFolderKey);
-		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(srcFile)) {
+		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).exists(srcFile)) {
 			throw new SystemException("Source file " + srcFile + " cannot be read!");
 		}
-		if (!destDir.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
+		if (!destDir.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()))) {
 			throw new SystemException("Cannot write into destination directory " + destDir);
 		}
 		String newFileId;
 		try {
 			newFileId = destDir.getExtRepositoryModelKey() + srcFile.getName();
-			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().copy(srcFile.getExtRepositoryModelKey(), newFileId);
+			OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).copy(srcFile.getExtRepositoryModelKey(), newFileId);
 			// StreamUtil.transfer(new FileInputStream(srcFile),
 			// new FileOutputStream(dstFile), true);
 			// return fileToFileEntry(dstFile);
@@ -171,10 +171,10 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			String extRepositoryObjectKey) throws PortalException, SystemException {
 
 		WebdavObject webdavObject = new WebdavObject(extRepositoryObjectKey);
-		if (!OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(webdavObject)) {
+		if (!OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).exists(webdavObject)) {
 			throw new SystemException("File doesn't exist or cannot be modified " + webdavObject);
 		}
-		OwncloudRepositoryUtil.getWebdavRepositoryAsUser().deleteDirectory(webdavObject.getExtRepositoryModelKey());
+		OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).deleteDirectory(webdavObject.getExtRepositoryModelKey());
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
 		 * System.out.println("   " + s);
 		 */
-		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser().get(extRepositoryFileEntry);
+		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).get(extRepositoryFileEntry);
 	}
 
 	@Override
@@ -199,7 +199,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
 		 * System.out.println("   " + s);
 		 */
-		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser().get(extRepositoryFileVersion);
+		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).get(extRepositoryFileVersion);
 	}
 
 	@Override
@@ -232,7 +232,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	public String getRootFolderKey() {
 		return OwncloudRepositoryUtil.getRootFolderIdFromGroupId(getGroupId());
 	}
-
+	/*
 	@Override
 	public long getGroupId() {
 		try {
@@ -246,7 +246,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			e.printStackTrace();
 		}
 		return 0;
-	}
+	}*/
 
 	@Override
 	public String[] getSupportedConfigurations() {
@@ -273,18 +273,18 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		else 
 			dstObject = new WebdavFile(parentFolder.getExtRepositoryModelKey() + WebdavIdUtil.encode(newTitle));
 
-		if (!parentFolder.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser())) {
+		if (!parentFolder.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()))) {
 			_log.debug("Target parent folder does not exist. Id: " + newExtRepositoryFolderKey);
 			throw new NoSuchFolderException("Target parent folder doesn't exist: " + newExtRepositoryFolderKey);
 		}
-		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser().exists(dstObject)) {
+		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).exists(dstObject)) {
 			_log.debug("Destination file does already exist: " + fileToMove.getName());
 			throw new DuplicateFileException("Destination file does already exist: "
 					+ dstObject.getExtRepositoryModelKey());
 		}
 
 		try {
-			OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(extRepositoryObjectKey,
+			OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).move(extRepositoryObjectKey,
 					dstObject.getExtRepositoryModelKey(), true, false);
 		} catch (Exception e) {
 			if (e instanceof SardineException) {
@@ -303,7 +303,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	private WebdavFile createFileWithInputStream(String title, InputStream is, WebdavFile dstFile)
 			throws PortalException, SystemException {
 		_log.debug("start createFileWithInputStream");
-		OwncloudRepositoryUtil.getWebdavRepositoryAsUser().createFile(title,
+		OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).createFile(title,
 				dstFile.getParentFolder().getExtRepositoryModelKey(), is);
 		_log.debug("end createFileWithInputStream");
 		return dstFile;
@@ -415,7 +415,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		List<T> childrens = (List<T>) OwncloudCache.getInstance().getWebdavFiles(extRepositoryFolderKey);
 
 		if (childrens == null) {
-			childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepositoryAsUser().getChildrenFromId(1000, 0,
+			childrens = (List<T>) OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).getChildrenFromId(1000, 0,
 					extRepositoryFolderKey, getGroupId());
 
 			OwncloudCache.getInstance().putWebdavFiles(childrens, extRepositoryFolderKey);

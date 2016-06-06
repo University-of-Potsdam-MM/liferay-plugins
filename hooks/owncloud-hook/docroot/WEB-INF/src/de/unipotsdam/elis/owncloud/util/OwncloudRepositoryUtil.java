@@ -1,6 +1,7 @@
 package de.unipotsdam.elis.owncloud.util;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.lang.StringUtils;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -34,9 +35,13 @@ public class OwncloudRepositoryUtil {
 
 	public static String getRootFolderIdFromGroupId(long groupId) {
 		try {
-			Group group = GroupLocalServiceUtil.getGroup(groupId);
-			String groupName = WebdavIdUtil.encode(group.getDescriptiveName());
-			return StringPool.FORWARD_SLASH + groupName + StringPool.FORWARD_SLASH;
+			Group group = getCorrectGroup(groupId);
+			if (group.isUser()) {
+				User user = UserLocalServiceUtil.getUser(group.getClassPK());
+				return StringPool.FORWARD_SLASH + WebdavIdUtil.encode(user.getLogin()) + StringPool.FORWARD_SLASH;
+			}
+			return StringPool.FORWARD_SLASH + WebdavIdUtil.encode(group.getDescriptiveName())
+					+ StringPool.FORWARD_SLASH;
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
@@ -62,7 +67,7 @@ public class OwncloudRepositoryUtil {
 
 	public static void createRootFolder(long groupId) {
 		String folderId = getRootFolderIdFromGroupId(groupId);
-		getWebdavRepositoryAsRoot().createFolder(folderId);
+		getWebdavRepositoryAsRoot(groupId).createFolder(folderId);
 	}
 
 	public static void shareRootFolderWithCurrentUser(long groupId) {
@@ -74,7 +79,7 @@ public class OwncloudRepositoryUtil {
 		else {
 			try {
 
-				OwncloudRepositoryUtil.getWebdavRepositoryAsUser().move(
+				OwncloudRepositoryUtil.getWebdavRepositoryAsUser(groupId).move(
 						folderId,
 						StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder())
 								+ folderId, false, true);
@@ -90,28 +95,37 @@ public class OwncloudRepositoryUtil {
 			RepositoryServiceUtil.addRepository(groupId, PortalUtil.getClassNameId(OwncloudRepository.class.getName()),
 					0, WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
 					new UnicodeProperties(), new ServiceContext());
+			if (!getCorrectGroup(groupId).isUser())
+				createRootFolder(groupId);
 		} catch (PortalException e) {
 			e.printStackTrace();
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
-		createRootFolder(groupId);
 	}
 
-	public static synchronized WebdavObjectStore getWebdavRepositoryAsRoot() {
+	public static Group getCorrectGroup(long groupId) throws PortalException, SystemException {
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+		if (group.getParentGroup() != null)
+			return group.getParentGroup();
+		return group;
+	}
+
+	public static synchronized WebdavObjectStore getWebdavRepositoryAsRoot(long groupId) {
 		_log.debug("start getWebdavRepository");
-		WebdavObjectStore result = getWebdavRepository(WebdavConfigurationLoader.getRootUsername(),
+		WebdavObjectStore result = getWebdavRepository(groupId, WebdavConfigurationLoader.getRootUsername(),
 				WebdavConfigurationLoader.getRootPassword());
 		_log.debug("end getWebdavRepository");
 		return result;
 	}
 
-	public static synchronized WebdavObjectStore getWebdavRepositoryAsUser() {
+	public static synchronized WebdavObjectStore getWebdavRepositoryAsUser(long groupId) {
 		_log.debug("start getWebdavRepository");
 		try {
 			String userLogin = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
 			System.out.println("passoooord: " + OwncloudCache.getInstance().getPassword());
-			WebdavObjectStore result = getWebdavRepository(userLogin, OwncloudCache.getInstance().getPassword());
+			WebdavObjectStore result = getWebdavRepository(groupId, userLogin, OwncloudCache.getInstance()
+					.getPassword());
 			_log.debug("end getWebdavRepository");
 			return result;
 		} catch (Exception e) {
@@ -120,9 +134,9 @@ public class OwncloudRepositoryUtil {
 		return null;
 	}
 
-	public static synchronized WebdavObjectStore getWebdavRepository(String username, String password) {
+	public static synchronized WebdavObjectStore getWebdavRepository(long groupId, String username, String password) {
 		_log.debug("start getWebdavRepository");
-		WebdavObjectStore result = new WebdavObjectStore(username, password);
+		WebdavObjectStore result = new WebdavObjectStore(groupId, username, password);
 		_log.debug("end getWebdavRepository");
 		return result;
 	}
@@ -162,7 +176,9 @@ public class OwncloudRepositoryUtil {
 		}
 	}
 
-	public static String replaceCustomRootWithOriginalRoot(String id, long groupId) {
+	public static String correctRoot(String id, long groupId) throws PortalException, SystemException {
+		if (getCorrectGroup(groupId).isUser())
+			return StringUtils.removeEnd(getRootFolderIdFromGroupId(groupId), StringPool.FORWARD_SLASH) + id;
 		String originalRoot = getRootFolderIdFromGroupId(groupId);
 		return id.replace(getCustomRoot(originalRoot), originalRoot);
 	}

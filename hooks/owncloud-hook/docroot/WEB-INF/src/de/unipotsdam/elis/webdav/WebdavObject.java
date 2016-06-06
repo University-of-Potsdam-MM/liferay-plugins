@@ -78,9 +78,4 @@ public class WebdavObject extends WebdavModel implements ExtRepositoryObject {
 		return _modifiedDate;
 	}
 
-	public void renameTo(WebdavObject dstFile) {
-		OwncloudRepositoryUtil.getWebdavRepositoryAsUser().rename(this.getExtRepositoryModelKey(),
-				dstFile.getExtRepositoryModelKey());
-	}
-
 }

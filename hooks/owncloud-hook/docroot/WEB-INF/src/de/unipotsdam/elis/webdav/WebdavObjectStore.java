@@ -11,11 +11,14 @@ import org.apache.commons.lang.StringUtils;
 
 import com.github.sardine.DavResource;
 import com.github.sardine.impl.SardineException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.repository.external.ExtRepositoryModel;
 import com.liferay.repository.external.ExtRepositoryObject;
 
@@ -33,9 +36,11 @@ public class WebdavObjectStore {
 	private static Log _log = LogFactoryUtil.getLog(WebdavObjectStore.class);
 
 	private WebdavEndpoint endpoint;
+	private long groupId;
 
-	public WebdavObjectStore(String username, String password) {
-		endpoint = new WebdavEndpoint(username, password);
+	public WebdavObjectStore(long groupId, String username, String password) {
+		this.endpoint = new WebdavEndpoint(username, password);
+		this.groupId = groupId;
 	}
 
 	public void createFile(String documentName, String parentId, InputStream contentStream) {
@@ -113,7 +118,8 @@ public class WebdavObjectStore {
 		endpoint.getSardine().move(endpoint.getEndpoint() + customSourceId, customDestinationUrl);
 	}
 
-	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id, long groupId) {
+	public List<WebdavObject> getChildrenFromId(int maxItems, int skipCount, String id, long groupId)
+			throws PortalException, SystemException {
 		long start = 0;
 		if (_log.isDebugEnabled()) {
 			_log.debug("Getting childrens from id " + correctRootFolder(id));
@@ -133,7 +139,7 @@ public class WebdavObjectStore {
 				_log.debug("Status code of webdav list request: " + statusCode);
 				if (statusCode == HttpStatus.SC_NOT_FOUND) {
 					String rootFolder = OwncloudRepositoryUtil.getRootFolderIdFromGroupId(groupId);
-					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot().exists(rootFolder)) {
+					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot(groupId).exists(rootFolder)) {
 						_log.debug("Root folder does not exist");
 						OwncloudRepositoryUtil.createRootFolder(groupId);
 					}
@@ -149,8 +155,8 @@ public class WebdavObjectStore {
 
 		while (it.hasNext()) {
 			DavResource davResource = it.next();
-			String originalId = OwncloudRepositoryUtil.replaceCustomRootWithOriginalRoot(
-					WebdavIdUtil.getIdFromDavResource(davResource), groupId);
+			String originalId = OwncloudRepositoryUtil.correctRoot(WebdavIdUtil.getIdFromDavResource(davResource),
+					groupId);
 			_log.debug("iterate childrens " + davResource.getName() + " " + originalId);
 			if (davResource.isDirectory()) {
 				WebdavFolder folderResult = new WebdavFolder(davResource, originalId);
@@ -280,18 +286,18 @@ public class WebdavObjectStore {
 			SardineException sardineException = ((SardineException) e);
 			_log.debug("Sardine exception status code: " + sardineException.getStatusCode());
 			if (sardineException.getStatusCode() == 404) {
-				OwncloudCache.getInstance().putWebdavError("folder-does-not-exist");
+				OwncloudCache.putWebdavError("folder-does-not-exist");
 				return;
 			} else if (sardineException.getStatusCode() == 401) {
 				if (OwncloudCache.getInstance().getPassword() == null) {
-					OwncloudCache.getInstance().putWebdavError("enter-password");
+					OwncloudCache.putWebdavError("enter-password");
 				} else {
-					OwncloudCache.getInstance().putWebdavError("wrong-password");
+					OwncloudCache.putWebdavError("wrong-password");
 				}
 				return;
 			}
 		}
-		OwncloudCache.getInstance().putWebdavError("no-owncloud-connection");
+		OwncloudCache.putWebdavError("no-owncloud-connection");
 	}
 
 	private String correctRootFolder(String id) {
@@ -299,9 +305,24 @@ public class WebdavObjectStore {
 		if (endpoint.isRoot())
 			return id;
 
-		String originalRootPath = WebdavIdUtil.getRootFolder(id);
-		String correctedId = id.replace(originalRootPath, OwncloudRepositoryUtil.getCustomRoot(originalRootPath));
-		_log.debug("Corrected id: " + correctedId);
-		return correctedId;
+		try {
+			String originalRootPath = WebdavIdUtil.getRootFolder(id);
+			Group group = OwncloudRepositoryUtil.getCorrectGroup(groupId);
+			String correctRoot;
+
+			if (group.isUser())
+				correctRoot = StringPool.FORWARD_SLASH;
+			else
+				correctRoot = OwncloudRepositoryUtil.getCustomRoot(originalRootPath);
+
+			String correctedId = id.replace(originalRootPath, correctRoot);
+			_log.debug("Corrected id: " + correctedId);
+			return correctedId;
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		return id;
 	}
 }
