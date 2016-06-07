@@ -72,7 +72,7 @@ public class OwncloudRepositoryUtil {
 
 	public static void shareRootFolderWithCurrentUser(long groupId) {
 		String folderId = getRootFolderIdFromGroupId(groupId);
-		int statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, folderId);
+		int statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, WebdavIdUtil.decode(folderId));
 		_log.debug("Status code of share request: " + statusCode);
 		if (statusCode == HttpStatus.SC_FORBIDDEN)
 			setCustomFolder(folderId);
