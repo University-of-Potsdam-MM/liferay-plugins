@@ -143,7 +143,10 @@ public class WebdavObjectStore {
 						_log.debug("Root folder does not exist");
 						OwncloudRepositoryUtil.createRootFolder(groupId);
 					}
-					OwncloudRepositoryUtil.shareRootFolderWithCurrentUser(groupId);
+					if (!OwncloudRepositoryUtil.shareRootFolderWithCurrentUser(groupId)) {
+						OwncloudCache.putWebdavError("unsolvable-error");
+						return folderChildren;
+					}
 					return getChildrenFromId(maxItems, skipCount, id, groupId);
 				}
 			}

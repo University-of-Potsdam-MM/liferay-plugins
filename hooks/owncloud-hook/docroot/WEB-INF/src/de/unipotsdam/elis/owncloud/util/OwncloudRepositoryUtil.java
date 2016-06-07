@@ -70,12 +70,12 @@ public class OwncloudRepositoryUtil {
 		getWebdavRepositoryAsRoot(groupId).createFolder(folderId);
 	}
 
-	public static void shareRootFolderWithCurrentUser(long groupId) {
+	public static boolean shareRootFolderWithCurrentUser(long groupId) {
 		String folderId = getRootFolderIdFromGroupId(groupId);
 		int statusCode = OwncloudShareCreator.createShareForCurrentUser(groupId, WebdavIdUtil.decode(folderId));
 		_log.debug("Status code of share request: " + statusCode);
 		if (statusCode == HttpStatus.SC_FORBIDDEN)
-			setCustomFolder(folderId);
+			return setCustomFolder(folderId);
 		else {
 			try {
 
@@ -83,8 +83,10 @@ public class OwncloudRepositoryUtil {
 						folderId,
 						StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder())
 								+ folderId, false, true);
+				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
+				return false;
 			}
 		}
 
@@ -141,15 +143,16 @@ public class OwncloudRepositoryUtil {
 		return result;
 	}
 
-	public static void setCustomFolder(String originalPath) {
+	public static boolean setCustomFolder(String originalPath) {
 		try {
 			User user = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId());
-			String userPath = OwncloudShareCreator.getSharedFolder(user.getLogin(), originalPath);
+			String userPath = WebdavIdUtil.encode(OwncloudShareCreator.getSharedFolder(user.getLogin(), originalPath));
 			CustomSiteRootFolder oldUserOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
 					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
 							originalPath));
-
-			if (userPath != null) {
+			if (userPath == null)
+				return false;
+			else {
 				if (oldUserOwncloudDirectory != null
 						&& userPath.equals(StringPool.FORWARD_SLASH
 								+ WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder()) + originalPath)) {
@@ -166,13 +169,11 @@ public class OwncloudRepositoryUtil {
 								+ " from " + oldUserOwncloudDirectoryPath + " to " + userPath);
 					}
 				}
-			} else if (oldUserOwncloudDirectory != null) {
-				CustomSiteRootFolderLocalServiceUtil.deleteCustomSiteRootFolder(oldUserOwncloudDirectory);
-				if (_log.isInfoEnabled())
-					_log.info("Removed custom path for folder " + originalPath);
+				return true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 

@@ -41,7 +41,7 @@ public class OwncloudShareCreator {
 			return createShare(user.getLogin(), filePath, deriveOwncloudPermissions(user, siteGroupId));
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		return 0;
 	}
 
@@ -61,13 +61,13 @@ public class OwncloudShareCreator {
 
 		try {
 			client.executeMethod(method);
-			
-			if (log.isInfoEnabled()){
+
+			if (log.isInfoEnabled()) {
 				log.info("Create share for folder " + filePath + " and user " + userName + ". Response:");
 				log.info(method.getResponseBodyAsString());
 			}
 			Document document = SAXReaderUtil.read(method.getResponseBodyAsString());
-			
+
 			return Integer.parseInt(document.selectSingleNode("/ocs/meta/statuscode").getText());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,8 +76,8 @@ public class OwncloudShareCreator {
 		}
 		return 0;
 	}
-	
-	public static String getSharedFolder(String userName, String path){
+
+	public static String getSharedFolder(String userName, String path) {
 		HttpClient client = new HttpClient();
 		String auth = WebdavConfigurationLoader.getRootUsername() + ":" + WebdavConfigurationLoader.getRootPassword();
 		String encoding = Base64.encodeBase64String(auth.getBytes());
@@ -85,28 +85,32 @@ public class OwncloudShareCreator {
 		GetMethod method = new GetMethod(WebdavConfigurationLoader.getOwncloudShareAddress());
 		method.setRequestHeader("Authorization", "Basic " + encoding);
 		method.setQueryString("path=" + path);
-		
+
 		try {
 			int returnCode = client.executeMethod(method);
 			String response = method.getResponseBodyAsString();
-			
-			if (log.isInfoEnabled()){
+
+			if (log.isInfoEnabled()) {
 				log.info("Getting shares for folder " + path + ". Response:");
 				log.info(response);
 			}
-			
-			if (returnCode == HttpStatus.SC_OK){
+
+			if (returnCode == HttpStatus.SC_OK) {
 				Document document = SAXReaderUtil.read(response);
-				List<Node> elementNodes = document.selectNodes("/ocs/data/element");
-				System.out.println(elementNodes.size());
-				for(Node elementNode : elementNodes){
-					Node shareWithNode = elementNode.selectSingleNode("/ocs/data/element/share_with");
-					System.out.println(shareWithNode.getText());
-					if (shareWithNode.getText().equals(userName))
-						return elementNode.selectSingleNode("/ocs/data/element/file_target").getText() + StringPool.FORWARD_SLASH;
+				List<Node> elementNodes = document.selectNodes("/ocs/data/element/share_with");
+				for (Node elementNode : elementNodes) {
+					if (log.isInfoEnabled()) {
+						log.info("shared with: " + elementNode.getText());
+					}
+					if (elementNode.getText().equals(userName)) {
+						if (log.isInfoEnabled()) {
+							log.info("file target: " + elementNode.getParent().element("file_target").getText());
+						}
+						return elementNode.getParent().element("file_target").getText() + StringPool.FORWARD_SLASH;
+					}
 				}
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
