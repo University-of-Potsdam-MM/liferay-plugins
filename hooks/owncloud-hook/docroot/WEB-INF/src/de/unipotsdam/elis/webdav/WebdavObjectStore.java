@@ -5,6 +5,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.namespace.QName;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
@@ -46,7 +50,7 @@ public class WebdavObjectStore {
 	public void createFile(String documentName, String parentId, InputStream contentStream) {
 		String url = endpoint.getEndpoint() + correctRootFolder(parentId + WebdavIdUtil.encode(documentName));
 		try {
-			url = solveDuplicateFiles(url);
+			//url = solveDuplicateFiles(url);
 			_log.debug("creating file with url " + url);
 			endpoint.getSardine().put(url, contentStream);
 		} catch (IOException e) {
@@ -158,6 +162,15 @@ public class WebdavObjectStore {
 
 		while (it.hasNext()) {
 			DavResource davResource = it.next();
+			System.out.println(davResource.getName());
+			for (Map.Entry<String, String> entry : davResource.getCustomProps().entrySet())
+			{
+			    System.out.println(entry.getKey() + "/" + entry.getValue());
+			}
+			for (Entry<QName, String> entry : davResource.getCustomPropsNS().entrySet())
+			{
+			    System.out.println(entry.getKey() + "/" + entry.getValue());
+			}
 			String originalId = OwncloudRepositoryUtil.correctRoot(WebdavIdUtil.getIdFromDavResource(davResource),
 					groupId);
 			_log.debug("iterate childrens " + davResource.getName() + " " + originalId);
