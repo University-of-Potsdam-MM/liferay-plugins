@@ -96,23 +96,19 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 			SystemException {
 
 		WebdavFolder directory = new WebdavFolder(extRepositoryParentFolderKey);
-
-		if (directory.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()))) {
-			// Fileable file = new File(directory, sourceFileName);
-			WebdavFile documentImpl = new WebdavFile(directory.getExtRepositoryModelKey() + title);
-			try {
-				documentImpl = createFileWithInputStream(title, inputStream, documentImpl);
-				_log.debug("end addFileEntry");
-				return documentImpl;
-				// StreamUtil.transfer(is, new FileOutputStream(file), true);
-				// return fileToFileEntry(file);
-			} catch (Exception ex) {
-				_log.error(ex);
-				throw new SystemException(ex);
-			}
-		} else {
-			throw new SystemException("Directory " + directory + " cannot be read!");
+		WebdavFile newFile = new WebdavFile(directory.getExtRepositoryModelKey() + title);
+		
+		if (!directory.exists(OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()))) {
+			_log.debug("Parent folder does not exist. Id: " + extRepositoryParentFolderKey);
+			throw new NoSuchFolderException("Parent folder doesn't exist: " + extRepositoryParentFolderKey);
 		}
+		if (OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).exists(newFile)) {
+			_log.debug("Destination file does already exist: " + newFile.getExtRepositoryModelKey());
+			throw new DuplicateFileException("Destination file does already exist: "
+					+ newFile.getExtRepositoryModelKey());
+		}
+
+		return createFileWithInputStream(title, inputStream, newFile);
 	}
 
 	@Override
@@ -300,8 +296,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 		return (T) dstObject;
 	}
 
-	private WebdavFile createFileWithInputStream(String title, InputStream is, WebdavFile dstFile)
-			throws PortalException, SystemException {
+	private WebdavFile createFileWithInputStream(String title, InputStream is, WebdavFile dstFile) {
 		_log.debug("start createFileWithInputStream");
 		OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).createFile(title,
 				dstFile.getParentFolder().getExtRepositoryModelKey(), is);
