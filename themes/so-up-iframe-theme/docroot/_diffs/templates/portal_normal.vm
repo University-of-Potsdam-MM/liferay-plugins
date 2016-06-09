@@ -30,92 +30,10 @@
 			</div>
 		</div>
 	#end
-	<header id="mobile-menu">
-		<div id="up-menu">
-			#if ($is_signed_in)
-			<div class="main">
-				<div class="mainnavi-mobile-wrapper">
-				<a href="#grouproom-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger ">
-					<span class="icon grouproom"></span></a>
-				<a href="#personal-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
-					<span class="icon personal"></span></a>
-				<a href="#contact-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
-					<span class="icon profile"></span></a>
-				<a href="#portfolio-trigger" class="mobile-menu aui-button aui-style-default aui-dropdown2-trigger">
-					<span class="icon portfolio"></span></a>
-				</div>
-			</div>
-			#end
-		</div>
-
-		<div id="grouproom-trigger" class="submenu aui-style-default aui-dropdown hidden">
-			#if ($is_signed_in)
-				<ul class="aui-list-truncate">
-					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($personalAreaSection = 0)
-						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
-							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
-						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 1)
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-						#end
-					#end
-				</ul>
-			#end
-		</div>
-
-		<div id="personal-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
-			#if ($is_signed_in)
-				<ul class="aui-list-truncate">
-					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($personalAreaSection = 0)
-						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
-							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
-						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 2)
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-						#end
-					#end
-				</ul>
-			#end
-		</div>		
-
-		<div id="contact-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
-			#if ($is_signed_in)
-				<ul class="aui-list-truncate">
-						#foreach ($myLayout in $myPublicLayouts)
-							#if (!$myLayout.getName($themeDisplay.getLocale()).equals("Portfolio") && $myLayout.isRootLayout() && !$myLayout.isHidden())
-								<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-							#end
-						#end
-				</ul>
-			#end
-		</div>
-		
-		<div id="portfolio-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
-			#if ($is_signed_in)
-				<ul class="aui-list-truncate">
-					#foreach ($myLayout in $myPrivateLayouts)
-						#set ($personalAreaSection = 0)
-						#if ($myLayout.getExpandoBridge().hasAttribute("PersonalAreaSection"))
-							#set ($personalAreaSection = $myLayout.getExpandoBridge().getAttribute("PersonalAreaSection"))
-						#end
-						#if ($myLayout.isRootLayout() && !$myLayout.isHidden() && $personalAreaSection == 3)
-							<li><a href="$portalUtil.getLayoutURL($myLayout, $themeDisplay)">$myLayout.getName($themeDisplay.getLocale())</a></li>
-						#end
-					#end
-				</ul>
-			#end
-		</div>
-		<div id="services-trigger" class="submenu aui-style-default aui-dropdown2 hidden">
-			<ul class="aui-list-truncate">
-				<li></li>
-			</ul>
-		</div>
-	</header>
-
+	
 	<header id="banner" role="banner">
 		<div class="" id="up_section_indicator"></div>
+		<div class="wrapper-banner">
 	
  		<div id="uppertoolbar">
  			<div id="position-wrapper">
@@ -141,11 +59,8 @@
 	      		 <div class="btn-toolbar">
 	      			<!-- Help Button -->
 	      			<div class="btn-group">
-	      				<a class="btn dropdown-toggle help" data-toggle="dropdown" href="#">#language("help")<span class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<li><a href="/">Hilfethema I</a></li>
-								<li><a href="/">Hilfethema II</a></li>
-							</ul>
+	      				<a class="btn help" href="$portal_url/web/guest/#language("help")">#language("help")</a>
+							
 					</div><!-- /btn-group -->
 	      			
 	      			<!-- UP Services -->
@@ -233,46 +148,11 @@
 	
 		<nav id="breadcrumbs">#breadcrumbs()</nav>
 		<div class="clear-left"></div>	
+		</div>
 	</header>  
 	<div class="wrapper-portlet-area">	
-		<div id="heading">
-			
-			<h2 class="page-title">	$site_name</h2>		
 		
-			#if ($is_signed_in)
-				#if (((!$page_group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_edit_controls || $show_preview_controls || $show_toggle_controls)))		
-				<ul id="workspace-control">
-					#if ($show_edit_controls)
-						<li style="display: none;">
-							<a id="editPage" class="btn" href="javascript:;"><span>#language("edit-page")</span></a>
-						</li>
-					#end
-					#if ($has_layout_update_permission || ($layoutTypePortlet.isCustomizable() && $layoutTypePortlet.isCustomizedView()))
-						<li style="display: none;">
-							<a id="addApplication" class="btn" href="javascript:;"><span>#language("add-application")</span></a>
-						</li>
-					#end
-					<li id="toggle-controls-botton" >
-						<a class="toggle-controls btn workspace" href="javascript:void(0);"><span>#language("so-up-theme-workspace-configure")</span>
-						</a>
-					</li>
-					#end
-					#if ($isOmniAdmin)
-					<li>
-						<a href="$control_panel_url" class="btn">
-							<div id="adminbox">
-								<span class="admin"></span>Administration
-							</div>
-						</a>
-					</li>
-				</ul>
-				
-				#end
-			#end
-			
-		</div>
 		
-			<div style="clear:both"></div>	
 		
 
 		<div id="content">
