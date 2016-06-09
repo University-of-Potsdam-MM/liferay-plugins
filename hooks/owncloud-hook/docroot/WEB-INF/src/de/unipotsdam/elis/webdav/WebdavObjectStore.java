@@ -135,8 +135,9 @@ public class WebdavObjectStore {
 
 		// converts webdav result to CMIS type of files
 		List<DavResource> resources;
+		String correctedId = correctRootFolder(id);
 		try {
-			resources = getResourcesFromId(correctRootFolder(id), false);
+			resources = getResourcesFromId(correctedId, false);
 		} catch (IOException e) {
 			if (e instanceof SardineException) {
 				int statusCode = ((SardineException) e).getStatusCode();
@@ -148,9 +149,16 @@ public class WebdavObjectStore {
 						OwncloudRepositoryUtil.createRootFolder(groupId);
 					}
 					if (!OwncloudRepositoryUtil.shareRootFolderWithCurrentUser(groupId)) {
+						_log.debug("Unsolvable error");
 						OwncloudCache.putWebdavError("unsolvable-error");
 						return folderChildren;
 					}
+					if (!OwncloudRepositoryUtil.getWebdavRepositoryAsRoot(groupId).exists(id)){
+						_log.debug("Folder doesn't exist: " + id);
+						OwncloudCache.putWebdavError("folder-does-not-exist");
+						return folderChildren;
+					}
+						
 					return getChildrenFromId(maxItems, skipCount, id, groupId);
 				}
 			}
