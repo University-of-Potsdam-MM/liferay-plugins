@@ -119,7 +119,7 @@ else {
 					Map<String, Object> dataView = new HashMap<String, Object>();
 					
 					List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, searchContainer.getStart(), searchContainer.getEnd());
-					System.out.println(scopeGroupId + " " + mountFolders.size());
+
 					if (mountFolders.size() > 0){
 						navigation = String.valueOf(mountFolders.get(0).getFolderId());
 					}

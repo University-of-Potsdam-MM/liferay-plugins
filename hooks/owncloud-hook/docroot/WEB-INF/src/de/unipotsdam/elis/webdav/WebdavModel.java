@@ -64,7 +64,6 @@ public class WebdavModel implements ExtRepositoryModel {
 
 	@Override
 	public long getSize() {
-		System.out.println("size: " + _size);
 		return _size;
 	}
 

@@ -143,11 +143,9 @@ public class OwncloudCache implements Cloneable {
 	}
 
 	public void putPassword(String password) {
-
 		if (_log.isInfoEnabled()) {
 			_log.info("Put password of user with the " + PrincipalThreadLocal.getUserId());
 		}
-		System.out.println("put password: " + password);
 
 		try {
 			Company company = CompanyLocalServiceUtil.getCompany(PortalUtil.getDefaultCompanyId());

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012 TomÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ PoleÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ovskÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â½
+ * Copyright (c) 2012 TomÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ PoleÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ovskÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -193,20 +193,12 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements ExtRepos
 	@Override
 	public InputStream getContentStream(ExtRepositoryFileEntry extRepositoryFileEntry) throws PortalException,
 			SystemException {
-		/*
-		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
-		 * System.out.println("   " + s);
-		 */
 		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).get(extRepositoryFileEntry);
 	}
 
 	@Override
 	public InputStream getContentStream(ExtRepositoryFileVersion extRepositoryFileVersion) throws PortalException,
 			SystemException {
-		/*
-		 * for (StackTraceElement s : Thread.currentThread().getStackTrace())
-		 * System.out.println("   " + s);
-		 */
 		return OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId()).get(extRepositoryFileVersion);
 	}
 

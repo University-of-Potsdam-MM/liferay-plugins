@@ -16,8 +16,6 @@
 
 <%@ include file="/html/portlet/document_library/init.jsp" %>
 
-<% System.out.println("jojojo"); %>
-
 <liferay-ui:header
 	backURL="javascript:history.go(-1);"
 	title="error"

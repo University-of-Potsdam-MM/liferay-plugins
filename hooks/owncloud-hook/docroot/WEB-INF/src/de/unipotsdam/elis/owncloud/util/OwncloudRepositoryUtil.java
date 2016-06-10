@@ -111,7 +111,6 @@ public class OwncloudRepositoryUtil {
 		_log.debug("start getWebdavRepository");
 		try {
 			String userLogin = UserLocalServiceUtil.getUser(PrincipalThreadLocal.getUserId()).getLogin();
-			System.out.println("passoooord: " + OwncloudCache.getInstance().getPassword());
 			WebdavObjectStore result = getWebdavRepository(groupId, userLogin, OwncloudCache.getInstance()
 					.getPassword());
 			_log.debug("end getWebdavRepository");

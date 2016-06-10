@@ -30,7 +30,6 @@ String navigation = ParamUtil.getString(request, "navigation", "home");
 Folder folder = (Folder)request.getAttribute(WebKeys.DOCUMENT_LIBRARY_FOLDER);
 
 long folderId = GetterUtil.getLong((String)request.getAttribute("view.jsp-folderId"));
-System.out.println("folderId " + request.getAttribute("test123"));
 
 long repositoryId = GetterUtil.getLong((String)request.getAttribute("view.jsp-repositoryId"));
 
@@ -344,13 +343,6 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 	String owncloudError = null;
 	if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)) 
 		owncloudError = getErrorMethod.invoke(owncloudCacheObject).toString();
-	System.out.println(isOwncloudRepository);
-	System.out.println(owncloudError);
-	System.out.println("results: " + results.isEmpty());
-	System.out.println("navigaton:" + navigation);
-	System.out.println("repositoryId " + repositoryId);
-	System.out.println("folderId " + folderId);
-	
 %>
 
 <c:if test="<%= results.isEmpty() %>">

@@ -112,7 +112,7 @@ public class WebdavObjectStore {
 
 		String webdavPath = endpoint.getEndpoint() + id;
 		if (!endpoint.getSardine().exists(webdavPath)) {
-			// TODO: exist nÃoetig?
+			// TODO: exist nÃƒoetig?
 			endpoint.getSardine().createDirectory(webdavPath);
 		}
 	}
@@ -181,15 +181,6 @@ public class WebdavObjectStore {
 
 		while (it.hasNext()) {
 			DavResource davResource = it.next();
-			System.out.println(davResource.getName());
-			for (Map.Entry<String, String> entry : davResource.getCustomProps().entrySet())
-			{
-			    System.out.println(entry.getKey() + "/" + entry.getValue());
-			}
-			for (Entry<QName, String> entry : davResource.getCustomPropsNS().entrySet())
-			{
-			    System.out.println(entry.getKey() + "/" + entry.getValue());
-			}
 			String originalId = OwncloudRepositoryUtil.correctRoot(WebdavIdUtil.getIdFromDavResource(davResource),
 					groupId);
 			_log.debug("iterate childrens " + davResource.getName() + " " + originalId);
