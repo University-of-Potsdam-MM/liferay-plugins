@@ -29,11 +29,9 @@ public class CustomEditFolderAction implements StrutsPortletAction {
 		try {
 			originalStrutsPortletAction.processAction(portletConfig, actionRequest, actionResponse);
 		} catch (SystemException e) {
-			System.out.println(e.getCause());
-			if (e.getCause() != null && e.getCause() instanceof DuplicateFolderNameException){
-			System.out.println(e.getCause().getClass());
-			SessionErrors.add(actionRequest, e.getCause().getClass());
-			setForward(actionRequest, "portlet.document_library.error");
+			if (e.getCause() != null && e.getCause() instanceof DuplicateFolderNameException) {
+				SessionErrors.add(actionRequest, e.getCause().getClass());
+				setForward(actionRequest, "portlet.document_library.error");
 			}
 		}
 	}

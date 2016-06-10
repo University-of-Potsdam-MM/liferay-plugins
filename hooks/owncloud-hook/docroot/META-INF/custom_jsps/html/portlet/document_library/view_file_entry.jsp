@@ -126,7 +126,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 	</c:if>
 
 	<aui:row>
-		<aui:col cssClass="lfr-asset-column-details" width="<%= 70 %>">
+		<aui:col cssClass="lfr-asset-column-details" width="<%= 100 %>">
 			<c:if test="<%= showActions %>">
 				<liferay-ui:app-view-toolbar>
 					<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "fileEntryToolbar" %>' />
@@ -194,6 +194,22 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							<img alt="<liferay-ui:message key="thumbnail" />" border="no" class="thumbnail" src="<%= thumbnailSrc %>" style="max-height: <%= PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_HEIGHT %>px; max-width: <%= PropsValues.DL_FILE_ENTRY_THUMBNAIL_MAX_WIDTH %>px;" />
 						</span>
 
+						<%-- BEGIN HOOK CHANGE --%>
+						
+						<div class="asset-details-content">
+
+							<div class="lfr-asset-icon lfr-asset-date">
+								<%= dateFormatDateTime.format(fileVersion.getModifiedDate()) %>
+							</div>
+
+							<c:if test="<%= Validator.isNotNull(fileVersion.getDescription()) %>">
+								<blockquote class="lfr-asset-description">
+									<%= HtmlUtil.escape(fileVersion.getDescription()) %>
+								</blockquote>
+							</c:if>
+						</div>
+						
+						<%-- 
 						<span class="user-date">
 
 							<%
@@ -208,7 +224,11 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 
 							<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {displayURL, HtmlUtil.escape(fileEntry.getUserName()), dateFormatDateTime.format(fileEntry.getCreateDate())}) %>' />
 						</span>
-
+ 						--%>
+ 						
+ 						
+ 						
+						<%-- END HOOK CHANGE --%>
 						<c:if test="<%= enableRatings && fileEntry.isSupportsSocial() %>">
 							<span class="lfr-asset-ratings">
 								<liferay-ui:ratings
@@ -437,6 +457,8 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 			</div>
 		</aui:col>
 
+		<%-- BEGIN HOOK CHANGE --%>
+		<%--
 		<aui:col cssClass="lfr-asset-column-details context-pane" last="<%= true %>" width="<%= 30 %>">
 			<div class="body-row asset-details">
 				<c:if test="<%= showAssetMetadata %>">
@@ -749,6 +771,8 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 				</div>
 			</div>
 		</aui:col>
+		--%>
+		<%-- END HOOK CHANGE --%>
 	</aui:row>
 </div>
 
