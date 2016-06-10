@@ -39,4 +39,6 @@
 		owncloudCacheObject = getInstanceMethod.invoke(null);
 		getErrorMethod = owncloudCacheClass.getMethod("getError");
 	}
+	
+	showFoldersSearch = false;
 %>
