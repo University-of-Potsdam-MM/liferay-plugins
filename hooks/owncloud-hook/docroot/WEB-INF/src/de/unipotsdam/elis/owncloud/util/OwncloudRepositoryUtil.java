@@ -3,6 +3,7 @@ package de.unipotsdam.elis.owncloud.util;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang.StringUtils;
 
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -49,22 +50,7 @@ public class OwncloudRepositoryUtil {
 		}
 		return StringPool.BLANK;
 	}
-
-	public static String getCustomRootFolderFromOriginalRoot(String originalPath) {
-		try {
-			CustomSiteRootFolder userOwncloudDirectory = CustomSiteRootFolderLocalServiceUtil
-					.fetchCustomSiteRootFolder(new CustomSiteRootFolderPK(PrincipalThreadLocal.getUserId(),
-							originalPath));
-
-			if (userOwncloudDirectory != null) {
-				return userOwncloudDirectory.getCustomPath();
-			}
-		} catch (SystemException e) {
-			e.printStackTrace();
-		}
-		return originalPath;
-	}
-
+	
 	public static void createRootFolder(long groupId) {
 		String folderId = getRootFolderIdFromGroupId(groupId);
 		getWebdavRepositoryAsRoot(groupId).createFolder(folderId);
@@ -195,6 +181,13 @@ public class OwncloudRepositoryUtil {
 			e.printStackTrace();
 		}
 		return StringPool.FORWARD_SLASH + WebdavIdUtil.encode(WebdavConfigurationLoader.getRootFolder()) + originalRoot;
+	}
 
+	public static String liferayIdToWebdavId(long groupId, String liferayId) throws PortalException, SystemException {
+		if (getCorrectGroup(groupId).isUser())
+			return StringPool.FORWARD_SLASH
+					+ StringUtil.replaceFirst(liferayId, WebdavIdUtil.getRootFolder(liferayId), "");
+		else
+			return correctRoot(liferayId, groupId);
 	}
 }

@@ -14,4 +14,8 @@
         <struts-action-path>/document_library/view</struts-action-path>
         <struts-action-impl>de.unipotsdam.elis.portlet.documentslibrary.action.CustomStrutsAction</struts-action-impl>
     </struts-action>
+    <struts-action>
+        <struts-action-path>/document_library/edit_folder</struts-action-path>
+        <struts-action-impl>de.unipotsdam.elis.portlet.documentslibrary.action.CustomEditFolderAction</struts-action-impl>
+    </struts-action>
 </hook>
