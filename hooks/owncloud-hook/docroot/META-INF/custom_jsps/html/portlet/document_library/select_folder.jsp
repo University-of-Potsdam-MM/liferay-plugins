@@ -29,8 +29,12 @@ String folderName = LanguageUtil.get(pageContext, "home");
 if (folder != null) {
 	repositoryId = folder.getRepositoryId();
 	folderName = folder.getName();
-
-	DLUtil.addPortletBreadcrumbEntries(folder, request, renderResponse);
+	
+	// HOOK CHANGE BEGIN
+	PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
+	portletURLnew.setParameter("struts_action", "/document_library/view");
+	DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
+	// HOOK CHANGE END
 }
 %>
 
@@ -38,8 +42,11 @@ if (folder != null) {
 	<liferay-ui:header
 		title="home"
 	/>
-
-	<liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" />
+	
+	<%-- HOOK CHANGE BEGIN --%>
+	<%-- <liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" /> --%>
+	<liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" />
+	<%-- HOOK CHANGE END --%>
 
 	<aui:button-row>
 		<c:if test="<%= showAddFolderButton && DLFolderPermission.contains(permissionChecker, repositoryId, folderId, ActionKeys.ADD_FOLDER) %>">
