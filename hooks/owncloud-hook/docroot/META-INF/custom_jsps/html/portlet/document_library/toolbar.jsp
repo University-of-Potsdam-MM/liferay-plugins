@@ -42,7 +42,9 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 	<aui:nav id="toolbarContainer">
 		<aui:nav-item cssClass="hide" dropdown="<%= true %>" id="actionsButtonContainer" label="actions">
 			<c:if test="<%= !scopeGroup.isStaged() || scopeGroup.isStagingGroup() || !scopeGroup.isStagedPortlet(PortletKeys.DOCUMENT_LIBRARY) %>">
-
+				
+				<%-- BEGIN HOOK CHANGE --%>
+				<%--
 				<%
 				String taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.CANCEL_CHECKOUT + "'}); void(0);";
 				%>
@@ -58,12 +60,14 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 				<%
 				taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.CHECKOUT + "'}); void(0);";
 				%>
-
+				
 				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-signout" label="checkout[document]" />
-
+				--%>
+				
 				<%
-				taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.MOVE + "'}); void(0);";
-				%>
+				String taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.MOVE + "'}); void(0);";
+				%> 
+				<%-- END HOOK CHANGE --%>
 
 				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-move" label="move" />
 			</c:if>
