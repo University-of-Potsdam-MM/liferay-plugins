@@ -32,7 +32,7 @@ if (folder != null) {
 	
 	// HOOK CHANGE BEGIN
 	PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
-	portletURLnew.setParameter("struts_action", "/document_library/view");
+	portletURLnew.setParameter("struts_action", "/document_library/select_folder");
 	DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
 	// HOOK CHANGE END
 }
