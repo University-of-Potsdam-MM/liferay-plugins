@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping default-lazy="false" auto-import="false">
+	<import class="de.unipotsdam.elis.owncloud.model.CustomSiteRootFolder" />
+	<class name="de.unipotsdam.elis.owncloud.model.impl.CustomSiteRootFolderImpl" table="Owncloud_CustomSiteRootFolder">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="de.unipotsdam.elis.owncloud.service.persistence.CustomSiteRootFolderPK">
+			<key-property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+			<key-property name="originalPath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
+		<property name="customPath" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+</hibernate-mapping>

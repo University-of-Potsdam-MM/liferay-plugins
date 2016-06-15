@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="de.unipotsdam.elis.owncloud">
+	<author>Matthias</author>
+	<namespace>Owncloud</namespace>
+
+	<entity local-service="true" remote-service="false" name="CustomSiteRootFolder">
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+        <column name="userId" type="long" primary="true"></column>
+        <column name="originalPath" type="String" primary="true"></column>
+        <column name="customPath" type="String"></column>
+	</entity>
+</service-builder>

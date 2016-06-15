@@ -9,35 +9,37 @@ import com.liferay.repository.external.ExtRepositoryFolder;
 
 public class WebdavFolder extends WebdavObject implements ExtRepositoryFolder {
 	private static Log _log = LogFactoryUtil.getLog(WebdavFolder.class);
-	
+
 	private String repositoryId;
 
-	public WebdavFolder(DavResource davResource) {
-		super(davResource);
+	public WebdavFolder(DavResource davResource, String originalId) {
+		super(davResource, originalId);
 	}
 
-	public WebdavFolder(String encodedId) {
-		super(encodedId);
+	public WebdavFolder(String id) {
+		super(id);
 	}
-	
+
 	public String getAbsolutePath() {
 		return getExtRepositoryModelKey();
 	}
-	
+
 	public Boolean exists(WebdavObjectStore objectStore) {
 		return objectStore.exists(this);
 	}
 
 	@Override
 	public boolean isRoot() {
-		// TODO 
-		_log.debug("isroot: " + getExtRepositoryModelKey() + " " + (StringUtils.countMatches(getExtRepositoryModelKey(), "/") == 2));
+		// TODO
+		_log.debug("isroot: " + getExtRepositoryModelKey() + " "
+				+ (StringUtils.countMatches(getExtRepositoryModelKey(), "/") == 2));
 		return StringUtils.countMatches(getExtRepositoryModelKey(), "/") == 2;
 	}
-	
+
 	public String getRepositoryId() {
 		return repositoryId;
 	}
+
 	public void setRepositoryId(String repositoryId) {
 		this.repositoryId = repositoryId;
 	}

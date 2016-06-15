@@ -339,9 +339,18 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 	</c:if>
 </div>
 
+<% 
+	String owncloudError = null;
+	if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)) 
+		owncloudError = getErrorMethod.invoke(owncloudCacheObject).toString();
+%>
+
 <c:if test="<%= results.isEmpty() %>">
 	<div class="entries-empty alert alert-info">
 		<c:choose>
+			<c:when test="<%= owncloudError != null%>">
+				<liferay-ui:message key="<%= owncloudError %>" />
+			</c:when>
 			<c:when test="<%= (fileEntryTypeId >= 0) %>">
 				<liferay-ui:message arguments="<%= HtmlUtil.escape(dlFileEntryTypeName) %>" key="there-are-no-documents-or-media-files-of-type-x" />
 			</c:when>
@@ -350,6 +359,11 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 			</c:otherwise>
 		</c:choose>
 	</div>
+	<c:choose>
+		<c:when test="<%= (owncloudError != null) && (owncloudError.equals(\"enter-password\") || owncloudError.equals(\"wrong-password\")) %>">
+			<liferay-util:include page="/html/portlet/document_library/password_form.jsp" />
+		</c:when>
+	</c:choose>
 </c:if>
 
 <%

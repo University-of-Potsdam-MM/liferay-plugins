@@ -112,6 +112,7 @@ else {
 
 			<c:choose>
 				<c:when test='<%= (((folderId == rootFolderId) && !expandFolder) || ((folder != null) && (folder.isRoot() && !folder.isDefaultRepository() && !expandFolder))) && !browseBy.equals("file-entry-type") %>'>
+					
 					<liferay-portlet:renderURL varImpl="viewDocumentsHomeURL">
 						<portlet:param name="struts_action" value="/document_library/view" />
 						<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
@@ -120,7 +121,7 @@ else {
 						<portlet:param name="folderStart" value="0" />
 						<portlet:param name="folderEnd" value="<%= String.valueOf(folderEnd - folderStart) %>" />
 					</liferay-portlet:renderURL>
-
+					
 					<%
 					String navigation = ParamUtil.getString(request, "navigation", "home");
 
@@ -129,13 +130,13 @@ else {
 					request.setAttribute("view_entries.jsp-repositoryId", String.valueOf(repositoryId));
 
 					Map<String, Object> dataView = new HashMap<String, Object>();
-
+					
 					dataView.put("folder", true);
 					dataView.put("folder-id", rootFolderId);
 					dataView.put("navigation", "home");
 					dataView.put("title", LanguageUtil.get(pageContext, "home"));
 					%>
-
+					
 					<liferay-ui:app-view-navigation-entry
 						actionJsp="/html/portlet/document_library/folder_action.jsp"
 						dataView="<%= dataView %>"
@@ -144,6 +145,83 @@ else {
 						selected='<%= (navigation.equals("home") && (folderId == rootFolderId) && (fileEntryTypeId == -1)) %>'
 						viewURL="<%= viewDocumentsHomeURL.toString() %>"
 					/>
+					
+					<%
+					
+					List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, searchContainer.getStart(), searchContainer.getEnd());
+					
+					for (Folder mountFolder : mountFolders) {
+						request.setAttribute("view_entries.jsp-folder", mountFolder);
+						request.setAttribute("view_entries.jsp-folderId", String.valueOf(mountFolder.getFolderId()));
+						request.setAttribute("view_entries.jsp-folderSelected", String.valueOf(folderId == mountFolder.getFolderId()));
+						request.setAttribute("view_entries.jsp-repositoryId", String.valueOf(mountFolder.getRepositoryId()));
+
+						try {
+					%>
+
+							<liferay-portlet:renderURL varImpl="viewURL">
+								<portlet:param name="struts_action" value="/document_library/view" />
+								<portlet:param name="folderId" value="<%= String.valueOf(mountFolder.getFolderId()) %>" />
+								<portlet:param name="entryStart" value="0" />
+								<portlet:param name="entryEnd" value="<%= String.valueOf(entryEnd - entryStart) %>" />
+								<portlet:param name="folderStart" value="0" />
+								<portlet:param name="folderEnd" value="<%= String.valueOf(folderEnd - folderStart) %>" />
+							</liferay-portlet:renderURL>
+
+							<% 
+							dataView = new HashMap<String, Object>();
+
+							dataView.put("folder", true);
+							dataView.put("folder-id", mountFolder.getFolderId());
+							dataView.put("repository-id", mountFolder.getRepositoryId());
+							dataView.put("title", mountFolder.getName());
+							%>
+
+							<liferay-ui:app-view-navigation-entry
+								actionJsp="/html/portlet/document_library/folder_action.jsp"
+								dataView="<%= dataView %>"
+								entryTitle="<%= mountFolder.getName() %>"
+								iconImage="icon-hdd"
+								selected="<%= (navigation.equals(String.valueOf(mountFolder.getFolderId()))) %>"
+								viewURL="<%= viewURL.toString() %>"
+							/>
+
+						<%
+						}
+						catch (Exception e) {
+							if (permissionChecker.isContentReviewer(user.getCompanyId(), scopeGroupId)) {
+								String errorMessage = null;
+
+								if (e instanceof PrincipalException) {
+									errorMessage = "an-authentication-error-occurred-while-connecting-to-the-repository";
+								}
+								else {
+									errorMessage = "an-unexpected-error-occurred-while-connecting-to-the-repository";
+								}
+						%>
+
+								<li class="app-view-navigation-entry folder error" title="<%= LanguageUtil.get(pageContext, errorMessage) %>">
+
+									<%
+									request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
+									%>
+
+									<liferay-util:include page="/html/portlet/document_library/folder_action.jsp" />
+
+									<span class="browse-folder">
+										<liferay-ui:icon alt="drive-error" image="drive_error" />
+
+										<span class="entry-title">
+											<%= HtmlUtil.escape(mountFolder.getName()) %>
+										</span>
+									</span>
+								</li>
+
+					<%
+							}
+						}
+					}
+					%>
 
 					<c:if test="<%= rootFolderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID %>">
 						<liferay-portlet:renderURL varImpl="viewRecentDocumentsURL">
@@ -225,82 +303,6 @@ else {
 							/>
 						</c:if>
 					</c:if>
-
-					<%
-					List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, searchContainer.getStart(), searchContainer.getEnd());
-
-					for (Folder mountFolder : mountFolders) {
-						request.setAttribute("view_entries.jsp-folder", mountFolder);
-						request.setAttribute("view_entries.jsp-folderId", String.valueOf(mountFolder.getFolderId()));
-						request.setAttribute("view_entries.jsp-folderSelected", String.valueOf(folderId == mountFolder.getFolderId()));
-						request.setAttribute("view_entries.jsp-repositoryId", String.valueOf(mountFolder.getRepositoryId()));
-
-						try {
-					%>
-
-							<liferay-portlet:renderURL varImpl="viewURL">
-								<portlet:param name="struts_action" value="/document_library/view" />
-								<portlet:param name="folderId" value="<%= String.valueOf(mountFolder.getFolderId()) %>" />
-								<portlet:param name="entryStart" value="0" />
-								<portlet:param name="entryEnd" value="<%= String.valueOf(entryEnd - entryStart) %>" />
-								<portlet:param name="folderStart" value="0" />
-								<portlet:param name="folderEnd" value="<%= String.valueOf(folderEnd - folderStart) %>" />
-							</liferay-portlet:renderURL>
-
-							<%
-							dataView = new HashMap<String, Object>();
-
-							dataView.put("folder", true);
-							dataView.put("folder-id", mountFolder.getFolderId());
-							dataView.put("repository-id", mountFolder.getRepositoryId());
-							dataView.put("title", mountFolder.getName());
-							%>
-
-							<liferay-ui:app-view-navigation-entry
-								actionJsp="/html/portlet/document_library/folder_action.jsp"
-								dataView="<%= dataView %>"
-								entryTitle="<%= mountFolder.getName() %>"
-								iconImage="icon-hdd"
-								selected="<%= (mountFolder.getFolderId() == folderId) %>"
-								viewURL="<%= viewURL.toString() %>"
-							/>
-
-						<%
-						}
-						catch (Exception e) {
-							if (permissionChecker.isContentReviewer(user.getCompanyId(), scopeGroupId)) {
-								String errorMessage = null;
-
-								if (e instanceof PrincipalException) {
-									errorMessage = "an-authentication-error-occurred-while-connecting-to-the-repository";
-								}
-								else {
-									errorMessage = "an-unexpected-error-occurred-while-connecting-to-the-repository";
-								}
-						%>
-
-								<li class="app-view-navigation-entry folder error" title="<%= LanguageUtil.get(pageContext, errorMessage) %>">
-
-									<%
-									request.removeAttribute(WebKeys.SEARCH_CONTAINER_RESULT_ROW);
-									%>
-
-									<liferay-util:include page="/html/portlet/document_library/folder_action.jsp" />
-
-									<span class="browse-folder">
-										<liferay-ui:icon alt="drive-error" image="drive_error" />
-
-										<span class="entry-title">
-											<%= HtmlUtil.escape(mountFolder.getName()) %>
-										</span>
-									</span>
-								</li>
-
-					<%
-							}
-						}
-					}
-					%>
 
 				</c:when>
 				<c:when test='<%= browseBy.equals("file-entry-type") %>'>
