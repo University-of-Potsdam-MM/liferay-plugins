@@ -16,11 +16,11 @@ import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
 
 public class WebdavConfigurationLoader {
 
-	private static final String _ownCloudWebdavAddress = "http://localhost/owncloud/remote.php/webdav";
-	private static final String _ownCloudDownloadAddress = "http://localhost/owncloud/index.php/apps/files/ajax/download.php";
-	private static final String _ownCloudShareAddress = "http://localhost/owncloud/ocs/v1.php/apps/files_sharing/api/v1/shares";
+	private static final String _ownCloudWebdavAddress = "http://erdmaennchen.soft.cs.uni-potsdam.de/owncloud/remote.php/webdav";
+	private static final String _ownCloudDownloadAddress = "http://erdmaennchen.soft.cs.uni-potsdam.de/owncloud/index.php/apps/files/ajax/download.php";
+	private static final String _ownCloudShareAddress = "http://erdmaennchen.soft.cs.uni-potsdam.de/owncloud/ocs/v1.php/apps/files_sharing/api/v1/shares";
 	private static final String _ownCloudRootFolder = "Campus.UP";
-	private static final String _ownCloudRootUsername = "test";
+	private static final String _ownCloudRootUsername = "campus.up";
 	private static final String _ownCloudRootPassword = "test";
 	private static final String _ownCloudRepositoryName = "Box.UP";
 
