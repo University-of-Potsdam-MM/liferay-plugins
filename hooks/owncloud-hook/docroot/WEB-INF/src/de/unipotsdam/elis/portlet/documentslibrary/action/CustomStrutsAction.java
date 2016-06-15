@@ -96,6 +96,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 
 		createRepositoryIfNotExistent(resourceRequest, resourceResponse);
 		setProperties(resourceRequest, resourceResponse);
+		
 
 		originalStrutsPortletAction.serveResource(portletConfig, resourceRequest, resourceResponse);
 	}
@@ -112,7 +113,7 @@ public class CustomStrutsAction implements StrutsPortletAction {
 		} else {
 			DLFolder dlFolder = DLFolderLocalServiceUtil.fetchDLFolder(folderId);
 			if (dlFolder != null)
-				rep = RepositoryLocalServiceUtil.getRepository(dlFolder.getRepositoryId());
+				rep = RepositoryLocalServiceUtil.fetchRepository(dlFolder.getRepositoryId());
 		}
 
 		if (rep != null) {

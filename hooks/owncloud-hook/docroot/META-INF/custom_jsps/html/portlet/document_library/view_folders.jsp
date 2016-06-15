@@ -113,16 +113,42 @@ else {
 			<c:choose>
 				<c:when test='<%= (((folderId == rootFolderId) && !expandFolder) || ((folder != null) && (folder.isRoot() && !folder.isDefaultRepository() && !expandFolder))) && !browseBy.equals("file-entry-type") %>'>
 					
-					<%
-					String navigation = ParamUtil.getString(request, "navigation", "");
+					<liferay-portlet:renderURL varImpl="viewDocumentsHomeURL">
+						<portlet:param name="struts_action" value="/document_library/view" />
+						<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
+						<portlet:param name="entryStart" value="0" />
+						<portlet:param name="entryEnd" value="<%= String.valueOf(entryEnd - entryStart) %>" />
+						<portlet:param name="folderStart" value="0" />
+						<portlet:param name="folderEnd" value="<%= String.valueOf(folderEnd - folderStart) %>" />
+					</liferay-portlet:renderURL>
 					
+					<%
+					String navigation = ParamUtil.getString(request, "navigation", "home");
+
+					request.setAttribute("view_entries.jsp-folder", folder);
+					request.setAttribute("view_entries.jsp-folderId", String.valueOf(folderId));
+					request.setAttribute("view_entries.jsp-repositoryId", String.valueOf(repositoryId));
+
 					Map<String, Object> dataView = new HashMap<String, Object>();
 					
+					dataView.put("folder", true);
+					dataView.put("folder-id", rootFolderId);
+					dataView.put("navigation", "home");
+					dataView.put("title", LanguageUtil.get(pageContext, "home"));
+					%>
+					
+					<liferay-ui:app-view-navigation-entry
+						actionJsp="/html/portlet/document_library/folder_action.jsp"
+						dataView="<%= dataView %>"
+						entryTitle='<%= LanguageUtil.get(pageContext, "home") %>'
+						iconImage="icon-home"
+						selected='<%= (navigation.equals("home") && (folderId == rootFolderId) && (fileEntryTypeId == -1)) %>'
+						viewURL="<%= viewDocumentsHomeURL.toString() %>"
+					/>
+					
+					<%
+					
 					List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, searchContainer.getStart(), searchContainer.getEnd());
-
-					if (mountFolders.size() > 0){
-						navigation = String.valueOf(mountFolders.get(0).getFolderId());
-					}
 					
 					for (Folder mountFolder : mountFolders) {
 						request.setAttribute("view_entries.jsp-folder", mountFolder);
@@ -156,7 +182,7 @@ else {
 								dataView="<%= dataView %>"
 								entryTitle="<%= mountFolder.getName() %>"
 								iconImage="icon-hdd"
-								selected="<%= (navigation.equals(String.valueOf(mountFolder.getFolderId()))) || (mountFolder.getFolderId() == folderId) %>"
+								selected="<%= (navigation.equals(String.valueOf(mountFolder.getFolderId()))) %>"
 								viewURL="<%= viewURL.toString() %>"
 							/>
 

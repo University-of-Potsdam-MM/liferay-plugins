@@ -43,6 +43,7 @@ long repositoryId = scopeGroupId;
 //BEGIN HOOK CHANGE
 
 // folder and folder id needs to be set because owncloud folder is now the primary folder
+/*
 if (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID){
 	List<Folder> tmpMountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, 
 			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
@@ -51,7 +52,7 @@ if (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID){
 		folder = tmpMountFolders.get(0);
 		folderId = folder.getFolderId();	
 	}
-}
+}*/
 //END HOOK CHANGE
 
 if (folder != null) {
