@@ -56,6 +56,17 @@ if (privateVisible) {
 		<liferay-ui:icon-help message="private-public-help"></liferay-ui:icon-help>
 	</aui:form>
 	
+	<!-- 
+	<label class="switch">
+  			<input type="checkbox"  value="private" class="private" checked="<%= layout.isPrivateLayout() %>" >
+  			<div class="slider">Mitglieder</div>
+	</label>
+
+	<label class="switch">
+  		<input type="checkbox" value="public" class="public" checked="<%= !layout.isPrivateLayout() %>">
+  		<div class="slider">Gäste</div>
+	</label><br><br>
+	-->
 	<aui:script>
 	AUI().use("aui-base", function(A){ 
 		A.all("#<portlet:namespace />scopeNavigation").on('change',function(e){
