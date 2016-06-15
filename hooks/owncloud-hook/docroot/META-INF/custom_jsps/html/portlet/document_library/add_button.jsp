@@ -56,7 +56,12 @@ boolean hasAddDocumentPermission = DLFolderPermission.contains(permissionChecker
 		<aui:nav-item href="<%= editFileShortcutURL %>" label="shortcut" />
 	</c:if>
 
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- 
 	<c:if test="<%= (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) && (DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.ADD_REPOSITORY)) %>">
+	--%>
+	<c:if test="<%= (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) && (DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.ADD_REPOSITORY)) && permissionChecker.isOmniadmin() %>">
+	<%-- END HOOK CHANGE --%>
 		<portlet:renderURL var="addRepositoryURL">
 			<portlet:param name="struts_action" value="/document_library/edit_repository" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />

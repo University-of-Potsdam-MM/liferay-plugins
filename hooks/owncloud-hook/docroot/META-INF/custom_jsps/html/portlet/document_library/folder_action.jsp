@@ -138,7 +138,12 @@ String iconMenuId = null;
 						/>
 					</c:if>
 
+					<%-- BEGIN HOOK CHANGE --%>
+					<%-- 
 					<c:if test="<%= hasUpdatePermission && folder.isMountPoint() %>">
+					--%>
+					<c:if test="<%= hasUpdatePermission && folder.isMountPoint() && permissionChecker.isOmniadmin() %>">
+					<%-- END HOOK CHANGE --%>
 						<portlet:renderURL var="editURL">
 							<portlet:param name="struts_action" value="/document_library/edit_repository" />
 							<portlet:param name="redirect" value="<%= redirect %>" />
@@ -199,8 +204,13 @@ String iconMenuId = null;
 
 						<liferay-ui:icon-delete trash="<%= ((folder.getModel() instanceof DLFolder) && TrashUtil.isTrashEnabled(scopeGroupId)) %>" url="<%= deleteURL %>" />
 					</c:if>
-
+					
+					<%-- BEGIN HOOK CHANGE --%>
+					<%-- 
 					<c:if test="<%= hasDeletePermission && folder.isMountPoint() %>">
+					--%>
+					<c:if test="<%= hasDeletePermission && folder.isMountPoint() && permissionChecker.isOmniadmin() %>">
+					<%-- END HOOK CHANGE --%>
 						<portlet:renderURL var="redirectURL">
 							<portlet:param name="struts_action" value="/document_library/view" />
 							<portlet:param name="folderId" value="<%= String.valueOf(folder.getParentFolderId()) %>" />
