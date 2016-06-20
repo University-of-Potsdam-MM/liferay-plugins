@@ -170,7 +170,7 @@ else {
 
 							<% 
 							dataView = new HashMap<String, Object>();
-
+ 
 							dataView.put("folder", true);
 							dataView.put("folder-id", mountFolder.getFolderId());
 							dataView.put("repository-id", mountFolder.getRepositoryId());
@@ -182,7 +182,7 @@ else {
 								dataView="<%= dataView %>"
 								entryTitle="<%= mountFolder.getName() %>"
 								iconImage="icon-hdd"
-								selected="<%= (navigation.equals(String.valueOf(mountFolder.getFolderId()))) %>"
+								selected="<%= (mountFolder.getFolderId() == folderId) %>"
 								viewURL="<%= viewURL.toString() %>"
 							/>
 

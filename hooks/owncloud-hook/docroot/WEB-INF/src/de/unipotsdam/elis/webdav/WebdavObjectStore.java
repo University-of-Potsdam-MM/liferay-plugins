@@ -125,7 +125,7 @@ public class WebdavObjectStore {
 			customDestinationId = correctRootFolder(destinationId);
 			customSourceId = correctRootFolder(sourceId);
 		}
-		createFolderRec(WebdavIdUtil.getParentIdFromChildId(destinationId));
+		createFolderRec(WebdavIdUtil.getParentIdFromChildId(customDestinationId));
 		String customDestinationUrl = endpoint.getEndpoint() + customDestinationId;
 		if (solveDuplicates)
 			customDestinationUrl = solveDuplicateFiles(endpoint.getEndpoint() + customDestinationId);
