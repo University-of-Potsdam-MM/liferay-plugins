@@ -336,7 +336,7 @@ aui .btn.disabled, .aui .btn[disabled] {
 }
 
 .aui a:hover, .aui a:focus {
-  color: #026694;
+  color: #014260;
   text-decoration: none;
 }
 
@@ -358,6 +358,8 @@ aui .btn.disabled, .aui .btn[disabled] {
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.2); 
  
 }
+
+
 
 
 
