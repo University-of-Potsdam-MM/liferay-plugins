@@ -23,6 +23,7 @@ public class WebdavConfigurationLoader {
 	private static final String _ownCloudRootUsername = "campus.up";
 	private static final String _ownCloudRootPassword = "test";
 	private static final String _ownCloudRepositoryName = "Box.UP";
+	private static final String _imageUploadFolder = "Uploads";
 
 	public static final String getOwnCloudWebdavAddress() {
 		String result = PortletProps.get("owncloud.webdav.adress");
@@ -57,6 +58,11 @@ public class WebdavConfigurationLoader {
 	public static final String getRepositoryName() {
 		String result = PortletProps.get("owncloud.repository.name");
 		return (result != null ? result : _ownCloudRepositoryName);
+	}
+
+	public static final String getImageUploadFolder() {
+		String result = PortletProps.get("imageupload.folder");
+		return (result != null ? result : _imageUploadFolder);
 	}
 
 	public static final String getEndpointPath() {

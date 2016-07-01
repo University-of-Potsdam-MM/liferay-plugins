@@ -62,7 +62,7 @@ public class WebdavObjectStore {
 	
 	public void createFile(String id, InputStream inputStream){
 		try {
-			endpoint.getSardine().put(endpoint.getEndpoint() + id, inputStream);
+			endpoint.getSardine().put(endpoint.getEndpoint() + correctRootFolder(id), inputStream);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -87,8 +87,7 @@ public class WebdavObjectStore {
 	}
 
 	public WebdavFolder createFolder(String folderName, String parentId) {
-		String id = correctRootFolder(parentId + WebdavIdUtil.encode(folderName));
-		return createFolder(id);
+		return createFolder(parentId + WebdavIdUtil.encode(folderName));
 	}
 
 	public WebdavFolder createFolder(String id) {
@@ -96,7 +95,7 @@ public class WebdavObjectStore {
 		_log.debug("creating folder " + folderId);
 
 		try {
-			createFolderRec(folderId);
+			createFolderRec(correctRootFolder(folderId));
 		} catch (Exception e) {
 			handleException(e);
 			return null;
