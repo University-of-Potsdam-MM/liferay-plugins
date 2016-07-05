@@ -40,6 +40,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.RepositoryEntry;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RepositoryEntryLocalServiceUtil;
@@ -133,6 +134,9 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 		ExtRepositoryFileEntry extRepositoryFileEntry = addExtRepositoryFileEntry(
 				extRepositoryFolderKey, mimeType, fileName, description,
 				changeLog, inputStream,imageUpload);
+		System.out.println("error:" + OwncloudCache.getError());
+		if (imageUpload && OwncloudCache.getError() != null && (OwncloudCache.getError().equals("enter-password") || OwncloudCache.getError().equals("wrong-password")))
+			throw new PrincipalException();
 
 		return _toExtRepositoryObjectAdapter(
 				ExtRepositoryObjectAdapterType.FILE, extRepositoryFileEntry);
@@ -180,7 +184,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 		}
 		
 
-		return createFileWithInputStream(title, inputStream, newFile);
+		return createFileWithInputStream(title, inputStream, newFile, solveDuplicates);
 	}
 	
 	private String solveDuplicateFileName(String id){
@@ -415,7 +419,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 	}
 
 	private WebdavFile createFileWithInputStream(String title, InputStream is,
-			WebdavFile dstFile) {
+			WebdavFile dstFile, boolean uploadImage) {
 		_log.debug("start createFileWithInputStream " + title + " "
 				+ dstFile.getExtRepositoryModelKey());
 		OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId())

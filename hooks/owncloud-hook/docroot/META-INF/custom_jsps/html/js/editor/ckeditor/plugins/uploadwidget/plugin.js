@@ -463,7 +463,22 @@
 
 		loader.on( 'error', function() {
 			task && task.cancel();
-			editor.showNotification( loader.message, 'warning' );
+			// BEGIN HOOK CHANGE
+			var message;
+			console.log(loader.message);
+			if (loader.message == 'uploadError'){
+				message = editor.lang.uploadwidget.uploadError;
+			}
+			else if (loader.message == 'authentificationFailed'){
+				message = editor.lang.uploadwidget.authentificationFailed;
+			}
+			aggregator = editor._.uploadWidgetNotificaionAggregator;
+			aggregator.notification.update( {
+				message: message,
+				type: 'warning',
+				important: 1
+			} );
+			// END HOOK CHANGE
 		} );
 
 		loader.on( 'abort', function() {
@@ -481,7 +496,8 @@
 
 				aggregator.once( 'finished', function() {
 					var tasks = aggregator.getTaskCount();
-
+					// BEGIN HOOK CHANGE
+					/*
 					if ( tasks === 0 ) {
 						aggregator.notification.hide();
 					} else {
@@ -493,6 +509,8 @@
 							important: 1
 						} );
 					}
+					*/
+					// END HOOK CHANGE
 				} );
 			}
 		}
