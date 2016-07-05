@@ -65,9 +65,7 @@ public class WebdavObjectStore {
 			endpoint.getSardine().put(endpoint.getEndpoint() + correctRootFolder(id), inputStream);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
-			// TODO: fehler hier richtig?
-			OwncloudCache.putWebdavError("no-owncloud-connection");
+			handleException(e);
 		}
 	}
 

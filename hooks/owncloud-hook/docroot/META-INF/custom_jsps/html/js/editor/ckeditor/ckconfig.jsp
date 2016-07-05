@@ -101,10 +101,12 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 
 	config.entities = false;
 
-	//config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc,uploadimage';
+	<%-- BEGIN HOOK CHANGE --%>
+	// ajaxsave needs to be removed to avoid error message after the update of the ckeditor to version 4.5
+	// added uploadimage to allow the upload of images with drag and drop
+	//config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc';
 	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage';
-	
-	//config.imageUploadUrl =
+	<%-- END HOOK CHANGE --%>
 
 	config.height = 265;
 
