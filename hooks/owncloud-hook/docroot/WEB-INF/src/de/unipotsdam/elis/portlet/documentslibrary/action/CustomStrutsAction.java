@@ -126,10 +126,11 @@ public class CustomStrutsAction implements StrutsPortletAction {
 		request.setAttribute("isOwncloudRepository", true);
 	}
 
-	private void createRepositoryIfNotExistent(PortletRequest request, PortletResponse response) {
+	private void createRepositoryIfNotExistent(PortletRequest request, PortletResponse response) throws PortalException, SystemException {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
-		if (!hasOwncloudRepository(themeDisplay.getScopeGroupId()))
-			OwncloudRepositoryUtil.createRepository(themeDisplay.getScopeGroupId());
+		long groupId = OwncloudRepositoryUtil.getCorrectGroup(themeDisplay.getScopeGroupId()).getGroupId();
+		if (!hasOwncloudRepository(groupId))
+			OwncloudRepositoryUtil.createRepository(groupId);
 	}
 
 	private boolean hasOwncloudRepository(long groupId) {
