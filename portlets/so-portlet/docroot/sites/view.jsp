@@ -85,14 +85,14 @@ pageContext.setAttribute("portletURL", portletURL);
 
 		<input src="<%= themeDisplay.getPathThemeImages() %>/common/search.png" type="image" value='<liferay-ui:message key="search" />' />
 	</div>
-
+  <div class="control-container">
+	</div>
 	<div class="site-list-container">
 		<ul class="site-list">
 		</ul>
 	</div>
 
-	<div class="control-container">
-	</div>
+	
 </form>
 
 <aui:script use="aui-base,aui-io-deprecated,aui-toolbar,liferay-so-user-menu">
