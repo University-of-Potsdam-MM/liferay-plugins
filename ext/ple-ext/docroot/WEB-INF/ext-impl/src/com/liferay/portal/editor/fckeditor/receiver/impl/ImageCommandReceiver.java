@@ -30,6 +30,7 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -40,6 +41,7 @@ import com.liferay.portal.model.Group;
 import com.liferay.portal.repository.liferayrepository.model.LiferayFolder;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.upload.LiferayFileItem;
 import com.liferay.portal.upload.LiferayFileItemFactory;
 import com.liferay.portal.upload.LiferayFileUpload;
@@ -48,6 +50,7 @@ import com.liferay.portal.upload.UploadServletRequestImpl;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portal.util.PrefsPropsUtil;
 import com.liferay.portal.util.PropsKeys;
+import com.liferay.portal.util.WebKeys;
 import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
@@ -62,13 +65,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.portlet.PortletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -107,10 +110,15 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 	@Override
 	public void fileUpload(CommandArgument commandArgument,
 			HttpServletRequest request, HttpServletResponse response) {
+		ThemeDisplay themeDisplay = (ThemeDisplay) request
+				.getAttribute(WebKeys.THEME_DISPLAY);
 
 		InputStream inputStream = null;
 
 		String returnValue = null;
+
+		// indicates that the image is added by drag and drop
+		boolean droppedImage = false;
 
 		try {
 			ServletFileUpload servletFileUpload = new LiferayFileUpload(
@@ -137,6 +145,11 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 			}
 
 			DiskFileItem diskFileItem = (DiskFileItem) fields.get("NewFile");
+
+			if (diskFileItem == null){
+				diskFileItem = (DiskFileItem) fields.get("upload");
+				droppedImage = true;
+			}
 
 			String fileName = StringUtil.replace(diskFileItem.getName(),
 					CharPool.BACK_SLASH, CharPool.SLASH);
@@ -168,12 +181,18 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 			Folder folder = _getFolder(commandArgument.getCurrentGroup()
 					.getGroupId(), commandArgument.getCurrentFolder());
 			returnValue = "0";
-			String fileURL = "/documents/" + newFileEntry.getGroupId()
-					+ StringPool.BACK_SLASH + folder.getFolderId()
-					+ StringPool.BACK_SLASH + newFileEntry.getTitle()
-					+ StringPool.BACK_SLASH + newFileEntry.getUuid();
-
-			_writeUploadResponse(fileName, fileURL, returnValue, response);
+			String fileURL = HttpUtil.encodePath("/documents/"
+					+ newFileEntry.getGroupId() + StringPool.SLASH
+					+ folder.getFolderId() + StringPool.SLASH
+					+ newFileEntry.getTitle() + StringPool.SLASH
+					+ newFileEntry.getUuid());
+			if (droppedImage)
+				_writeUploadResponseForDroppedImage(fileName, fileURL, returnValue,
+						request.getParameter("CKEditorFuncNum"), response,
+						themeDisplay);
+			else
+				_writeUploadResponse(fileName, fileURL, returnValue, response,
+						themeDisplay);
 		} catch (Exception e) {
 			e.printStackTrace();
 			FCKException fcke = null;
@@ -220,8 +239,13 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 					throw fcke;
 				}
 			}
-
-			_writeUploadResponse("", "", returnValue, response);
+			if (droppedImage)
+				_writeUploadResponseForDroppedImage("", "", returnValue,
+						request.getParameter("CKEditorFuncNum"), response,
+						themeDisplay);
+			else
+				_writeUploadResponse("", "", returnValue, response,
+						themeDisplay);
 		} finally {
 			StreamUtil.cleanUp(inputStream);
 		}
@@ -461,18 +485,19 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 	}
 
 	private void _writeUploadResponse(String fileName, String url,
-			String returnValue, HttpServletResponse response) {
+			String returnValue, HttpServletResponse response,
+			ThemeDisplay themeDisplay) {
 
 		try {
-			System.out.println("returnvalue: " + returnValue);
 			JSONObject result = JSONFactoryUtil.createJSONObject();
 
 			if (!returnValue.equals("0")) {
 				JSONObject error = JSONFactoryUtil.createJSONObject();
 				if (returnValue.equals("207"))
-					error.put("message", "authentificationFailed");
+					error.put("message",
+							themeDisplay.translate("authentification-failed"));
 				else
-					error.put("message", "uploadError");
+					error.put("message", themeDisplay.translate("upload-error"));
 				result.put("error", error);
 				result.put("uploaded", false);
 				_log.debug("Upload failed for " + fileName
@@ -491,6 +516,50 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 			printWriter = response.getWriter();
 
 			printWriter.print(result.toString());
+
+			printWriter.flush();
+			printWriter.close();
+		} catch (Exception e) {
+			throw new FCKException(e);
+		}
+	}
+
+	private void _writeUploadResponseForDroppedImage(String fileName, String url,
+			String returnValue, String funcNum, HttpServletResponse response,
+			ThemeDisplay themeDisplay) {
+
+		try {
+			StringBundler sb = new StringBundler(8);
+			String message = "";
+			String fileUrl = url;
+			sb.append("<script type=\"text/javascript\">");
+			if (!returnValue.equals("0")) {
+				if (returnValue.equals("207"))
+					message = themeDisplay.translate("authentification-failed");
+				else
+					message = themeDisplay.translate("upload-error");
+				fileUrl = "";
+				_log.debug("Upload failed for " + fileName
+						+ " with the error code " + returnValue);
+			}
+
+			sb.append("window.parent.CKEDITOR.tools.callFunction('");
+			sb.append(funcNum);
+			sb.append("','");
+			sb.append(fileUrl);
+			sb.append("','");
+			sb.append(message);
+			sb.append("');");
+			sb.append("</script>");
+
+			response.setContentType("text/html; charset=UTF-8");
+			response.setHeader("Cache-Control", "no-cache");
+
+			PrintWriter printWriter = null;
+
+			printWriter = response.getWriter();
+
+			printWriter.print(sb.toString());
 
 			printWriter.flush();
 			printWriter.close();
