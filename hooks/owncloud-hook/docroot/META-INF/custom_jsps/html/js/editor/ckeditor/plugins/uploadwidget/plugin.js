@@ -465,16 +465,9 @@
 			task && task.cancel();
 			// BEGIN HOOK CHANGE
 			var message;
-			console.log(loader.message);
-			if (loader.message == 'uploadError'){
-				message = editor.lang.uploadwidget.uploadError;
-			}
-			else if (loader.message == 'authentificationFailed'){
-				message = editor.lang.uploadwidget.authentificationFailed;
-			}
 			aggregator = editor._.uploadWidgetNotificaionAggregator;
 			aggregator.notification.update( {
-				message: message,
+				message: loader.message,
 				type: 'warning',
 				important: 1
 			} );

@@ -134,7 +134,6 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 		ExtRepositoryFileEntry extRepositoryFileEntry = addExtRepositoryFileEntry(
 				extRepositoryFolderKey, mimeType, fileName, description,
 				changeLog, inputStream,imageUpload);
-		System.out.println("error:" + OwncloudCache.getError());
 		if (imageUpload && OwncloudCache.getError() != null && (OwncloudCache.getError().equals("enter-password") || OwncloudCache.getError().equals("wrong-password")))
 			throw new PrincipalException();
 
@@ -608,7 +607,6 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 	public List<Folder> getFolders(long parentFolderId,
 			boolean includeMountFolders, int start, int end,
 			OrderByComparator obc) throws PortalException, SystemException {
-		System.out.println(getExtRepositoryObjectKey(parentFolderId));
 		List<Folder> result = super.getFolders(parentFolderId,
 				includeMountFolders, start, end, obc);
 
