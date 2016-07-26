@@ -1018,7 +1018,10 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>',
 					on: {
 						click: function(event) {
-							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {
+							<!-- BEGIN HOOK CHANGE -->
+							<!--if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {-->
+							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this-file") %>')) {
+							<!-- END HOOK CHANGE -->
 								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 								document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
 								submitForm(document.<portlet:namespace />fm);
