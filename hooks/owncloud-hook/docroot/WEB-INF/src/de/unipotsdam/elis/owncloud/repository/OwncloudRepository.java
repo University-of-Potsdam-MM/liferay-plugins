@@ -402,7 +402,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 			OwncloudRepositoryUtil.getWebdavRepositoryAsUser(getGroupId())
 					.move(extRepositoryObjectKey,
 							dstObject.getExtRepositoryModelKey(), true, false);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			if (e instanceof SardineException) {
 				int statusCode = ((SardineException) e).getStatusCode();
 				_log.debug("Status code of webdav move request: " + statusCode);

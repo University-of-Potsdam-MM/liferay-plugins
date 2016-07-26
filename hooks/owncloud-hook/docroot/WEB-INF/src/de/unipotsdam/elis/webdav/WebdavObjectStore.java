@@ -103,15 +103,12 @@ public class WebdavObjectStore {
 	}
 
 	private void createFolderRec(String id) throws IOException {
-		String parentId = WebdavIdUtil.getParentIdFromChildId(id);
-		if (!parentId.equals(StringPool.FORWARD_SLASH))
-			createFolderRec(parentId);
-
 		String webdavPath = endpoint.getEndpoint() + id;
-		if (!endpoint.getSardine().exists(webdavPath)) {
-			// TODO: exist nÃƒoetig?
-			endpoint.getSardine().createDirectory(webdavPath);
-		}
+		if (id.equals(StringPool.FORWARD_SLASH) || endpoint.getSardine().exists(webdavPath))
+			return;
+		
+		createFolderRec(WebdavIdUtil.getParentIdFromChildId(id));
+		endpoint.getSardine().createDirectory(webdavPath);
 	}
 
 	public void move(String sourceId, String destinationId, boolean correctRoot, boolean solveDuplicates)
