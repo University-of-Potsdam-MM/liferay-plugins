@@ -105,7 +105,7 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 	// ajaxsave needs to be removed to avoid error message after the update of the ckeditor to version 4.5
 	// added uploadimage to allow the upload of images with drag and drop
 	//config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc';
-	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage';
+	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage,oembed';
 	<%-- END HOOK CHANGE --%>
 
 	config.height = 265;
@@ -139,8 +139,8 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 		['Link', 'Unlink'],
 		['Image']
 	];
-
-	config.toolbar_liferay = [
+	<%-- BEGIN HOOK HANGE --%>
+	<%-- config.toolbar_liferay = [
 		['Bold', 'Italic', 'Underline', 'Strike'],
 
 		<c:if test="<%= inlineEdit %>">
@@ -176,8 +176,39 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 		['Source'],
 		['Link', 'Unlink', 'Anchor'],
 		['Image', 'Flash', <c:if test="<%= XugglerUtil.isEnabled() %>">'Audio', 'Video',</c:if> 'Table', '-', 'Smiley', 'SpecialChar', 'LiferayPageBreak']
+	];--%>
+	
+	config.toolbar_liferay = [
+		['Styles', 'Bold', 'Italic', 'Underline', 'Strike'],
+		['Subscript', 'Superscript', '-', 'RemoveFormat'],
+		'/',
+
+		<c:if test="<%= inlineEdit %>">
+			['AjaxSave', '-', 'Restore'],
+		</c:if>
+		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Outdent', 'Indent'],
+		'/',
+		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar']
+
+		<c:if test="<%= !inlineEdit %>">
+			,['Source']
+		</c:if>
 	];
 
+	config.toolbar_liferayArticle = [
+		['Styles', 'Bold', 'Italic', 'Underline', 'Strike'],
+		['Subscript', 'Superscript', '-', 'RemoveFormat'],
+		'/',
+		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Outdent', 'Indent'],
+		'/',
+		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar']
+
+		<c:if test="<%= !inlineEdit %>">
+			,['Source']
+		</c:if>
+	];
+	<%-- END HOOK HANGE --%>
+	
 	config.toolbar_phone = [
 		['Bold', 'Italic', 'Underline'],
 		['NumberedList', 'BulletedList'],

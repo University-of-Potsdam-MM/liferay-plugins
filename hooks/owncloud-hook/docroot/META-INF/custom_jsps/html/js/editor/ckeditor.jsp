@@ -372,6 +372,8 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 				// filebrowserUploadUrl: null,
 				imageUploadUrl: '<%= uploadURL %>',
 				filebrowserUploadUrl: '<%= uploadURL %>',
+				// needed to allow helix media embed
+				allowedContent: true,
 				<%-- END HOOK CHANGE --%> 
 				toolbar: getToolbarSet('<%= TextFormatter.format(HtmlUtil.escapeJS(toolbarSet), TextFormatter.M) %>')
 			}
