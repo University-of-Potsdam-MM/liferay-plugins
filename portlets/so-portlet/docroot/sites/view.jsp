@@ -85,12 +85,16 @@ pageContext.setAttribute("portletURL", portletURL);
 
 		<input src="<%= themeDisplay.getPathThemeImages() %>/common/search.png" type="image" value='<liferay-ui:message key="search" />' />
 	</div>
-  <div class="control-container">
+	<%-- BEGIN CHANGE --%>
+	<%-- move controls in front of the site list --%>
+  	<div class="control-container">
 	</div>
+	
 	<div class="site-list-container">
 		<ul class="site-list">
 		</ul>
 	</div>
+	<%-- END CHANGE --%>
 
 	
 </form>
@@ -136,6 +140,9 @@ pageContext.setAttribute("portletURL", portletURL);
 							}
 						},
 					</c:if>
+					// BEGIN CHANGE
+					// Remove sites directory button
+					/*
 					{
 						cssClass: '<%= addSiteEnabled ? "site-controls-double" : "site-controls-single" %>',
 						icon: 'icon-reorder',
@@ -149,7 +156,8 @@ pageContext.setAttribute("portletURL", portletURL);
 								Liferay.SO.Sites.displayPopup('<%= viewSitesURL %>', '<liferay-ui:message key="sites-directory" unicode="<%= true %>" />');
 							}
 						}
-					}
+					}*/
+					// END CHANGE
 				]
 			}
 		).render(controlContainer);
