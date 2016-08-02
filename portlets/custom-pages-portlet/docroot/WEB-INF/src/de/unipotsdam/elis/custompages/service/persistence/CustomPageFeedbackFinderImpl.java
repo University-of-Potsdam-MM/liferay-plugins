@@ -97,6 +97,7 @@ public class CustomPageFeedbackFinderImpl extends BasePersistenceImpl<CustomPage
 
 			QueryPos qPos = QueryPos.getInstance(q);
 			qPos.add(userId);
+			qPos.add(userId);
 
 			return (List<Layout>) QueryUtil.list(q, getDialect(), begin, end);
 		} catch (Exception e) {
