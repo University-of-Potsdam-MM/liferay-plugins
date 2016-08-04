@@ -111,7 +111,10 @@ if (fileShortcut != null) {
 	fileEntry = DLAppLocalServiceUtil.getFileEntry(fileShortcut.getToFileEntryId());
 }
 
+// BEGIN HOOK CHANGE
+// detect if user is an administrator oder advanced user
 boolean adminOrAdvancedUser = permissionChecker.isOmniadmin() || RoleLocalServiceUtil.hasUserRole(user.getUserId(), company.getCompanyId(), "Advanced User", false);
+// END HOOK CHANGE
 %>
 
 <liferay-util:buffer var="iconMenu">
@@ -121,9 +124,13 @@ boolean adminOrAdvancedUser = permissionChecker.isOmniadmin() || RoleLocalServic
 		<%@ include file="/html/portlet/document_library/action/view_original.jspf" %>
 		<%@ include file="/html/portlet/document_library/action/edit.jspf" %>
 		<%@ include file="/html/portlet/document_library/action/move.jspf" %>
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Remove lock action and only show permissions to an administrator or advanced user --%>
+		<%-- <%@ include file="/html/portlet/document_library/action/lock.jspf" %> --%>
 		<% if (adminOrAdvancedUser) {%>
 		<%@ include file="/html/portlet/document_library/action/permissions.jspf" %>
 		<% } %>
+		<%-- END HOOK CHANGE --%>
 		<%@ include file="/html/portlet/document_library/action/delete.jspf" %>
 	</liferay-ui:icon-menu>
 </liferay-util:buffer>

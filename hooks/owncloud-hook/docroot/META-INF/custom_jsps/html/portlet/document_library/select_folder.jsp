@@ -31,9 +31,15 @@ if (folder != null) {
 	folderName = folder.getName();
 	
 	// HOOK CHANGE BEGIN
-	PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
-	portletURLnew.setParameter("struts_action", "/document_library/select_folder");
-	DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
+	// Hide "Home" from breadcrumbs if the current folder belongs to a owncloud repository
+	// DLUtil.addPortletBreadcrumbEntries(folder, request, renderResponse);
+	if (isOwncloudRepository) {
+		PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
+		portletURLnew.setParameter("struts_action", "/document_library/select_folder");
+		DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
+	} else {
+		DLUtil.addPortletBreadcrumbEntries(folder, request, renderResponse);
+	}
 	// HOOK CHANGE END
 }
 %>
@@ -44,8 +50,16 @@ if (folder != null) {
 	/>
 	
 	<%-- HOOK CHANGE BEGIN --%>
+	<%-- Hide name of the site from breadcrumbs if the current folder belongs to a owncloud repository  --%>
 	<%-- <liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" /> --%>
-	<liferay-ui:breadcrumb showCurrentGroup="<%= false %>" showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" />
+	<c:choose>
+		<c:when test='<%= isOwncloudRepository %>'>
+			<liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" showCurrentGroup="<%= false %>"/>
+		</c:when>
+		<c:otherwise>
+		 	<liferay-ui:breadcrumb showGuestGroup="<%= false %>" showLayout="<%= false %>" showParentGroups="<%= false %>" />
+		</c:otherwise>
+	</c:choose>
 	<%-- HOOK CHANGE END --%>
 
 	<aui:button-row>
@@ -105,8 +119,9 @@ if (folder != null) {
 			int foldersCount = 0;
 			int fileEntriesCount = 0;
 			
-			/* BEGIN HOOK CHANGE 
-			try {
+			// BEGIN HOOK CHANGE 
+			// Avoid counting files in sub directories
+			/* try {
 				List<Long> subfolderIds = DLAppServiceUtil.getSubfolderIds(curFolder.getRepositoryId(), curFolder.getFolderId(), false);
 
 				foldersCount = subfolderIds.size();
@@ -121,8 +136,8 @@ if (folder != null) {
 			}
 			catch (com.liferay.portal.security.auth.PrincipalException pe) {
 				rowURL = null;
-			}
-			END HOOK CHANGE*/
+			} */
+			// END HOOK CHANGE
 
 			String image = null;
 
@@ -151,8 +166,8 @@ if (folder != null) {
 			</liferay-ui:search-container-column-text>
 
 			<%-- BEGIN HOOK CHANGE --%>
-			<%-- 
-			<liferay-ui:search-container-column-text
+			<%-- Hide columns showing the number of files in a subfolder if the current folder belongs to a owncloud repository --%>
+			<%-- <liferay-ui:search-container-column-text
 				href="<%= rowURL %>"
 				name="num-of-folders"
 				value="<%= String.valueOf(foldersCount) %>"
@@ -162,8 +177,20 @@ if (folder != null) {
 				href="<%= rowURL %>"
 				name="num-of-documents"
 				value="<%= String.valueOf(fileEntriesCount) %>"
-			/>
-			--%>
+			/> --%>
+			<c:if test='<%= !isOwncloudRepository %>'>
+				<liferay-ui:search-container-column-text
+					href="<%= rowURL %>"
+					name="num-of-folders"
+					value="<%= String.valueOf(foldersCount) %>"
+				/>
+	
+				<liferay-ui:search-container-column-text
+					href="<%= rowURL %>"
+					name="num-of-documents"
+					value="<%= String.valueOf(fileEntriesCount) %>"
+				/>
+			</c:if>
 			<%-- END HOOK CHANGE --%>
 			
 			<liferay-ui:search-container-column-text>

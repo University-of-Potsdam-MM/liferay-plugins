@@ -38,4 +38,7 @@
 <liferay-ui:error exception="<%= NoSuchRepositoryException.class %>" message="the-repository-could-not-be-found" />
 <liferay-ui:error exception="<%= NoSuchStructureException.class %>" message="the-structure-could-not-be-found" />
 <liferay-ui:error exception="<%= PrincipalException.class %>" message="you-do-not-have-the-required-permissions" />
+<%-- BEGIN HOOK CHANGE --%>
+<%-- Add error message for a duplicated folder name --%>
 <liferay-ui:error exception="<%= DuplicateFolderNameException.class %>" message="a-folder-with-this-name-already-exists" />
+<%-- END HOOK CHANGE --%>

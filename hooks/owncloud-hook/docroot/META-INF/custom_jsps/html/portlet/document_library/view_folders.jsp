@@ -112,7 +112,6 @@ else {
 
 			<c:choose>
 				<c:when test='<%= (((folderId == rootFolderId) && !expandFolder) || ((folder != null) && (folder.isRoot() && !folder.isDefaultRepository() && !expandFolder))) && !browseBy.equals("file-entry-type") %>'>
-					
 					<liferay-portlet:renderURL varImpl="viewDocumentsHomeURL">
 						<portlet:param name="struts_action" value="/document_library/view" />
 						<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
@@ -146,6 +145,8 @@ else {
 						viewURL="<%= viewDocumentsHomeURL.toString() %>"
 					/>
 					
+					<%-- BEGIN HOOK CHANGE --%>
+					<%-- Move repository folders to the second place --%>
 					<%
 					
 					List<Folder> mountFolders = DLAppServiceUtil.getMountFolders(scopeGroupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, searchContainer.getStart(), searchContainer.getEnd());
@@ -222,6 +223,7 @@ else {
 						}
 					}
 					%>
+					<%-- END HOOK CHANGE --%>
 
 					<c:if test="<%= rootFolderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID %>">
 						<liferay-portlet:renderURL varImpl="viewRecentDocumentsURL">
@@ -445,41 +447,48 @@ else {
 						</liferay-portlet:renderURL>
 
 						<%
-						
 						dataView = new HashMap<String, Object>();
 
 						dataView.put("folder-id", curFolder.getFolderId());
 						dataView.put("folder", true);
 						dataView.put("repository-id", curFolder.getRepositoryId());
 						dataView.put("title", curFolder.getName());
-						
-						if (isOwncloudRepository) {
-						
 						%>
-
-						<liferay-ui:app-view-navigation-entry
-							actionJsp="/html/portlet/document_library/folder_action.jsp"
-							dataView="<%= dataView %>"
-							entryTitle="<%= curFolder.getName() %>"
-							iconImage='<%= "icon-folder-open" %>'
-							selected="<%= (curFolder.getFolderId() == folderId) %>"
-							viewURL="<%= viewURL.toString() %>"
-						/>
-						
-						<% } else { %>
-						
-						
-						<liferay-ui:app-view-navigation-entry
+						<%-- BEGIN HOOK CHANGE --%>
+						<%-- Only change folder icon if the folder does't belong to a owncloud repository --%>
+						<%-- <liferay-ui:app-view-navigation-entry
 							actionJsp="/html/portlet/document_library/folder_action.jsp"
 							dataView="<%= dataView %>"
 							entryTitle="<%= curFolder.getName() %>"
 							iconImage='<%= (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), WorkflowConstants.STATUS_APPROVED, true) > 0) ? "icon-folder-open" : "icon-folder-close" %>'
 							selected="<%= (curFolder.getFolderId() == folderId) %>"
 							viewURL="<%= viewURL.toString() %>"
-						/>
+						/> --%>
+						<c:choose>
+							<c:when test='<%= isOwncloudRepository %>'>
+								<liferay-ui:app-view-navigation-entry
+									actionJsp="/html/portlet/document_library/folder_action.jsp"
+									dataView="<%= dataView %>"
+									entryTitle="<%= curFolder.getName() %>"
+									iconImage='<%= "icon-folder-open" %>'
+									selected="<%= (curFolder.getFolderId() == folderId) %>"
+									viewURL="<%= viewURL.toString() %>"
+								/>
+							</c:when>
+							<c:otherwise>
+								<liferay-ui:app-view-navigation-entry
+									actionJsp="/html/portlet/document_library/folder_action.jsp"
+									dataView="<%= dataView %>"
+									entryTitle="<%= curFolder.getName() %>"
+									iconImage='<%= (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), WorkflowConstants.STATUS_APPROVED, true) > 0) ? "icon-folder-open" : "icon-folder-close" %>'
+									selected="<%= (curFolder.getFolderId() == folderId) %>"
+									viewURL="<%= viewURL.toString() %>"
+								/>
+							</c:otherwise>
+						</c:choose>
+						<%-- END HOOK CHANGE --%>
 
 					<%
-						}
 					}
 					%>
 

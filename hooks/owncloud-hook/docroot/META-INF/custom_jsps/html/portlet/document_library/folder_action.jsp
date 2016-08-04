@@ -67,7 +67,7 @@ else {
 	}
 }
 
-int status = WorkflowConstants.STATUS_APPROVED; 
+int status = WorkflowConstants.STATUS_APPROVED;
 
 if (permissionChecker.isCompanyAdmin() || permissionChecker.isGroupAdmin(scopeGroupId)) {
 	status = WorkflowConstants.STATUS_ANY;
@@ -96,7 +96,10 @@ else {
 	showPermissionsURL = DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS);
 }
 
+//BEGIN HOOK CHANGE
+//detect if user is an administrator oder advanced user
 boolean adminOrAdvancedUser = permissionChecker.isOmniadmin() || RoleLocalServiceUtil.hasUserRole(user.getUserId(), company.getCompanyId(), "Advanced User", false);
+//END HOOK CHANGE
 
 boolean showWhenSingleIcon = false;
 
@@ -139,9 +142,8 @@ String iconMenuId = null;
 					</c:if>
 
 					<%-- BEGIN HOOK CHANGE --%>
-					<%-- 
-					<c:if test="<%= hasUpdatePermission && folder.isMountPoint() %>">
-					--%>
+					<%-- show button to edit repository only to administrators --%>
+					<%-- <c:if test="<%= hasUpdatePermission && folder.isMountPoint() %>"> --%>
 					<c:if test="<%= hasUpdatePermission && folder.isMountPoint() && permissionChecker.isOmniadmin() %>">
 					<%-- END HOOK CHANGE --%>
 						<portlet:renderURL var="editURL">
@@ -171,8 +173,11 @@ String iconMenuId = null;
 							url="<%= moveURL %>"
 						/>
 					</c:if>
-
+					<%-- BEGIN HOOK CHANGE --%>
+					<%-- hide permissions if user is not an administrator or an advanced user --%>
+					<%-- <c:if test="<%= showPermissionsURL %>"> --%>
 					<c:if test="<%= adminOrAdvancedUser && showPermissionsURL %>">
+					<%-- END HOOK CHANGE --%>
 						<liferay-security:permissionsURL
 							modelResource="<%= modelResource %>"
 							modelResourceDescription="<%= HtmlUtil.escape(modelResourceDescription) %>"
@@ -206,9 +211,8 @@ String iconMenuId = null;
 					</c:if>
 					
 					<%-- BEGIN HOOK CHANGE --%>
-					<%-- 
-					<c:if test="<%= hasDeletePermission && folder.isMountPoint() %>">
-					--%>
+					<%-- show button to delete repository only to administrators --%>
+					<%-- <c:if test="<%= hasDeletePermission && folder.isMountPoint() %>"> --%>
 					<c:if test="<%= hasDeletePermission && folder.isMountPoint() && permissionChecker.isOmniadmin() %>">
 					<%-- END HOOK CHANGE --%>
 						<portlet:renderURL var="redirectURL">
@@ -407,21 +411,26 @@ String iconMenuId = null;
 			</c:when>
 		</c:choose>
 
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- show Button "access from desktop" only to administrators--%>
 		<c:if test="<%= permissionChecker.isOmniadmin() %>">
-			<c:if test="<%= hasViewPermission && portletDisplay.isWebDAVEnabled() && ((folder == null) || (folder.getRepositoryId() == scopeGroupId)) %>">
-	
-				<%
-				iconMenuId = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon-menu:id"));
-				%>
-	
-				<liferay-ui:icon
-					cssClass='<%= randomNamespace + "-webdav-action" %>'
-					image="desktop"
-					message="access-from-desktop"
-					url="javascript:;"
-				/>
-			</c:if>
+		<%-- END HOOK CHANGE --%>
+		<c:if test="<%= hasViewPermission && portletDisplay.isWebDAVEnabled() && ((folder == null) || (folder.getRepositoryId() == scopeGroupId)) %>">
+
+			<%
+			iconMenuId = GetterUtil.getString((String)request.getAttribute("liferay-ui:icon-menu:id"));
+			%>
+
+			<liferay-ui:icon
+				cssClass='<%= randomNamespace + "-webdav-action" %>'
+				image="desktop"
+				message="access-from-desktop"
+				url="javascript:;"
+			/>
 		</c:if>
+		<%-- BEGIN HOOK CHANGE --%>
+		</c:if>
+		<%-- END HOOK CHANGE --%>
 	</liferay-ui:icon-menu>
 </liferay-util:buffer>
 

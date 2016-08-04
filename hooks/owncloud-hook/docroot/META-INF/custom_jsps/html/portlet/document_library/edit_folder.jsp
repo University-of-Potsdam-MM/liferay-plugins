@@ -267,6 +267,7 @@ if (workflowEnabled) {
 		</c:if>
 		
 		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Hide settings for permissions if user of not an administrator --%>
 		<%--  
 		<c:if test="<%= !rootFolder && (folder == null) %>">
 			<aui:field-wrapper label="permissions">

@@ -13,27 +13,30 @@
  * details.
  */
 --%>
+<%-- BEGIN HOOK CHANGE --%>
 <%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%@page import="com.liferay.portal.kernel.bean.PortletBeanLocatorUtil"%>
 <%@page import="java.lang.reflect.Method"%>
 
 <%
+	// Get isOwncloudRepository attribute detecting whether the current folder belongs to a repository 
 	boolean isOwncloudRepository = false;
 	if (request.getAttribute("isOwncloudRepository") != null) 
-		isOwncloudRepository = Boolean.parseBoolean(request.getAttribute("isOwncloudRepository").toString());
-		 
+		isOwncloudRepository = Boolean.parseBoolean(request.getAttribute("isOwncloudRepository").toString());		 
 		 
 	Object owncloudRepositoryObject = null;
 	Method getDownloadLinkMethod = null;
 	Object owncloudCacheObject = null;
 	Method getErrorMethod = null;
 		 
-	if (isOwncloudRepository){		
+	if (isOwncloudRepository){	
+		// get method returning the download link for a file by reflection (necessary because hook classes are not visible)
 		ClassLoader classLoader = PortletBeanLocatorUtil.getBeanLocator("owncloud-hook").getClassLoader();
 		Class owncloudRepositoryClass = classLoader.loadClass("de.unipotsdam.elis.owncloud.repository.OwncloudRepository");
 		getDownloadLinkMethod = owncloudRepositoryClass.getMethod("getDownloadLink", long.class);
 		owncloudRepositoryObject = owncloudRepositoryClass.newInstance();
-		
+
+		// get method to access cache (for error messages)
 		Class owncloudCacheClass = classLoader.loadClass("de.unipotsdam.elis.owncloud.repository.OwncloudCache");
 		Method getInstanceMethod = owncloudCacheClass.getMethod("getInstance");
 		owncloudCacheObject = getInstanceMethod.invoke(null);
@@ -42,3 +45,4 @@
 	
 	showFoldersSearch = false;
 %>
+<%-- END HOOK CHANGE --%>

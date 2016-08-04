@@ -126,7 +126,11 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 	</c:if>
 
 	<aui:row>
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Increse column size because details column is removed --%>
+		<%-- <aui:col cssClass="lfr-asset-column-details" width="<%= 70 %>"> --%>
 		<aui:col cssClass="lfr-asset-column-details" width="<%= 100 %>">
+		<%-- END HOOK CHANGE --%>
 			<c:if test="<%= showActions %>">
 				<liferay-ui:app-view-toolbar>
 					<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "fileEntryToolbar" %>' />
@@ -195,7 +199,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 						</span>
 
 						<%-- BEGIN HOOK CHANGE --%>
-						
+						<%-- Move modification date and description to the header and remove uploaded by message --%>
 						<div class="asset-details-content">
 
 							<div class="lfr-asset-icon lfr-asset-date">
@@ -209,8 +213,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							</c:if>
 						</div>
 						
-						<%-- 
-						<span class="user-date">
+						<%-- <span class="user-date">
 
 							<%
 							String displayURL = StringPool.BLANK;
@@ -223,12 +226,9 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							%>
 
 							<liferay-ui:icon image="../document_library/add_document" label="<%= true %>" message='<%= LanguageUtil.format(pageContext, "uploaded-by-x-x", new Object[] {displayURL, HtmlUtil.escape(fileEntry.getUserName()), dateFormatDateTime.format(fileEntry.getCreateDate())}) %>' />
-						</span>
- 						--%>
- 						
- 						
- 						
+						</span> --%>
 						<%-- END HOOK CHANGE --%>
+						
 						<c:if test="<%= enableRatings && fileEntry.isSupportsSocial() %>">
 							<span class="lfr-asset-ratings">
 								<liferay-ui:ratings
@@ -458,6 +458,7 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 		</aui:col>
 
 		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Hide details column --%>
 		<%--
 		<aui:col cssClass="lfr-asset-column-details context-pane" last="<%= true %>" width="<%= 30 %>">
 			<div class="body-row asset-details">
@@ -681,10 +682,10 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 								headerNames.add("version");
 								headerNames.add("date");
 								headerNames.add("size");
-								/*
+								
 								if (showNonApprovedDocuments && !portletId.equals(PortletKeys.TRASH)) {
 									headerNames.add("status");
-								}*/
+								}
 
 								headerNames.add(StringPool.BLANK);
 
@@ -727,10 +728,10 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 									row.addText(TextFormatter.formatStorageSize(curFileVersion.getSize(), locale));
 
 									// Status
-									/*
+									
 									if (showNonApprovedDocuments && !portletId.equals(PortletKeys.TRASH)) {
 										row.addStatus(curFileVersion.getStatus(), curFileVersion.getStatusByUserId(), curFileVersion.getStatusDate());
-									}*/
+									}
 
 									// Action
 
@@ -954,36 +955,87 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					}
 				}
 			);
-		</c:if>
-
-		<c:if test="<%= permissionChecker.isOmniadmin() %>">
-			<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
+			
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- Remove Buttons for checkin and checkout of a file --%>
+			<%-- <c:if test="<%= !fileEntry.isCheckedOut() %>">
 				fileEntryButtonGroup.push(
 					{
-						<liferay-security:permissionsURL
-							modelResource="<%= DLFileEntryConstants.getClassName() %>"
-							modelResourceDescription="<%= fileEntry.getTitle() %>"
-							resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
-							var="permissionsURL"
-							windowState="<%= LiferayWindowState.POP_UP.toString() %>"
-						/>
-	
-						icon: 'icon-permissions',
-						label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
+
+						icon: 'icon-lock',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkout[document]") %>',
 						on: {
 							click: function(event) {
-								Liferay.Util.openWindow(
-									{
-										title: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
-										uri: '<%= permissionsURL.toString() %>',
-									}
-								);
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
 							}
 						}
 					}
 				);
 			</c:if>
+
+			<c:if test="<%= fileEntry.isCheckedOut() && fileEntry.hasLock() %>">
+				fileEntryButtonGroup.push(
+					{
+
+						icon: 'icon-undo',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "cancel-checkout[document]") %>',
+						on: {
+							click: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CANCEL_CHECKOUT %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
+						}
+					},
+					{
+
+						icon: 'icon-unlock',
+						label: '<%= UnicodeLanguageUtil.get(pageContext, "checkin") %>',
+						on: {
+							click: function(event) {
+								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKIN %>';
+								submitForm(document.<portlet:namespace />fm);
+							}
+						}
+					}
+				);
+			</c:if> --%>
+			<%-- END HOOK CHANGE --%>
 		</c:if>
+
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Hide permissions if user is not an administrator --%>
+		<c:if test="<%= permissionChecker.isOmniadmin() %>">
+		<%-- END HOOK CHANGE --%>
+		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.PERMISSIONS) %>">
+			fileEntryButtonGroup.push(
+				{
+					<liferay-security:permissionsURL
+						modelResource="<%= DLFileEntryConstants.getClassName() %>"
+						modelResourceDescription="<%= fileEntry.getTitle() %>"
+						resourcePrimKey="<%= String.valueOf(fileEntry.getFileEntryId()) %>"
+						var="permissionsURL"
+						windowState="<%= LiferayWindowState.POP_UP.toString() %>"
+					/>
+
+					icon: 'icon-permissions',
+					label: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
+					on: {
+						click: function(event) {
+							Liferay.Util.openWindow(
+								{
+									title: '<%= UnicodeLanguageUtil.get(pageContext, "permissions") %>',
+									uri: '<%= permissionsURL.toString() %>',
+								}
+							);
+						}
+					}
+				}
+			);
+		</c:if>
+		<%-- BEGIN HOOK CHANGE --%>
+		</c:if>
+		<%-- END HOOK CHANGE --%>
 
 		<c:if test="<%= DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.DELETE) && (fileEntry.getModel() instanceof DLFileEntry) && TrashUtil.isTrashEnabled(scopeGroupId) %>">
 			fileEntryButtonGroup.push(
@@ -1018,10 +1070,11 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 					label: '<%= UnicodeLanguageUtil.get(pageContext, "delete") %>',
 					on: {
 						click: function(event) {
-							<!-- BEGIN HOOK CHANGE -->
-							<!--if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {-->
+							<%-- BEGIN HOOK CHANGE --%>
+							<%-- Changed message when removing a file --%>
+							<%--if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this") %>')) {--%>
 							if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-delete-this-file") %>')) {
-							<!-- END HOOK CHANGE -->
+							<%-- END HOOK CHANGE --%>
 								document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 								document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= viewFolderURL.toString() %>';
 								submitForm(document.<portlet:namespace />fm);

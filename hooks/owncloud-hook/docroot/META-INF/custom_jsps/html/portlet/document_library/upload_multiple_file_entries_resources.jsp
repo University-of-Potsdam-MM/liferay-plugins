@@ -98,11 +98,14 @@ long assetClassPK = 0;
 			<aui:input name="description" />
 
 			<c:if test="<%= !fileEntryTypes.isEmpty() %>">
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- hide file entry types of only one is available --%>
 			<% if (fileEntryTypes.size() == 1) { %>
 				<div style="display: none;">
 			<% } else {%>
 				<div>
 			<% } %>
+			<%-- END HOOK CHANGE --%>
 				<liferay-ui:panel collapsible="<%= true %>" cssClass="document-type" persistState="<%= true %>" title="document-type">
 					<aui:input name="fileEntryTypeId" type="hidden" value="<%= (fileEntryTypeId > 0) ? fileEntryTypeId : 0 %>" />
 					<aui:input name="defaultLanguageId" type="hidden" value="<%= themeDisplay.getLanguageId() %>" />
@@ -232,7 +235,9 @@ long assetClassPK = 0;
 					label="<%= true %>"
 				/>
 			</liferay-ui:custom-attributes-available>
+		<%-- BEGIN HOOK CHANGE --%>
 		</div>
+		<%-- END HOOK CHANGE --%>
 		</c:if>
 		
 		<c:if test="<%= (folder == null) || folder.isSupportsSocial() %>">
@@ -246,7 +251,13 @@ long assetClassPK = 0;
 		</c:if>
 	</liferay-ui:panel-container>
 
-	
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- Hide permissions if user is not an administrator --%>
+	<%-- <aui:field-wrapper cssClass="upload-multiple-file-permissions" label="permissions">
+		<liferay-ui:input-permissions
+			modelName="<%= DLFileEntryConstants.getClassName() %>"
+		/>
+	</aui:field-wrapper> --%>
 	<c:choose>
 		<c:when test="<%= permissionChecker.isOmniadmin()%>">
 			<aui:field-wrapper cssClass="upload-multiple-file-permissions" label="permissions">
@@ -265,6 +276,7 @@ long assetClassPK = 0;
 			</div>
 		</c:otherwise>
 	</c:choose>
+	<%-- END HOOK CHANGE --%>
 
 	<span id="<portlet:namespace />selectedFileNameContainer"></span>
 

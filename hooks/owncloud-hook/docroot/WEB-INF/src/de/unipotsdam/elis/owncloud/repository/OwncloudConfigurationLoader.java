@@ -1,20 +1,11 @@
-package de.unipotsdam.elis.webdav;
+package de.unipotsdam.elis.owncloud.repository;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.liferay.compat.portal.util.PortalUtil;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Company;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.util.Encryptor;
-import com.liferay.util.EncryptorException;
 import com.liferay.util.portlet.PortletProps;
 
-import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
-
-public class WebdavConfigurationLoader {
+public class OwncloudConfigurationLoader {
 
 	private static final String _ownCloudWebdavAddress = "http://erdmaennchen.soft.cs.uni-potsdam.de/owncloud/remote.php/webdav";
 	private static final String _ownCloudDownloadAddress = "http://erdmaennchen.soft.cs.uni-potsdam.de/owncloud/index.php/apps/files/ajax/download.php";

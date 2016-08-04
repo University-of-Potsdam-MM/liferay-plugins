@@ -235,6 +235,12 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 
 	<aui:model-context bean="<%= fileVersion %>" model="<%= DLFileVersion.class %>" />
 
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- Remove file version information--%>
+	<%-- <c:if test="<%= fileVersion != null %>">
+		<aui:workflow-status model="<%= DLFileEntry.class %>" status="<%= fileVersion.getStatus() %>" version="<%= fileVersion.getVersion() %>" />
+	</c:if> --%>
+	<%-- END HOOK CHANGE --%>
 
 	<aui:fieldset>
 		<aui:field-wrapper>
@@ -413,8 +419,22 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 					<aui:input classPK="<%= assetClassPK %>" model="<%= DLFileEntry.class %>" name="tags" type="assetTags" />
 				</aui:fieldset>
 			</liferay-ui:panel>
+			
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- Hide possibility to add assets to an entry--%>
+			<%-- <liferay-ui:panel defaultState="closed" extended="<%= false %>" id="dlFileEntryAssetLinksPanel" persistState="<%= true %>" title="related-assets">
+				<aui:fieldset>
+					<liferay-ui:input-asset-links
+						className="<%= DLFileEntry.class.getName() %>"
+						classPK="<%= assetClassPK %>"
+					/>
+				</aui:fieldset>
+			</liferay-ui:panel> --%>
+			<%-- END HOOK CHANGE --%>
 		</c:if>
 		
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Hide permission settings if user is not an administrator --%>
 		<c:choose>
 			<c:when test="<%= fileEntry == null && permissionChecker.isOmniadmin()%>">
 				<aui:field-wrapper label="permissions">
@@ -433,6 +453,7 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 				</div>
 			</c:otherwise>
 		</c:choose>
+		<%-- END HOOK CHANGE --%>
 
 		<c:if test="<%= approved %>">
 			<div class="alert alert-info">
@@ -456,11 +477,12 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 			}
 			%>
 
-			<!-- 
-			<c:if test="<%= PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED %>">
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- Hide button to save entry as a draft --%>
+			<%-- <c:if test="<%= PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED %>">
 				<aui:button disabled="<%= checkedOut && !hasLock %>" name="saveButton" onClick='<%= renderResponse.getNamespace() + "saveFileEntry(true);" %>' value="<%= saveButtonLabel %>" />
-			</c:if>
-			 -->
+			</c:if> --%>
+			<%-- END HOOK CHANGE --%>
 
 			<%
 			String publishButtonLabel = "publish";
@@ -475,9 +497,25 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 			%>
 
 			<aui:button disabled="<%= checkedOut && !hasLock || (pending && PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) %>" name="publishButton" type="submit" value="<%= publishButtonLabel %>" />
+			
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- Hide buttons to check out or check in files --%>
+			<%-- <c:if test="<%= (fileEntry != null) && ((checkedOut && hasLock) || !checkedOut) %>">
+				<c:choose>
+					<c:when test="<%= !hasLock %>">
+						<aui:button onClick='<%= renderResponse.getNamespace() + "checkOut();" %>' value="checkout[document]" />
+					</c:when>
+					<c:otherwise>
+						<aui:button onClick='<%= renderResponse.getNamespace() + "checkIn();" %>' value="save-and-checkin" />
+
+						<aui:button onClick='<%= renderResponse.getNamespace() + "cancelCheckOut();" %>' value="cancel-checkout[document]" />
+					</c:otherwise>
+				</c:choose>
+			</c:if> --%>
+			<%-- END HOOK CHANGE --%>
 
 			<aui:button href="<%= redirect %>" type="cancel" />
-		</aui:button-row> 
+		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
 

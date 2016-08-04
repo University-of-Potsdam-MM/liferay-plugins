@@ -15,21 +15,31 @@ import com.liferay.portal.kernel.struts.StrutsPortletAction;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.DuplicateFolderNameException;
 
+/**
+ * Catches the DuplicateFolderNameException thrown in
+ * {@link de.unipotsdam.elis.owncloud.repository.OwncloudRepository#addExtRepositoryFolder(String, String, String)}
+ * to allow displaying the error in the user interface.
+ *
+ */
 public class CustomEditFolderAction implements StrutsPortletAction {
 
 	@Override
-	public void processAction(PortletConfig portletConfig, ActionRequest actionRequest, ActionResponse actionResponse)
+	public void processAction(PortletConfig portletConfig,
+			ActionRequest actionRequest, ActionResponse actionResponse)
 			throws Exception {
 
 	}
 
 	@Override
-	public void processAction(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
-			ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+	public void processAction(StrutsPortletAction originalStrutsPortletAction,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse) throws Exception {
 		try {
-			originalStrutsPortletAction.processAction(portletConfig, actionRequest, actionResponse);
+			originalStrutsPortletAction.processAction(portletConfig,
+					actionRequest, actionResponse);
 		} catch (SystemException e) {
-			if (e.getCause() != null && e.getCause() instanceof DuplicateFolderNameException) {
+			if (e.getCause() != null
+					&& e.getCause() instanceof DuplicateFolderNameException) {
 				SessionErrors.add(actionRequest, e.getCause().getClass());
 				setForward(actionRequest, "portlet.document_library.error");
 			}
@@ -37,27 +47,33 @@ public class CustomEditFolderAction implements StrutsPortletAction {
 	}
 
 	@Override
-	public String render(PortletConfig portletConfig, RenderRequest renderRequest, RenderResponse renderResponse)
+	public String render(PortletConfig portletConfig,
+			RenderRequest renderRequest, RenderResponse renderResponse)
 			throws Exception {
 		return null;
 	}
 
 	@Override
-	public String render(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
-			RenderRequest renderRequest, RenderResponse renderResponse) throws Exception {
-		return originalStrutsPortletAction.render(portletConfig, renderRequest, renderResponse);
+	public String render(StrutsPortletAction originalStrutsPortletAction,
+			PortletConfig portletConfig, RenderRequest renderRequest,
+			RenderResponse renderResponse) throws Exception {
+		return originalStrutsPortletAction.render(portletConfig, renderRequest,
+				renderResponse);
 	}
 
 	@Override
-	public void serveResource(PortletConfig portletConfig, ResourceRequest resourceRequest,
+	public void serveResource(PortletConfig portletConfig,
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+
+	}
+
+	@Override
+	public void serveResource(StrutsPortletAction originalStrutsPortletAction,
+			PortletConfig portletConfig, ResourceRequest resourceRequest,
 			ResourceResponse resourceResponse) throws Exception {
-
-	}
-
-	@Override
-	public void serveResource(StrutsPortletAction originalStrutsPortletAction, PortletConfig portletConfig,
-			ResourceRequest resourceRequest, ResourceResponse resourceResponse) throws Exception {
-		originalStrutsPortletAction.serveResource(portletConfig, resourceRequest, resourceResponse);
+		originalStrutsPortletAction.serveResource(portletConfig,
+				resourceRequest, resourceResponse);
 	}
 
 	private void setForward(PortletRequest portletRequest, String forward) {
@@ -65,7 +81,8 @@ public class CustomEditFolderAction implements StrutsPortletAction {
 	}
 
 	private String getForwardKey(PortletRequest portletRequest) {
-		String portletId = (String) portletRequest.getAttribute(com.liferay.portal.kernel.util.WebKeys.PORTLET_ID);
+		String portletId = (String) portletRequest
+				.getAttribute(com.liferay.portal.kernel.util.WebKeys.PORTLET_ID);
 
 		String portletNamespace = PortalUtil.getPortletNamespace(portletId);
 

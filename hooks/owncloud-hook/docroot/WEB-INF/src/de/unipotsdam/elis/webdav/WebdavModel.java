@@ -11,10 +11,12 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryModel;
 
 import de.unipotsdam.elis.owncloud.repository.OwncloudCache;
-import de.unipotsdam.elis.owncloud.repository.OwncloudCacheManager;
-import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
-public class WebdavModel implements ExtRepositoryModel {
+/**
+ * Represents a webdav model.
+ *
+ */
+public abstract class WebdavModel implements ExtRepositoryModel {
 
 	private static Log _log = LogFactoryUtil.getLog(WebdavModel.class);
 
@@ -25,6 +27,7 @@ public class WebdavModel implements ExtRepositoryModel {
 
 	public WebdavModel(String extRepositoryModelKey) {
 		_log.debug("create by key: " + extRepositoryModelKey);
+		// we don't distinguish between files and file versions
 		WebdavModel cachedWebdavModel = (WebdavModel) OwncloudCache.getInstance().getWebdavModel(
 				StringUtils.removeEnd(extRepositoryModelKey, "_v"));
 		if (cachedWebdavModel != null) {

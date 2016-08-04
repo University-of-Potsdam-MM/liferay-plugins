@@ -10,46 +10,41 @@ import com.liferay.compat.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 
-import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
+import de.unipotsdam.elis.owncloud.repository.OwncloudConfigurationLoader;
 
+/**
+ * Util to convert webdav ids.
+ *
+ */
 public class WebdavIdUtil {
 	private static Log _log = LogFactoryUtil.getLog(WebdavIdUtil.class);
 
 	public static final String LIFERAYROOTID = "100";
-	public static final String LIFERAYROOTSYMBOL = "/";
 
-	public static String getWebdavURIfromId(String id) {
-		return WebdavConfigurationLoader.getOwnCloudWebdavAddress() + id;
+	public static String getWebdavURLfromId(String id) {
+		return OwncloudConfigurationLoader.getOwnCloudWebdavAddress() + id;
 	}
 
-	/**
-	 * Root Directory is also listed (first)!!
-	 * 
-	 * @param resource
-	 * @return
-	 */
 	public static String getIdFromDavResource(DavResource resource) {
 		String path = null;
 		if (resource.isDirectory()) {
 			_log.debug("webdavResourceToDecodedId resource: " + resource.toString());
-			path = resource.toString().replace(WebdavConfigurationLoader.getEndpointPath(), "");
+			path = resource.toString().replace(OwncloudConfigurationLoader.getEndpointPath(), "");
 		} else {
 			_log.debug("webdavResourceToDecodedId resource: " + resource.getPath());
-			path = resource.getPath().replace(WebdavConfigurationLoader.getEndpointPath(), "");
+			path = resource.getPath().replace(OwncloudConfigurationLoader.getEndpointPath(), "");
 		}
 		_log.debug("getIdFromDavResource: " + encode(path));
 		return encode(path);
 	}
 
 	public static String getDownloadLinkFromId(String id) {
-		// TODO: was wenn datei im root verzeichnis liegt?
 		String directoryName = getParentNameFromChildId(id);
 		String fileName = getNameFromId(id);
 		URIBuilder url = null;
 		try {
 			url = new URIBuilder("http://localhost/owncloud/index.php/apps/files/ajax/download.php");
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		url.addParameter("dir", HttpUtil.encodeURL(directoryName));
