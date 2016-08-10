@@ -3,5 +3,6 @@
 
 <struts-config>
 	<action-mappings>
+		<action path="/dockbar/edit_site" type="com.liferay.portlet.sites.action.EditGroupAction" />
 	</action-mappings>
 </struts-config>
