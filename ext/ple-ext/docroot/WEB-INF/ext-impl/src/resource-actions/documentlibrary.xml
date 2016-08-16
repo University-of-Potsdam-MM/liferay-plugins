@@ -50,6 +50,9 @@
 			<site-member-defaults>
 				<action-key>ADD_DOCUMENT</action-key>
 				<action-key>ADD_FOLDER</action-key>
+				<!-- BEGIN EXT-PLUGIN CHANGE -->
+				<!-- <action-key>ADD_SHORTCUT</action-key> -->
+				<!-- END EXT-PLUGIN CHANGE -->
 				<action-key>SUBSCRIBE</action-key>
 				<action-key>VIEW</action-key>
 			</site-member-defaults>
@@ -183,6 +186,9 @@
 			</supports>
 			<site-member-defaults>
 				<action-key>ADD_DOCUMENT</action-key>
+				<!-- BEGIN EXT-PLUGIN CHANGE -->
+				<!-- <action-key>ADD_SHORTCUT</action-key> -->
+				<!-- END EXT-PLUGIN CHANGE -->
 				<action-key>ADD_SUBFOLDER</action-key>
 				<action-key>VIEW</action-key>
 			</site-member-defaults>

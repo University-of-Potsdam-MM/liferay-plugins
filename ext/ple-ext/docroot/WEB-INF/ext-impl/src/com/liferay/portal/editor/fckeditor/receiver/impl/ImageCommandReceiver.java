@@ -14,13 +14,28 @@
 
 package com.liferay.portal.editor.fckeditor.receiver.impl;
 
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.disk.DiskFileItem;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import com.liferay.portal.editor.fckeditor.command.CommandArgument;
 import com.liferay.portal.editor.fckeditor.exception.FCKException;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
-import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
@@ -30,7 +45,6 @@ import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -57,26 +71,12 @@ import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import javax.portlet.PortletConfig;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 /**
- * @author Ivica Cardic
+ * Taken from
+ * {@com.liferay.portal.editor.fckeditor.receiver.impl.DocumentCommandReceiver}
+ * and adopted to allow the upload of pictures by the CKEditor.
+ * 
+ * @author Matthias
  */
 public class ImageCommandReceiver extends BaseCommandReceiver {
 
@@ -107,6 +107,11 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 		return "0";
 	}
 
+	/*
+	 * Needs to be overwritten to call the correct _writeUploadResponse method.
+	 * The Drag & Drop plugin expects the response as an XML while the upload by
+	 * menu expects a JSON response
+	 */
 	@Override
 	public void fileUpload(CommandArgument commandArgument,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -146,7 +151,7 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 
 			DiskFileItem diskFileItem = (DiskFileItem) fields.get("NewFile");
 
-			if (diskFileItem == null){
+			if (diskFileItem == null) {
 				diskFileItem = (DiskFileItem) fields.get("upload");
 				droppedImage = true;
 			}
@@ -187,9 +192,9 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 					+ newFileEntry.getTitle() + StringPool.SLASH
 					+ newFileEntry.getUuid());
 			if (droppedImage)
-				_writeUploadResponseForDroppedImage(fileName, fileURL, returnValue,
-						request.getParameter("CKEditorFuncNum"), response,
-						themeDisplay);
+				_writeUploadResponseForDroppedImage(fileName, fileURL,
+						returnValue, request.getParameter("CKEditorFuncNum"),
+						response, themeDisplay);
 			else
 				_writeUploadResponse(fileName, fileURL, returnValue, response,
 						themeDisplay);
@@ -283,6 +288,10 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 		return "0";
 	}
 
+	/**
+	 * Sets the imageupload property which is recognized in the owncloud-hook
+	 * allowing a direct upload.
+	 */
 	protected FileEntry customFileUpload(CommandArgument commandArgument,
 			String fileName, InputStream inputStream, String contentType,
 			long size) {
@@ -484,6 +493,10 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 		}
 	}
 
+	/**
+	 * Creates an upload response with the needed information in the JSON
+	 * format.
+	 */
 	private void _writeUploadResponse(String fileName, String url,
 			String returnValue, HttpServletResponse response,
 			ThemeDisplay themeDisplay) {
@@ -524,9 +537,12 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 		}
 	}
 
-	private void _writeUploadResponseForDroppedImage(String fileName, String url,
-			String returnValue, String funcNum, HttpServletResponse response,
-			ThemeDisplay themeDisplay) {
+	/**
+	 * Creates an upload response with the needed information in the XML format.
+	 */
+	private void _writeUploadResponseForDroppedImage(String fileName,
+			String url, String returnValue, String funcNum,
+			HttpServletResponse response, ThemeDisplay themeDisplay) {
 
 		try {
 			StringBundler sb = new StringBundler(8);

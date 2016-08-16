@@ -530,9 +530,11 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 			if (groupId > 0) {
 				group = GroupLocalServiceUtil.getGroup(groupId);
 
+				// BEGIN EXT-PLUGIN CHANGE
+				// Get layout group before checking if it is the personal site to solve issue LPS-57926
 				// If the group is a scope group for a layout, check the
 				// original group.
-
+				
 				if (group.isLayout() &&
 					!ResourceBlockLocalServiceUtil.isSupported(name)) {
 
@@ -553,6 +555,7 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 
 					groupId = group.getGroupId();
 				}
+				// END EXT-PLUGIN CHANGE
 
 				// If the group is a staging group, check the live group.
 

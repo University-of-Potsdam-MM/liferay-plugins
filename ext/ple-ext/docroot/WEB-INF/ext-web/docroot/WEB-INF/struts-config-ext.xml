@@ -3,6 +3,7 @@
 
 <struts-config>
 	<action-mappings>
+		<!-- needed to add a panel to the sidebar enabling site editing -->
 		<action path="/dockbar/edit_site" type="com.liferay.portlet.sites.action.EditGroupAction" />
 	</action-mappings>
 </struts-config>

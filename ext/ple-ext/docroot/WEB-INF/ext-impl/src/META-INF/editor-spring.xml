@@ -19,9 +19,11 @@
 				<entry key="Page">
 					<bean class="com.liferay.portal.editor.fckeditor.receiver.impl.PageCommandReceiver" />
 				</entry>
+				<!-- BEGIN EXT-PLUGIN CHANGE -->
 				<entry key="Image">
 					<bean class="com.liferay.portal.editor.fckeditor.receiver.impl.ImageCommandReceiver" />
 				</entry>
+				<!-- END EXT-PLUGIN CHANGE -->
 			</map>
 		</property>
 	</bean>

@@ -66,6 +66,10 @@
 				<action-key>VIEW</action-key>
 			</site-member-defaults>
 			<guest-defaults>
+				<!-- BEGIN EXT-PLUGIN CHANGE -->
+				<!-- <action-key>ADD_DISCUSSION</action-key>
+				<action-key>VIEW</action-key> -->
+				<!-- END EXT-PLUGIN CHANGE -->
 			</guest-defaults>
 			<guest-unsupported>
 				<action-key>ADD_DISCUSSION</action-key>
@@ -87,6 +91,9 @@
 		<weight>2</weight>
 		<permissions>
 			<supports>
+				<!-- BEGIN EXT-PLUGIN CHANGE -->
+				<!-- <action-key>ADD_TO_PAGE</action-key> -->
+				<!-- END EXT-PLUGIN CHANGE -->
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>ASSIGN_MEMBERS</action-key>
 				<action-key>DELETE</action-key>

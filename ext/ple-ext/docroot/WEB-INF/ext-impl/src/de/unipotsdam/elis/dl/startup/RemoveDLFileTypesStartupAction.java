@@ -14,28 +14,45 @@ import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
 import com.liferay.portlet.documentlibrary.model.DLFileEntryTypeConstants;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
 
-public class RemoveDLFileTypesStartupAction extends SimpleAction{
+/**
+ * Action which will be called when the server is started. The action removes
+ * the default file entry types.
+ * 
+ * @author Matthias
+ *
+ */
+public class RemoveDLFileTypesStartupAction extends SimpleAction {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void run(String[] ids) throws ActionException {
 		try {
-		DynamicQuery query = DynamicQueryFactoryUtil.forClass(DLFileEntryType.class);
-		Criterion criterion = null;
-		criterion = RestrictionsFactoryUtil.like("fileEntryTypeKey", DLFileEntryTypeConstants.NAME_CONTRACT);
-		criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("fileEntryTypeKey", DLFileEntryTypeConstants.NAME_MARKETING_BANNER));
-		criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("fileEntryTypeKey", DLFileEntryTypeConstants.NAME_ONLINE_TRAINING));
-		criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("fileEntryTypeKey", DLFileEntryTypeConstants.NAME_SALES_PRESENTATION));
-		query.add(criterion);
-		List<DLFileEntryType> result = DLFileEntryTypeLocalServiceUtil.dynamicQuery(query);
-		for (DLFileEntryType entryType : result){
-			DLFileEntryTypeLocalServiceUtil.deleteFileEntryType(entryType);
-		}
+			DynamicQuery query = DynamicQueryFactoryUtil
+					.forClass(DLFileEntryType.class);
+			Criterion criterion = null;
+			criterion = RestrictionsFactoryUtil.like("fileEntryTypeKey",
+					DLFileEntryTypeConstants.NAME_CONTRACT);
+			criterion = RestrictionsFactoryUtil.or(criterion,
+					RestrictionsFactoryUtil.like("fileEntryTypeKey",
+							DLFileEntryTypeConstants.NAME_MARKETING_BANNER));
+			criterion = RestrictionsFactoryUtil.or(criterion,
+					RestrictionsFactoryUtil.like("fileEntryTypeKey",
+							DLFileEntryTypeConstants.NAME_ONLINE_TRAINING));
+			criterion = RestrictionsFactoryUtil.or(criterion,
+					RestrictionsFactoryUtil.like("fileEntryTypeKey",
+							DLFileEntryTypeConstants.NAME_SALES_PRESENTATION));
+			query.add(criterion);
+			List<DLFileEntryType> result = DLFileEntryTypeLocalServiceUtil
+					.dynamicQuery(query);
+			for (DLFileEntryType entryType : result) {
+				DLFileEntryTypeLocalServiceUtil.deleteFileEntryType(entryType);
+			}
 		} catch (SystemException e) {
 			e.printStackTrace();
 		} catch (PortalException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }
