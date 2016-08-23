@@ -94,7 +94,7 @@ public class OwncloudRepository extends ExtRepositoryAdapter implements
 			fileName = title;
 		}
 
-		// indicates, that the file is an image and was uploaded through the
+		// indicates, that the file is an image and was uploaded by the
 		// CKEditor
 		boolean imageUpload = serviceContext.getAttribute("imageupload") == null ? false
 				: true;

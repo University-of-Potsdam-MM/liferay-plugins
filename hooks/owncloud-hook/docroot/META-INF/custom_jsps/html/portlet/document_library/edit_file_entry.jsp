@@ -323,7 +323,11 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 			</aui:validator>
 		</aui:input>
 
-		<aui:input name="title">
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- rename "title" to "name" --%>
+		<%-- <aui:input name="title"> --%>
+		<aui:input name="title" label="name">
+		<%-- END HOOK CHANGE --%>
 			<aui:validator errorMessage="you-must-specify-a-file-or-a-title" name="custom">
 				function(val, fieldNode, ruleValue) {
 					return ((val != '') || A.one('#<portlet:namespace />file').val() != '');
