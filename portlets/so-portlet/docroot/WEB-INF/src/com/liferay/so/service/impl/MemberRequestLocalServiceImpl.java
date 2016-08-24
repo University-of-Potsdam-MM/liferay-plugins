@@ -52,6 +52,7 @@ import com.liferay.so.util.PortletKeys;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
 
@@ -359,17 +360,40 @@ public class MemberRequestLocalServiceImpl
 			toName = receiverUser.getFullName();
 		}
 
-		String subject = StringUtil.read(
+		// BEGIN CHANGE
+		// the subject of the mail will be in german if the users language is set to german
+		/*String subject = StringUtil.read(
 			getClassLoader(),
-			"com/liferay/so/invitemembers/dependencies/subject.tmpl");
-
+			"com/liferay/so/invitemembers/dependencies/subject.tmpl");*/
+		String subjectFileName = null;
+		if (receiverUser.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage()))
+			subjectFileName = "subject_de.tmpl";
+		else
+			subjectFileName = "subject.tmpl";
+		String subject = StringUtil.read(
+				getClassLoader(),
+				"com/liferay/so/invitemembers/dependencies/" + 
+				subjectFileName);
+		// END CHANGE
 		String body = StringPool.BLANK;
 
 		if (memberRequest.getReceiverUserId() > 0) {
+			// BEGIN CHANGE
+			// the content of the mail will be in german if the users language is set to german
+			/* body = StringUtil.read(
+				getClassLoader(),
+				"com/liferay/so/invitemembers/dependencies/" +
+					"existing_user_bodyee.tmpl");*/
+			String bodyFileName = null;
+			if (receiverUser.getLocale().getLanguage().equals(Locale.GERMAN.getLanguage()))
+				bodyFileName = "existing_user_body_de.tmpl";
+			else
+				bodyFileName = "existing_user_body.tmpl";
 			body = StringUtil.read(
 				getClassLoader(),
 				"com/liferay/so/invitemembers/dependencies/" +
-					"existing_user_body.tmpl");
+				bodyFileName);
+			// END CHANGE
 		}
 		else {
 			body = StringUtil.read(
