@@ -13,6 +13,9 @@
  * details.
  */
 --%>
+<%-- 
+  Taken from the original iFrame-Portlet coming with liferay.
+ --%>
 
 <%@page import="com.liferay.portal.kernel.util.Validator"%>
 <%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>

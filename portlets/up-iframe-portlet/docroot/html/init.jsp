@@ -13,6 +13,10 @@
  * details.
  */
 --%>
+<%-- 
+  Taken from the original iFrame-Portlet coming with liferay. Includes lines from 
+  /html/common/init.jsp.
+ --%>
 
 
 <%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
@@ -42,7 +46,6 @@ WindowState windowState = liferayPortletRequest.getWindowState();
 PortletURL currentURLObj = PortletURLUtil.getCurrent(liferayPortletRequest, liferayPortletResponse);
 
 String currentURL = currentURLObj.toString();
-//String currentURL = PortalUtil.getCurrentURL(request);
 
 String src = portletPreferences.getValue("src", StringPool.BLANK);
 boolean relative = GetterUtil.getBoolean(portletPreferences.getValue("relative", StringPool.BLANK));

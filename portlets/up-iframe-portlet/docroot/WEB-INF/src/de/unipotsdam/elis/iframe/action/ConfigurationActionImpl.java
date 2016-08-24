@@ -24,6 +24,8 @@ import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 
 /**
+ * Taken from the original iFrame-Portlet coming with liferay.
+ * 
  * @author Brian Wing Shun Chan
  */
 public class ConfigurationActionImpl extends DefaultConfigurationAction {

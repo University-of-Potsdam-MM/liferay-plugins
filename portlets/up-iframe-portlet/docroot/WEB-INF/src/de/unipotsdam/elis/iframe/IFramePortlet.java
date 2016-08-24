@@ -38,7 +38,14 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 import de.unipotsdam.elis.iframe.util.IFrameUtil;
 
 /**
- * @author Brian Wing Shun Chan
+ * This class is taken from the original iFrame-Portlet coming with liferay. The
+ * methods getPassword, getSrc, getUserName and transformSrc are taken from
+ * {@link com.liferay.portlet.iframe.action.ViewAction}. The method
+ * processAction saves the url of the website which can be set in the portlet if
+ * no url is set. The method render sets the IFRAME_SRC-Attribute allowing to
+ * display the corresponding url in the portlet.
+ * 
+ * @author Brian Wing Shun Chan (edited by Matthias Weise)
  */
 public class IFramePortlet extends MVCPortlet {
 
@@ -47,53 +54,47 @@ public class IFramePortlet extends MVCPortlet {
 	public static final String DEFAULT_VIEW_ACTION = "/iframe/view";
 
 	@Override
-	public void processAction(ActionRequest actionRequest, ActionResponse actionResponse) throws IOException,
-			PortletException {
+	public void processAction(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException, PortletException {
 		String src = actionRequest.getParameter("website");
-		
+
 		PortletPreferences portletPreferences = actionRequest.getPreferences();
-		
+
 		portletPreferences.setValue("src", src);
 		portletPreferences.store();
-		
+
 		super.processAction(actionRequest, actionResponse);
 	}
 
 	@Override
-	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-		// TODO Auto-generated method stub
-
+	public void render(RenderRequest request, RenderResponse response)
+			throws PortletException, IOException {
 		String src = "";
 		try {
 			src = transformSrc(request, response);
 		} catch (PortalException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SystemException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*
-		 * if (Validator.isNull(src) || src.equals(Http.HTTP_WITH_SLASH) ||
-		 * src.equals(Http.HTTPS_WITH_SLASH)) {
-		 * 
-		 * response.setRenderParameter("jspPage", "html/config.jsp"); }
-		 */
 		request.setAttribute("IFRAME_SRC", src);
 		super.render(request, response);
 	}
 
-	protected String getPassword(RenderRequest renderRequest, RenderResponse renderResponse) throws PortalException,
+	protected String getPassword(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws PortalException,
 			SystemException {
 
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
-		String password = portletPreferences.getValue("basicPassword", StringPool.BLANK);
+		String password = portletPreferences.getValue("basicPassword",
+				StringPool.BLANK);
 
 		return IFrameUtil.getPassword(renderRequest, password);
 	}
 
-	protected String getSrc(RenderRequest renderRequest, RenderResponse renderResponse) {
+	protected String getSrc(RenderRequest renderRequest,
+			RenderResponse renderResponse) {
 
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
@@ -104,30 +105,35 @@ public class IFramePortlet extends MVCPortlet {
 		return src;
 	}
 
-	protected String getUserName(RenderRequest renderRequest, RenderResponse renderResponse) throws PortalException,
+	protected String getUserName(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws PortalException,
 			SystemException {
 
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
-		String userName = portletPreferences.getValue("basicUserName", StringPool.BLANK);
+		String userName = portletPreferences.getValue("basicUserName",
+				StringPool.BLANK);
 
 		return IFrameUtil.getUserName(renderRequest, userName);
 	}
 
-	protected String transformSrc(RenderRequest renderRequest, RenderResponse renderResponse) throws PortalException,
+	protected String transformSrc(RenderRequest renderRequest,
+			RenderResponse renderResponse) throws PortalException,
 			SystemException {
 
 		PortletPreferences portletPreferences = renderRequest.getPreferences();
 
 		String src = getSrc(renderRequest, renderResponse);
 
-		boolean auth = GetterUtil.getBoolean(portletPreferences.getValue("auth", StringPool.BLANK));
+		boolean auth = GetterUtil.getBoolean(portletPreferences.getValue(
+				"auth", StringPool.BLANK));
 
 		if (!auth) {
 			return src;
 		}
 
-		String authType = portletPreferences.getValue("authType", StringPool.BLANK);
+		String authType = portletPreferences.getValue("authType",
+				StringPool.BLANK);
 
 		if (authType.equals("basic")) {
 			String userName = getUserName(renderRequest, renderResponse);
@@ -140,14 +146,17 @@ public class IFramePortlet extends MVCPortlet {
 
 			src = protocol + userName + ":" + password + "@" + url;
 		} else {
-			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+			ThemeDisplay themeDisplay = (ThemeDisplay) renderRequest
+					.getAttribute(WebKeys.THEME_DISPLAY);
 
 			String portletId = PortalUtil.getPortletId(renderRequest);
 
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(themeDisplay.getCompanyId(), portletId);
+			Portlet portlet = PortletLocalServiceUtil.getPortletById(
+					themeDisplay.getCompanyId(), portletId);
 
-			src = themeDisplay.getPathMain() + "/" + portlet.getStrutsPath() + "/proxy?p_l_id="
-					+ themeDisplay.getPlid() + "&p_p_id=" + portletId;
+			src = themeDisplay.getPathMain() + "/" + portlet.getStrutsPath()
+					+ "/proxy?p_l_id=" + themeDisplay.getPlid() + "&p_p_id="
+					+ portletId;
 		}
 
 		return src;

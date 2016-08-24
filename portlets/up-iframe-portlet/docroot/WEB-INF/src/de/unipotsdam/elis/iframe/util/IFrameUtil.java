@@ -34,6 +34,8 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
 /**
+ * Taken from the original iFrame-Portlet coming with liferay.
+ * 
  * @author Amos Fong
  */
 public class IFrameUtil {
