@@ -600,7 +600,6 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 }
 
 form#_mycustompages_WAR_custompagesportlet_fm:before {
-	    content: "ODER";
     display: block;
     width: 100%;
     /* background: red; */
@@ -1033,4 +1032,19 @@ table *:focus {
 
 #portlet_mycustompages_WAR_custompagesportlet .label-required,  #portlet_othercustompages_WAR_custompagesportlet .label-required {
     color: red;
+}
+
+#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .choose-publishment-type {
+	float:left
+}
+#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .portalwide-publishment-div {
+	text-align: center;
+}
+
+#_mycustompages_WAR_custompagesportlet_inviteMembersContainer #_mycustompages_WAR_custompagesportlet_portalwide-publishment-button {
+	width:100%
+}
+
+#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .user-search-wrapper {
+	float:none
 }

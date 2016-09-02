@@ -1,3 +1,4 @@
+<%@page import="com.liferay.compat.portal.kernel.util.LocalizationUtil"%>
 <%@ include file="/html/init.jsp"%>
 
 <portlet:defineObjects />
@@ -22,17 +23,25 @@ String published = renderRequest.getParameter("published");
 	<% if (isPrivate) { %>
 		<span class="alert alert-info"><%= LanguageUtil.get(pageContext, "custompages-page-will-be-moved-to-public-area-message") %></span>
 	<% } %>
-	<div class="user-search-wrapper">
-		<h2>
-			<liferay-ui:message key="find-members" />
-		</h2>
-
-		<input class="invite-user-search" id="<portlet:namespace />inviteUserSearch" name="<portlet:namespace />userName" type="text" />
-
-		<div class="search">
-			<div class="list"></div>
+	
+	<div class="choose-publishment-type">
+		<div class="portalwide-publishment-div">
+			<aui:button name="portalwide-publishment-button" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
+			<label class="or-label"><%= LanguageUtil.get(pageContext, "custompages-or") %></label>
+		</div>
+		<div class="user-search-wrapper">
+			<h2>
+				<liferay-ui:message key="custompages-find-members-for-sharing" />
+			</h2>
+	
+			<input class="invite-user-search" id="<portlet:namespace />inviteUserSearch" name="<portlet:namespace />userName" type="text" />
+	
+			<div class="search">
+				<div class="list"></div>
+			</div>
 		</div>
 	</div>
+
 
 	<div class="invited-users-wrapper">
 		<div class="user-invited">
@@ -59,8 +68,6 @@ String published = renderRequest.getParameter("published");
 				<portlet:param name="published" value="true" />
 			</portlet:renderURL>
 
-			
-			<aui:button value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
 				
 			<aui:form action="<%= publishCustomPageURL %>" id="fm" method="post" name="fm">
 				<aui:input name="redirect" type="hidden" value="<%= redirectHereURL %>" />
@@ -69,7 +76,7 @@ String published = renderRequest.getParameter("published");
 				<aui:input name="globalPublishment" type="hidden" value="false" />
 				
 
-				<aui:button id="submit" type="submit"  />
+				<aui:button id="submit" type="submit" value="custompages-share-with-chosen-user" />
 			</aui:form>
 		</div>
 	</div>
