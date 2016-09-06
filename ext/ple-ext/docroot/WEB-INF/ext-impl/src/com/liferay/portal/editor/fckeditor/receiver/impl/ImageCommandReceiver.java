@@ -33,6 +33,8 @@ import org.w3c.dom.Node;
 
 import com.liferay.portal.editor.fckeditor.command.CommandArgument;
 import com.liferay.portal.editor.fckeditor.exception.FCKException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.ByteArrayFileInputStream;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -43,6 +45,7 @@ import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.upload.FileItem;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
@@ -69,6 +72,7 @@ import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
 import com.liferay.portlet.documentlibrary.model.impl.DLFolderImpl;
 import com.liferay.portlet.documentlibrary.service.DLAppServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 
 /**
@@ -307,7 +311,13 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 			String title = fileName;
 			String description = StringPool.BLANK;
 			String changeLog = StringPool.BLANK;
-
+			
+			// temporary solution until box.up integration is added
+			folder = createDirectoryIfNecessary(folder, title);
+			title = solveDuplicateFileName(folder.getGroupId(), folder.getFolderId(), title);
+			folderId = folder.getFolderId();
+			//
+			
 			ServiceContext serviceContext = new ServiceContext();
 
 			serviceContext.setAddGroupPermissions(true);
@@ -320,6 +330,31 @@ public class ImageCommandReceiver extends BaseCommandReceiver {
 		} catch (Exception e) {
 			throw new FCKException(e);
 		}
+	}
+	
+	private Folder createDirectoryIfNecessary(Folder folder, String title) throws PortalException, SystemException{
+		if (folder.getFolderId() == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID){
+			ServiceContext serviceContext = new ServiceContext();
+			serviceContext.setAddGroupPermissions(true);
+			serviceContext.setAddGuestPermissions(true);
+			return DLAppServiceUtil.addFolder(folder.getRepositoryId(), folder.getFolderId(), "Uploads", "Uploads", serviceContext);
+		}
+		return folder;
+	}
+	
+	private String solveDuplicateFileName(long groupId, long folderId, String title) throws SystemException {
+		int i = 1;
+		String newTitle= title;
+		String fileExtension = StringPool.PERIOD + FileUtil.getExtension(title);
+		String titleWithoutFileExtension = StringUtil.replaceLast(title,
+				fileExtension, "");
+		while (DLFileEntryLocalServiceUtil.fetchFileEntry(groupId, folderId, newTitle) != null) {
+			newTitle = titleWithoutFileExtension + " "
+					+ StringPool.OPEN_PARENTHESIS + i
+					+ StringPool.CLOSE_PARENTHESIS + fileExtension;
+			i++;
+		}
+		return newTitle;
 	}
 
 	protected Element getFileElement(CommandArgument commandArgument,

@@ -360,7 +360,9 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 			String siteGroupId = String.valueOf(themeDisplay.getSiteGroupId());
 			String siteGroupName = HttpUtil.encodePath(themeDisplay.getSiteGroupName());
 			String uploadURL = "/c/portal/fckeditor?Command=FileUpload&Type=Image&CurrentFolder=%2F" + 
-				siteGroupId + "%20-%20" + siteGroupName + "%2FBox.UP%2F";
+				siteGroupId + "%20-%20" + siteGroupName + "%2FUploads%2F";
+			//String uploadURL = "/c/portal/fckeditor?Command=FileUpload&Type=Image&CurrentFolder=%2F" + 
+			//	siteGroupId + "%20-%20" + siteGroupName + "%2FBox.UP%2F";
 		%>
 		<%-- END HOOK CHANGE --%>
 
