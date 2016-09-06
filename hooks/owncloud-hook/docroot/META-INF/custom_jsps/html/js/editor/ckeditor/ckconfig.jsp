@@ -140,6 +140,7 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 		['Image']
 	];
 	<%-- BEGIN HOOK HANGE --%>
+	<%-- modify toolbar for the new plugins--%>
 	<%-- config.toolbar_liferay = [
 		['Bold', 'Italic', 'Underline', 'Strike'],
 

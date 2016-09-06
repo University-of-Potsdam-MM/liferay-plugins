@@ -656,6 +656,7 @@
         new $.fn.oembed.OEmbedProvider("youtube", "video", ["youtube\\.com/watch.+v=[\\w-]+&?", "youtu\\.be/[\\w-]+", "youtube.com/embed"], checkProtocol() + 'www.youtube.com/embed/$1?wmode=transparent', {
         templateRegex: /.*(?:v\=|be\/|embed\/)([\w\-]+)&?.*/,embedtag: {tag: 'iframe',width: '425',height: '349'}}),
         /* BEGIN HOOK CHANGE */
+        /* add new provider to allow embedding of media up videos */
         new $.fn.oembed.OEmbedProvider("mediaup", "video", ["mediaup\\.uni\\-potsdam\\.de/Play/[\\w-]+"], 'https://mediaup.uni-potsdam.de/player?autostart=n&fullscreen=y&width=320&height=260&videoId=$1&quality=hd&captions=n&chapterId=0', {
             templateRegex: /.*de\/Play\/([\w\-]+).*/,
             embedtag: {tag: 'iframe',width: '330',height: '260'}

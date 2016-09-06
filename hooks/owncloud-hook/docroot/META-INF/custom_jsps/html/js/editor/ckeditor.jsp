@@ -355,6 +355,7 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 			</c:otherwise>
 		</c:choose>
 		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Determine uploadurl for the UploadImage plugin --%>
 		<%
 			String siteGroupId = String.valueOf(themeDisplay.getSiteGroupId());
 			String siteGroupName = HttpUtil.encodePath(themeDisplay.getSiteGroupName());
@@ -367,12 +368,18 @@ if (inlineEdit && Validator.isNotNull(inlineEditSaveURL)) {
 			{
 				customConfig: '<%= PortalUtil.getPathContext() %>/html/js/editor/ckeditor/<%= HtmlUtil.escapeJS(ckEditorConfigFileName) %>?p_p_id=<%= HttpUtil.encodeURL(portletId) %>&p_main_path=<%= HttpUtil.encodeURL(mainPath) %>&contentsLanguageId=<%= HttpUtil.encodeURL(contentsLanguageId) %>&cssClasses=<%= HttpUtil.encodeURL(cssClasses) %>&cssPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeCss()) %>&doAsGroupId=<%= HttpUtil.encodeURL(String.valueOf(doAsGroupId)) %>&doAsUserId=<%= HttpUtil.encodeURL(doAsUserId) %>&imagesPath=<%= HttpUtil.encodeURL(themeDisplay.getPathThemeImages()) %>&inlineEdit=<%= inlineEdit %><%= configParams %>&languageId=<%= HttpUtil.encodeURL(LocaleUtil.toLanguageId(locale)) %>&name=<%= name %>&resizable=<%= resizable %>',
 				<%-- BEGIN HOOK CHANGE --%>
-				//filebrowserBrowseUrl: '<%= PortalUtil.getPathContext() %>/html/js/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=<%= connectorURL %><%= fileBrowserParams %>',
+				<%-- set filebrowserBrowseUrl to null to esable server browsing --%>
+				<%-- filebrowserBrowseUrl: '<%= PortalUtil.getPathContext() %>/html/js/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=<%= connectorURL %><%= fileBrowserParams %>', --%> 
 				filebrowserBrowseUrl: null,
-				// filebrowserUploadUrl: null,
+				<%-- END HOOK CHANGE --%>
+				<%-- BEGIN HOOK CHANGE --%>
+				<%-- set upload url for the UploadImage plugin
+				<%-- filebrowserUploadUrl: null, --%>
 				imageUploadUrl: '<%= uploadURL %>',
 				filebrowserUploadUrl: '<%= uploadURL %>',
-				// needed to allow helix media embed
+				<%-- END HOOK CHANGE --%>
+				<%-- BEGIN HOOK CHANGE --%>
+				<%-- needed to allow helix media embed --%>
 				allowedContent: true,
 				<%-- END HOOK CHANGE --%> 
 				toolbar: getToolbarSet('<%= TextFormatter.format(HtmlUtil.escapeJS(toolbarSet), TextFormatter.M) %>')
