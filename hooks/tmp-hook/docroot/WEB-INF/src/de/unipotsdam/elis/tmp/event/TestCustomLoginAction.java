@@ -42,6 +42,7 @@ import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.LayoutSetPrototypeActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -119,11 +120,11 @@ public class TestCustomLoginAction extends Action {
 		Map<Locale, String> GROUP_WORK_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Group Work");
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Gruppenarbeit");
-		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nÃ¼tzlichen Anwendungen fÃ¼r die Zusammenarbeit aus. StandardmÃ¤ÃŸig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es kÃ¶nnen aber auch weitere Seiten und Anwendungen hinzugefÃ¼gt werden.";
+		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nützlichen Anwendungen für die Zusammenarbeit aus. StandardmäÜŸig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es können aber auch weitere Seiten und Anwendungen hinzugefügt werden.";
 
 		Map<Locale, String> GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ãœbersicht");
+		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Üœbersicht");
 		Map<String, String[]> GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { "1_WAR_soannouncementsportlet",
 				"upactivities_WAR_upactivitiesportlet" });
@@ -204,17 +205,17 @@ public class TestCustomLoginAction extends Action {
 		Map<Locale, String> WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP = new HashMap<Locale, String>();
 		WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP.put(Locale.GERMANY, "Gruppenbeschreibung");
 		WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP.put(Locale.US, "Group Description");
-		String WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_CONTENT = "<?xml version=\"1.0\"?><root available-locales=\"en_US,de_DE\" default-locale=\"de_DE\"><static-content language-id=\"en_US\"><![CDATA[Here you can place a group description.]]></static-content><static-content language-id=\"de_DE\"><![CDATA[Hier haben Sie Platz fÃ¼r eine Gruppenbeschreibung.]]></static-content></root>";
+		String WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_CONTENT = "<?xml version=\"1.0\"?><root available-locales=\"en_US,de_DE\" default-locale=\"de_DE\"><static-content language-id=\"en_US\"><![CDATA[Here you can place a group description.]]></static-content><static-content language-id=\"de_DE\"><![CDATA[Hier haben Sie Platz für eine Gruppenbeschreibung.]]></static-content></root>";
 
 		// Properties and layouts for the empty site template
 		Map<Locale, String> EMPTY_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		EMPTY_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Empty");
 		EMPTY_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Leer");
-		String EMPTY_SITE_TEMPLATE_DESCRIPTION = "Wenn Sie diese Option wÃ¤hlen, enthÃ¤lt der Workspace zunÃ¤chst noch keine Seiten und Anwendungen. Sie kÃ¶nnen diese mit wenigen Klicks selbst hinzufÃ¼gen und so Ihren Workspace individuell gestalten.";
+		String EMPTY_SITE_TEMPLATE_DESCRIPTION = "Wenn Sie diese Option wählen, enthält der Workspace zunächst noch keine Seiten und Anwendungen. Sie können diese mit wenigen Klicks selbst hinzufügen und so Ihren Workspace individuell gestalten.";
 
 		Map<Locale, String> EMPTY_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ãœbersicht");
+		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Üœbersicht");
 		Map<String, String[]> EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		Object[] EMPTY_OVERVIEW_LAYOUT = new Object[] { EMPTY_OVERVIEW_LAYOUT_NAME_MAP, new Boolean(true), null,
 				"2_columns_i", EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP };
@@ -233,12 +234,12 @@ public class TestCustomLoginAction extends Action {
 		// Properties and layouts for public area of sites
 		Map<Locale, String> PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Public Workspace Page");
-		PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Ã–ffentlicher Workspace-Bereich");
-		String PUBLIC_AREA_SITE_TEMPLATE_DESCRIPTION = "Ã–ffenlicher Workspace-Bereich";
+		PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Öffentlicher Workspace-Bereich");
+		String PUBLIC_AREA_SITE_TEMPLATE_DESCRIPTION = "Öffenlicher Workspace-Bereich";
 
 		Map<Locale, String> PUBLIC_AREA_SITE_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ãœbersicht");
+		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Üœbersicht");
 		Map<String, String[]> PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP.put("column-1",
 				new String[] { "workspacedescription_WAR_workspacedescriptionportlet" });
@@ -251,25 +252,25 @@ public class TestCustomLoginAction extends Action {
 		Map<Locale, String> BLOG_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		BLOG_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Blog");
 		BLOG_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit einem Blog");
-		String BLOG_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Blog, der z.B. als Lerntagebuch oder fÃ¼r Berichte genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String BLOG_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Blog, der z.B. als Lerntagebuch oder für Berichte genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
 		// Properties for the wiki page template
 		Map<Locale, String> WIKI_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		WIKI_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Wiki");
 		WIKI_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit einem Wiki");
-		String WIKI_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet ein Wiki, das z.B. als Glossar oder fÃ¼r Dokumentationen genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String WIKI_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet ein Wiki, das z.B. als Glossar oder für Dokumentationen genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
 		// Properties for the web content page template
 		Map<Locale, String> WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Text-Image Editor");
 		WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit Text-Bild-Editor");
-		String WEB_CONTENT_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Editor, der z.B. fÃ¼r Texte mit Grafiken und Weblinks genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String WEB_CONTENT_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Editor, der z.B. für Texte mit Grafiken und Weblinks genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
 		// Properties for the empty page template
 		Map<Locale, String> PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP.put(Locale.US, "Page without Applications");
 		PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Frei gestaltbare Seite");
-		String PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION = "Diese Seite ist leer und kann nach dem Erstellen beliebig mit Anwendungen und Inhalten bestÃ¼ckt werden.";
+		String PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION = "Diese Seite ist leer und kann nach dem Erstellen beliebig mit Anwendungen und Inhalten bestückt werden.";
 
 		// Properties and permissions for the editor role
 		Map<Locale, String> EDITOR_ROLE_TITLE_MAP = new HashMap<Locale, String>();
@@ -600,6 +601,253 @@ public class TestCustomLoginAction extends Action {
 				ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
 				ActionKeys.VIEW });
 
+		// Properties and permissions for the member role
+		Map<Locale, String> MEMBER_ROLE_TITLE_MAP = new HashMap<Locale, String>();
+		MEMBER_ROLE_TITLE_MAP.put(Locale.US, "Member");
+		MEMBER_ROLE_TITLE_MAP.put(Locale.GERMANY, "Mitglied");
+		Map<Locale, String> MEMBER_ROLE_DESCRIPTION_MAP = new HashMap<Locale, String>();
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.ENGLISH, "Member");
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.GERMAN, "Mitglied");
+		Map<String, String[]> MEMBER_ROLE_PERMISSIONS = new HashMap<String, String[]>();
+		// Workspace Administration -> Pages -> Sites of the Workspaces ->
+		// General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.GROUP_PAGES, new String[] { ActionKeys.ACCESS_IN_CONTROL_PANEL,
+				ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Pages -> Sites of the Workspaces ->
+		// Resource Permissions
+		MEMBER_ROLE_PERMISSIONS.put(Group.class.getName(), new String[] { ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS });
+		// Workspace Administration -> Pages -> Sites of the Workspaces -> Page
+		MEMBER_ROLE_PERMISSIONS
+				.put(Layout.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Recent Content-> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.RECENT_CONTENT, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.journal", new String[] { ActionKeys.ADD_ARTICLE,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Folder
+		MEMBER_ROLE_PERMISSIONS.put(JournalFolder.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Article
+		MEMBER_ROLE_PERMISSIONS.put(JournalArticle.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Feed
+		MEMBER_ROLE_PERMISSIONS.put(JournalFeed.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Structure
+		MEMBER_ROLE_PERMISSIONS.put(JournalStructure.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Template
+		MEMBER_ROLE_PERMISSIONS.put(JournalTemplate.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.DOCUMENT_LIBRARY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Documents
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.documentlibrary", new String[] { ActionKeys.ADD_DOCUMENT,
+				ActionKeys.ADD_FOLDER, ActionKeys.ADD_REPOSITORY, ActionKeys.ADD_STRUCTURE,
+				ActionKeys.SUBSCRIBE, ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Documents Folder
+		MEMBER_ROLE_PERMISSIONS.put(DLFolder.class.getName(), new String[] { ActionKeys.ACCESS,
+				ActionKeys.ADD_DOCUMENT, ActionKeys.ADD_SUBFOLDER, ActionKeys.DELETE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Document
+		MEMBER_ROLE_PERMISSIONS.put(DLFileEntry.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.DELETE, ActionKeys.OVERRIDE_CHECKOUT, ActionKeys.UPDATE, 				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Shortcut
+		MEMBER_ROLE_PERMISSIONS.put(DLFileShortcut.class.getName(), new String[] {  ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Document Type
+		MEMBER_ROLE_PERMISSIONS.put(DLFileEntryType.class.getName(), new String[] { ActionKeys.DELETE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Blogs -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BLOGS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Blogs -> Resource Permissions
+		// -> Blog Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.blogs", new String[] { ActionKeys.ADD_ENTRY,
+				ActionKeys.SUBSCRIBE });
+		// Workspace Administration -> Content -> Blogs -> Resource Permissions
+		// -> Blog Entry
+		MEMBER_ROLE_PERMISSIONS.put(BlogsEntry.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MESSAGE_BOARDS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.messageboards", new String[] { ActionKeys.ADD_FILE,
+				ActionKeys.ADD_MESSAGE, ActionKeys.REPLY_TO_MESSAGE, ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Category
+		MEMBER_ROLE_PERMISSIONS.put(MBCategory.class.getName(), new String[] {});
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Thread
+		MEMBER_ROLE_PERMISSIONS.put(MBThread.class.getName(), new String[] { ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Message
+		MEMBER_ROLE_PERMISSIONS.put(MBMessage.class.getName(), new String[] { ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Nodes
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.wiki", new String[] { ActionKeys.ADD_NODE });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Node
+		MEMBER_ROLE_PERMISSIONS.put(WikiNode.class.getName(), new String[] { ActionKeys.ADD_ATTACHMENT,
+				ActionKeys.ADD_PAGE, ActionKeys.DELETE, ActionKeys.IMPORT, ActionKeys.SUBSCRIBE, ActionKeys.UPDATE,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Page
+		MEMBER_ROLE_PERMISSIONS.put(WikiPage.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.DELETE, ActionKeys.SUBSCRIBE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Bookmarks -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BOOKMARKS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Bookmarks -> Resource
+		// Permissions -> Bookmark Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.bookmarks", new String[] { ActionKeys.ADD_ENTRY,
+				ActionKeys.ADD_FOLDER, ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Polls -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.POLLS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Polls -> Resource Permissions
+		// -> Poll Questions
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.polls", new String[] {});
+		// Workspace Administration -> Content -> Polls -> Resource Permissions
+		// -> Poll Question
+		MEMBER_ROLE_PERMISSIONS.put(PollsQuestion.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Tags -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.TAGS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Tags -> Resource Permissions
+		// -> Asset Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.asset", new String[] {});
+		// Workspace Administration -> Content -> Tags -> Resource Permissions
+		// -> Tag
+		MEMBER_ROLE_PERMISSIONS.put(AssetTag.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_CATEGORIES_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> Resource
+		// Permissions -> Category Vocabulary
+		MEMBER_ROLE_PERMISSIONS.put(AssetVocabulary.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> Resource
+		// Permissions -> Category
+		MEMBER_ROLE_PERMISSIONS.put(AssetCategory.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Users -> Site Memberships -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.SITE_MEMBERSHIPS_ADMIN, new String[] {});
+		// Workspace Administration -> Users -> Site Memberships -> Resource
+		// Permissions -> Team
+		MEMBER_ROLE_PERMISSIONS.put(Team.class.getName(), new String[] {});
+		// Workspace Administration -> Users -> Site Teams -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("191", new String[] {});
+		// Workspace Administration -> Applications -> Activities -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("upactivities_WAR_upactivitiesportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Announcements ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ANNOUNCEMENTS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Announcements ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.announcements.model.AnnouncementsEntry",
+				new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Asset Publisher ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_PUBLISHER, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Blogs -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BLOGS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Categories Navigation ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_CATEGORIES_NAVIGATION, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Comments and Feedback ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.PAGE_COMMENTS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Documents and Media
+		// Display -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.DOCUMENT_LIBRARY_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Events Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_eventsdisplayportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Media Gallery ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MEDIA_GALLERY_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Message Boards ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MESSAGE_BOARDS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_microblogsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Resource
+		// Permissions -> Microblogs
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.microblogs.model.MicroblogsEntry", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Resource
+		// Permissions -> Microblogs Entry
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.microblogs", new String[] {});
+		// Workspace Administration -> Applications -> Microblogs Status Update
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("2_WAR_microblogsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Polls Display
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.POLLS_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Quick Notest
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("97", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> RSS -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.RSS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Social Office
+		// Announcements -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_soannouncementsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tag Cloud -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.TAGS_CLOUD, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tags Navigation ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_TAGS_NAVIGATION, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tasks -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_tasksportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tasks -> Resource
+		// Permissions -> Tasks
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.tasks", new String[] {});
+		// Workspace Administration -> Applications -> Tasks -> Resource
+		// Permissions -> Tasks Entry
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.tasks.model.TasksEntry", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> WYSIWYG -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_wysiwygportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content List ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT_LIST, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content Search ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT_SEARCH, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Wiki -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Wiki Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Workspace Description ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("workspacedescription_WAR_workspacedescriptionportlet",
+				new String[] { ActionKeys.VIEW });
+
 		// names of the roles permissions will be removed from
 		String[] roleNamesForPermissionDeletion = new String[] { RoleConstants.USER, RoleConstants.POWER_USER,
 				RoleConstants.GUEST };
@@ -623,7 +871,7 @@ public class TestCustomLoginAction extends Action {
 		// name ids for permission addition
 		String[] namesForPermissionAdditionCompany = new String[] { "com.liferay.portlet.documentlibrary" };
 		// action ids for permission addition
-		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW };
+		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY };
 
 		// names of the roles permissions will be added to
 		String[] roleNamesForPermissionAdditionPersonal = new String[] { "User" };
@@ -645,7 +893,7 @@ public class TestCustomLoginAction extends Action {
 			setLayoutSetPrototypeUneditable(0, USER_PROFILE_LAYOUT_SET_PROTOTYPE_NAME);
 
 			// Create or update group work site template
-			LayoutSetPrototype groupWorkLayoutSetPrototype = createLayoutSetPrototypeIfNeededAndSetProperties(
+			createLayoutSetPrototypeIfNeededAndSetProperties(
 					GROUP_WORK_SITE_TEMPLATE_ID, GROUP_WORK_SITE_TEMPLATE_NAME_MAP,
 					GROUP_WORK_SITE_TEMPLATE_DESCRIPTION, true);
 			createLayoutSetPrototypeLayouts(GROUP_WORK_SITE_TEMPLATE_ID,
@@ -686,8 +934,12 @@ public class TestCustomLoginAction extends Action {
 					PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP, PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION);
 
 			// Create or update editor role and set permissions
-			Role role = createOrUpdateRole(EDITOR_ROLE_TITLE_MAP, EDITOR_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
-			setRolePermissions(role, EDITOR_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
+			Role editorRole = createOrUpdateRole(EDITOR_ROLE_TITLE_MAP, EDITOR_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
+			setRolePermissions(editorRole, EDITOR_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
+			
+			// Create or update member role and set permissions
+			Role memberRole = createOrUpdateRole(MEMBER_ROLE_TITLE_MAP, MEMBER_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
+			setRolePermissions(memberRole, MEMBER_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
 
 			// Removes given permissions
 			removePermissions(roleNamesForPermissionDeletion, namesForPermissionDeletion,
@@ -767,11 +1019,23 @@ public class TestCustomLoginAction extends Action {
 			layoutSetPrototype.setNameMap(layoutSetPrototypeNameMap);
 			layoutSetPrototype.setDescription(layoutSetPrototypeDescription);
 			layoutSetPrototype.setActive(active);
+			UnicodeProperties settings = layoutSetPrototype.getSettingsProperties();
+			settings.setProperty("customJspServletContextName", "so-hook");
+			layoutSetPrototype.setSettingsProperties(settings);
 			LayoutSetPrototypeLocalServiceUtil.updateLayoutSetPrototype(layoutSetPrototype);
 			out.println("Set properties of the LayoutSetPrototype with the id "
 					+ layoutSetPrototype.getLayoutSetPrototypeId());
-
 		}
+
+		Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.USER);
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
+				LayoutSetPrototype.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(layoutSetPrototype.getLayoutSetPrototypeId()), userRole.getRoleId(),
+				new String[] { ActionKeys.VIEW });
+
+		UnicodeProperties settings = layoutSetPrototype.getSettingsProperties();
+		settings.setProperty("customJspServletContextName", "so-hook");
+
 		out.println();
 		return layoutSetPrototype;
 	}
@@ -1221,7 +1485,6 @@ public class TestCustomLoginAction extends Action {
 		out.println("Set article with the id " + journalArticle.getArticleId());
 		out.println();
 	}
-	
 
 	/**
 	 * Removes the given portlet id from the list. Ignores instance portlet ids.
@@ -1306,7 +1569,9 @@ public class TestCustomLoginAction extends Action {
 		return null;
 	}
 
-	/** Initializes the permission checker with the admin user
+	/**
+	 * Initializes the permission checker with the admin user
+	 * 
 	 * @throws Exception
 	 */
 	void initPermissionChecker() throws Exception {
@@ -1315,7 +1580,9 @@ public class TestCustomLoginAction extends Action {
 		PermissionThreadLocal.setPermissionChecker(permissionChecker);
 	}
 
-	/** Returns the first admin user found.
+	/**
+	 * Returns the first admin user found.
+	 * 
 	 * @return admin user
 	 * @throws Exception
 	 */
@@ -1328,6 +1595,6 @@ public class TestCustomLoginAction extends Action {
 		}
 		return null;
 	}
-// REMOVE FOR SCRIPT BEGIN 3
+	// REMOVE FOR SCRIPT BEGIN 3
 }
 // REMOVE FOR SCRIPT END 3
