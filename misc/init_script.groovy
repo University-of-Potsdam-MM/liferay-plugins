@@ -1368,7 +1368,7 @@ import com.liferay.portlet.wiki.model.WikiPage;
 				if (instancePortletId == null) {
 					instancePortletId = layoutTypePortlet.addPortletId(getAdmin().getUserId(), portlet,
 							columnPortletEntry.getKey(), 0);
-					System.out.println("Added portlet " + portlet + "to the layout " + nameMap.get(Locale.US));
+					out.println("Added portlet " + portlet + "to the layout " + nameMap.get(Locale.US));
 				}
 				orderedPortletIds.add(instancePortletId);
 			}
