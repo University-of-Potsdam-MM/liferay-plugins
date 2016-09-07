@@ -195,7 +195,7 @@ public class EditGroupAssignmentsAction extends PortletAction {
 		// BEGIN EXT-PLUGIN CHANGE
 		// set default user role
 		if (addUserIds.length > 0) {
-			Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Editor");
+			Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Member");
 			if (defaultRole != null)
 				UserGroupRoleLocalServiceUtil.addUserGroupRoles(addUserIds, groupId, defaultRole.getRoleId());
 		}

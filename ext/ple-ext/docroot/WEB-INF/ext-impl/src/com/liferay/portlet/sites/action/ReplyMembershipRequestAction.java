@@ -74,7 +74,7 @@ public class ReplyMembershipRequestAction extends PortletAction {
 
 				// BEGIN EXT-PLUGIN CHANGE
 				// set default user role
-				Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Editor");
+				Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Member");
 				if (defaultRole != null)
 					UserGroupRoleLocalServiceUtil.addUserGroupRoles(membershipRequest.getUserId(),
 							membershipRequest.getGroupId(), new long[] { defaultRole.getRoleId() });
