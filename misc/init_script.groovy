@@ -101,11 +101,11 @@ import com.liferay.portlet.wiki.model.WikiPage;
 		Map<Locale, String> GROUP_WORK_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Group Work");
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Gruppenarbeit");
-		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nützlichen Anwendungen für die Zusammenarbeit aus. StandardmäÜ?ig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es können aber auch weitere Seiten und Anwendungen hinzugefügt werden.";
+		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nützlichen Anwendungen für die Zusammenarbeit aus. Standardmäßig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es können aber auch weitere Seiten und Anwendungen hinzugefügt werden.";
 
 		Map<Locale, String> GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ü?bersicht");
+		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
 		Map<String, String[]> GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP.put("column-1", [ "1_WAR_soannouncementsportlet",
 				"upactivities_WAR_upactivitiesportlet" ] as String[]);
@@ -196,7 +196,7 @@ import com.liferay.portlet.wiki.model.WikiPage;
 
 		Map<Locale, String> EMPTY_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ü?bersicht");
+		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
 		Map<String, String[]> EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		Object[] EMPTY_OVERVIEW_LAYOUT = [ EMPTY_OVERVIEW_LAYOUT_NAME_MAP, new Boolean(true), null,
 				"2_columns_i", EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP ] as Object[];
@@ -220,7 +220,7 @@ import com.liferay.portlet.wiki.model.WikiPage;
 
 		Map<Locale, String> PUBLIC_AREA_SITE_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
 		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
-		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Ü?bersicht");
+		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
 		Map<String, String[]> PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
 		PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP.put("column-1",
 				[ "workspacedescription_WAR_workspacedescriptionportlet" ] as String[]);
