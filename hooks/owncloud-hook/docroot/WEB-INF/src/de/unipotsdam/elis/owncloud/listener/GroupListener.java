@@ -31,7 +31,8 @@ public class GroupListener implements ModelListener<Group> {
 	public void onAfterCreate(Group model) throws ModelListenerException {
 		try {
 			if (model.isSite()) {
-				RepositoryServiceUtil.addRepository(model.getGroupId(),
+				// ADD WHEN BOX.UP IS CONNECTED
+				/* RepositoryServiceUtil.addRepository(model.getGroupId(),
 						PortalUtil.getClassNameId(OwncloudRepository.class
 								.getName()), 0, OwncloudConfigurationLoader
 								.getRepositoryName(), StringPool.BLANK,
@@ -40,7 +41,7 @@ public class GroupListener implements ModelListener<Group> {
 				OwncloudRepositoryUtil.getWebdavRepositoryAsRoot(
 						model.getGroupId()).createFolder(
 						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model
-								.getGroupId()));
+								.getGroupId()));*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
