@@ -19,12 +19,16 @@
 <%
 Folder folder = (Folder)request.getAttribute("view.jsp-folder");
 
-
-PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
-
-portletURLnew.setParameter("struts_action", "/document_library/view");
-
-DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
+// BEGIN HOOK CHANGE 
+// DLUtil.addPortletBreadcrumbEntries(folder, request, liferayPortletResponse);
+// Remove "Home" from breadcrumbs if folder belongs to an owncloud repository
+if (isOwncloudRepository){
+	PortletURL portletURLnew = liferayPortletResponse.createRenderURL();
+	portletURLnew.setParameter("struts_action", "/document_library/view");
+	DLUtil.addPortletBreadcrumbEntries(folder, request, portletURLnew);
+} else {
+	DLUtil.addPortletBreadcrumbEntries(folder, request, liferayPortletResponse);
+}
 %>
 
 <liferay-ui:breadcrumb

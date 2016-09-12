@@ -1,11 +1,14 @@
 package de.unipotsdam.elis.tmp.event;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.portlet.PortletPreferences;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,20 +18,31 @@ import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
 import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.LayoutType;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.Team;
+import com.liferay.portal.model.User;
+import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
+import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
+import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.persistence.LayoutSetPrototypeActionableDynamicQuery;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.model.AssetCategory;
@@ -44,6 +58,7 @@ import com.liferay.portlet.journal.model.JournalFeed;
 import com.liferay.portlet.journal.model.JournalFolder;
 import com.liferay.portlet.journal.model.JournalStructure;
 import com.liferay.portlet.journal.model.JournalTemplate;
+import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
@@ -51,6 +66,7 @@ import com.liferay.portlet.polls.model.PollsQuestion;
 import com.liferay.portlet.wiki.model.WikiNode;
 import com.liferay.portlet.wiki.model.WikiPage;
 
+// REMOVE FOR SCRIPT BEGIN 1
 public class TestCustomLoginAction extends Action {
 	/*
 	 * (non-Java-doc)
@@ -67,15 +83,23 @@ public class TestCustomLoginAction extends Action {
 	public void run(HttpServletRequest request, HttpServletResponse response) throws ActionException {
 
 		System.out.println("TestCustomLoginAction Active");
-
+		// REMOVE FOR SCRIPT END 1
 		// if set the script will search for the site template by the id (and
 		// set the name). Otherwise the script will search for the site template
 		// by the corresponding name.
 		long GROUP_WORK_SITE_TEMPLATE_ID = 0;
+		// if set the script will search for the site template by the id (and
+		// set the name). Otherwise the script will search for the site template
+		// by the corresponding name.
+		long EMPTY_SITE_TEMPLATE_ID = 0;
+		// if set the script will search for the site template by the id (and
+		// set the name). Otherwise the script will search for the site template
+		// by the corresponding name.
+		long PUBLIC_SITE_AREA_TEMPLATE_ID = 0;
 		// if set the script will search for the page template by the id (and
 		// set the name). Otherwise the script will search for the page template
 		// by the corresponding name.
-		long BLOG_PAGE_TEMPLATE_ID = 20317;
+		long BLOG_PAGE_TEMPLATE_ID = 0;
 		// if set the script will search for the page template by the id (and
 		// set the name). Otherwise the script will search for the page template
 		// by the corresponding name.
@@ -92,31 +116,163 @@ public class TestCustomLoginAction extends Action {
 		String USER_HOME_LAYOUT_SET_PROTOTYPE_NAME = "Social Office User Home";
 		String USER_PROFILE_LAYOUT_SET_PROTOTYPE_NAME = "Social Office User Profile";
 
+		// Properties and layouts for the group work site template
 		Map<Locale, String> GROUP_WORK_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Group Work");
 		GROUP_WORK_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Gruppenarbeit");
-		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nÃ¼tzlichen Anwendungen fÃ¼r die Zusammenarbeit aus. StandardmÃ¤ÃŸig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es kÃ¶nnen aber auch weitere Seiten und Anwendungen hinzugefÃ¼gt werden.";
+		String GROUP_WORK_SITE_TEMPLATE_DESCRIPTION = "Diese Vorlage stattet den Workspace mit nützlichen Anwendungen für die Zusammenarbeit aus. Standardmäßig ist eine Dokumentenverwaltung enthalten sowie verschiedene Web2.0-Werkzeuge (Blog, Wiki, Forum). Es können aber auch weitere Seiten und Anwendungen hinzugefügt werden.";
 
+		Map<Locale, String> GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
+		GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
+		Map<String, String[]> GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { "1_WAR_soannouncementsportlet",
+				"upactivities_WAR_upactivitiesportlet" });
+		GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP.put("column-2", new String[] { PortletKeys.JOURNAL_CONTENT });
+		Object[] GROUP_WORK_OVERVIEW_LAYOUT = new Object[] { GROUP_WORK_OVERVIEW_LAYOUT_NAME_MAP, new Boolean(true),
+				null, "2_columns_i", GROUP_WORK_OVERVIEW_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_DOCUMENTS_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_DOCUMENTS_LAYOUT_NAME_MAP.put(Locale.US, "Documents & Resources");
+		GROUP_WORK_DOCUMENTS_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Dokumente & Ressourcen");
+		Map<String, String[]> GROUP_WORK_DOCUMENTS_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_DOCUMENTS_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.DOCUMENT_LIBRARY });
+		Object[] GROUP_WORK_DOCUMENTS_LAYOUT = new Object[] { GROUP_WORK_DOCUMENTS_LAYOUT_NAME_MAP, new Boolean(true),
+				null, "1_column", GROUP_WORK_DOCUMENTS_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_WEB_BOOKMARKS_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_WEB_BOOKMARKS_LAYOUT_NAME_MAP.put(Locale.US, "Web bookmarks");
+		GROUP_WORK_WEB_BOOKMARKS_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Weblesezeichen");
+		Map<String, String[]> GROUP_WORK_WEB_BOOKMARKS_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_WEB_BOOKMARKS_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.BOOKMARKS });
+		Object[] GROUP_WORK_WEB_BOOKMARKS_LAYOUT = new Object[] { GROUP_WORK_WEB_BOOKMARKS_LAYOUT_NAME_MAP,
+				new Boolean(true), GROUP_WORK_DOCUMENTS_LAYOUT_NAME_MAP.get(Locale.US), "1_column",
+				GROUP_WORK_WEB_BOOKMARKS_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_TOOLS_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.put(Locale.US, "Tools");
+		GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Werkzeuge");
+		Object[] GROUP_WORK_TOOLS_LAYOUT = new Object[] { GROUP_WORK_TOOLS_LAYOUT_NAME_MAP, new Boolean(true), null,
+				"1_column", new LinkedHashMap<String, String[]>() };
+
+		Map<Locale, String> GROUP_WORK_BLOG_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_BLOG_LAYOUT_NAME_MAP.put(Locale.US, "Blog");
+		GROUP_WORK_BLOG_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Blog");
+		Map<String, String[]> GROUP_WORK_BLOG_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_BLOG_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.BLOGS });
+		Object[] GROUP_WORK_BLOG_LAYOUT = new Object[] { GROUP_WORK_BLOG_LAYOUT_NAME_MAP, new Boolean(true),
+				GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.get(Locale.US), "1_column", GROUP_WORK_BLOG_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_FORUM_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_FORUM_LAYOUT_NAME_MAP.put(Locale.US, "Forum");
+		GROUP_WORK_FORUM_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Forum");
+		Map<String, String[]> GROUP_WORK_FORUM_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_FORUM_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.MESSAGE_BOARDS });
+		Object[] GROUP_WORK_FORUM_LAYOUT = new Object[] { GROUP_WORK_FORUM_LAYOUT_NAME_MAP, new Boolean(true),
+				GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.get(Locale.US), "1_column", GROUP_WORK_FORUM_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_WIKI_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_WIKI_LAYOUT_NAME_MAP.put(Locale.US, "Wiki");
+		GROUP_WORK_WIKI_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Wiki");
+		Map<String, String[]> GROUP_WORK_WIKI_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_WIKI_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.WIKI });
+		Object[] GROUP_WORK_WIKI_LAYOUT = new Object[] { GROUP_WORK_WIKI_LAYOUT_NAME_MAP, new Boolean(true),
+				GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.get(Locale.US), "1_column", GROUP_WORK_WIKI_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_MEMBERS_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_MEMBERS_LAYOUT_NAME_MAP.put(Locale.US, "Members");
+		GROUP_WORK_MEMBERS_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Mitglieder");
+		Map<String, String[]> GROUP_WORK_MEMBERS_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_MEMBERS_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.SITE_MEMBERSHIPS_ADMIN });
+		GROUP_WORK_MEMBERS_LAYOUT_PORTLETS_MAP.put("column-2", new String[] { "2_WAR_soportlet" });
+		Object[] GROUP_WORK_MEMBERS_LAYOUT = new Object[] { GROUP_WORK_MEMBERS_LAYOUT_NAME_MAP, new Boolean(true),
+				null, "2_columns_i", GROUP_WORK_MEMBERS_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> GROUP_WORK_ORGANISATIONAL_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		GROUP_WORK_ORGANISATIONAL_LAYOUT_NAME_MAP.put(Locale.US, "Organisational");
+		GROUP_WORK_ORGANISATIONAL_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Organisierung");
+		Map<String, String[]> GROUP_WORK_ORGANISATIONAL_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		GROUP_WORK_ORGANISATIONAL_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { "1_WAR_tasksportlet" });
+		GROUP_WORK_ORGANISATIONAL_LAYOUT_PORTLETS_MAP.put("column-2", new String[] { PortletKeys.POLLS_DISPLAY });
+		Object[] GROUP_WORK_ORGANISATIONAL_LAYOUT = new Object[] { GROUP_WORK_ORGANISATIONAL_LAYOUT_NAME_MAP,
+				new Boolean(true), null, "2_columns_ii", GROUP_WORK_ORGANISATIONAL_LAYOUT_PORTLETS_MAP };
+
+		Object[][] GROUP_WORK_LAYOUTS = new Object[][] { GROUP_WORK_OVERVIEW_LAYOUT, GROUP_WORK_DOCUMENTS_LAYOUT,
+				GROUP_WORK_WEB_BOOKMARKS_LAYOUT, GROUP_WORK_TOOLS_LAYOUT, GROUP_WORK_BLOG_LAYOUT,
+				GROUP_WORK_FORUM_LAYOUT, GROUP_WORK_WIKI_LAYOUT, GROUP_WORK_ORGANISATIONAL_LAYOUT,
+				GROUP_WORK_MEMBERS_LAYOUT };
+
+		Map<Locale, String> WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP = new HashMap<Locale, String>();
+		WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP.put(Locale.GERMANY, "Gruppenbeschreibung");
+		WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP.put(Locale.US, "Group Description");
+		String WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_CONTENT = "<?xml version=\"1.0\"?><root available-locales=\"en_US,de_DE\" default-locale=\"de_DE\"><static-content language-id=\"en_US\"><![CDATA[Here you can place a group description.]]></static-content><static-content language-id=\"de_DE\"><![CDATA[Hier haben Sie Platz für eine Gruppenbeschreibung.]]></static-content></root>";
+
+		// Properties and layouts for the empty site template
+		Map<Locale, String> EMPTY_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
+		EMPTY_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Empty");
+		EMPTY_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Leer");
+		String EMPTY_SITE_TEMPLATE_DESCRIPTION = "Wenn Sie diese Option wählen, enthält der Workspace zunächst noch keine Seiten und Anwendungen. Sie können diese mit wenigen Klicks selbst hinzufügen und so Ihren Workspace individuell gestalten.";
+
+		Map<Locale, String> EMPTY_OVERVIEW_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
+		EMPTY_OVERVIEW_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
+		Map<String, String[]> EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		Object[] EMPTY_OVERVIEW_LAYOUT = new Object[] { EMPTY_OVERVIEW_LAYOUT_NAME_MAP, new Boolean(true), null,
+				"2_columns_i", EMPTY_OVERVIEW_LAYOUT_PORTLETS_MAP };
+
+		Map<Locale, String> EMPTY_MEMBERS_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		EMPTY_MEMBERS_LAYOUT_NAME_MAP.put(Locale.US, "Members");
+		EMPTY_MEMBERS_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Mitglieder");
+		Map<String, String[]> EMPTY_MEMBERS_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		EMPTY_MEMBERS_LAYOUT_PORTLETS_MAP.put("column-1", new String[] { PortletKeys.SITE_MEMBERSHIPS_ADMIN });
+		EMPTY_MEMBERS_LAYOUT_PORTLETS_MAP.put("column-2", new String[] { "2_WAR_soportlet" });
+		Object[] EMPTY_MEMBERS_LAYOUT = new Object[] { EMPTY_MEMBERS_LAYOUT_NAME_MAP, new Boolean(true), null,
+				"2_columns_i", EMPTY_MEMBERS_LAYOUT_PORTLETS_MAP };
+
+		Object[][] EMPTY_SITE_TEMPLATE_LAYOUTS = new Object[][] { EMPTY_OVERVIEW_LAYOUT, EMPTY_MEMBERS_LAYOUT };
+
+		// Properties and layouts for public area of sites
+		Map<Locale, String> PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
+		PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.put(Locale.US, "Public Workspace Page");
+		PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Öffentlicher Workspace-Bereich");
+		String PUBLIC_AREA_SITE_TEMPLATE_DESCRIPTION = "Öffenlicher Workspace-Bereich";
+
+		Map<Locale, String> PUBLIC_AREA_SITE_LAYOUT_NAME_MAP = new HashMap<Locale, String>();
+		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.US, "Overview");
+		PUBLIC_AREA_SITE_LAYOUT_NAME_MAP.put(Locale.GERMANY, "Übersicht");
+		Map<String, String[]> PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP = new LinkedHashMap<String, String[]>();
+		PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP.put("column-1",
+				new String[] { "workspacedescription_WAR_workspacedescriptionportlet" });
+		Object[] PUBLIC_AREA_SITE_LAYOUT = new Object[] { PUBLIC_AREA_SITE_LAYOUT_NAME_MAP, new Boolean(true),
+				GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.get(Locale.US), "1_column", PUBLIC_AREA_SITE_LAYOUT_PORTLETS_MAP };
+
+		Object[][] PUBLIC_AREA_SITE_LAYOUTS = new Object[][] { PUBLIC_AREA_SITE_LAYOUT };
+
+		// Properties for the blog page template
 		Map<Locale, String> BLOG_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		BLOG_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Blog");
 		BLOG_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit einem Blog");
-		String BLOG_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Blog, der z.B. als Lerntagebuch oder fÃ¼r Berichte genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String BLOG_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Blog, der z.B. als Lerntagebuch oder für Berichte genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
+		// Properties for the wiki page template
 		Map<Locale, String> WIKI_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		WIKI_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Wiki");
 		WIKI_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit einem Wiki");
-		String WIKI_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet ein Wiki, das z.B. als Glossar oder fÃ¼r Dokumentationen genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String WIKI_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet ein Wiki, das z.B. als Glossar oder für Dokumentationen genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
+		// Properties for the web content page template
 		Map<Locale, String> WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP.put(Locale.US, "Page with Text-Image Editor");
 		WEB_CONTENT_PAGE_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Seite mit Text-Bild-Editor");
-		String WEB_CONTENT_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Editor, der z.B. fÃ¼r Texte mit Grafiken und Weblinks genutzt werden kann. Es kÃ¶nnen weitere Anwendungen hinzugefÃ¼gt werden.";
+		String WEB_CONTENT_PAGE_TEMPLATE_DESCRIPTION = "Diese Seite beinhaltet einen Editor, der z.B. für Texte mit Grafiken und Weblinks genutzt werden kann. Es können weitere Anwendungen hinzugefügt werden.";
 
+		// Properties for the empty page template
 		Map<Locale, String> PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP = new HashMap<Locale, String>();
 		PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP.put(Locale.US, "Page without Applications");
 		PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP.put(Locale.GERMANY, "Frei gestaltbare Seite");
-		String PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION = "Diese Seite ist leer und kann nach dem Erstellen beliebig mit Anwendungen und Inhalten bestÃ¼ckt werden.";
+		String PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION = "Diese Seite ist leer und kann nach dem Erstellen beliebig mit Anwendungen und Inhalten bestückt werden.";
 
+		// Properties and permissions for the editor role
 		Map<Locale, String> EDITOR_ROLE_TITLE_MAP = new HashMap<Locale, String>();
 		EDITOR_ROLE_TITLE_MAP.put(Locale.US, "Editor");
 		EDITOR_ROLE_TITLE_MAP.put(Locale.GERMANY, "Redakteur");
@@ -133,11 +289,10 @@ public class TestCustomLoginAction extends Action {
 		// Resource Permissions
 		EDITOR_ROLE_PERMISSIONS.put(Group.class.getName(), new String[] { ActionKeys.ADD_COMMUNITY,
 				ActionKeys.ADD_LAYOUT, ActionKeys.ADD_LAYOUT_BRANCH, ActionKeys.ADD_LAYOUT_SET_BRANCH,
-				ActionKeys.CONFIGURE_PORTLETS, ActionKeys.EXPORT_IMPORT_LAYOUTS,
-				ActionKeys.EXPORT_IMPORT_PORTLET_INFO, ActionKeys.MANAGE_ANNOUNCEMENTS,
-				ActionKeys.MANAGE_ARCHIVED_SETUPS, ActionKeys.MANAGE_LAYOUTS, ActionKeys.MANAGE_STAGING,
-				ActionKeys.PERMISSIONS, ActionKeys.PREVIEW_IN_DEVICE, ActionKeys.PUBLISH_STAGING,
-				ActionKeys.PUBLISH_TO_REMOTE, ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS,
+				ActionKeys.CONFIGURE_PORTLETS, ActionKeys.EXPORT_IMPORT_LAYOUTS, ActionKeys.EXPORT_IMPORT_PORTLET_INFO,
+				ActionKeys.MANAGE_ANNOUNCEMENTS, ActionKeys.MANAGE_ARCHIVED_SETUPS, ActionKeys.MANAGE_LAYOUTS,
+				ActionKeys.MANAGE_STAGING, ActionKeys.PERMISSIONS, ActionKeys.PREVIEW_IN_DEVICE,
+				ActionKeys.PUBLISH_STAGING, ActionKeys.PUBLISH_TO_REMOTE, ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS,
 				ActionKeys.VIEW_SITE_ADMINISTRATION, ActionKeys.VIEW_STAGING });
 		// Workspace Administration -> Pages -> Sites of the Workspaces -> Page
 		EDITOR_ROLE_PERMISSIONS.put(Layout.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
@@ -446,6 +601,253 @@ public class TestCustomLoginAction extends Action {
 				ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
 				ActionKeys.VIEW });
 
+		// Properties and permissions for the member role
+		Map<Locale, String> MEMBER_ROLE_TITLE_MAP = new HashMap<Locale, String>();
+		MEMBER_ROLE_TITLE_MAP.put(Locale.US, "Member");
+		MEMBER_ROLE_TITLE_MAP.put(Locale.GERMANY, "Mitglied");
+		Map<Locale, String> MEMBER_ROLE_DESCRIPTION_MAP = new HashMap<Locale, String>();
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.ENGLISH, "Member");
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.GERMAN, "Mitglied");
+		Map<String, String[]> MEMBER_ROLE_PERMISSIONS = new HashMap<String, String[]>();
+		// Workspace Administration -> Pages -> Sites of the Workspaces ->
+		// General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.GROUP_PAGES, new String[] { ActionKeys.ACCESS_IN_CONTROL_PANEL,
+				ActionKeys.ADD_TO_PAGE, ActionKeys.CONFIGURATION, ActionKeys.PERMISSIONS, ActionKeys.PREFERENCES,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Pages -> Sites of the Workspaces ->
+		// Resource Permissions
+		MEMBER_ROLE_PERMISSIONS.put(Group.class.getName(), new String[] { ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS });
+		// Workspace Administration -> Pages -> Sites of the Workspaces -> Page
+		MEMBER_ROLE_PERMISSIONS
+				.put(Layout.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Recent Content-> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.RECENT_CONTENT, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.journal", new String[] { ActionKeys.ADD_ARTICLE,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Folder
+		MEMBER_ROLE_PERMISSIONS.put(JournalFolder.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Article
+		MEMBER_ROLE_PERMISSIONS.put(JournalArticle.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Feed
+		MEMBER_ROLE_PERMISSIONS.put(JournalFeed.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Structure
+		MEMBER_ROLE_PERMISSIONS.put(JournalStructure.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Web Content-> Resource
+		// Permissions -> Web Content Template
+		MEMBER_ROLE_PERMISSIONS.put(JournalTemplate.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.DOCUMENT_LIBRARY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Documents
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.documentlibrary", new String[] { ActionKeys.ADD_DOCUMENT,
+				ActionKeys.ADD_FOLDER, ActionKeys.ADD_REPOSITORY, ActionKeys.ADD_STRUCTURE,
+				ActionKeys.SUBSCRIBE, ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Documents Folder
+		MEMBER_ROLE_PERMISSIONS.put(DLFolder.class.getName(), new String[] { ActionKeys.ACCESS,
+				ActionKeys.ADD_DOCUMENT, ActionKeys.ADD_SUBFOLDER, ActionKeys.DELETE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Document
+		MEMBER_ROLE_PERMISSIONS.put(DLFileEntry.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.DELETE, ActionKeys.OVERRIDE_CHECKOUT, ActionKeys.UPDATE, 				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Shortcut
+		MEMBER_ROLE_PERMISSIONS.put(DLFileShortcut.class.getName(), new String[] {  ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Document and Media -> Resource
+		// Permissions -> Document Type
+		MEMBER_ROLE_PERMISSIONS.put(DLFileEntryType.class.getName(), new String[] { ActionKeys.DELETE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Blogs -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BLOGS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Blogs -> Resource Permissions
+		// -> Blog Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.blogs", new String[] { ActionKeys.ADD_ENTRY,
+				ActionKeys.SUBSCRIBE });
+		// Workspace Administration -> Content -> Blogs -> Resource Permissions
+		// -> Blog Entry
+		MEMBER_ROLE_PERMISSIONS.put(BlogsEntry.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MESSAGE_BOARDS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.messageboards", new String[] { ActionKeys.ADD_FILE,
+				ActionKeys.ADD_MESSAGE, ActionKeys.REPLY_TO_MESSAGE, ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Category
+		MEMBER_ROLE_PERMISSIONS.put(MBCategory.class.getName(), new String[] {});
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Thread
+		MEMBER_ROLE_PERMISSIONS.put(MBThread.class.getName(), new String[] { ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Message Boards -> Resource
+		// Permissions -> Messages Boards Message
+		MEMBER_ROLE_PERMISSIONS.put(MBMessage.class.getName(), new String[] { ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Nodes
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.wiki", new String[] { ActionKeys.ADD_NODE });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Node
+		MEMBER_ROLE_PERMISSIONS.put(WikiNode.class.getName(), new String[] { ActionKeys.ADD_ATTACHMENT,
+				ActionKeys.ADD_PAGE, ActionKeys.DELETE, ActionKeys.IMPORT, ActionKeys.SUBSCRIBE, ActionKeys.UPDATE,
+				ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Wiki -> Resource Permissions
+		// -> Wiki Page
+		MEMBER_ROLE_PERMISSIONS.put(WikiPage.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
+				ActionKeys.DELETE, ActionKeys.SUBSCRIBE,
+				ActionKeys.UPDATE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Bookmarks -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BOOKMARKS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Bookmarks -> Resource
+		// Permissions -> Bookmark Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.bookmarks", new String[] { ActionKeys.ADD_ENTRY,
+				ActionKeys.ADD_FOLDER, ActionKeys.SUBSCRIBE, ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Polls -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.POLLS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Polls -> Resource Permissions
+		// -> Poll Questions
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.polls", new String[] {});
+		// Workspace Administration -> Content -> Polls -> Resource Permissions
+		// -> Poll Question
+		MEMBER_ROLE_PERMISSIONS.put(PollsQuestion.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Tags -> General Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.TAGS_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Tags -> Resource Permissions
+		// -> Asset Entries
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.asset", new String[] {});
+		// Workspace Administration -> Content -> Tags -> Resource Permissions
+		// -> Tag
+		MEMBER_ROLE_PERMISSIONS.put(AssetTag.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_CATEGORIES_ADMIN, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> Resource
+		// Permissions -> Category Vocabulary
+		MEMBER_ROLE_PERMISSIONS.put(AssetVocabulary.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Content -> Categories -> Resource
+		// Permissions -> Category
+		MEMBER_ROLE_PERMISSIONS.put(AssetCategory.class.getName(), new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Users -> Site Memberships -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.SITE_MEMBERSHIPS_ADMIN, new String[] {});
+		// Workspace Administration -> Users -> Site Memberships -> Resource
+		// Permissions -> Team
+		MEMBER_ROLE_PERMISSIONS.put(Team.class.getName(), new String[] {});
+		// Workspace Administration -> Users -> Site Teams -> General
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("191", new String[] {});
+		// Workspace Administration -> Applications -> Activities -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("upactivities_WAR_upactivitiesportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Announcements ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ANNOUNCEMENTS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Announcements ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.portlet.announcements.model.AnnouncementsEntry",
+				new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Asset Publisher ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_PUBLISHER, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Blogs -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.BLOGS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Categories Navigation ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_CATEGORIES_NAVIGATION, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Comments and Feedback ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.PAGE_COMMENTS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Documents and Media
+		// Display -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.DOCUMENT_LIBRARY_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Events Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_eventsdisplayportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Media Gallery ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MEDIA_GALLERY_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Message Boards ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.MESSAGE_BOARDS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_microblogsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Resource
+		// Permissions -> Microblogs
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.microblogs.model.MicroblogsEntry", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Microblogs -> Resource
+		// Permissions -> Microblogs Entry
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.microblogs", new String[] {});
+		// Workspace Administration -> Applications -> Microblogs Status Update
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("2_WAR_microblogsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Polls Display
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.POLLS_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Quick Notest
+		// -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("97", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> RSS -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.RSS, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Social Office
+		// Announcements -> Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_soannouncementsportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tag Cloud -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.TAGS_CLOUD, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tags Navigation ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.ASSET_TAGS_NAVIGATION, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tasks -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_tasksportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Tasks -> Resource
+		// Permissions -> Tasks
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.tasks", new String[] {});
+		// Workspace Administration -> Applications -> Tasks -> Resource
+		// Permissions -> Tasks Entry
+		MEMBER_ROLE_PERMISSIONS.put("com.liferay.tasks.model.TasksEntry", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> WYSIWYG -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put("1_WAR_wysiwygportlet", new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content List ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT_LIST, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Web Content Search ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.JOURNAL_CONTENT_SEARCH, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Wiki -> Application
+		// Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Wiki Display ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put(PortletKeys.WIKI_DISPLAY, new String[] { ActionKeys.VIEW });
+		// Workspace Administration -> Applications -> Workspace Description ->
+		// Application Permissions
+		MEMBER_ROLE_PERMISSIONS.put("workspacedescription_WAR_workspacedescriptionportlet",
+				new String[] { ActionKeys.VIEW });
+
 		// names of the roles permissions will be removed from
 		String[] roleNamesForPermissionDeletion = new String[] { RoleConstants.USER, RoleConstants.POWER_USER,
 				RoleConstants.GUEST };
@@ -459,7 +861,8 @@ public class TestCustomLoginAction extends Action {
 				"2_WAR_microblogsportlet", PortletKeys.RSS, "97", PortletKeys.MEDIA_GALLERY_DISPLAY,
 				"upiframe_WAR_upiframeportlet", "1_WAR_wysiwygportlet",
 				"workspacedescription_WAR_workspacedescriptionportlet", "1_WAR_privatemessagingportlet",
-				PortletKeys.SITE_MEMBERS_DIRECTORY };
+				PortletKeys.SITE_MEMBERS_DIRECTORY, "mycustompages_WAR_custompagesportlet",
+				"othercustompages_WAR_custompagesportlet" };
 		// action ids for permission deletion
 		String[] actionIdsForPermissionDeletion = new String[] { ActionKeys.ADD_TO_PAGE };
 
@@ -468,7 +871,7 @@ public class TestCustomLoginAction extends Action {
 		// name ids for permission addition
 		String[] namesForPermissionAdditionCompany = new String[] { "com.liferay.portlet.documentlibrary" };
 		// action ids for permission addition
-		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW };
+		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY };
 
 		// names of the roles permissions will be added to
 		String[] roleNamesForPermissionAdditionPersonal = new String[] { "User" };
@@ -480,15 +883,39 @@ public class TestCustomLoginAction extends Action {
 
 		try {
 
-			// Make predefined pages in users personal area uneditable
-			setLayoutSetPrototypeUneditable(GROUP_WORK_SITE_TEMPLATE_ID, USER_HOME_LAYOUT_SET_PROTOTYPE_NAME);
+			// needed to allow adding of portlets to a layout
+			initPermissionChecker();
 
-			// Set description of the group work workspace
-			setLayoutSetPrototypeProperties(GROUP_WORK_SITE_TEMPLATE_ID, GROUP_WORK_SITE_TEMPLATE_NAME_MAP,
-					GROUP_WORK_SITE_TEMPLATE_DESCRIPTION);
+			// Make predefined pages in users personal area uneditable
+			setLayoutSetPrototypeUneditable(0, USER_HOME_LAYOUT_SET_PROTOTYPE_NAME);
 
 			// Make predefined pages in users profile uneditable
-			setLayoutSetPrototypeUneditable(GROUP_WORK_SITE_TEMPLATE_ID, USER_PROFILE_LAYOUT_SET_PROTOTYPE_NAME);
+			setLayoutSetPrototypeUneditable(0, USER_PROFILE_LAYOUT_SET_PROTOTYPE_NAME);
+
+			// Create or update group work site template
+			createLayoutSetPrototypeIfNeededAndSetProperties(
+					GROUP_WORK_SITE_TEMPLATE_ID, GROUP_WORK_SITE_TEMPLATE_NAME_MAP,
+					GROUP_WORK_SITE_TEMPLATE_DESCRIPTION, true);
+			createLayoutSetPrototypeLayouts(GROUP_WORK_SITE_TEMPLATE_ID,
+					GROUP_WORK_SITE_TEMPLATE_NAME_MAP.get(Locale.US), GROUP_WORK_LAYOUTS);
+			setArticleOfJournalContentPortlet(GROUP_WORK_SITE_TEMPLATE_ID,
+					GROUP_WORK_SITE_TEMPLATE_NAME_MAP.get(Locale.US), true, "Overview",
+					WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_TITLE_MAP, WORKSPACES_OVERVIEW_JOURNAL_ARTICLE_CONTENT);
+			setLinkToLayoutId(GROUP_WORK_SITE_TEMPLATE_ID, GROUP_WORK_SITE_TEMPLATE_NAME_MAP.get(Locale.US),
+					GROUP_WORK_TOOLS_LAYOUT_NAME_MAP.get(Locale.US), true,
+					GROUP_WORK_FORUM_LAYOUT_NAME_MAP.get(Locale.US));
+
+			// Create or update public site area template
+			createLayoutSetPrototypeIfNeededAndSetProperties(PUBLIC_SITE_AREA_TEMPLATE_ID,
+					PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP, PUBLIC_AREA_SITE_TEMPLATE_DESCRIPTION, false);
+			createLayoutSetPrototypeLayouts(PUBLIC_SITE_AREA_TEMPLATE_ID,
+					PUBLIC_AREA_SITE_TEMPLATE_NAME_MAP.get(Locale.US), PUBLIC_AREA_SITE_LAYOUTS);
+
+			// Create or update empty site template
+			createLayoutSetPrototypeIfNeededAndSetProperties(EMPTY_SITE_TEMPLATE_ID, EMPTY_SITE_TEMPLATE_NAME_MAP,
+					EMPTY_SITE_TEMPLATE_DESCRIPTION, true);
+			createLayoutSetPrototypeLayouts(EMPTY_SITE_TEMPLATE_ID, EMPTY_SITE_TEMPLATE_NAME_MAP.get(Locale.US),
+					EMPTY_SITE_TEMPLATE_LAYOUTS);
 
 			// Set description of the blog page layout prototype
 			setLayoutPrototypeProperties(BLOG_PAGE_TEMPLATE_ID, BLOG_PAGE_TEMPLATE_NAME_MAP,
@@ -507,8 +934,12 @@ public class TestCustomLoginAction extends Action {
 					PAGE_WITHOUT_APPLICATIONS_TEMPLATE_NAME_MAP, PAGE_WITHOUT_APPLICATIONS_TEMPLATE_DESCRIPTION);
 
 			// Create or update editor role and set permissions
-			Role role = createOrUpdateRole(EDITOR_ROLE_TITLE_MAP, EDITOR_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
-			setRolePermissions(role, EDITOR_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
+			Role editorRole = createOrUpdateRole(EDITOR_ROLE_TITLE_MAP, EDITOR_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
+			setRolePermissions(editorRole, EDITOR_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
+			
+			// Create or update member role and set permissions
+			Role memberRole = createOrUpdateRole(MEMBER_ROLE_TITLE_MAP, MEMBER_ROLE_DESCRIPTION_MAP, RoleConstants.TYPE_SITE);
+			setRolePermissions(memberRole, MEMBER_ROLE_PERMISSIONS, ResourceConstants.SCOPE_GROUP_TEMPLATE);
 
 			// Removes given permissions
 			removePermissions(roleNamesForPermissionDeletion, namesForPermissionDeletion,
@@ -528,7 +959,10 @@ public class TestCustomLoginAction extends Action {
 		} catch (Exception e) {
 			e.printStackTrace(out);
 		}
+		// REMOVE FOR SCRIPT BEGIN 2
 	}
+
+	// REMOVE FOR SCRIPT END 2
 
 	/**
 	 * Makes the pages of LayoutSets inheriting from the given
@@ -543,8 +977,7 @@ public class TestCustomLoginAction extends Action {
 	void setLayoutSetPrototypeUneditable(long layoutSetPrototypeId, String layoutSetPrototypeName) throws Exception {
 		out.println("Try to make layouts of the LayoutSetPrototype " + layoutSetPrototypeName + " uneditable");
 
-		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototypeByLayoutSetPrototypeIdOrName(layoutSetPrototypeId,
-				layoutSetPrototypeName);
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(layoutSetPrototypeId, layoutSetPrototypeName);
 
 		if (layoutSetPrototype != null) {
 			UnicodeProperties properties = layoutSetPrototype.getSettingsProperties();
@@ -574,22 +1007,37 @@ public class TestCustomLoginAction extends Action {
 	 *            Description of the LayoutSetPrototype
 	 * @throws Exception
 	 */
-	void setLayoutSetPrototypeProperties(long layoutSetPrototypeId, Map<Locale, String> layoutSetPrototypeNameMap,
-			String layoutSetPrototypeDescription) throws Exception {
+	LayoutSetPrototype createLayoutSetPrototypeIfNeededAndSetProperties(long layoutSetPrototypeId,
+			Map<Locale, String> layoutSetPrototypeNameMap, String layoutSetPrototypeDescription, boolean active)
+			throws Exception {
 		out.println("Try to set properties of the LayoutSetPrototype with the id " + layoutSetPrototypeId
 				+ " or with the name " + layoutSetPrototypeNameMap.get(Locale.US));
-		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototypeByLayoutSetPrototypeIdOrName(layoutSetPrototypeId,
-				layoutSetPrototypeNameMap.get(Locale.US));
+		LayoutSetPrototype layoutSetPrototype = getOrCreateLayoutSetPrototype(layoutSetPrototypeId,
+				layoutSetPrototypeNameMap, layoutSetPrototypeDescription, new ServiceContext());
 
 		if (layoutSetPrototype != null) {
 			layoutSetPrototype.setNameMap(layoutSetPrototypeNameMap);
 			layoutSetPrototype.setDescription(layoutSetPrototypeDescription);
+			layoutSetPrototype.setActive(active);
+			UnicodeProperties settings = layoutSetPrototype.getSettingsProperties();
+			settings.setProperty("customJspServletContextName", "so-hook");
+			layoutSetPrototype.setSettingsProperties(settings);
 			LayoutSetPrototypeLocalServiceUtil.updateLayoutSetPrototype(layoutSetPrototype);
 			out.println("Set properties of the LayoutSetPrototype with the id "
 					+ layoutSetPrototype.getLayoutSetPrototypeId());
-
 		}
+
+		Role userRole = RoleLocalServiceUtil.getRole(PortalUtil.getDefaultCompanyId(), RoleConstants.USER);
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(PortalUtil.getDefaultCompanyId(),
+				LayoutSetPrototype.class.getName(), ResourceConstants.SCOPE_INDIVIDUAL,
+				String.valueOf(layoutSetPrototype.getLayoutSetPrototypeId()), userRole.getRoleId(),
+				new String[] { ActionKeys.VIEW });
+
+		UnicodeProperties settings = layoutSetPrototype.getSettingsProperties();
+		settings.setProperty("customJspServletContextName", "so-hook");
+
 		out.println();
+		return layoutSetPrototype;
 	}
 
 	/**
@@ -617,6 +1065,46 @@ public class TestCustomLoginAction extends Action {
 		}
 
 		out.println();
+	}
+
+	/**
+	 * Tries to find a layout prototype with the given id or name.
+	 * 
+	 * @param layoutPrototypeId
+	 *            id of the layout prototype
+	 * @param layoutPrototypeName
+	 *            name of the layout prototype
+	 * @return layout prototype if existent, else null
+	 * @throws Exception
+	 */
+	LayoutPrototype getLayoutPrototypeByLayoutPrototypeIdOrName(long layoutPrototypeId, String layoutPrototypeName)
+			throws Exception {
+		LayoutPrototype layoutPrototype = null;
+
+		if (layoutPrototypeId != 0) {
+			layoutPrototype = LayoutPrototypeLocalServiceUtil.fetchLayoutPrototype(layoutPrototypeId);
+		}
+
+		if (layoutPrototype == null) {
+			List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(
+					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+			for (LayoutPrototype lsp : layoutPrototypes) {
+				if (lsp.getName(Locale.US).equals(layoutPrototypeName)) {
+					layoutPrototype = lsp;
+					break;
+				}
+			}
+
+			if (layoutPrototype == null) {
+				out.println("WARNING: could not find LayoutPrototype with the id " + layoutPrototypeId
+						+ " or with the name " + layoutPrototypeName);
+			} else {
+				out.println("Found LayoutPrototype with the name " + layoutPrototype.getName(Locale.US)
+						+ " and the id " + layoutPrototype.getLayoutPrototypeId());
+			}
+		}
+		return layoutPrototype;
 	}
 
 	/**
@@ -729,6 +1217,74 @@ public class TestCustomLoginAction extends Action {
 		out.println();
 	}
 
+	/**
+	 * Returns the layout set prototype with the given id and name. Prints
+	 * corresponding messages.
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param layoutSetPrototypeName
+	 *            name of the layout set prototype
+	 * @return layout set prototype with the given id and name
+	 * @throws Exception
+	 */
+	LayoutSetPrototype getLayoutSetPrototype(long layoutSetPrototypeId, String layoutSetPrototypeName) throws Exception {
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototypeByLayoutSetPrototypeIdOrName(layoutSetPrototypeId,
+				layoutSetPrototypeName);
+		if (layoutSetPrototype == null) {
+			out.println("WARNING: could not find LayoutSetPrototype with the id " + layoutSetPrototypeId
+					+ " or with the name " + layoutSetPrototypeName);
+		} else {
+			out.println("Found LayoutSetPrototype with the name " + layoutSetPrototype.getName(Locale.US)
+					+ " and the id " + layoutSetPrototype.getLayoutSetPrototypeId());
+		}
+		return layoutSetPrototype;
+	}
+
+	/**
+	 * Returns the layout set with the given english name. If not found it will
+	 * be created with the given properties.
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param nameMap
+	 *            localized names of the layout set prototype
+	 * @param description
+	 *            description of the layout set prototype
+	 * @param serviceContext
+	 *            service Context containing additional properties
+	 * @return existing or new layout set prototype
+	 * @throws Exception
+	 */
+	LayoutSetPrototype getOrCreateLayoutSetPrototype(long layoutSetPrototypeId, Map<Locale, String> nameMap,
+			String description, ServiceContext serviceContext) throws Exception {
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototypeByLayoutSetPrototypeIdOrName(layoutSetPrototypeId,
+				nameMap.get(Locale.US));
+
+		if (layoutSetPrototype == null) {
+			out.println("Could not find LayoutSetPrototype with the id " + layoutSetPrototypeId + " or with the name "
+					+ nameMap.get(Locale.US));
+			layoutSetPrototype = LayoutSetPrototypeLocalServiceUtil.addLayoutSetPrototype(
+					UserLocalServiceUtil.getDefaultUserId(PortalUtil.getDefaultCompanyId()),
+					PortalUtil.getDefaultCompanyId(), nameMap, description, true, true, serviceContext);
+			out.println("The LayoutSetPrototype with the name " + nameMap.get(Locale.US) + " was created");
+		} else {
+			out.println("Found LayoutSetPrototype with the name " + layoutSetPrototype.getName(Locale.US)
+					+ " and the id " + layoutSetPrototype.getLayoutSetPrototypeId());
+		}
+		return layoutSetPrototype;
+	}
+
+	/**
+	 * Returns the layout set prototype with the given id and name.
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param layoutSetPrototypeName
+	 *            name of the layout set prototype
+	 * @return layout set prototype with the given id and name
+	 * @throws Exception
+	 */
 	LayoutSetPrototype getLayoutSetPrototypeByLayoutSetPrototypeIdOrName(long layoutSetPrototypeId,
 			String layoutSetPrototypeName) throws Exception {
 		LayoutSetPrototype layoutSetPrototype = null;
@@ -747,45 +1303,298 @@ public class TestCustomLoginAction extends Action {
 					break;
 				}
 			}
-
-			if (layoutSetPrototype == null) {
-				out.println("WARNING: could not find LayoutSetPrototype with the id " + layoutSetPrototypeId
-						+ " or with the name " + layoutSetPrototypeName);
-			} else {
-				out.println("Found LayoutSetPrototype with the name " + layoutSetPrototype.getName(Locale.US)
-						+ " and the id " + layoutSetPrototype.getLayoutSetPrototypeId());
-			}
 		}
 		return layoutSetPrototype;
 	}
 
-	LayoutPrototype getLayoutPrototypeByLayoutPrototypeIdOrName(long layoutPrototypeId, String layoutPrototypeName)
+	/**
+	 * Creates the layouts with the given properties as children of the given
+	 * layout set prototype
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param layoutSetPrototypeName
+	 *            name of the layout set prototype
+	 * @param layouts
+	 *            layouts with the corresponding properties
+	 * @throws Exception
+	 */
+	void createLayoutSetPrototypeLayouts(long layoutSetPrototypeId, String layoutSetPrototypeName, Object[][] layouts)
 			throws Exception {
-		LayoutPrototype layoutPrototype = null;
-
-		if (layoutPrototypeId != 0) {
-			layoutPrototype = LayoutPrototypeLocalServiceUtil.fetchLayoutPrototype(layoutPrototypeId);
-		}
-
-		if (layoutPrototype == null) {
-			List<LayoutPrototype> layoutPrototypes = LayoutPrototypeLocalServiceUtil.getLayoutPrototypes(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-			for (LayoutPrototype lsp : layoutPrototypes) {
-				if (lsp.getName(Locale.US).equals(layoutPrototypeName)) {
-					layoutPrototype = lsp;
-					break;
+		out.println("Try to create or update layouts of the LayoutSetPrototype " + layoutSetPrototypeName);
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(layoutSetPrototypeId, layoutSetPrototypeName);
+		if (layoutSetPrototype != null) {
+			List<String> layoutNames = new ArrayList<String>();
+			for (int i = 0; i < layouts.length; i++) {
+				createOrUpdateLayout(layoutSetPrototype.getGroupId(), ((Boolean) layouts[i][1]).booleanValue(),
+						(String) layouts[i][3], (String) layouts[i][2], (Map<Locale, String>) layouts[i][0],
+						(Map<String, String[]>) layouts[i][4], i);
+				layoutNames.add(((Map<Locale, String>) layouts[i][0]).get(Locale.US));
+			}
+			List<Layout> currentLayouts = LayoutLocalServiceUtil.getLayouts(layoutSetPrototype.getGroupId(), true);
+			for (Layout layout : currentLayouts) {
+				if (!layoutNames.contains(layout.getName(Locale.US))) {
+					LayoutLocalServiceUtil.deleteLayout(layout);
+					out.println("Removed Layout + " + layout.getName(Locale.US));
 				}
 			}
+			return;
+		}
+		out.println("Layouts of the LayoutSetPrototype " + layoutSetPrototypeName + " updated or created.");
+	}
 
-			if (layoutPrototype == null) {
-				out.println("WARNING: could not find LayoutPrototype with the id " + layoutPrototypeId
-						+ " or with the name " + layoutPrototypeName);
-			} else {
-				out.println("Found LayoutPrototype with the name " + layoutPrototype.getName(Locale.US)
-						+ " and the id " + layoutPrototype.getLayoutPrototypeId());
+	/**
+	 * Creates or updates a existing layout
+	 * 
+	 * @param groupId
+	 * @param privateLayout
+	 * @param layoutTemplateId
+	 * @param parentLayoutName
+	 * @param nameMap
+	 * @param columnPortletMap
+	 * @param priority
+	 * @throws Exception
+	 */
+	void createOrUpdateLayout(long groupId, boolean privateLayout, String layoutTemplateId, String parentLayoutName,
+			Map<Locale, String> nameMap, Map<String, String[]> columnPortletMap, int priority) throws Exception {
+		out.println("Try to create or update layout " + nameMap.get(Locale.US));
+		long defaultUserId = UserLocalServiceUtil.getDefaultUserId(PortalUtil.getDefaultCompanyId());
+		Layout layout = getLayout(nameMap.get(Locale.US), privateLayout, groupId);
+
+		if (layout == null) {
+			out.println("Layout " + nameMap.get(Locale.US) + " not found.");
+			long parentLayoutId = 0;
+			if (parentLayoutName != null) {
+				Layout parentLayout = getLayout(parentLayoutName, privateLayout, groupId);
+				if (parentLayout != null)
+					parentLayoutId = parentLayout.getLayoutId();
+			}
+
+			layout = LayoutLocalServiceUtil.addLayout(defaultUserId, groupId, privateLayout, parentLayoutId, nameMap,
+					nameMap, null, null, null, LayoutConstants.TYPE_PORTLET, "layout-template-id=" + layoutTemplateId
+							+ " privateLayout=" + privateLayout, false, new HashMap<Locale, String>(),
+					new ServiceContext());
+			out.println("Layout " + nameMap.get(Locale.US) + " created.");
+		}
+
+		LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) layout.getLayoutType();
+		layoutTypePortlet.setLayoutTemplateId(defaultUserId, layoutTemplateId);
+
+		// Add new portlets and record order
+		List<String> currentPortletIds = layoutTypePortlet.getPortletIds();
+		Map<String, List<String>> orderedPortletIdsMap = new HashMap<String, List<String>>();
+		for (Map.Entry<String, String[]> columnPortletEntry : columnPortletMap.entrySet()) {
+			List<String> orderedPortletIds = new ArrayList<String>();
+			for (String portlet : columnPortletEntry.getValue()) {
+				String instancePortletId = removePortletIdFromList(portlet, currentPortletIds);
+				if (instancePortletId == null) {
+					instancePortletId = layoutTypePortlet.addPortletId(getAdmin().getUserId(), portlet,
+							columnPortletEntry.getKey(), 0);
+					out.println("Added portlet " + portlet + "to the layout " + nameMap.get(Locale.US));
+				}
+				orderedPortletIds.add(instancePortletId);
+			}
+			orderedPortletIdsMap.put(columnPortletEntry.getKey(), orderedPortletIds);
+		}
+
+		// Remove portlets not in new portlet list
+		for (String currentPortletId : currentPortletIds) {
+			layoutTypePortlet.removePortletId(getAdmin().getUserId(), currentPortletId);
+			out.println("Portlet " + currentPortletId + " removed from layout " + nameMap.get(Locale.US));
+		}
+
+		// Set (new) order of the portlets
+		for (Map.Entry<String, List<String>> orderedPortletIdsEntry : orderedPortletIdsMap.entrySet()) {
+			layoutTypePortlet.setTypeSettingsProperty(orderedPortletIdsEntry.getKey(), orderedPortletIdsEntry
+					.getValue().toString().replace("]", "").replace("[", "").replace(" ", ""));
+		}
+
+		layout.setPriority(priority);
+		LayoutLocalServiceUtil.updateLayout(layout);
+		out.println("Layout " + nameMap.get(Locale.US) + " created or updated");
+	}
+
+	/**
+	 * Sets the article of the journal content portlet placed on the given
+	 * layout set prototype
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param layoutSetPrototypeName
+	 *            name of the layout set prototype
+	 * @param privateLayout
+	 *            true if the layout the portlet is placed on is private
+	 * @param layoutName
+	 *            name of the layout the portlet is placed on
+	 * @param articleTitleMap
+	 *            localized titles of the article
+	 * @param articleContent
+	 *            content of the article
+	 * @throws Exception
+	 */
+	void setArticleOfJournalContentPortlet(long layoutSetPrototypeId, String layoutSetPrototypeName,
+			boolean privateLayout, String layoutName, Map<Locale, String> articleTitleMap, String articleContent)
+			throws Exception {
+		out.println("Try to set article of the journal content portlet on the layout " + layoutName);
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(layoutSetPrototypeId, layoutSetPrototypeName);
+		if (layoutSetPrototype == null)
+			return;
+
+		Layout layoutWithJournalPortlet = getLayout(layoutName, privateLayout, layoutSetPrototype.getGroupId());
+		if (layoutWithJournalPortlet == null) {
+			out.println("WARNING: could not find Layout with the name " + layoutName);
+			return;
+		}
+		out.println("Found layout with the name " + layoutName);
+
+		String portletId = removePortletIdFromList(PortletKeys.JOURNAL_CONTENT,
+				((LayoutTypePortlet) layoutWithJournalPortlet.getLayoutType()).getPortletIds());
+		PortletPreferences portletPreferences = PortletPreferencesLocalServiceUtil.fetchPreferences(
+				layoutWithJournalPortlet.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
+				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layoutWithJournalPortlet.getPlid(), portletId);
+
+		if (portletPreferences == null) {
+			out.println("WARNING: there is no journal content portlet belonging to the layout with the name "
+					+ layoutName);
+			return;
+		}
+		out.println("Found content portlet belonging to the layout with the name " + layoutName);
+
+		String oldArticleId = portletPreferences.getValue("articleId", null);
+		if (oldArticleId != null) {
+			JournalArticle oldArticle = JournalArticleLocalServiceUtil.fetchLatestArticle(
+					layoutSetPrototype.getGroupId(), oldArticleId, 0);
+			if (oldArticle != null) {
+				oldArticle.setTitleMap(articleTitleMap);
+				oldArticle.setContent(articleContent);
+				JournalArticleLocalServiceUtil.updateJournalArticle(oldArticle);
+				out.println("Updated article with the id " + oldArticle.getArticleId());
+				out.println();
+				return;
 			}
 		}
-		return layoutPrototype;
+		ServiceContext serviceContext = new ServiceContext();
+		serviceContext.setScopeGroupId(layoutSetPrototype.getGroupId());
+		JournalArticle journalArticle = JournalArticleLocalServiceUtil.addArticle(getAdmin().getUserId(),
+				layoutSetPrototype.getGroupId(), 0, articleTitleMap, null, articleContent, "", "", serviceContext);
+
+		portletPreferences.setValue("articleId", journalArticle.getArticleId());
+		portletPreferences.setValue("groupId", String.valueOf(layoutSetPrototype.getGroupId()));
+		PortletPreferencesLocalServiceUtil.updatePreferences(PortletKeys.PREFS_OWNER_ID_DEFAULT,
+				PortletKeys.PREFS_OWNER_TYPE_LAYOUT, layoutWithJournalPortlet.getPlid(), portletId, portletPreferences);
+		out.println("Set article with the id " + journalArticle.getArticleId());
+		out.println();
 	}
+
+	/**
+	 * Removes the given portlet id from the list. Ignores instance portlet ids.
+	 * 
+	 * @param portletId
+	 *            portlet id wich has to be removed
+	 * @param portletIdList
+	 *            list of portlet ids
+	 * @return
+	 */
+	String removePortletIdFromList(String portletId, List<String> portletIdList) {
+		String idToRemove = null;
+		for (String id : portletIdList) {
+			if (id.replaceFirst("_INSTANCE_.*", "").equals(portletId)) {
+				idToRemove = id;
+				break;
+			}
+		}
+		if (idToRemove != null)
+			portletIdList.remove(idToRemove);
+		return idToRemove;
+	}
+
+	/**
+	 * Links a layout to an other layout.
+	 * 
+	 * @param layoutSetPrototypeId
+	 *            id of the layout set prototype
+	 * @param layoutSetPrototypeName
+	 *            name of the layout set prototype
+	 * @param layoutName
+	 *            name of the linking layout
+	 * @param privateLayout
+	 *            true if the linking layout is private
+	 * @param linkedLayoutName
+	 *            name of the linked layout
+	 * @throws Exception
+	 */
+	void setLinkToLayoutId(long layoutSetPrototypeId, String layoutSetPrototypeName, String layoutName,
+			boolean privateLayout, String linkedLayoutName) throws Exception {
+		out.println("Try to link the layout " + layoutName + " to " + linkedLayoutName);
+		LayoutSetPrototype layoutSetPrototype = getLayoutSetPrototype(layoutSetPrototypeId, layoutSetPrototypeName);
+		if (layoutSetPrototype != null) {
+			Layout layout = getLayout(layoutName, privateLayout, layoutSetPrototype.getGroupId());
+
+			if (layout != null) {
+				Layout linkedLayout = getLayout(linkedLayoutName, privateLayout, layoutSetPrototype.getGroupId());
+				if (linkedLayout != null) {
+					LayoutType layoutType = (LayoutType) layout.getLayoutType();
+					layout.setType(LayoutConstants.TYPE_LINK_TO_LAYOUT);
+					layoutType.setTypeSettingsProperty("linkToLayoutId", String.valueOf(linkedLayout.getLayoutId()));
+					LayoutLocalServiceUtil.updateLayout(layout);
+					out.println("Linked the layout " + layoutName + " to " + linkedLayoutName);
+					out.println();
+					return;
+				}
+				out.println("WARNING: linked layout " + linkedLayoutName + "not found!");
+			}
+			out.println("WARNING: linking layout " + layoutName + "not found!");
+		}
+		out.println();
+	}
+
+	/**
+	 * Returns the layout with the given properties if existent
+	 * 
+	 * @param name
+	 *            name of the layout
+	 * @param private Layout true if the layout is private
+	 * @param groupId
+	 *            group id of the layout
+	 * @return layout if existent, else null
+	 * @throws Exception
+	 */
+	Layout getLayout(String name, boolean privateLayout, long groupId) throws Exception {
+		List<Layout> currentLayouts = LayoutLocalServiceUtil.getLayouts(groupId, privateLayout);
+		for (Layout currentLayout : currentLayouts) {
+			if (currentLayout.getName(Locale.US).equals(name)) {
+				return currentLayout;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Initializes the permission checker with the admin user
+	 * 
+	 * @throws Exception
+	 */
+	void initPermissionChecker() throws Exception {
+		PrincipalThreadLocal.setName(getAdmin().getUserId());
+		PermissionChecker permissionChecker = PermissionCheckerFactoryUtil.create(getAdmin());
+		PermissionThreadLocal.setPermissionChecker(permissionChecker);
+	}
+
+	/**
+	 * Returns the first admin user found.
+	 * 
+	 * @return admin user
+	 * @throws Exception
+	 */
+	User getAdmin() throws Exception {
+		final long companyId = PortalUtil.getDefaultCompanyId();
+		Role role = null;
+		role = RoleLocalServiceUtil.getRole(companyId, RoleConstants.ADMINISTRATOR);
+		for (final User admin : UserLocalServiceUtil.getRoleUsers(role.getRoleId())) {
+			return admin;
+		}
+		return null;
+	}
+	// REMOVE FOR SCRIPT BEGIN 3
 }
+// REMOVE FOR SCRIPT END 3

@@ -8,7 +8,6 @@
 	<bean id="com.liferay.portal.service.permission.LayoutPermissionImpl" class="de.unipotsdam.elis.custompages.permission.CustomLayoutPermissionImpl" />
 	<bean id="com.liferay.portal.service.permission.LayoutPermissionUtil" class="com.liferay.portal.service.permission.LayoutPermissionUtil">
 		<property name="layoutPermission" ref="com.liferay.portal.service.permission.LayoutPermissionImpl">
-
 		</property>
 	</bean>
 	

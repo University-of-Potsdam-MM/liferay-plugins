@@ -29,17 +29,20 @@ if (relative) {
 
 iframeSrc += (String)request.getAttribute("IFRAME_SRC");
 
-if (iframeSrc.equals(StringPool.BLANK)){%>
+// BEGIN CHANGE
+// Show form if no url is set allowing input of the url of the website that will be shown in the iframe portlet
+if (iframeSrc.equals(StringPool.BLANK)){ %>
 
-<portlet:actionURL var="saveWebsiteURL">
-</portlet:actionURL>
-
-<aui:form action="<%=saveWebsiteURL.toString() %>">
-	<aui:input name="website"></aui:input>
-	<aui:button type="submit"></aui:button>
-</aui:form>
+	<portlet:actionURL var="saveWebsiteURL">
+	</portlet:actionURL>
+	
+	<aui:form action="<%=saveWebsiteURL.toString() %>">
+		<aui:input name="website"></aui:input>
+		<aui:button type="submit"></aui:button>
+	</aui:form>
 
 <% } else {
+// BEGIN CHANGE
 
 if (Validator.isNotNull(iframeVariables)) {
 	if (iframeSrc.contains(StringPool.QUESTION)) {
@@ -61,7 +64,7 @@ if (lastSlashPos != -1) {
 String iframeHeight = heightNormal;
 
 if (windowState.equals(WindowState.MAXIMIZED)) {
-	iframeHeight = heightMaximized; 
+	iframeHeight = heightMaximized;
 }
 %>
 
@@ -115,10 +118,13 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		'<portlet:namespace />init',
 		function() {
 			var A = AUI();
+			// BEGIN CHANGE
+			// resize IFrame when browser window is resized
 			<portlet:namespace />resizeIFrame();
 			window.onresize = function(event) {
 				<portlet:namespace />resizeIFrame();
 			};
+			// END CHANGE
 
 			var hash = document.location.hash.replace('#', '');
 
@@ -192,6 +198,8 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		['aui-base', 'querystring']
 	);
 	
+	// BEGIN CHANGE
+	// provide method to resize the iframe
 	Liferay.provide(
 			window,
 			'<portlet:namespace />resizeIFrame',function(){
@@ -202,6 +210,7 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 			},['aui-autosize-iframe']),
 
 	<portlet:namespace />init();
+	// END CHANGE
 </aui:script>
 
 <aui:script use="aui-autosize-iframe">
@@ -218,7 +227,10 @@ if (windowState.equals(WindowState.MAXIMIZED)) {
 		iframe.on(
 			'load',
 			function() {
+				// Begin Change
+				// use resize method on loading
 				<portlet:namespace />resizeIFrame();
+				// End Change
 				var iframe = A.one('#<portlet:namespace />iframe');	
 				iframe.autosizeiframe.set('monitorHeight', false);		
 			}

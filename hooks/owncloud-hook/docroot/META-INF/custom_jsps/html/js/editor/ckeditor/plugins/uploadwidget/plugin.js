@@ -464,6 +464,7 @@
 		loader.on( 'error', function() {
 			task && task.cancel();
 			// BEGIN HOOK CHANGE
+			// show warning on error
 			var message;
 			aggregator = editor._.uploadWidgetNotificaionAggregator;
 			aggregator.notification.update( {
@@ -490,6 +491,8 @@
 				aggregator.once( 'finished', function() {
 					var tasks = aggregator.getTaskCount();
 					// BEGIN HOOK CHANGE
+					// needs to be removed to allow a more meaningful message 
+					// on sucessfull or unsucessfull upload
 					/*
 					if ( tasks === 0 ) {
 						aggregator.notification.hide();

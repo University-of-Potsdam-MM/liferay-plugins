@@ -87,10 +87,6 @@ AUI().use(
         }, {});
     });
     
-function confirmDeletion(){
-	return confirm("<%=LanguageUtil.get(pageContext, "custompages-confirm-deletion")%>");
-}
-    
 function <portlet:namespace />fadeInAlert(text){   
 	var alertDiv = $( "div#<portlet:namespace />myAlert" );
 	alertDiv.text(text);

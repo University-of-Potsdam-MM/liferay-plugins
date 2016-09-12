@@ -9,9 +9,12 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryObject;
 
-import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
 import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
 
+/**
+ * Represents a webdav object
+ *
+ */
 public class WebdavObject extends WebdavModel implements ExtRepositoryObject {
 	private static Log _log = LogFactoryUtil.getLog(WebdavObject.class);
 

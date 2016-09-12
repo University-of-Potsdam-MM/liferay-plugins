@@ -136,22 +136,34 @@ else if (portletName.equals(PortletKeys.ASSET_PUBLISHER) || portletName.equals(P
 
 boolean enableRelatedAssets = GetterUtil.getBoolean(portletPreferences.getValue("enableRelatedAssets", null), true);
 
+// BEGIN HOOK CHANGE
+// Remove stastus column in list view
+// String defaultEntryColumns = "name,size,status";
 String defaultEntryColumns = "name,size";
+//END HOOK CHANGE
 
 if (PropsValues.DL_FILE_ENTRY_BUFFERED_INCREMENT_ENABLED) {
 	defaultEntryColumns += ",downloads";
 }
 
+// BEGIN HOOK CHANGE
+// Add creation date column in list view
 defaultEntryColumns += ",create-date";
+// END HOOK CHANGE
 
 if (showActions) {
 	defaultEntryColumns += ",action";
 }
 
+// BEGIN HOOK CHANGE
+// Add modified date column to the available columns for the list view
+// String allEntryColumns = defaultEntryColumns + ",modified-date,create-date";
 String allEntryColumns = defaultEntryColumns + ",modified-date";
 
+// Only use set default entry columns
 //String[] entryColumns = StringUtil.split(PrefsParamUtil.getString(portletPreferences, request, "entryColumns", defaultEntryColumns));
 String[] entryColumns = StringUtil.split(defaultEntryColumns);
+// END HOOK CHANGE
 
 if (!showActions) {
 	entryColumns = ArrayUtil.remove(entryColumns, "action");
@@ -160,8 +172,13 @@ else if (!portletId.equals(PortletKeys.DOCUMENT_LIBRARY) && !ArrayUtil.contains(
 	entryColumns = ArrayUtil.append(entryColumns, "action");
 }
 
+// BEGIN HOOK CHANGE
+// Bewertungen und Kommentarbewertungen deaktvieren
+// boolean enableRatings = GetterUtil.getBoolean(portletPreferences.getValue("enableRatings", null), true);
+// boolean enableCommentRatings = GetterUtil.getBoolean(portletPreferences.getValue("enableCommentRatings", null), true);
 boolean enableRatings = false;
 boolean enableCommentRatings = false;
+//END HOOK CHANGE
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 %>

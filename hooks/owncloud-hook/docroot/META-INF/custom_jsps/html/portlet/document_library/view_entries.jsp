@@ -256,6 +256,12 @@ request.setAttribute("view.jsp-total", String.valueOf(total));
 
 request.setAttribute("view_entries.jsp-entryStart", String.valueOf(searchContainer.getStart()));
 request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer.getEnd()));
+
+// BEGIN HOOK CHANGE
+String owncloudError = null;
+if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)) 
+	owncloudError = getErrorMethod.invoke(owncloudCacheObject).toString();
+// END HOOK CHANGE
 %>
 
 <div class="subscribe-action">
@@ -338,12 +344,6 @@ request.setAttribute("view_entries.jsp-entryEnd", String.valueOf(searchContainer
 		</c:choose>
 	</c:if>
 </div>
-
-<% 
-	String owncloudError = null;
-	if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)) 
-		owncloudError = getErrorMethod.invoke(owncloudCacheObject).toString();
-%>
 
 <c:if test="<%= results.isEmpty() %>">
 	<div class="entries-empty alert alert-info">
@@ -510,12 +510,18 @@ for (int i = 0; i < results.size(); i++) {
 					<%
 					String folderImage = "folder_empty_document";
 					
+					// BEGIN HOOK CHANGE
+					// Don't change icon for full folder if the folder belongs to a owncloud repository
+					/* if (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), status, true) > 0) {
+						folderImage = "folder_full_document";
+					} */
 					if (isOwncloudRepository) {
 							folderImage = "folder_full_document";
 					}
 					else if (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), status, true) > 0) {
 						folderImage = "folder_full_document";
 					}
+					// END HOOK CHANGE
 
 					PortletURL tempRowURL = liferayPortletResponse.createRenderURL();
 
@@ -547,12 +553,18 @@ for (int i = 0; i < results.size(); i++) {
 
 						<%
 						String folderImage = "folder_empty";
+						// BEGIN HOOK CHANGE
+						// Don't change icon for full folder if the folder belongs to a owncloud repository
+						/* if (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), status, true) > 0) {
+							folderImage = "folder_full_document";
+						} */
 						if (isOwncloudRepository) {
-								folderImage = "folder_full_document";
+							folderImage = "folder_full_document";
 						}
 						else if (DLAppServiceUtil.getFoldersAndFileEntriesAndFileShortcutsCount(curFolder.getRepositoryId(), curFolder.getFolderId(), status, true) > 0) {
 							folderImage = "folder_full_document";
 						}
+						// END HOOK CHANGE
 
 						Map<String, Object> data = new HashMap<String, Object>();
 

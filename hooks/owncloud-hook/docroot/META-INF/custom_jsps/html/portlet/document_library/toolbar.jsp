@@ -44,8 +44,8 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 			<c:if test="<%= !scopeGroup.isStaged() || scopeGroup.isStagingGroup() || !scopeGroup.isStagedPortlet(PortletKeys.DOCUMENT_LIBRARY) %>">
 				
 				<%-- BEGIN HOOK CHANGE --%>
-				<%--
-				<%
+				<%-- Hide nav items for checking in and out of files --%>
+				<%-- <%
 				String taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.CANCEL_CHECKOUT + "'}); void(0);";
 				%>
 
@@ -61,8 +61,7 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 				taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.CHECKOUT + "'}); void(0);";
 				%>
 				
-				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-signout" label="checkout[document]" />
-				--%>
+				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-signout" label="checkout[document]" /> --%>
 				
 				<%
 				String taglibURL = "javascript:Liferay.fire('" + renderResponse.getNamespace() + "editEntry', {action: '" + Constants.MOVE + "'}); void(0);";
@@ -88,6 +87,26 @@ Group scopeGroup = themeDisplay.getScopeGroup();
 		<liferay-util:include page="/html/portlet/document_library/add_button.jsp" />
 
 		<liferay-util:include page="/html/portlet/document_library/sort_button.jsp" />
+		
+		<%-- BEGIN HOOK CHANGE --%>
+		<%-- Hide buttons for the document types and metadata sets --%>
+		<%-- <c:if test="<%= !user.isDefaultUser() %>">
+			<aui:nav-item dropdown="<%= true %>" label="manage">
+
+				<%
+				String taglibURL = "javascript:" + renderResponse.getNamespace() + "openFileEntryTypeView()";
+				%>
+
+				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-file" label="document-types" />
+
+				<%
+				taglibURL = "javascript:" + renderResponse.getNamespace() + "openDDMStructureView()";
+				%>
+
+				<aui:nav-item href="<%= taglibURL %>" iconCssClass="icon-file-text" label="metadata-sets" />
+			</aui:nav-item>
+		</c:if>	--%>
+		<%-- END HOOK CHANGE --%>
 	</aui:nav>
 
 	<c:if test="<%= showFoldersSearch %>">

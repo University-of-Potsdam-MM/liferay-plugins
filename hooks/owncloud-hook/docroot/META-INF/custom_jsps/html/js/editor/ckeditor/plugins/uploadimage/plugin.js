@@ -58,6 +58,7 @@
 						'width="' + this.parts.img.$.naturalWidth + '" ' +
 						'height="' + this.parts.img.$.naturalHeight + '">' );
 					// BEGIN HOOK CHANGE
+					// show success message on finished upload
 					var aggregator = editor._.uploadWidgetNotificaionAggregator;
 					aggregator.notification.update( {
 						message: editor.lang.uploadwidget.doneOne,

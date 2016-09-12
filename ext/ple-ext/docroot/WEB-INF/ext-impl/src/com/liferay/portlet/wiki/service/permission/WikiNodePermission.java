@@ -1,3 +1,17 @@
+/**
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
 package com.liferay.portlet.wiki.service.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
@@ -11,6 +25,9 @@ import com.liferay.portlet.wiki.service.WikiNodeLocalServiceUtil;
 
 import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
+/**
+ * @author Brian Wing Shun Chan
+ */
 public class WikiNodePermission {
 
 	public static void check(
@@ -63,9 +80,12 @@ public class WikiNodePermission {
 	public static boolean contains(
 		PermissionChecker permissionChecker, WikiNode node, String actionId) {
 		
-		if (!PermissionHelper.checkPortfolioPermission(node.getGroupId(), actionId)){
+		// BEGIN EXT-PUGIN CHANGE
+		// A published page can only be viewed (and e.g. not modified)
+		if (!PermissionHelper.checkCustomPagePermission(node.getGroupId(), actionId)){
 			return false;
 		}
+		// END EXT-PUGIN CHANGE
 
 		Boolean hasPermission = StagingPermissionUtil.hasPermission(
 			permissionChecker, node.getGroupId(), WikiNode.class.getName(),

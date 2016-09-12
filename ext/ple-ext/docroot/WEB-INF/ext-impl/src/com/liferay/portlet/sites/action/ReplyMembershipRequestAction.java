@@ -72,11 +72,13 @@ public class ReplyMembershipRequestAction extends PortletAction {
 				LiveUsers.joinGroup(themeDisplay.getCompanyId(), membershipRequest.getGroupId(),
 						new long[] { membershipRequest.getUserId() });
 
+				// BEGIN EXT-PLUGIN CHANGE
 				// set default user role
-				Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Editor");
+				Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Member");
 				if (defaultRole != null)
 					UserGroupRoleLocalServiceUtil.addUserGroupRoles(membershipRequest.getUserId(),
 							membershipRequest.getGroupId(), new long[] { defaultRole.getRoleId() });
+				// END EXT-PLUGIN CHANGE
 
 			}
 

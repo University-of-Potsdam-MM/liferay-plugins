@@ -18,6 +18,16 @@ import com.liferay.util.Encryptor;
 
 import de.unipotsdam.elis.webdav.WebdavModel;
 
+/**
+ * Allows to cache webdav objects, the user password and error messages. Caching
+ * error messages is kind of a work around because there is no possible to get
+ * error messages from the execution layer to the user interface. User passwords
+ * need to be saved because of the currently missing SSO for owncloud at the
+ * university of potsdam.
+ * 
+ * @author Matthias
+ *
+ */
 public class OwncloudCache implements Cloneable {
 
 	public static OwncloudCache getInstance() {
@@ -26,9 +36,9 @@ public class OwncloudCache implements Cloneable {
 
 	@Override
 	public OwncloudCache clone() {
-		if (_log.isInfoEnabled()) {
+		if (_log.isDebugEnabled()) {
 			Thread currentThread = Thread.currentThread();
-			_log.info("Create " + currentThread.getName());
+			_log.debug("Create " + currentThread.getName());
 		}
 
 		try {
@@ -38,132 +48,128 @@ public class OwncloudCache implements Cloneable {
 		}
 	}
 
-	public WebdavModel getWebdavModel(String webdavFileId) {
-		Map<String, WebdavModel> webdavModels = _getWebdavModels();
-
-		WebdavModel googleDriveFile = webdavModels.get(webdavFileId);
-
-		if (googleDriveFile != null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Hit " + webdavFileId);
-			}
-		} else {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Miss " + webdavFileId);
-			}
-		}
-
-		return googleDriveFile;
-	}
-
-	public List<?> getWebdavFiles(String webdavFileId) {
-		Map<String, List<?>> webdavFiles = _getWebdavFiles();
-
-		List<?> googleDriveFile = webdavFiles.get(webdavFileId);
-
-		if (googleDriveFile != null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Hit " + webdavFileId);
-			}
-		} else {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Miss " + webdavFileId);
-			}
-		}
-
-		return googleDriveFile;
-	}
-
-	public static String getError() {
-		String webdavError = (String)ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.SESSION, _errorCacheName).get(_errorCacheName);
-		if (webdavError != null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Hit Error");
-			}
-		} else {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Miss Error");
-			}
-		}
-
-		return webdavError;
-	}
-
-	public String getPassword() {
-		String encryptedPassword = (String) MultiVMPoolUtil.getCache(_passwordCacheName).get(
-				PrincipalThreadLocal.getUserId());
-		if (encryptedPassword != null) {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Hit Password for user with the id " + PrincipalThreadLocal.getUserId());
-			}
-			try {
-				Company company = CompanyLocalServiceUtil.getCompany(PortalUtil.getDefaultCompanyId());
-				String decryptedPassword = Encryptor.decrypt(company.getKeyObj(), encryptedPassword);
-				return decryptedPassword;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			if (_log.isDebugEnabled()) {
-				_log.debug("Miss Password for user with the id " + PrincipalThreadLocal.getUserId());
-			}
-		}
-		return null;
-	}
-
+	/**
+	 * Caches a webdav object.
+	 */
 	public void putWebdavModel(WebdavModel webdavModel) {
 		Map<String, WebdavModel> webdavFiles = _getWebdavModels();
 
 		String webdavFileId = webdavModel.getExtRepositoryModelKey();
-
-		if (_log.isInfoEnabled()) {
-			_log.info("Put " + webdavFileId);
-		}
-
+		_log.debug("Put " + webdavFileId);
 		webdavFiles.put(webdavFileId, webdavModel);
 	}
 
-	public void putWebdavFiles(List<?> webdavModel, String webdavFolderId) {
+	/**
+	 * Returns a cached webdav object.
+	 * 
+	 */
+	public WebdavModel getWebdavModel(String webdavFileId) {
+		Map<String, WebdavModel> webdavModels = _getWebdavModels();
+		WebdavModel googleDriveFile = webdavModels.get(webdavFileId);
+
+		if (_log.isDebugEnabled())
+			_log.debug(((googleDriveFile != null) ? "Hit " : "Miss ")
+					+ webdavFileId);
+
+		return googleDriveFile;
+	}
+
+	/**
+	 * Caches the files of a webdav folder.
+	 * 
+	 */
+	public void putWebdavFiles(List<?> webdavModels, String webdavFolderId) {
 		Map<String, List<?>> webdavFiles = _getWebdavFiles();
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Put " + webdavFolderId);
-		}
+		_log.debug("Put " + webdavFolderId);
 
-		webdavFiles.put(webdavFolderId, webdavModel);
+		webdavFiles.put(webdavFolderId, webdavModels);
 	}
 
-	public static void putWebdavError(String webdavError) {
+	/**
+	 * Returns cached files of a directory.
+	 *
+	 */
+	public List<?> getWebdavFiles(String folderId) {
+		List<?> webdavFiles = _getWebdavFiles().get(folderId);
 
-		if (_log.isInfoEnabled()) {
-			_log.info("Put " + webdavError);
-		}
+		if (_log.isDebugEnabled())
+			_log.debug(((webdavFiles != null) ? "Hit " : "Miss ") + folderId);
 
-		ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.SESSION, _errorCacheName).put(_errorCacheName, webdavError);
+		return webdavFiles;
 	}
 
+	/**
+	 * Caches a error.
+	 *
+	 */
+	public static void putError(String webdavError) {
+		_log.debug("Put " + webdavError);
+
+		ThreadLocalCacheManager.getThreadLocalCache(Lifecycle.SESSION,
+				_errorCacheName).put(_errorCacheName, webdavError);
+	}
+
+	/**
+	 * Returns a cached error.
+	 *
+	 */
+	public static String getError() {
+		String webdavError = (String) ThreadLocalCacheManager
+				.getThreadLocalCache(Lifecycle.SESSION, _errorCacheName).get(
+						_errorCacheName);
+
+		if (_log.isDebugEnabled())
+			_log.debug((webdavError != null) ? "Hit Error" : "Miss Error");
+
+		return webdavError;
+	}
+
+	/**
+	 * Caches a user password.
+	 *
+	 */
 	public void putPassword(String password) {
-		if (_log.isInfoEnabled()) {
-			_log.info("Put password of user with the " + PrincipalThreadLocal.getUserId());
-		}
+		_log.debug("Put password of user with the "
+				+ PrincipalThreadLocal.getUserId());
 
 		try {
-			Company company = CompanyLocalServiceUtil.getCompany(PortalUtil.getDefaultCompanyId());
-			String encryptedPassword = Encryptor.encrypt(company.getKeyObj(), password);
-			MultiVMPoolUtil.getCache(_passwordCacheName).put(PrincipalThreadLocal.getUserId(), encryptedPassword, _passwordCacheTimeToLive);
+			Company company = CompanyLocalServiceUtil.getCompany(PortalUtil
+					.getDefaultCompanyId());
+			String encryptedPassword = Encryptor.encrypt(company.getKeyObj(),
+					password);
+			MultiVMPoolUtil.getCache(_passwordCacheName).put(
+					PrincipalThreadLocal.getUserId(), encryptedPassword,
+					_passwordCacheTimeToLive);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void removeWebdavModel(String googleDriveFileId) {
-		Map<String, WebdavModel> webdavModels = _getWebdavModels();
-
-		if (_log.isInfoEnabled()) {
-			_log.info("Remove " + googleDriveFileId);
+	/**
+	 * Returns a cached user password
+	 *
+	 */
+	public String getPassword() {
+		String encryptedPassword = (String) MultiVMPoolUtil.getCache(
+				_passwordCacheName).get(PrincipalThreadLocal.getUserId());
+		if (encryptedPassword != null) {
+			_log.debug("Hit Password for user with the id "
+					+ PrincipalThreadLocal.getUserId());
+			try {
+				Company company = CompanyLocalServiceUtil.getCompany(PortalUtil
+						.getDefaultCompanyId());
+				String decryptedPassword = Encryptor.decrypt(
+						company.getKeyObj(), encryptedPassword);
+				return decryptedPassword;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			_log.debug("Miss Password for user with the id "
+					+ PrincipalThreadLocal.getUserId());
 		}
-
-		webdavModels.remove(googleDriveFileId);
+		return null;
 	}
 
 	private Map<String, WebdavModel> _getWebdavModels() {
@@ -190,8 +196,8 @@ public class OwncloudCache implements Cloneable {
 	private Map<String, WebdavModel> _webdavModels;
 	private Map<String, List<?>> _webdavFiles;
 	private String _passwordCacheName = "PasswordCache";
-	private int _passwordCacheTimeToLive = 60*60*24;
-	
+	private int _passwordCacheTimeToLive = 60 * 60 * 24;
+
 	private static String _errorCacheName = "ErrorCache";
 
 }

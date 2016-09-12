@@ -44,8 +44,12 @@
 			editor.on( 'fileUploadRequest', function( evt ) {
 				var fileLoader = evt.data.fileLoader,
 					formData = new FormData();
-
+				
+				// BEGIN HOOK CHANGE
+				// Needed to make ImageCommandReceiver work correctly
+				// formData.append( 'upload', fileLoader.file, fileLoader.fileName );
 				formData.append( 'NewFile', fileLoader.file, fileLoader.fileName );
+				// END HOOK CHANGE
 
 				// Append token preventing CSRF attacks.
 				formData.append( 'ckCsrfToken', CKEDITOR.tools.getCsrfToken() );

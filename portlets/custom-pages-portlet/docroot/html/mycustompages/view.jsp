@@ -355,7 +355,7 @@ AUI().use(
 
 Liferay.provide(window, '<portlet:namespace />deleteCustomPage',
     function(plid) {
-	if (confirmDeletion()){
+	if (confirm('<%=LanguageUtil.get(pageContext,"custompages-confirm-deletion-page")%>')){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deleteCustomPageURL.toString()%>', {
                 dataType: 'text/html',
@@ -398,7 +398,7 @@ Liferay.provide(window, '<portlet:namespace />changeCustomPageType',
 
 Liferay.provide(window, '<portlet:namespace />deletePublishment',
     function(plid, userId) {
-	if (confirmDeletion()){
+	if (confirm('<%=LanguageUtil.get(pageContext, "custompages-confirm-deletion-publishment")%>')){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deletePublishment1URL.toString()%>', {
                 dataType: 'text/html',
@@ -420,7 +420,7 @@ Liferay.provide(window, '<portlet:namespace />deletePublishment',
     
 Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
 	    function(plid) {
-		if (confirmDeletion()){
+		if (confirm('<%=LanguageUtil.get(pageContext, "custompages-confirm-deletion-global-publishment")%>')){
 	        AUI().use('aui-base', 'aui-io-request', function(A) {
 	            A.io.request('<%=deleteGlobalPublishment1URL.toString()%>', {
 	                dataType: 'text/html',
@@ -459,7 +459,7 @@ Liferay.provide(window, '<portlet:namespace />requestFeedbackFromUser',
 
 Liferay.provide(window, '<portlet:namespace />deleteCustomPageFeedbackRequest',
     function(plid, userId) {
-	if (confirmDeletion()){
+	if (confirm('<%=LanguageUtil.get(pageContext, "custompages-confirm-deletion-feedback-request")%>')){
         AUI().use('aui-base', 'aui-io-request', function(A) {
             A.io.request('<%=deleteFeedbackRequestURL.toString()%>', {
                 dataType: 'text/html',

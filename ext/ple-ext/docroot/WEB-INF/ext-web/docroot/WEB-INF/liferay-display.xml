@@ -52,12 +52,9 @@
 		<portlet id="83" />
 		<portlet id="84" />
 		<portlet id="101" />
-		<portlet id="115" />
 		<portlet id="121" />
 		<portlet id="141" />
 		<portlet id="143" />
-		<portlet id="175" />
-		<portlet id="188" />
 		<portlet id="2_WAR_contactsportlet" />
 		<portlet id="3_WAR_contactsportlet" />
 		<portlet id="4_WAR_contactsportlet" />
@@ -70,8 +67,6 @@
 		<portlet id="73" />
 		<portlet id="82" />
 		<portlet id="99" />
-		<portlet id="104" />
-		<portlet id="111" />
 		<portlet id="125" />
 		<portlet id="127" />
 		<portlet id="128" />

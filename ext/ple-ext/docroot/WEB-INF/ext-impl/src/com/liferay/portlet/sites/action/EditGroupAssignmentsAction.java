@@ -14,6 +14,19 @@
 
 package com.liferay.portlet.sites.action;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.PortletConfig;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -24,7 +37,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.liveusers.LiveUsers;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.membershippolicy.MembershipPolicyException;
 import com.liferay.portal.service.OrganizationServiceUtil;
@@ -37,25 +49,10 @@ import com.liferay.portal.service.UserGroupRoleServiceUtil;
 import com.liferay.portal.service.UserGroupServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
-import com.liferay.portal.service.persistence.UserGroupRolePK;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.WebKeys;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
 /**
  * @author Brian Wing Shun Chan
@@ -195,12 +192,14 @@ public class EditGroupAssignmentsAction extends PortletAction {
 		LiveUsers.joinGroup(themeDisplay.getCompanyId(), groupId, addUserIds);
 		LiveUsers.leaveGroup(themeDisplay.getCompanyId(), groupId, removeUserIds);
 
+		// BEGIN EXT-PLUGIN CHANGE
 		// set default user role
 		if (addUserIds.length > 0) {
-			Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Editor");
+			Role defaultRole = RoleLocalServiceUtil.fetchRole(PortalUtil.getDefaultCompanyId(), "Member");
 			if (defaultRole != null)
 				UserGroupRoleLocalServiceUtil.addUserGroupRoles(addUserIds, groupId, defaultRole.getRoleId());
 		}
+		// END EXT-PLUGIN CHANGE
 	}
 
 	protected void updateUserGroupGroupRole(ActionRequest actionRequest) throws Exception {

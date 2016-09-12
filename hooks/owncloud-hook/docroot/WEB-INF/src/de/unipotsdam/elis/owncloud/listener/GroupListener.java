@@ -10,14 +10,20 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 
+import de.unipotsdam.elis.owncloud.repository.OwncloudConfigurationLoader;
 import de.unipotsdam.elis.owncloud.repository.OwncloudRepository;
 import de.unipotsdam.elis.owncloud.util.OwncloudRepositoryUtil;
-import de.unipotsdam.elis.webdav.WebdavConfigurationLoader;
 
+/**
+ * Adds a webdav repository after a site was created to enable a connection to
+ * owncloud.
+ *
+ */
 public class GroupListener implements ModelListener<Group> {
 
 	@Override
-	public void onAfterAddAssociation(Object classPK, String associationClassName, Object associationClassPK)
+	public void onAfterAddAssociation(Object classPK,
+			String associationClassName, Object associationClassPK)
 			throws ModelListenerException {
 	}
 
@@ -25,12 +31,17 @@ public class GroupListener implements ModelListener<Group> {
 	public void onAfterCreate(Group model) throws ModelListenerException {
 		try {
 			if (model.isSite()) {
-				RepositoryServiceUtil.addRepository(model.getGroupId(),
-						PortalUtil.getClassNameId(OwncloudRepository.class.getName()), 0,
-						WebdavConfigurationLoader.getRepositoryName(), StringPool.BLANK, PortletKeys.DOCUMENT_LIBRARY,
-						new UnicodeProperties(), new ServiceContext());
-				OwncloudRepositoryUtil.getWebdavRepositoryAsRoot(model.getGroupId()).createFolder(
-						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model.getGroupId()));
+				// ADD WHEN BOX.UP IS CONNECTED
+				/* RepositoryServiceUtil.addRepository(model.getGroupId(),
+						PortalUtil.getClassNameId(OwncloudRepository.class
+								.getName()), 0, OwncloudConfigurationLoader
+								.getRepositoryName(), StringPool.BLANK,
+						PortletKeys.DOCUMENT_LIBRARY, new UnicodeProperties(),
+						new ServiceContext());
+				OwncloudRepositoryUtil.getWebdavRepositoryAsRoot(
+						model.getGroupId()).createFolder(
+						OwncloudRepositoryUtil.getRootFolderIdFromGroupId(model
+								.getGroupId()));*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,7 +53,8 @@ public class GroupListener implements ModelListener<Group> {
 	}
 
 	@Override
-	public void onAfterRemoveAssociation(Object classPK, String associationClassName, Object associationClassPK)
+	public void onAfterRemoveAssociation(Object classPK,
+			String associationClassName, Object associationClassPK)
 			throws ModelListenerException {
 	}
 
@@ -51,7 +63,8 @@ public class GroupListener implements ModelListener<Group> {
 	}
 
 	@Override
-	public void onBeforeAddAssociation(Object classPK, String associationClassName, Object associationClassPK)
+	public void onBeforeAddAssociation(Object classPK,
+			String associationClassName, Object associationClassPK)
 			throws ModelListenerException {
 	}
 
@@ -64,7 +77,8 @@ public class GroupListener implements ModelListener<Group> {
 	}
 
 	@Override
-	public void onBeforeRemoveAssociation(Object classPK, String associationClassName, Object associationClassPK)
+	public void onBeforeRemoveAssociation(Object classPK,
+			String associationClassName, Object associationClassPK)
 			throws ModelListenerException {
 	}
 

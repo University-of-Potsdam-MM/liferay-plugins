@@ -8,10 +8,16 @@ import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.permission.PortletPermissionImpl;
 
-public class CustomPortletPermissionImpl extends PortletPermissionImpl {
+/**
+ * Intervenes the check permission progress for a portlet. 
+ * 
+ * @author Matthias
+ *
+ */public class CustomPortletPermissionImpl extends PortletPermissionImpl {
 
 	public CustomPortletPermissionImpl() {
-		System.out.println("CustomPortletPermission 3 created");
+		// Debug message to check whether the ext-plugin is deployed correctly
+		System.out.println("CustomPortletPermission created");
 	}
 
 	@Override
@@ -21,6 +27,7 @@ public class CustomPortletPermissionImpl extends PortletPermissionImpl {
 		if (!permissionChecker.isOmniadmin() && !actionId.equals(ActionKeys.VIEW) && layout != null) {
 			if (PermissionHelper.isCustomPage(layout) && PermissionHelper.feedbackRequested(layout.getPlid())) {
 				if (((LayoutTypePortlet) layout.getLayoutType()).getPortletIds().contains(portletId)) {
+					// only viewing of a portlet is permitted when the feedback is requested for the corresponding page
 					return false;
 				}
 			}

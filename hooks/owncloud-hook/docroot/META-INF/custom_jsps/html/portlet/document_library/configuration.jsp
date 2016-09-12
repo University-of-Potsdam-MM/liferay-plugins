@@ -65,7 +65,20 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="tabs2" type="hidden" value="<%= tabs2 %>" />
 	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
+	
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- Remove email options (and thereby additional tabs) from the configuration --%>
+	<%-- <%
+	String tabs2Names = "display-settings,email-from,document-added-email,document-updated-email";
+	%>
 
+	<liferay-ui:tabs
+		names="<%= tabs2Names %>"
+		param="tabs2"
+		url="<%= configurationRenderURL %>"
+	/> --%>
+	<%-- END HOOK CHANGE --%>
+	
 	<liferay-ui:error key="displayViewsInvalid" message="display-style-views-cannot-be-empty" />
 	<liferay-ui:error key="emailFileEntryAddedBody" message="please-enter-a-valid-body" />
 	<liferay-ui:error key="emailFileEntryAddedSignature" message="please-enter-a-valid-signature" />
@@ -76,47 +89,101 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 	<liferay-ui:error key="emailFromAddress" message="please-enter-a-valid-email-address" />
 	<liferay-ui:error key="emailFromName" message="please-enter-a-valid-name" />
 	<liferay-ui:error key="rootFolderIdInvalid" message="please-enter-a-valid-root-folder" />
-
-	<aui:input name="preferences--rootFolderId--" type="hidden" value="<%= rootFolderId %>" />
-	<aui:input name="preferences--displayViews--" type="hidden" />
-	<aui:input name="preferences--entryColumns--" type="hidden" />
-
-	<aui:fieldset>
-		<aui:field-wrapper label="root-folder">
-			<div class="input-append">
-				<liferay-ui:input-resource id="rootFolderName" url="<%= rootFolderName %>" />
-
-				<aui:button name="selectFolderButton" value="select" />
-
-				<%
-				String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('rootFolderId', 'rootFolderName', '" + renderResponse.getNamespace() + "');";
-				%>
-
-				<aui:button disabled="<%= rootFolderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
-			</div>
-		</aui:field-wrapper>
-
-		<aui:input label="show-search" name="preferences--showFoldersSearch--" type="checkbox" value="<%= showFoldersSearch %>" />
-
-		<aui:select label="maximum-entries-to-display" name="preferences--entriesPerPage--">
-
-			<%
-			for (int pageDeltaValue : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
-			%>
-
-				<aui:option label="<%= pageDeltaValue %>" selected="<%= entriesPerPage == pageDeltaValue %>" />
-
-			<%
-			}
-			%>
-
-		</aui:select>
-
-		<!-- 
-		<aui:input name="preferences--enableRelatedAssets--" type="checkbox" value="<%= enableRelatedAssets %>" />
-		 -->
-		 
-	</aui:fieldset>
+	
+	
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- Remove check for tab because there is only one tab --%>
+	<%-- <c:choose>
+		<c:when test='<%= tabs2.equals("display-settings") %>'> --%>
+	<%-- END HOOK CHANGE --%>
+			<aui:input name="preferences--rootFolderId--" type="hidden" value="<%= rootFolderId %>" />
+			<aui:input name="preferences--displayViews--" type="hidden" />
+			<aui:input name="preferences--entryColumns--" type="hidden" />
+	
+			<%-- BEGIN HOOK CHANGE --%>
+			<%-- Remove collapsible panel --%>
+			<%-- <liferay-ui:panel-container extended="<%= true %>" id="documentLibrarySettingsPanelContainer" persistState="<%= true %>">
+				<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="documentLibraryItemsListingPanel" persistState="<%= true %>" title="display-settings"> --%>
+			<%-- END HOOK CHANGE --%>
+					<aui:fieldset>
+						<aui:field-wrapper label="root-folder">
+							<div class="input-append">
+								<liferay-ui:input-resource id="rootFolderName" url="<%= rootFolderName %>" />
+				
+								<aui:button name="selectFolderButton" value="select" />
+				
+								<%
+								String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('rootFolderId', 'rootFolderName', '" + renderResponse.getNamespace() + "');";
+								%>
+				
+								<aui:button disabled="<%= rootFolderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+							</div>
+						</aui:field-wrapper>
+				
+						<aui:input label="show-search" name="preferences--showFoldersSearch--" type="checkbox" value="<%= showFoldersSearch %>" />
+				
+						<aui:select label="maximum-entries-to-display" name="preferences--entriesPerPage--">
+				
+							<%
+							for (int pageDeltaValue : PropsValues.SEARCH_CONTAINER_PAGE_DELTA_VALUES) {
+							%>
+				
+								<aui:option label="<%= pageDeltaValue %>" selected="<%= entriesPerPage == pageDeltaValue %>" />
+				
+							<%
+							}
+							%>
+				
+						</aui:select>
+				
+						<%-- BEGIN HOOK CHANGE --%>
+						<%-- Remove options for related assets and display options --%>
+						<%-- <aui:input name="preferences--enableRelatedAssets--" type="checkbox" value="<%= enableRelatedAssets %>" />
+						
+						<aui:field-wrapper label="display-style-views">
+				
+							<%
+							Set<String> availableDisplayViews = SetUtil.fromArray(PropsValues.DL_DISPLAY_VIEWS);
+				
+							// Left list
+				
+							List leftList = new ArrayList();
+				
+							for (String displayView : displayViews) {
+								leftList.add(new KeyValuePair(displayView, LanguageUtil.get(pageContext, displayView)));
+							}
+				
+							// Right list
+				
+							List rightList = new ArrayList();
+				
+							Arrays.sort(displayViews);
+				
+							for (String displayView : availableDisplayViews) {
+								if (Arrays.binarySearch(displayViews, displayView) < 0) {
+									rightList.add(new KeyValuePair(displayView, LanguageUtil.get(pageContext, displayView)));
+								}
+							}
+				
+							rightList = ListUtil.sort(rightList, new KeyValuePairComparator(false, true));
+							%>
+				
+							<liferay-ui:input-move-boxes
+								leftBoxName="currentDisplayViews"
+								leftList="<%= leftList %>"
+								leftReorder="true"
+								leftTitle="current"
+								rightBoxName="availableDisplayViews"
+								rightList="<%= rightList %>"
+								rightTitle="available"
+							/>
+						</aui:field-wrapper> --%>
+						<%-- END HOOK CHANGE --%>
+					</aui:fieldset>
+				<%-- BEGIN HOOK CHANGE --%>
+				<%-- </liferay-ui:panel> --%>
+				<%-- END HOOK CHANGE --%>
+				
 
 	<liferay-portlet:renderURL portletName="<%= portletResource %>" var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="struts_action" value='<%= strutsAction + "/select_folder" %>' />
@@ -153,6 +220,213 @@ String emailBody = PrefsParamUtil.getString(portletPreferences, request, emailBo
 			}
 		);
 	</aui:script>
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- Remove content of the email tabs --%>
+	<%-- </c:when>
+		<c:when test='<%= tabs2.equals("email-from") %>'>
+			<aui:fieldset>
+				<aui:input cssClass="lfr-input-text-container" label="name" name="preferences--emailFromName--" value="<%= emailFromName %>" />
+
+				<aui:input cssClass="lfr-input-text-container" label="address" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" />
+			</aui:fieldset>
+
+			<div class="definition-of-terms">
+				<h4><liferay-ui:message key="definition-of-terms" /></h4>
+
+				<dl>
+					<dt>
+						[$COMPANY_ID$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-id-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$COMPANY_MX$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-mx-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$COMPANY_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-name-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$DOCUMENT_STATUS_BY_USER_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-user-who-updated-the-document" />
+					</dd>
+					<dt>
+						[$DOCUMENT_USER_ADDRESS$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-email-address-of-the-user-who-added-the-document" />
+					</dd>
+					<dt>
+						[$DOCUMENT_USER_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-user-who-added-the-document" />
+					</dd>
+					<dt>
+						[$PORTLET_NAME$]
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(PortalUtil.getPortletTitle(renderResponse)) %>
+					</dd>
+					<dt>
+						[$SITE_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-site-name-associated-with-the-document" />
+					</dd>
+				</dl>
+			</div>
+		</c:when>
+		<c:when test='<%= tabs2.startsWith("document-") %>'>
+			<aui:fieldset>
+				<c:choose>
+					<c:when test='<%= tabs2.equals("document-added-email") %>'>
+						<aui:input label="enabled" name="preferences--emailFileEntryAddedEnabled--" type="checkbox" value="<%= emailFileEntryAddedEnabled %>" />
+					</c:when>
+					<c:when test='<%= tabs2.equals("document-updated-email") %>'>
+						<aui:input label="enabled" name="preferences--emailFileEntryUpdatedEnabled--" type="checkbox" value="<%= emailFileEntryUpdatedEnabled %>" />
+					</c:when>
+				</c:choose>
+
+				<aui:select label="language" name="languageId" onChange='<%= renderResponse.getNamespace() + "updateLanguage(this);" %>'>
+
+					<%
+					Locale[] locales = LanguageUtil.getAvailableLocales(themeDisplay.getSiteGroupId());
+
+					for (int i = 0; i < locales.length; i++) {
+						String style = StringPool.BLANK;
+
+						if (Validator.isNotNull(portletPreferences.getValue(emailParam + "Subject_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK)) ||
+							Validator.isNotNull(portletPreferences.getValue(emailParam + "Body_" + LocaleUtil.toLanguageId(locales[i]), StringPool.BLANK))) {
+
+							style = "font-weight: bold;";
+						}
+					%>
+
+						<aui:option label="<%= locales[i].getDisplayName(locale) %>" selected="<%= currentLanguageId.equals(LocaleUtil.toLanguageId(locales[i])) %>" style="<%= style %>" value="<%= LocaleUtil.toLanguageId(locales[i]) %>" />
+
+					<%
+					}
+					%>
+
+				</aui:select>
+
+				<aui:input cssClass="lfr-input-text-container" label="subject" name='<%= "preferences--" + emailSubjectParam + "--" %>' value="<%= emailSubject %>" />
+
+				<aui:field-wrapper label="body">
+					<liferay-ui:input-editor editorImpl="<%= EDITOR_WYSIWYG_IMPL_KEY %>" />
+
+					<aui:input name='<%= "preferences--" + emailBodyParam + "--" %>' type="hidden" />
+				</aui:field-wrapper>
+			</aui:fieldset>
+
+			<div class="definition-of-terms">
+				<h4><liferay-ui:message key="definition-of-terms" /></h4>
+
+				<dl>
+					<dt>
+						[$COMPANY_ID$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-id-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$COMPANY_MX$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-mx-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$COMPANY_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-company-name-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$DOCUMENT_TITLE$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-document-title" />
+					</dd>
+					<dt>
+						[$DOCUMENT_TYPE$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-document-type" />
+					</dd>
+					<dt>
+						[$DOCUMENT_USER_ADDRESS$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-email-address-of-the-user-who-added-the-document" />
+					</dd>
+					<dt>
+						[$DOCUMENT_USER_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-user-who-added-the-document" />
+					</dd>
+					<dt>
+						[$FOLDER_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-folder-in-which-the-document-has-been-added" />
+					</dd>
+					<dt>
+						[$FROM_ADDRESS$]
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(emailFromAddress) %>
+					</dd>
+					<dt>
+						[$FROM_NAME$]
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(emailFromName) %>
+					</dd>
+					<dt>
+						[$PORTAL_URL$]
+					</dt>
+					<dd>
+						<%= company.getVirtualHostname() %>
+					</dd>
+					<dt>
+						[$PORTLET_NAME$]
+					</dt>
+					<dd>
+						<%= HtmlUtil.escape(PortalUtil.getPortletTitle(renderResponse)) %>
+					</dd>
+					<dt>
+						[$SITE_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-site-name-associated-with-the-document" />
+					</dd>
+					<dt>
+						[$TO_ADDRESS$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-address-of-the-email-recipient" />
+					</dd>
+					<dt>
+						[$TO_NAME$]
+					</dt>
+					<dd>
+						<liferay-ui:message key="the-name-of-the-email-recipient" />
+					</dd>
+				</dl>
+			</div>
+		</c:when>
+	</c:choose> --%>
+	<%-- END HOOK CHANGE --%>
 	<aui:button-row>
 		<aui:button type="submit" />
 	</aui:button-row>

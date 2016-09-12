@@ -3,12 +3,16 @@ package de.unipotsdam.elis.webdav;
 import org.apache.commons.lang.StringUtils;
 
 import com.github.sardine.DavResource;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.repository.external.ExtRepositoryFolder;
 
+import de.unipotsdam.elis.webdav.util.WebdavIdUtil;
+
+/**
+ * Represents a webdav folder.
+ *
+ */
 public class WebdavFolder extends WebdavObject implements ExtRepositoryFolder {
-	private static Log _log = LogFactoryUtil.getLog(WebdavFolder.class);
 
 	private String repositoryId;
 
@@ -30,9 +34,6 @@ public class WebdavFolder extends WebdavObject implements ExtRepositoryFolder {
 
 	@Override
 	public boolean isRoot() {
-		// TODO
-		_log.debug("isroot: " + getExtRepositoryModelKey() + " "
-				+ (StringUtils.countMatches(getExtRepositoryModelKey(), "/") == 2));
 		return StringUtils.countMatches(getExtRepositoryModelKey(), "/") == 2;
 	}
 

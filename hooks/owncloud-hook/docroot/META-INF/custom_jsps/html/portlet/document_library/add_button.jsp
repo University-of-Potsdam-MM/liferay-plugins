@@ -60,6 +60,7 @@ boolean hasAddDocumentPermission = DLFolderPermission.contains(permissionChecker
 	<%-- 
 	<c:if test="<%= (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) && (DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.ADD_REPOSITORY)) %>">
 	--%>
+	<%-- only admins can see the link to add a repository --%>
 	<c:if test="<%= (folderId == DLFolderConstants.DEFAULT_PARENT_FOLDER_ID) && (DLFolderPermission.contains(permissionChecker, scopeGroupId, folderId, ActionKeys.ADD_REPOSITORY)) && permissionChecker.isOmniadmin() %>">
 	<%-- END HOOK CHANGE --%>
 		<portlet:renderURL var="addRepositoryURL">
