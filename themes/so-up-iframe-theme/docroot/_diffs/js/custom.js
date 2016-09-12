@@ -31,3 +31,27 @@ $('document').ready(function($){
     
 }); 
 
+
+/* scroll sidebar */
+
+$(document).ready(function(){
+	
+	get_height();
+	$(".site-list-container").niceScroll({touchbehavior:true,cursorcolor:"#014260",cursorwidth:5,autohidemode:true}); 
+	$('.nicescroll-rails').css("position","fixed");
+	$('.nicescroll-rails').css("top","100px");
+	function get_height(){
+	
+			var list_height=$(window).height() - 150;
+  			$('.site-list-container').height(list_height);
+  			
+		
+  
+	};
+ 
+	$(window).resize(function() {
+		get_height();
+	});		
+
+}); 
+
