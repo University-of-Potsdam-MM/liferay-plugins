@@ -513,6 +513,7 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
     	padding: 0 12px 12px 12px; 
     	    max-height: 500px;
     overflow: scroll;
+    margin-right:20px;
 }
     
 .user-search-wrapper .invite-user-search {
@@ -525,6 +526,7 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 .user-search-wrapper h2{
 	margin-top: 0;
 	font-size: 1.5em;
+	text-shadow:0 0 0;
 }
 
 .user-search-wrapper .footnote  {
@@ -594,23 +596,20 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 .invited-users-wrapper .invite-actions .btn{
 	   display: block;
     text-align: center;
-  
+    float:left;
+    margin-right:10px;
     width: 50%;
     margin: 0 auto;
 }
 
-form#_mycustompages_WAR_custompagesportlet_fm:before {
-    display: block;
-    width: 100%;
-    /* background: red; */
-    text-align: center;
-    margin-bottom: 10px;
-        padding-top: 10px;
+
+
+.invited-users-wrapper .invite-actions form  {
+	 float:right;
 }
 
-.invited-users-wrapper .invite-actions form .btn {
-	    width: 50%;
-    margin: 0 auto;
+.invited-users-wrapper .invite-actions form button {
+	 margin-right:0;
 }
 
 
