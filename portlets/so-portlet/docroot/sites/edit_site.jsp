@@ -232,10 +232,10 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		</div>
 
 		<div class="buttons-right">
-			<!-- BEGIN CHANGE -->
-			<!-- <aui:button id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" /> -->
+			<%-- BEGIN CHANGE --%>
+			<%-- <aui:button id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" /> --%>
 			<aui:button disabled="true" id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" />
-			<!-- END CHANGE -->
+			<%-- END CHANGE --%>
 			
 		</div>
 	</aui:button-row>
