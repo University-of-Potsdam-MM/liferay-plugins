@@ -26,7 +26,9 @@
 		<staged-model-data-handler-class>com.liferay.calendar.lar.CalendarResourceStagedModelDataHandler</staged-model-data-handler-class>
 		<staged-model-data-handler-class>com.liferay.calendar.lar.CalendarStagedModelDataHandler</staged-model-data-handler-class>
 		<social-activity-interpreter-class>com.liferay.calendar.social.CalendarActivityInterpreter</social-activity-interpreter-class>
-		<asset-renderer-factory>com.liferay.calendar.asset.CalendarBookingAssetRendererFactory</asset-renderer-factory>
+		<!-- BEGIN CHANGE -->
+		<!-- <asset-renderer-factory>com.liferay.calendar.asset.CalendarBookingAssetRendererFactory</asset-renderer-factory>  -->
+		<!-- END CHANGE -->
 		<custom-attributes-display>com.liferay.calendar.CalendarCustomAttributesDisplay</custom-attributes-display>
 		<trash-handler>com.liferay.calendar.trash.CalendarBookingTrashHandler</trash-handler>
 		<preferences-unique-per-layout>false</preferences-unique-per-layout>
