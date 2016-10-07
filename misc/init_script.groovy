@@ -852,7 +852,7 @@ import com.liferay.portlet.wiki.model.WikiPage;
 		// name ids for permission addition
 		String[] namesForPermissionAdditionCompany = [ "com.liferay.portlet.documentlibrary" ] as String[];
 		// action ids for permission addition
-		String[] actionIdsForPermissionAdditionCompany = [ ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY ] as String[];
+		String[] actionIdsForPermissionAdditionCompany = [ ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY, ActionKeys.ADD_DOCUMENT ] as String[];
 
 		// names of the roles permissions will be added to
 		String[] roleNamesForPermissionAdditionPersonal = [ "User" ] as String[];

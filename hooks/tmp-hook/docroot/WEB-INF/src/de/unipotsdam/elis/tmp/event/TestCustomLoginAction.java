@@ -871,7 +871,7 @@ public class TestCustomLoginAction extends Action {
 		// name ids for permission addition
 		String[] namesForPermissionAdditionCompany = new String[] { "com.liferay.portlet.documentlibrary" };
 		// action ids for permission addition
-		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY };
+		String[] actionIdsForPermissionAdditionCompany = new String[] { ActionKeys.VIEW, ActionKeys.ADD_REPOSITORY, ActionKeys.ADD_DOCUMENT };
 
 		// names of the roles permissions will be added to
 		String[] roleNamesForPermissionAdditionPersonal = new String[] { "User" };
