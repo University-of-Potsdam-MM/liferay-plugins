@@ -100,9 +100,7 @@ public class CalendarBookingAssetRendererFactory
 		return portletURL;
 	}
 
-	// BEGIN CHANGE
-	// @Override
-	// END CHANGE
+	@Override
 	public boolean hasAddPermission(
 			PermissionChecker permissionChecker, long groupId, long classTypeId)
 		throws Exception {
