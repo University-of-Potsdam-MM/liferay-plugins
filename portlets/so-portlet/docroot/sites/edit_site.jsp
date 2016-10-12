@@ -232,7 +232,11 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		</div>
 
 		<div class="buttons-right">
-			<aui:button id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" />
+			<%-- BEGIN CHANGE --%>
+			<%-- <aui:button id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" /> --%>
+			<aui:button disabled="true" id="save" onClick='<%= renderResponse.getNamespace() + "save()" %>' value="save" />
+			<%-- END CHANGE --%>
+			
 		</div>
 	</aui:button-row>
 </aui:form>
@@ -243,6 +247,9 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 	var previousButton = A.one('.so-portlet-sites-dialog #previous');
 	var nextButton = A.one('.so-portlet-sites-dialog #next');
+	// BEGIN CHANGE
+	var saveButton = A.one('.so-portlet-sites-dialog #save');
+	// END CHANGE
 
 	Liferay.provide(
 		window,
@@ -350,6 +357,9 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 			if (!section.next('.section')) {
 				Liferay.SO.Sites.disableButton(nextButton);
+				// BEGIN CHANGE
+				Liferay.SO.Sites.enableButton(saveButton);
+				// END CHANGE
 			}
 			else {
 				Liferay.SO.Sites.enableButton(nextButton);
