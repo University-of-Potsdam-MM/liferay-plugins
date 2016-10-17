@@ -350,9 +350,9 @@ $defaultTextColor: #202020;
 
 		.name {
 			
-			color:#014260;
+		
 			font-weight:bold;
-    		font-size: 1.3em;
+    		font-size: 1em;
 		}
 
 		.included-pages, .permission {
@@ -645,9 +645,7 @@ $defaultTextColor: #202020;
 /* ---------- custom ---------- */
 
 .so-portlet-sites-dialog .site-settings .layout label {
-    font-size: 1.6em;
-    margin-bottom: 20px;
-    color: #014260;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -656,25 +654,38 @@ $defaultTextColor: #202020;
 }
 
 .so-portlet-sites-dialog .template-details:after,  .so-portlet-sites-dialog .type-details:after{
-		content: '';
+	content: '';
     position: absolute;
     border-style: solid;
-    border-width: 15px 15px 15px 0;
-    border-color: transparent #d0dae3;
+    border-width: 17px 18px 17px 0;
+    border-color: transparent #FFFFFF;
     display: block;
     width: 0;
     z-index: 1;
-    margin-top: -15px;
-      left: -14px;
-    top: 25px;
+    left: -18px;
+    top: 19px;
+}
+
+
+.so-portlet-sites-dialog .template-details:before,  .so-portlet-sites-dialog .type-details:before{
+	content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 17px 18px 17px 0;
+    border-color: transparent #ededed;
+    display: block;
+    width: 0;
+    z-index: 0;
+    left: -19px;
+    top: 19px;
 }
 
 
 
+
 .so-portlet-sites-dialog .template-details, .so-portlet-sites-dialog .type-details {
-    background-color: #d0dae3;
-    color: #014260;
-        padding: 10px;
+    padding: 10px;
+    border: 1px solid #ededed;
 }
 
  .so-portlet-sites-dialog .type-details .permission {
@@ -694,9 +705,9 @@ $defaultTextColor: #202020;
 
 
 .so-portlet-sites-dialog .template-pages h2 {
-    color: #014260;
-    font-size: 1.6em;
-    font-weight: bold;
+  
+    font-size:14px;
+  
 }	
 
 .so-portlet-sites-dialog button#save {
