@@ -125,7 +125,7 @@ a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before
 #_scopenavigation_WAR_scopenavigationportlet_siteMembership.membershipRequested 
 	{
 	font-weight: normal;
-    margin-top: 0;
+  
     height: 40px;
     line-height: 40px;
 }
