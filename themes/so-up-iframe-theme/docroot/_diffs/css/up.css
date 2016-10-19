@@ -1048,6 +1048,11 @@ html.aui
    											text-shadow: none;
    											margin-right: 10px;
     								}
+    								
+    								button.site-controls-double-content:nth-of-type(2)
+    								{
+    									display:none;
+    								}
     							}
 									
 								

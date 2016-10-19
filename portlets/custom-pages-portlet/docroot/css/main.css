@@ -6,10 +6,16 @@
 
  .aui #portlet_mycustompages_WAR_custompagesportlet .navbar-search,
  .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search {
- 	float:none;
- 	margin-bottom: 10px;
-    margin-top: 20px;
-    margin-left:11%;
+ 	float: none;
+    margin-top: 0;
+    margin-left: 80px;
+ }
+ 
+ 
+  .aui #portlet_mycustompages_WAR_custompagesportlet .portlet-body,
+ .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .portlet-body {
+ 	
+    margin-top:10px;
  }
  
   .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .navbar-search {
@@ -73,18 +79,10 @@
 	border:1px solid #014260;
 }
 
- #portlet_mycustompages_WAR_custompagesportlet thead,
- #p_p_id_othercustompages_WAR_custompagesportlet_ thead {
-  color: #fff;
-  background-color: #014260;
-}
+#customPageTable, #otherCustomPagesTable {margin-top:20px;}
 
-.aui  #portlet_mycustompages_WAR_custompagesportlet .table thead th,
-.aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table thead th{
-	background-color:transparent;
-}
 
-.aui #portlet_mycustompages_WAR_custompagesportlet .table thead th:nth-child(1) {
+.aui #portlet_mycustompages_WAR_custompagesportlet .table thead th:nth-child(1), #portlet_mycustompages_WAR_custompagesportlet tr td:nth-child(1) {
     border-right:  none !important;
 }
 
@@ -105,12 +103,6 @@
     border-left: none !important;
 }
 
- #portlet_mycustompages_WAR_custompagesportlet tbody tr,
- #p_p_id_othercustompages_WAR_custompagesportlet_ .table tbody tr {
-  background-color: #F5F8FB !important;
-}
-
-
 
  #portlet_mycustompages_WAR_custompagesportlet .table-col-titleOptions, 
 #portlet_mycustompages_WAR_custompagesportlet .table-col-publishmentOptions, 
@@ -127,45 +119,15 @@
 /*border neben Titel */
 
 
- #portlet_mycustompages_WAR_custompagesportlet tr td:nth-child(1) {
-    border-right: none !important;
-}
+
 
  #portlet_mycustompages_WAR_custompagesportlet tr td:nth-child(2) {
     border-left: none!important;
-}
-
-/*hinterrgundfarbe fuer interkationspalten dummes wort*/
- #portlet_mycustompages_WAR_custompagesportlet td:nth-child(2), td:nth-child(4) {
-    /* background-color: #C8D5E0 !important; */
-}
-
-td.table-col-changes.table-sorted {
-    background: #F5F8FB;
+  
 }
 
 
-/*trenner */
 
- #portlet_mycustompages_WAR_custompagesportlet tr.table-odd + tr.table-even,
- #p_p_id_othercustompages_WAR_custompagesportlet_ tr.table-odd + tr.table-even {
-    border-top: 4px solid #fff;
-}
-
- #portlet_mycustompages_WAR_custompagesportlet tr.table-even + tr.table-odd,
- #portlet_mycustompages_WAR_custompagesportlet tr.table-even + tr.table-odd {
-    border-top: 4px solid #fff;
-}
-
- #portlet_mycustompages_WAR_custompagesportlet tr.table-even {
-    border-bottom: 1px solid #D8D8D8;
-}
-
- #portlet_mycustompages_WAR_custompagesportlet tr.table-odd {
-    border-bottom: 1px solid #e2e9f1;
-}
-
-/*border hinter feedback*/
 
  #portlet_mycustompages_WAR_custompagesportlet tr td:nth-child(5) {
     border-right: none !important;
@@ -194,43 +156,32 @@ td.table-col-changes.table-sorted {
 /*spalten hintergrund */
  #portlet_mycustompages_WAR_custompagesportlet .table-even td,
  #p_p_id_othercustompages_WAR_custompagesportlet_ .table-even td {
-    background-color: #E2E7EC;
+    background-color: #ededed;
+        border-color: #fff !important;
 }
 /*table font */
- #portlet_mycustompages_WAR_custompagesportlet .table-col-title,
- #p_p_id_othercustompages_WAR_custompagesportlet_ .table-col-title {
-    font-weight: bold;
-    
-    
+
+
+
+
+.aui #portlet_mycustompages_WAR_custompagesportlet table a.popUpLink {
+    height: 30px;
+    background-color: #d0dae3;
+    font-size: 14px;
+    line-height: 30px;
+    display: inline-block;
+    padding: 0 5px 0 5px;
 }
 
-
-.aui #portlet_mycustompages_WAR_custompagesportlet table a:hover, 
-.aui  #portlet_mycustompages_WAR_custompagesportlet table a:focus,
-#p_p_id_othercustompages_WAR_custompagesportlet_ table a:hover,
-#p_p_id_othercustompages_WAR_custompagesportlet_ table a:focus {
+.aui #portlet_mycustompages_WAR_custompagesportlet table a.popUpLink:hover {
+	background-color:#e2e9ee;
 	
-	    text-decoration: underline !important; 
 }
+
 /*feedback icons */
-
-td.feedback-unrequested:before {
-	content:"\f0da";
-	font-family:fontawesome;
-	color:#014260;
-}
-
-td.feedback-unrequested a {
-	margin-left:8px;
-}
-
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ td.feedback-unrequested{
 	text-indent: 1.1em;
-}
-
-#p_p_id_othercustompages_WAR_custompagesportlet_ td.feedback-unrequested:before{
-	margin-left:-1.3em;
 }
 
 td.feedback-requested:before {
@@ -250,7 +201,7 @@ td.feedback-requested span img  {
 td.feedback-delivered:before {
 	    content: "\f164";
     font-family: fontawesome;
-    color: #014260;
+    color: #1b1b1b;
     color:green;
 }
 
@@ -268,17 +219,15 @@ td.feedback-delivered span img {
 	text-decoration:underline;
 }
 
-.aui #portlet_mycustompages_WAR_custompagesportlet .table th,
-.aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table th  {
-  
-  border: 2px solid #fff;
-}
 
  .aui  #portlet_mycustompages_WAR_custompagesportlet .table td,
  .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table td {
-  
-  border-right: 2px solid #fff;
-   border-left: 2px solid #fff;
+ 	border:1px solid #ededed;
+}
+
+ .aui  #portlet_mycustompages_WAR_custompagesportlet .table tr.table-even td,
+ .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table te.table-even td {
+ 	border:1px solid #fff;
 }
 
 .aui #portlet_mycustompages_WAR_custompagesportlet .table td.feedback-unrequested {
@@ -292,11 +241,11 @@ td.feedback-delivered span img {
 }
 
 .aui #portlet_mycustompages_WAR_custompagesportlet .table th.table-sortable-column div.table-sort-liner {
-    color: #fff;
+    /*color: #fff;*/
 }
 
 .aui #p_p_id_othercustompages_WAR_custompagesportlet_  .table th.table-sortable-column div.table-sort-liner {
-    color: #fff;
+   /* color: #fff;*/
 }
 
 .yui3-datatable-paginator-wrapper {
@@ -325,7 +274,7 @@ td.feedback-delivered span img {
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group button {
-	height: 30px;
+/*	height: 30px;
   padding: 4px 6px;
   margin-bottom: 0px;
   font-size: 14px;
@@ -333,42 +282,42 @@ td.feedback-delivered span img {
   margin-bottom: 0;
     border: 1px solid #ddd;
   color: #014260;
-  background-color:#d0dae3;
+  background-color:#d0dae3;*/
 
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group button:hover {
-	background-color:#014260;
-	color:#fff;	
+	/*background-color:#014260;
+	color:#fff;	*/
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled {
-    color: #D6D6D6 !important;
-    background-color:#DCE7F1;
+   /* color: #D6D6D6 !important;
+    background-color:#DCE7F1;*/
 
 }
 
 .yui3-datatable-paginator .yui3-datatable-paginator-group button.disabled:hover{
-	 border: 1px solid #ddd;
+	/* border: 1px solid #ddd;
 	 color: #D6D6D6 !important;
-	 background-color:#DCE7F1;
+	 background-color:#DCE7F1;*/
 	
 }
 
 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-disabled, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover {
-	border: 1px solid #ccc;
-	background-color:#fff;
+/*	border: 1px solid #ccc;
+	background-color:#fff;*/
 }
 
 .datatable-paginator .yui3-datatable-paginator-control-first:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-last:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-prev:hover, 
 .yui3-datatable-paginator .yui3-datatable-paginator-control-next:hover {
-  box-shadow: 0 0px 0px transparent !important;
+/*  box-shadow: 0 0px 0px transparent !important;
   color:#014260;
-  background-color:#d0dae3;
+  background-color:#d0dae3;*/
 }
 
 
@@ -388,16 +337,7 @@ form.yui3-datatable-paginator-group #itemsPerPage {
 
 #_mycustompages_WAR_custompagesportlet_createPageButton {
 	float:left;
-	margin-right:10px;
-	background-color:#d0dae3;
-	color:#014260;
-	text-shadow: 0 0px 0px transparent;
-	cursor:pointer;
-    font-size: 1.2em;
-    max-width: 30%;
-	white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+	margin-right:5px;
 }
 
 #_mycustompages_WAR_custompagesportlet_createPageButton:before {
@@ -405,39 +345,30 @@ form.yui3-datatable-paginator-group #itemsPerPage {
     font-weight: bold;
 }
 
-#_mycustompages_WAR_custompagesportlet_createPageButton:hover {
-	background-color:#ededed;
-}
+
 
 input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages_WAR_custompagesportlet_filterInput {
 	   background-image: url(/so-up-theme/images/up/ple-icons.png);
     background-position: 3px -92px;
     background-repeat: no-repeat;
   
-    margin-left: 200px;
+    margin-left: 75px;
    
 }
 
-input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages_WAR_custompagesportlet_filterInput {
-	margin-left:111px;
-}
+
 
 #_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced {
-	    width: auto;
-    height: 13px !important;
-    background-color:#d0dae3;
-        font-size: 12px;
+	width: auto;
+    height: 30px;
+    background-color: #d0dae3;
+    font-size: 13px;
     color: #014260;
-    font-weight: bold;
-    
-    font-family: "source sans pro", arial, sans-serif;
+    line-height: 30px;
+    /* font-weight: bold; */
+    padding: 0 5px 0 5px;
 }
 
-#_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced span, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced span {
-
-        font-size: 1.4em;
-   
-}
 
 #_mycustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search, #_othercustompages_WAR_custompagesportlet_searchtoggleAdvanced .icon-search 
 {
@@ -495,36 +426,36 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 }
 
 div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
-	    min-height: 50px;
-    padding-top: 40px;
-    font-weight: bold;
+	    min-height: 50px; 
+  
     color: #014260;
     text-shadow: none;
     font-size: 1.3em;
-    width: 95%;
+ 
     display: block;
     text-align: center;
 }
 
 .user-search-wrapper  {
-		background: #ededed;
-    	border: none;
+		
     	float: left;
     	padding: 0 12px 12px 12px; 
-    	    max-height: 500px;
-    overflow: scroll;
+    	    max-height: 650px;
+    overflow-y: scroll;
+    margin-right:20px;
 }
     
-.user-search-wrapper .invite-user-search {
-		background-image: url('/so-up-theme/css/../images/ple-icons.png');
-		background-repeat:no-repeat;
-		background-position: 20px -91px;
-    	text-indent: 30px;
-	
+.aui .user-search-wrapper input#_mycustompages_WAR_custompagesportlet_inviteUserSearch.invite-user-search {
+    background-image: url(/so-up-theme/css/../images/ple-icons.png);
+    background-repeat: no-repeat;
+    background-position: 10px -91px;
+    text-indent: 30px;
 }
+
 .user-search-wrapper h2{
 	margin-top: 0;
 	font-size: 1.5em;
+	text-shadow:0 0 0;
 }
 
 .user-search-wrapper .footnote  {
@@ -541,11 +472,7 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 }
 	
 
-
-.invited-users-wrapper {
-		margin-left: 270px; 
-}
-		
+	
 			    
 .invited-users-wrapper  h2 span{
 	display: block;
@@ -591,32 +518,18 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 
 }
 
-.invited-users-wrapper .invite-actions .btn{
-	   display: block;
-    text-align: center;
-  
-    width: 50%;
-    margin: 0 auto;
+.invited-users-wrapper .invite-actions form  {
+	 float:right;
 }
 
-form#_mycustompages_WAR_custompagesportlet_fm:before {
-    display: block;
-    width: 100%;
-    /* background: red; */
-    text-align: center;
-    margin-bottom: 10px;
-        padding-top: 10px;
-}
-
-.invited-users-wrapper .invite-actions form .btn {
-	    width: 50%;
-    margin: 0 auto;
+.invited-users-wrapper .invite-actions form button {
+	 margin-right:0;
 }
 
 
 .user-invited h2 span {
 	color: #999;
-	font-size: 0.8em;
+	font-size: 0.6em;
 	font-weight: normal;
 	margin-left: 0em;
 	position: relative;
@@ -693,15 +606,10 @@ form#_mycustompages_WAR_custompagesportlet_fm:before {
 
 span.email {
 	color: #AAA;
-	font-size: 0.8em;
+	font-size: 0.9em;
 	margin-left: 0.5em;
 }
 
-.aui #_mycustompages_WAR_custompagesportlet_form label {
-    font-weight: bold;
-    font-family: georgia,serif;
-    color: #014260;
-}	
 
 
 .aui  #portlet_mycustompages_WAR_custompagesportlet div#description {
@@ -722,62 +630,77 @@ span.email {
 /* Dialog */
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #templateChoice {
-	width: 50%;
-    background: #ededed;
+	 width: 40%;
+    /* background: #ededed; */
     padding: .5em;
     float: left;
+    border-bottom: 1px solid #ededed;
 	
 }
 
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #customPageTypeChoice {
-       margin-top: 2em;
-    background: #ededed;
+	margin-top: 1em;    
+    width: 40%;
     padding: .5em;
     float: left;
-    width: 50%;
 }
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ div#pageTypeDescription {
-    width: 42%;
-    float: right;
-    margin-top: 2em;
-    background-color: #d0dae3;
-    padding: 10px;
+       float: right;
+    width: 55%;
     box-sizing: border-box;
-    color: #014260;
-     position:relative;
+    padding: 10px;
+    position: relative;
+    border: 1px solid #ededed;
+    min-height:70px;
 }
 
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #description{
    
-    background: #d0dae3;
-    padding: .5em;
-    float: right;
-    width: 42%;
+       float: right;
+    width: 55%;
     box-sizing: border-box;
     padding: 10px;
-    position:relative;
+    position: relative;
+    border: 1px solid #ededed;
+    min-height:70px;
 }
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ #description:after, #p_p_id_mycustompages_WAR_custompagesportlet_ div#pageTypeDescription:after{
-		content: '';
-		position: absolute;
-		border-style: solid;
-		border-width: 15px 15px 15px 0;
-		border-color: transparent #d0dae3;
-		display: block;
-		width: 0;
-		    z-index: 1;
-   
-    margin-left: -24px;
-    top: 12px;
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 17px 18px 17px 0;
+	border-color: transparent #FFFFFF;
+	display: block;
+	width: 0;
+	z-index: 1;
+	left: -18px;
+	top: 19px;
+}
+
+#p_p_id_mycustompages_WAR_custompagesportlet_ #description:before, #p_p_id_mycustompages_WAR_custompagesportlet_ div#pageTypeDescription:before{
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 17px 18px 17px 0;
+	border-color: transparent #ededed;
+	display: block;
+	width: 0;
+	z-index: 0;
+	left: -19px;
+	top: 19px;
 }
 
 
+.aui #_mycustompages_WAR_custompagesportlet_form label:first-Child {
+    font-weight: bold;
+}
+
 #p_p_id_mycustompages_WAR_custompagesportlet_ #pageTypeDescription h2, #p_p_id_mycustompages_WAR_custompagesportlet_ #description h2  {
-    font-size: 1.2em;
+    font-size: 1em;
         line-height: 1;
     margin-top: 0;
 }
@@ -793,7 +716,7 @@ span.email {
 tr.portfolio-page td.table-col-title:before {
     content: "\f19d";
     font-family: FontAwesome;
-    color: #014260;
+    color: #1b1b1b;
     background-color: #fff;
     border-radius: 50%;
     padding: 5px;
@@ -812,7 +735,7 @@ tr.portfolio-page td.table-col-title:before {
 tr.custom-page td.table-col-title:before {
     content: "\f108";
     font-family: FontAwesome;
-    color: #014260;
+    color: #1b1b1b;
     background-color: #fff;
     border-radius: 50%;
     padding: 5px;
@@ -830,7 +753,7 @@ tr.custom-page td.table-col-title:before {
 
 th.table-col-publishment:before {
     content: "\f234 ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -845,7 +768,7 @@ th.table-col-publishment:before {
 
  #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-publishment div:before {
     content: "\f234 ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -861,7 +784,7 @@ th.table-col-publishment:before {
 
 #p_p_id_mycustompages_WAR_custompagesportlet_ th.table-col-feedback:before {
     content: "\f19c ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -878,7 +801,7 @@ th.table-col-publishment:before {
 
 th.table-col-changes div:before {
     content: "\f017 ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -894,7 +817,7 @@ th.table-col-changes div:before {
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-creator div:before
 {
 	content: "\f007 ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -910,7 +833,7 @@ th.table-col-changes div:before {
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-publishedTo div:before {
 	content: "\f0c0 ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -927,7 +850,7 @@ th.table-col-changes div:before {
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-options:before {
 	
 	content: "\f0ad ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -943,7 +866,7 @@ th.table-col-changes div:before {
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-visible:before  {
 	
 	content: "\f06e ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -958,7 +881,7 @@ th.table-col-changes div:before {
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-feedback div:before {
     content: "\f19c ";
-    color: #fff;
+    color: #1b1b1b;
     font-family: FontAwesome;
     margin-right: 5px;
     font-size: 14px;
@@ -1024,8 +947,8 @@ table *:focus {
 
 .aui .icon-envelope:before, .aui .icon-eye-open:before, .aui .icon-eye-close:before {
     
-    color: #014260;
-    font-size: 1.7em;
+    color: #1b1b1b;
+  
     font-family: fontAwesome;
     font-weight: bold;
 }
@@ -1039,6 +962,7 @@ table *:focus {
 }
 #_mycustompages_WAR_custompagesportlet_inviteMembersContainer .portalwide-publishment-div {
 	text-align: center;
+	margin-right:20px;
 }
 
 #_mycustompages_WAR_custompagesportlet_inviteMembersContainer #_mycustompages_WAR_custompagesportlet_portalwide-publishment-button {
@@ -1047,4 +971,47 @@ table *:focus {
 
 #_mycustompages_WAR_custompagesportlet_inviteMembersContainer .user-search-wrapper {
 	float:none
+}
+
+
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control-first:hover, .yui3-datatable-paginator .yui3-datatable-paginator-control-last:hover, .yui3-datatable-paginator .yui3-datatable-paginator-control-prev:hover, .yui3-datatable-paginator .yui3-datatable-paginator-control-next:hover
+ {box-shadow:none !important;
+ }
+ 
+ .yui3-datatable-paginator .yui3-datatable-paginator-control, .yui3-datatable-paginator .yui3-datatable-paginator-group button {
+    display: inline-block;
+    zoom: 1;
+    margin: 0 3px;
+    /* padding: 0 5px 0 5px; */
+    padding: 5px 14px;
+    text-align: center;
+    text-decoration: none;
+    line-height: 20px;
+    /* height: 30px; */
+    border: 1px solid #ededed;
+    border-radius: 3px;
+    /* background: transparent; */
+    font-size: 14px;
+    background-color: #fff;
+    border-radius:0;
+}
+ .yui3-datatable-paginator .yui3-datatable-paginator-control:hover, .yui3-datatable-paginator .yui3-datatable-paginator-group button:hover {
+	background-color: #fff;
+    color: #bdc7db;
+    border-color: #ededed
+}
+
+.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled, .yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover {
+	    color: #E8E8E8;
+    background-color: #ff;	
+		
+}
+
+@media (max-width: 979px) {
+	.aui .btn {
+	   padding: 0 5px 0 5px;
+	    font-size: 14px;
+	}
+
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="owncloud-portlet" basedir="." default="deploy">
+	<property name="import.shared" value="dl-repository-shared" />
+	<import file="../build-common-portlet.xml" />
+</project>

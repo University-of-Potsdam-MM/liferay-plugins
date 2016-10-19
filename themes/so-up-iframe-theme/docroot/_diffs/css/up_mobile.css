@@ -88,6 +88,13 @@
 			.content 
 			{
 				border-right: 4px solid #fff;
+				
+				
+				 .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+				 {
+				 	padding:.3em;
+				 }
+				
 			}
 		} /* ende #sidebar */
 		
@@ -148,6 +155,8 @@
 		{
 			display:none;
 		}
+		
+		
 
 
 	
@@ -1131,6 +1140,11 @@
 	    z-index:1;
 	    left:0;
 	}
+	
+	html.aui body #sidebar.show-sidebar .content .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+	{
+		padding:.3em;
+	}
 }	
 	
 
@@ -1270,6 +1284,10 @@
     		margin-top: 51px;
 		}
 		
+		html.aui body #sidebar.show-sidebar .content .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+		{
+			padding:.3em;
+		}
 		
 		
 		
@@ -1346,6 +1364,11 @@
 	html.aui body.signed-in #main-menu-wrapper ul#main-menu li:nth-of-type(3) ul li:before
 	{
 		display:none;
+	}
+	
+	html.aui body #sidebar.show-sidebar .content .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+	{
+		padding:.3em;
 	}
 }
 
@@ -1504,6 +1527,11 @@
 			width: 95%;
     		margin: 0 auto;
 		}
+		
+		html.aui body #sidebar.show-sidebar .content .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+	{
+		padding:.3em;
+	}
 
 }
 
@@ -1577,6 +1605,11 @@
 	
 	html.aui body.signed-in header#banner .wrapper-banner #uppertoolbar #position-wrapper #p_p_id_145_ #_145_dockbar .navbar-inner .container ul#_145_navAccountControls.nav-account-controls li.dockbar-user-notifications .dockbar-user-notifications-container.open ul.dropdown-menu{
 		width:100%;
+	}
+	
+	html.aui body #sidebar.show-sidebar .content .so-portlet-sites .portlet .portlet-content .portlet-body form .control-container button
+	{
+		padding:.3em;
 	}
 	
 	
