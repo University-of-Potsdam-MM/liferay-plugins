@@ -13,7 +13,7 @@
 	if (personalSite) {
 		if (!publicPage) {
 %>
-			<aui:button id="createPageButton" name="createPageButton" type="button" value="custompages-new-page"/>
+			<aui:button id="createPageButton" name="createPageButton" type="button" class="btn-primary" value="custompages-new-page"/>
 			
 			<%@ include file="/html/table_filter_input.jsp" %>
 			
@@ -88,9 +88,10 @@
 
 <div id="iconMenuDiv" style="display: none;">
 	<liferay-ui:icon-menu extended="false" id="iconMenu">
-		<liferay-ui:icon image="delete" url="javascript:void(0);" id="deleteIcon"/>
+		
 		<liferay-ui:icon image="configuration" url="javascript:void(0);" message="edit" id="configurationIcon"></liferay-ui:icon>
 		<liferay-ui:icon image="category" url="javascript:void(0);" message="edit" id="categoryIcon"></liferay-ui:icon>
+		<liferay-ui:icon image="delete" url="javascript:void(0);" id="deleteIcon"/>
 	</liferay-ui:icon-menu>
 </div>
 <div id="helpIconDiv" style="display: none;">
