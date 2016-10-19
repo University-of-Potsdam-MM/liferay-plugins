@@ -101,6 +101,8 @@ public class ExtSocialActivitySetFinderImpl extends BasePersistenceImpl<SocialAc
 	        qPos.add(userId);
 	        qPos.add(userId);
 	        qPos.add(userId);
+	        qPos.add(userId);
+	        qPos.add(userId);
 	        qPos.add(classNameIds);
 
 	        return (List<SocialActivitySet>) QueryUtil.list(q, getDialect(), begin, end);

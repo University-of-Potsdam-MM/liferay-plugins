@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalServiceUtil"%>
 <%@page import="de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil"%>
 <%@page
 	import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"
@@ -24,7 +25,9 @@
 <%@ include file="/html/init.jsp"%>
 
 <%
-	List<SocialActivitySet> results = null;
+System.out.println("1");
+List<SocialActivitySet> results = null; 
+ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
 
 int count = 0;
 long total = 0;
@@ -41,9 +44,14 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 				total = SocialActivitySetLocalServiceUtil.getUserGroupsActivitySetsCount(group.getClassPK());
 			}
 			else if (tabs1.equals("custom-pages")) {
-				 results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
-				 total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
-				}
+				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames, start, end);
+			 	total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(group.getClassPK(), classNames);
+			}
+			else if (tabs1.equals("moodle")){ 
+				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserIdAndClassNames(user.getUserId(), new String[]{MoodleSocialActivity.class.getName()}, start, end);
+				total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserIdAndClassNames(user.getUserId(), new String[]{MoodleSocialActivity.class.getName()});
+				//results = MoodleSocialActivityLocalServiceUtil.getMoodleSocialActivities(start, end);
+			}
 			else { 
 				results = ExtSocialActivitySetLocalServiceUtil.findSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames, start, end);
 				total = ExtSocialActivitySetLocalServiceUtil.countSocialActivitySetsByUserGroupsOrUserIdAndClassNames(group.getClassPK(), classNames);
