@@ -1,121 +1,138 @@
-
-
-.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ header {
-    display: none;
+.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ header
+	{
+	display: none;
 }
-
 
 @media only screen and (max-width: 979px) {
-	
-	
-	.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
-    width: 100%;
-    font-size: .9em;
+	.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select
+		{
+		width: 100%;
+		font-size: .9em;
 	}
 }
 
-@media only screen and (max-width: 800px) { 
-
-	
-	#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
-		   
-    width: 90% !important;
-    float: left;
-    display: block !important;
-        margin: 0 !important;
-	
+@media only screen and (max-width: 800px) {
+	#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group
+		{
+		width: 90% !important;
+		float: left;
+		display: block !important;
+		margin: 0 !important;
 	}
-	
-	#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
-	    display: block;
-	    text-align: right;
-	    margin-right: 10px
-	    
+	#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help
+		{
+		display: block;
+		text-align: right;
+		margin-right: 10px
 	}
 }
 
-.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet {
+.portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet
+	{
 	border: none;
-    border-bottom: none !important;
+	border-bottom: none !important;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet .portlet-content {
-   	background-color: #fff;
-    color: #014260;
-    padding:1em .3em 1em .3em;
-    border-bottom: 1px solid #ededed;
-    border-top: 1px solid #ededed;
-    text-align: center;
-    font-weight: bold;
-    min-height: 25px;
-    padding: .7em 0em 1em 0em !important;
-	
+	background-color: #fff;
+	color: #014260;
+	padding: 1em .3em 1em .3em;
+	border-bottom: 1px solid #ededed;
+	border-top: 1px solid #ededed;
+	text-align: center;
+	font-weight: bold;
+	min-height: 25px;
+	padding: .7em 0em 1em 0em !important;
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form {
-    margin-bottom: 0;
-}
-
-#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group {
 	margin-bottom: 0;
-    width: 80%;
-    display: inline-block;
-
-    float:left;
 }
 
-#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label {
-    color: #014260;
-}
-
-
-.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select {
-	    width: 100%;
-	     border:none;
-   
-    font-weight: bold;
-    color: #014260;
-}
-
-#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help {
-	display:inline;
-}
-
-.aui .portlet-topper-toolbar#portlet-topper-toolbar_scopenavigation_WAR_scopenavigationportlet .btn-group {
-	display:none;
-}
-
-
-
-
-a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
-	    background-color: #d0dae3;
-    width: 100%;
-    display: inline-block;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-align:center;
-    font-weight:bold;
-}
-
-a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before {
-	background-image: url('/so-up-theme/css/../images/ple-icons.png') !important; 
-	background-repeat:no-repeat;
-	background-position: 0 -33px;
-	display:inline-block;
-	position:relative;
-	width:15px;
-	height:15px;
-	content: "";
+#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group
+	{
+	margin-bottom: 0;
+	width: 80%;
+	display: inline-block;
 	float: left;
-    margin-top: 2px;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group label
+	{
+	color: #014260;
+}
+
+.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select
+	{
+	width: 100%;
+	border: none;
+	text-indent: 5px;
+	font-weight: bold;
+	color: #014260;
+	font-weight: bold;
+}
+
+#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help
+	{
+	display: inline;
+}
+
+.aui .portlet-topper-toolbar#portlet-topper-toolbar_scopenavigation_WAR_scopenavigationportlet .btn-group
+	{
+	display: none;
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership {
+	background-color: #d0dae3;
+	height: 40px;
+	margin-top: 10px;
+	    line-height: 40px;
+	    font-weight:normal;
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership:hover, #_scopenavigation_WAR_scopenavigationportlet_siteMembership:hover a {
+	background-color:#e2e9ee;
 	
 }
 
-#_scopenavigation_WAR_scopenavigationportlet_siteMembership .membershipRequested {
-    color: red;
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
+	background-color: #d0dae3;
+	display: inline-block;
+	padding: 10px;
+	font-weight: normal;
 }
 
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:hover {
+	text-decoration: none;
+}
 
+a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before
+	{
+	background-image: url('/so-up-theme/css/../images/ple-icons.png')
+		!important;
+	background-repeat: no-repeat;
+	background-position: 0 -33px;
+	display: inline-block;
+	position: relative;
+	width: 15px;
+	height: 15px;
+	content: "";
+	float: left;
+	margin-top: 2px;
+	margin-right:4px;
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership.membershipRequested 
+	{
+	font-weight: normal;
+    margin-top: 0;
+    height: 40px;
+    line-height: 40px;
+}
+
+#_scopenavigation_WAR_scopenavigationportlet_siteMembership.membershipRequested:before {
+	    content: "\f017";
+    font-family: fontawesome;
+    display: inline-block;
+    margin-right: 5px;
+}
