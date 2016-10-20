@@ -471,7 +471,10 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 	text-shadow: none;
 }
 	
-
+.invited-users-wrapper {
+	    margin-top: 85px;
+	
+}
 	
 			    
 .invited-users-wrapper  h2 span{
