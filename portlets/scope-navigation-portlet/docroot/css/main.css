@@ -11,21 +11,7 @@
 	}
 }
 
-@media only screen and (max-width: 800px) {
-	#portlet_scopenavigation_WAR_scopenavigationportlet form .control-group
-		{
-		width: 90% !important;
-		float: left;
-		display: block !important;
-		margin: 0 !important;
-	}
-	#portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help
-		{
-		display: block;
-		text-align: right;
-		margin-right: 10px
-	}
-}
+
 
 .portlet-boundary.portlet-boundary_scopenavigation_WAR_scopenavigationportlet_ #portlet_scopenavigation_WAR_scopenavigationportlet
 	{
@@ -70,6 +56,12 @@
 	font-weight: bold;
 	color: #014260;
 	font-weight: bold;
+}
+
+.aui .wrapper-portlet-area #portlet_scopenavigation_WAR_scopenavigationportlet form .control-group select.aui-field-select option:first-child {
+	background-image: url(/so-up-theme/images/up/scope-icon.png);
+	background-repeat:no-repeat;
+	
 }
 
 #portlet_scopenavigation_WAR_scopenavigationportlet form .taglib-icon-help
