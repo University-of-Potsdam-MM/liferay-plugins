@@ -26,7 +26,7 @@ String published = renderRequest.getParameter("published");
 	
 	<div class="choose-publishment-type">
 		<div class="portalwide-publishment-div">
-			<aui:button name="portalwide-publishment-button" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
+			<aui:button name="portalwide-publishment-button" type="submit" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
 			<label class="or-label"><%= LanguageUtil.get(pageContext, "custompages-or") %></label>
 		</div>
 		<div class="user-search-wrapper">
