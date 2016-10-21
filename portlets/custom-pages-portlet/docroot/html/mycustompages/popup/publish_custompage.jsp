@@ -87,20 +87,6 @@ String published = renderRequest.getParameter("published");
 		Liferay.Util.getOpener().closeDialog();
 	}
 
-	var publishState = 0;
-	A.one('#<portlet:namespace />fm').after("submit",function(){
-		if (invitedMembersList.all('.user').size() > 0 || invitedMembersList.one('.global')){
-			if ('<%= isPrivate %>' === 'true'){
-				Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-public-area") %>');
-				publishState = 1;
-			}
-		}
-		else if ('<%= isPrivate %>' === 'false'){
-			Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
-			publishState = 2;
-		}
-	});
-	
 	var inviteMembersContainer = A.one('#<portlet:namespace />inviteMembersContainer');
 
 	var invitedMembersList = inviteMembersContainer.one('.user-invited .list');
