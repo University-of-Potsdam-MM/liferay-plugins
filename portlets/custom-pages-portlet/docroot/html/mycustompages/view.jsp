@@ -409,9 +409,10 @@ Liferay.provide(window, '<portlet:namespace />deletePublishment',
                 on: {
                     success: function() {
                         updateTableData(A);
+                        /* removed due to #622
                         var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
                         if (movedToPrivateArea)
-                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
+                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>'); */
                     }
                 }
             });
@@ -431,9 +432,10 @@ Liferay.provide(window, '<portlet:namespace />deleteGlobalPublishment',
 	                on: {
 	                    success: function() {
 	                        updateTableData(A);
+	                        /* removed due to #622
 	                        var movedToPrivateArea = JSON.parse(this.get('responseData')).movedToPrivateArea;
 	                        if (movedToPrivateArea)
-	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
+	                        	<portlet:namespace />fadeInAlert('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>'); */
 	                    }
 	                }
 	            });
