@@ -14,12 +14,15 @@
 
 package com.liferay.notifications.hook.service.impl;
 
+import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.notifications.notifications.portlet.NotificationsPortlet;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
@@ -33,8 +36,10 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
@@ -42,6 +47,7 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -53,10 +59,11 @@ import com.liferay.portlet.announcements.service.persistence.AnnouncementsEntryF
 import com.liferay.so.util.PortletKeys;
 
 import java.io.Serializable;
-
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.mail.internet.InternetAddress;
 
 /**
  * @author Jonathan Lee
@@ -300,10 +307,81 @@ public class AnnouncementsEntryLocalServiceImpl
 							addUserNotificationEvent(
 								user.getUserId(), notificationEvent);
 					}
+					
+					// BEGIN CHANGE
+					// send mail from notifications portlet
+					// after checking for notifications, mails will be checked too
+					if (UserNotificationManagerUtil.isDeliver(
+							user.getUserId(), PortletKeys.SO_ANNOUNCEMENTS, 0,
+							0,
+							UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+						
+						try {
+							sendMail(announcementEntry,notificationEventJSONObject, user.getUserId());
+						} catch (Exception e) {
+							throw new SystemException(e);
+						}
+						
+					}
+					// END CHANGE
 				}
 			}
 		}
 
+		private void sendMail(AnnouncementsEntry announcementEntry,
+			JSONObject notificationEventJSONObject, long userId) 
+			throws Exception{
+			
+//			User sender = UserLocalServiceUtil.getUser(announcementEntry.getUserId());
+			
+			User recipient = UserLocalServiceUtil.getUser(userId);
+			
+			Company company = CompanyLocalServiceUtil.getCompany(announcementEntry.getCompanyId());
+			
+			String subject = "";
+			String body = "";
+			
+			subject = StringUtil.read(
+					NotificationsPortlet.class.getResourceAsStream(
+					"dependencies/email_subject.tmpl"));
+			
+			subject = StringUtil.replace(
+					subject, new String[] {
+							"[$ENTRY_TYPE$]", 
+							"[$PORTLET_NAME$]]", 
+							"[$ENTRY_TITLE$]"
+					},
+					new String[] {
+							announcementEntry.getType(),
+							"Announcement",
+							announcementEntry.getTitle()
+					});
+			
+			body = StringUtil.read(
+					NotificationsPortlet.class.getResourceAsStream(
+					"dependencies/email_body.tmpl"));
+			
+			body = StringUtil.replace(
+					body, 
+					new String[] {
+						"[$ENTRY_CONTENT$]", "[$ENTRY_URL$]", 
+						"[$ENTRY_TITLE$]", "[$PORTAL_URL$]"
+					},
+					new String[] {
+						announcementEntry.getContent(), announcementEntry.getUrl(),
+						announcementEntry.getTitle(), company.getPortalURL(company.getGroupId())
+					});
+				
+			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+		
 		private static final long serialVersionUID = 1L;
 
 		private AnnouncementsEntry _announcementEntry;
