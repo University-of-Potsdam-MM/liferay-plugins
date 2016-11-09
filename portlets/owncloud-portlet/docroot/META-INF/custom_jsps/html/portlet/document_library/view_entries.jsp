@@ -265,8 +265,11 @@ if (isOwncloudRepository && (getErrorMethod.invoke(owncloudCacheObject) != null)
 %>
 
 <div class="subscribe-action">
-	<c:if test="<%= DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && ((folder == null) || folder.isSupportsSubscribing()) && (DLUtil.getEmailFileEntryAddedEnabled(portletPreferences) || DLUtil.getEmailFileEntryUpdatedEnabled(portletPreferences)) %>">
-
+	<%-- BEGIN HOOK CHANGE --%>
+	<%-- removed check if email is activated, so subscribe button is always visible. Emails will be managed via Notification Portlet. --%>
+	<%-- <c:if test="<%= DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && ((folder == null) || folder.isSupportsSubscribing()) && (DLUtil.getEmailFileEntryAddedEnabled(portletPreferences) || DLUtil.getEmailFileEntryUpdatedEnabled(portletPreferences)) %>"> --%>
+	<c:if test="<%= DLPermission.contains(permissionChecker, scopeGroupId, ActionKeys.SUBSCRIBE) && ((folder == null) || folder.isSupportsSubscribing()) %>">
+	<%-- END HOOK CHANGE --%>
 		<%
 		boolean subscribed = false;
 		boolean unsubscribable = true;
