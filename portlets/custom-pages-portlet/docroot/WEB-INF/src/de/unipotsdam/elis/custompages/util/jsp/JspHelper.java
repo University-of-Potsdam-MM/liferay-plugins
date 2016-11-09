@@ -13,6 +13,7 @@ import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -133,7 +134,7 @@ public class JspHelper {
 		// END CHANGE
 	}
 
-	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest im JSON
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest im JSON
 	// kodiert werden, sondern dynamisch abgefragt werden, wenn die Activity
 	// angezeigt wird
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -145,7 +146,7 @@ public class JspHelper {
 				socialActivityType, jsonObject.toString(), receiverUserId);
 	}
 
-	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest in der
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest in der
 	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
 	// Nachricht angezeigt wird
 	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
@@ -260,12 +261,12 @@ public class JspHelper {
 			
 			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
 			
-			System.out.println("***** Custom-Page-Email ***** ");
-			System.out.println("SocialActivityType: "+socialActivityType);
-			System.out.println("From: "+from.getAddress()+", TO:"+to.getAddress());
-			System.out.println("Subject: "+subject);
-			System.out.println("Body: "+body);
-//			MailServiceUtil.sendEmail(mailMessage);
+//			System.out.println("***** Custom-Page-Email ***** ");
+//			System.out.println("SocialActivityType: "+socialActivityType);
+//			System.out.println("From: "+from.getAddress()+", TO:"+to.getAddress());
+//			System.out.println("Subject: "+subject);
+//			System.out.println("Body: "+body);
+			MailServiceUtil.sendEmail(mailMessage);
 		}
 	}
 
