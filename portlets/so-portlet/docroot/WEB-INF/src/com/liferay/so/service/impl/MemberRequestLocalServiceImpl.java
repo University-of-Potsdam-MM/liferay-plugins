@@ -433,8 +433,19 @@ public class MemberRequestLocalServiceImpl
 
 		MailMessage mailMessage = new MailMessage(
 			from, to, subject, body, true);
+		
+//		BEGIN CHANGE
+//		Mail is prepared but will only be send if user allows it
+		if (UserNotificationManagerUtil.isDeliver(
+				memberRequest.getReceiverUserId(),
+				PortletKeys.SO_INVITE_MEMBERS, 0,
+				MembershipRequestConstants.STATUS_PENDING,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 
-		MailServiceUtil.sendEmail(mailMessage);
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+// 		END CHANGE
+	
 	}
 
 	protected void sendNotificationEvent(MemberRequest memberRequest)
