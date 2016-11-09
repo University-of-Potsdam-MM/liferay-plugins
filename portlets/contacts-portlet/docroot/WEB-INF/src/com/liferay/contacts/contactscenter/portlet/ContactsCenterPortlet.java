@@ -25,6 +25,7 @@ import com.liferay.contacts.util.ContactsConstants;
 import com.liferay.contacts.util.ContactsUtil;
 import com.liferay.contacts.util.PortletKeys;
 import com.liferay.contacts.util.SocialRelationConstants;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.AddressCityException;
 import com.liferay.portal.AddressStreetException;
 import com.liferay.portal.AddressZipException;
@@ -49,6 +50,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
@@ -65,6 +67,7 @@ import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
@@ -76,6 +79,7 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -104,6 +108,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
@@ -389,6 +394,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					extraDataJSONObject.toString(), userId);
 
 			sendNotificationEvent(socialRequest);
+			// BEGIN CHANGE
+			// added send method
+			sendMail(socialRequest);
+			// END CHANGE
 		}
 	}
 
@@ -1035,6 +1044,65 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		return jsonObject;
 	}
 
+	protected void sendMail(SocialRequest socialRequest) 
+		throws Exception {
+		
+		if (UserNotificationManagerUtil.isDeliver(
+				socialRequest.getReceiverUserId(), PortletKeys.CONTACTS_CENTER,
+				0, SocialRelationConstants.SOCIAL_RELATION_REQUEST,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+			
+			User sender = UserLocalServiceUtil.getUser(socialRequest.getUserId());
+			
+			User recipient = UserLocalServiceUtil.getUser(socialRequest.getReceiverUserId());
+			
+			long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(socialRequest.getUserId());
+			Company company = CompanyLocalServiceUtil.getCompany(companyId);
+			
+			// TODO check german/english
+			String subject = StringUtil.read(
+					ContactsCenterPortlet.class.getResourceAsStream(
+						"dependencies/email_subject.tmpl"));
+			
+			// replace placeholder in subject-template
+			subject = StringUtil.replace(
+					subject,
+					new String [] {
+						"[$USER_NAME$]"	
+					},
+					new String [] {
+						sender.getFullName()	
+					});
+			
+			// TODO check german/english
+			String body = StringUtil.read(
+					ContactsCenterPortlet.class.getResourceAsStream(
+						"dependencies/email_body.tmpl"));
+			
+			// replace placeholder in body template
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$TO_NAME$]", "[$USER_NAME$]", 
+						"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+					},
+					new String [] {
+						recipient.getFullName(), sender.getFullName(),
+						company.getName(), company.getEmailAddress(),
+					});
+			
+			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(
+					from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage); 
+		}
+	}
+	
 	protected void sendNotificationEvent(SocialRequest socialRequest)
 		throws Exception {
 
