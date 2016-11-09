@@ -14,12 +14,15 @@
 
 package com.liferay.notifications.util;
 
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.notifications.model.UserNotificationEvent;
+import com.liferay.notifications.notifications.portlet.NotificationsPortlet;
 import com.liferay.notifications.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
@@ -29,20 +32,41 @@ import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Subscription;
+import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryModel;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryType;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryTypeLocalServiceUtil;
+import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.service.JournalArticleImageLocalServiceUtil;
+import com.liferay.portlet.journal.service.JournalArticleLocalServiceUtil;
+import com.liferay.portlet.messageboards.model.MBCategory;
+import com.liferay.portlet.messageboards.model.MBMessage;
+import com.liferay.portlet.messageboards.service.MBCategoryLocalServiceUtil;
+import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
+import com.liferay.portlet.wiki.model.WikiNode;
+import com.liferay.portlet.wiki.model.WikiPage;
+import com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil;
 
 import java.io.Serializable;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.mail.internet.InternetAddress;
 
 /**
  * @author Lin Cui
@@ -238,6 +262,8 @@ public class NotificationsUtil {
 				List<ObjectValuePair<String, Long>> subscribersOVPs)
 			throws PortalException, SystemException {
 
+			System.out.println("***** Notification: "+notificationEventJSONObject);
+			
 			int notificationType = notificationEventJSONObject.getInt(
 				"notificationType");
 
@@ -281,8 +307,312 @@ public class NotificationsUtil {
 								addUserNotificationEvent(
 									subscriberUserId, notificationEvent);
 					}
+					
+					// BEGIN CHANGE
+					// email routine added
+					if (UserNotificationManagerUtil.isDeliver(
+							subscriberUserId, portletKey, 0, notificationType,
+							UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+						
+						try {
+							sendMail(notificationEventJSONObject, userId,
+									subscriberUserId, companyId);
+						}
+						catch (Exception e) {
+							throw new SystemException(e);
+						}
+					}
+					// END CHANGE
+					
 				}
 			}
+		}
+		
+		private void sendMail(JSONObject notificationEventJSONObject, 
+			long userId, long subscriberUserId, long companyId) throws Exception{
+			
+			System.out.println("***** NOTIFICATION MAIL SEND *****");
+			/**
+			 * "className":"com.liferay.portlet.blogs.model.BlogsEntry"
+			 * "classPK":37020 
+			 * "notificationType":0 - add
+			 * "notificationType":1 - update
+			 * 
+			 * "className":"com.liferay.portlet.messageboards.model.MBMessage"
+			 * "classPK":38312 - variiert je nach eintrag
+			 * "notificationType":0 - add
+			 * "notificationType":1 - update
+			 * 
+			 * "className":"com.liferay.portlet.wiki.model.WikiPage"
+			 * "classPK":38332
+			 * "notificationType":0 - add
+			 * "notificationType":1 - update
+			 */
+			
+			User sender = UserLocalServiceUtil.getUser(userId);
+			
+			User recipient = UserLocalServiceUtil.getUser(subscriberUserId);
+			
+			Company company = CompanyLocalServiceUtil.getCompany(companyId);
+			
+			String notificationType = "added";
+			if (notificationEventJSONObject.getInt("notificationType") == 1)			
+				notificationType = "updated";
+		
+			String className = notificationEventJSONObject.getString("className");
+			
+			String subject = "";
+			String body = "";
+			
+			// create email for blogentries
+			if (className.equals("com.liferay.portlet.blogs.model.BlogsEntry")) {
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/blog/email_entry_"+notificationType+"_subject.tmpl"));
+				
+				subject = StringUtil.replace(
+						subject, new String[] {"[$BLOGS_ENTRY_USER_NAME$]"},
+						new String[] {sender.getFullName()});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/blog/email_entry_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, 
+						new String[] {
+							"[$TO_NAME$]", "[$BLOGS_ENTRY_USER_NAME$]", 
+							"[$BLOGS_ENTRY_URL$]", 
+							"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+						},
+						new String[] {
+							recipient.getFullName(), sender.getFullName(),
+							notificationEventJSONObject.getString("entryURL"), 
+							company.getName(), company.getEmailAddress()
+						});
+				
+				if (notificationEventJSONObject.getInt("notificationType") == 1){
+					body = StringUtil.replace(body, "[$BLOGS_ENTRY_STATUS_BY_USER_NAME$]", 
+							sender.getFullName());
+				}
+			}
+			
+			// create email for wikipages
+			if (className.equals("com.liferay.portlet.wiki.model.WikiPage")) {
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/wiki/email_page_"+notificationType+"_subject.tmpl"));
+				
+				// get Page and Node for detailed information
+				WikiPage wikiPage = WikiPageLocalServiceUtil.getPageByPageId(notificationEventJSONObject.getLong("classPK"));
+				WikiNode wikiNode = wikiPage.getNode();
+				
+				subject = StringUtil.replace(
+						subject, new String[] {
+								"[$NODE_NAME$]", "[$PAGE_TITLE$]"
+							}, new String[] {
+								wikiNode.getName(), notificationEventJSONObject.getString("entryTitle")
+							});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/wiki/email_page_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, new String[] {
+								"[$PAGE_USER_NAME$]", "[$PAGE_DATE_UPDATE$]",
+								"[$PAGE_TITLE$]", "[$PAGE_CONTENT$]"
+							}, new String[] {
+								wikiPage.getUserName(), wikiPage.getCreateDate().toString(),
+								wikiPage.getTitle(), wikiPage.getContent()
+							});
+				
+				String wikiSignature = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/wiki/email_page_"+notificationType+"_signature.tmpl"));
+				
+				wikiSignature = StringUtil.replace(
+						wikiSignature, new String[] {
+								"[$PAGE_URL$]", "[$PAGE_TITLE$]",
+								"[$COMPANY_NAME$]", "[$PORTAL_URL$]"
+							}, new String[] {
+								notificationEventJSONObject.getString("entryURL"), wikiPage.getTitle(),
+								company.getName(), company.getPortalURL(sender.getGroupId())
+							});
+				
+				body += "\n<br></br>"+wikiSignature;
+			}
+			
+			// create email for messageboards
+			if (className.equals("com.liferay.portlet.messageboards.model.MBMessage")) {
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/mb/email_message_"+notificationType+"_subject.tmpl"));
+				
+				// get message by PK to get category
+				MBMessage mbMessage = MBMessageLocalServiceUtil.getMBMessage(
+						notificationEventJSONObject.getLong("classPK"));
+				MBCategory mbCategory = mbMessage.getCategory();
+				
+				subject = StringUtil.replace(
+						subject, new String[] {
+								"[$CATEGORY_NAME$]", "[$MESSAGE_SUBJECT$]"
+								}, new String[] {
+								mbCategory.getName(), notificationEventJSONObject.getString("entryTitle")
+								});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/mb/email_message_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, new String[] {
+									"[$MESSAGE_BODY$]"
+								}, new String[] {
+									mbMessage.getBody()
+								});
+				
+				String signature = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/mb/email_message_"+notificationType+"_signature.tmpl"));
+				
+				signature = StringUtil.replace(
+						signature, new String[] {
+									"[$COMPANY_NAME$]", "[$MESSAGE_URL$]", 
+									"[$MAILING_LIST_ADDRESS$]", "[$PORTAL_URL$]"
+								}, new String[] {
+									company.getName(), notificationEventJSONObject.getString("entryURL"),
+									"",company.getPortalURL(sender.getGroupId()) 
+								});
+				
+				body += "\n<br></br>"+signature;
+			}
+			
+			// create mail for bookmarks
+			if (className.equals("com.liferay.portlet.bookmarks.model.BookmarksFolder")) {
+				// {"entryURL":"http://localhost:8080/c/bookmarks/find_entry?p_l_id=39183&noSuchEntryRedirect=null&entryId=39258","notificationType":0,"userId":29556,"entryTitle":"Google","classPK":0,"className":"com.liferay.portlet.bookmarks.model.BookmarksFolder"}
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/bookmarks/email_entry_"+notificationType+"_subject.tmpl"));
+				
+				subject = StringUtil.replace(
+						subject, new String[] {"[$BOOKMARKS_ENTRY_USER_NAME$]"},
+						new String[] {sender.getFullName()});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/bookmarks/email_entry_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, 
+						new String[] {
+							"[$TO_NAME$]", "[$BOOKMARKS_ENTRY_USER_NAME$]", 
+							"[$BOOKMARKS_ENTRY_URL$]", 
+							"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+						},
+						new String[] {
+							recipient.getFullName(), sender.getFullName(),
+							notificationEventJSONObject.getString("entryURL"), 
+							company.getName(), company.getEmailAddress()
+						});
+				
+				if (notificationEventJSONObject.getInt("notificationType") == 1){
+					subject = StringUtil.replace(
+							subject, new String[] {"[$BOOKMARKS_ENTRY_STATUS_BY_USER_NAME$]"},
+							new String[] {sender.getFullName()});
+					body = StringUtil.replace(body, "[$BOOKMARKS_ENTRY_STATUS_BY_USER_NAME$]", 
+							sender.getFullName());
+				}
+			}
+			
+			// create mail for document-library
+			if (className.equals("com.liferay.portlet.documentlibrary.model.DLFileEntry")) {
+				// {"entryURL":"http://localhost:8080/c/document_library/find_file_entry?p_l_id=27269&noSuchEntryRedirect=null&fileEntryId=39325","notificationType":0,"userId":20199,"entryTitle":"Liferay","classPK":39325,"className":"com.liferay.portlet.documentlibrary.model.DLFileEntry"}
+				
+				DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.getDLFileEntry(notificationEventJSONObject.getLong("classPK"));
+//				DLFileEntryModel dlFileEntryModel = null;
+				DLFileEntryType dlFileEntryType = DLFileEntryTypeLocalServiceUtil.getFileEntryType(dlFileEntry.getFileEntryTypeId());
+				
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/documentslibrary/email_file_entry_"+notificationType+"_subject.tmpl"));
+				
+				subject = StringUtil.replace(
+						subject, 
+						new String[] {
+							"[$DOCUMENT_TYPE$]", 
+							"[$DOCUMENT_TITLE$]"
+						},
+						new String[] {
+							dlFileEntryType.getName(), 
+							dlFileEntry.getTitle()
+						});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/documentslibrary/email_file_entry_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, 
+						new String[] {
+							"[$TO_NAME$]", "[$PORTLET_NAME$]", 
+							"[$DOCUMENT_TYPE$]", "[$DOCUMENT_TITLE$]",
+							"[$FROM_NAME$]","[$FROM_ADDRESS$]"
+						},
+						new String[] {
+							recipient.getFullName(), "document library",
+							dlFileEntryType.getName(), dlFileEntry.getTitle(),
+							company.getName(), company.getEmailAddress()
+						});
+			}
+			
+			// create mail for journal
+			if (className.equals("com.liferay.portlet.journal.model.JournalArticle")) {
+				// {"entryURL":"http://localhost:8080/group/der-geheime-workspace/2","notificationType":1,"userId":20199,"entryTitle":"Gruppenbeschreibung","classPK":41708,"className":"com.liferay.portlet.journal.model.JournalArticle"}
+				
+				JournalArticle journalArticle =JournalArticleLocalServiceUtil.getArticle(notificationEventJSONObject.getLong("classPK"));
+				
+				subject = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/journal/email_article_"+notificationType+"_subject.tmpl"));
+				
+				subject = StringUtil.replace(
+						subject, 
+						new String[] {
+							"[$PORTLET_NAME$]", 
+							"[$ARTICLE_ID$]", "[$ARTICLE_VERSION$]"
+						},
+						new String[] {
+							"Text-Image-Editor", 
+							journalArticle.getId()+"", journalArticle.getVersion()+""
+						});
+				
+				body = StringUtil.read(
+						NotificationsPortlet.class.getResourceAsStream(
+						"dependencies/journal/email_article_"+notificationType+"_body.tmpl"));
+				
+				body = StringUtil.replace(
+						body, 
+						new String[] {
+							"[$TO_NAME$]", "[$PORTLET_NAME$]", 
+							"[$ARTICLE_ID$]", "[$ARTICLE_VERSIONE$]", "[$ARTICLE_TITLE$]",
+							"[$FROM_NAME$]","[$FROM_ADDRESS$]"
+						},
+						new String[] {
+							recipient.getFullName(), "Text-Image-Editor",
+							journalArticle.getId()+"", journalArticle.getVersion()+"", journalArticle.getTitle(),
+							company.getName(), company.getEmailAddress()
+						});
+			}
+			
+			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+
+			MailServiceUtil.sendEmail(mailMessage);
 		}
 
 		private static final long serialVersionUID = 1L;
