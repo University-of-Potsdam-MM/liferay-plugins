@@ -446,15 +446,28 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				mbMessage.getThreadId());
 
 		for (UserThread userThread : userThreads) {
-			if ((userThread.getUserId() == mbMessage.getUserId()) &&
-				UserNotificationManagerUtil.isDeliver(
-					userThread.getUserId(), PortletKeys.PRIVATE_MESSAGING,
-					PrivateMessagingConstants.NEW_MESSAGE, 0,
-					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
-
+//			BEGIN CHANGE
+//			if-Statement always returned true and isDeliver was called with wrong parameter order 
+//			adopted code from notifications to fix problem
+//			if ((userThread.getUserId() == mbMessage.getUserId()) &&
+//				UserNotificationManagerUtil.isDeliver(
+//					userThread.getUserId(), PortletKeys.PRIVATE_MESSAGING,
+//					PrivateMessagingConstants.NEW_MESSAGE, 0,
+//					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+//				
+//				continue;
+//			}
+			if ((userThread.getUserId() == mbMessage.getUserId()) ||
+				((userThread.getUserId() != mbMessage.getUserId()) &&
+				 !UserNotificationManagerUtil.isDeliver(
+						 userThread.getUserId(), PortletKeys.PRIVATE_MESSAGING, 0,
+						 PrivateMessagingConstants.NEW_MESSAGE,
+						 UserNotificationDeliveryConstants.TYPE_EMAIL))) {
+				
 				continue;
 			}
-
+//			END CHANGE
+			
 			User recipient = UserLocalServiceUtil.getUser(
 				userThread.getUserId());
 
