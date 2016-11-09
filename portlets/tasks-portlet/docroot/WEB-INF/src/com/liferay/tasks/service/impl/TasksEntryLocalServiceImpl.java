@@ -18,17 +18,22 @@
 package com.liferay.tasks.service.impl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -40,6 +45,7 @@ import com.liferay.tasks.TasksEntryDueDateException;
 import com.liferay.tasks.TasksEntryTitleException;
 import com.liferay.tasks.model.TasksEntry;
 import com.liferay.tasks.model.TasksEntryConstants;
+import com.liferay.tasks.portlet.TasksPortlet;
 import com.liferay.tasks.service.base.TasksEntryLocalServiceBaseImpl;
 import com.liferay.tasks.social.TasksActivityKeys;
 import com.liferay.tasks.util.PortletKeys;
@@ -47,6 +53,8 @@ import com.liferay.tasks.util.PortletKeys;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
+import javax.mail.internet.InternetAddress;
 
 /**
  * @author Ryan Park
@@ -123,6 +131,18 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
 			serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 		return tasksEntry;
 	}
 
@@ -351,6 +371,18 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		sendNotificationEvent(
 			tasksEntry, oldStatus, oldAssigneeUserId, serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 		return tasksEntry;
 	}
 
@@ -393,6 +425,19 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			tasksEntry, oldStatus, tasksEntry.getAssigneeUserId(),
 			serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, tasksEntry.getAssigneeUserId(),
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
+		
 		return tasksEntry;
 	}
 
@@ -419,6 +464,83 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			extraDataJSONObject.toString(), tasksEntry.getAssigneeUserId());
 	}
 
+	protected void sendEmail(
+			TasksEntry tasksEntry, int oldStatus, long oldAssigneeUserId,
+			ServiceContext serviceContext
+			) throws Exception {
+		
+		HashSet<Long> receiverUserIds = new HashSet<Long>(3);
+
+		receiverUserIds.add(oldAssigneeUserId);
+		receiverUserIds.add(tasksEntry.getUserId());
+		receiverUserIds.add(tasksEntry.getAssigneeUserId());
+
+		receiverUserIds.remove(serviceContext.getUserId());
+		
+		for (long receiverUserId : receiverUserIds) {
+			if ((receiverUserId == 0) ||
+				!UserNotificationManagerUtil.isDeliver(
+					receiverUserId, PortletKeys.TASKS, 0,
+					TasksEntryConstants.STATUS_ALL,
+					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+
+				continue;
+			}
+			
+			User sender = UserLocalServiceUtil.getUser(tasksEntry.getUserId());
+			
+			Company company = CompanyLocalServiceUtil.getCompany(
+					sender.getCompanyId());
+
+			User recipient = UserLocalServiceUtil.getUser(
+					receiverUserId);
+			
+			// TODO check german/english
+			String subject = StringUtil.read(
+					TasksPortlet.class.getResourceAsStream(
+						"dependencies/email_task_added_subject.tmpl"));
+			
+			// replace placeholder in subject-template
+			subject = StringUtil.replace(
+					subject,
+					new String [] {
+						"[$TASKS_ENTRY_USER_NAME$]"	
+					},
+					new String [] {
+						tasksEntry.getReporterFullName()	
+					});
+			
+			// TODO check german/english
+			String body = StringUtil.read(
+					TasksPortlet.class.getResourceAsStream(
+						"dependencies/email_task_added_body.tmpl"));
+			
+			// replace placeholder in body template
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$TO_NAME$]", "[$TASKS_ENTRY_USER_NAME$]", 
+						"[$TASKS_ENTRY_URL$]",
+						"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+					},
+					new String [] {
+						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
+						company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
+						company.getName(), company.getEmailAddress()
+					});
+			
+			InternetAddress from = new InternetAddress(company.getEmailAddress());
+
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(
+					from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+	}
+	
 	protected void sendNotificationEvent(
 			TasksEntry tasksEntry, int oldStatus, long oldAssigneeUserId,
 			ServiceContext serviceContext)
