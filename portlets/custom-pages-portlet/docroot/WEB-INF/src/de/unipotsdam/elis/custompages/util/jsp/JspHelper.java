@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import javax.portlet.ReadOnlyException;
@@ -18,11 +19,15 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
@@ -32,7 +37,9 @@ import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
@@ -47,6 +54,7 @@ import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.custompages.CustomPageStatics;
+import de.unipotsdam.elis.custompages.CustomUserLocalServiceWrapper;
 import de.unipotsdam.elis.custompages.model.CustomPageFeedback;
 import de.unipotsdam.elis.custompages.notifications.MyCustomPagesNotificationHandler;
 import de.unipotsdam.elis.custompages.util.CustomPageUtil;
@@ -109,7 +117,20 @@ public class JspHelper {
 
 		}
 		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
-		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
+		// BEGIN CHANGE
+		// add socialActivityType parameter to check if user wants to be notified
+//		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
+		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId, socialActivityType);
+		// END CHANGE
+		// BEGIN CHANGE
+		// send email if user wants to be notified via email
+		try {
+			createCustomPageEmail(themeDisplay.getUser(), receiver, notificationMessage, 
+					customPage, portletId, socialActivityType, themeDisplay);
+		} catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 	}
 
 	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest im JSON
@@ -128,15 +149,124 @@ public class JspHelper {
 	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
 	// Nachricht angezeigt wird
 	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
-			String portletId) throws PortalException, SystemException {
+			String portletId, int socialActivityType) throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("userId", sender.getUserId());
 		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
+		
+		// BEGIN CHANGE
+		// isDeliver checks if user enabled notification for this socialActivity
+		if(UserNotificationManagerUtil.isDeliver(
+				receiver.getUserId(),
+				portletId, 0,
+				socialActivityType,
+				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
+		
 		NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
 				System.currentTimeMillis(), portletId, jsonObject);
 		notificationEvent.setDeliveryRequired(0);
 		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(receiver.getUserId(), notificationEvent);
+		}
+		// END CHANGE
+	}
+	
+	private static void createCustomPageEmail(User sender, User receiver, String message, Layout customPage,
+			String portletId, int socialActivityType, ThemeDisplay themeDisplay) throws Exception {
+		if(UserNotificationManagerUtil.isDeliver(
+				receiver.getUserId(),
+				portletId, 0,
+				socialActivityType,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)){
+			
+			Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
+			
+			String subject = "";
+			String body = "";
+			
+			// replace subject and body by template corresponding to socialActityId
+			switch (socialActivityType) {
+			case 1:
+				// Seite freigegeben (share page)
+				subject = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_share_subject.tmpl"));
+				
+				body = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_share_body.tmpl"));
+
+				break;
+			
+			case 2:
+				// Seite eingereicht (submit page)
+				subject = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_submit_subject.tmpl"));
+				
+				body = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_submit_body.tmpl"));
+
+				break;
+			
+			case 3:
+				// Feedback abgegeben (has given Feedback)
+				subject = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_feedback_subject.tmpl"));
+				
+				body = StringUtil.read(
+						CustomUserLocalServiceWrapper.class.getResourceAsStream(
+							"dependencies/email_custom_page_feedback_body.tmpl"));
+
+				break;
+	
+			default:
+				break;
+			}
+			
+			subject = StringUtil.replace(
+					subject,
+					new String [] {
+						"[$USER_NAME$]", "[$CUSTOM_PAGE_NAME$]"	
+					},
+					new String [] {
+						sender.getFullName(), customPage.getName(themeDisplay.getLocale())
+					});
+			
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$TO_NAME$]", "[$USER_NAME$]",
+						"[$CUSTOM_PAGE_NAME$]", 
+						"[$CUSTOM_PAGE_URL$]",
+						"[$FROM_NAME$]","[$FROM_ADDRESS$]"
+					},
+					new String [] {
+						receiver.getFullName(), sender.getFullName(),
+						customPage.getName(themeDisplay.getLocale()), 
+						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
+						company.getName(), company.getEmailAddress()
+					});
+			
+			// temp fix to handle missmatch of page affiliation
+			if (socialActivityType == 3)
+				body = StringUtil.replace(body, sender.getLogin(), receiver.getLogin()); 
+			
+			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			
+			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+			
+			System.out.println("***** Custom-Page-Email ***** ");
+			System.out.println("SocialActivityType: "+socialActivityType);
+			System.out.println("From: "+from.getAddress()+", TO:"+to.getAddress());
+			System.out.println("Subject: "+subject);
+			System.out.println("Body: "+body);
+//			MailServiceUtil.sendEmail(mailMessage);
+		}
 	}
 
 	public static void addToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
