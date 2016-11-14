@@ -26,6 +26,8 @@ import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
@@ -182,90 +184,92 @@ public class JspHelper {
 			
 			Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
 			
+			String portalURL = PortalUtil.getPortalURL(
+					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+			
+			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
+			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
+					"[$LOGIN_NAME$]", receiver.getLogin());
+			
+			String language = "";
+			
+			// check language, default: English
+			if (receiver.getLocale().equals(Locale.GERMANY)) {
+				language = "_"+Locale.GERMANY.toString();
+			}
+			
 			String subject = "";
 			String body = "";
 			
-			// replace subject and body by template corresponding to socialActityId
+			String templateType = "";
+			
+			// get templateType corresponding to socialActityId
 			switch (socialActivityType) {
 			case 1:
 				// Seite freigegeben (share page)
-				subject = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_share_subject.tmpl"));
-				
-				body = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_share_body.tmpl"));
-
+				templateType = "share";
 				break;
 			
 			case 2:
 				// Seite eingereicht (submit page)
-				subject = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_submit_subject.tmpl"));
-				
-				body = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_submit_body.tmpl"));
-
+				templateType = "submit";
 				break;
 			
 			case 3:
 				// Feedback abgegeben (has given Feedback)
-				subject = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_feedback_subject.tmpl"));
-				
-				body = StringUtil.read(
-						CustomUserLocalServiceWrapper.class.getResourceAsStream(
-							"dependencies/email_custom_page_feedback_body.tmpl"));
-
+				templateType = "feedback";
 				break;
 	
 			default:
 				break;
 			}
 			
+			subject = StringUtil.read(
+					CustomUserLocalServiceWrapper.class.getResourceAsStream(
+						"dependencies/email_custom_page_"+templateType+"_subject"+language+".tmpl"));
+			
+			body = StringUtil.read(
+					CustomUserLocalServiceWrapper.class.getResourceAsStream(
+						"dependencies/email_custom_page_"+templateType+"_body"+language+".tmpl"));
+			
+			// all templates have same placeholders
 			subject = StringUtil.replace(
 					subject,
 					new String [] {
-						"[$USER_NAME$]", "[$CUSTOM_PAGE_NAME$]"	
+						"[$CUSTOM_PAGE_NAME$]"	
 					},
 					new String [] {
-						sender.getFullName(), customPage.getName(themeDisplay.getLocale())
+						customPage.getName(themeDisplay.getLocale())
 					});
 			
 			body = StringUtil.replace(
 					body,
 					new String [] {
+						"[$CUSTOM_PAGE_NAME$]",
 						"[$TO_NAME$]", "[$USER_NAME$]",
-						"[$CUSTOM_PAGE_NAME$]", 
-						"[$CUSTOM_PAGE_URL$]",
-						"[$FROM_NAME$]","[$FROM_ADDRESS$]"
+						"[$CUSTOM_PAGE_URL$]", 
+						"[$PAGEMANAGEMENT_URL$]",
+						"[$CONFIG_URL$]"
 					},
-					new String [] {
+					new String [] { 
+						customPage.getName(themeDisplay.getLocale()),
 						receiver.getFullName(), sender.getFullName(),
-						customPage.getName(themeDisplay.getLocale()), 
 						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
-						company.getName(), company.getEmailAddress()
-					});
+						portalURL+"/user/"+receiver.getLogin()+"/seitenverwaltung",
+						notificationConfigURL
+					}); 
 			
-			// temp fix to handle missmatch of page affiliation
-			if (socialActivityType == 3)
-				body = StringUtil.replace(body, sender.getLogin(), receiver.getLogin()); 
-			
-			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			String fromName = PrefsPropsUtil.getString(
+					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			
 			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
 			
 			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
 			
-//			System.out.println("***** Custom-Page-Email ***** ");
-//			System.out.println("SocialActivityType: "+socialActivityType);
-//			System.out.println("From: "+from.getAddress()+", TO:"+to.getAddress());
-//			System.out.println("Subject: "+subject);
-//			System.out.println("Body: "+body);
 			MailServiceUtil.sendEmail(mailMessage);
 		}
 	}
@@ -490,4 +494,7 @@ public class JspHelper {
 
 		return layout;
 	}
+	
+	private static String NOTIFICATION_CONFIG_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=false&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fconfiguration.jsp";
+	
 }
