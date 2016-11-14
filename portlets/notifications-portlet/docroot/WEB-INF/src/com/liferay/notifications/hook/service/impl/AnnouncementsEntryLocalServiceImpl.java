@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -48,10 +49,12 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsEntry;
 import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalService;
 import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceWrapper;
@@ -62,6 +65,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
 
@@ -338,41 +342,61 @@ public class AnnouncementsEntryLocalServiceImpl
 			
 			Company company = CompanyLocalServiceUtil.getCompany(announcementEntry.getCompanyId());
 			
+			Group workspace = GroupLocalServiceUtil.getGroup(announcementEntry.getGroupId());
+			
+			String portalURL = PortalUtil.getPortalURL(
+					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+			
+			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
+			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
+					"[$LOGIN_NAME$]", recipient.getLogin());
+			
+			String language = "";
+			
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			
 			String subject = "";
 			String body = "";
 			
 			subject = StringUtil.read(
 					NotificationsPortlet.class.getResourceAsStream(
-					"dependencies/email_subject.tmpl"));
+					"dependencies/email_subject"+language+".tmpl"));
 			
 			subject = StringUtil.replace(
-					subject, new String[] {
-							"[$ENTRY_TYPE$]", 
-							"[$PORTLET_NAME$]]", 
+					subject, new String[] { 
+							"[$WORKSPACE_NAME$]", 
 							"[$ENTRY_TITLE$]"
 					},
 					new String[] {
-							announcementEntry.getType(),
-							"Announcement",
+							workspace.getName(),
 							announcementEntry.getTitle()
 					});
 			
 			body = StringUtil.read(
 					NotificationsPortlet.class.getResourceAsStream(
-					"dependencies/email_body.tmpl"));
+					"dependencies/email_body"+language+".tmpl"));
 			
 			body = StringUtil.replace(
 					body, 
 					new String[] {
-						"[$ENTRY_CONTENT$]", "[$ENTRY_URL$]", 
-						"[$ENTRY_TITLE$]", "[$PORTAL_URL$]"
+						"[$WORKSPACE_NAME$]", "[$TO_NAME$]",
+						"[$ENTRY_USER_NAME$]", "[$ENTRY_CONTENT$]", 
+						"[$ENTRY_URL$]", 
+						"[$CONFIG_URL$]"
 					},
 					new String[] {
-						announcementEntry.getContent(), announcementEntry.getUrl(),
-						announcementEntry.getTitle(), company.getPortalURL(company.getGroupId())
+						workspace.getName(), recipient.getFullName(),
+						announcementEntry.getUserName(), announcementEntry.getContent(),
+						portalURL+"/group"+workspace.getFriendlyURL(), notificationConfigURL
 					});
 				
-			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			String fromName = PrefsPropsUtil.getString(
+					announcementEntry.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+					announcementEntry.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			
 			InternetAddress to = new InternetAddress(
 					recipient.getEmailAddress());
@@ -382,6 +406,7 @@ public class AnnouncementsEntryLocalServiceImpl
 			MailServiceUtil.sendEmail(mailMessage);
 		}
 		
+		private static String NOTIFICATION_CONFIG_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=false&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fconfiguration.jsp";
 		private static final long serialVersionUID = 1L;
 
 		private AnnouncementsEntry _announcementEntry;
