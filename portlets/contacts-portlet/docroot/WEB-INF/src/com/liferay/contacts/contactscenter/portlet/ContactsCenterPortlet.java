@@ -61,6 +61,8 @@ import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -106,6 +108,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.mail.internet.InternetAddress;
@@ -1059,39 +1062,51 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(socialRequest.getUserId());
 			Company company = CompanyLocalServiceUtil.getCompany(companyId);
 			
-			// TODO check german/english
+			String portalURL = PortalUtil.getPortalURL(
+					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+			
+			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
+			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
+					"[$LOGIN_NAME$]", recipient.getLogin());
+			
+			String requestURL = portalURL + REQUEST_URL;
+			requestURL = StringUtil.replace(requestURL, 
+					"[$LOGIN_NAME$]", recipient.getLogin());
+			
+			String language = "";
+			
+			// send mail in German if recipient is using German
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			
 			String subject = StringUtil.read(
 					ContactsCenterPortlet.class.getResourceAsStream(
-						"dependencies/email_subject.tmpl"));
+						"dependencies/email_subject"+language+".tmpl"));
 			
-			// replace placeholder in subject-template
-			subject = StringUtil.replace(
-					subject,
-					new String [] {
-						"[$USER_NAME$]"	
-					},
-					new String [] {
-						sender.getFullName()	
-					});
-			
-			// TODO check german/english
 			String body = StringUtil.read(
 					ContactsCenterPortlet.class.getResourceAsStream(
-						"dependencies/email_body.tmpl"));
+						"dependencies/email_body"+language+".tmpl"));
 			
 			// replace placeholder in body template
 			body = StringUtil.replace(
 					body,
 					new String [] {
 						"[$TO_NAME$]", "[$USER_NAME$]", 
-						"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+						"[$REQUEST_URL$]", 
+						"[$CONFIG_URL$]"
 					},
 					new String [] {
 						recipient.getFullName(), sender.getFullName(),
-						company.getName(), company.getEmailAddress(),
+						requestURL, 
+						notificationConfigURL,
 					});
 			
-			InternetAddress from = new InternetAddress(company.getEmailAddress());
+			String fromName = PrefsPropsUtil.getString(
+				companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+				companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			
 			InternetAddress to = new InternetAddress(
 					recipient.getEmailAddress());
@@ -1276,4 +1291,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			Contact.class.getName(), user.getContactId(), websites);
 	}
 
+	private static String NOTIFICATION_CONFIG_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=false&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fconfiguration.jsp";
+	private static String REQUEST_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=true&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fview.jsp";
+	
 }
