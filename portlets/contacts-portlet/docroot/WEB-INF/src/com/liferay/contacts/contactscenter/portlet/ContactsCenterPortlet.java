@@ -92,6 +92,7 @@ import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.announcements.service.AnnouncementsDeliveryLocalServiceUtil;
 import com.liferay.portlet.social.NoSuchRelationException;
@@ -115,11 +116,15 @@ import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -399,7 +404,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			sendNotificationEvent(socialRequest);
 			// BEGIN CHANGE
 			// added send method
-			sendMail(socialRequest);
+			sendMail(socialRequest, themeDisplay);
 			// END CHANGE
 		}
 	}
@@ -1047,7 +1052,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		return jsonObject;
 	}
 
-	protected void sendMail(SocialRequest socialRequest) 
+	protected void sendMail(SocialRequest socialRequest, ThemeDisplay themeDisplay) 
 		throws Exception {
 		
 		if (UserNotificationManagerUtil.isDeliver(
@@ -1061,17 +1066,6 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			
 			long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(socialRequest.getUserId());
 			Company company = CompanyLocalServiceUtil.getCompany(companyId);
-			
-			String portalURL = PortalUtil.getPortalURL(
-					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
-			
-			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
-			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
-					"[$LOGIN_NAME$]", recipient.getLogin());
-			
-			String requestURL = portalURL + REQUEST_URL;
-			requestURL = StringUtil.replace(requestURL, 
-					"[$LOGIN_NAME$]", recipient.getLogin());
 			
 			String language = "";
 			
@@ -1097,8 +1091,8 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					},
 					new String [] {
 						recipient.getFullName(), sender.getFullName(),
-						requestURL, 
-						notificationConfigURL,
+						getNotificationRequestURL(themeDisplay), 
+						getNotificationConfigURL(themeDisplay),
 					});
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -1291,7 +1285,32 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			Contact.class.getName(), user.getContactId(), websites);
 	}
 
-	private static String NOTIFICATION_CONFIG_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=false&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fconfiguration.jsp";
-	private static String REQUEST_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=true&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fview.jsp";
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay) 
+			throws WindowStateException, PortletModeException {
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
+				PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "false");
+		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+		
+		return myUrl.toString();
+	}
+	
+	private static String getNotificationRequestURL (ThemeDisplay themeDisplay) 
+			throws WindowStateException, PortletModeException {
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
+				PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "true");
+		myUrl.setParameter("mvcPath", "/notifications/view.jsp");
+		
+		return myUrl.toString();
+	}
 	
 }
