@@ -48,6 +48,7 @@ import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.webserver.WebServerServletTokenUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageConstants;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
@@ -59,14 +60,18 @@ import com.liferay.privatemessaging.util.PortletKeys;
 import com.liferay.privatemessaging.util.PrivateMessagingConstants;
 
 import java.io.InputStream;
-
 import java.text.Format;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Scott Lee
@@ -493,6 +498,12 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				}
 			);
 
+			// BEGIN CHANGE
+			// added config url to existing template
+			userThreadBody = StringUtil.replace(userThreadBody, "[$CONFIG_URL$]", 
+					getNotificationConfigURL(themeDisplay, recipient));
+			// END CHANGE
+			
 			MailMessage mailMessage = new MailMessage(
 				from, to, subject, userThreadBody, true);
 
@@ -536,4 +547,30 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		}
 	}
 
+	private static String getNotificationConfigURL(
+			ThemeDisplay themeDisplay, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
+	}
 }

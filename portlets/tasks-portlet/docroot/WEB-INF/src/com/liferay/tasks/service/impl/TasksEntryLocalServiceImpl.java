@@ -31,13 +31,16 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
@@ -55,6 +58,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -521,12 +530,14 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 					new String [] {
 						"[$TO_NAME$]", "[$TASKS_ENTRY_USER_NAME$]", 
 						"[$TASKS_ENTRY_URL$]",
-						"[$FROM_NAME$]", "[$FROM_ADDRESS$]"
+						"[$FROM_NAME$]", "[$FROM_ADDRESS$]",
+						"[$CONFIG_URL$]"
 					},
 					new String [] {
 						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
 						company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
-						company.getName(), company.getEmailAddress()
+						company.getName(), company.getEmailAddress(),
+						getNotificationConfigURL(serviceContext, recipient)
 					});
 			
 			InternetAddress from = new InternetAddress(company.getEmailAddress());
@@ -624,4 +635,31 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		}
 	}
 
+	private static String getNotificationConfigURL(
+			ServiceContext serviceContext, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					serviceContext.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
+	}
+	
 }
