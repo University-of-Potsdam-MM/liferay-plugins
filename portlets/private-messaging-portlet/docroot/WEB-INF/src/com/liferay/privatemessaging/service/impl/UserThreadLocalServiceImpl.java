@@ -64,6 +64,7 @@ import java.text.Format;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletMode;
@@ -414,38 +415,6 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		InternetAddress from = new InternetAddress(company.getEmailAddress());
 
-		String subject = StringUtil.read(
-			PrivateMessagingPortlet.class.getResourceAsStream(
-				"dependencies/notification_message_subject.tmpl"));
-
-		subject = StringUtil.replace(
-			subject, new String[] {"[$COMPANY_NAME$]", "[$FROM_NAME$]"},
-			new String[] {company.getName(), sender.getFullName()});
-
-		String body = StringUtil.read(
-			PrivateMessagingPortlet.class.getResourceAsStream(
-				"dependencies/notification_message_body.tmpl"));
-
-		long portraitId = sender.getPortraitId();
-		String tokenId = WebServerServletTokenUtil.getToken(
-			sender.getPortraitId());
-		String portraitURL =
-			themeDisplay.getPortalURL() + themeDisplay.getPathImage() +
-				"/user_" + (sender.isFemale() ? "female" : "male") +
-					"_portrait?img_id=" + portraitId + "&t=" + tokenId;
-
-		body = StringUtil.replace(
-			body,
-			new String[] {
-				"[$BODY$]", "[$COMPANY_NAME$]", "[$FROM_AVATAR$]",
-				"[$FROM_NAME$]", "[$FROM_PROFILE_URL$]", "[$SUBJECT$]"
-			},
-			new String[] {
-				mbMessage.getBody(), company.getName(), portraitURL,
-				sender.getFullName(), sender.getDisplayURL(themeDisplay),
-				mbMessage.getSubject()
-			});
-
 		List<UserThread> userThreads =
 			UserThreadLocalServiceUtil.getMBThreadUserThreads(
 				mbMessage.getThreadId());
@@ -483,6 +452,57 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				continue;
 			}
 
+			// BEGIN CHANGE
+			String language = "";
+			// send mail in German if recipient is using German
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			// END CHANGE
+			
+			String subject = StringUtil.read(
+				PrivateMessagingPortlet.class.getResourceAsStream(
+					// BEGIN CHANGE
+					// "dependencies/notification_message_subject.tmpl"));
+						"dependencies/notification_message_subject"+language+".tmpl"));
+					// END CHANGE
+
+			subject = StringUtil.replace(
+				subject, new String[] {"[$COMPANY_NAME$]", "[$FROM_NAME$]"},
+				new String[] {company.getName(), sender.getFullName()});
+
+			String body = StringUtil.read(
+				PrivateMessagingPortlet.class.getResourceAsStream(
+					// BEGIN CHANGE
+					// "dependencies/notification_message_body.tmpl"));
+						"dependencies/notification_message_body"+language+".tmpl"));
+					// END CHANGE
+
+			long portraitId = sender.getPortraitId();
+			String tokenId = WebServerServletTokenUtil.getToken(
+				sender.getPortraitId());
+			String portraitURL =
+				themeDisplay.getPortalURL() + themeDisplay.getPathImage() +
+					"/user_" + (sender.isFemale() ? "female" : "male") +
+						"_portrait?img_id=" + portraitId + "&t=" + tokenId;
+
+			body = StringUtil.replace(
+				body,
+				new String[] {
+					// BEGIN CHANGE
+					// "[$BODY$]", "[$COMPANY_NAME$]", "[$FROM_AVATAR$]",
+					// "[$FROM_NAME$]", "[$FROM_PROFILE_URL$]", "[$SUBJECT$]"
+					"[$TO_NAME$]","[$FROM_NAME$]","[$MESSAGE_CONTENT$]"
+					// END CHANGE
+				},
+				new String[] {
+					// BEGIN CHANGE
+					// mbMessage.getBody(), company.getName(), portraitURL,
+					// sender.getFullName(), sender.getDisplayURL(themeDisplay),
+					// mbMessage.getSubject()
+					recipient.getFullName(), sender.getFullName(), mbMessage.getBody()	
+					// END CHANGE
+				});
+			
 			InternetAddress to = new InternetAddress(
 				recipient.getEmailAddress());
 
