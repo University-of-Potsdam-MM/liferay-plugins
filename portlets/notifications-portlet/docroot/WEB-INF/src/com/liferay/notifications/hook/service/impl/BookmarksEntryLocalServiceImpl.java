@@ -15,6 +15,7 @@
 package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -71,6 +72,15 @@ public class BookmarksEntryLocalServiceImpl
 					bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
 					bookmarksEntry.getFolderId()),
 				userId);
+			
+			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY,
+					getSubscribersOVPs(
+						bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
+						bookmarksEntry.getFolderId()),
+					userId, serviceContext, bookmarksEntry.getFolderId()
+					);
 		}
 
 		return bookmarksEntry;
@@ -102,6 +112,16 @@ public class BookmarksEntryLocalServiceImpl
 					bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
 					bookmarksEntry.getEntryId()),
 				userId);
+			
+			// TODO does not work
+			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
+					getSubscribersOVPs(
+						bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
+						bookmarksEntry.getFolderId()),
+					userId, serviceContext, bookmarksEntry.getFolderId()
+					);
 		}
 
 		return bookmarksEntry;
