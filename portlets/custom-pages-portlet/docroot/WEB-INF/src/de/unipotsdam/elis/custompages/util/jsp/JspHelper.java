@@ -8,9 +8,14 @@ import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
 import com.liferay.mail.service.MailServiceUtil;
@@ -53,6 +58,7 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
@@ -187,10 +193,6 @@ public class JspHelper {
 			String portalURL = PortalUtil.getPortalURL(
 					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
 			
-			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
-			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
-					"[$LOGIN_NAME$]", receiver.getLogin());
-			
 			String language = "";
 			
 			// check language, default: English
@@ -255,8 +257,8 @@ public class JspHelper {
 						customPage.getName(themeDisplay.getLocale()),
 						receiver.getFullName(), sender.getFullName(),
 						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
-						portalURL+"/user/"+receiver.getLogin()+"/seitenverwaltung",
-						notificationConfigURL
+						portalURL+getPageManagementURL(receiver),
+						getNotificationConfigURL(themeDisplay)
 					}); 
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -273,7 +275,65 @@ public class JspHelper {
 			MailServiceUtil.sendEmail(mailMessage);
 		}
 	}
+	
+	/**
+	 * Create URL to notification configuration.
+	 * @param themeDisplay
+	 * @return URL
+	 * @throws WindowStateException
+	 * @throws PortletModeException
+	 */
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay) 
+			throws WindowStateException, PortletModeException {
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
+				PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "false");
+		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+		
+		return myUrl.toString();
+	}
 
+	/**
+	 * Create URL to PageManagement, by searching all pages of a user
+	 * until custom-pages-portlet is found.
+	 * @param user
+	 * @return URL to page with custom-pages-portlet
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	private static String getPageManagementURL(User user) 
+			throws SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(user.getGroupId(), true);
+		
+		Layout layout = null;
+		
+		// iterate over all layouts of workspace too get all portlets
+		for (Layout possibleLayout : layouts) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)possibleLayout.getLayoutType();
+			List<String> actualPortletList = layoutTypePortlet.getPortletIds();
+			
+			// iterate over all portlets to find announcement portlet
+			for (String portletId : actualPortletList) {
+				if (("mycustompages_WAR_custompagesportlet".equals(portletId)) || 
+						("othercustompages_WAR_custompagesportlet".equals(portletId))) {
+					layout = possibleLayout;
+					break;
+				}
+			}
+		}
+		
+		if (layout != null)
+			return PortalUtil.getLayoutActualURL(layout);
+		
+		
+		return "";
+	}
+	
 	public static void addToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
@@ -495,6 +555,5 @@ public class JspHelper {
 		return layout;
 	}
 	
-	private static String NOTIFICATION_CONFIG_URL = "/user/[$LOGIN_NAME$]?p_p_id=1_WAR_notificationsportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&_1_WAR_notificationsportlet_actionable=false&_1_WAR_notificationsportlet_mvcPath=%2Fnotifications%2Fconfiguration.jsp";
 	
 }
