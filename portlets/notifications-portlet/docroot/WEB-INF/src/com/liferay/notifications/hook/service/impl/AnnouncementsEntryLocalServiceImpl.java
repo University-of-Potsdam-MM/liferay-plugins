@@ -14,6 +14,14 @@
 
 package com.liferay.notifications.hook.service.impl;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.mail.internet.InternetAddress;
+
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.notifications.notifications.portlet.NotificationsPortlet;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -42,6 +50,8 @@ import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -50,6 +60,7 @@ import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -60,14 +71,6 @@ import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalService;
 import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceWrapper;
 import com.liferay.portlet.announcements.service.persistence.AnnouncementsEntryFinderUtil;
 import com.liferay.so.util.PortletKeys;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-
-import javax.mail.internet.InternetAddress;
 
 /**
  * @author Jonathan Lee
@@ -321,7 +324,7 @@ public class AnnouncementsEntryLocalServiceImpl
 							UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 						
 						try {
-							sendMail(announcementEntry,notificationEventJSONObject, user.getUserId());
+							sendMail(announcementEntry, user.getUserId());
 						} catch (Exception e) {
 							throw new SystemException(e);
 						}
@@ -332,8 +335,7 @@ public class AnnouncementsEntryLocalServiceImpl
 			}
 		}
 
-		private void sendMail(AnnouncementsEntry announcementEntry,
-			JSONObject notificationEventJSONObject, long userId) 
+		private void sendMail(AnnouncementsEntry announcementEntry, long userId) 
 			throws Exception{
 			
 //			User sender = UserLocalServiceUtil.getUser(announcementEntry.getUserId());
@@ -344,12 +346,38 @@ public class AnnouncementsEntryLocalServiceImpl
 			
 			Group workspace = GroupLocalServiceUtil.getGroup(announcementEntry.getGroupId());
 			
+			List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspace.getGroupId(), true);
+			
+			Layout layout = null;
+			
+			// iterate over all layouts of workspace too get all portlets
+			for (Layout possibleLayout : layouts) {
+				LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)possibleLayout.getLayoutType();
+				List<String> actualPortletList = layoutTypePortlet.getPortletIds();
+				
+				// iterate over all portlets to find announcement portlet
+				for (String portletId : actualPortletList) {
+					if (PortletKeys.SO_ANNOUNCEMENTS.equals(portletId)) {
+						layout = possibleLayout;
+						break;
+					}
+				}
+			}
+			
 			String portalURL = PortalUtil.getPortalURL(
 					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
 			
 			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
 			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
 					"[$LOGIN_NAME$]", recipient.getLogin());
+			
+			String layoutURL; 
+			
+			if (layout == null) {
+				layoutURL = portalURL+"/user/"+recipient.getLogin(); // falls layout nicht gefunden wird, verlinke eigene Seite
+			} else {
+				layoutURL = portalURL+PortalUtil.getLayoutActualURL(layout);
+			}
 			
 			String language = "";
 			
@@ -388,7 +416,7 @@ public class AnnouncementsEntryLocalServiceImpl
 					new String[] {
 						workspace.getName(), recipient.getFullName(),
 						announcementEntry.getUserName(), announcementEntry.getContent(),
-						portalURL+"/group"+workspace.getFriendlyURL(), notificationConfigURL
+						layoutURL, notificationConfigURL
 					});
 				
 			String fromName = PrefsPropsUtil.getString(
