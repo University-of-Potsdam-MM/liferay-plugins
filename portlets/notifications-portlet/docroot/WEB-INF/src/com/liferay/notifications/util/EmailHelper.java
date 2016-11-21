@@ -26,16 +26,19 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.blogs.model.BlogsEntry;
@@ -56,18 +59,30 @@ import com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil;
  */
 public class EmailHelper {
 	
-	public static String getConfigURL (ServiceContext serviceContext) 
-			throws WindowStateException, PortletModeException {
-
-		PortletURL myUrl = PortletURLFactoryUtil.create(
-				serviceContext.getRequest(), "1_WAR_notificationsportlet", serviceContext.getPlid(), //themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
-		myUrl.setWindowState(WindowState.MAXIMIZED);
-		myUrl.setPortletMode(PortletMode.VIEW);
-		myUrl.setParameter("actionable", "false");
-		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	private static String getConfigURL (ServiceContext serviceContext, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		return myUrl.toString();
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					serviceContext.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
 	}
 	
 	
@@ -256,7 +271,7 @@ public class EmailHelper {
 //						workspace.getDescriptiveName(recipient.getLocale()), blogname, // entfernt bis Breadcrump diskussion abgeschlossen
 						recipient.getFullName(), sender.getFullName(),
 						blogContent, entryURL, 
-						getConfigURL(serviceContext)
+						getConfigURL(serviceContext, recipient)
 						});
 		
 		return new String[] {subject, body};
@@ -306,7 +321,7 @@ public class EmailHelper {
 //						workspace.getDescriptiveName(recipient.getLocale()), wikiName, // entfernt bis Breadcrump diskussion abgeschlossen
 						recipient.getFullName(), sender.getFullName(),
 						wikiPageContent, entryURL,
-						getConfigURL(serviceContext)
+						getConfigURL(serviceContext, recipient)
 					});
 		
 		return new String[] {subject, body};
@@ -361,7 +376,7 @@ public class EmailHelper {
 							recipient.getFullName(), sender.getFullName(),
 							messageBody, 
 							entryURL,
-							getConfigURL(serviceContext)
+							getConfigURL(serviceContext, recipient)
 						});
 
 		
@@ -416,7 +431,7 @@ public class EmailHelper {
 					recipient.getFullName(), sender.getFullName(),
 					entryTitle,
 					entryURL, 
-					getConfigURL(serviceContext)
+					getConfigURL(serviceContext, recipient)
 				});
 		
 		if (notificationType.equals("updated")){
@@ -466,7 +481,7 @@ public class EmailHelper {
 //			workspace.getDescriptiveName(), LanguageUtil.get(recipient.getLocale(), "javax.portlet.title."+portlet.getPortletName()), // entfernt bis Breadcrump diskussion abgeschlossen
 			recipient.getFullName(), sender.getFullName(),
 			entryTitle, entryURL,
-			EmailHelper.getConfigURL(serviceContext)
+			EmailHelper.getConfigURL(serviceContext, recipient)
 		});
 		
 		return new String[] {subject, body};

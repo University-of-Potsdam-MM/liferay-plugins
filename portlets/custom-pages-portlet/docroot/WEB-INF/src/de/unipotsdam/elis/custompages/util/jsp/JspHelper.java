@@ -258,7 +258,7 @@ public class JspHelper {
 						receiver.getFullName(), sender.getFullName(),
 						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
 						portalURL+getPageManagementURL(receiver),
-						getNotificationConfigURL(themeDisplay)
+						getNotificationConfigURL(themeDisplay, receiver)
 					}); 
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -283,18 +283,30 @@ public class JspHelper {
 	 * @throws WindowStateException
 	 * @throws PortletModeException
 	 */
-	private static String getNotificationConfigURL (ThemeDisplay themeDisplay) 
-			throws WindowStateException, PortletModeException {
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		PortletURL myUrl = PortletURLFactoryUtil.create(
-				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
-		myUrl.setWindowState(WindowState.MAXIMIZED);
-		myUrl.setPortletMode(PortletMode.VIEW);
-		myUrl.setParameter("actionable", "false");
-		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
 		
-		return myUrl.toString();
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
 	}
 
 	/**

@@ -47,6 +47,8 @@ import com.liferay.portal.UserSmsException;
 import com.liferay.portal.WebsiteURLException;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -82,6 +84,7 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -1091,8 +1094,8 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					},
 					new String [] {
 						recipient.getFullName(), sender.getFullName(),
-						getNotificationRequestURL(themeDisplay), 
-						getNotificationConfigURL(themeDisplay),
+						getNotificationRequestURL(themeDisplay, recipient), 
+						getNotificationConfigURL(themeDisplay, recipient),
 					});
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -1285,32 +1288,56 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			Contact.class.getName(), user.getContactId(), websites);
 	}
 
-	private static String getNotificationConfigURL (ThemeDisplay themeDisplay) 
-			throws WindowStateException, PortletModeException {
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		PortletURL myUrl = PortletURLFactoryUtil.create(
-				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
-		myUrl.setWindowState(WindowState.MAXIMIZED);
-		myUrl.setPortletMode(PortletMode.VIEW);
-		myUrl.setParameter("actionable", "false");
-		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
 		
-		return myUrl.toString();
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+		
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet", layout.getPlid(),
+					PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+			
+			return myUrl.toString();
+		}
+		return "";
 	}
 	
-	private static String getNotificationRequestURL (ThemeDisplay themeDisplay) 
-			throws WindowStateException, PortletModeException {
+	private static String getNotificationRequestURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		PortletURL myUrl = PortletURLFactoryUtil.create(
-				themeDisplay.getRequest(), "1_WAR_notificationsportlet", themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
-		myUrl.setWindowState(WindowState.MAXIMIZED);
-		myUrl.setPortletMode(PortletMode.VIEW);
-		myUrl.setParameter("actionable", "true");
-		myUrl.setParameter("mvcPath", "/notifications/view.jsp");
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
 		
-		return myUrl.toString();
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+		
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet", layout.getPlid(),
+					PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "true");
+			myUrl.setParameter("mvcPath", "/notifications/view.jsp");
+			
+			return myUrl.toString();
+		}
+		return "";
 	}
 	
 }
