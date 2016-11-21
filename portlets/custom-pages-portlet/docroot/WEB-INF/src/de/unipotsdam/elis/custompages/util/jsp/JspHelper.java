@@ -210,6 +210,7 @@ public class JspHelper {
 			case 1:
 				// Seite freigegeben (share page)
 				templateType = "share";
+				customPage.setPrivateLayout(false); // change type to create public url
 				break;
 			
 			case 2:
