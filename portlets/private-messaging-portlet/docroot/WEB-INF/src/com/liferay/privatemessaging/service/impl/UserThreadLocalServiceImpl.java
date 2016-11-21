@@ -413,8 +413,12 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		Company company = CompanyLocalServiceUtil.getCompany(
 			sender.getCompanyId());
 
-		InternetAddress from = new InternetAddress(company.getEmailAddress());
-
+		// BEGIN CHANGE
+		// changed email sender address from admin to message sender
+		// InternetAddress from = new InternetAddress(company.getEmailAddress());
+		InternetAddress from = new InternetAddress(sender.getEmailAddress(), sender.getFullName());  // (fromAddress, fromName)
+		// END CHANGE
+		
 		List<UserThread> userThreads =
 			UserThreadLocalServiceUtil.getMBThreadUserThreads(
 				mbMessage.getThreadId());
