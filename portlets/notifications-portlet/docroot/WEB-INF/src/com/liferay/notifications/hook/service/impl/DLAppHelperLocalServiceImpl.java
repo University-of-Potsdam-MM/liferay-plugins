@@ -124,19 +124,12 @@ public class DLAppHelperLocalServiceImpl
 				notificationType, getSubscribersOVPs(latestFileVersion),
 				userId);
 			
-			System.out.println("Group: "+fileEntry.getGroupId());
-			System.out.println("FolderGroup: "+fileEntry.getFolder().getGroupId());
 			// BEGIN CHANGE
-			// TODO: use email helper
+			// added email helper to prepare and send email
 			EmailHelper.prepareEmail(fileEntry.getGroupId(), latestFileVersion.getCompanyId(), PortletKeys.DOCUMENT_LIBRARY,
 					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
 					notificationType, getSubscribersOVPs(latestFileVersion),
 					userId, serviceContext, latestFileVersion.getFileEntryId());
-			
-//			prepareMail(fileEntry.getGroupId(), latestFileVersion.getCompanyId(), PortletKeys.DOCUMENT_LIBRARY,
-//					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-//					notificationType, getSubscribersOVPs(latestFileVersion),
-//					userId, fileEntry, serviceContext);
 			// END CHANGE
 		}
 		else {
@@ -174,136 +167,6 @@ public class DLAppHelperLocalServiceImpl
 		}
 
 		return subscribersOVPs;
-	}
-	
-	private void prepareMail(long groupId,
-			long companyId, String portletKey,
-			String entryTitle, String entryURL, int notificationType,
-			List<ObjectValuePair<String, Long>> subscribersOVPs, long userId, 
-			FileEntry fileEntry, ServiceContext serviceContext)
-		throws PortalException, SystemException {
-		
-		Set<Long> subscriberUserIds = new HashSet<Long>();
-
-		for (ObjectValuePair<String, Long> ovp : subscribersOVPs) {
-			String className = ovp.getKey();
-			long classPK = ovp.getValue();
-
-			List<Subscription> subscriptions =
-				SubscriptionLocalServiceUtil.getSubscriptions(
-					companyId, className, classPK);
-
-			for (Subscription subscription : subscriptions) {
-				long subscriberUserId = subscription.getUserId();
-
-				if (subscriberUserId == userId) {
-					continue;
-				}
-
-				if (subscriberUserIds.contains(subscriberUserId)) {
-					continue;
-				}
-
-				subscriberUserIds.add(subscriberUserId);
-				
-				if (UserNotificationManagerUtil.isDeliver(
-						subscriberUserId, portletKey, 0, notificationType,
-						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
-					
-					try {
-						sendMail(userId, subscriberUserId, companyId, 
-								portletKey, groupId, notificationType,
-								entryTitle, entryURL, fileEntry,
-								serviceContext);
-					}
-					catch (Exception e) {
-						throw new SystemException(e);
-					}
-				}
-				
-			}
-		}
-		
-	}
-
-	private void sendMail (long userId, long subscriberUserId, long companyId, String portletKey,
-			long groupId, int notificationTypeInt, String entryTitle, String entryURL,
-			FileEntry fileEntry, ServiceContext serviceContext) 
-			throws Exception {
-		
-		User sender = UserLocalServiceUtil.getUser(userId);
-		
-		User recipient = UserLocalServiceUtil.getUser(subscriberUserId);
-		
-		Company company = CompanyLocalServiceUtil.getCompany(companyId);
-		
-		Group workspace = GroupLocalServiceUtil.getGroup(groupId);
-		
-		Portlet portlet = PortletLocalServiceUtil.getPortletById(serviceContext.getPortletId());
-		
-		String language = "";
-		// check language, default: English
-		if (recipient.getLocale().equals(Locale.GERMANY)) {
-			language = "_"+Locale.GERMANY.toString();
-		} 
-		
-		String notificationType = "added";
-		if (notificationTypeInt == 1)			
-			notificationType = "updated";
-		
-		String subject = StringUtil.read(
-				NotificationsPortlet.class.getResourceAsStream(
-				"dependencies/documentslibrary/email_file_entry_"+notificationType+"_subject"+language+".tmpl"));
-		
-		subject = StringUtil.replace(
-				subject, 
-				new String[] {
-					"[$WORKSPACE_NAME$]", 
-					"[$DOCUMENT_TITLE$]"
-				},
-				new String[] {
-					workspace.getDescriptiveName(), 
-					entryTitle
-				});
-		
-		String body = StringUtil.read(
-				NotificationsPortlet.class.getResourceAsStream(
-				"dependencies/documentslibrary/email_file_entry_"+notificationType+"_body"+language+".tmpl"));
-		
-		body = StringUtil.replace(
-		body, 
-		new String[] {
-			"[$WORKSPACE_NAME$]", "[$FOLDER_TITLE$]",
-			"[$TO_NAME$]", "[$USER_NAME$]", 
-			"[$CONTENT$]", "[$ENTRY_URL$]",
-			"[$CONFIG_URL$]"
-		},
-		new String[] {
-			workspace.getDescriptiveName(), LanguageUtil.get(recipient.getLocale(), "javax.portlet.title."+portlet.getPortletName()),
-			recipient.getFullName(), sender.getFullName(),
-			entryTitle, entryURL,
-			EmailHelper.getConfigURL(serviceContext)
-		});
-		
-		String fromName = PrefsPropsUtil.getString(
-			companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
-		String fromAddress = PrefsPropsUtil.getString(
-			companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-	
-		InternetAddress from = new InternetAddress(fromAddress, fromName);
-		
-		InternetAddress to = new InternetAddress(
-				recipient.getEmailAddress());
-		
-		MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
-
-		System.out.println("***************************");
-		System.out.println("From: "+from.getAddress()+" ,To: "+to.getAddress());
-		System.out.println(subject);
-		System.out.println(body);
-		System.out.println("***************************");
-		
-//		MailServiceUtil.sendEmail(mailMessage);
 	}
 	
 	protected AssetRendererFactory _assetRendererFactory =
