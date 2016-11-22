@@ -18,21 +18,34 @@
 package com.liferay.tasks.service.impl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
@@ -40,6 +53,7 @@ import com.liferay.tasks.TasksEntryDueDateException;
 import com.liferay.tasks.TasksEntryTitleException;
 import com.liferay.tasks.model.TasksEntry;
 import com.liferay.tasks.model.TasksEntryConstants;
+import com.liferay.tasks.portlet.TasksPortlet;
 import com.liferay.tasks.service.base.TasksEntryLocalServiceBaseImpl;
 import com.liferay.tasks.social.TasksActivityKeys;
 import com.liferay.tasks.util.PortletKeys;
@@ -47,6 +61,15 @@ import com.liferay.tasks.util.PortletKeys;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+
+import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -123,6 +146,18 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
 			serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 		return tasksEntry;
 	}
 
@@ -351,6 +386,18 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		sendNotificationEvent(
 			tasksEntry, oldStatus, oldAssigneeUserId, serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 		return tasksEntry;
 	}
 
@@ -393,6 +440,19 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			tasksEntry, oldStatus, tasksEntry.getAssigneeUserId(),
 			serviceContext);
 
+		// BEGIN CHANGE
+		// Email
+		
+		try {
+			sendEmail(
+					tasksEntry, TasksEntryConstants.STATUS_ALL, tasksEntry.getAssigneeUserId(),
+					serviceContext);
+		}
+		catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
+		
 		return tasksEntry;
 	}
 
@@ -419,6 +479,104 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			extraDataJSONObject.toString(), tasksEntry.getAssigneeUserId());
 	}
 
+	protected void sendEmail(
+			TasksEntry tasksEntry, int oldStatus, long oldAssigneeUserId,
+			ServiceContext serviceContext
+			) throws Exception {
+		
+		HashSet<Long> receiverUserIds = new HashSet<Long>(3);
+
+		receiverUserIds.add(oldAssigneeUserId);
+		receiverUserIds.add(tasksEntry.getUserId());
+		receiverUserIds.add(tasksEntry.getAssigneeUserId());
+
+		receiverUserIds.remove(serviceContext.getUserId());
+		
+		for (long receiverUserId : receiverUserIds) {
+			if ((receiverUserId == 0) ||
+				!UserNotificationManagerUtil.isDeliver(
+					receiverUserId, PortletKeys.TASKS, 0,
+					TasksEntryConstants.STATUS_ALL,
+					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+
+				continue;
+			}
+			
+			User sender = UserLocalServiceUtil.getUser(tasksEntry.getUserId());
+			
+			Company company = CompanyLocalServiceUtil.getCompany(
+					sender.getCompanyId());
+
+			User recipient = UserLocalServiceUtil.getUser(
+					receiverUserId);
+			
+			Group group = GroupLocalServiceUtil.getGroup(tasksEntry.getGroupId());
+			
+			while ((group.getParentGroupId() != 0)) {
+				group = GroupLocalServiceUtil.getGroup(group.getParentGroupId());
+			}
+			
+			Group workspace = group;
+			
+			String language = "";
+			// send mail in German if recipient is using German
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			
+			
+			String subject = StringUtil.read(
+					TasksPortlet.class.getResourceAsStream(
+						"dependencies/email_task_added_subject"+language+".tmpl"));
+			
+			// replace placeholder in subject-template
+			subject = StringUtil.replace(
+					subject,
+					new String [] {
+//						"[$TASKS_ENTRY_USER_NAME$]",	
+						"[$WORKSPACE_NAME$]", "[$TASKS_ENTRY_NAME$]"
+					},
+					new String [] {
+//						tasksEntry.getReporterFullName()
+						workspace.getDescriptiveName(), tasksEntry.getTitle()	
+					});
+			
+			String body = StringUtil.read(
+					TasksPortlet.class.getResourceAsStream(
+						"dependencies/email_task_added_body"+language+".tmpl"));
+			
+			// replace placeholder in body template
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$TO_NAME$]", "[$TASKS_ENTRY_USER_NAME$]", 
+						"[$TASKS_CONTENT$]",
+						"[$TASKS_ENTRY_URL$]",
+						"[$CONFIG_URL$]"
+					},
+					new String [] {
+						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
+						tasksEntry.getTitle(),
+						getTasksPortletURL(workspace.getGroupId(), company), //company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
+						getNotificationConfigURL(serviceContext, recipient)
+					});
+			
+			String fromName = PrefsPropsUtil.getString(
+				company.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+					company.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+			
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
+
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(
+					from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+	}
+	
 	protected void sendNotificationEvent(
 			TasksEntry tasksEntry, int oldStatus, long oldAssigneeUserId,
 			ServiceContext serviceContext)
@@ -502,4 +660,60 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		}
 	}
 
+	private static String getNotificationConfigURL(
+			ServiceContext serviceContext, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					serviceContext.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
+	}
+	
+	private static String getTasksPortletURL (long workspaceGroupId, Company company) throws SystemException {
+		
+		String portalURL = PortalUtil.getPortalURL(
+				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspaceGroupId, true);
+		
+		Layout layout = null;
+		
+		// iterate over all layouts of workspace too get all portlets
+		for (Layout possibleLayout : layouts) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)possibleLayout.getLayoutType();
+			List<String> actualPortletList = layoutTypePortlet.getPortletIds();
+			
+			// iterate over all portlets to find announcement portlet
+			for (String portletId : actualPortletList) {
+				if (PortletKeys.TASKS.equals(portletId)) {
+					layout = possibleLayout;
+					break;
+				}
+			}
+		}
+		
+		String layoutURL = "";
+		if (layout != null)
+				layoutURL = PortalUtil.getLayoutActualURL(layout);
+		
+		return portalURL+layoutURL;
+	}
 }

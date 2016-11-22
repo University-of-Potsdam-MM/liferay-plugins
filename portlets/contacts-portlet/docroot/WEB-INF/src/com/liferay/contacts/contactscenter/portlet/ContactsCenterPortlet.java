@@ -25,6 +25,7 @@ import com.liferay.contacts.util.ContactsConstants;
 import com.liferay.contacts.util.ContactsUtil;
 import com.liferay.contacts.util.PortletKeys;
 import com.liferay.contacts.util.SocialRelationConstants;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.AddressCityException;
 import com.liferay.portal.AddressStreetException;
 import com.liferay.portal.AddressZipException;
@@ -46,9 +47,12 @@ import com.liferay.portal.UserSmsException;
 import com.liferay.portal.WebsiteURLException;
 import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
@@ -59,12 +63,15 @@ import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Address;
 import com.liferay.portal.model.BaseModel;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
@@ -76,6 +83,8 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -86,6 +95,7 @@ import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsDelivery;
 import com.liferay.portlet.announcements.service.AnnouncementsDeliveryLocalServiceUtil;
 import com.liferay.portlet.social.NoSuchRelationException;
@@ -102,16 +112,22 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -389,6 +405,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					extraDataJSONObject.toString(), userId);
 
 			sendNotificationEvent(socialRequest);
+			// BEGIN CHANGE
+			// added send method
+			sendMail(socialRequest, themeDisplay);
+			// END CHANGE
 		}
 	}
 
@@ -1035,6 +1055,66 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		return jsonObject;
 	}
 
+	protected void sendMail(SocialRequest socialRequest, ThemeDisplay themeDisplay) 
+		throws Exception {
+		
+		if (UserNotificationManagerUtil.isDeliver(
+				socialRequest.getReceiverUserId(), PortletKeys.CONTACTS_CENTER,
+				0, SocialRelationConstants.SOCIAL_RELATION_REQUEST,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+			
+			User sender = UserLocalServiceUtil.getUser(socialRequest.getUserId());
+			
+			User recipient = UserLocalServiceUtil.getUser(socialRequest.getReceiverUserId());
+			
+			long companyId = CompanyLocalServiceUtil.getCompanyIdByUserId(socialRequest.getUserId());
+			Company company = CompanyLocalServiceUtil.getCompany(companyId);
+			
+			String language = "";
+			
+			// send mail in German if recipient is using German
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			
+			String subject = StringUtil.read(
+					ContactsCenterPortlet.class.getResourceAsStream(
+						"dependencies/email_subject"+language+".tmpl"));
+			
+			String body = StringUtil.read(
+					ContactsCenterPortlet.class.getResourceAsStream(
+						"dependencies/email_body"+language+".tmpl"));
+			
+			// replace placeholder in body template
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$TO_NAME$]", "[$USER_NAME$]", 
+						"[$REQUEST_URL$]", 
+						"[$CONFIG_URL$]"
+					},
+					new String [] {
+						recipient.getFullName(), sender.getFullName(),
+						getNotificationRequestURL(themeDisplay, recipient), 
+						getNotificationConfigURL(themeDisplay, recipient),
+					});
+			
+			String fromName = PrefsPropsUtil.getString(
+				companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+				companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
+			
+			InternetAddress to = new InternetAddress(
+					recipient.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(
+					from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage); 
+		}
+	}
+	
 	protected void sendNotificationEvent(SocialRequest socialRequest)
 		throws Exception {
 
@@ -1208,4 +1288,56 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			Contact.class.getName(), user.getContactId(), websites);
 	}
 
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+		
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet", layout.getPlid(),
+					PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+			
+			return myUrl.toString();
+		}
+		return "";
+	}
+	
+	private static String getNotificationRequestURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+		
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet", layout.getPlid(),
+					PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "true");
+			myUrl.setParameter("mvcPath", "/notifications/view.jsp");
+			
+			return myUrl.toString();
+		}
+		return "";
+	}
+	
 }

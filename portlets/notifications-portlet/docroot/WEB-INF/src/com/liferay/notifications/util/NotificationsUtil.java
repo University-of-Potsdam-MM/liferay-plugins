@@ -14,6 +14,11 @@
 
 package com.liferay.notifications.util;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.liferay.notifications.model.UserNotificationEvent;
 import com.liferay.notifications.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -37,12 +42,6 @@ import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
-
-import java.io.Serializable;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author Lin Cui
@@ -238,6 +237,8 @@ public class NotificationsUtil {
 				List<ObjectValuePair<String, Long>> subscribersOVPs)
 			throws PortalException, SystemException {
 
+			System.out.println("***** Notification: "+notificationEventJSONObject);
+			
 			int notificationType = notificationEventJSONObject.getInt(
 				"notificationType");
 

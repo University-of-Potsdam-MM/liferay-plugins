@@ -63,7 +63,11 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 			</div>
 		</div>
 		
+		<%-- BEGIN CHANGE --%>
+		<%-- hide invite by email menu --%>
+		<%-- <div class="email-invited"> --%>
 		<div style="display:none" class="email-invited">
+		<%-- END CHANGE --%>
 			<h2>
 				<liferay-ui:message key="invite-by-email" />
 			</h2>
@@ -85,6 +89,11 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 		%>
 
 		<c:if test="<%= !roles.isEmpty() && GroupPermissionUtil.contains(permissionChecker, group.getGroupId(), ActionKeys.ASSIGN_USER_ROLES) %>">
+			<%-- BEGIN CHANGE --%>
+			<%-- hide invite to dialog --%>
+			<%-- <div class="email-invited"> --%>
+			<div class="invite-to">
+			<%-- END CHANGE --%>
 			<div style="display:none;" class="invite-to">
 				<h2>
 					<liferay-ui:message key="invite-to-role" />
@@ -95,13 +104,10 @@ Group group = GroupLocalServiceUtil.getGroup(scopeGroupId);
 
 					<%
 					for (Role role : roles) {
-						if (role.getName().equals("Editor")){
 					%>
 						
-						<option selected value="<%= role.getRoleId() %>"><%= HtmlUtil.escape(role.getTitle(locale)) %></option>
-
+						<option value="<%= role.getRoleId() %>"><%= HtmlUtil.escape(role.getTitle(locale)) %></option>
 					<%
-						}
 					}
 					%>
 

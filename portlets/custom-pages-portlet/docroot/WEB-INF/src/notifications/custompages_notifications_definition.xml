@@ -2,8 +2,8 @@
 <!DOCTYPE user-notification-definitions PUBLIC "-//Liferay//DTD User Notification Definitions 6.2.0//EN" "http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd">
 <user-notification-definitions>
 	<definition>
-		<notification-type>${de.unipotsdam.elis.custompages.notifications.MyCustomPagesNotificationHandler.PORTLET_ID}</notification-type>
-		<description>custom page notification</description>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED}</notification-type>
+		<description>receive-a-notification-when-someone-publishes-you-a-custom-page</description>
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
@@ -18,8 +18,24 @@
 		</delivery-type>
 	</definition>
 	<definition>
-		<notification-type>${de.unipotsdam.elis.custompages.notifications.OtherCustomPagesNotificationHandler.PORTLET_ID}</notification-type>
-		<description>custom page notification</description>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED}</notification-type>
+		<description>receive-a-notification-when-someone-requests-custom-page-feedback</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>false</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
+	<definition>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_FEEDBACK_DELIVERED}</notification-type>
+		<description>receive-a-notification-when-someone-delivers-custom-page-feedback</description>
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>

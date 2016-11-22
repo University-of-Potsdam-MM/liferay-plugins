@@ -6,23 +6,36 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
@@ -32,7 +45,9 @@ import com.liferay.portal.model.ResourcePermission;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
@@ -43,10 +58,12 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.custompages.CustomPageStatics;
+import de.unipotsdam.elis.custompages.CustomUserLocalServiceWrapper;
 import de.unipotsdam.elis.custompages.model.CustomPageFeedback;
 import de.unipotsdam.elis.custompages.notifications.MyCustomPagesNotificationHandler;
 import de.unipotsdam.elis.custompages.util.CustomPageUtil;
@@ -109,10 +126,23 @@ public class JspHelper {
 
 		}
 		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
-		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
+		// BEGIN CHANGE
+		// add socialActivityType parameter to check if user wants to be notified
+//		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
+		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId, socialActivityType);
+		// END CHANGE
+		// BEGIN CHANGE
+		// send email if user wants to be notified via email
+		try {
+			createCustomPageEmail(themeDisplay.getUser(), receiver, notificationMessage, 
+					customPage, portletId, socialActivityType, themeDisplay);
+		} catch (Exception e) {
+			throw new SystemException(e);
+		}
+		// END CHANGE
 	}
 
-	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest im JSON
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest im JSON
 	// kodiert werden, sondern dynamisch abgefragt werden, wenn die Activity
 	// angezeigt wird
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -124,21 +154,199 @@ public class JspHelper {
 				socialActivityType, jsonObject.toString(), receiverUserId);
 	}
 
-	// TODO: Da sich der Name ändern kann, sollte er hier nicht so fest in der
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest in der
 	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
 	// Nachricht angezeigt wird
 	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
-			String portletId) throws PortalException, SystemException {
+			String portletId, int socialActivityType) throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("userId", sender.getUserId());
 		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
+		
+		// BEGIN CHANGE
+		// isDeliver checks if user enabled notification for this socialActivity
+		if(UserNotificationManagerUtil.isDeliver(
+				receiver.getUserId(),
+				portletId, 0,
+				socialActivityType,
+				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
+		
 		NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
 				System.currentTimeMillis(), portletId, jsonObject);
 		notificationEvent.setDeliveryRequired(0);
 		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(receiver.getUserId(), notificationEvent);
+		}
+		// END CHANGE
+	}
+	
+	private static void createCustomPageEmail(User sender, User receiver, String message, Layout customPage,
+			String portletId, int socialActivityType, ThemeDisplay themeDisplay) throws Exception {
+		if(UserNotificationManagerUtil.isDeliver(
+				receiver.getUserId(),
+				portletId, 0,
+				socialActivityType,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)){
+			
+			Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
+			
+			String portalURL = PortalUtil.getPortalURL(
+					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+			
+			String language = "";
+			
+			// check language, default: English
+			if (receiver.getLocale().equals(Locale.GERMANY)) {
+				language = "_"+Locale.GERMANY.toString();
+			}
+			
+			String subject = "";
+			String body = "";
+			
+			String templateType = "";
+			
+			// get templateType corresponding to socialActityId
+			switch (socialActivityType) {
+			case 1:
+				// Seite freigegeben (share page)
+				templateType = "share";
+				customPage.setPrivateLayout(false); // change type to create public url
+				break;
+			
+			case 2:
+				// Seite eingereicht (submit page)
+				templateType = "submit";
+				break;
+			
+			case 3:
+				// Feedback abgegeben (has given Feedback)
+				templateType = "feedback";
+				break;
+	
+			default:
+				break;
+			}
+			
+			subject = StringUtil.read(
+					CustomUserLocalServiceWrapper.class.getResourceAsStream(
+						"dependencies/email_custom_page_"+templateType+"_subject"+language+".tmpl"));
+			
+			body = StringUtil.read(
+					CustomUserLocalServiceWrapper.class.getResourceAsStream(
+						"dependencies/email_custom_page_"+templateType+"_body"+language+".tmpl"));
+			
+			// all templates have same placeholders
+			subject = StringUtil.replace(
+					subject,
+					new String [] {
+						"[$CUSTOM_PAGE_NAME$]"	
+					},
+					new String [] {
+						customPage.getName(themeDisplay.getLocale())
+					});
+			
+			body = StringUtil.replace(
+					body,
+					new String [] {
+						"[$CUSTOM_PAGE_NAME$]",
+						"[$TO_NAME$]", "[$USER_NAME$]",
+						"[$CUSTOM_PAGE_URL$]", 
+						"[$PAGEMANAGEMENT_URL$]",
+						"[$CONFIG_URL$]"
+					},
+					new String [] { 
+						customPage.getName(themeDisplay.getLocale()),
+						receiver.getFullName(), sender.getFullName(),
+						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
+						portalURL+getPageManagementURL(receiver),
+						getNotificationConfigURL(themeDisplay, receiver)
+					}); 
+			
+			String fromName = PrefsPropsUtil.getString(
+					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+			String fromAddress = PrefsPropsUtil.getString(
+					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+		
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
+			
+			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
+			
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+	}
+	
+	/**
+	 * Create URL to notification configuration.
+	 * @param themeDisplay
+	 * @return URL
+	 * @throws WindowStateException
+	 * @throws PortletModeException
+	 */
+	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
 	}
 
+	/**
+	 * Create URL to PageManagement, by searching all pages of a user
+	 * until custom-pages-portlet is found.
+	 * @param user
+	 * @return URL to page with custom-pages-portlet
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	private static String getPageManagementURL(User user) 
+			throws SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(user.getGroupId(), true);
+		
+		Layout layout = null;
+		
+		// iterate over all layouts of workspace too get all portlets
+		for (Layout possibleLayout : layouts) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet)possibleLayout.getLayoutType();
+			List<String> actualPortletList = layoutTypePortlet.getPortletIds();
+			
+			// iterate over all portlets to find announcement portlet
+			for (String portletId : actualPortletList) {
+				if (("mycustompages_WAR_custompagesportlet".equals(portletId)) || 
+						("othercustompages_WAR_custompagesportlet".equals(portletId))) {
+					layout = possibleLayout;
+					break;
+				}
+			}
+		}
+		
+		if (layout != null)
+			return PortalUtil.getLayoutActualURL(layout);
+		
+		
+		return "";
+	}
+	
 	public static void addToCustomPageJSONArray(JSONArray customPageJSONArray, Layout customPage,
 			ThemeDisplay themeDisplay) throws PortalException, SystemException {
 		JSONObject customPageJSON = JSONFactoryUtil.createJSONObject();
@@ -359,4 +567,6 @@ public class JspHelper {
 
 		return layout;
 	}
+	
+	
 }

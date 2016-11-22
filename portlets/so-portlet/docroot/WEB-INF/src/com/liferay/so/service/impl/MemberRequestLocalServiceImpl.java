@@ -17,6 +17,18 @@
 
 package com.liferay.so.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
+
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -36,25 +48,22 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.so.MemberRequestAlreadyUsedException;
 import com.liferay.so.MemberRequestInvalidUserException;
 import com.liferay.so.invitemembers.util.InviteMembersConstants;
 import com.liferay.so.model.MemberRequest;
 import com.liferay.so.service.base.MemberRequestLocalServiceBaseImpl;
 import com.liferay.so.util.PortletKeys;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import javax.mail.internet.InternetAddress;
 
 /**
  * @author Ryan Park
@@ -418,13 +427,15 @@ public class MemberRequestLocalServiceImpl
 				"[$ADMIN_ADDRESS$]", "[$ADMIN_NAME$]",
 				"[$MEMBER_REQUEST_CREATE_ACCOUNT_URL$]",
 				"[$MEMBER_REQUEST_GROUP$]", "[$MEMBER_REQUEST_LOGIN_URL$]",
-				"[$MEMBER_REQUEST_USER$]"
+				"[$MEMBER_REQUEST_USER$]",
+				"[$CONFIG_URL$]"
 			},
 			new String[] {
 				fromAddress, fromName,
 				getCreateAccountURL(memberRequest, serviceContext),
 				group.getDescriptiveName(serviceContext.getLocale()),
-				getLoginURL(memberRequest, serviceContext), user.getFullName()
+				getLoginURL(memberRequest, serviceContext), user.getFullName(),
+				getNotificationConfigURL(serviceContext, receiverUser)
 			});
 
 		InternetAddress from = new InternetAddress(fromAddress, fromName);
@@ -433,8 +444,19 @@ public class MemberRequestLocalServiceImpl
 
 		MailMessage mailMessage = new MailMessage(
 			from, to, subject, body, true);
+		
+//		BEGIN CHANGE
+//		Mail is prepared but will only be send if user allows it
+		if (UserNotificationManagerUtil.isDeliver(
+				memberRequest.getReceiverUserId(),
+				PortletKeys.SO_INVITE_MEMBERS, 0,
+				MembershipRequestConstants.STATUS_PENDING,
+				UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 
-		MailServiceUtil.sendEmail(mailMessage);
+			MailServiceUtil.sendEmail(mailMessage);
+		}
+// 		END CHANGE
+	
 	}
 
 	protected void sendNotificationEvent(MemberRequest memberRequest)
@@ -478,6 +500,33 @@ public class MemberRequestLocalServiceImpl
 		else if (memberRequest.getReceiverUserId() != userId) {
 			throw new MemberRequestInvalidUserException();
 		}
+	}
+	
+	private static String getNotificationConfigURL(
+			ServiceContext serviceContext, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					serviceContext.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
 	}
 
 }

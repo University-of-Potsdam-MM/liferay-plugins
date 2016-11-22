@@ -15,6 +15,7 @@
 package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -31,7 +32,6 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceWrapper;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +85,11 @@ public class JournalArticleLocalServiceImpl
 				_JOURNAL_ARTICLE_CLASS_NAME, article.getId(),
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
 				notificationType, getSubscribersOVPs(article), userId);
+			
+			EmailHelper.prepareEmail(article.getGroupId(), article.getCompanyId(), PortletKeys.JOURNAL,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					notificationType, getSubscribersOVPs(article), userId, serviceContext, article.getId()
+					);
 		}
 		else {
 			serviceContext.setAttribute("entryURL", entryURL);

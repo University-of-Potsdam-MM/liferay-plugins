@@ -18,7 +18,7 @@
             <div class="advanced-search"> 
 	            <input class="search-query span9" id="<portlet:namespace />filterInput" name="_127_keywords" placeholder="<%= LanguageUtil.get(pageContext, "custompages-filter-placeholder") %>" type="text" value=""> 
 	            <span class="toggle-advanced" id="<portlet:namespace />searchtoggleAdvanced"> 
-	            	<span>Optionen</span>
+	            	<span><%= LanguageUtil.get(pageContext, "custompages-options-column") %></span>
 		            <i class="icon-search"></i> 
 		            <i class="caret"></i> 
 	            </span> 

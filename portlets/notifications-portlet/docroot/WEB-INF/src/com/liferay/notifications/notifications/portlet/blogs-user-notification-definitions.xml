@@ -11,6 +11,12 @@
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>false</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 	<definition>
 		<notification-type>${com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY}</notification-type>
@@ -18,6 +24,12 @@
 		<delivery-type>
 			<name>website</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>

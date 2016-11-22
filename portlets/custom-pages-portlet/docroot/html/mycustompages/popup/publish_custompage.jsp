@@ -26,7 +26,7 @@ String published = renderRequest.getParameter("published");
 	
 	<div class="choose-publishment-type">
 		<div class="portalwide-publishment-div">
-			<aui:button name="portalwide-publishment-button" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
+			<aui:button name="portalwide-publishment-button" type="submit" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
 			<label class="or-label"><%= LanguageUtil.get(pageContext, "custompages-or") %></label>
 		</div>
 		<div class="user-search-wrapper">
@@ -87,20 +87,6 @@ String published = renderRequest.getParameter("published");
 		Liferay.Util.getOpener().closeDialog();
 	}
 
-	var publishState = 0;
-	A.one('#<portlet:namespace />fm').after("submit",function(){
-		if (invitedMembersList.all('.user').size() > 0 || invitedMembersList.one('.global')){
-			if ('<%= isPrivate %>' === 'true'){
-				Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-public-area") %>');
-				publishState = 1;
-			}
-		}
-		else if ('<%= isPrivate %>' === 'false'){
-			Liferay.Util.getOpener().setMessageOnDialogClose('<%= LanguageUtil.get(pageContext, "custompages-page-moved-to-private-area") %>');
-			publishState = 2;
-		}
-	});
-	
 	var inviteMembersContainer = A.one('#<portlet:namespace />inviteMembersContainer');
 
 	var invitedMembersList = inviteMembersContainer.one('.user-invited .list');

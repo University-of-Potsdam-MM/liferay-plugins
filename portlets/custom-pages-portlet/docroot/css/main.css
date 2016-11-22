@@ -352,8 +352,8 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
     background-position: 3px -92px;
     background-repeat: no-repeat;
   
-    margin-left: 75px;
-   
+    /* margin-left: 75px; */
+   	margin-right: 10px;
 }
 
 
@@ -367,6 +367,7 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
     line-height: 30px;
     /* font-weight: bold; */
     padding: 0 5px 0 5px;
+    left: auto; 
 }
 
 
@@ -471,7 +472,10 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 	text-shadow: none;
 }
 	
-
+.invited-users-wrapper {
+	    margin-top: 85px;
+	
+}
 	
 			    
 .invited-users-wrapper  h2 span{
