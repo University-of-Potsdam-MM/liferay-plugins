@@ -15,6 +15,7 @@
 package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -79,6 +80,14 @@ public class BlogsEntryLocalServiceImpl extends BlogsEntryLocalServiceWrapper {
 				_BLOGS_ENTRY_CLASS_NAME, blogsEntry.getEntryId(),
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
 				notificationType, getSubscribersOVPs(blogsEntry), userId);
+			
+			// BEGIN CHANGE
+			// added method to check if user is subscribed and send mail
+			EmailHelper.prepareEmail(blogsEntry.getGroupId(), blogsEntry.getCompanyId(), PortletKeys.BLOGS,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					notificationType, getSubscribersOVPs(blogsEntry), userId,
+					serviceContext, blogsEntry.getEntryId());
+			// END CHANGE
 		}
 		else {
 			serviceContext.setAttribute("entryURL", entryURL);

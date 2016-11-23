@@ -15,17 +15,39 @@
 package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.notifications.notifications.portlet.NotificationsPortlet;
+import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.FileVersion;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.Subscription;
+import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.SubscriptionLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
@@ -34,10 +56,21 @@ import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalService;
 import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceWrapper;
 
 import java.io.Serializable;
-
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
+import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Lin Cui
@@ -90,6 +123,14 @@ public class DLAppHelperLocalServiceImpl
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
 				notificationType, getSubscribersOVPs(latestFileVersion),
 				userId);
+			
+			// BEGIN CHANGE
+			// added email helper to prepare and send email
+			EmailHelper.prepareEmail(fileEntry.getGroupId(), latestFileVersion.getCompanyId(), PortletKeys.DOCUMENT_LIBRARY,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					notificationType, getSubscribersOVPs(latestFileVersion),
+					userId, serviceContext, latestFileVersion.getFileEntryId());
+			// END CHANGE
 		}
 		else {
 			serviceContext.setAttribute("entryURL", entryURL);
@@ -127,7 +168,7 @@ public class DLAppHelperLocalServiceImpl
 
 		return subscribersOVPs;
 	}
-
+	
 	protected AssetRendererFactory _assetRendererFactory =
 		AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 			_DL_FILE_ENTRY_CLASS_NAME);

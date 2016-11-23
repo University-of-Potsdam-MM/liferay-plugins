@@ -15,6 +15,7 @@
 package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
+import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -87,6 +88,17 @@ public class WikiPageLocalServiceImpl extends WikiPageLocalServiceWrapper {
 				getSubscribersOVPs(
 					wikiPage, subscriptionClassName, subscriptionClassPK),
 				userId);
+			
+			// BEGIN CHANGE
+			// added method to send mail
+			EmailHelper.prepareEmail(wikiPage.getGroupId(), wikiPage.getCompanyId(), 
+					PortletKeys.WIKI,
+					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+					notificationType,
+					getSubscribersOVPs(
+						wikiPage, subscriptionClassName, subscriptionClassPK),
+					userId, serviceContext, wikiPage.getPageId());
+			// END CHANGE
 		}
 		else {
 			serviceContext.setAttribute("entryURL", entryURL);

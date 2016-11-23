@@ -48,6 +48,7 @@ import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.webserver.WebServerServletTokenUtil;
+import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageConstants;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
@@ -59,14 +60,19 @@ import com.liferay.privatemessaging.util.PortletKeys;
 import com.liferay.privatemessaging.util.PrivateMessagingConstants;
 
 import java.io.InputStream;
-
 import java.text.Format;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
+import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.portlet.WindowStateException;
 
 /**
  * @author Scott Lee
@@ -407,40 +413,12 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		Company company = CompanyLocalServiceUtil.getCompany(
 			sender.getCompanyId());
 
-		InternetAddress from = new InternetAddress(company.getEmailAddress());
-
-		String subject = StringUtil.read(
-			PrivateMessagingPortlet.class.getResourceAsStream(
-				"dependencies/notification_message_subject.tmpl"));
-
-		subject = StringUtil.replace(
-			subject, new String[] {"[$COMPANY_NAME$]", "[$FROM_NAME$]"},
-			new String[] {company.getName(), sender.getFullName()});
-
-		String body = StringUtil.read(
-			PrivateMessagingPortlet.class.getResourceAsStream(
-				"dependencies/notification_message_body.tmpl"));
-
-		long portraitId = sender.getPortraitId();
-		String tokenId = WebServerServletTokenUtil.getToken(
-			sender.getPortraitId());
-		String portraitURL =
-			themeDisplay.getPortalURL() + themeDisplay.getPathImage() +
-				"/user_" + (sender.isFemale() ? "female" : "male") +
-					"_portrait?img_id=" + portraitId + "&t=" + tokenId;
-
-		body = StringUtil.replace(
-			body,
-			new String[] {
-				"[$BODY$]", "[$COMPANY_NAME$]", "[$FROM_AVATAR$]",
-				"[$FROM_NAME$]", "[$FROM_PROFILE_URL$]", "[$SUBJECT$]"
-			},
-			new String[] {
-				mbMessage.getBody(), company.getName(), portraitURL,
-				sender.getFullName(), sender.getDisplayURL(themeDisplay),
-				mbMessage.getSubject()
-			});
-
+		// BEGIN CHANGE
+		// changed email sender address from admin to message sender
+		// InternetAddress from = new InternetAddress(company.getEmailAddress());
+		InternetAddress from = new InternetAddress(sender.getEmailAddress(), sender.getFullName());  // (fromAddress, fromName)
+		// END CHANGE
+		
 		List<UserThread> userThreads =
 			UserThreadLocalServiceUtil.getMBThreadUserThreads(
 				mbMessage.getThreadId());
@@ -478,6 +456,57 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				continue;
 			}
 
+			// BEGIN CHANGE
+			String language = "";
+			// send mail in German if recipient is using German
+			if (recipient.getLocale().equals(Locale.GERMANY))
+				language = "_"+Locale.GERMANY.toString();
+			// END CHANGE
+			
+			String subject = StringUtil.read(
+				PrivateMessagingPortlet.class.getResourceAsStream(
+					// BEGIN CHANGE
+					// "dependencies/notification_message_subject.tmpl"));
+						"dependencies/notification_message_subject"+language+".tmpl"));
+					// END CHANGE
+
+			subject = StringUtil.replace(
+				subject, new String[] {"[$COMPANY_NAME$]", "[$FROM_NAME$]"},
+				new String[] {company.getName(), sender.getFullName()});
+
+			String body = StringUtil.read(
+				PrivateMessagingPortlet.class.getResourceAsStream(
+					// BEGIN CHANGE
+					// "dependencies/notification_message_body.tmpl"));
+						"dependencies/notification_message_body"+language+".tmpl"));
+					// END CHANGE
+
+			long portraitId = sender.getPortraitId();
+			String tokenId = WebServerServletTokenUtil.getToken(
+				sender.getPortraitId());
+			String portraitURL =
+				themeDisplay.getPortalURL() + themeDisplay.getPathImage() +
+					"/user_" + (sender.isFemale() ? "female" : "male") +
+						"_portrait?img_id=" + portraitId + "&t=" + tokenId;
+
+			body = StringUtil.replace(
+				body,
+				new String[] {
+					// BEGIN CHANGE
+					// "[$BODY$]", "[$COMPANY_NAME$]", "[$FROM_AVATAR$]",
+					// "[$FROM_NAME$]", "[$FROM_PROFILE_URL$]", "[$SUBJECT$]"
+					"[$TO_NAME$]","[$FROM_NAME$]","[$MESSAGE_CONTENT$]"
+					// END CHANGE
+				},
+				new String[] {
+					// BEGIN CHANGE
+					// mbMessage.getBody(), company.getName(), portraitURL,
+					// sender.getFullName(), sender.getDisplayURL(themeDisplay),
+					// mbMessage.getSubject()
+					recipient.getFullName(), sender.getFullName(), mbMessage.getBody()	
+					// END CHANGE
+				});
+			
 			InternetAddress to = new InternetAddress(
 				recipient.getEmailAddress());
 
@@ -493,6 +522,12 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				}
 			);
 
+			// BEGIN CHANGE
+			// added config url to existing template
+			userThreadBody = StringUtil.replace(userThreadBody, "[$CONFIG_URL$]", 
+					getNotificationConfigURL(themeDisplay, recipient));
+			// END CHANGE
+			
 			MailMessage mailMessage = new MailMessage(
 				from, to, subject, userThreadBody, true);
 
@@ -536,4 +571,30 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		}
 	}
 
+	private static String getNotificationConfigURL(
+			ThemeDisplay themeDisplay, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
+	}
 }
