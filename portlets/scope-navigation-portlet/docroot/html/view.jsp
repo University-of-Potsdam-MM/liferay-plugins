@@ -90,7 +90,7 @@ else{
 	if (!isMember){
 		if (membershipRequestPending){
 		%>
-			<div id="<portlet:namespace />siteMembership">
+			<div id="<portlet:namespace />siteMembership" class="membershipRequested">
 				<span><%= LanguageUtil.get(pageContext, "membership-requested") %></span>
 			</div>
 		<%
