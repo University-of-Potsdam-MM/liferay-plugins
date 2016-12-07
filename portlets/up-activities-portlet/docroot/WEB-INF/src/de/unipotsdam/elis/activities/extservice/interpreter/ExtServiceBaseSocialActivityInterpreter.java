@@ -135,17 +135,18 @@ public class ExtServiceBaseSocialActivityInterpreter extends BaseSocialActivityI
 			} else if (moodleSocialActivityType.equals("ma:record")) {
 				_interpreter = new MoodleDataBaseActivityInterpreter();
 			} else if (moodleSocialActivityType.equals("ma:resource")) {
-				_interpreter = new MoodleDefaultActivityInterpreter();
+				_interpreter = new MoodleRessourcesActivityInterpreter();
 			} else if (moodleSocialActivityType.equals("ma:survey")) {
 				_interpreter = new MoodleSurveyActivityInterpreter();
 			} else if (moodleSocialActivityType.equals("ma:url")) {
-				_interpreter = new MoodleDefaultActivityInterpreter();
+				_interpreter = new MoodleRessourcesActivityInterpreter();
 			} else if (moodleSocialActivityType.equals("ma:wiki")) {
 				return null;
 			} else if (moodleSocialActivityType.equals("ma:workshop")) {
 				_interpreter = new MoodleWorkshopActivityInterpreter();
 			} else {
 				_interpreter = new MoodleDefaultActivityInterpreter();
+				return null;
 			}
 
 			return new SocialActivityFeedEntry(null, getTitle(activitySet, data,

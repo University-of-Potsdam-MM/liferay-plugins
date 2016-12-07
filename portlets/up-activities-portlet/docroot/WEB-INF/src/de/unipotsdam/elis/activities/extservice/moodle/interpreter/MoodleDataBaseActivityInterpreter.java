@@ -26,7 +26,7 @@ public class MoodleDataBaseActivityInterpreter extends
 //		else if (activitySet.getType() == ExtendedSocialActivityKeyConstants.WIKI_UPDATE_PAGE)
 //			return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "updated-wiki-page");
 //		return StringPool.BLANK;
-		return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "added-new-database");
+		return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "added-new-database-record");
 	}
 
 	@Override

@@ -57,6 +57,12 @@ for (SocialActivitySet activitySet : results) {
 			moodleSocialActivityType = "feedback";
 		if (moodleSocialActivityType.equals("scrom"))
 			moodleSocialActivityType = "packet";
+		if (moodleSocialActivityType.equals("adobeconnect"))
+			moodleSocialActivityType = "adobe";
+		if (moodleSocialActivityType.equals("lesson"))
+			moodleSocialActivityType = "lecture";
+		if (moodleSocialActivityType.equals("quiz"))
+			moodleSocialActivityType = "test";
 		
 		socialActivityCssClass = moodleSocialActivityType;
 

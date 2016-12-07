@@ -26,6 +26,13 @@ public class MoodleSurveyActivityInterpreter extends
 //		else if (activitySet.getType() == ExtendedSocialActivityKeyConstants.WIKI_UPDATE_PAGE)
 //			return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "updated-wiki-page");
 //		return StringPool.BLANK;
+		
+		String moodleSocialActivityType = data.getString("type");
+		
+		if (moodleSocialActivityType.equalsIgnoreCase("submitt")) {
+			return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "submitt-survey");
+		}
+		
 		return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "added-new-survey");
 	}
 
