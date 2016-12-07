@@ -21,7 +21,6 @@
 <%@ include file="/html/init.jsp" %>
 
 <%
-System.out.println("2");
 
 List<SocialActivity> results = null;
 

@@ -25,7 +25,6 @@
 <%@ include file="/html/init.jsp"%>
 
 <%
-System.out.println("1");
 List<SocialActivitySet> results = null; 
 ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
 

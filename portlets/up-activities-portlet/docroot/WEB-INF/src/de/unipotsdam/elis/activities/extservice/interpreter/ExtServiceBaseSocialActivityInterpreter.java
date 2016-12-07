@@ -39,9 +39,7 @@ import de.unipotsdam.elis.activities.extservice.moodle.interpreter.MoodleRessour
 import de.unipotsdam.elis.activities.extservice.moodle.interpreter.MoodleSurveyActivityInterpreter;
 import de.unipotsdam.elis.activities.extservice.moodle.interpreter.MoodleWikiActivityInterpreter;
 import de.unipotsdam.elis.activities.extservice.moodle.interpreter.MoodleWorkshopActivityInterpreter;
-import de.unipotsdam.elis.activities.extservice.util.ExtSocialActivityUtil;
 import de.unipotsdam.elis.activities.model.MoodleSocialActivity;
-import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalServiceUtil;
 import de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalServiceUtil;
 
 public class ExtServiceBaseSocialActivityInterpreter extends BaseSocialActivityInterpreter {
@@ -64,25 +62,10 @@ public class ExtServiceBaseSocialActivityInterpreter extends BaseSocialActivityI
 		if (PortalUtil.getClassName(activitySet.getClassNameId()).equals(MoodleSocialActivity.class.getName())) {
 			MoodleSocialActivity moodleSocialActivity = MoodleSocialActivityLocalServiceUtil
 					.getMoodleSocialActivity(activitySet.getClassPK());
-			System.out.print(moodleSocialActivity.getExtSocialActivityId()+"\t");
 			
 			JSONObject data = JSONFactoryUtil.createJSONObject(moodleSocialActivity.getData());
 			
 			String moodleSocialActivityType = data.getJSONObject("object").getJSONArray("type").getString(1);
-			System.out.println(moodleSocialActivityType);
-//			if (moodleSocialActivityType.equals("ma:post") || moodleSocialActivityType.equals("ma:discussion")) {
-//				_interpreter = new MoodleMBActivityInterpreter();
-//			} else if (moodleSocialActivityType.equals("ma:page")) {
-//				_interpreter = new MoodleWikiActivityInterpreter();
-//			} else if (moodleSocialActivityType.equals("ma:forum") || 
-//					moodleSocialActivityType.equals("ma:ouwiki") || 
-//					moodleSocialActivityType.equals("ma:wiki")) {
-//				
-//				_interpreter = new MoodleDefaultActivityInterpreter();
-//				return null;
-//			} else {
-//				_interpreter = new MoodleDefaultActivityInterpreter();
-//			}
 			
 			if (moodleSocialActivityType.equals("ma:assign")) {
 				return null;

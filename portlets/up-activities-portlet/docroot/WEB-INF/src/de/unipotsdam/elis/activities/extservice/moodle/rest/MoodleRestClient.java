@@ -35,7 +35,7 @@ public class MoodleRestClient {
 			throw new ClientErrorException(response);
 
 		JSONObject jsonResponse = JSONFactoryUtil.createJSONObject(response.readEntity(String.class));
-		System.out.println("MOERP: "+jsonResponse.toString());
+
 		String token = jsonResponse.getString("token", "null");
 
 		if (token.equals("null"))

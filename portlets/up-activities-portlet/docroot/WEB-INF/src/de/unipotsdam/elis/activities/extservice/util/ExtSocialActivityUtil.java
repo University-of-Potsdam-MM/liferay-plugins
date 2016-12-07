@@ -12,13 +12,9 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
-import de.unipotsdam.elis.activities.extservice.moodle.rest.MoodleRestClient;
 import de.unipotsdam.elis.activities.model.MoodleSocialActivity;
 import de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalServiceUtil;
 
@@ -37,19 +33,19 @@ public class ExtSocialActivityUtil {
 			throws ClientErrorException, PortalException, SystemException, DatatypeConfigurationException {
 		MoodleSocialActivity mostRecentMoodleActivity = MoodleSocialActivityLocalServiceUtil
 				.getMostRecentMoodleSocialActivity(userId);
-//		System.out.println("MOERP_most_recent "+mostRecentMoodleActivity.getData());
+
 		long currentTime = System.currentTimeMillis() / 1000;
 		// TODO: könnte eine fette abfrage werden wenn wirklich alle aktivitäten
 		// geholt werden soll -> vielleicht doch immer auf 10 reduzieren oder so
 		long starttime = (mostRecentMoodleActivity != null) ? mostRecentMoodleActivity.getPublished() + 1 : 0;
-		System.out.println("MOERP_starttime "+ starttime);
-		System.out.println("MOERP_currenttime "+ currentTime);
+//		System.out.println("starttime "+ starttime);
+//		System.out.println("currenttime "+ currentTime);
 		try {
 			// TODO: remove sample Data if rest service is deployed
 			JSONArray mostRecentMoodleActivities = createSampleData(starttime);
 //			JSONArray mostRecentMoodleActivities = MoodleRestClient.getLatestCourseNews(username, password, starttime,
 //					currentTime, 0, 0); 
-			System.out.println("BÄM: "+mostRecentMoodleActivities);
+//			System.out.println("mostRecentMoodleActivities: "+mostRecentMoodleActivities);
 			/*
 			 * Alle mostRecentMoodleActivities zur DB hinzufügen fürht zu doppelten Einträgen. Daher maximale starttime 
 			 * in DB raussuchen und nur neuere Einträge hinzufügen!
@@ -65,13 +61,12 @@ public class ExtSocialActivityUtil {
 			SystemException, DatatypeConfigurationException {
 		for (int i = 0; i < extActivities.length(); i++) {
 			addMoodleSocialActivityToDB(userId, extActivities.getJSONObject(i));
-			System.out.println(i);
 		}
 	}
 
 	private static MoodleSocialActivity addMoodleSocialActivityToDB(long userId, JSONObject data)
 			throws PortalException, SystemException, DatatypeConfigurationException {
-		System.out.println(data);
+
 		JSONObject context = data.getJSONObject("context");
 		String extServiceContext = "<a class=\"group\" href=\"" + context.getString("url") + "\">"
 				+ HtmlUtil.escape(context.getString("name")) + "</a>";
@@ -106,35 +101,5 @@ public class ExtSocialActivityUtil {
 		// END CHANGE
 		
 		return result; // wozu?
-	}
-	
-	/**
-	 * This method checks, which user created the current activity.
-	 * The actor of activity Stream is fetched to check, if he is 
-	 * also part of campus.up.
-	 * @param userId
-	 * @param data
-	 * @return
-	 * @throws SystemException
-	 */
-	private static long getActivityCreatorUserId(long userId, JSONObject data) 
-			throws SystemException {
-		
-		// TODO: does not work, iteration stops
-		
-		User currentUser = UserLocalServiceUtil.fetchUser(userId);
-		if (currentUser == null)
-			return 0;
-		
-		long companyId = currentUser.getCompanyId();
-		
-		String loginName = data.getJSONObject("actor").getString("id");
-
-		User activitySetUser = UserLocalServiceUtil.fetchUserByScreenName(companyId, loginName);
-		if (activitySetUser == null)
-			return 0;
-		else 
-			return activitySetUser.getUserId();
-		
 	}
 }
