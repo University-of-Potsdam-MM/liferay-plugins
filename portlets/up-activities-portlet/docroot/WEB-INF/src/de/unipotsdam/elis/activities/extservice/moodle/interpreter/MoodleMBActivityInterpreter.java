@@ -34,6 +34,8 @@ public class MoodleMBActivityInterpreter extends ExtServiceSocialActivityInterpr
 
 		StringBuilder sb = new StringBuilder();
 
+		sb.append(super.getBody(data, themeDisplay));
+		
 		sb.append("<div class=\"activity-body\"><div class=\"title\">");
 		sb.append(getLink(object, themeDisplay));
 		sb.append("</div><div class=\"forum-page-content\">");

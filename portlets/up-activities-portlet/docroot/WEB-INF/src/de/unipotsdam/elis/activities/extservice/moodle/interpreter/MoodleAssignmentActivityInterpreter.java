@@ -6,18 +6,14 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.SocialActivitySet;
 
-import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
 import de.unipotsdam.elis.activities.extservice.interpreter.ExtServiceSocialActivityInterpreter;
 
-public class MoodleDefaultActivityInterpreter extends
+public class MoodleAssignmentActivityInterpreter extends
 		ExtServiceSocialActivityInterpreter {
 
 	@Override
@@ -31,6 +27,12 @@ public class MoodleDefaultActivityInterpreter extends
 //			return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "updated-wiki-page");
 //		return StringPool.BLANK;
 		
+//		String moodleSocialActivityObjectType = data.getJSONObject("object").getJSONArray("type").getString(0);
+		String moodleSocialActivityType = data.getString("type");
+		
+		if (moodleSocialActivityType.equalsIgnoreCase("submitt")) {
+			return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "submitted-an-assignment");
+		}
 		return LanguageUtil.get(portletConfig, serviceContext.getLocale(), "new-moodle-activity");
 	}
 
@@ -40,7 +42,7 @@ public class MoodleDefaultActivityInterpreter extends
 
 		StringBuilder sb = new StringBuilder();
 
-//		sb.append(super.getBody(data, themeDisplay));
+		sb.append(super.getBody(data, themeDisplay));
 		
 		sb.append("<div class=\"activity-body\"><div class=\"title\">");
 		sb.append(getLink(object, themeDisplay));
