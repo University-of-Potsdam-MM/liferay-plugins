@@ -90,7 +90,6 @@
 a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink {
 	background-color: #d0dae3;
 	display: inline-block;
-	padding: 10px;
 	font-weight: normal;
 }
 
@@ -100,18 +99,17 @@ a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:hover {
 
 a#_scopenavigation_WAR_scopenavigationportlet_siteMembershipLink:before
 	{
-	background-image: url('/so-up-theme/css/../images/ple-icons.png')
-		!important;
-	background-repeat: no-repeat;
-	background-position: 0 -33px;
-	display: inline-block;
-	position: relative;
-	width: 15px;
-	height: 15px;
-	content: "";
-	float: left;
-	margin-top: 2px;
-	margin-right:4px;
+    background-image: url(/so-up-theme/css/../images/ple-icons.png) !important;
+    background-repeat: no-repeat;
+    background-position: 0 -33px;
+    display: inline-block;
+    position: relative;
+    width: 15px;
+    height: 15px;
+    content: "";
+    margin-right: 4px;
+    line-height: 40px;
+    vertical-align: text-top;
 }
 
 #_scopenavigation_WAR_scopenavigationportlet_siteMembership.membershipRequested 

@@ -1,3 +1,7 @@
+.aui #customPageTable table, .aui #p_p_id_othercustompages_WAR_custompagesportlet_ table {
+	width:100%;
+}
+
 
 .aui  #p_p_id_othercustompages_WAR_custompagesportlet_ .nav-tabs {
 	  border-bottom: 1px solid #014260;
@@ -338,11 +342,27 @@ form.yui3-datatable-paginator-group #itemsPerPage {
 #_mycustompages_WAR_custompagesportlet_createPageButton {
 	float:left;
 	margin-right:5px;
+	background-color:#014260;
+	color:#fff;
+	    font-weight: bold;
 }
 
+#_mycustompages_WAR_custompagesportlet_createPageButton:hover {
+	background-color:#e2e9ee;
+	color:#014260;
+}
+
+#_mycustompages_WAR_custompagesportlet_createPageButton:hover:before {
+	color:#014260;
+
+} 
+
 #_mycustompages_WAR_custompagesportlet_createPageButton:before {
-    content: "+";
-    font-weight: bold;
+    content: "\f055";
+    font-family:fontawesome;
+    font-size:14px;
+    font-weight: normal;
+    margin-right: 3px;
 }
 
 
