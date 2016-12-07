@@ -18,9 +18,10 @@
 --%>
 
 <%
+
 for (SocialActivitySet activitySet : results) {
 	SocialActivityFeedEntry activityFeedEntry = SocialActivityInterpreterLocalServiceUtil.interpret("SO", activitySet, ServiceContextFactory.getInstance(request));
-
+	
 	start++;
 
 	if (activityFeedEntry == null) {
@@ -32,9 +33,96 @@ for (SocialActivitySet activitySet : results) {
 	}
 
 	Portlet portlet = PortletLocalServiceUtil.getPortletById(activityFeedEntry.getPortletId());
+	
+	String socialActivityCssClass = portlet.getCssClassWrapper(); // style class for activity
+	String originCssClass = "cu";	// activity origin, default is campus.up
+	
+	// if activity is MoodleSocialActivity set socialActivityCssClass to moodlesocialactivity type
+	if (PortalUtil.getClassName(activitySet.getClassNameId()).equals(MoodleSocialActivity.class.getName())) {
+		MoodleSocialActivity moodleSocialActivity = MoodleSocialActivityLocalServiceUtil.getMoodleSocialActivity(activitySet.getClassPK());
+		JSONObject data = JSONFactoryUtil.createJSONObject(moodleSocialActivity.getData());
+		String moodleSocialActivityType = data.getJSONObject("object").getJSONArray("type").getString(0);
+		
+		originCssClass = "moodle";
+		
+		// some replacements to group or rename moodle activities
+		if (moodleSocialActivityType.equals("assign"))
+			moodleSocialActivityType = "task";
+		if (moodleSocialActivityType.equals("scheduler"))
+			moodleSocialActivityType = "calender";
+		if ((moodleSocialActivityType.equals("survey")) || (moodleSocialActivityType.equals("choice")))
+			moodleSocialActivityType = "poll";
+		if (moodleSocialActivityType.equals("workshop"))
+			moodleSocialActivityType = "feedback";
+		if (moodleSocialActivityType.equals("scrom"))
+			moodleSocialActivityType = "packet";
+		if (moodleSocialActivityType.equals("adobeconnect"))
+			moodleSocialActivityType = "adobe";
+		if (moodleSocialActivityType.equals("lesson"))
+			moodleSocialActivityType = "lecture";
+		if (moodleSocialActivityType.equals("quiz"))
+			moodleSocialActivityType = "test";
+		
+		socialActivityCssClass = moodleSocialActivityType;
+
+	} else if (activitySet.getClassPK() == 60510) { // dirty, better solution?
+		
+		// check type of custompage to set cssClass
+		switch (activitySet.getType()) {
+		case ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_PUBLISHED:
+			socialActivityCssClass = "sharedpage";
+			break;
+
+		case ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED:
+			socialActivityCssClass = "submission";
+			break;
+			
+		case ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_DELIVERED:
+			socialActivityCssClass = "feedback";
+			break;
+			
+		case ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_DELETED:
+			socialActivityCssClass = "delete";
+			break;
+		}
+	
+	} else {
+		
+		// check classNameIds to set desired css class 
+		if (activitySet.getClassNameId() == 20717)
+			socialActivityCssClass = "task";
+		else if (activitySet.getClassNameId() == 20444)
+			socialActivityCssClass = "calendar";
+		else if ((activitySet.getClassNameId() == 20109) 
+				|| (activitySet.getClassNameId() == 20010
+				|| (activitySet.getClassNameId() == 20011)
+				|| (activitySet.getClassNameId() == 20012)
+				|| (activitySet.getClassNameId() == 20013)))
+			socialActivityCssClass = "text";
+		else if(activitySet.getClassNameId() == 20007)
+			socialActivityCssClass = "blog";
+		else if((activitySet.getClassNameId() == 20011) || (activitySet.getClassNameId() == 20012))
+			socialActivityCssClass = "upload";
+		else if(activitySet.getClassNameId() == 20008)
+			socialActivityCssClass = "bookmark";
+		else if((activitySet.getClassNameId() == 20124) 
+				|| (activitySet.getClassNameId() == 20125
+				|| (activitySet.getClassNameId() == 20126)))
+			socialActivityCssClass = "poll";
+		else if(activitySet.getClassNameId() == 20016)
+			socialActivityCssClass = "wiki";
+		else if(activitySet.getClassNameId() == -1) // TODO are comments microblogs or messageboards?
+			socialActivityCssClass = "comment";
+		else if(activitySet.getClassNameId() == 20658)
+			socialActivityCssClass = "microblog";
+		else if((activitySet.getClassNameId() == 20014) || (activitySet.getClassNameId() == 20015))
+			socialActivityCssClass = "forum";
+		
+	}
+	
 %>
 
-	<div class="activity-item clearfix <%= portlet.getCssClassWrapper() %>-activity" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
+	<div class="activity-item clearfix <%= portlet.getCssClassWrapper() %>-activity <%= originCssClass %> <%= socialActivityCssClass %>" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
 
 		<%
 		User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
@@ -47,7 +135,7 @@ for (SocialActivitySet activitySet : results) {
 			userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
 			userFullName = activitySetUser.getFullName();
 			userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
-		}
+		 }
 		%>
 
 		<div class="user-portrait">

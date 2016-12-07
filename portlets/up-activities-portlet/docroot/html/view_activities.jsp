@@ -41,6 +41,10 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 				results = SocialActivityLocalServiceUtil.getActivities(Layout.class.getName(), start, end);
 				total = SocialActivityLocalServiceUtil.getActivitiesCount(Layout.class.getName());
 			}
+			else if (tabs1.equals("moodle")){
+				results = SocialActivityLocalServiceUtil.getActivities(MoodleSocialActivity.class.getName(), start, end);
+				total = SocialActivityLocalServiceUtil.getActivitiesCount(MoodleSocialActivity.class.getName());
+			}
 			else {
 				results = SocialActivityLocalServiceUtil.getUserActivities(group.getClassPK(), start, end);
 				total = SocialActivityLocalServiceUtil.getUserActivitiesCount(group.getClassPK());

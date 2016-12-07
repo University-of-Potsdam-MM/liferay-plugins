@@ -3,4 +3,17 @@
 
 <hibernate-mapping default-lazy="false" auto-import="false">
 	<import class="de.unipotsdam.elis.activities.model.ExtSocialActivitySet" />
+	<import class="de.unipotsdam.elis.activities.model.MoodleSocialActivity" />
+	<class name="de.unipotsdam.elis.activities.model.impl.MoodleSocialActivityImpl" table="Activity_MoodleSocialActivity">
+		<cache usage="read-write" />
+		<id name="extSocialActivityId" type="long">
+			<generator class="assigned" />
+		</id>
+		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="type" type="com.liferay.portal.dao.orm.hibernate.IntegerType" column="type_" />
+		<property name="extServiceActivityType" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="extServiceContext" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="data" type="com.liferay.portal.dao.orm.hibernate.StringType" column="data_" />
+		<property name="published" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+	</class>
 </hibernate-mapping>

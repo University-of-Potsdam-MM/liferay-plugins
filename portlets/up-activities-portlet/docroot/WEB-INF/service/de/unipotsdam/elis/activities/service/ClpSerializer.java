@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 
+import de.unipotsdam.elis.activities.model.MoodleSocialActivityClp;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -96,6 +98,14 @@ public class ClpSerializer {
 	}
 
 	public static Object translateInput(BaseModel<?> oldModel) {
+		Class<?> oldModelClass = oldModel.getClass();
+
+		String oldModelClassName = oldModelClass.getName();
+
+		if (oldModelClassName.equals(MoodleSocialActivityClp.class.getName())) {
+			return translateInputMoodleSocialActivity(oldModel);
+		}
+
 		return oldModel;
 	}
 
@@ -111,6 +121,17 @@ public class ClpSerializer {
 		return newList;
 	}
 
+	public static Object translateInputMoodleSocialActivity(
+		BaseModel<?> oldModel) {
+		MoodleSocialActivityClp oldClpModel = (MoodleSocialActivityClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getMoodleSocialActivityRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
 	public static Object translateInput(Object obj) {
 		if (obj instanceof BaseModel<?>) {
 			return translateInput((BaseModel<?>)obj);
@@ -124,6 +145,47 @@ public class ClpSerializer {
 	}
 
 	public static Object translateOutput(BaseModel<?> oldModel) {
+		Class<?> oldModelClass = oldModel.getClass();
+
+		String oldModelClassName = oldModelClass.getName();
+
+		if (oldModelClassName.equals(
+					"de.unipotsdam.elis.activities.model.impl.MoodleSocialActivityImpl")) {
+			return translateOutputMoodleSocialActivity(oldModel);
+		}
+		else if (oldModelClassName.endsWith("Clp")) {
+			try {
+				ClassLoader classLoader = ClpSerializer.class.getClassLoader();
+
+				Method getClpSerializerClassMethod = oldModelClass.getMethod(
+						"getClpSerializerClass");
+
+				Class<?> oldClpSerializerClass = (Class<?>)getClpSerializerClassMethod.invoke(oldModel);
+
+				Class<?> newClpSerializerClass = classLoader.loadClass(oldClpSerializerClass.getName());
+
+				Method translateOutputMethod = newClpSerializerClass.getMethod("translateOutput",
+						BaseModel.class);
+
+				Class<?> oldModelModelClass = oldModel.getModelClass();
+
+				Method getRemoteModelMethod = oldModelClass.getMethod("get" +
+						oldModelModelClass.getSimpleName() + "RemoteModel");
+
+				Object oldRemoteModel = getRemoteModelMethod.invoke(oldModel);
+
+				BaseModel<?> newModel = (BaseModel<?>)translateOutputMethod.invoke(null,
+						oldRemoteModel);
+
+				return newModel;
+			}
+			catch (Throwable t) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Unable to translate " + oldModelClassName, t);
+				}
+			}
+		}
+
 		return oldModel;
 	}
 
@@ -204,7 +266,23 @@ public class ClpSerializer {
 			return new SystemException();
 		}
 
+		if (className.equals(
+					"de.unipotsdam.elis.activities.NoSuchMoodleSocialActivityException")) {
+			return new de.unipotsdam.elis.activities.NoSuchMoodleSocialActivityException();
+		}
+
 		return throwable;
+	}
+
+	public static Object translateOutputMoodleSocialActivity(
+		BaseModel<?> oldModel) {
+		MoodleSocialActivityClp newModel = new MoodleSocialActivityClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setMoodleSocialActivityRemoteModel(oldModel);
+
+		return newModel;
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(ClpSerializer.class);

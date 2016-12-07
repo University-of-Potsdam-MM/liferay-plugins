@@ -63,6 +63,19 @@
 					WHERE
 						userId = ?
 				) OR
+				activitySetId IN (
+					SELECT
+						activitySetId
+					FROM
+						SocialActivitySet
+					INNER JOIN
+						SocialRelation ON
+							(SocialRelation.userId2 = SocialActivitySet.userId)
+					WHERE
+						(SocialRelation.userId1 = ?)
+				) OR (
+					userId = ?
+				) OR
 				activitysetid IN (
 					SELECT
 						activitysetid

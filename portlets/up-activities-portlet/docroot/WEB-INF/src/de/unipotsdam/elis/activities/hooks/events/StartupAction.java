@@ -73,6 +73,7 @@ public class StartupAction extends SimpleAction {
 					addActivityInterpreter(activityInterpreter);
 			}
 			catch (Exception e) {
+				
 				if (_log.isWarnEnabled()) {
 					_log.warn(
 						"Unable to add social activity interpreter " +
