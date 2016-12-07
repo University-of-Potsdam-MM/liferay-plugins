@@ -50,6 +50,7 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+import de.unipotsdam.elis.activities.extservice.moodle.rest.MoodleRestClient;
 import de.unipotsdam.elis.activities.util.ActivitiesUtil;
 
 import java.io.IOException;
@@ -73,7 +74,7 @@ import javax.portlet.ResourceResponse;
  */
 public class ActivitiesPortlet extends MVCPortlet {
 
-	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "custom-pages" };
+	public final static String[] ACTIVITY_TABS = new String[] { "all", "my-sites", "custom-pages", "moodle" };
 	
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {

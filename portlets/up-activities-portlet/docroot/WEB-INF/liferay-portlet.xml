@@ -5,14 +5,26 @@
 	<portlet>
 		<portlet-name>up-activities</portlet-name>
 		<icon>/icon.png</icon>
+
 		<configuration-action-class>de.unipotsdam.elis.activities.configuration.ConfigurationActionImpl</configuration-action-class>
+		<!-- <scheduler-entry>
+			<scheduler-event-listener-class>de.unipotsdam.elis.activities.extservice.moodle.schedule.MoodleActivityRequestJob</scheduler-event-listener-class>
+			<trigger>
+				<simple>
+					<simple-trigger-value>5</simple-trigger-value>
+					<time-unit>second</time-unit>
+				</simple>
+			</trigger>
+		</scheduler-entry> -->
 		<friendly-url-mapper-class>com.liferay.portal.kernel.portlet.DefaultFriendlyURLMapper</friendly-url-mapper-class>
 		<friendly-url-mapping>user_activities</friendly-url-mapping>
 		<friendly-url-routes>com/liferay/portal/kernel/portlet/rss-friendly-url-routes.xml</friendly-url-routes>
+		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>up-activities-portlet</css-class-wrapper>
 	</portlet>
+
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

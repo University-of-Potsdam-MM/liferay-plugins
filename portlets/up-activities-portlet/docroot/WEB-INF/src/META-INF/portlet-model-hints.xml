@@ -1,3 +1,17 @@
 <?xml version="1.0"?>
 
-<model-hints></model-hints>
+<model-hints>
+	<model name="de.unipotsdam.elis.activities.model.MoodleSocialActivity">
+		<field name="extSocialActivityId" type="long" />
+		<field name="userId" type="long" />
+		<field name="type" type="int" />
+		<field name="extServiceActivityType" type="String" />
+		<field name="extServiceContext" type="String">
+			<hint name="max-length">1000</hint>
+		</field>
+		<field name="data" type="String">
+			<hint name="max-length">2000000</hint>
+		</field>
+		<field name="published" type="long" />
+	</model>
+</model-hints>

@@ -25,6 +25,7 @@ import com.liferay.portal.service.persistence.UserPersistence;
 
 import de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalService;
 import de.unipotsdam.elis.activities.service.persistence.ExtSocialActivitySetFinder;
+import de.unipotsdam.elis.activities.service.persistence.MoodleSocialActivityPersistence;
 
 import javax.sql.DataSource;
 
@@ -85,6 +86,44 @@ public abstract class ExtSocialActivitySetLocalServiceBaseImpl
 	public void setExtSocialActivitySetFinder(
 		ExtSocialActivitySetFinder extSocialActivitySetFinder) {
 		this.extSocialActivitySetFinder = extSocialActivitySetFinder;
+	}
+
+	/**
+	 * Returns the moodle social activity local service.
+	 *
+	 * @return the moodle social activity local service
+	 */
+	public de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalService getMoodleSocialActivityLocalService() {
+		return moodleSocialActivityLocalService;
+	}
+
+	/**
+	 * Sets the moodle social activity local service.
+	 *
+	 * @param moodleSocialActivityLocalService the moodle social activity local service
+	 */
+	public void setMoodleSocialActivityLocalService(
+		de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalService moodleSocialActivityLocalService) {
+		this.moodleSocialActivityLocalService = moodleSocialActivityLocalService;
+	}
+
+	/**
+	 * Returns the moodle social activity persistence.
+	 *
+	 * @return the moodle social activity persistence
+	 */
+	public MoodleSocialActivityPersistence getMoodleSocialActivityPersistence() {
+		return moodleSocialActivityPersistence;
+	}
+
+	/**
+	 * Sets the moodle social activity persistence.
+	 *
+	 * @param moodleSocialActivityPersistence the moodle social activity persistence
+	 */
+	public void setMoodleSocialActivityPersistence(
+		MoodleSocialActivityPersistence moodleSocialActivityPersistence) {
+		this.moodleSocialActivityPersistence = moodleSocialActivityPersistence;
 	}
 
 	/**
@@ -254,6 +293,10 @@ public abstract class ExtSocialActivitySetLocalServiceBaseImpl
 	protected de.unipotsdam.elis.activities.service.ExtSocialActivitySetLocalService extSocialActivitySetLocalService;
 	@BeanReference(type = ExtSocialActivitySetFinder.class)
 	protected ExtSocialActivitySetFinder extSocialActivitySetFinder;
+	@BeanReference(type = de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalService.class)
+	protected de.unipotsdam.elis.activities.service.MoodleSocialActivityLocalService moodleSocialActivityLocalService;
+	@BeanReference(type = MoodleSocialActivityPersistence.class)
+	protected MoodleSocialActivityPersistence moodleSocialActivityPersistence;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)
