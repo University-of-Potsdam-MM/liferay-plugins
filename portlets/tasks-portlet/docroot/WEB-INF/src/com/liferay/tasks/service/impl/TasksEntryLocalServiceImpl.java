@@ -523,10 +523,24 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			if (recipient.getLocale().equals(Locale.GERMANY))
 				language = "_"+Locale.GERMANY.toString();
 			
+			// check ticket status to send correct mail
+			String taskStatus = "updated";
+			int status = tasksEntry.getStatus();
+			switch (status) {
+			case TasksEntryConstants.STATUS_OPEN:
+				taskStatus = "added";
+				break;
+			case TasksEntryConstants.STATUS_RESOLVED:
+				taskStatus = "resolved";
+				break;
+			case TasksEntryConstants.STATUS_REOPENED:
+				taskStatus = "reopened";
+				break;
+			}
 			
 			String subject = StringUtil.read(
 					TasksPortlet.class.getResourceAsStream(
-						"dependencies/email_task_added_subject"+language+".tmpl"));
+						"dependencies/email_task_"+taskStatus+"_subject"+language+".tmpl"));
 			
 			// replace placeholder in subject-template
 			subject = StringUtil.replace(
@@ -542,7 +556,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			
 			String body = StringUtil.read(
 					TasksPortlet.class.getResourceAsStream(
-						"dependencies/email_task_added_body"+language+".tmpl"));
+						"dependencies/email_task_"+taskStatus+"_body"+language+".tmpl"));
 			
 			// replace placeholder in body template
 			body = StringUtil.replace(
