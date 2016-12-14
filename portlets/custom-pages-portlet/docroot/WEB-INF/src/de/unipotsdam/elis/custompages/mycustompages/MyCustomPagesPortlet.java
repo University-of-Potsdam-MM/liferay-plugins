@@ -237,10 +237,15 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				List<Layout> customPages = CustomPageFeedbackLocalServiceUtil.getCustomPagesByLayoutUserId(themeDisplay
 						.getSiteGroup().getClassPK());
 				for (Layout customPage : customPages) {
+					/* Changed for #599
 					if (((Integer) customPage.getExpandoBridge().getAttribute(
 							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE
 							&& ((Integer) customPage.getExpandoBridge().getAttribute(
-									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0)
+									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() != 0)*/
+					if (((Integer) customPage.getExpandoBridge().getAttribute(
+							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME)).intValue() != CustomPageStatics.CUSTOM_PAGE_TYPE_NONE
+							&& ((Integer) customPage.getExpandoBridge().getAttribute(
+									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME)).intValue() == 2)
 						JspHelper.addToCustomPageJSONArray(customPageJSONArray, customPage, themeDisplay);
 				}
 			} else {
