@@ -376,7 +376,7 @@ AUI().use(
 								var deleteHTML = '<span class="action-not-allowed"></span>';
 
 								if (result.deleteURL) {
-									if (result.deleteURL == '<%= StringPool.FALSE %>') {
+									if (result.deleteURL == 'false') {
 										deleteHTML = getSiteActionHtml('delete', 'disabled',  Liferay.Language.get("you-cannot-delete-the-current-site"), '#')
 									}
 									else {
