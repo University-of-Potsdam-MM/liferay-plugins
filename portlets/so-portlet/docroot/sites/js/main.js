@@ -349,11 +349,11 @@ AUI().use(
 				else {
 					var siteTemplate =
 						'<li class="{classNames}">' + 
+							'{favoriteHTML}' +
 							// BEGIN HOOK CHANGE
 							// Add icon button to allow deletion of sites (#649)
 							'{deleteHTML}' +
 							// END HOOK CHANGE
-							'{favoriteHTML}' +
 							'<span class="name">{siteName}</span>' +
 						'</li>';
 
