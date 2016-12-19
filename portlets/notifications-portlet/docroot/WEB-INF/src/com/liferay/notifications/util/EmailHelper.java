@@ -23,7 +23,6 @@ import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -38,7 +37,6 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.blogs.model.BlogsEntry;
@@ -58,6 +56,172 @@ import com.liferay.portlet.wiki.service.WikiPageLocalServiceUtil;
  * 
  */
 public class EmailHelper {
+	
+	/**
+	 * Get subscribed users and initialize email. Also check if user has enabled email notification. 
+	 * @param mbMessage
+	 * @param serviceContext
+	 * @param subscribersOVPs
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	public static void sendCommentsMail (MBMessage mbMessage, ServiceContext serviceContext,
+			List<ObjectValuePair<String, Long>> subscribersOVPs) 
+			throws PortalException, SystemException {
+
+		Set<Long> subscriberUserIds = new HashSet<Long>();
+		
+		for (ObjectValuePair<String, Long> ovp : subscribersOVPs) {
+			String className = ovp.getKey();
+			long classPK = ovp.getValue();
+			
+			List<Subscription> subscriptions = SubscriptionLocalServiceUtil
+					.getSubscriptions(mbMessage.getCompanyId(), className, classPK);
+
+			for (Subscription subscription : subscriptions) {
+				long subscriberUserId = subscription.getUserId();
+
+				if (subscriberUserId == mbMessage.getUserId()) {
+					continue;
+				}
+
+				if (subscriberUserIds.contains(subscriberUserId)) {
+					continue;
+				}
+
+				subscriberUserIds.add(subscriberUserId);
+				
+				int notificationType = 1; // add a comment
+				if (serviceContext.isCommandUpdate()) 
+					notificationType = 2; // update a comment
+				
+				// check to which entry the comment belongs (Blog, Wiki, ...)
+				// comments cannot be added to: bookmarks, ressources, journal, messageboard
+				if (mbMessage.getClassNameId() == 20007) {
+					// This comment was made to a blogsentry
+					
+					// Send email only if user allows it
+					if (UserNotificationManagerUtil.isDeliver(subscriberUserId,
+						PortletKeys.BLOGS, 0, notificationType,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+						
+						try {
+							sendCommentsMail(mbMessage, serviceContext, subscriberUserId);
+						} catch (Exception e) {
+							throw new SystemException(e);
+						}
+					}
+				}
+
+				if (mbMessage.getClassNameId() == 20016) {
+					// This comment was made to a wikipage
+					
+					// Send email only if user allows it
+					if (UserNotificationManagerUtil.isDeliver(subscriberUserId,
+						PortletKeys.WIKI, 0, notificationType,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+						
+						try {
+							sendCommentsMail(mbMessage, serviceContext, subscriberUserId);
+						} catch (Exception e) {
+							throw new SystemException(e);
+						}
+					}
+				}
+				
+				// TODO ActivityStream
+				
+
+			}
+		}
+	}
+	
+	/**
+	 * build email and send it
+	 * @param mbMessage
+	 * @param serviceContext
+	 * @param recipientUserId
+	 * @throws Exception
+	 */
+	private static void sendCommentsMail(MBMessage mbMessage, ServiceContext serviceContext, long recipientUserId) 
+			throws Exception {
+		
+		User commentator = UserLocalServiceUtil.getUser(mbMessage.getUserId());
+		
+		User recipient = UserLocalServiceUtil.getUser(recipientUserId);
+		
+//		Company company = CompanyLocalServiceUtil.getCompany(mbMessage.getCompanyId());
+		
+		Group workspace = GroupLocalServiceUtil.fetchGroup(mbMessage.getGroupId());
+		
+		String workspaceName = "";
+		if (workspace != null) {
+			workspaceName = workspace.getDescriptiveName(recipient.getLocale());
+		}
+		
+		String language = "";
+		// check language, default: English
+		if (recipient.getLocale().equals(Locale.GERMANY)) {
+			language = "_"+Locale.GERMANY.toString();
+		} 
+		
+		String notificationType = "added";
+		if (serviceContext.isCommandUpdate())			
+			notificationType = "updated";
+		
+		System.out.println("notificationType "+notificationType);
+		
+		String contentURL = (String)serviceContext.getAttribute("contentURL");
+		
+		String subject = StringUtil.read(
+				NotificationsPortlet.class.getResourceAsStream(
+				"dependencies/mb/discussion_email_"+notificationType+"_subject"+language+".tmpl"));
+		
+		subject = StringUtil.replace(
+				subject, new String[] {
+							"[$WORKSPACE_NAME$]", 
+							"[$COMMENTS_USER_NAME$]"
+						}, new String[] {
+							workspaceName, 
+							commentator.getFullName()
+						});
+		
+		String body = StringUtil.read(
+				NotificationsPortlet.class.getResourceAsStream(
+				"dependencies/mb/discussion_email_"+notificationType+"_body"+language+".tmpl"));
+		
+		body = StringUtil.replace(
+				body, new String[] {
+							"[$TO_NAME$]", "[$COMMENTS_USER_NAME$]",
+							"[$COMMENTS_BODY$]", 
+							"[$CONTENT_URL$]", 
+							"[$CONFIG_URL$]"
+						}, new String[] {  
+							recipient.getFullName(), commentator.getFullName(),
+							mbMessage.getBody(), // translation needed? 
+							contentURL,
+							getConfigURL(serviceContext, recipient)
+						});
+		
+		String fromName = PrefsPropsUtil.getString(
+			mbMessage.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+		String fromAddress = PrefsPropsUtil.getString(
+				mbMessage.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+	
+		InternetAddress from = new InternetAddress(fromAddress, fromName);
+		
+		InternetAddress to = new InternetAddress(
+				recipient.getEmailAddress());
+		
+		MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+
+//		System.out.println("From: "+from.getAddress());
+//		System.out.println("To: "+to.getAddress());
+//		System.out.println(subject);
+//		System.out.println(body);
+		
+		MailServiceUtil.sendEmail(mailMessage);
+	}
 	
 	private static String getConfigURL (ServiceContext serviceContext, User user) 
 			throws WindowStateException, PortletModeException, SystemException, PortalException {

@@ -20,6 +20,7 @@ import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
@@ -59,7 +60,18 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 
 		if (mbMessage.getCategoryId() ==
 				MBCategoryConstants.DISCUSSION_CATEGORY_ID) {
+			
+			List<ObjectValuePair<String, Long>> subscribersOVPs =
+					new ArrayList<ObjectValuePair<String, Long>>();
 
+			String className = (String)serviceContext.getAttribute("className");
+			long classPK = ParamUtil.getLong(serviceContext, "classPK");
+			
+			ObjectValuePair<String, Long> ovp = new ObjectValuePair<String, Long>(
+					className, classPK);
+			subscribersOVPs.add(ovp);
+				
+			EmailHelper.sendCommentsMail(mbMessage, serviceContext, subscribersOVPs);
 			return mbMessage;
 		}
 
