@@ -17,21 +17,30 @@
 
 package com.liferay.so.invitemembers.portlet;
 
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.notifications.util.PortletKeys;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.security.permission.PermissionCheckerFactoryUtil;
@@ -44,22 +53,29 @@ import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
+import com.liferay.so.invitemembers.util.InviteMembersConstants;
 import com.liferay.so.invitemembers.util.InviteMembersUtil;
+import com.liferay.so.model.MemberRequest;
 import com.liferay.so.service.MemberRequestLocalServiceUtil;
+import com.liferay.util.ContentUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
+import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletMode;
+import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
-
+import javax.portlet.WindowStateException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -180,6 +196,22 @@ public class InviteMembersPortlet extends MVCPortlet {
 		}
 
 		writeJSON(actionRequest, actionResponse, jsonObject);
+		
+		// BEGIN CHANGE
+		// send mail to invitor, if invitation is confirmed
+		if (status == InviteMembersConstants.STATUS_ACCEPTED) {
+			MemberRequest memberRequest = MemberRequestLocalServiceUtil.getMemberRequest(
+					memberRequestId);
+			
+			if (UserNotificationManagerUtil.isDeliver(
+					memberRequest.getUserId(),
+					PortletKeys.SO_INVITE_MEMBERS, 0,
+					MembershipRequestConstants.STATUS_APPROVED,
+					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+				sendInvitationApprovedMail(memberRequest, themeDisplay);
+			}
+		}
+		// END CHANGE
 	}
 
 	protected void doSendInvite(
@@ -297,6 +329,110 @@ public class InviteMembersPortlet extends MVCPortlet {
 		return StringUtil.split(GetterUtil.getString(value));
 	}
 
+	/*
+	 * This method sends a mail if an invited user confirms her invitation.
+	 */
+	private void sendInvitationApprovedMail (MemberRequest memberRequest, ThemeDisplay themeDisplay) 
+			throws PortalException, SystemException, WindowStateException, PortletModeException, IOException {
+		
+		// user who got invitation
+		User user = UserLocalServiceUtil.getUser(memberRequest.getReceiverUserId());
+		
+		long companyId = memberRequest.getCompanyId();
+
+		Group workspace = GroupLocalServiceUtil.getGroup(memberRequest.getGroupId());
+
+		// user who get's the mail
+		User receiverUser = null; 
+
+		if (memberRequest.getReceiverUserId() > 0) {
+			receiverUser = UserLocalServiceUtil.getUser(memberRequest.getUserId());
+		}
+		
+		if (receiverUser == null)
+			return;
+		
+		// check language, default: English
+		String language = "";
+		if (receiverUser.getLocale().equals(Locale.GERMANY)) {
+			language = "_"+Locale.GERMANY.toString();
+		} 
+		
+		// load template
+		String subject = ContentUtil.get(
+				"com/liferay/so/invitemembers/dependencies/" +"invitation_approved_mail_subject"+language+".tmpl");
+		String body = ContentUtil.get(
+				"com/liferay/so/invitemembers/dependencies/" +"invitation_approved_mail_body"+language+".tmpl");
+		
+		// replace placeholders
+		subject = StringUtil.replace(
+			subject, new String[] {
+						"[$MEMBER_REQUEST_USER$]", 
+						"[$MEMBER_REQUEST_GROUP$]"
+					}, new String[] {
+						user.getFullName(), 
+						workspace.getDescriptiveName()
+					});
+		
+		body = StringUtil.replace(
+			body, new String[] {
+						"[$TO_NAME$]", 
+						"[$MEMBER_REQUEST_USER$]",
+						"[$MEMBER_REQUEST_GROUP$]", 
+						"[$CONFIG_URL$]"
+					}, new String[] {  
+						receiverUser.getFullName(), 
+						user.getFullName(),
+						workspace.getDescriptiveName(), // translation needed? 
+						getNotificationConfigURL(themeDisplay, receiverUser)
+					});
+		
+		// send mail
+		String fromName = PrefsPropsUtil.getString(
+			companyId, PropsKeys.ADMIN_EMAIL_FROM_NAME);
+		String fromAddress = PrefsPropsUtil.getString(
+			companyId, PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+
+		String toName = StringPool.BLANK;
+		String toAddress = receiverUser.getEmailAddress();
+		
+		InternetAddress from = new InternetAddress(fromAddress, fromName);
+
+		InternetAddress to = new InternetAddress(toAddress, toName);
+
+		MailMessage mailMessage = new MailMessage(
+			from, to, subject, body, true);
+		
+		MailServiceUtil.sendEmail(mailMessage);
+	}
+	
+	private String getNotificationConfigURL(
+			ThemeDisplay themeDisplay, User user)
+			throws WindowStateException, PortletModeException, SystemException, PortalException {
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+		
+		Layout layout  = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+
+		if (layout != null) {
+			
+			PortletURL myUrl = PortletURLFactoryUtil.create(
+					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+					layout.getPlid(), PortletRequest.RENDER_PHASE);
+			myUrl.setWindowState(WindowState.MAXIMIZED);
+			myUrl.setPortletMode(PortletMode.VIEW);
+			myUrl.setParameter("actionable", "false");
+			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+	
+			return myUrl.toString();
+		}
+		return "";
+	}
+	
 	private static Log _log = LogFactoryUtil.getLog(InviteMembersPortlet.class);
 
 }

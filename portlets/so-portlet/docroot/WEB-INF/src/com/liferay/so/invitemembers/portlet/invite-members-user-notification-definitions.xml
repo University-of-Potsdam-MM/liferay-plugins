@@ -18,4 +18,14 @@
 			<modifiable>false</modifiable>
 		</delivery-type>
 	</definition>
+	<definition>
+		<notification-type>${com.liferay.portal.model.MembershipRequestConstants.STATUS_APPROVED}</notification-type>
+		<description>receive-a-notification-when-someone-confirms-your-membership-request</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
 </user-notification-definitions>
