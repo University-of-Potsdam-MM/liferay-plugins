@@ -27,4 +27,8 @@ public class CustomPageStatics {
 	public final static int MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED = 1;
 	public final static int MESSAGE_TYPE_FEEDBACK_REQUESTED = 2;
 	public final static int MESSAGE_TYPE_FEEDBACK_DELIVERED = 3;
+	
+	public final static int MESSAGE_TYPE_CUSTOM_PAGE_DELETED = 4;
+	public final static int MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE = 5;
+	public final static int MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION = 6; // same as unrequested?
 }

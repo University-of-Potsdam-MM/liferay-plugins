@@ -288,6 +288,17 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay) resourceRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long plid = Long.valueOf(ParamUtil.getString(resourceRequest, "customPagePlid"));
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
+		
+		// get all users that have access to page (before deleting it)
+		List<CustomPageFeedback> customPageFeedbackList = CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(plid);
+		for (CustomPageFeedback customPageFeedback : customPageFeedbackList) {
+			User user = customPageFeedback.getUser();
+			if (themeDisplay.getUserId() != user.getUserId()) {
+				JspHelper.handleSocialActivities(customPage, resourceRequest, user,
+				CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED);
+			}
+		}
+		
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.DELETE) && !CustomPageUtil.feedbackRequested(plid))
 			CustomPageUtil.removeCustomPage(plid);
@@ -317,6 +328,13 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		jsonObject.put("movedToPrivateArea", movedToPrivateArea);
 		PrintWriter out = resourceResponse.getWriter();
 		out.println(jsonObject.toString());
+		
+		// send email notification
+		User user = UserLocalServiceUtil.fetchUser(userId);
+		if (user != null) {
+			JspHelper.handleSocialActivities(customPage, resourceRequest, user,
+				CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE);
+		}
 	}
 
 	/**
@@ -385,6 +403,13 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				ActionKeys.CUSTOMIZE)) {
 			CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId,
 					CustomPageStatics.FEEDBACK_UNREQUESTED);
+		}
+		
+		// send Mail
+		User user = UserLocalServiceUtil.fetchUser(userId);
+		if (user != null) {
+			JspHelper.handleSocialActivities(customPage, resourceRequest, user,
+				CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION);
 		}
 	}
 

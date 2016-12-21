@@ -118,13 +118,31 @@ public class JspHelper {
 					"custompages-custom-page-feedback-requested-message", new Object[] {
 							themeDisplay.getUser().getFullName(), customPage.getName(themeDisplay.getLocale()) });
 			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED;
-		} else {
+		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_DELIVERED) {
 			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
 					"custompages-custom-page-feedback-delivered", new Object[] { themeDisplay.getUser().getFullName(),
 							customPage.getName(themeDisplay.getLocale()) });
 			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_DELIVERED;
 
+		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED){
+			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
+					"custompages-custom-page-deleted", new Object[] { themeDisplay.getUser().getFullName(),
+							customPage.getName(themeDisplay.getLocale()) });
+			socialActivityType = ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_DELETED;
+		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE){
+			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
+					"custompages-custom-page-deleted-share", new Object[] { themeDisplay.getUser().getFullName(),
+							customPage.getName(themeDisplay.getLocale()) });
+			socialActivityType = CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE;
+		} else /*if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION)*/{
+			notificationMessage = LanguageUtil.format(portletConfig, themeDisplay.getLocale(),
+					"custompages-custom-page-deleted-publish", new Object[] { themeDisplay.getUser().getFullName(),
+							customPage.getName(themeDisplay.getLocale()) });
+			socialActivityType = CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION;
 		}
+		
+		if (socialActivityType < 4) {
+			// TODO handle activities and notifications for new cases
 		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
 		// BEGIN CHANGE
 		// add socialActivityType parameter to check if user wants to be notified
@@ -133,6 +151,8 @@ public class JspHelper {
 		// END CHANGE
 		// BEGIN CHANGE
 		// send email if user wants to be notified via email
+		}
+		
 		try {
 			createCustomPageEmail(themeDisplay.getUser(), receiver, notificationMessage, 
 					customPage, portletId, socialActivityType, themeDisplay);
@@ -223,7 +243,16 @@ public class JspHelper {
 				templateType = "feedback";
 				break;
 	
-			default:
+			case 4:
+				templateType ="deleted";
+				break;
+				
+			case 5:
+				templateType = "deleted_share";
+				break;
+				
+			case 6:
+				templateType = "deleted_submit";
 				break;
 			}
 			

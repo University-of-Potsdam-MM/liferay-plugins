@@ -49,4 +49,34 @@
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
+	<definition>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED}</notification-type>
+		<description>receive-a-notification-when-someone-deletes-a-custom-page</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
+	<definition>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE}</notification-type>
+		<description>receive-a-notification-when-someone-deletes-a-custom-page-share</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
+	<definition>
+		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION}</notification-type>
+		<description>receive-a-notification-when-someone-deletes-a-custom-page-submission</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
 </user-notification-definitions>
