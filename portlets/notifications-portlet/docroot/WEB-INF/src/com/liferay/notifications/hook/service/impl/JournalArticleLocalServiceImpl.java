@@ -19,10 +19,16 @@ import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
@@ -30,6 +36,9 @@ import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceWrapper;
+
+import de.unipotsdam.elis.custompages.model.CustomPageFeedback;
+import de.unipotsdam.elis.custompages.service.CustomPageFeedbackLocalServiceUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -86,15 +95,68 @@ public class JournalArticleLocalServiceImpl
 				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
 				notificationType, getSubscribersOVPs(article), userId);
 			
-			EmailHelper.prepareEmail(article.getGroupId(), article.getCompanyId(), PortletKeys.JOURNAL,
-					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-					notificationType, getSubscribersOVPs(article), userId, serviceContext, article.getId()
-					);
+			// nobody can subscribe to an article, so prepare mail won't work
+//			EmailHelper.prepareEmail(article.getGroupId(), article.getCompanyId(), PortletKeys.JOURNAL,
+//					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//					notificationType, getSubscribersOVPs(article), userId, serviceContext, article.getId()
+//					);
 		}
 		else {
 			serviceContext.setAttribute("entryURL", entryURL);
 		}
 
+		// send mail for journal in a workspace
+		Group workspace = GroupLocalServiceUtil.fetchGroup(article.getGroupId());
+		
+		if (workspace == null)
+			return article;
+
+		if (workspace.isSite()) {
+
+			if (workspace.getParentGroupId() != 0) {
+				workspace = GroupLocalServiceUtil.getGroup(workspace.getParentGroupId());
+			}
+			
+			List<User> groupUsers = UserLocalServiceUtil.getGroupUsers(workspace.getGroupId());
+			for (User user : groupUsers) {
+				if (user.getUserId() == article.getUserId())
+					continue;
+
+				if (UserNotificationManagerUtil.isDeliver(user.getUserId(),
+						PortletKeys.JOURNAL, 0,
+						UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+					try {
+						EmailHelper.sendJournalMail(journalArticle, serviceContext, user, workspace);
+					} catch (Exception e) {
+						throw new SystemException(e);
+					}
+				}
+			}
+		} else {
+		
+			// Journal befindet sich auf custom page
+			// get all users that have access to page (before deleting it)
+			List<CustomPageFeedback> customPageFeedbackList = 
+					CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(serviceContext.getPlid());
+			for (CustomPageFeedback customPageFeedback : customPageFeedbackList) {
+				User user = customPageFeedback.getUser();
+				if (user.getUserId() == article.getUserId())
+					continue;
+
+				if (UserNotificationManagerUtil.isDeliver(user.getUserId(),
+						PortletKeys.JOURNAL, 0,
+						UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+					
+					try {
+						EmailHelper.sendJournalMail(journalArticle, serviceContext, user, null);
+					} catch (Exception e) {
+						throw new SystemException(e);
+					}
+				}
+			}
+		}
 		return journalArticle;
 	}
 

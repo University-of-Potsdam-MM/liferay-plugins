@@ -72,6 +72,7 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 			subscribersOVPs.add(ovp);
 				
 			EmailHelper.sendCommentsMail(mbMessage, serviceContext, subscribersOVPs);
+			// TODO notification events for comments
 			return mbMessage;
 		}
 

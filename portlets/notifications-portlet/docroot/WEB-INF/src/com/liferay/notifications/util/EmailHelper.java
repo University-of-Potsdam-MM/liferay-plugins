@@ -1,10 +1,12 @@
 package com.liferay.notifications.util;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
@@ -37,6 +39,7 @@ import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.blogs.model.BlogsEntry;
@@ -354,9 +357,10 @@ public class EmailHelper {
 		}
 		// TODO create journal this method is not called, cause no one can subscribe to journals
 		if (portletKey.equals(PortletKeys.JOURNAL)) {
-			temp = createJournalMail(sender, recipient, company, notificationType, language, entryTitle, entryURL, workspace, serviceContext, portlet, entryId);
-			subject = temp[0];
-			body = temp[1];
+//			temp = createJournalMail(sender, recipient, company, notificationType, language, entryTitle, entryURL, workspace, serviceContext, portlet, entryId);
+//			subject = temp[0];
+//			body = temp[1];
+			return; // cannot handle that kind of mail
 		}
 
 		if(portletKey.equals(PortletKeys.DOCUMENT_LIBRARY)){
@@ -695,4 +699,95 @@ public class EmailHelper {
 		return new String[] {subject, body};
 	}
 	
+	public static void sendJournalMail (JournalArticle article, ServiceContext serviceContext,
+			User recipient, Group workspace) 
+		throws SystemException, IOException, AddressException, PortalException, WindowStateException, PortletModeException {
+		
+		// Updater of Journal
+		User user = UserLocalServiceUtil.fetchUser(article.getUserId());
+		
+		// Recipient
+		if (recipient == null)
+			return;
+		
+		// get url to article
+		String url = getPortalURL(recipient.getCompanyId());
+		Layout layout = LayoutLocalServiceUtil.getLayout(serviceContext.getPlid());
+		if (layout != null) {
+			url += PortalUtil.getLayoutActualURL(layout);
+		}
+		
+		// choose template language
+		String language = "";
+		// check language, default: English
+		if (recipient.getLocale().equals(Locale.GERMANY)) {
+			language = "_"+Locale.GERMANY.toString();
+		} 
+		
+		// load templates
+		String subject = StringUtil.read(
+			NotificationsPortlet.class.getResourceAsStream(
+			"dependencies/journal/email_journal_subject"+language+".tmpl"));
+		
+		String body = StringUtil.read(
+			NotificationsPortlet.class.getResourceAsStream(
+			"dependencies/journal/email_journal_body"+language+".tmpl"));
+		
+		// replace placholders 
+		subject = StringUtil.replace(
+			subject, 
+			new String[] {
+				"[$WORKSPACE_NAME$]"
+			},
+			new String[] {
+				workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale())
+			});
+		
+		body = StringUtil.replace(
+			body, 
+			new String[] {
+				"[$TO_NAME$]", 
+				"[$ARTICLE_USER_NAME$]", 
+				"[$ARTICLE_CONTENT$]",
+				"[$ARTICLE_URL$]",
+				"[$CONFIG_URL$]"
+			},
+			new String[] {
+				recipient.getFullName(),
+				user.getFullName(),
+				"", // TODO content parsen?
+				url,
+				getConfigURL(serviceContext, recipient)
+			});
+		
+		// prepare sender and recipient
+		String fromName = PrefsPropsUtil.getString(
+			article.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+		String fromAddress = PrefsPropsUtil.getString(
+			article.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+	
+		InternetAddress from = new InternetAddress(fromAddress, fromName);
+		
+		InternetAddress to = new InternetAddress(
+				recipient.getEmailAddress());
+		
+		MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+
+		// send mail
+		System.out.println("FROM: "+from.getAddress());
+		System.out.println("TO: "+to.getAddress());
+		System.out.println(subject);
+		System.out.println(body);
+//		MailServiceUtil.sendEmail(mailMessage);
+	}
+	
+	private static String getPortalURL (long companyId) 
+			throws PortalException, SystemException {
+		Company company = CompanyLocalServiceUtil.getCompany(companyId);
+		
+		String portalURL = PortalUtil.getPortalURL(
+				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		
+		return portalURL;
+	}
 }
