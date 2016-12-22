@@ -19,9 +19,15 @@ import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
@@ -31,6 +37,9 @@ import com.liferay.portlet.bookmarks.model.BookmarksFolder;
 import com.liferay.portlet.bookmarks.model.BookmarksFolderConstants;
 import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalService;
 import com.liferay.portlet.bookmarks.service.BookmarksEntryLocalServiceWrapper;
+
+import de.unipotsdam.elis.custompages.model.CustomPageFeedback;
+import de.unipotsdam.elis.custompages.service.CustomPageFeedbackLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +92,9 @@ public class BookmarksEntryLocalServiceImpl
 					);
 		}
 
+		// send an email to all users that have access to bookmark (same workspace or shared page)
+		emailNotifyAllUsers(bookmarksEntry, serviceContext, entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY);
+		
 		return bookmarksEntry;
 	}
 
@@ -124,6 +136,9 @@ public class BookmarksEntryLocalServiceImpl
 					);
 		}
 
+		// send an email to all users that have access to bookmark (same workspace or shared page)
+		emailNotifyAllUsers(bookmarksEntry, serviceContext, entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY);
+		
 		return bookmarksEntry;
 	}
 
@@ -167,6 +182,77 @@ public class BookmarksEntryLocalServiceImpl
 		}
 
 		return subscribersOVPs;
+	}
+	
+	private void emailNotifyAllUsers (BookmarksEntry bookmarksEntry, ServiceContext serviceContext,
+			String entryURL, int notificationType) 
+		throws SystemException, PortalException {
+		
+		// get possible workspace
+		Group workspace = GroupLocalServiceUtil.fetchGroup(bookmarksEntry.getGroupId());
+
+		// return if no possible workspace is available
+		if (workspace == null) {
+			return;
+		} 
+		
+		// identify real workspace, parentgroup of workspace is 0
+		while (workspace.getParentGroupId() != 0) {
+			workspace = GroupLocalServiceUtil.getGroup(workspace.getParentGroupId());
+		}
+	
+		if (workspace.isSite()) {
+			/* Because subscription of bookmark-folders is currently not working
+			 * every user in workspace is notified if a new bookmark is created
+			 */
+			// get users of workspace
+			List<User> groupUsers = UserLocalServiceUtil.getGroupUsers(workspace.getGroupId());
+			for (User user : groupUsers) {
+				// do not notify user that added bookmark
+				if (user.getUserId() == bookmarksEntry.getUserId())
+					continue;
+	
+				if (UserNotificationManagerUtil.isDeliver(user.getUserId(),
+						PortletKeys.BOOKMARKS, 0,
+						notificationType,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+					try {
+						EmailHelper.sendBookmarksMail(bookmarksEntry, serviceContext, 
+								user, workspace, entryURL, 
+								notificationType);
+					} catch (Exception e) {
+						throw new SystemException(e);
+					}
+				}
+			}
+		} else {
+			/* Because subscription of bookmark-folders is currently not working
+			 * every user, to whom the page is shared with, is notified if a new bookmark is created
+			 */
+			// get all users that page is shared with
+			List<CustomPageFeedback> customPageFeedbackList = 
+					CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(serviceContext.getPlid());
+			for (CustomPageFeedback customPageFeedback : customPageFeedbackList) {
+				User user = customPageFeedback.getUser();
+				
+				// do not notify user that added bookmark
+				if (user.getUserId() == bookmarksEntry.getUserId())
+					continue;
+				
+				if (UserNotificationManagerUtil.isDeliver(user.getUserId(),
+						PortletKeys.BOOKMARKS, 0,
+						notificationType,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+					try {
+						EmailHelper.sendBookmarksMail(bookmarksEntry, serviceContext, 
+								user, workspace, entryURL, 
+								notificationType);
+					} catch (Exception e) {
+						throw new SystemException(e);
+					}
+				}
+			}
+		}
 	}
 
 	protected AssetRendererFactory _assetRendererFactory =

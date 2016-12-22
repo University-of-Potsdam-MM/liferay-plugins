@@ -699,6 +699,81 @@ public class EmailHelper {
 		return new String[] {subject, body};
 	}
 	
+	public static void sendBookmarksMail (BookmarksEntry bookmarksEntry, ServiceContext serviceContext,
+			User recipient, Group workspace, String entryURL, int notificationTypeInt) 
+		throws IOException, PortalException, SystemException, WindowStateException, PortletModeException, AddressException {
+		
+		// Recipient
+		if (recipient == null)
+			return;
+		
+		// choose template language
+		String language = "";
+		// check language, default: English
+		if (recipient.getLocale().equals(Locale.GERMANY)) {
+			language = "_"+Locale.GERMANY.toString();
+		} 
+		
+		// check notification type
+		String notificationType = "added";
+		if (notificationTypeInt == 1)			
+			notificationType = "updated";
+		
+		String subject = StringUtil.read(
+				NotificationsPortlet.class.getResourceAsStream(
+				"dependencies/bookmarks/email_entry_"+notificationType+"_subject"+language+".tmpl"));
+		
+		subject = StringUtil.replace(
+				subject, new String[] {"[$WORKSPACE_NAME$]","[$BOOKMARK_NAME$]"},
+				new String[] {
+						workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale()), 
+						bookmarksEntry.getName()
+				});
+		
+		String body = StringUtil.read(
+				NotificationsPortlet.class.getResourceAsStream(
+				"dependencies/bookmarks/email_entry_"+notificationType+"_body"+language+".tmpl"));
+		
+		body = StringUtil.replace(
+				body, 
+				new String[] {
+					"[$TO_NAME$]", "[$BOOKMARKS_ENTRY_USER_NAME$]", 
+					"[$BOOKMARKS_ENTRY_CONTENT$]",
+					"[$BOOKMARKS_ENTRY_URL$]", 
+					"[$CONFIG_URL$]"
+				},
+				new String[] {
+					recipient.getFullName(), bookmarksEntry.getUserName(),
+					bookmarksEntry.getName(),
+					entryURL, 
+					getConfigURL(serviceContext, recipient)
+				});
+		
+		if (notificationType.equals("updated")){
+			subject = StringUtil.replace(
+					subject, new String[] {"[$BOOKMARKS_ENTRY_STATUS_BY_USER_NAME$]"},
+					new String[] {bookmarksEntry.getUserName()});
+			body = StringUtil.replace(body, "[$BOOKMARKS_ENTRY_STATUS_BY_USER_NAME$]", 
+					bookmarksEntry.getUserName());
+		}
+		
+
+		String fromName = PrefsPropsUtil.getString(
+			recipient.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
+		String fromAddress = PrefsPropsUtil.getString(
+			recipient.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
+	
+		InternetAddress from = new InternetAddress(fromAddress, fromName);
+		
+		InternetAddress to = new InternetAddress(
+				recipient.getEmailAddress());
+		
+		MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+
+		MailServiceUtil.sendEmail(mailMessage);
+		
+	}
+	
 	public static void sendJournalMail (JournalArticle article, ServiceContext serviceContext,
 			User recipient, Group workspace) 
 		throws SystemException, IOException, AddressException, PortalException, WindowStateException, PortletModeException {
