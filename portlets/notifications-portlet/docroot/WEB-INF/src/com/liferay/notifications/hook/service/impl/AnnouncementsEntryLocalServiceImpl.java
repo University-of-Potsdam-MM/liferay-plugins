@@ -394,11 +394,13 @@ public class AnnouncementsEntryLocalServiceImpl
 			subject = StringUtil.replace(
 					subject, new String[] { 
 							"[$WORKSPACE_NAME$]", 
-							"[$ENTRY_TITLE$]"
+							"[$ENTRY_TITLE$]",
+							"[$ENTRY_USER_NAME$]"
 					},
 					new String[] {
 							workspace.getName(),
-							announcementEntry.getTitle()
+							announcementEntry.getTitle(),
+							announcementEntry.getUserName()
 					});
 			
 			body = StringUtil.read(

@@ -417,11 +417,12 @@ public class EmailHelper {
 		
 		subject = StringUtil.replace(
 				subject, new String[] {
-						"[$WORKSPACE_NAME$]", "[$BLOGS_ENTRY_NAME$]"
+						"[$WORKSPACE_NAME$]", "[$BLOGS_ENTRY_NAME$]", "[$BLOGS_ENTRY_USER_NAME$]"
 						},
 				new String[] {
 						workspace.getDescriptiveName(recipient.getLocale()),// blogsEntry.getTitle(),
-						entryTitle
+						entryTitle,
+						sender.getFullName()
 						});
 		
 		String body = StringUtil.read(
@@ -470,9 +471,10 @@ public class EmailHelper {
 		
 		subject = StringUtil.replace(
 				subject, new String[] {
-						"[$WORKSPACE_NAME$]", "[$PAGE_TITLE$]"
+						"[$WORKSPACE_NAME$]", "[$PAGE_TITLE$]", "[$PAGE_USER_NAME$]"
 					}, new String[] {
-						workspace.getDescriptiveName(recipient.getLocale()), entryTitle//notificationEventJSONObject.getString("entryTitle")
+						workspace.getDescriptiveName(recipient.getLocale()), entryTitle,//notificationEventJSONObject.getString("entryTitle")
+						sender.getFullName()
 					});
 		
 		String body = StringUtil.read(
@@ -520,10 +522,12 @@ public class EmailHelper {
 		subject = StringUtil.replace(
 				subject, new String[] {
 							"[$WORKSPACE_NAME$]", 
-							"[$MESSAGE_SUBJECT$]"
+							"[$MESSAGE_SUBJECT$]",
+							"[$USER_NAME$]"
 						}, new String[] {
 							workspace.getDescriptiveName(recipient.getLocale()), 
-							entryTitle
+							entryTitle,
+							sender.getFullName()
 						});
 		
 		String body = StringUtil.read(
@@ -724,10 +728,11 @@ public class EmailHelper {
 				"dependencies/bookmarks/email_entry_"+notificationType+"_subject"+language+".tmpl"));
 		
 		subject = StringUtil.replace(
-				subject, new String[] {"[$WORKSPACE_NAME$]","[$BOOKMARK_NAME$]"},
+				subject, new String[] {"[$WORKSPACE_NAME$]","[$BOOKMARK_NAME$]","[$BOOKMARKS_ENTRY_USER_NAME$]"},
 				new String[] {
 						workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale()), 
-						bookmarksEntry.getName()
+						bookmarksEntry.getName(),
+						bookmarksEntry.getUserName()
 				});
 		
 		String body = StringUtil.read(
@@ -812,10 +817,12 @@ public class EmailHelper {
 		subject = StringUtil.replace(
 			subject, 
 			new String[] {
-				"[$WORKSPACE_NAME$]"
+				"[$WORKSPACE_NAME$]",
+				"[$ARTICLE_USER_NAME$]"
 			},
 			new String[] {
-				workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale())
+				workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale()),
+				user.getFullName()		
 			});
 		
 		body = StringUtil.replace(

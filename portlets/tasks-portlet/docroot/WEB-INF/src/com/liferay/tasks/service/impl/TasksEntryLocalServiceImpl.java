@@ -546,11 +546,11 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			subject = StringUtil.replace(
 					subject,
 					new String [] {
-//						"[$TASKS_ENTRY_USER_NAME$]",	
+						"[$TASKS_ENTRY_USER_NAME$]",	
 						"[$WORKSPACE_NAME$]", "[$TASKS_ENTRY_NAME$]"
 					},
 					new String [] {
-//						tasksEntry.getReporterFullName()
+						tasksEntry.getReporterFullName(),
 						workspace.getDescriptiveName(), tasksEntry.getTitle()	
 					});
 			

@@ -268,10 +268,12 @@ public class JspHelper {
 			subject = StringUtil.replace(
 					subject,
 					new String [] {
-						"[$CUSTOM_PAGE_NAME$]"	
+						"[$CUSTOM_PAGE_NAME$]",
+						"[$USER_NAME$]"
 					},
 					new String [] {
-						customPage.getName(themeDisplay.getLocale())
+						customPage.getName(themeDisplay.getLocale()),
+						sender.getFullName()
 					});
 			
 			body = StringUtil.replace(
