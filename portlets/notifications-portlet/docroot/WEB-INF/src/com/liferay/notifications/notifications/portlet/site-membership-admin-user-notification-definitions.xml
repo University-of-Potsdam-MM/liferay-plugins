@@ -32,4 +32,14 @@
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
+	<definition>
+		<notification-type>4</notification-type>
+		<description>receive-a-notification-when-someone-deletes-a-workspace-you-are-member-of</description>
+		<delivery-type>
+			<name>email</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+	</definition>
 </user-notification-definitions>
