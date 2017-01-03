@@ -14,7 +14,7 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
-			<default>true</default>
+			<default>false</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
@@ -30,7 +30,7 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
-			<default>true</default>
+			<default>false</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
