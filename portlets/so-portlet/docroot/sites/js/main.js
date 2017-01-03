@@ -348,8 +348,12 @@ AUI().use(
 				}
 				else {
 					var siteTemplate =
-						'<li class="{classNames}">' +
+						'<li class="{classNames}">' + 
 							'{favoriteHTML}' +
+							// BEGIN HOOK CHANGE
+							// Add icon button to allow deletion of sites (#649)
+							'{deleteHTML}' +
+							// END HOOK CHANGE
 							'<span class="name">{siteName}</span>' +
 						'</li>';
 
@@ -366,6 +370,20 @@ AUI().use(
 								if (!result.joinURL) {
 									classNames.push('member');
 								}
+								
+								// BEGIN HOOK CHANGE
+								// Add icon button to allow deletion of sites (#649)
+								var deleteHTML = '<span class="action-not-allowed"></span>';
+
+								if (result.deleteURL) {
+									if (result.deleteURL == 'false') {
+										deleteHTML = getSiteActionHtml('delete', 'disabled',  Liferay.Language.get("you-cannot-delete-the-current-site"), '#')
+									}
+									else {
+										deleteHTML = getSiteActionHtml('action delete', 'delete-site', Liferay.Language.get("delete-site"), result.deleteURL);
+									}
+								}
+								// END HOOK CHANGE
 
 								var favoriteHTML;
 
@@ -394,6 +412,10 @@ AUI().use(
 									siteTemplate,
 									{
 										classNames: classNames.join(' '),
+										// BEGIN HOOK CHANGE
+										// Add icon button to allow deletion of sites (#649)
+										deleteHTML: deleteHTML,
+										// END HOOK CHANGE
 										favoriteHTML: favoriteHTML,
 										siteName: name
 									}

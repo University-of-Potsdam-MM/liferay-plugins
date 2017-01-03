@@ -199,8 +199,10 @@ pageContext.setAttribute("portletURL", portletURL);
 			},
 			'.more a'
 		);
-
-		siteList.delegate(
+	
+	// BEGIN HOOK CHANGE
+	// Added listener for deleting a site (#649)
+	/* siteList.delegate(
 			'click',
 			function(event) {
 				event.preventDefault();
@@ -217,7 +219,60 @@ pageContext.setAttribute("portletURL", portletURL);
 				);
 			},
 			'.action a'
+		); */
+	siteList.delegate(
+			'click',
+			function(event) {
+				event.preventDefault();
+
+				var currentTargetClass = event.currentTarget.getAttribute('class');
+
+				if ((currentTargetClass == 'delete-site')) {
+
+					var siteNode = event.currentTarget.ancestor('li');
+
+					var siteName = siteNode.one('.name a');
+
+					if (!siteName) {
+						siteName = siteNode.one('.name');
+					}
+
+					var unescapedSiteName = A.Lang.String.unescapeHTML(siteName.getContent());
+					
+					confirmMessage = A.Lang.sub(Liferay.Language.get('are-you-sure-you-want-to-delete-x'), [unescapedSiteName]);
+					siteAction = A.Lang.sub(Liferay.Language.get('you-deleted-x'), [unescapedSiteName]);
+					
+					if (confirm(confirmMessage)) {
+						A.io.request(
+							event.currentTarget.get('href'),
+							{
+								after: {
+									success: function(event, id, obj) {
+										siteName.insert(siteAction, 'replace');
+
+										setTimeout(function(){Liferay.SO.Sites.updateSites();}, 2000);
+									}
+								}
+							}
+						);
+					}
+				} else {
+					// if site is added or removed from the favorites
+					A.io.request(
+							event.currentTarget.get('href'),
+							{
+								after: {
+									success: function(event, id, obj) {
+										Liferay.SO.Sites.updateSites();
+									}
+								}
+							}
+						);
+				}
+			},
+			'.action a'
 		);
+	// END HOOK CHANGE
 	}
 
 	var dockBar = A.one('.portlet-dockbar');
