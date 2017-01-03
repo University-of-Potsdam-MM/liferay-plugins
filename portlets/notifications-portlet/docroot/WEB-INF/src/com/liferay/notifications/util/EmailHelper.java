@@ -109,7 +109,7 @@ public class EmailHelper {
 						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 						
 						try {
-							sendCommentsMail(mbMessage, serviceContext, subscriberUserId);
+							sendCommentsMail(mbMessage, serviceContext, subscriberUserId, PortletKeys.BLOGS);
 						} catch (Exception e) {
 							throw new SystemException(e);
 						}
@@ -125,15 +125,29 @@ public class EmailHelper {
 						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 						
 						try {
-							sendCommentsMail(mbMessage, serviceContext, subscriberUserId);
+							sendCommentsMail(mbMessage, serviceContext, subscriberUserId, PortletKeys.WIKI);
 						} catch (Exception e) {
 							throw new SystemException(e);
 						}
 					}
 				}
 				
-				// TODO ActivityStream
-				
+				// Journal Mail
+				if (mbMessage.getClassNameId() == 20109) {
+					// This comment was made to a journal
+					
+					// Send email only if user allows it
+					if (UserNotificationManagerUtil.isDeliver(subscriberUserId,
+						PortletKeys.JOURNAL, 0, notificationType,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+						
+						try {
+							sendCommentsMail(mbMessage, serviceContext, subscriberUserId, PortletKeys.JOURNAL);
+						} catch (Exception e) {
+							throw new SystemException(e);
+						}
+					}
+				}
 
 			}
 		}
@@ -146,7 +160,8 @@ public class EmailHelper {
 	 * @param recipientUserId
 	 * @throws Exception
 	 */
-	private static void sendCommentsMail(MBMessage mbMessage, ServiceContext serviceContext, long recipientUserId) 
+	private static void sendCommentsMail(MBMessage mbMessage, ServiceContext serviceContext, 
+			long recipientUserId, String portletKey) 
 			throws Exception {
 		
 		User commentator = UserLocalServiceUtil.getUser(mbMessage.getUserId());
@@ -161,6 +176,15 @@ public class EmailHelper {
 		if (workspace != null) {
 			workspaceName = workspace.getDescriptiveName(recipient.getLocale());
 		}
+		
+		// check portletKey to load right template
+		String portletType = "";
+		if (PortletKeys.BLOGS.equals(portletKey))
+			portletType = "blog";
+		if (PortletKeys.WIKI.equals(portletKey))
+			portletType = "wiki";
+		if (PortletKeys.JOURNAL.equals(portletKey))
+			portletType = "article";
 		
 		String language = "";
 		// check language, default: English
@@ -178,7 +202,7 @@ public class EmailHelper {
 		
 		String subject = StringUtil.read(
 				NotificationsPortlet.class.getResourceAsStream(
-				"dependencies/mb/discussion_email_"+notificationType+"_subject"+language+".tmpl"));
+				"dependencies/mb/"+portletType+"_discussion_email_"+notificationType+"_subject"+language+".tmpl"));
 		
 		subject = StringUtil.replace(
 				subject, new String[] {
@@ -191,7 +215,7 @@ public class EmailHelper {
 		
 		String body = StringUtil.read(
 				NotificationsPortlet.class.getResourceAsStream(
-				"dependencies/mb/discussion_email_"+notificationType+"_body"+language+".tmpl"));
+				"dependencies/mb/"+portletType+"_discussion_email_"+notificationType+"_body"+language+".tmpl"));
 		
 		body = StringUtil.replace(
 				body, new String[] {
@@ -417,7 +441,7 @@ public class EmailHelper {
 		
 		subject = StringUtil.replace(
 				subject, new String[] {
-						"[$WORKSPACE_NAME$]", "[$BLOGS_ENTRY_NAME$]", "[$BLOGS_ENTRY_USER_NAME$]"
+						"[$WORKSPACE_NAME$]", "[$BLOGS_ENTRY_NAME$]", "[$ENTRY_USER_NAME$]"
 						},
 				new String[] {
 						workspace.getDescriptiveName(recipient.getLocale()),// blogsEntry.getTitle(),
@@ -630,11 +654,13 @@ public class EmailHelper {
 				subject, 
 				new String[] {
 					"[$WORKSPACE_NAME$]", 
-					"[$DOCUMENT_TITLE$]"
+					"[$DOCUMENT_TITLE$]",
+					"[$USER_NAME$]"
 				},
 				new String[] {
 					workspace.getDescriptiveName(), 
-					entryTitle
+					entryTitle,
+					sender.getFullName()
 				});
 		
 		String body = StringUtil.read(
@@ -728,7 +754,7 @@ public class EmailHelper {
 				"dependencies/bookmarks/email_entry_"+notificationType+"_subject"+language+".tmpl"));
 		
 		subject = StringUtil.replace(
-				subject, new String[] {"[$WORKSPACE_NAME$]","[$BOOKMARK_NAME$]","[$BOOKMARKS_ENTRY_USER_NAME$]"},
+				subject, new String[] {"[$WORKSPACE_NAME$]","[$BOOKMARK_NAME$]","[$ENTRY_USER_NAME$]"},
 				new String[] {
 						workspace == null ? "" : workspace.getDescriptiveName(recipient.getLocale()), 
 						bookmarksEntry.getName(),
@@ -792,10 +818,11 @@ public class EmailHelper {
 		
 		// get url to article
 		String url = getPortalURL(recipient.getCompanyId());
-		Layout layout = LayoutLocalServiceUtil.getLayout(serviceContext.getPlid());
+		Layout layout = LayoutLocalServiceUtil.fetchLayout(serviceContext.getPlid());
 		if (layout != null) {
 			url += PortalUtil.getLayoutActualURL(layout);
-		}
+		} else
+			return;
 		
 		// choose template language
 		String language = "";
