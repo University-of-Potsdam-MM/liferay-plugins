@@ -367,6 +367,9 @@ public class AnnouncementsEntryLocalServiceImpl
 			String portalURL = PortalUtil.getPortalURL(
 					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
 			
+			if (!portalURL.contains("localhost"))
+				portalURL = company.getPortalURL(recipient.getGroupId());
+			
 			String notificationConfigURL = portalURL + NOTIFICATION_CONFIG_URL;
 			notificationConfigURL = StringUtil.replace(notificationConfigURL, 
 					"[$LOGIN_NAME$]", recipient.getLogin());

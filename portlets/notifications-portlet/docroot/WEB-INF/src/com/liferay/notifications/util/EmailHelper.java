@@ -817,7 +817,7 @@ public class EmailHelper {
 			return;
 		
 		// get url to article
-		String url = getPortalURL(recipient.getCompanyId());
+		String url = serviceContext.getPortalURL();//getPortalURL(recipient.getCompanyId());
 		Layout layout = LayoutLocalServiceUtil.fetchLayout(serviceContext.getPlid());
 		if (layout != null) {
 			url += PortalUtil.getLayoutActualURL(layout);

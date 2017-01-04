@@ -570,7 +570,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 					new String [] {
 						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
 						tasksEntry.getTitle(),
-						getTasksPortletURL(workspace.getGroupId(), company), //company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
+						getTasksPortletURL(workspace.getGroupId(), company, serviceContext), //company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
 						getNotificationConfigURL(serviceContext, recipient)
 					});
 			
@@ -701,10 +701,9 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		return "";
 	}
 	
-	private static String getTasksPortletURL (long workspaceGroupId, Company company) throws SystemException {
+	private static String getTasksPortletURL (long workspaceGroupId, Company company, ServiceContext serviceContext) throws SystemException {
 		
-		String portalURL = PortalUtil.getPortalURL(
-				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		String portalURL = serviceContext.getPortalURL();
 		
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspaceGroupId, true);
 		

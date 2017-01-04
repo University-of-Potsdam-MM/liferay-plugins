@@ -554,8 +554,7 @@ public class MembershipRequestLocalServiceImpl
 		
 		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
 		
-		String portalURL = PortalUtil.getPortalURL(
-				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		String portalURL = serviceContext.getPortalURL();
 		
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspace.getGroupId(), true);
 		

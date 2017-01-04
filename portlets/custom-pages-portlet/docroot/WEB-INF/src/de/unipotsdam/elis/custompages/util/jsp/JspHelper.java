@@ -210,8 +210,7 @@ public class JspHelper {
 			
 			Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
 			
-			String portalURL = PortalUtil.getPortalURL(
-					company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+			String portalURL = themeDisplay.getPortalURL();
 			
 			String language = "";
 			

@@ -52,14 +52,12 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.liveusers.LiveUsers;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.security.membershippolicy.MembershipPolicyException;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.OrganizationServiceUtil;
@@ -350,7 +348,7 @@ public class EditGroupAssignmentsAction extends PortletAction {
 					}, new String[] {  
 						user.getFullName(), 
 						workspace.getDescriptiveName(), // translation needed? 
-						getWorkspaceURL(user, workspace),
+						getWorkspaceURL(user, workspace, themeDisplay),
 						getConfigURL(themeDisplay, user)
 					});
 		
@@ -372,13 +370,12 @@ public class EditGroupAssignmentsAction extends PortletAction {
 	/**
 	 * This method returns the link to the workspace
 	 * for a given user.
+	 * @param themeDisplay 
 	 */
-	private String getWorkspaceURL (User user, Group workspace) 
+	private String getWorkspaceURL (User user, Group workspace, ThemeDisplay themeDisplay) 
 			throws PortalException, SystemException {
-		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
 		
-		String portalURL = PortalUtil.getPortalURL(
-				company.getVirtualHostname(), PortalUtil.getPortalPort(false), false);
+		String portalURL = themeDisplay.getPortalURL();
 		
 		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspace.getGroupId(), true);
 		
