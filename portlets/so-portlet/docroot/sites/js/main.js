@@ -238,7 +238,11 @@ AUI().use(
 				}
 
 				if (showSuccessMessage && instance._messages) {
-					instance._messages.html('<span class="portlet-msg-success">' + Liferay.Language.get('your-request-completed-successfully') + '</span>');
+					// BEGIN CHANGE 
+					// changed language string case your-request-completed-successfully is used in different contexts as well refs #711 
+					//instance._messages.html('<span class="portlet-msg-success">' + Liferay.Language.get('your-request-completed-successfully') + '</span>');
+					instance._messages.html('<span class="portlet-msg-success">' + Liferay.Language.get('your-workspace-was-created-successfully') + '</span>');
+					// END CHANGE
 				}
 			},
 
