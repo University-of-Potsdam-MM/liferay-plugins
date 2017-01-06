@@ -188,7 +188,7 @@ public class JspHelper {
 		// isDeliver checks if user enabled notification for this socialActivity
 		if(UserNotificationManagerUtil.isDeliver(
 				receiver.getUserId(),
-				portletId, 0,
+				"othercustompages_WAR_custompagesportlet"/*portletId*/, 0, // portletId harcoded to force check of othercustompages
 				socialActivityType,
 				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
 		
@@ -204,7 +204,7 @@ public class JspHelper {
 			String portletId, int socialActivityType, ThemeDisplay themeDisplay) throws Exception {
 		if(UserNotificationManagerUtil.isDeliver(
 				receiver.getUserId(),
-				portletId, 0,
+				"othercustompages_WAR_custompagesportlet"/*portletId*/, 0, // portletId harcoded to force check of othercustompages
 				socialActivityType,
 				UserNotificationDeliveryConstants.TYPE_EMAIL)){
 			
