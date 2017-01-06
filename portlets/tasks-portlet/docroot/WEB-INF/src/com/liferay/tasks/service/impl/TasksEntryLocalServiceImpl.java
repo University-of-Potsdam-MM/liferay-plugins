@@ -493,13 +493,25 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		receiverUserIds.remove(serviceContext.getUserId());
 		
 		for (long receiverUserId : receiverUserIds) {
-			if ((receiverUserId == 0) ||
-				!UserNotificationManagerUtil.isDeliver(
-					receiverUserId, PortletKeys.TASKS, 0,
-					TasksEntryConstants.STATUS_ALL,
-					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+			if (TasksEntryConstants.STATUS_OPEN == tasksEntry.getStatus()) {
+				if ((receiverUserId == 0) ||
+					!UserNotificationManagerUtil.isDeliver(
+						receiverUserId, PortletKeys.TASKS, 0,
+						TasksEntryConstants.STATUS_ALL,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
+	
+					continue;
+				}
+			} else {
+			// check if user wants notifications for task updates 
+				if ((receiverUserId == 0) || 
+					!UserNotificationManagerUtil.isDeliver(
+						receiverUserId, PortletKeys.TASKS, 0,
+						8,
+						UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 
-				continue;
+					continue;
+				}
 			}
 			
 			User sender = UserLocalServiceUtil.getUser(tasksEntry.getUserId());
@@ -612,15 +624,28 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		notificationEventJSONObject.put("userId", serviceContext.getUserId());
 
 		for (long receiverUserId : receiverUserIds) {
-			if ((receiverUserId == 0) ||
-				!UserNotificationManagerUtil.isDeliver(
-					receiverUserId, PortletKeys.TASKS, 0,
-					TasksEntryConstants.STATUS_ALL,
-					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+			
+			if (TasksEntryConstants.STATUS_OPEN == tasksEntry.getStatus()) {
+				if ((receiverUserId == 0) ||
+					!UserNotificationManagerUtil.isDeliver(
+						receiverUserId, PortletKeys.TASKS, 0,
+						TasksEntryConstants.STATUS_ALL,
+						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+		
+					continue;
+				}
+			} else {
+			// check if user wants notifications for task updates 
+				if ((receiverUserId == 0) || 
+					!UserNotificationManagerUtil.isDeliver(
+						receiverUserId, PortletKeys.TASKS, 0,
+						8,
+						UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 
-				continue;
+					continue;
+				}
 			}
-
+			
 			String title = StringPool.BLANK;
 
 			if (oldStatus == TasksEntryConstants.STATUS_ALL) {
