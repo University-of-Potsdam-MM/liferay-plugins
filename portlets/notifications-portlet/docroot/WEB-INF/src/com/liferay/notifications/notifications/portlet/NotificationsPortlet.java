@@ -31,13 +31,17 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationFeedEntry;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.MembershipRequest;
+import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.MembershipRequestServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
@@ -52,7 +56,6 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.text.DateFormat;
 import java.text.Format;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,6 +175,9 @@ public class NotificationsPortlet extends MVCPortlet {
 			}
 			else if (actionName.equals("updateUserNotificationDelivery")) {
 				updateUserNotificationDelivery(actionRequest, actionResponse);
+			}
+			else if (actionName.equals("updateMembershipRequest")) {
+				handleMembershipRequest(actionRequest, actionResponse);
 			}
 			else {
 				super.processAction(actionRequest, actionResponse);
@@ -541,6 +547,46 @@ public class NotificationsPortlet extends MVCPortlet {
 
 		UserNotificationEventLocalServiceUtil.updateUserNotificationEvent(
 			userNotificationEvent);
+	}
+	
+	/**
+	 * This method is called, if a user replys to membership requests via notification request.
+	 * It updates status of membership request according to user action.
+	 * @param actionRequest
+	 * @param actionResponse
+	 * @throws Exception
+	 */
+	private void handleMembershipRequest (
+			ActionRequest actionRequest, ActionResponse actionResponse)
+	throws Exception {
+		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+		
+		long membershipRequestId = ParamUtil.getLong(
+			actionRequest, "membershipRequestId");
+
+		int statusId = ParamUtil.getInteger(actionRequest, "statusId");
+		String replyComments = ParamUtil.getString(
+			actionRequest, "replyComments");
+		
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			actionRequest);
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			MembershipRequestServiceUtil.updateStatus(
+				membershipRequestId, replyComments, statusId, serviceContext);
+			jsonObject.put("success", Boolean.TRUE);
+		} catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
+
+		SessionMessages.add(actionRequest, "membershipReplySent");
+
+		sendRedirect(actionRequest, actionResponse);
 	}
 
 	private static final String _ACTION_DIV_DEFAULT =

@@ -31,8 +31,12 @@ import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.MembershipRequestCommentsException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -59,6 +63,7 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.base.MembershipRequestLocalServiceBaseImpl;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -388,6 +393,15 @@ public class MembershipRequestLocalServiceImpl
 				// send mail for pending request
 				sendMail(userId, membershipRequest, serviceContext);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(userId,
+					PortletKeys.SITE_MEMBERSHIPS_ADMIN, 0,
+					MembershipRequestConstants.STATUS_PENDING,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+
+				sendNotificationEvent(userId, membershipRequest, serviceContext);
+			}
+			
 		} else {
 			// isDeliver checks if user enabled mails for reply in notifications			
 			if ((UserNotificationManagerUtil.isDeliver(userId,
@@ -421,6 +435,30 @@ public class MembershipRequestLocalServiceImpl
 		if (Validator.isNull(comments) || Validator.isNumber(comments)) {
 			throw new MembershipRequestCommentsException();
 		}
+	}
+	
+	private void sendNotificationEvent(long userId, MembershipRequest membershipRequest, 
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+		
+		JSONObject notificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject();
+
+		notificationEventJSONObject.put("actionRequired", true);
+		notificationEventJSONObject.put(
+			"classPK", membershipRequest.getMembershipRequestId());
+		notificationEventJSONObject.put(
+			"userId", membershipRequest.getUserId());
+		
+		NotificationEvent notificationEvent =
+			NotificationEventFactoryUtil.createNotificationEvent(
+				System.currentTimeMillis(), PortletKeys.SITE_MEMBERSHIPS_ADMIN,
+				notificationEventJSONObject);
+
+		notificationEvent.setDeliveryRequired(0);
+
+		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+			userId, notificationEvent);
 	}
 	
 	/**
