@@ -58,6 +58,12 @@
 			<default>false</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>false</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 	<definition>
 		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE}</notification-type>
@@ -68,6 +74,12 @@
 			<default>false</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>false</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 	<definition>
 		<notification-type>${de.unipotsdam.elis.custompages.CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION}</notification-type>
@@ -75,6 +87,12 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>false</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>false</default>
 			<modifiable>true</modifiable>
 		</delivery-type>

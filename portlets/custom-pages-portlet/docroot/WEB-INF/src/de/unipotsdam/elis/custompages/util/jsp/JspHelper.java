@@ -35,7 +35,6 @@ import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutPrototype;
@@ -47,7 +46,6 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutPrototypeLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
@@ -142,17 +140,18 @@ public class JspHelper {
 		}
 		
 		if (socialActivityType < 4) {
-			// TODO handle activities and notifications for new cases
-		createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+			// TODO handle activities for new cases
+			createCustomPageActivity(customPage, themeDisplay.getUserId(), receiver.getUserId(), socialActivityType);
+		}
+		
 		// BEGIN CHANGE
 		// add socialActivityType parameter to check if user wants to be notified
 //		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
 		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId, socialActivityType);
 		// END CHANGE
+		
 		// BEGIN CHANGE
 		// send email if user wants to be notified via email
-		}
-		
 		try {
 			createCustomPageEmail(themeDisplay.getUser(), receiver, notificationMessage, 
 					customPage, portletId, socialActivityType, themeDisplay);
@@ -183,19 +182,22 @@ public class JspHelper {
 		jsonObject.put("userId", sender.getUserId());
 		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
+		jsonObject.put("socialActivityType", socialActivityType);
+		if (socialActivityType == 2)
+			jsonObject.put("actionRequired", true);
 		
 		// BEGIN CHANGE
 		// isDeliver checks if user enabled notification for this socialActivity
 		if(UserNotificationManagerUtil.isDeliver(
 				receiver.getUserId(),
-				"othercustompages_WAR_custompagesportlet"/*portletId*/, 0, // portletId harcoded to force check of othercustompages
+				"othercustompages_WAR_custompagesportlet", 0, // portletId hardcoded to force check of othercustompages
 				socialActivityType,
 				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
 		
-		NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
-				System.currentTimeMillis(), portletId, jsonObject);
-		notificationEvent.setDeliveryRequired(0);
-		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(receiver.getUserId(), notificationEvent);
+			NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
+					System.currentTimeMillis(), portletId, jsonObject);
+			notificationEvent.setDeliveryRequired(0);
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(receiver.getUserId(), notificationEvent);
 		}
 		// END CHANGE
 	}
@@ -204,11 +206,11 @@ public class JspHelper {
 			String portletId, int socialActivityType, ThemeDisplay themeDisplay) throws Exception {
 		if(UserNotificationManagerUtil.isDeliver(
 				receiver.getUserId(),
-				"othercustompages_WAR_custompagesportlet"/*portletId*/, 0, // portletId harcoded to force check of othercustompages
+				"othercustompages_WAR_custompagesportlet", 0, // portletId hardcoded to force check of othercustompages
 				socialActivityType,
 				UserNotificationDeliveryConstants.TYPE_EMAIL)){
 			
-			Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
+			//Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
 			
 			String portalURL = themeDisplay.getPortalURL();
 			
