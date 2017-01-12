@@ -13,7 +13,7 @@
 		</delivery-type>
 		<delivery-type>
 			<name>website</name>
-			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
@@ -27,6 +27,12 @@
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 	<definition>
 		<notification-type>3</notification-type>
@@ -37,6 +43,12 @@
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 	<definition>
 		<notification-type>4</notification-type>
@@ -44,6 +56,12 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>

@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -49,6 +51,7 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -210,6 +213,16 @@ public class InviteMembersPortlet extends MVCPortlet {
 					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 				sendInvitationApprovedMail(memberRequest, themeDisplay);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(
+					memberRequest.getReceiverUserId(),
+					PortletKeys.SO_INVITE_MEMBERS, 0,
+					MembershipRequestConstants.STATUS_APPROVED,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+				
+				createNotificationEvent(memberRequest);
+			}
+			
 		}
 		// END CHANGE
 	}
@@ -404,6 +417,30 @@ public class InviteMembersPortlet extends MVCPortlet {
 			from, to, subject, body, true);
 		
 		MailServiceUtil.sendEmail(mailMessage);
+	}
+	
+	private void createNotificationEvent (MemberRequest memberRequest) 
+			throws PortalException, SystemException {
+		// [$MEMBER_REQUEST_USER$] hat Ihre Einladung [$MEMBER_REQUEST_GROUP$] beizutreten angenommen.
+		
+		JSONObject notificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject();
+
+		notificationEventJSONObject.put(
+			"classPK", memberRequest.getMemberRequestId());
+		notificationEventJSONObject.put(
+			"userId", memberRequest.getReceiverUserId());
+
+		NotificationEvent notificationEvent =
+			NotificationEventFactoryUtil.createNotificationEvent(
+				System.currentTimeMillis(), PortletKeys.SO_INVITE_MEMBERS,
+				notificationEventJSONObject);
+
+		notificationEvent.setDeliveryRequired(0);
+
+		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+				memberRequest.getUserId(), notificationEvent);
+		
 	}
 	
 	private String getNotificationConfigURL(

@@ -16,11 +16,13 @@ package com.liferay.notifications.hook.service.impl;
 
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.notifications.util.EmailHelper;
+import com.liferay.notifications.util.NotificationsConstants;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.ServiceContext;
@@ -72,7 +74,28 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 			subscribersOVPs.add(ovp);
 				
 			EmailHelper.sendCommentsMail(mbMessage, serviceContext, subscribersOVPs);
-			// TODO notification events for comments
+			
+			String portletKey = StringPool.BLANK;
+			// notification events for comments
+			if (mbMessage.getClassNameId() == 20007)
+				portletKey = PortletKeys.BLOGS; 
+			
+			if (mbMessage.getClassNameId() == 20016)
+				portletKey = PortletKeys.WIKI; 
+			
+			if (mbMessage.getClassNameId() == 20109)
+				portletKey = PortletKeys.JOURNAL; 
+			
+			if (portletKey.equals(StringPool.BLANK))
+				return mbMessage;
+			
+			NotificationsUtil.sendNotificationEvent(
+				mbMessage.getCompanyId(), portletKey, 
+				className, classPK, mbMessage.getBody(), 
+				(String)serviceContext.getAttribute("contentURL"), 
+				serviceContext.isCommandUpdate() ? NotificationsConstants.NOTIFICATION_TYPE_UPDATE_COMMENT : NotificationsConstants.NOTIFICATION_TYPE_ADD_COMMENT,
+				subscribersOVPs, userId);
+			
 			return mbMessage;
 		}
 

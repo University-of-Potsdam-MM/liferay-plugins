@@ -92,6 +92,15 @@ public class InviteMembersUserNotificationHandler
 					getSiteDescriptiveName(
 						memberRequest.getGroupId(), serviceContext)});
 		}
+		else {
+			String message = serviceContext.translate(
+					"x-accepted-your-invitation-to-join-x",
+					new Object[] {
+						getUserNameLink(memberRequest.getUserId(), serviceContext),
+						getSiteDescriptiveName(
+							memberRequest.getGroupId(), serviceContext)});
+			return StringUtil.replace("<div class=\"title\">[$TITLE$]</div>", new String[] { "[$TITLE$]" }, new String[] { message });
+		}
 
 		LiferayPortletResponse liferayPortletResponse =
 			serviceContext.getLiferayPortletResponse();

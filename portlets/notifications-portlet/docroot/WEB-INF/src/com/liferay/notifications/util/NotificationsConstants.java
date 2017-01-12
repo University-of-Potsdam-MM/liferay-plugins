@@ -28,4 +28,7 @@ public interface NotificationsConstants {
 		// END CHANGE
 	};
 
+	// added constants for comment notification type
+	public static final int NOTIFICATION_TYPE_ADD_COMMENT = 3;
+	public static final int NOTIFICATION_TYPE_UPDATE_COMMENT = 4;
 }

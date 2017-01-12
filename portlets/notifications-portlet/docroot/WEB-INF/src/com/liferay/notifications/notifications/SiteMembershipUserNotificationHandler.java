@@ -46,6 +46,44 @@ public class SiteMembershipUserNotificationHandler extends
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 				userNotificationEvent.getPayload());
 		
+		boolean isMembershipRequest = jsonObject.getBoolean("membershipRequest");
+		
+		// check if no membershipRequest is going to be interpreted
+		if (!isMembershipRequest) {
+			
+			boolean isWorkspaceDeletion = jsonObject.getBoolean("workspaceDeletion");
+			// check if noitfication is going to inform of a deleted workspace
+			if (isWorkspaceDeletion) {
+				String workspaceName = jsonObject.getString("workspaceName"); // get workspacename form request
+				
+				String message = LanguageUtil.format(serviceContext.getLocale(), "workspace-x-was-deleted", 
+						new String[] { 
+							workspaceName 
+						});
+				
+				return StringUtil.replace(
+						"<div class=\"title\">[$TITLE$]</div>", 
+						new String[] { "[$TITLE$]" }, 
+						new String[] { message });
+			}
+			else {
+				// notification informs user that she is added to a workspace
+				
+				String workspaceName = jsonObject.getString("workspaceName"); //get workspacename form request
+				
+				String message = LanguageUtil.format(serviceContext.getLocale(), "you-were-added-to-workspace-x", 
+						new String[] { 
+							workspaceName 
+						});
+				
+				return StringUtil.replace(
+						"<div class=\"title\">[$TITLE$]</div>", 
+						new String[] { "[$TITLE$]" }, 
+						new String[] { message });
+			}
+			
+		}
+		
 		long membershipRequestId = jsonObject.getLong("classPK");
 		
 		MembershipRequest membershipRequest = 
@@ -75,6 +113,31 @@ public class SiteMembershipUserNotificationHandler extends
 						getUserNameLink(membershipRequest.getUserId(), serviceContext),
 						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
 					});
+		} 
+		else if (membershipRequest.getStatusId() ==
+				MembershipRequestConstants.STATUS_APPROVED) {
+			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-approved-your-request-to-join-x", 
+					new Object[] { 
+						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
+						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
+					});
+			return StringUtil.replace(
+					"<div class=\"title\">[$TITLE$]</div>", 
+					new String[] { "[$TITLE$]" }, 
+					new String[] { title });
+		}
+		else if (membershipRequest.getStatusId() ==
+				MembershipRequestConstants.STATUS_DENIED) {
+			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-denied-your-request-to-join-x", 
+					new Object[] { 
+						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
+						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
+					});
+			
+			return StringUtil.replace(
+					"<div class=\"title\">[$TITLE$]</div>", 
+					new String[] { "[$TITLE$]" }, 
+					new String[] { title });
 		}
 		
 		LiferayPortletResponse liferayPortletResponse =

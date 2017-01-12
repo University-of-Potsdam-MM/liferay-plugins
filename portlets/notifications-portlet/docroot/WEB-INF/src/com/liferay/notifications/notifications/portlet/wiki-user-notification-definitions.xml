@@ -35,7 +35,7 @@
 		</delivery-type>
 	</definition>
 		<definition>
-		<notification-type>1</notification-type>
+		<notification-type>3</notification-type>
 		<description>receive-a-notification-when-someone-posts-a-comment-to-a-wiki-page-you-are-subscribed-to</description>
 		<delivery-type>
 			<name>website</name>
@@ -51,7 +51,7 @@
 		</delivery-type>
 	</definition>
 	<definition>
-		<notification-type>2</notification-type>
+		<notification-type>4</notification-type>
 		<description>receive-a-notification-when-someone-updates-a-comment-to-a-wiki-page-you-are-subscribed-to</description>
 		<delivery-type>
 			<name>website</name>

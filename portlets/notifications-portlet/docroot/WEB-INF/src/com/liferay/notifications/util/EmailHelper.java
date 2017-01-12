@@ -94,9 +94,9 @@ public class EmailHelper {
 
 				subscriberUserIds.add(subscriberUserId);
 				
-				int notificationType = 1; // add a comment
+				int notificationType = NotificationsConstants.NOTIFICATION_TYPE_ADD_COMMENT; // add a comment
 				if (serviceContext.isCommandUpdate()) 
-					notificationType = 2; // update a comment
+					notificationType = NotificationsConstants.NOTIFICATION_TYPE_UPDATE_COMMENT; // update a comment
 				
 				// check to which entry the comment belongs (Blog, Wiki, ...)
 				// comments cannot be added to: bookmarks, ressources, journal, messageboard

@@ -43,7 +43,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -58,7 +57,6 @@ import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -399,7 +397,8 @@ public class MembershipRequestLocalServiceImpl
 					MembershipRequestConstants.STATUS_PENDING,
 					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 
-				sendNotificationEvent(userId, membershipRequest, serviceContext);
+				sendNotificationEvent(userId, membershipRequest, serviceContext,
+						MembershipRequestConstants.STATUS_PENDING);
 			}
 			
 		} else {
@@ -411,6 +410,16 @@ public class MembershipRequestLocalServiceImpl
 				// send mail for approved or denied request
 				sendMail(userId, membershipRequest, serviceContext);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(userId,
+					PortletKeys.SITE_MEMBERSHIPS_ADMIN, 0,
+					MembershipRequestConstants.STATUS_DENIED,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+
+				sendNotificationEvent(userId, membershipRequest, serviceContext, 
+						MembershipRequestConstants.STATUS_DENIED);
+			}
+			
 		}
 		// END CHANGE
 		
@@ -438,17 +447,25 @@ public class MembershipRequestLocalServiceImpl
 	}
 	
 	private void sendNotificationEvent(long userId, MembershipRequest membershipRequest, 
-			ServiceContext serviceContext)
+			ServiceContext serviceContext, int status)
 		throws PortalException, SystemException {
 		
 		JSONObject notificationEventJSONObject =
 			JSONFactoryUtil.createJSONObject();
 
-		notificationEventJSONObject.put("actionRequired", true);
+		if (status == MembershipRequestConstants.STATUS_PENDING)
+			notificationEventJSONObject.put("actionRequired", true);
+		
 		notificationEventJSONObject.put(
 			"classPK", membershipRequest.getMembershipRequestId());
 		notificationEventJSONObject.put(
 			"userId", membershipRequest.getUserId());
+		/* 
+		 * same notificationhandler is used for membershipRequests, 
+		 * deleting workspaces and adding users to workspaces. So it
+		 * is necessary to know which kind of event will be interpreted. 
+		 */
+		notificationEventJSONObject.put("membershipRequest", true); 
 		
 		NotificationEvent notificationEvent =
 			NotificationEventFactoryUtil.createNotificationEvent(
@@ -590,7 +607,7 @@ public class MembershipRequestLocalServiceImpl
 	private String getMemberManagementURL (ServiceContext serviceContext, User user, Group workspace) 
 			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
+//		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
 		
 		String portalURL = serviceContext.getPortalURL();
 		
