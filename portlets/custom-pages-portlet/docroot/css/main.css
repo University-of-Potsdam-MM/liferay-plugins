@@ -493,7 +493,9 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 }
 	
 .invited-users-wrapper {
-	    margin-top: 85px;
+    margin-top: 85px;
+    float: right;
+   	width: 50%;
 	
 }
 	
@@ -982,7 +984,8 @@ table *:focus {
 }
 
 #_mycustompages_WAR_custompagesportlet_inviteMembersContainer .choose-publishment-type {
-	float:left
+	float:left;
+	width: 50%;
 }
 #_mycustompages_WAR_custompagesportlet_inviteMembersContainer .portalwide-publishment-div {
 	text-align: center;
