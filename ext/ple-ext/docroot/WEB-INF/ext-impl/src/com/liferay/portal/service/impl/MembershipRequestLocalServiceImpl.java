@@ -657,19 +657,25 @@ public class MembershipRequestLocalServiceImpl
 		if (!layouts.isEmpty())
 			layout = layouts.get(0);
 
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					serviceContext.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
+		if (layout == null) {
+			// Notifications Portlet was not found, so display on first page
+			// if there is a page, else no link can be created
+			if (!layouts.isEmpty())
+				layout = layouts.get(0);
+			else
+				return "";
+
+		} 
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				serviceContext.getRequest(), "1_WAR_notificationsportlet",
+				layout.getPlid(), PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "false");
+		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+
+		return myUrl.toString();
 	}
 
 }

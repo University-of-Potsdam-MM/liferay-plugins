@@ -30,6 +30,7 @@ import javax.portlet.WindowState;
 import javax.portlet.WindowStateException;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -435,7 +436,7 @@ public class MemberRequestLocalServiceImpl
 				getCreateAccountURL(memberRequest, serviceContext),
 				group.getDescriptiveName(serviceContext.getLocale()),
 				getLoginURL(memberRequest, serviceContext), user.getFullName(),
-				getNotificationConfigURL(serviceContext, receiverUser)
+				UserNotificationHelper.getConfigURL(serviceContext, receiverUser)
 			});
 
 		InternetAddress from = new InternetAddress(fromAddress, fromName);
@@ -500,33 +501,6 @@ public class MemberRequestLocalServiceImpl
 		else if (memberRequest.getReceiverUserId() != userId) {
 			throw new MemberRequestInvalidUserException();
 		}
-	}
-	
-	private static String getNotificationConfigURL(
-			ServiceContext serviceContext, User user)
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					serviceContext.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
 	}
 
 }

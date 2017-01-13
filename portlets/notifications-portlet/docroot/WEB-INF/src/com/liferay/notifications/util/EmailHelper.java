@@ -8,11 +8,7 @@ import java.util.Set;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.portlet.PortletMode;
 import javax.portlet.PortletModeException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowState;
 import javax.portlet.WindowStateException;
 
 import com.liferay.mail.service.MailServiceUtil;
@@ -41,7 +37,6 @@ import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.blogs.model.BlogsEntry;
 import com.liferay.portlet.blogs.service.BlogsEntryLocalServiceUtil;
 import com.liferay.portlet.bookmarks.model.BookmarksEntry;
@@ -227,7 +222,7 @@ public class EmailHelper {
 							recipient.getFullName(), commentator.getFullName(),
 							mbMessage.getBody(), // translation needed? 
 							contentURL,
-							getConfigURL(serviceContext, recipient)
+							UserNotificationHelper.getConfigURL(serviceContext, recipient)
 						});
 		
 		String fromName = PrefsPropsUtil.getString(
@@ -248,32 +243,6 @@ public class EmailHelper {
 //		System.out.println(body);
 		
 		MailServiceUtil.sendEmail(mailMessage);
-	}
-	
-	private static String getConfigURL (ServiceContext serviceContext, User user) 
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-		
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					serviceContext.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
 	}
 	
 	
@@ -464,7 +433,7 @@ public class EmailHelper {
 //						workspace.getDescriptiveName(recipient.getLocale()), blogname, // entfernt bis Breadcrump diskussion abgeschlossen
 						recipient.getFullName(), sender.getFullName(),
 						blogContent, entryURL, 
-						getConfigURL(serviceContext, recipient)
+						UserNotificationHelper.getConfigURL(serviceContext, recipient)
 						});
 		
 		return new String[] {subject, body};
@@ -515,7 +484,7 @@ public class EmailHelper {
 //						workspace.getDescriptiveName(recipient.getLocale()), wikiName, // entfernt bis Breadcrump diskussion abgeschlossen
 						recipient.getFullName(), sender.getFullName(),
 						wikiPageContent, entryURL,
-						getConfigURL(serviceContext, recipient)
+						UserNotificationHelper.getConfigURL(serviceContext, recipient)
 					});
 		
 		return new String[] {subject, body};
@@ -572,7 +541,7 @@ public class EmailHelper {
 							recipient.getFullName(), sender.getFullName(),
 							messageBody, 
 							entryURL,
-							getConfigURL(serviceContext, recipient)
+							UserNotificationHelper.getConfigURL(serviceContext, recipient)
 						});
 
 		
@@ -627,7 +596,7 @@ public class EmailHelper {
 					recipient.getFullName(), sender.getFullName(),
 					entryTitle,
 					entryURL, 
-					getConfigURL(serviceContext, recipient)
+					UserNotificationHelper.getConfigURL(serviceContext, recipient)
 				});
 		
 		if (notificationType.equals("updated")){
@@ -679,7 +648,7 @@ public class EmailHelper {
 //			workspace.getDescriptiveName(), LanguageUtil.get(recipient.getLocale(), "javax.portlet.title."+portlet.getPortletName()), // entfernt bis Breadcrump diskussion abgeschlossen
 			recipient.getFullName(), sender.getFullName(),
 			entryTitle, entryURL,
-			EmailHelper.getConfigURL(serviceContext, recipient)
+			UserNotificationHelper.getConfigURL(serviceContext, recipient)
 		});
 		
 		return new String[] {subject, body};
@@ -777,7 +746,7 @@ public class EmailHelper {
 					recipient.getFullName(), bookmarksEntry.getUserName(),
 					bookmarksEntry.getName(),
 					entryURL, 
-					getConfigURL(serviceContext, recipient)
+					UserNotificationHelper.getConfigURL(serviceContext, recipient)
 				});
 		
 		if (notificationType.equals("updated")){
@@ -866,7 +835,7 @@ public class EmailHelper {
 				user.getFullName(),
 				"", // TODO content parsen?
 				url,
-				getConfigURL(serviceContext, recipient)
+				UserNotificationHelper.getConfigURL(serviceContext, recipient)
 			});
 		
 		// prepare sender and recipient

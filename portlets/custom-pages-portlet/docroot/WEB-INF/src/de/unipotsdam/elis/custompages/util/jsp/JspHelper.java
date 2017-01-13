@@ -8,17 +8,13 @@ import java.util.Map;
 
 import javax.mail.internet.InternetAddress;
 import javax.portlet.PortletConfig;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletModeException;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 import javax.portlet.ReadOnlyException;
 import javax.portlet.ValidatorException;
-import javax.portlet.WindowState;
-import javax.portlet.WindowStateException;
 
 import com.liferay.compat.portal.kernel.util.HtmlUtil;
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -56,7 +52,6 @@ import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants;
@@ -161,7 +156,7 @@ public class JspHelper {
 		// END CHANGE
 	}
 
-	// TODO: Da sich der Name �ndern kann, sollte er hier nicht so fest im JSON
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest im JSON
 	// kodiert werden, sondern dynamisch abgefragt werden, wenn die Activity
 	// angezeigt wird
 	public static void createCustomPageActivity(Layout layout, long userId, long receiverUserId, int socialActivityType)
@@ -173,7 +168,7 @@ public class JspHelper {
 				socialActivityType, jsonObject.toString(), receiverUserId);
 	}
 
-	// TODO: Da sich der Name �ndern kann, sollte er hier nicht so fest in der
+	// TODO: Da sich der Name ï¿½ndern kann, sollte er hier nicht so fest in der
 	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
 	// Nachricht angezeigt wird
 	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
@@ -291,7 +286,8 @@ public class JspHelper {
 						receiver.getFullName(), sender.getFullName(),
 						PortalUtil.getLayoutFullURL(customPage, themeDisplay), 
 						portalURL+getPageManagementURL(receiver),
-						getNotificationConfigURL(themeDisplay, receiver)
+//						getNotificationConfigURL(themeDisplay, receiver)
+						UserNotificationHelper.getConfigURL(themeDisplay, receiver)
 					}); 
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -307,39 +303,6 @@ public class JspHelper {
 			
 			MailServiceUtil.sendEmail(mailMessage);
 		}
-	}
-	
-	/**
-	 * Create URL to notification configuration.
-	 * @param themeDisplay
-	 * @return URL
-	 * @throws WindowStateException
-	 * @throws PortletModeException
-	 */
-	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-		
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
 	}
 
 	/**

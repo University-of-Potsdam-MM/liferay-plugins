@@ -19,6 +19,7 @@ package com.liferay.so.invitemembers.portlet;
 
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.notifications.util.PortletKeys;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -397,7 +398,7 @@ public class InviteMembersPortlet extends MVCPortlet {
 						receiverUser.getFullName(), 
 						user.getFullName(),
 						workspace.getDescriptiveName(), // translation needed? 
-						getNotificationConfigURL(themeDisplay, receiverUser)
+						UserNotificationHelper.getConfigURL(themeDisplay, receiverUser)
 					});
 		
 		// send mail
@@ -441,33 +442,6 @@ public class InviteMembersPortlet extends MVCPortlet {
 		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
 				memberRequest.getUserId(), notificationEvent);
 		
-	}
-	
-	private String getNotificationConfigURL(
-			ThemeDisplay themeDisplay, User user)
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(InviteMembersPortlet.class);

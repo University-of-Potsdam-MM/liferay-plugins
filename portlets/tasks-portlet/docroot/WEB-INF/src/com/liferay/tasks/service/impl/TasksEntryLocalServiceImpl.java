@@ -19,6 +19,7 @@ package com.liferay.tasks.service.impl;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -583,7 +584,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
 						tasksEntry.getTitle(),
 						getTasksPortletURL(workspace.getGroupId(), company, serviceContext), //company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
-						getNotificationConfigURL(serviceContext, recipient)
+						UserNotificationHelper.getConfigURL(serviceContext, recipient)
 					});
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -697,33 +698,6 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		if (Validator.isNull(title)) {
 			throw new TasksEntryTitleException();
 		}
-	}
-
-	private static String getNotificationConfigURL(
-			ServiceContext serviceContext, User user)
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					serviceContext.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
 	}
 	
 	private static String getTasksPortletURL (long workspaceGroupId, Company company, ServiceContext serviceContext) throws SystemException {
