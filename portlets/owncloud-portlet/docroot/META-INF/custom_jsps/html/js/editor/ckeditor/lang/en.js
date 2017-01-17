@@ -11,7 +11,7 @@ CKEDITOR.lang['en'] = {
 		"url" : "URL",
 		"protocol" : "Protocol",
 		"upload" : "Upload",
-		"uploadSubmit" : "Send it to the Server YEAH DEFAULT SUBMIT",
+		"uploadSubmit" : "Send it to the Server",
 		"image" : "Image",
 		"flash" : "Flash",
 		"form" : "Form",
