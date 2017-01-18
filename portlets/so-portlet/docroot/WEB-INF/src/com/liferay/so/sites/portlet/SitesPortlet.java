@@ -20,6 +20,8 @@ package com.liferay.so.sites.portlet;
 import com.liferay.compat.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.DuplicateGroupException;
 import com.liferay.portal.GroupNameException;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -109,9 +111,21 @@ public class SitesPortlet extends MVCPortlet {
 			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 			try {
-				doAddSite(actionRequest, actionResponse);
-
+				Group group = doAddSite(actionRequest, actionResponse);
+				
+				// BEGIN CHANGE
+				// open workspace after creation #662
+				ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+						WebKeys.THEME_DISPLAY);
+				
+				String workspaceURL = getWorkspaceURL(group, themeDisplay);
+				// END CHANGE
+				
 				jsonObject.put("result", "success");
+				
+				// BEGIN CHANGE
+				jsonObject.put("workspaceURL", workspaceURL);
+				// END CHANGE
 			}
 			catch (Exception e) {
 				jsonObject.put("result", "failure");
@@ -561,7 +575,11 @@ public class SitesPortlet extends MVCPortlet {
 		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
-	protected void doAddSite(
+	/**
+	 * HOOK CHANGE: added return Type Group
+	 * 
+	 */
+	protected Group doAddSite( 
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
@@ -623,6 +641,12 @@ public class SitesPortlet extends MVCPortlet {
 		}
 
 		setCustomJspServletContextName(group);
+		
+		// BEGIN CHANGE
+		// group is returned to create group url after site is created
+		return group;
+		// END CHANGE
+		
 	}
 
 	protected long[] getLongArray(PortletRequest portletRequest, String name) {
@@ -696,6 +720,29 @@ public class SitesPortlet extends MVCPortlet {
 		portletPreferences.store();
 	}
 
+	/**
+	 * This method returns the link to the workspace
+	 * 
+	 * @param themeDisplay 
+	 */
+	private String getWorkspaceURL (Group workspace, ThemeDisplay themeDisplay) 
+			throws PortalException, SystemException {
+		
+		String portalURL = themeDisplay.getPortalURL();
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(workspace.getGroupId(), true);
+		
+		Layout layout = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+		
+		if (layout != null)
+			return portalURL + PortalUtil.getLayoutActualURL(layout);
+		
+		return "";
+	}
+	
 	private static final String _CLASS_NAME =
 		"com.liferay.portlet.sites.util.SitesUtil";
 
