@@ -19,6 +19,7 @@ package com.liferay.so.invitemembers.portlet;
 
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.notifications.util.PortletKeys;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
@@ -27,6 +28,8 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -49,6 +52,7 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.permission.LayoutPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -210,6 +214,16 @@ public class InviteMembersPortlet extends MVCPortlet {
 					UserNotificationDeliveryConstants.TYPE_EMAIL)) {
 				sendInvitationApprovedMail(memberRequest, themeDisplay);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(
+					memberRequest.getReceiverUserId(),
+					PortletKeys.SO_INVITE_MEMBERS, 0,
+					MembershipRequestConstants.STATUS_APPROVED,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+				
+				createNotificationEvent(memberRequest);
+			}
+			
 		}
 		// END CHANGE
 	}
@@ -384,7 +398,7 @@ public class InviteMembersPortlet extends MVCPortlet {
 						receiverUser.getFullName(), 
 						user.getFullName(),
 						workspace.getDescriptiveName(), // translation needed? 
-						getNotificationConfigURL(themeDisplay, receiverUser)
+						UserNotificationHelper.getConfigURL(themeDisplay, receiverUser)
 					});
 		
 		// send mail
@@ -406,31 +420,28 @@ public class InviteMembersPortlet extends MVCPortlet {
 		MailServiceUtil.sendEmail(mailMessage);
 	}
 	
-	private String getNotificationConfigURL(
-			ThemeDisplay themeDisplay, User user)
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
+	private void createNotificationEvent (MemberRequest memberRequest) 
+			throws PortalException, SystemException {
+		// [$MEMBER_REQUEST_USER$] hat Ihre Einladung [$MEMBER_REQUEST_GROUP$] beizutreten angenommen.
 		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
+		JSONObject notificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject();
 
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
+		notificationEventJSONObject.put(
+			"classPK", memberRequest.getMemberRequestId());
+		notificationEventJSONObject.put(
+			"userId", memberRequest.getReceiverUserId());
+
+		NotificationEvent notificationEvent =
+			NotificationEventFactoryUtil.createNotificationEvent(
+				System.currentTimeMillis(), PortletKeys.SO_INVITE_MEMBERS,
+				notificationEventJSONObject);
+
+		notificationEvent.setDeliveryRequired(0);
+
+		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+				memberRequest.getUserId(), notificationEvent);
+		
 	}
 	
 	private static Log _log = LogFactoryUtil.getLog(InviteMembersPortlet.class);

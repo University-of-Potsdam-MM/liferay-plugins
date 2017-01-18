@@ -5,12 +5,13 @@
 	<portlet>
 		<portlet-name>my-custom-pages</portlet-name>
 		<icon>/icon.png</icon>
-		<!-- <user-notification-definitions>notifications/custompages_notifications_definition.xml</user-notification-definitions> -->
+		<!-- <user-notification-definitions>notifications/custompages_notifications_definition.xml</user-notification-definitions> --> <!-- removed to prevent duplicate entries in notification config -->
     	<user-notification-handler-class>de.unipotsdam.elis.custompages.notifications.MyCustomPagesNotificationHandler</user-notification-handler-class>		
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>my-custom-pages-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource> <!-- needed to use process action  -->
 	</portlet>
 	<portlet>
 		<portlet-name>other-custom-pages</portlet-name>
@@ -20,6 +21,7 @@
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>other-custom-pages-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource> <!-- needed to use process action  -->
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

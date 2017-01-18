@@ -31,15 +31,18 @@ import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.MembershipRequestCommentsException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutTypePortlet;
@@ -54,11 +57,11 @@ import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.ResourceActionsUtil;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.base.MembershipRequestLocalServiceBaseImpl;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
@@ -388,6 +391,16 @@ public class MembershipRequestLocalServiceImpl
 				// send mail for pending request
 				sendMail(userId, membershipRequest, serviceContext);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(userId,
+					PortletKeys.SITE_MEMBERSHIPS_ADMIN, 0,
+					MembershipRequestConstants.STATUS_PENDING,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+
+				sendNotificationEvent(userId, membershipRequest, serviceContext,
+						MembershipRequestConstants.STATUS_PENDING);
+			}
+			
 		} else {
 			// isDeliver checks if user enabled mails for reply in notifications			
 			if ((UserNotificationManagerUtil.isDeliver(userId,
@@ -397,6 +410,16 @@ public class MembershipRequestLocalServiceImpl
 				// send mail for approved or denied request
 				sendMail(userId, membershipRequest, serviceContext);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(userId,
+					PortletKeys.SITE_MEMBERSHIPS_ADMIN, 0,
+					MembershipRequestConstants.STATUS_DENIED,
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+
+				sendNotificationEvent(userId, membershipRequest, serviceContext, 
+						MembershipRequestConstants.STATUS_DENIED);
+			}
+			
 		}
 		// END CHANGE
 		
@@ -421,6 +444,38 @@ public class MembershipRequestLocalServiceImpl
 		if (Validator.isNull(comments) || Validator.isNumber(comments)) {
 			throw new MembershipRequestCommentsException();
 		}
+	}
+	
+	private void sendNotificationEvent(long userId, MembershipRequest membershipRequest, 
+			ServiceContext serviceContext, int status)
+		throws PortalException, SystemException {
+		
+		JSONObject notificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject();
+
+		if (status == MembershipRequestConstants.STATUS_PENDING)
+			notificationEventJSONObject.put("actionRequired", true);
+		
+		notificationEventJSONObject.put(
+			"classPK", membershipRequest.getMembershipRequestId());
+		notificationEventJSONObject.put(
+			"userId", membershipRequest.getUserId());
+		/* 
+		 * same notificationhandler is used for membershipRequests, 
+		 * deleting workspaces and adding users to workspaces. So it
+		 * is necessary to know which kind of event will be interpreted. 
+		 */
+		notificationEventJSONObject.put("membershipRequest", true); 
+		
+		NotificationEvent notificationEvent =
+			NotificationEventFactoryUtil.createNotificationEvent(
+				System.currentTimeMillis(), PortletKeys.SITE_MEMBERSHIPS_ADMIN,
+				notificationEventJSONObject);
+
+		notificationEvent.setDeliveryRequired(0);
+
+		UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+			userId, notificationEvent);
 	}
 	
 	/**
@@ -552,7 +607,7 @@ public class MembershipRequestLocalServiceImpl
 	private String getMemberManagementURL (ServiceContext serviceContext, User user, Group workspace) 
 			throws WindowStateException, PortletModeException, SystemException, PortalException {
 		
-		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
+//		Company company = CompanyLocalServiceUtil.getCompany(user.getCompanyId());
 		
 		String portalURL = serviceContext.getPortalURL();
 		
@@ -602,19 +657,25 @@ public class MembershipRequestLocalServiceImpl
 		if (!layouts.isEmpty())
 			layout = layouts.get(0);
 
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					serviceContext.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
+		if (layout == null) {
+			// Notifications Portlet was not found, so display on first page
+			// if there is a page, else no link can be created
+			if (!layouts.isEmpty())
+				layout = layouts.get(0);
+			else
+				return "";
+
+		} 
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				serviceContext.getRequest(), "1_WAR_notificationsportlet",
+				layout.getPlid(), PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "false");
+		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+
+		return myUrl.toString();
 	}
 
 }

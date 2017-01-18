@@ -20,7 +20,15 @@ package com.liferay.notifications.util;
 public interface NotificationsConstants {
 
 	public static final String[] ACTIONABLE_TYPES = {
-		PortletKeys.CONTACTS_CENTER, PortletKeys.SO_INVITE_MEMBERS
+		// add portlets here you want to control via notification requests.
+		// BEGIN CHANGE
+		// added PortletKeys.SITE_MEMBERSHIPS_ADMIN to control workspace join requests, added custompages to handle feedback requests
+//		PortletKeys.CONTACTS_CENTER, PortletKeys.SO_INVITE_MEMBERS
+		PortletKeys.CONTACTS_CENTER, PortletKeys.SO_INVITE_MEMBERS, PortletKeys.SITE_MEMBERSHIPS_ADMIN, "othercustompages_WAR_custompagesportlet", "mycustompages_WAR_custompagesportlet"
+		// END CHANGE
 	};
 
+	// added constants for comment notification type
+	public static final int NOTIFICATION_TYPE_ADD_COMMENT = 3;
+	public static final int NOTIFICATION_TYPE_UPDATE_COMMENT = 4;
 }

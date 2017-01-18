@@ -27,5 +27,11 @@
 			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
+		<delivery-type>
+			<name>website</name>
+			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
+			<default>true</default>
+			<modifiable>true</modifiable>
+		</delivery-type>
 	</definition>
 </user-notification-definitions>

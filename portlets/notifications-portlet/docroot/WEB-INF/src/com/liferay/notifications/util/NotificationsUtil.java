@@ -35,8 +35,12 @@ import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.model.Subscription;
+import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -160,6 +164,43 @@ public class NotificationsUtil {
 		catch (Exception e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * this method returns the plid of the page the contains
+	 * notification portlet.
+	 * @param user
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 */
+	public static long getNotificationPortletPlid(User user) 
+			throws SystemException, PortalException {
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+				user.getGroupId(), true);
+
+		Layout layout = null;
+
+		// iterate over all layouts of workspace too get all portlets
+		for (Layout possibleLayout : layouts) {
+			LayoutTypePortlet layoutTypePortlet = (LayoutTypePortlet) possibleLayout
+					.getLayoutType();
+			List<String> actualPortletList = layoutTypePortlet.getPortletIds();
+
+			// iterate over all portlets to find notification portlet
+			for (String portletId : actualPortletList) {
+				if (PortletKeys.NOTIFICATIONS.equals(portletId)) {
+					layout = possibleLayout;
+					break;
+				}
+			}
+		}
+
+		if (layout != null)
+			return layout.getPlid();
+
+		return 0;
 	}
 
 	public static List<UserNotificationEvent>

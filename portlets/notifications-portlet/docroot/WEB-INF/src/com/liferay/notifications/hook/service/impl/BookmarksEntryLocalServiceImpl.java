@@ -19,6 +19,10 @@ import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
@@ -28,6 +32,7 @@ import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
@@ -71,29 +76,31 @@ public class BookmarksEntryLocalServiceImpl
 		String entryURL = NotificationsUtil.getEntryURL(
 			assetRenderer, PortletKeys.BOOKMARKS, serviceContext);
 
-		if (Validator.isNotNull(entryURL)) {
-			NotificationsUtil.sendNotificationEvent(
-				bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
-				_BOOKMARKS_FOLDER_CLASS_NAME, bookmarksEntry.getFolderId(),
-				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY,
-				getSubscribersOVPs(
-					bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
-					bookmarksEntry.getFolderId()),
-				userId);
-			
-			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
-					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-					UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY,
-					getSubscribersOVPs(
-						bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
-						bookmarksEntry.getFolderId()),
-					userId, serviceContext, bookmarksEntry.getFolderId()
-					);
-		}
+		// removed cause campus.UP does not use folders for bookmarks
+//		if (Validator.isNotNull(entryURL)) {
+//			NotificationsUtil.sendNotificationEvent(
+//				bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+//				_BOOKMARKS_FOLDER_CLASS_NAME, bookmarksEntry.getFolderId(),
+//				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//				UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY,
+//				getSubscribersOVPs(
+//					bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
+//					bookmarksEntry.getFolderId()),
+//				userId);
+//			
+//			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+//					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//					UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY,
+//					getSubscribersOVPs(
+//						bookmarksEntry, _BOOKMARKS_FOLDER_CLASS_NAME,
+//						bookmarksEntry.getFolderId()),
+//					userId, serviceContext, bookmarksEntry.getFolderId()
+//					);
+//		}
 
 		// send an email to all users that have access to bookmark (same workspace or shared page)
-		emailNotifyAllUsers(bookmarksEntry, serviceContext, entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY);
+		notifyAllUsers(bookmarksEntry, serviceContext, entryURL, 
+				UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY, assetRenderer);
 		
 		return bookmarksEntry;
 	}
@@ -114,30 +121,32 @@ public class BookmarksEntryLocalServiceImpl
 		String entryURL = NotificationsUtil.getEntryURL(
 			assetRenderer, PortletKeys.BOOKMARKS, serviceContext);
 
-		if (Validator.isNotNull(entryURL)) {
-			NotificationsUtil.sendNotificationEvent(
-				bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
-				_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
-				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
-				getSubscribersOVPs(
-					bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
-					bookmarksEntry.getEntryId()),
-				userId);
-			
-			// TODO does not work
-			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
-					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-					UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
-					getSubscribersOVPs(
-						bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
-						bookmarksEntry.getFolderId()),
-					userId, serviceContext, bookmarksEntry.getFolderId()
-					);
-		}
+		// removed cause campus.UP does not use folders for bookmarks
+//		if (Validator.isNotNull(entryURL)) {
+//			NotificationsUtil.sendNotificationEvent(
+//				bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+//				_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
+//				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//				UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
+//				getSubscribersOVPs(
+//					bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
+//					bookmarksEntry.getEntryId()),
+//				userId);
+//			
+//			// does not work
+//			EmailHelper.prepareEmail(bookmarksEntry.getGroupId(), bookmarksEntry.getCompanyId(), PortletKeys.BOOKMARKS,
+//					assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//					UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY,
+//					getSubscribersOVPs(
+//						bookmarksEntry, _BOOKMARKS_ENTRY_CLASS_NAME,
+//						bookmarksEntry.getFolderId()),
+//					userId, serviceContext, bookmarksEntry.getFolderId()
+//					);
+//		}
 
 		// send an email to all users that have access to bookmark (same workspace or shared page)
-		emailNotifyAllUsers(bookmarksEntry, serviceContext, entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY);
+		notifyAllUsers(bookmarksEntry, serviceContext, entryURL, 
+				UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY, assetRenderer);
 		
 		return bookmarksEntry;
 	}
@@ -184,8 +193,8 @@ public class BookmarksEntryLocalServiceImpl
 		return subscribersOVPs;
 	}
 	
-	private void emailNotifyAllUsers (BookmarksEntry bookmarksEntry, ServiceContext serviceContext,
-			String entryURL, int notificationType) 
+	private void notifyAllUsers (BookmarksEntry bookmarksEntry, ServiceContext serviceContext,
+			String entryURL, int notificationType, AssetRenderer assetRenderer) 
 		throws SystemException, PortalException {
 		
 		// get possible workspace
@@ -224,6 +233,10 @@ public class BookmarksEntryLocalServiceImpl
 						throw new SystemException(e);
 					}
 				}
+				
+				createNotificationEvent(_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
+											assetRenderer.getTitle(serviceContext.getLocale()), 
+											entryURL, notificationType, user.getUserId());
 			}
 		} else {
 			/* Because subscription of bookmark-folders is currently not working
@@ -251,7 +264,37 @@ public class BookmarksEntryLocalServiceImpl
 						throw new SystemException(e);
 					}
 				}
+				
+				createNotificationEvent(_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
+						assetRenderer.getTitle(serviceContext.getLocale()), 
+						entryURL, notificationType, user.getUserId());
 			}
+		}
+	}
+	
+	private void createNotificationEvent (String className, long classPK,
+			String entryTitle, String entryURL, int notificationType, long userId) 
+		throws PortalException, SystemException, IllegalArgumentException {
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		
+		jsonObject.put("className", className);
+		jsonObject.put("classPK", classPK);
+		jsonObject.put("entryTitle", entryTitle);
+		jsonObject.put("entryURL", entryURL);
+		jsonObject.put("notificationType", notificationType);
+		jsonObject.put("userId", userId);
+		
+		if(UserNotificationManagerUtil.isDeliver(
+				userId,
+				PortletKeys.BOOKMARKS, 0, 
+				notificationType,
+				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
+		
+			NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
+					System.currentTimeMillis(), PortletKeys.BOOKMARKS, jsonObject);
+			notificationEvent.setDeliveryRequired(0);
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(userId, notificationEvent);
 		}
 	}
 

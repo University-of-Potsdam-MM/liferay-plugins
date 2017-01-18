@@ -26,6 +26,7 @@ import com.liferay.contacts.util.ContactsUtil;
 import com.liferay.contacts.util.PortletKeys;
 import com.liferay.contacts.util.SocialRelationConstants;
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.notifications.util.UserNotificationHelper;
 import com.liferay.portal.AddressCityException;
 import com.liferay.portal.AddressStreetException;
 import com.liferay.portal.AddressZipException;
@@ -1095,7 +1096,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					new String [] {
 						recipient.getFullName(), sender.getFullName(),
 						getNotificationRequestURL(themeDisplay, recipient), 
-						getNotificationConfigURL(themeDisplay, recipient),
+						UserNotificationHelper.getConfigURL(themeDisplay, recipient),
 					});
 			
 			String fromName = PrefsPropsUtil.getString(
@@ -1286,32 +1287,6 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		UsersAdminUtil.updateWebsites(
 			Contact.class.getName(), user.getContactId(), websites);
-	}
-
-	private static String getNotificationConfigURL (ThemeDisplay themeDisplay, User user) 
-			throws WindowStateException, PortletModeException, SystemException, PortalException {
-		
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
-				user.getGroupId(), true);
-		
-		Layout layout  = null;
-		
-		if (!layouts.isEmpty())
-			layout = layouts.get(0);
-
-		if (layout != null) {
-		
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					themeDisplay.getRequest(), "1_WAR_notificationsportlet", layout.getPlid(),
-					PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-			
-			return myUrl.toString();
-		}
-		return "";
 	}
 	
 	private static String getNotificationRequestURL (ThemeDisplay themeDisplay, User user) 

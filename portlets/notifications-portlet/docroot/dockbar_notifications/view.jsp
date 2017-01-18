@@ -22,8 +22,11 @@
 	int newUserNotificationsCount = NotificationsUtil.getDeliveredUserNotificationEventsCount(themeDisplay.getUserId(), false);
 	int unreadUserNotificationsCount = NotificationsUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
 
-	long notificationsPlid = themeDisplay.getPlid();
-
+	long notificationsPlid = NotificationsUtil.getNotificationPortletPlid(themeDisplay.getUser()); // use plid of layout where NotificationsPortlet is located
+	// if plid is 0 no page was found, so place portlet in current page
+	if (notificationsPlid == 0)
+		notificationsPlid = themeDisplay.getPlid();
+	
 	if (layout.isTypeControlPanel()) {
 		notificationsPlid = LayoutLocalServiceUtil.getDefaultPlid(user.getGroupId(), true);
 

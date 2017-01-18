@@ -42,7 +42,11 @@ import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -67,6 +71,7 @@ import com.liferay.portal.service.UserGroupGroupRoleServiceUtil;
 import com.liferay.portal.service.UserGroupRoleServiceUtil;
 import com.liferay.portal.service.UserGroupServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.struts.PortletAction;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -262,6 +267,14 @@ public class EditGroupAssignmentsAction extends PortletAction {
 				
 				sendMail(userId, groupId, themeDisplay);
 			}
+			
+			if (UserNotificationManagerUtil.isDeliver(userId,
+					PortletKeys.SITE_MEMBERSHIPS_ADMIN, 0,
+					3, // constants 0..2 already in use, so 3 is used for this case
+					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+				
+				sendNotificationEvent(userId, groupId);
+			}
 		}
 		// END CHANGE
 	}
@@ -368,6 +381,49 @@ public class EditGroupAssignmentsAction extends PortletAction {
 	}
 	
 	/**
+	 * send website notification to user that she was added to workspace
+	 * @param userId
+	 * @param groupId - id of workspace
+	 * @throws PortalException
+	 * @throws SystemException
+	 */
+	private void sendNotificationEvent(long userId, long groupId)
+			throws PortalException, SystemException {
+			
+			Group workspace = GroupLocalServiceUtil.fetchGroup(groupId);
+			if (workspace == null) {
+				System.err.println("workspace is null");
+				return;
+			}
+			
+			JSONObject notificationEventJSONObject =
+				JSONFactoryUtil.createJSONObject();
+
+			notificationEventJSONObject.put(
+				"userId", userId);
+			notificationEventJSONObject.put(
+				"workspaceName", workspace.getDescriptiveName());
+			notificationEventJSONObject.put(
+					"workspaceDeletion", false);
+			/* 
+			 * same notificationhandler is used for membershipRequests, 
+			 * deleting workspaces and adding users to workspaces. So it
+			 * is necessary to know which kind of event will be interpreted. 
+			 */
+			notificationEventJSONObject.put("membershipRequest", false); 
+			
+			NotificationEvent notificationEvent =
+				NotificationEventFactoryUtil.createNotificationEvent(
+					System.currentTimeMillis(), PortletKeys.SITE_MEMBERSHIPS_ADMIN,
+					notificationEventJSONObject);
+
+			notificationEvent.setDeliveryRequired(0);
+
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
+				userId, notificationEvent);
+		}
+	
+	/**
 	 * This method returns the link to the workspace
 	 * for a given user.
 	 * @param themeDisplay 
@@ -405,18 +461,24 @@ public class EditGroupAssignmentsAction extends PortletAction {
 		if (!layouts.isEmpty())
 			layout = layouts.get(0);
 
-		if (layout != null) {
-			
-			PortletURL myUrl = PortletURLFactoryUtil.create(
-					themeDisplay.getRequest(), "1_WAR_notificationsportlet",
-					layout.getPlid(), PortletRequest.RENDER_PHASE);
-			myUrl.setWindowState(WindowState.MAXIMIZED);
-			myUrl.setPortletMode(PortletMode.VIEW);
-			myUrl.setParameter("actionable", "false");
-			myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
-	
-			return myUrl.toString();
-		}
-		return "";
+		if (layout == null) {
+			// Notifications Portlet was not found, so display on first page
+			// if there is a page, else no link can be created
+			if (!layouts.isEmpty())
+				layout = layouts.get(0);
+			else
+				return "";
+
+		} 
+		
+		PortletURL myUrl = PortletURLFactoryUtil.create(
+				themeDisplay.getRequest(), "1_WAR_notificationsportlet",
+				layout.getPlid(), PortletRequest.RENDER_PHASE);
+		myUrl.setWindowState(WindowState.MAXIMIZED);
+		myUrl.setPortletMode(PortletMode.VIEW);
+		myUrl.setParameter("actionable", "false");
+		myUrl.setParameter("mvcPath", "/notifications/configuration.jsp");
+
+		return myUrl.toString();
 	}
 }

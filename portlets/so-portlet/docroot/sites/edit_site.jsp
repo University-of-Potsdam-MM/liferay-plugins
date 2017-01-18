@@ -301,6 +301,11 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 								}
 
 								setTimeout(callback, 1000);
+								
+								// BEGIN HOOK CHANGE
+								// open workspace after creation #662
+								location.replace(data.workspaceURL);
+								// END HOOK CHANGE
 							}
 							else if (data.result == 'failure') {
 								var errorMsg = form.one('.portlet-msg-error');
