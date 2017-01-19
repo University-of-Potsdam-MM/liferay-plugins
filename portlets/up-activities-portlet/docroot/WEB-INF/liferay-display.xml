@@ -5,4 +5,7 @@
 	<category name="category.notification">
 		<portlet id="up-activities" />
 	</category>
+	<category name="category.hidden">
+		<portlet id="activities-admin"></portlet>
+	</category>
 </display>
