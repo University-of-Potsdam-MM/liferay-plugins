@@ -25,17 +25,21 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
+import com.liferay.portlet.blogs.model.BlogsEntry;
+import com.liferay.portlet.journal.model.JournalArticle;
 import com.liferay.portlet.messageboards.model.MBCategory;
 import com.liferay.portlet.messageboards.model.MBCategoryConstants;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
 import com.liferay.portlet.messageboards.service.MBMessageLocalService;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceWrapper;
+import com.liferay.portlet.wiki.model.WikiPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,13 +81,13 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceWrapper {
 			
 			String portletKey = StringPool.BLANK;
 			// notification events for comments
-			if (mbMessage.getClassNameId() == 20007)
+			if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(BlogsEntry.class.getName()))
 				portletKey = PortletKeys.BLOGS; 
 			
-			if (mbMessage.getClassNameId() == 20016)
+			if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(WikiPage.class.getName()))
 				portletKey = PortletKeys.WIKI; 
 			
-			if (mbMessage.getClassNameId() == 20109)
+			if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(JournalArticle.class.getName()))
 				portletKey = PortletKeys.JOURNAL; 
 			
 			if (portletKey.equals(StringPool.BLANK))

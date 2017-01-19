@@ -28,6 +28,7 @@ import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.Subscription;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -95,7 +96,7 @@ public class EmailHelper {
 				
 				// check to which entry the comment belongs (Blog, Wiki, ...)
 				// comments cannot be added to: bookmarks, ressources, journal, messageboard
-				if (mbMessage.getClassNameId() == 20007) {
+				if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(BlogsEntry.class.getName())) {
 					// This comment was made to a blogsentry
 					
 					// Send email only if user allows it
@@ -111,7 +112,7 @@ public class EmailHelper {
 					}
 				}
 
-				if (mbMessage.getClassNameId() == 20016) {
+				if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(WikiPage.class.getName())) {
 					// This comment was made to a wikipage
 					
 					// Send email only if user allows it
@@ -128,7 +129,7 @@ public class EmailHelper {
 				}
 				
 				// Journal Mail
-				if (mbMessage.getClassNameId() == 20109) {
+				if (mbMessage.getClassNameId() == ClassNameLocalServiceUtil.getClassNameId(JournalArticle.class.getName())) {
 					// This comment was made to a journal
 					
 					// Send email only if user allows it
