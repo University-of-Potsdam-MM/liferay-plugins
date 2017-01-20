@@ -37,6 +37,9 @@
 		userNotificationDefinitionsMap.putAll(UserNotificationManagerUtil.getUserNotificationDefinitions());
 
 		for (Map.Entry<String, List<UserNotificationDefinition>> entry : userNotificationDefinitionsMap.entrySet()) {
+			// microblogs is not used, so just skip it
+			if (entry.getKey().equals("1_WAR_microblogsportlet"))
+				continue;
 		%>
 
 			<table class="notification-deliveries table table-condensed">
