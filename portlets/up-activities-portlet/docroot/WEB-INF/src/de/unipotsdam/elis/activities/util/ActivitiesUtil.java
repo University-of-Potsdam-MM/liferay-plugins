@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
@@ -46,6 +48,78 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
  */
 public class ActivitiesUtil {
 
+	private static boolean isClassNameValueContaining(long classNameId, String s) {
+		
+		String className = PortalUtil.getClassName(classNameId);
+		
+		if (className.contains(s))
+			return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Get css class for campus.UP activities.
+	 * @param classNameId
+	 * @return
+	 */
+	public static String getActivityCssClass (long classNameId) {
+		
+		if (ActivitiesUtil.isClassNameValueContaining(classNameId, "TasksEntry"))
+			return "task";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "Calendar")) 
+			return "calendar";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "Journal"))
+			return "text";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "BlogsEntry")) // contains is case sensitive so MircoblogsEntry should not be a problem here
+			return "blog";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "DLFile"))
+			return "upload";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "BookmarksEntry"))
+			return "bookmark";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "Polls"))
+			return "poll";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "WikiPage"))
+			return "wiki";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "MBDiscussion")) // comments are illustrated as forum discussions
+			return "comment";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "MicroblogsEntry")) 
+			return "microblog";
+		else if (ActivitiesUtil.isClassNameValueContaining(classNameId, "MBMessage") 
+				|| (ActivitiesUtil.isClassNameValueContaining(classNameId, "MBThread")))
+			return "forum";
+		
+		return "";
+	}
+	
+	/**
+	 * Get css class for moodle activities
+	 * @param moodleSocialActivityType
+	 * @return
+	 */
+	public static String getMoodleSocialActivityCssClass (String moodleSocialActivityType) {
+		
+		// some replacements to group or rename moodle activities
+		if (moodleSocialActivityType.equals("assign"))
+			moodleSocialActivityType = "task";
+		if (moodleSocialActivityType.equals("scheduler"))
+			moodleSocialActivityType = "calender";
+		if ((moodleSocialActivityType.equals("survey")) || (moodleSocialActivityType.equals("choice")))
+			moodleSocialActivityType = "poll";
+		if (moodleSocialActivityType.equals("workshop"))
+			moodleSocialActivityType = "feedback";
+		if (moodleSocialActivityType.equals("scrom"))
+			moodleSocialActivityType = "packet";
+		if (moodleSocialActivityType.equals("adobeconnect"))
+			moodleSocialActivityType = "adobe";
+		if (moodleSocialActivityType.equals("lesson"))
+			moodleSocialActivityType = "lecture";
+		if (moodleSocialActivityType.equals("quiz"))
+			moodleSocialActivityType = "test";
+		
+		return moodleSocialActivityType;
+	}
+	
 	public static Object[] getCommentsClassNameAndClassPK(SocialActivitySet activitySet) throws Exception {
 
 		String className = activitySet.getClassName();

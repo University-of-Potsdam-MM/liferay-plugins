@@ -17,6 +17,7 @@
  */
 --%>
 
+<%@page import="de.unipotsdam.elis.activities.util.ActivitiesUtil"%>
 <%
 
 for (SocialActivitySet activitySet : results) {
@@ -44,29 +45,11 @@ for (SocialActivitySet activitySet : results) {
 		String moodleSocialActivityType = data.getJSONObject("object").getJSONArray("type").getString(0);
 		
 		originCssClass = "moodle";
-		
-		// some replacements to group or rename moodle activities
-		if (moodleSocialActivityType.equals("assign"))
-			moodleSocialActivityType = "task";
-		if (moodleSocialActivityType.equals("scheduler"))
-			moodleSocialActivityType = "calender";
-		if ((moodleSocialActivityType.equals("survey")) || (moodleSocialActivityType.equals("choice")))
-			moodleSocialActivityType = "poll";
-		if (moodleSocialActivityType.equals("workshop"))
-			moodleSocialActivityType = "feedback";
-		if (moodleSocialActivityType.equals("scrom"))
-			moodleSocialActivityType = "packet";
-		if (moodleSocialActivityType.equals("adobeconnect"))
-			moodleSocialActivityType = "adobe";
-		if (moodleSocialActivityType.equals("lesson"))
-			moodleSocialActivityType = "lecture";
-		if (moodleSocialActivityType.equals("quiz"))
-			moodleSocialActivityType = "test";
-		
-		socialActivityCssClass = moodleSocialActivityType;
 
-	} else if (activitySet.getClassPK() == 60510) { // dirty, better solution?
+		socialActivityCssClass = ActivitiesUtil.getMoodleSocialActivityCssClass(moodleSocialActivityType);
 		
+	} else if (PortalUtil.getClassName(activitySet.getClassNameId()).equals(Layout.class.getName())){	
+		// Layoutclass found so activity belongs to custompage
 		// check type of custompage to set cssClass
 		switch (activitySet.getType()) {
 		case ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_PUBLISHED:
@@ -88,36 +71,8 @@ for (SocialActivitySet activitySet : results) {
 	
 	} else {
 		
-		// check classNameIds to set desired css class 
-		if (activitySet.getClassNameId() == 20717)
-			socialActivityCssClass = "task";
-		else if (activitySet.getClassNameId() == 20444)
-			socialActivityCssClass = "calendar";
-		else if ((activitySet.getClassNameId() == 20109) 
-				|| (activitySet.getClassNameId() == 20010
-				|| (activitySet.getClassNameId() == 20011)
-				|| (activitySet.getClassNameId() == 20012)
-				|| (activitySet.getClassNameId() == 20013)))
-			socialActivityCssClass = "text";
-		else if(activitySet.getClassNameId() == 20007)
-			socialActivityCssClass = "blog";
-		else if((activitySet.getClassNameId() == 20011) || (activitySet.getClassNameId() == 20012))
-			socialActivityCssClass = "upload";
-		else if(activitySet.getClassNameId() == 20008)
-			socialActivityCssClass = "bookmark";
-		else if((activitySet.getClassNameId() == 20124) 
-				|| (activitySet.getClassNameId() == 20125
-				|| (activitySet.getClassNameId() == 20126)))
-			socialActivityCssClass = "poll";
-		else if(activitySet.getClassNameId() == 20016)
-			socialActivityCssClass = "wiki";
-		else if(activitySet.getClassNameId() == -1) // TODO are comments microblogs or messageboards?
-			socialActivityCssClass = "comment";
-		else if(activitySet.getClassNameId() == 20658)
-			socialActivityCssClass = "microblog";
-		else if((activitySet.getClassNameId() == 20014) || (activitySet.getClassNameId() == 20015))
-			socialActivityCssClass = "forum";
-		
+		// check classNameIds to set desired css class
+		socialActivityCssClass = ActivitiesUtil.getActivityCssClass(activitySet.getClassNameId());
 	}
 	
 %>
@@ -151,7 +106,6 @@ for (SocialActivitySet activitySet : results) {
 		<div class="activity-block">
 
 			<%= activityFeedEntry.getBody() %>
-
 			<div class="activity-footer">
 				<c:if test="<%=!Validator.equals(activitySet.getClassName(), Layout.class.getName()) &&
 						!Validator.equals(activitySet.getClassName(), MBMessage.class.getName()) %>">
@@ -204,7 +158,7 @@ for (SocialActivitySet activitySet : results) {
 
 					<%@ include file="/html/view_comments.jspf" %>
 				</c:if>
-			</div>
+			</div>		
 		</div>
 	</div>
 
