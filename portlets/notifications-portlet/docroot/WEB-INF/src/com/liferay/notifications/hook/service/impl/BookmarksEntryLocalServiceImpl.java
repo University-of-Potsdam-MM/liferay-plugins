@@ -236,7 +236,7 @@ public class BookmarksEntryLocalServiceImpl
 				
 				createNotificationEvent(_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
 											assetRenderer.getTitle(serviceContext.getLocale()), 
-											entryURL, notificationType, user.getUserId());
+											entryURL, notificationType, user.getUserId(), bookmarksEntry.getUserId());
 			}
 		} else {
 			/* Because subscription of bookmark-folders is currently not working
@@ -267,13 +267,14 @@ public class BookmarksEntryLocalServiceImpl
 				
 				createNotificationEvent(_BOOKMARKS_ENTRY_CLASS_NAME, bookmarksEntry.getEntryId(),
 						assetRenderer.getTitle(serviceContext.getLocale()), 
-						entryURL, notificationType, user.getUserId());
+						entryURL, notificationType, user.getUserId(), bookmarksEntry.getUserId());
 			}
 		}
 	}
 	
 	private void createNotificationEvent (String className, long classPK,
-			String entryTitle, String entryURL, int notificationType, long userId) 
+			String entryTitle, String entryURL, int notificationType, long userId, 
+			long senderUserId) 
 		throws PortalException, SystemException, IllegalArgumentException {
 		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
@@ -283,7 +284,7 @@ public class BookmarksEntryLocalServiceImpl
 		jsonObject.put("entryTitle", entryTitle);
 		jsonObject.put("entryURL", entryURL);
 		jsonObject.put("notificationType", notificationType);
-		jsonObject.put("userId", userId);
+		jsonObject.put("userId", senderUserId);
 		
 		if(UserNotificationManagerUtil.isDeliver(
 				userId,
