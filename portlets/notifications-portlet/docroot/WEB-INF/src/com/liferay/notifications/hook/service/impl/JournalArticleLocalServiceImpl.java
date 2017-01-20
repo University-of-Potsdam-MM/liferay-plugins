@@ -19,6 +19,10 @@ import com.liferay.notifications.util.EmailHelper;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.Validator;
@@ -29,6 +33,7 @@ import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
@@ -89,11 +94,12 @@ public class JournalArticleLocalServiceImpl
 		if ((status == WorkflowConstants.STATUS_APPROVED) &&
 			Validator.isNotNull(entryURL)) {
 
-			NotificationsUtil.sendNotificationEvent(
-				article.getCompanyId(), PortletKeys.JOURNAL,
-				_JOURNAL_ARTICLE_CLASS_NAME, article.getId(),
-				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
-				notificationType, getSubscribersOVPs(article), userId);
+			// does not work, cause nobody can subscribe...
+//			NotificationsUtil.sendNotificationEvent(
+//				article.getCompanyId(), PortletKeys.JOURNAL,
+//				_JOURNAL_ARTICLE_CLASS_NAME, article.getId(),
+//				assetRenderer.getTitle(serviceContext.getLocale()), entryURL,
+//				notificationType, getSubscribersOVPs(article), userId);
 			
 			// nobody can subscribe to an article, so prepare mail won't work
 //			EmailHelper.prepareEmail(article.getGroupId(), article.getCompanyId(), PortletKeys.JOURNAL,
@@ -107,15 +113,16 @@ public class JournalArticleLocalServiceImpl
 
 		// send mail for journal in a workspace
 		Group workspace = GroupLocalServiceUtil.fetchGroup(article.getGroupId());
-		
+
 		if (workspace == null)
 			return article;
 
+		// identify real workspace, parentgroup of workspace is 0
+		while (workspace.getParentGroupId() != 0) {
+			workspace = GroupLocalServiceUtil.getGroup(workspace.getParentGroupId());
+		}
+		
 		if (workspace.isSite()) {
-
-			if (workspace.getParentGroupId() != 0) {
-				workspace = GroupLocalServiceUtil.getGroup(workspace.getParentGroupId());
-			}
 			
 			List<User> groupUsers = UserLocalServiceUtil.getGroupUsers(workspace.getGroupId());
 			for (User user : groupUsers) {
@@ -132,6 +139,13 @@ public class JournalArticleLocalServiceImpl
 						throw new SystemException(e);
 					}
 				}
+				
+				// create Notification Event for Journal Article
+				createNotificationEvent(_JOURNAL_ARTICLE_CLASS_NAME, journalArticle.getId(),
+						assetRenderer.getTitle(serviceContext.getLocale()), 
+						entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY, user.getUserId(),
+						journalArticle.getUserId());
+				
 			}
 		} else {
 		
@@ -155,6 +169,12 @@ public class JournalArticleLocalServiceImpl
 						throw new SystemException(e);
 					}
 				}
+				
+				// create Notification Event for Journal Article
+				createNotificationEvent(_JOURNAL_ARTICLE_CLASS_NAME, journalArticle.getId(),
+						assetRenderer.getTitle(serviceContext.getLocale()), 
+						entryURL, UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY, user.getUserId(),
+						journalArticle.getUserId());
 			}
 		}
 		return journalArticle;
@@ -178,6 +198,44 @@ public class JournalArticleLocalServiceImpl
 		AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 			_JOURNAL_ARTICLE_CLASS_NAME);
 
+	/**
+	 * create NotificationEvent for Journal (Text-Image-Editor).
+	 * @param className
+	 * @param classPK
+	 * @param entryTitle
+	 * @param entryURL
+	 * @param notificationType
+	 * @param userId
+	 * @throws PortalException
+	 * @throws SystemException
+	 * @throws IllegalArgumentException
+	 */
+	private void createNotificationEvent (String className, long classPK,
+			String entryTitle, String entryURL, int notificationType, long userId, long senderUserId) 
+		throws PortalException, SystemException, IllegalArgumentException {
+		
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+		
+		jsonObject.put("className", className);
+		jsonObject.put("classPK", classPK);
+		jsonObject.put("entryTitle", entryTitle);
+		jsonObject.put("entryURL", entryURL);
+		jsonObject.put("notificationType", notificationType);
+		jsonObject.put("userId", senderUserId);
+		
+		if(UserNotificationManagerUtil.isDeliver(
+				userId,
+				PortletKeys.JOURNAL, 0, 
+				notificationType,
+				UserNotificationDeliveryConstants.TYPE_WEBSITE)){
+		
+			NotificationEvent notificationEvent = NotificationEventFactoryUtil.createNotificationEvent(
+					System.currentTimeMillis(), PortletKeys.JOURNAL, jsonObject);
+			notificationEvent.setDeliveryRequired(0);
+			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(userId, notificationEvent);
+		}
+	}
+	
 	private static final String _JOURNAL_ARTICLE_CLASS_NAME =
 		JournalArticle.class.getName();
 

@@ -853,11 +853,11 @@ public class EmailHelper {
 		MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
 
 		// send mail
-		System.out.println("FROM: "+from.getAddress());
-		System.out.println("TO: "+to.getAddress());
-		System.out.println(subject);
-		System.out.println(body);
-//		MailServiceUtil.sendEmail(mailMessage);
+//		System.out.println("FROM: "+from.getAddress());
+//		System.out.println("TO: "+to.getAddress());
+//		System.out.println(subject);
+//		System.out.println(body);
+		MailServiceUtil.sendEmail(mailMessage);
 	}
 	
 	private static String getPortalURL (long companyId) 
