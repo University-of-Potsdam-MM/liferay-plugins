@@ -14,6 +14,7 @@
  */
 --%>
 
+<%@page import="com.liferay.portal.kernel.language.LanguageUtil"%>
 <%@ include file="/init.jsp" %>
 
 <div class="manage-notifications-content">
@@ -21,12 +22,17 @@
 		<div class="title">
 			<div class="receive-notification">
 				<c:choose>
+					<%--  
 					<c:when test="<%= UserNotificationDeliveryLocalServiceUtil.getUserNotificationDeliveriesCount() > 0 %>">
 						<span><liferay-ui:message key="receive-a-notification-when-someone" /></span>
 					</c:when>
 					<c:otherwise>
 						<span><liferay-ui:message key="there-are-no-available-options-to-configure" /></span>
 					</c:otherwise>
+					--%>
+					<c:when test="<%= UserNotificationDeliveryLocalServiceUtil.getUserNotificationDeliveriesCount() == 0 %>">
+						<span><liferay-ui:message key="there-are-no-available-options-to-configure" /></span>
+					</c:when>
 				</c:choose>
 			</div>
 		</div>
@@ -54,7 +60,8 @@
 
 					<tr>
 						<td class="span8">
-							<liferay-ui:message key="<%= userNotificationDefinition.getDescription() %>" />
+							<%-- <liferay-ui:message key="<%= userNotificationDefinition.getDescription() %>" /> --%>
+							<liferay-ui:message key="<%= LanguageUtil.get(locale, \"receive-a-notification-when-someone\") + \" \" + LanguageUtil.get(locale, userNotificationDefinition.getDescription()) %>" />
 						</td>
 						<td class="span1">
 
