@@ -56,25 +56,30 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 			'liferayStyles',
 			[
 
+			// BEGIN HOOK CHANGE 
 			// Block Styles
-
 			{name: 'Normal', element: 'p'},
-			{name: 'Heading 1', element: 'h1'},
-			{name: 'Heading 2', element: 'h2'},
-			{name: 'Heading 3', element: 'h3'},
-			{name: 'Heading 4', element: 'h4'},
+			{name: 'Heading 1', element: 'h1', attributes: {'class':'editor-h1'}},
+			{name: 'Heading 2', element: 'h2', attributes: {'class':'editor-h2'}},
+			{name: 'Heading 3', element: 'h3', attributes: {'class':'editor-h3'}},
+			{name: 'Heading 4', element: 'h4', attributes: {'class':'editor-h4'}},
 
 			// Special classes
 
-			{name: 'Preformatted Text', element:'pre'},
+	
 			{name: 'Cited Work', element:'cite'},
 			{name: 'Computer Code', element:'code'},
 
 			// Custom styles
 
-			{name: 'Info Message', element: 'div', attributes: {'class': 'portlet-msg-info'}},
-			{name: 'Alert Message', element: 'div', attributes: {'class': 'portlet-msg-alert'}},
-			{name: 'Error Message', element: 'div', attributes: {'class': 'portlet-msg-error'}}
+			{name: 'Yellow box', element: 'div', attributes: {'class': 'portlet-msg-info'}},
+			{name: 'Right align', element: 'p', attributes: {'class':'editor-rightalign'}},
+			{name: 'Blue text', element: 'span', attributes: {'class':'editor-darkblue'}},
+			{name: 'Grey box', element: 'div', attributes: {'class':'editor-greydiv'}},
+			{name: 'Large link', element: 'div', attributes: {'class':'editor-arrow'}},
+			{name: 'Bue box', element: 'div', attributes: {'class':'editor-lightblue'}},
+			// END HOOK CHANGE
+			
 			]
 		);
 	}
