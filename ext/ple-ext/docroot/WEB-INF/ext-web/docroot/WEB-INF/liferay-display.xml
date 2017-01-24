@@ -60,7 +60,6 @@
 		<portlet id="4_WAR_contactsportlet" />
 	</category>
 	<category name="category.hidden">
-		<portlet id="3" />
 		<portlet id="9" />
 		<portlet id="15" />
 		<portlet id="25" />
