@@ -6,7 +6,7 @@
 		<notification-type>${com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY}</notification-type>
 		<description>receive-a-notification-when-someone-adds-a-new-blog-entry-in-a-blog-you-are-subscribed-to</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
@@ -22,7 +22,7 @@
 		<notification-type>${com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY}</notification-type>
 		<description>receive-a-notification-when-someone-updates-a-blog-entry-you-are-subscribed-to</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
@@ -38,7 +38,7 @@
 		<notification-type>3</notification-type>
 		<description>receive-a-notification-when-someone-posts-a-comment-to-a-blog-entry-you-are-subscribed-to</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
@@ -54,7 +54,7 @@
 		<notification-type>4</notification-type>
 		<description>receive-a-notification-when-someone-updates-a-comment-to-a-blog-entry-you-are-subscribed-to</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>

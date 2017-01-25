@@ -6,7 +6,7 @@
 		<notification-type>${com.liferay.tasks.model.TasksEntryConstants.STATUS_ALL}</notification-type>
 		<description>receive-a-notification-when-someone-assigns-you-a-task</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
@@ -22,7 +22,7 @@
 		<notification-type>8</notification-type>
 		<description>receive-a-notification-when-someone-updates-your-assigned-task</description>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>

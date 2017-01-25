@@ -12,7 +12,7 @@
 			<modifiable>true</modifiable>
 		</delivery-type>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>false</modifiable>
@@ -28,7 +28,7 @@
 			<modifiable>true</modifiable>
 		</delivery-type>
 		<delivery-type>
-			<name>website</name>
+			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
 			<default>true</default>
 			<modifiable>true</modifiable>
