@@ -443,9 +443,12 @@ public class JspHelper {
 						getFeedbackStatusString(portletConfig, themeDisplay.getLocale(),
 								customPageFeedback.getFeedbackStatus()));
 		customPageFeedbackJSON.put(
-				"createDate",
+				"modifiedDate",
 				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
-						customPageFeedback.getCreateDate()));
+						customPageFeedback.getModifiedDate()));
+		customPageFeedbackJSON.put(
+				"modifiedDateInMilliseconds",
+						customPageFeedback.getModifiedDate().getTime());
 		customPageFeedbackJSON.put("inFeedbackProcess",
 				customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
 		customPageFeedbackJSON.put("feedbackDelivered",
@@ -462,10 +465,8 @@ public class JspHelper {
 		customPageFeedbackJSON.put("userName", UserLocalServiceUtil.getUserById(customPage.getUserId()).getFullName());
 		customPageFeedbackJSON.put("title", HtmlUtil.escape(customPage.getName(themeDisplay.getLocale())));
 		customPageFeedbackJSON.put("url", PortalUtil.getLayoutFullURL(customPage, themeDisplay));
-		customPageFeedbackJSON.put(
-				"modifiedDate",
-				FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), themeDisplay.getTimeZone()).format(
-						customPage.getModifiedDate()));
+		customPageFeedbackJSON.put("modifiedDate", FastDateFormatFactoryUtil.getDateTime(themeDisplay.getLocale(), 
+				themeDisplay.getTimeZone()).format(customPage.getModifiedDate()));
 		customPageFeedbackJSON.put("modifiedDateInMilliseconds", customPage.getModifiedDate().getTime());
 		customPageFeedbackJSONArray.put(customPageFeedbackJSON);
 	}
