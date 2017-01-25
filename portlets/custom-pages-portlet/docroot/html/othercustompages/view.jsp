@@ -83,14 +83,27 @@ AUI().use(
                 label: '<%= LanguageUtil.get(pageContext, "custompages-title-column")%>',
                 key: 'title',
                 formatter: function(o) {
-                    return '<a target="_blank" href=' + o.data.url + '>' + o.data.title + '</a> (' + o.data.createDate + ')';
+                    return '<a target="_blank" href=' + o.data.url + '>' + o.data.title + '</a>';
                 },
-                allowHTML: true,
-                sortable: true,
-                sortFn: function(a, b, desc) {
-                    var compare = a.get('title').localeCompare(b.get('title'));
-                    return desc ? compare : -compare
-                }
+                allowHTML: true
+            }, {
+                label: ' ',
+                key: 'visible',
+                formatter: function(o) {
+                    var result = "";
+                    if (Boolean(o.data.hidden)) {
+                        result += A.one('#hiddenIconDiv_' + o.data.plid).get('innerHTML');
+                    } else {
+                        result += A.one('#unhiddenIconDiv_' + o.data.plid).get('innerHTML');
+                    }
+                    return result;
+                },
+        	    sortable: true,
+        	    sortFn: function(a, b, desc) {
+        	        var compare = a.get('title').localeCompare(b.get('title'));
+        	        return desc ? compare : -compare
+        	    },
+                allowHTML: true
             }, {
                 label: '<%= LanguageUtil.get(pageContext, "custompages-creator-column")%>',
                 key: 'creator',
@@ -153,18 +166,17 @@ AUI().use(
                     return result;
                 },
                 allowHTML: true
-            }, {
-                label: '<%= LanguageUtil.get(pageContext, "custompages-hidden-column")%>',
-                key: 'visible',
+            },{
+                label: '<%= LanguageUtil.get(pageContext, "custompages-changes-column")%>',
+                key: 'changes',
                 formatter: function(o) {
-                    var result = "";
-                    if (Boolean(o.data.hidden)) {
-                        result += A.one('#hiddenIconDiv_' + o.data.plid).get('innerHTML');
-                    } else {
-                        result += A.one('#unhiddenIconDiv_' + o.data.plid).get('innerHTML');
-                    }
-                    return result;
+                    return  o.data.modifiedDate;
                 },
+        	    sortable: true,
+        	    sortFn: function(a, b, desc) {
+        	        var compare = parseInt(a.get("modifiedDateInMilliseconds")) - parseInt(b.get("modifiedDateInMilliseconds"));
+        	        return desc ? compare : -compare
+        	    },
                 allowHTML: true
             }],
             data: data,
@@ -174,7 +186,7 @@ AUI().use(
         });
 
         otherCustomPagesDataTable.render("#otherCustomPagesTable");
-        otherCustomPagesDataTable.sort('title');
+        otherCustomPagesDataTable.sort('changes');
         otherCustomPagesData = otherCustomPagesDataTable.data;
         
         <portlet:namespace />initFilter(otherCustomPagesDataTable,false);
