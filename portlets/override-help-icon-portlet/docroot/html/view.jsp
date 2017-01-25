@@ -3,6 +3,9 @@
 <div>
 	<aui:button id="createLanguageKeyButton" name="createLanguageKeyButton" type="button" value="add-language-key"/>
 	
+	<aui:button id="importExportButton" name="importExportButton" type="button" value="import-export"/>
+	<br><br>
+	
 	<portlet:renderURL var="searchURL" >
 		<portlet:param name="mvcPath" value="/html/view.jsp"/>
 	</portlet:renderURL>
@@ -22,6 +25,18 @@ AUI().use('aui-base',
 	            renderURL.setParameter("mvcPath", "/html/popup.jsp");
 	            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
 	            openPopUp(renderURL, '<%=LanguageUtil.get(pageContext, "add-language-key")%>');
+	        });
+	    });
+AUI().use('aui-base',
+	    'liferay-portlet-url',
+	    function(A) {
+	        A.one('#<portlet:namespace />importExportButton').on('click', function(event) {
+	            var renderURL = Liferay.PortletURL.createRenderURL();
+	            renderURL.setWindowState("<%=LiferayWindowState.POP_UP.toString() %>");
+	            renderURL.setPortletMode("<%=LiferayPortletMode.VIEW %>");
+	            renderURL.setParameter("mvcPath", "/html/import_export.jsp");
+	            renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
+	            openPopUp(renderURL, '<%=LanguageUtil.get(pageContext, "import-export")%>');
 	        });
 	    });
 </aui:script>
