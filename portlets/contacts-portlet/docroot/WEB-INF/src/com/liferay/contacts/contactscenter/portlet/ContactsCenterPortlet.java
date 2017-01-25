@@ -405,12 +405,11 @@ public class ContactsCenterPortlet extends MVCPortlet {
 					themeDisplay.getUserId(), type,
 					extraDataJSONObject.toString(), userId);
 
-//			Notifications deactivated, until contacts is redesigned
-//			sendNotificationEvent(socialRequest);
-//			// BEGIN CHANGE
-//			// added send method
-//			sendMail(socialRequest, themeDisplay);
-//			// END CHANGE
+			sendNotificationEvent(socialRequest);
+			// BEGIN CHANGE
+			// added send method
+			sendMail(socialRequest, themeDisplay);
+			// END CHANGE
 		}
 	}
 
