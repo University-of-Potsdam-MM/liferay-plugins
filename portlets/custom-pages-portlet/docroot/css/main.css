@@ -229,6 +229,14 @@ td.feedback-delivered span img {
  	border:1px solid #ededed;
 }
 
+.aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table td {
+	border-left:none;
+}
+
+.aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table td.table-col-title {
+	border-right:none;
+}
+
  .aui  #portlet_mycustompages_WAR_custompagesportlet .table tr.table-even td,
  .aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table te.table-even td {
  	border:1px solid #fff;
@@ -889,20 +897,9 @@ th.table-col-changes div:before {
 	font-weight: normal;
 }
 
-#p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-visible:before  {
+.aui #p_p_id_othercustompages_WAR_custompagesportlet_ .table td.table-col-visible {
+	text-align:center;
 	
-	content: "\f06e ";
-    color: #1b1b1b;
-    font-family: FontAwesome;
-    margin-right: 5px;
-    font-size: 14px;
-    text-shadow: none;
-    outline: none;
-        -webkit-font-smoothing: antialiased;
-    text-rendering: auto;
-    font-style: normal;
-	font-variant: normal;
-	font-weight: normal;
 }
 
 #p_p_id_othercustompages_WAR_custompagesportlet_ th.table-col-feedback div:before {
