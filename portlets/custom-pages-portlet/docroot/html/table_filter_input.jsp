@@ -25,7 +25,7 @@
             </div>
          </div>
       </div>
-      <div class="popover taglib-search-toggle-advanced yui3-widget yui3-widget-positioned yui3-widget-modal bottom yui3-widget-stacked" id="<portlet:namespace />searchadvanced" style="display: none; width: 248px; left: -17px; top: 19.8281px; z-index: 430;">
+      <div class="popover taglib-search-toggle-advanced yui3-widget yui3-widget-positioned yui3-widget-modal bottom yui3-widget-stacked" id="<portlet:namespace />searchadvanced" style="display: none; ">
 			<span><%= LanguageUtil.get(pageContext, "custompages-page-type") %></span>
 			<aui:input id="inputPageTypeNone" name="custompages-page-type-normal-page" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypeNoneCheckbox\", \"true\") %>"></aui:input>
 			<aui:input id="inputPageTypePortfolioPage" name="custompages-page-type-portfolio-page" type="checkbox" onChange="<%= renderResponse.getNamespace()  + \"filterTable(this)\" %>" value="<%= SessionClicks.get(request, renderResponse.getNamespace() + \"inputPageTypePortfolioPageCheckbox\", \"true\") %>"></aui:input>
@@ -59,13 +59,15 @@
 	            if (!e) {
 	                e = new a.Popover({
 	                    align: {
-	                        node: b,
-	                        points: [a.WidgetPositionAlign.TL, a.WidgetPositionAlign.BL]
+	                       node: b,
+	                        // points: [a.WidgetPositionAlign.TL, a.WidgetPositionAlign.BL]
 	                    },
 	                    boundingBox: g,
 	                    position: "bottom",
 	                    visible: false,
 	                    width: 248,
+	                    top: -15,
+	                 
 	                    zIndex: Liferay.zIndex.ALERT
 	                })
 	            }

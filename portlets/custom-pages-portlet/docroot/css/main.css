@@ -28,10 +28,17 @@
  }
  
  .aui #portlet_mycustompages_WAR_custompagesportlet .popover.bottom {
-    margin-top: 25px;
+    margin-top: 53px;
     margin-left: -177px;
+    top:-10px !important;
 }
 
+
+ .aui #portlet_othercustompages_WAR_custompagesportlet .popover.bottom {
+    margin-top: 53px;
+    margin-left: -177px;
+    top:-10px !important;
+}
  
  .aui .popover.bottom .arrow:after {
     top: 1px;
