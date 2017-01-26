@@ -104,12 +104,29 @@ portletURL.setWindowState(WindowState.NORMAL);
 								</c:if>
 
 								<aui:option label="connections" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_TYPE_BI_CONNECTION) %>" value="<%= ContactsConstants.FILTER_BY_TYPE_BI_CONNECTION %>" />
-								<aui:option label="following" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_TYPE_UNI_FOLLOWER) %>" value="<%= ContactsConstants.FILTER_BY_TYPE_UNI_FOLLOWER %>" />
-
+								
+								<%-- BEGIN CHANGE --%>
+								<%-- hide following entry for non-admins --%>
+								<c:if test="<%= permissionChecker.isOmniadmin() %>">
+									<aui:option label="following" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_TYPE_UNI_FOLLOWER) %>" value="<%= ContactsConstants.FILTER_BY_TYPE_UNI_FOLLOWER %>" /> 
+								</c:if>
+								<%-- END CHANGE --%>
+								
 								<c:if test="<%= !showOnlySiteMembers %>">
-									<aui:option label="followers" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_FOLLOWERS) %>" value="<%= ContactsConstants.FILTER_BY_FOLLOWERS %>" />
-									<aui:option label="my-contacts" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_TYPE_MY_CONTACTS) %>" value="<%= ContactsConstants.FILTER_BY_TYPE_MY_CONTACTS %>" />
-
+									<%-- BEGIN CHANGE --%>
+									<%-- hide followers entry for non-admins --%>
+									<c:if test="<%= permissionChecker.isOmniadmin() %>">
+										<aui:option label="followers" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_FOLLOWERS) %>" value="<%= ContactsConstants.FILTER_BY_FOLLOWERS %>" /> 
+									</c:if>
+									<%-- END CHANGE --%>
+									
+									<%-- BEGIN CHANGE --%>
+									<%-- hide my-contacts entry for non-admins --%>
+									<c:if test="<%= permissionChecker.isOmniadmin() %>">
+										<aui:option label="my-contacts" selected="<%= filterBy.equals(ContactsConstants.FILTER_BY_TYPE_MY_CONTACTS) %>" value="<%= ContactsConstants.FILTER_BY_TYPE_MY_CONTACTS %>" />
+									</c:if>		
+									<%-- END CHANGE --%>
+													
 									<%
 									List<Group> groups = user.getGroups();
 									%>
@@ -135,7 +152,11 @@ portletURL.setWindowState(WindowState.NORMAL);
 					</aui:layout>
 				</div>
 
-				<c:if test="<%= !showOnlySiteMembers && !userPublicPage %>">
+				<%-- BEGIN CHANGE --%>
+				<%-- hide add contact button for non-admins --%>
+				<%-- <c:if test="<%= !showOnlySiteMembers && !userPublicPage %>"> --%>
+				<c:if test="<%= !showOnlySiteMembers && !userPublicPage && permissionChecker.isOmniadmin() %>">
+				<%-- END CHANGE --%>
 					<aui:button cssClass="add-contact" icon="icon-plus-sign" id='<%= renderResponse.getNamespace() + "addContact" %>' value="add-contact" />
 				</c:if>
 			</aui:layout>
@@ -347,23 +368,38 @@ portletURL.setWindowState(WindowState.NORMAL);
 								<aui:layout cssClass="contacts-count connections">
 									<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(connectionUsersCount) %>" key='<%= showOnlySiteMembers ? "you-have-x-connections-in-this-site" : "you-have-x-connections" %>' translateArguments="<%= false %>" /></a>
 								</aui:layout>
-
-								<aui:layout cssClass="contacts-count followings">
-									<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followingUsersCount) %>" key='<%= showOnlySiteMembers ? "you-are-following-x-people-in-this-site" : "you-are-following-x-people" %>' translateArguments="<%= false %>" /></a>
-								</aui:layout>
+								
+								<%-- BEGIN CHANGE --%>
+								<%-- hide followings message for non-admins --%>
+								<c:if test="<%= permissionChecker.isOmniadmin() %>">
+									<aui:layout cssClass="contacts-count followings">
+										<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followingUsersCount) %>" key='<%= showOnlySiteMembers ? "you-are-following-x-people-in-this-site" : "you-are-following-x-people" %>' translateArguments="<%= false %>" /></a>
+									</aui:layout>
+								</c:if>
+								<%-- END CHANGE --%>
 
 								<c:if test="<%= !showOnlySiteMembers %>">
-									<aui:layout cssClass="contacts-count followers">
-										<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followerUsersCount) %>" key="you-have-x-followers" translateArguments="<%= false %>" /></a>
-									</aui:layout>
+									<%-- BEGIN CHANGE --%>
+									<%-- hide followers message for non-admins --%>
+									<c:if test="<%= permissionChecker.isOmniadmin() %>">
+										<aui:layout cssClass="contacts-count followers">
+											<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followerUsersCount) %>" key="you-have-x-followers" translateArguments="<%= false %>" /></a>
+										</aui:layout> 
+									</c:if>
+									<%-- END CHANGE --%>
 
 									<%
 									int myContactsCount = EntryLocalServiceUtil.getEntriesCount(user.getUserId());
 									%>
-
-									<aui:layout cssClass="contacts-count contacts">
-										<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(myContactsCount) %>" key="view-my-x-contacts" translateArguments="<%= false %>" /></a>
-									</aui:layout>
+									
+									<%-- BEGIN CHANGE --%>
+									<%-- hide contacts cound for non-admins --%>
+									<c:if test="<%= permissionChecker.isOmniadmin() %>">
+										<aui:layout cssClass="contacts-count contacts">
+											<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(myContactsCount) %>" key="view-my-x-contacts" translateArguments="<%= false %>" /></a>
+										</aui:layout>
+									</c:if>
+									<%-- END CHANGE --%>
 								</c:if>
 
 								<aui:layout cssClass="contacts-count all">
