@@ -55,13 +55,13 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
-			<default>false</default>
+			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 		<delivery-type>
 			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
-			<default>false</default>
+			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
@@ -77,7 +77,7 @@
 		<delivery-type>
 			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
-			<default>false</default>
+			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
@@ -87,13 +87,13 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
-			<default>false</default>
+			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 		<delivery-type>
 			<name>Campus.UP</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_WEBSITE}</type>
-			<default>false</default>
+			<default>true</default>
 			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
