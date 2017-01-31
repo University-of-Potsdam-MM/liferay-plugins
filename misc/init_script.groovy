@@ -258,8 +258,8 @@ import com.liferay.portlet.wiki.model.WikiPage;
 		EDITOR_ROLE_TITLE_MAP.put(Locale.US, "Editor");
 		EDITOR_ROLE_TITLE_MAP.put(Locale.GERMANY, "Redakteur");
 		Map<Locale, String> EDITOR_ROLE_DESCRIPTION_MAP = new HashMap<Locale, String>();
-		EDITOR_ROLE_DESCRIPTION_MAP.put(Locale.ENGLISH, "Editor");
-		EDITOR_ROLE_DESCRIPTION_MAP.put(Locale.GERMAN, "Redakteur");
+		EDITOR_ROLE_DESCRIPTION_MAP.put(Locale.US, "can: add/delete members, change title and type of workspace, add/delete pages, add/change page-content");
+		EDITOR_ROLE_DESCRIPTION_MAP.put(Locale.GERMANY, "kann: Mitglieder hinzufügen/entfernen, Titel und Typ des Workspace ändern, Seiten erstellen/einrichten/löschen, Inhalte auf Seiten erstellen/ändern");
 		Map<String, String[]> EDITOR_ROLE_PERMISSIONS = new HashMap<String, String[]>();
 		// Workspace Administration -> Pages -> Sites of the Workspaces ->
 		// General Permissions
@@ -587,8 +587,8 @@ import com.liferay.portlet.wiki.model.WikiPage;
 		MEMBER_ROLE_TITLE_MAP.put(Locale.US, "Member");
 		MEMBER_ROLE_TITLE_MAP.put(Locale.GERMANY, "Mitglied");
 		Map<Locale, String> MEMBER_ROLE_DESCRIPTION_MAP = new HashMap<Locale, String>();
-		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.ENGLISH, "Member");
-		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.GERMAN, "Mitglied");
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.US, "can: add and change page-content");
+		MEMBER_ROLE_DESCRIPTION_MAP.put(Locale.GERMANY, "kann: Inhalte auf bestehenden Seiten erstellen/ändern");
 		Map<String, String[]> MEMBER_ROLE_PERMISSIONS = new HashMap<String, String[]>();
 		// Workspace Administration -> Pages -> Sites of the Workspaces ->
 		// General Permissions
