@@ -33,6 +33,8 @@ for (SocialActivitySet activitySet : results) {
 		break;
 	}
 
+	String userPortraitURL = StringPool.BLANK;
+	
 	Portlet portlet = PortletLocalServiceUtil.getPortletById(activityFeedEntry.getPortletId());
 	
 	String socialActivityCssClass = portlet.getCssClassWrapper(); // style class for activity
@@ -47,6 +49,9 @@ for (SocialActivitySet activitySet : results) {
 		originCssClass = "moodle";
 
 		socialActivityCssClass = ActivitiesUtil.getMoodleSocialActivityCssClass(moodleSocialActivityType);
+		
+		/* creator of moodle activity can differ form current user */
+		userPortraitURL = ActivitiesUtil.getMoodleUserPortraitURL(data, themeDisplay);
 		
 	} else if (PortalUtil.getClassName(activitySet.getClassNameId()).equals(Layout.class.getName())){	
 		// Layoutclass found so activity belongs to custompage
@@ -84,12 +89,12 @@ for (SocialActivitySet activitySet : results) {
 
 		String userDisplayURL = StringPool.BLANK;
 		String userFullName = StringPool.BLANK;
-		String userPortraitURL = StringPool.BLANK;
 
 		if (activitySetUser != null) {
 			userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
 			userFullName = activitySetUser.getFullName();
-			userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
+			/* check if userPortraitURL is already set */
+			userPortraitURL = userPortraitURL.equals(StringPool.BLANK) ? activitySetUser.getPortraitURL(themeDisplay) : userPortraitURL;
 		 }
 		%>
 

@@ -45,7 +45,7 @@ public class MoodleHotPotActivityInterpreter extends
 
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(super.getBody(data, themeDisplay));
+		
 		
 		sb.append("<div class=\"activity-body\"><div class=\"title\">");
 		sb.append(getLink(object, themeDisplay));

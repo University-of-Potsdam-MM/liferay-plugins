@@ -19,35 +19,54 @@ package de.unipotsdam.elis.activities.util;
 
 import java.util.List;
 
-import com.liferay.compat.portal.kernel.dao.orm.ProjectionFactoryUtil;
-import com.liferay.portal.kernel.bean.PortalBeanLocatorUtil;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.QueryPos;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
-import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
-import com.liferay.portal.kernel.dao.orm.SQLQuery;
-import com.liferay.portal.kernel.dao.orm.Session;
-import com.liferay.portal.kernel.dao.orm.SessionFactory;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
-import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
-import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
-import com.liferay.util.dao.orm.CustomSQLUtil;
 
 /**
  * @author Matthew Kong
  */
 public class ActivitiesUtil {
 
+	/**
+	 * This method returns the userPortraitURL of the corresponding campus.UP user to a given Moodle actor id.
+	 * If no corresponding user is found, the default male portrait is returned.
+	 * @param data : JsonObject that contains moodle data
+	 * @param themeDisplay
+	 * @return
+	 */
+	public static String getMoodleUserPortraitURL (JSONObject data, ThemeDisplay themeDisplay) {
+		String loginName = data.getJSONObject("actor").getString("id");
+
+		User activitySetUser = null;
+		String userPortraitURL = StringPool.BLANK;
+		
+		try {
+			activitySetUser = UserLocalServiceUtil.fetchUserByScreenName(themeDisplay.getCompanyId(), loginName);
+			if (activitySetUser != null) {
+				userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
+				
+			} else {
+				
+				userPortraitURL = "/image/user_male_portrait";
+			}
+		} catch (Exception e) {}
+		
+		return userPortraitURL;
+	}
+	
 	private static boolean isClassNameValueContaining(long classNameId, String s) {
 		
 		String className = PortalUtil.getClassName(classNameId);
