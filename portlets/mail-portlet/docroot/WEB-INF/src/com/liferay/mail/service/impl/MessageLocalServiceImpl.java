@@ -365,6 +365,12 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 	}
 
 	protected String removeBoundaryMarker(String contentType) {
+		// BEGIN CHANGE
+		// added check if contentType is null, because it is necessary... 
+		if (contentType == null)
+			return contentType;
+		// END CHANGE
+		
 		int i = contentType.indexOf(CharPool.SEMICOLON);
 
 		if (i == -1) {
