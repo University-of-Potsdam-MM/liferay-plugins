@@ -50,6 +50,8 @@ for (int i = 0; i < accountsJSONArray.length(); i++) {
 		String titleLanguageKey = accountJSONObject.getString("titleLanguageKey");
 		String descriptionLanguageKey = accountJSONObject.getString("descriptionLanguageKey");
 		String address = accountJSONObject.getString("address");
+		if (i == 0) // first iteration is mail.UP
+			address = user.getScreenName() + address;
 		String protocol = accountJSONObject.getString("protocol");
 		boolean useLocalPartAsLogin = accountJSONObject.getBoolean("useLocalPartAsLogin");
 		boolean hideSettings = accountJSONObject.getBoolean("hideSettings");
