@@ -19,6 +19,7 @@ import java.util.List;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -55,6 +56,22 @@ public class MoodleSocialActivityLocalServiceImpl extends MoodleSocialActivityLo
 	 * .activities.service.MoodleSocialActivityLocalServiceUtil} to access the
 	 * moodle social activity local service.
 	 */
+	
+	public MoodleSocialActivity getMostRecentMoodleSocialActivity() throws SystemException {
+		
+		// select max published value
+		DynamicQuery subQuery = DynamicQueryFactoryUtil.forClass(MoodleSocialActivity.class)
+				.setProjection(ProjectionFactoryUtil.max("published"));
+		
+		// select MoodleSocialActivity where published = max(published)
+		DynamicQuery query = DynamicQueryFactoryUtil.forClass(MoodleSocialActivity.class)
+				.add(PropertyFactoryUtil.forName("published").eq(subQuery));
+
+		List<?> result = MoodleSocialActivityLocalServiceUtil.dynamicQuery(query, 0, 1);
+		if (result.size() > 0)
+			return (MoodleSocialActivity) result.get(0);
+		return null;
+	} 
 	
 	public MoodleSocialActivity getMostRecentMoodleSocialActivity(long userId) throws SystemException {
 		DynamicQuery query = DynamicQueryFactoryUtil.forClass(MoodleSocialActivity.class)

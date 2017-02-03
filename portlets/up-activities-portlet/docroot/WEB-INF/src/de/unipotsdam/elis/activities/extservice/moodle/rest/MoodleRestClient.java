@@ -12,22 +12,19 @@ import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 
+import de.unipotsdam.elis.activities.ActivitiesAdminPortlet;
+
 public class MoodleRestClient {
-
-	/**
-	 * http://localhost/moodle/webservice/rest/server.php?
-	 * wstoken=eaf10af21b98618e8bf0ea473a5e8e24
-	 * &wsfunction=webservice_get_recent_course_activities
-	 * &moodlewsrestformat=json
-	 */
 	
-	private final static String TARGET = "http://localhost";
+	private static String getToken(String serviceName) throws JSONException, ClientErrorException {
 
-	private static String getToken(String username, String password) throws JSONException, ClientErrorException {
-
+		String _target = ActivitiesAdminPortlet.getMoodleServiceEndpoint(); // set in admin portlet
+		String username = ActivitiesAdminPortlet.getMoodleServiceUsername();
+		String password = ActivitiesAdminPortlet.getMoodleServicePassword();
+		
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(TARGET).path("moodle/login/token.php").queryParam("username", username)
-				.queryParam("password", password).queryParam("service", "webservice_recent_course_activities");
+		WebTarget target = client.target(_target).path("/login/token.php").queryParam("username", username)
+				.queryParam("password", password).queryParam("service", serviceName);
 
 		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get();
 
@@ -44,13 +41,15 @@ public class MoodleRestClient {
 		return token;
 	}
 
-	public static JSONArray getLatestCourseNews(String username, String password, int startIndex, int endIndex)
+	public static JSONArray getLatestCourseNews(int startIndex, int endIndex)
 			throws JSONException, ClientErrorException {
 
-		String token = getToken(username, password);
+		String _target = ActivitiesAdminPortlet.getMoodleServiceEndpoint(); // set in admin portlet
+		
+		String token = getToken("webservice_recent_course_activities");
 
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(TARGET).path("moodle/webservice/rest/server.php")
+		WebTarget target = client.target(_target).path("/webservice/rest/server.php")
 				.queryParam("wsfunction", "webservice_get_recent_course_activities")
 				.queryParam("startindex", startIndex).queryParam("count", endIndex - startIndex)
 				.queryParam("wstoken", token).queryParam("moodlewsrestformat", "json");
@@ -63,13 +62,15 @@ public class MoodleRestClient {
 		return JSONFactoryUtil.createJSONArray(response.readEntity(String.class));
 	}
 
-	public static JSONArray getLatestCourseNews(String username, String password, long startTime, long endTime,
+	public static JSONArray getLatestCourseNews(long startTime, long endTime,
 			int startIndex, int endIndex) throws JSONException, ClientErrorException {
 
-		String token = getToken(username, password);
+		String _target = ActivitiesAdminPortlet.getMoodleServiceEndpoint(); // set in admin portlet
+		
+		String token = getToken("webservice_recent_course_activities");
 
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(TARGET).path("moodle/webservice/rest/server.php")
+		WebTarget target = client.target(_target).path("/webservice/rest/server.php")
 				.queryParam("wsfunction", "webservice_get_recent_course_activities").queryParam("starttime", startTime)
 				.queryParam("endtime", endTime).queryParam("startindex", startIndex)
 				.queryParam("count", endIndex - startIndex).queryParam("wstoken", token)
@@ -81,5 +82,31 @@ public class MoodleRestClient {
 			throw new ClientErrorException(response);
 		// TODO: fix crash, if webservice_access_exception occurs
 		return JSONFactoryUtil.createJSONArray(response.readEntity(String.class));
+	}
+	
+	/**
+	 * add user of campus.UP to moodle, too receive activities.
+	 * @param screenName
+	 * @throws ClientErrorException 
+	 * @throws JSONException 
+	 */
+	public static boolean addCampusUpUser(String screenName) throws JSONException, ClientErrorException {
+		String _target = ActivitiesAdminPortlet.getMoodleServiceEndpoint(); // set in admin portlet
+		
+		String token = getToken("webservice_add_campus_up_user"); 
+
+		Client client = ClientBuilder.newClient();
+		WebTarget target = client.target(_target).path("/webservice/rest/server.php")
+				.queryParam("wsfunction", "webservice_add_user")
+				.queryParam("userid", screenName)
+				.queryParam("wstoken", token)
+				.queryParam("moodlewsrestformat", "json");
+		
+		Response response = target.request(MediaType.APPLICATION_JSON_TYPE).get(); 
+
+		if (response.getStatus() != 200)
+			throw new ClientErrorException(response);
+
+		return true;//JSONFactoryUtil.createJSONArray(response.readEntity(String.class));
 	}
 }

@@ -26,7 +26,7 @@
 
 <%
 List<SocialActivitySet> results = null; 
-ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
+//ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
 
 int count = 0;
 long total = 0;
