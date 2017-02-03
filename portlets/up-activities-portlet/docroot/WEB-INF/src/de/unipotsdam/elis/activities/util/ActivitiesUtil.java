@@ -135,6 +135,8 @@ public class ActivitiesUtil {
 			moodleSocialActivityType = "lecture";
 		if (moodleSocialActivityType.equals("quiz"))
 			moodleSocialActivityType = "test";
+		if (moodleSocialActivityType.equals("url"))
+			moodleSocialActivityType = "resource";
 		
 		return moodleSocialActivityType;
 	}
