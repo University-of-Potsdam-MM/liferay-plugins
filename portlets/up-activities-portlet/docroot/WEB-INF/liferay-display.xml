@@ -7,5 +7,6 @@
 	</category>
 	<category name="category.hidden">
 		<portlet id="activities-admin"></portlet>
+		<portlet id="up-actvities-poller"></portlet>
 	</category>
 </display>
