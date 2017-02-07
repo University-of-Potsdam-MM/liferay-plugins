@@ -76,6 +76,10 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 		</c:when>
 	</c:choose>
 
+	<%-- BEGIN CHANGE --%>
+	<%-- hide follow buttons --%>
+	<c:if test="<%= permissionChecker.isOmniadmin() %>">
+	<%-- END CHANGE --%>
 	<c:choose>
 		<c:when test="<%= SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), user2.getUserId(), SocialRelationConstants.TYPE_UNI_FOLLOWER) %>">
 			<portlet:actionURL name="deleteSocialRelation" var="unfollowURL">
@@ -110,8 +114,15 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 			/>
 		</c:when>
 	</c:choose>
+	<%-- BEGIN CHANGE --%>
+	</c:if>
+	<%-- END CHANGE --%>
 </c:if>
 
+<%-- BEGIN CHANGE --%>
+<%-- hide block buttons --%>
+<c:if test="<%= permissionChecker.isOmniadmin() %>">
+<%-- END CHANGE --%>
 <c:choose>
 	<c:when test="<%= SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), user2.getUserId(), SocialRelationConstants.TYPE_UNI_ENEMY) %>">
 		<portlet:actionURL name="deleteSocialRelation" var="unblockURL">
@@ -146,6 +157,9 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 		/>
 	</c:when>
 </c:choose>
+<%-- BEGIN CHANGE --%>
+</c:if>
+<%-- END CHANGE --%>
 
 <c:if test="<%= user2.getUserId() != themeDisplay.getUserId() %>">
 
