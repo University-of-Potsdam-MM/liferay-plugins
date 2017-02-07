@@ -288,11 +288,11 @@ public class TestCustomLoginAction extends Action {
 		// Workspace Administration -> Pages -> Sites of the Workspaces ->
 		// Resource Permissions
 		EDITOR_ROLE_PERMISSIONS.put(Group.class.getName(), new String[] { ActionKeys.ADD_COMMUNITY,
-				ActionKeys.ADD_LAYOUT, ActionKeys.ADD_LAYOUT_BRANCH, ActionKeys.ADD_LAYOUT_SET_BRANCH,
+				ActionKeys.ADD_LAYOUT, ActionKeys.ADD_LAYOUT_BRANCH, ActionKeys.ADD_LAYOUT_SET_BRANCH, ActionKeys.ASSIGN_MEMBERS,
 				ActionKeys.CONFIGURE_PORTLETS, ActionKeys.EXPORT_IMPORT_LAYOUTS, ActionKeys.EXPORT_IMPORT_PORTLET_INFO,
 				ActionKeys.MANAGE_ANNOUNCEMENTS, ActionKeys.MANAGE_ARCHIVED_SETUPS, ActionKeys.MANAGE_LAYOUTS,
 				ActionKeys.MANAGE_STAGING, ActionKeys.PERMISSIONS, ActionKeys.PREVIEW_IN_DEVICE,
-				ActionKeys.PUBLISH_STAGING, ActionKeys.PUBLISH_TO_REMOTE, ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS,
+				ActionKeys.PUBLISH_STAGING, ActionKeys.PUBLISH_TO_REMOTE, ActionKeys.UPDATE, ActionKeys.VIEW, ActionKeys.VIEW_MEMBERS,
 				ActionKeys.VIEW_SITE_ADMINISTRATION, ActionKeys.VIEW_STAGING });
 		// Workspace Administration -> Pages -> Sites of the Workspaces -> Page
 		EDITOR_ROLE_PERMISSIONS.put(Layout.class.getName(), new String[] { ActionKeys.ADD_DISCUSSION,
