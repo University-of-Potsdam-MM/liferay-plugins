@@ -185,8 +185,15 @@ public class MembershipRequestLocalServiceImpl
 			int statusId, boolean addUserToGroup, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		validate(replyComments);
-
+		// BEGIN CHANGE #631
+		// replyComments shall be optional, so no Exception will be thrown if user adds no comment.
+		// Instead an empty String is used as a comment, because no text was entered.
+		// validate(replyComments);
+		if (Validator.isNull(replyComments) || Validator.isNumber(replyComments)) {
+			replyComments = "";
+		}
+		// END CHANGE
+		
 		MembershipRequest membershipRequest =
 			membershipRequestPersistence.findByPrimaryKey(membershipRequestId);
 
@@ -567,7 +574,7 @@ public class MembershipRequestLocalServiceImpl
 						requestUser.getFullName(),
 						workspace.getDescriptiveName(), // translation needed? 
 						memberManagementURL,
-						LanguageUtil.get(recipient.getLocale(), statusKey),
+						LanguageUtil.get(recipient.getLocale(), statusKey).toLowerCase(),
 						membershipRequest.getReplyComments(),
 						configURL//getConfigURL(serviceContext, recipient)
 					});

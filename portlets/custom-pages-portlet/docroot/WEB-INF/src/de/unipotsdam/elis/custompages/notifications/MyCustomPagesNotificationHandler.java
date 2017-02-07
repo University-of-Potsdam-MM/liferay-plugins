@@ -40,10 +40,11 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 
 		int socialActivityType = jsonObject.getInt("socialActivityType");
 
-		if (socialActivityType == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED) {
-			setActionable(true); // use request template
-			return doAsRequest(jsonObject, userNotificationEvent, serviceContext);
-		}
+		// removed due to #747
+//		if (socialActivityType == ExtendedSocialActivityKeyConstants.CUSTOM_PAGE_FEEDBACK_REQUESTED) {
+//			setActionable(true); // use request template
+//			return doAsRequest(jsonObject, userNotificationEvent, serviceContext);
+//		}
 		
 		String body = StringUtil.replace(getBodyTemplate(), new String[] { "[$TITLE$]" }, new String[] { message });
 

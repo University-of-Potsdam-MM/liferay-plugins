@@ -96,7 +96,7 @@ public class InviteMembersUserNotificationHandler
 			String message = serviceContext.translate(
 					"x-accepted-your-invitation-to-join-x",
 					new Object[] {
-						getUserNameLink(memberRequest.getUserId(), serviceContext),
+						getUserNameLink(memberRequest.getReceiverUserId(), serviceContext),
 						getSiteDescriptiveName(
 							memberRequest.getGroupId(), serviceContext)});
 			return StringUtil.replace("<div class=\"title\">[$TITLE$]</div>", new String[] { "[$TITLE$]" }, new String[] { message });

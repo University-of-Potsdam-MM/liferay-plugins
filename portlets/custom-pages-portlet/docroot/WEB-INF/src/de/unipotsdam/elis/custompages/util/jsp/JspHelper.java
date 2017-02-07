@@ -178,8 +178,9 @@ public class JspHelper {
 		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
 		jsonObject.put("socialActivityType", socialActivityType);
-		if (socialActivityType == 2)
-			jsonObject.put("actionRequired", true);
+		// removed due to #747
+//		if (socialActivityType == 2)
+//			jsonObject.put("actionRequired", true);
 		
 		// BEGIN CHANGE
 		// isDeliver checks if user enabled notification for this socialActivity
