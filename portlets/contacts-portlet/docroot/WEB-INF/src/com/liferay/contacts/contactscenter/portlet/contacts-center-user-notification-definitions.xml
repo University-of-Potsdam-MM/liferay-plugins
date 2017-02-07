@@ -14,8 +14,8 @@
 		<delivery-type>
 			<name>email</name>
 			<type>${com.liferay.portal.model.UserNotificationDeliveryConstants.TYPE_EMAIL}</type>
-			<default>false</default>
-			<modifiable>false</modifiable>
+			<default>true</default>
+			<modifiable>true</modifiable>
 		</delivery-type>
 	</definition>
 </user-notification-definitions>

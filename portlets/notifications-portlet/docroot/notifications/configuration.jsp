@@ -43,8 +43,8 @@
 		userNotificationDefinitionsMap.putAll(UserNotificationManagerUtil.getUserNotificationDefinitions());
 
 		for (Map.Entry<String, List<UserNotificationDefinition>> entry : userNotificationDefinitionsMap.entrySet()) {
-			// microblogs is not used, so just skip it and contacts shall not be listed in notification settings
-			if (entry.getKey().equals("1_WAR_microblogsportlet") || entry.getKey().equals(PortletKeys.CONTACTS_CENTER))
+			// microblogs is not used, so just skip it
+			if (entry.getKey().equals("1_WAR_microblogsportlet"))
 				continue;
 		%>
 
