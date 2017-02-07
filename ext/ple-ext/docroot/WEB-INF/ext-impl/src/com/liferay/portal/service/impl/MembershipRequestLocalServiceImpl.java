@@ -567,7 +567,7 @@ public class MembershipRequestLocalServiceImpl
 						requestUser.getFullName(),
 						workspace.getDescriptiveName(), // translation needed? 
 						memberManagementURL,
-						LanguageUtil.get(recipient.getLocale(), statusKey),
+						LanguageUtil.get(recipient.getLocale(), statusKey).toLowerCase(),
 						membershipRequest.getReplyComments(),
 						configURL//getConfigURL(serviceContext, recipient)
 					});
