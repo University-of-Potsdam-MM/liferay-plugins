@@ -469,6 +469,9 @@ public class TestCustomLoginAction extends Action {
 		// Workspace Administration -> Users -> Site Teams -> General
 		// Permissions
 		EDITOR_ROLE_PERMISSIONS.put("191", new String[] {});
+		// Workspace Administration -> Configuration -> Settings -> General
+		// Permissions
+		EDITOR_ROLE_PERMISSIONS.put(PortletKeys.SITE_SETTINGS, new String[] {ActionKeys.ACCESS_IN_CONTROL_PANEL});
 		// Workspace Administration -> Applications -> Activities -> Application
 		// Permissions
 		EDITOR_ROLE_PERMISSIONS.put("upactivities_WAR_upactivitiesportlet", new String[] { ActionKeys.ADD_TO_PAGE,

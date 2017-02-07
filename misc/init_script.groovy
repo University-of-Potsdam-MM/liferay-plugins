@@ -450,6 +450,9 @@ import com.liferay.portlet.wiki.model.WikiPage;
 		// Workspace Administration -> Users -> Site Teams -> General
 		// Permissions
 		EDITOR_ROLE_PERMISSIONS.put("191", [] as String[]);
+		// Workspace Administration -> Configuration -> Settings -> General
+		// Permissions
+		EDITOR_ROLE_PERMISSIONS.put(PortletKeys.SITE_SETTINGS, [ ActionKeys.ACCESS_IN_CONTROL_PANEL ] as String[]);
 		// Workspace Administration -> Applications -> Activities -> Application
 		// Permissions
 		EDITOR_ROLE_PERMISSIONS.put("upactivities_WAR_upactivitiesportlet", [ ActionKeys.ADD_TO_PAGE,
