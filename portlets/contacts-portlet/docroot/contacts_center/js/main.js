@@ -864,8 +864,12 @@ AUI.add(
 
 					_showButton: function(node) {
 						node.show();
-
-						if (node.hasClass('btn-hidden')) {
+						
+						// BEGIN CHANGE
+						// dont show block and follow buttons
+						// if (node.hasClass('btn-hidden') && node.get("id")
+						if (node.hasClass('btn-hidden') && node.get("id") != (this._namespace + ("followButton")) && node.get("id") != (this._namespace + ("blockButton"))) {
+						// END CHANGE	
 							node.removeClass('btn-hidden');
 						}
 					},
