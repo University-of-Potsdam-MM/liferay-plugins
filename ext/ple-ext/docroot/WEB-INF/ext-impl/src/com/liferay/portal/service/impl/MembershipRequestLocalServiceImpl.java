@@ -85,7 +85,14 @@ public class MembershipRequestLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		Date now = new Date();
 
-		validate(comments);
+		// BEGIN CHANGE #631
+		// comments shall be optional, so no Exception will be thrown if user adds no comment.
+		// Instead an empty String is used as a comment, because no text was entered.
+		// validate(comments);
+		if (Validator.isNull(comments) || Validator.isNumber(comments)) {
+			comments = "";
+		}
+		// END CHANGE
 
 		long membershipRequestId = counterLocalService.increment();
 
