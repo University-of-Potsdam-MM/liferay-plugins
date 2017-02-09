@@ -7,3 +7,6 @@
 [submodule "themes/so-up-theme"]
 	path = themes/so-up-theme
 	url = https://gitup.uni-potsdam.de/elis/so-up-theme.git
+[submodule "portlets/etherpad-lite-portlet"]
+	path = portlets/etherpad-lite-portlet
+	url = https://gitup.uni-potsdam.de/elis/liferay-etherpad-lite.git
