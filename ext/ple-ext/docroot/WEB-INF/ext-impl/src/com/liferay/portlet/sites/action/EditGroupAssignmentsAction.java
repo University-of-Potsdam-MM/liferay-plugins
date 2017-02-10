@@ -273,7 +273,7 @@ public class EditGroupAssignmentsAction extends PortletAction {
 					3, // constants 0..2 already in use, so 3 is used for this case
 					UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 				
-				sendNotificationEvent(userId, groupId);
+				sendNotificationEvent(userId, groupId, themeDisplay);
 			}
 		}
 		// END CHANGE
@@ -361,7 +361,7 @@ public class EditGroupAssignmentsAction extends PortletAction {
 					}, new String[] {  
 						user.getFullName(), 
 						workspace.getDescriptiveName(), // translation needed? 
-						getWorkspaceURL(user, workspace, themeDisplay),
+						getWorkspaceURL(workspace, themeDisplay),
 						getConfigURL(themeDisplay, user)
 					});
 		
@@ -384,10 +384,11 @@ public class EditGroupAssignmentsAction extends PortletAction {
 	 * send website notification to user that she was added to workspace
 	 * @param userId
 	 * @param groupId - id of workspace
+	 * @param themeDisplay 
 	 * @throws PortalException
 	 * @throws SystemException
 	 */
-	private void sendNotificationEvent(long userId, long groupId)
+	private void sendNotificationEvent(long userId, long groupId, ThemeDisplay themeDisplay)
 			throws PortalException, SystemException {
 			
 			Group workspace = GroupLocalServiceUtil.fetchGroup(groupId);
@@ -403,6 +404,8 @@ public class EditGroupAssignmentsAction extends PortletAction {
 				"userId", userId);
 			notificationEventJSONObject.put(
 				"workspaceName", workspace.getDescriptiveName());
+			notificationEventJSONObject.put(
+					"workspaceURL", getWorkspaceURL(workspace, themeDisplay));
 			notificationEventJSONObject.put(
 					"workspaceDeletion", false);
 			/* 
@@ -425,10 +428,10 @@ public class EditGroupAssignmentsAction extends PortletAction {
 	
 	/**
 	 * This method returns the link to the workspace
-	 * for a given user.
+	 * for a given workspace.
 	 * @param themeDisplay 
 	 */
-	private String getWorkspaceURL (User user, Group workspace, ThemeDisplay themeDisplay) 
+	private String getWorkspaceURL (Group workspace, ThemeDisplay themeDisplay) 
 			throws PortalException, SystemException {
 		
 		String portalURL = themeDisplay.getPortalURL();

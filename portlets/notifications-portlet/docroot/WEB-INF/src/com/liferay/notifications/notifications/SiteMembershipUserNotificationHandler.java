@@ -1,5 +1,7 @@
 package com.liferay.notifications.notifications;
 
+import java.util.List;
+
 import javax.portlet.ActionRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowState;
@@ -15,15 +17,18 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.MembershipRequest;
 import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 
 /**
@@ -71,9 +76,13 @@ public class SiteMembershipUserNotificationHandler extends
 				
 				String workspaceName = jsonObject.getString("workspaceName"); //get workspacename form request
 				
+				String linkedWorkspaceName = "<a href=\""
+						+ getLink(userNotificationEvent, serviceContext)
+						+ "\">" + workspaceName + "</a>";
+				
 				String message = LanguageUtil.format(serviceContext.getLocale(), "you-were-added-to-workspace-x", 
 						new String[] { 
-							workspaceName 
+							linkedWorkspaceName 
 						});
 				
 				return StringUtil.replace(
@@ -111,7 +120,7 @@ public class SiteMembershipUserNotificationHandler extends
 			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-wants-to-join-x", 
 					new Object[] { 
 						getUserNameLink(membershipRequest.getUserId(), serviceContext),
-						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
+						getWorkspaceNameLink(membershipRequest.getGroupId(), serviceContext) 
 					});
 		} 
 		else if (membershipRequest.getStatusId() ==
@@ -119,7 +128,7 @@ public class SiteMembershipUserNotificationHandler extends
 			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-approved-your-request-to-join-x", 
 					new Object[] { 
 						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
-						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
+						getWorkspaceNameLink(membershipRequest.getGroupId(), serviceContext) 
 					});
 			return StringUtil.replace(
 					"<div class=\"title\">[$TITLE$]</div>", 
@@ -206,6 +215,21 @@ public class SiteMembershipUserNotificationHandler extends
 	protected String getLink(UserNotificationEvent userNotificationEvent,
 			ServiceContext serviceContext) throws Exception {
 
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				userNotificationEvent.getPayload());
+		
+		// check type of notificationEvent 
+		boolean isWorkspaceDeletion = jsonObject.getBoolean("workspaceDeletion");
+		boolean isMembershipRequest = jsonObject.getBoolean("membershipRequest");
+		
+		if (!isMembershipRequest && !isWorkspaceDeletion) {
+			// notificationEvent: user added to workspace
+			String workspaceURL = jsonObject.getString("workspaceURL");
+			
+			// use workspaceURL as link
+			return workspaceURL;
+		}
+
 		return StringPool.BLANK;//super.getLink(userNotificationEvent, serviceContext);
 	}
 	
@@ -242,5 +266,52 @@ public class SiteMembershipUserNotificationHandler extends
 		catch (Exception e) {
 			return StringPool.BLANK;
 		}
+	}
+	
+	/**
+	 * Get workspaceName wrapped in a link.
+	 * @param groupId
+	 * @param serviceContext
+	 * @return BLANK if an exception occurs.
+	 */
+	protected String getWorkspaceNameLink(long groupId,
+			ServiceContext serviceContext) {
+
+		try {
+			String descriptiveName = getWorkspaceDescriptiveName(groupId,
+					serviceContext);
+			
+			String workspaceURL = getWorkspaceURL(groupId, serviceContext);
+			
+			return "<a href=\"" + workspaceURL + "\">" +
+				HtmlUtil.escape(descriptiveName) + "</a>";
+			
+		} catch (Exception e) {
+			return StringPool.BLANK;
+		}
+		
+	}
+	
+	/**
+	 * This method returns the link to the workspace
+	 * for a given id.
+	 * @param serviceContext 
+	 */
+	private String getWorkspaceURL (long groupId, ServiceContext serviceContext) 
+			throws PortalException, SystemException {
+		
+		String portalURL = serviceContext.getPortalURL();
+		
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(groupId, true);
+		
+		Layout layout = null;
+		
+		if (!layouts.isEmpty())
+			layout = layouts.get(0);
+		
+		if (layout != null)
+			return portalURL + PortalUtil.getLayoutActualURL(layout);
+		
+		return "";
 	}
 }
