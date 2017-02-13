@@ -10,7 +10,6 @@ import javax.portlet.PortletPreferences;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
@@ -25,7 +24,8 @@ public class ActivitiesAdminPortlet extends MVCPortlet {
  
 	private static final String _moodleServiceEndpoint = "http://localhost",
 			_moodleServiceUsername = "test",
-			_moodleServicePassword = "test";
+			_moodleServicePassword = "test",
+			_moodleServiceSchedulerActive = StringPool.FALSE;
 
 	@Override
 	public void processAction(ActionRequest actionRequest,
@@ -48,6 +48,10 @@ public class ActivitiesAdminPortlet extends MVCPortlet {
 			if (!param.equals(StringPool.BLANK))
 				prefs.setValue("moodle.service.password", param);
 			
+			param = ParamUtil.getString(actionRequest, "moodleSerivceSchedulerActive");
+			if (!param.equals(StringPool.BLANK))
+				prefs.setValue("moodle.service.schedulerActive", param);
+			
 			prefs.store();
 		} catch (Exception e) {
 			
@@ -69,6 +73,11 @@ public class ActivitiesAdminPortlet extends MVCPortlet {
 	public static final String getMoodleServicePassword () {
 		String result = determinePortletPreferencesValue("moodle.service.password");
 		return (result != null ? result : _moodleServicePassword);
+	}
+	
+	public static final String getMoodleServiceSchedulerActive () {
+		String result = determinePortletPreferencesValue("moodle.service.schedulerActive");
+		return (result != null ? result : _moodleServiceSchedulerActive);
 	}
 	
 	private static String determinePortletPreferencesValue(String key) {

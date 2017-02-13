@@ -8,7 +8,9 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
+import com.liferay.portal.kernel.util.GetterUtil;
 
+import de.unipotsdam.elis.activities.ActivitiesAdminPortlet;
 import de.unipotsdam.elis.activities.extservice.util.ExtSocialActivityUtil;
 
 
@@ -16,12 +18,13 @@ public class Scheduler implements MessageListener {
 
 	public void receive(Message arg0) throws MessageListenerException {
 		
-		try {
-			ExtSocialActivityUtil.requestNewMoodleActivities();
-		} catch (ClientErrorException | PortalException | SystemException
-				| DatatypeConfigurationException e) {
-			throw new MessageListenerException(e);
+		if (GetterUtil.getBoolean(ActivitiesAdminPortlet.getMoodleServiceSchedulerActive())) {
+			try {
+				ExtSocialActivityUtil.requestNewMoodleActivities();
+			} catch (ClientErrorException | PortalException | SystemException
+					| DatatypeConfigurationException e) {
+				throw new MessageListenerException(e);
+			}
 		}
-		
 	}
 }

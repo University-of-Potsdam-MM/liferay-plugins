@@ -16,7 +16,8 @@
 	<aui:input name="moodleServiceEndpoint" label="Moodle Service Endpoint" value="<%= ActivitiesAdminPortlet.getMoodleServiceEndpoint() %>"/>
 	<aui:input name="moodleServiceUsername" label="Moodle Service Username" value="<%= ActivitiesAdminPortlet.getMoodleServiceUsername() %>"/>
 	<aui:input name="moodleServicePassword" label="Moodle Service Password" value="<%= ActivitiesAdminPortlet.getMoodleServicePassword() %>" type="password"/>  
-
+	<aui:input name="moodleSerivceSchedulerActive" label="Moodle Service Scheduler Active" value="<%= ActivitiesAdminPortlet.getMoodleServiceSchedulerActive() %>" type="checkbox" />
+	
     <aui:button-row>
         <aui:button type="submit" />
     </aui:button-row>
