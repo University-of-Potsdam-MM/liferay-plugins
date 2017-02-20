@@ -298,7 +298,7 @@ public class JspHelper {
 			String fromAddress = PrefsPropsUtil.getString(
 					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 
-			InternetAddress from = new InternetAddress(fromName, fromAddress);
+			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			
 			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
 			
