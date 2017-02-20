@@ -201,8 +201,6 @@ public class JspHelper {
 	private static void createCustomPageEmail(User sender, User receiver, String message, Layout customPage,
 			String portletId, int socialActivityType, ThemeDisplay themeDisplay) throws Exception {
 		
-		System.out.println("MailLog: Mail-Method triggered.");
-		
 		if(UserNotificationManagerUtil.isDeliver(
 				receiver.getUserId(),
 				"othercustompages_WAR_custompagesportlet", 0, // portletId hardcoded to force check of othercustompages
@@ -210,8 +208,6 @@ public class JspHelper {
 				UserNotificationDeliveryConstants.TYPE_EMAIL)){
 			
 			//Company company = CompanyLocalServiceUtil.getCompany(sender.getCompanyId());
-			
-			System.out.println("MailLog: Going to create Mail.");
 			
 			String portalURL = themeDisplay.getPortalURL();
 			
@@ -221,7 +217,7 @@ public class JspHelper {
 			if (receiver.getLocale().equals(Locale.GERMANY)) {
 				language = "_"+Locale.GERMANY.toString();
 			}
-			System.out.println("MailLog: Set language to: "+language);
+
 			String subject = "";
 			String body = "";
 			
@@ -257,15 +253,15 @@ public class JspHelper {
 				templateType = "deleted_submit";
 				break;
 			}
-			System.out.println("MailLog: Set template type to: "+templateType);
+
 			subject = StringUtil.read(
 					CustomUserLocalServiceWrapper.class.getResourceAsStream(
 						"dependencies/email_custom_page_"+templateType+"_subject"+language+".tmpl"));
-			System.out.println("MailLog: read subject");
+
 			body = StringUtil.read(
 					CustomUserLocalServiceWrapper.class.getResourceAsStream(
 						"dependencies/email_custom_page_"+templateType+"_body"+language+".tmpl"));
-			System.out.println("MailLog: read body");
+
 			// all templates have same placeholders
 			subject = StringUtil.replace(
 					subject,
@@ -277,7 +273,7 @@ public class JspHelper {
 						customPage.getName(themeDisplay.getLocale()),
 						sender.getFullName()
 					});
-			System.out.println("MailLog: Set Mail subject.");
+
 			body = StringUtil.replace(
 					body,
 					new String [] {
@@ -295,25 +291,21 @@ public class JspHelper {
 //						getNotificationConfigURL(themeDisplay, receiver)
 						UserNotificationHelper.getConfigURL(themeDisplay, receiver)
 					}); 
-			System.out.println("MailLog: Set Mail body.");
+
 			String fromName = PrefsPropsUtil.getString(
 					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_NAME);
-			System.out.println("MailLog: Set Mail sender.");
+
 			String fromAddress = PrefsPropsUtil.getString(
 					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-			System.out.println("MailLog: Set Mail recipient.");
-			InternetAddress from = new InternetAddress("campusup-service@uni-potsdam.de", "Campus.UP");
+
+			InternetAddress from = new InternetAddress(fromName, fromAddress);
 			
 			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
 			
 			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
-			System.out.println("MailLog: Created Mail Message.");
+
 			MailServiceUtil.sendEmail(mailMessage);
-			System.out.println("MailLog: Sent Mail.");
-			System.out.println("MailLog: From: "+ mailMessage.getFrom().getAddress());
-			System.out.println("MailLog: To: "+ mailMessage.getTo()[0].getAddress());
-			System.out.println("MailLog: subject: "+ mailMessage.getSubject());
-			System.out.println("MailLog: body: "+ mailMessage.getBody());
+			
 		}
 	}
 
