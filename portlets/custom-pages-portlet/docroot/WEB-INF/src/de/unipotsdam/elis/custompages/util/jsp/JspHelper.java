@@ -302,7 +302,7 @@ public class JspHelper {
 			String fromAddress = PrefsPropsUtil.getString(
 					sender.getCompanyId(), PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
 			System.out.println("MailLog: Set Mail recipient.");
-			InternetAddress from = new InternetAddress(fromAddress, fromName);
+			InternetAddress from = new InternetAddress("campusup-service@uni-potsdam.de", "Campus.UP");
 			
 			InternetAddress to = new InternetAddress(receiver.getEmailAddress());
 			
