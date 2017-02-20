@@ -310,8 +310,8 @@ public class JspHelper {
 			System.out.println("MailLog: Created Mail Message.");
 			MailServiceUtil.sendEmail(mailMessage);
 			System.out.println("MailLog: Sent Mail.");
-			System.out.println("MailLog: From: "+ mailMessage.getFrom());
-			System.out.println("MailLog: To: "+ mailMessage.getTo());
+			System.out.println("MailLog: From: "+ mailMessage.getFrom().getAddress());
+			System.out.println("MailLog: To: "+ mailMessage.getTo()[0].getAddress());
 			System.out.println("MailLog: subject: "+ mailMessage.getSubject());
 			System.out.println("MailLog: body: "+ mailMessage.getBody());
 		}
