@@ -14,5 +14,7 @@
 		<dependency conf="test->default" name="arquillian-junit-container" org="org.jboss.arquillian.junit" rev="1.1.6.Final" />
 		<dependency conf="test->default" name="arquillian-tomcat-remote-7" org="org.jboss.arquillian.container" rev="1.0.0.CR6" />
 		<dependency conf="test->default" name="com.liferay.ant.arquillian" org="com.liferay" rev="1.0.0-SNAPSHOT" />
+		<dependency name="jsoup" org="org.jsoup" rev="1.8.3" />
+		<dependency name="commons-lang3" org="org.apache.commons" rev="3.5" />
 	</dependencies>
 </ivy-module>
