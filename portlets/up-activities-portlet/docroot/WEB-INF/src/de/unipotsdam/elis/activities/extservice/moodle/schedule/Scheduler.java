@@ -21,8 +21,7 @@ public class Scheduler implements MessageListener {
 		if (GetterUtil.getBoolean(ActivitiesAdminPortlet.getMoodleServiceSchedulerActive())) {
 			try {
 				ExtSocialActivityUtil.requestNewMoodleActivities();
-			} catch (ClientErrorException | PortalException | SystemException
-					| DatatypeConfigurationException e) {
+			} catch (Exception e) {
 				throw new MessageListenerException(e);
 			}
 		}
