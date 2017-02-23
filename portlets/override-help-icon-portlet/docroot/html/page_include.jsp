@@ -73,15 +73,17 @@ if (languageKey != null){
 							Document doc1 = Jsoup.parse(article.getContentByLocale(request.getLocale().getCountry()));
 							// needs to be parsed again because tags are escaped
 							Elements pElements = Jsoup.parse(doc1.text()).select("p");
+							System.out.println(Jsoup.parse(doc1.text()).toString());
 							if (!pElements.isEmpty()){
+								System.out.println((new TextNode(pElements.first().text(),"")).toString());
 								pageLink.replaceWith(new TextNode(pElements.first().text(),""));
 								boolean more = BooleanUtils.toBoolean(pageLink.attr("more"));
 								if (more) {
 									link = PortalUtil.getLayoutFullURL(helpPageLayout, themeDisplay);
 								}
-								else
-									errorMessage = "no first paragraph found";
 							}
+							else
+								errorMessage = "no first paragraph found";
 						}
 						else {
 							errorMessage = "no web conent set on the choosen page";
