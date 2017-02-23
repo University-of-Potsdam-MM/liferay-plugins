@@ -30,7 +30,7 @@ public class SchedulerAdd implements MessageListener {
 			
 			try {
 				defaultUser = UserLocalServiceUtil.getDefaultUser(PortalUtil.getDefaultCompanyId());
-			} catch (PortalException | SystemException e) {
+			} catch (Exception e) {
 				/*
 				 * If no default user is set an exception will occur. 
 				 * But it's not important, because we won't use the default user anyways.
@@ -52,7 +52,7 @@ public class SchedulerAdd implements MessageListener {
 						if (defaultUserId != user.getUserId()) {
 							MoodleRestClient.addCampusUpUser(user.getScreenName());
 						}
-					} catch (JSONException | ClientErrorException e) {
+					} catch (Exception e) {
 	//					_log.error(e);
 						throw new MessageListenerException(e);
 					}

@@ -17,7 +17,7 @@ public class ActivitiesUserListener extends BaseModelListener<User> {
 		try {
 			// TODO do not add default user, can default user be created?
 			MoodleRestClient.addCampusUpUser(user.getScreenName());
-		} catch (JSONException | ClientErrorException e) {
+		} catch (Exception e) {
 			throw new ModelListenerException(e);
 		}
 

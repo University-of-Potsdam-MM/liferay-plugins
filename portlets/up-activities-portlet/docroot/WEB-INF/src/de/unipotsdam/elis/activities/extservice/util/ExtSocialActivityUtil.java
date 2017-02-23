@@ -53,7 +53,7 @@ public class ExtSocialActivityUtil {
 		try {
 			mostRecentMoodleActivities = MoodleRestClient.getLatestCourseNews(starttime,
 					currentTime, 0, 0); 
-		} catch (JSONException | ClientErrorException e) {
+		} catch (Exception e) {
 			_log.error(e); // log error to inform admins 
 		}
 			
