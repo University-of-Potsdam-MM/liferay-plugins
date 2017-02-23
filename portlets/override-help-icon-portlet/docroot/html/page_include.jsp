@@ -1,3 +1,4 @@
+<%@page import="org.jsoup.select.Elements"%>
 <%@page import="org.jsoup.nodes.TextNode"%>
 <%@page import="org.jsoup.nodes.Node"%>
 <%@page import="com.liferay.portal.util.PortalUtil"%>
@@ -69,17 +70,18 @@ if (languageKey != null){
 						if (articleId != null && articleGroupId != null ){
 							JournalArticle article = JournalArticleLocalServiceUtil.fetchLatestArticle(
 									articleGroupId, articleId, 0);	
-							Matcher matcher = Pattern.compile("<p>([^>]*)</p>").matcher(article.getContentByLocale(request.getLocale().getCountry()));
-							matcher.find();
-							if (matcher.groupCount() > 0){
-								pageLink.replaceWith(new TextNode(matcher.group(1),"")) ;
+							Document doc1 = Jsoup.parse(article.getContentByLocale(request.getLocale().getCountry()));
+							// needs to be parsed again because tags are escaped
+							Elements pElements = Jsoup.parse(doc1.text()).select("p");
+							if (!pElements.isEmpty()){
+								pageLink.replaceWith(new TextNode(pElements.first().text(),""));
 								boolean more = BooleanUtils.toBoolean(pageLink.attr("more"));
 								if (more) {
 									link = PortalUtil.getLayoutFullURL(helpPageLayout, themeDisplay);
 								}
+								else
+									errorMessage = "no first paragraph found";
 							}
-							else
-								errorMessage = "no first paragraph found";
 						}
 						else {
 							errorMessage = "no web conent set on the choosen page";
