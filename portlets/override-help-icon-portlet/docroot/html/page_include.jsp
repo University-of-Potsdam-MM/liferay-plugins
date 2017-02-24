@@ -55,42 +55,46 @@ if (languageKey != null){
 		Long groupId = NumberUtils.createLong(pageLink.attr("groupId"));
 		Boolean privateLayout = BooleanUtils.toBooleanObject(pageLink.attr("privateLayout"));
 		String friendlyURL = pageLink.attr("friendlyURL");
+		int journalContentIndex = NumberUtils.toInt(pageLink.attr("journalContentIndex"));
 		if (groupId != null && privateLayout != null && friendlyURL != null){
 			Layout helpPageLayout = LayoutLocalServiceUtil.fetchLayoutByFriendlyURL(groupId, privateLayout, friendlyURL);
 			if (helpPageLayout != null){
 				LayoutTypePortlet helpPageLayoutTypePortlet = (LayoutTypePortlet)helpPageLayout.getLayoutType();
 				List<Portlet> portlets = helpPageLayoutTypePortlet.getAllPortlets();
+				int currentJournalContentIndex = 0;
 				for(Portlet portlet : portlets){
 					if (portlet.getPortletName().equals(PortletKeys.JOURNAL_CONTENT)){
-						PortletPreferences prefs = PortletPreferencesLocalServiceUtil.fetchPreferences(
-								helpPageLayout.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
-								PortletKeys.PREFS_OWNER_TYPE_LAYOUT, helpPageLayout.getPlid(), portlet.getPortletId());
-						String articleId = prefs.getValue("articleId", null);
-						Long articleGroupId = NumberUtils.createLong(prefs.getValue("groupId", null));
-						if (articleId != null && articleGroupId != null ){
-							JournalArticle article = JournalArticleLocalServiceUtil.fetchLatestArticle(
-									articleGroupId, articleId, 0);	
-							Document doc1 = Jsoup.parse(article.getContentByLocale(request.getLocale().getCountry()));
-							// needs to be parsed again because tags are escaped
-							Elements pElements = Jsoup.parse(doc1.text()).select("p");
-							System.out.println(Jsoup.parse(doc1.text()).toString());
-							if (!pElements.isEmpty()){
-								System.out.println((new TextNode(pElements.first().text(),"")).toString());
-								pageLink.replaceWith(new TextNode(pElements.first().text(),""));
-								boolean more = BooleanUtils.toBoolean(pageLink.attr("more"));
-								if (more) {
-									link = PortalUtil.getLayoutFullURL(helpPageLayout, themeDisplay);
+						if (journalContentIndex == currentJournalContentIndex){
+							PortletPreferences prefs = PortletPreferencesLocalServiceUtil.fetchPreferences(
+									helpPageLayout.getCompanyId(), PortletKeys.PREFS_OWNER_ID_DEFAULT,
+									PortletKeys.PREFS_OWNER_TYPE_LAYOUT, helpPageLayout.getPlid(), portlet.getPortletId());
+							String articleId = prefs.getValue("articleId", null);
+							Long articleGroupId = NumberUtils.createLong(prefs.getValue("groupId", null));
+							if (articleId != null && articleGroupId != null ){
+								JournalArticle article = JournalArticleLocalServiceUtil.fetchLatestArticle(
+										articleGroupId, articleId, 0);	
+								Document doc1 = Jsoup.parse(article.getContentByLocale(request.getLocale().getCountry()));
+								// needs to be parsed again because tags are escaped
+								Elements pElements = Jsoup.parse(doc1.text()).select("p");
+								if (!pElements.isEmpty()){
+									pageLink.replaceWith(new TextNode(pElements.first().text(),""));
+									boolean more = BooleanUtils.toBoolean(pageLink.attr("more"));
+									if (more) {
+										link = PortalUtil.getLayoutFullURL(helpPageLayout, themeDisplay);
+									}
 								}
+								else
+									errorMessage = "no first paragraph found";
 							}
-							else
-								errorMessage = "no first paragraph found";
+							else {
+								errorMessage = "no web conent set on the choosen page";
+							}
 						}
-						else {
-							errorMessage = "no web conent set on the choosen page";
-						}
+						currentJournalContentIndex++;
 					}
-					
-					
+				}
+				if (currentJournalContentIndex <= journalContentIndex){
+					errorMessage = "journalContentIndex out of range";
 				}
 			}
 			else{
@@ -131,7 +135,7 @@ String id = StringUtil.randomId();
 		<br>
 		<% if (link != null) {%>
 			<span class="more-link">
-				<a href="<%=link%>" onClick="window.open('<%=link%>');"><%= LanguageUtil.get(pageContext, "more") %></a>
+				<a href="<%=link%>" target="_blank"><%= LanguageUtil.get(pageContext, "more") %></a>
 			</span>
 		<% } %>
 	</span> 
