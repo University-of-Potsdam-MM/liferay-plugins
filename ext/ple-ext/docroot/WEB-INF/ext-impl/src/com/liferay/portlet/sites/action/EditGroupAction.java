@@ -956,16 +956,15 @@ public class EditGroupAction extends PortletAction {
 	 * @param themeDisplay
 	 * @throws Exception
 	 */
-	private void sendMail(User recipient, long groupId, ThemeDisplay themeDisplay, long userId) 
+	private void sendMail(User user, long groupId, ThemeDisplay themeDisplay, long userId) 
 		throws Exception {
-		
+
 		User deletor = null;
 		if (userId != 0) {
 			deletor = UserLocalServiceUtil.getUser(userId);
 			System.out.println(deletor.getFullName());
 		}
 		
-		User user = themeDisplay.getUser();
 		if (user == null) {
 			System.err.println("user is null");
 			return;
