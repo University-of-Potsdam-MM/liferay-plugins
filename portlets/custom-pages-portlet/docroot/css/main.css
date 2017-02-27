@@ -526,7 +526,7 @@ div#_mycustompages_WAR_custompagesportlet_inviteMembersContainer .alert {
 }
 	
 .user-invited .list {
-	min-height: 250px;
+	
 	overflow-y:auto;
 	overflow-x:auto; }
 		
