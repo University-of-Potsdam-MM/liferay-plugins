@@ -2,6 +2,22 @@
 <!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
+		<portlet>
+				<portlet-name>3</portlet-name>
+				<icon>/html/icons/search.png</icon>
+				<struts-path>search</struts-path>
+				<configuration-action-class>com.liferay.portlet.search.action.ConfigurationActionImpl</configuration-action-class>				
+				<!--<open-search-class>com.liferay.portal.search.PortalOpenSearchImpl</open-search-class>-->
+				<preferences-owned-by-group>true</preferences-owned-by-group>
+				<use-default-template>false</use-default-template>
+				<restore-current-view>false</restore-current-view>
+				<instanceable>true</instanceable>
+				<private-request-attributes>false</private-request-attributes>
+				<private-session-attributes>false</private-session-attributes>
+				<header-portlet-css>/html/portlet/search/css/main.css</header-portlet-css>
+				<css-class-wrapper>portlet-search</css-class-wrapper>
+				<add-default-resource>true</add-default-resource>
+		</portlet>
 		<portlet>	
 	            <portlet-name>10</portlet-name>
 	            <icon>/html/icons/address_book.png</icon>
