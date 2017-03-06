@@ -34,7 +34,7 @@
 		<portlet id="workspacedescription_WAR_workspacedescriptionportlet" />
 		<portlet id="upiframe_WAR_upiframeportlet" />
 		<portlet id="20" />
-		<portlet id="etherpadlite_WAR_liferayetherpadliteportlet" />
+		<portlet id="etherpadlite_WAR_etherpadliteportlet" />
 	</category>
 	<category name="category.notification">
 		<portlet id="116" />
