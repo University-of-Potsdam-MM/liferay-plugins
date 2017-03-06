@@ -32,8 +32,8 @@ public class CustomPageStartupAction extends SimpleAction {
 			ExpandoColumn expandoColumn = addExpandoAttribute(PortalUtil.getDefaultCompanyId(), CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME,
 					ExpandoColumnConstants.INTEGER, Layout.class.getName());
 
-			if (!expandoColumn.getDefaultData().equals("1")) {
-				expandoColumn.setDefaultData("1");
+			if (!expandoColumn.getDefaultData().equals("0")) {
+				expandoColumn.setDefaultData("0");
 				ExpandoColumnLocalServiceUtil.updateExpandoColumn(expandoColumn);
 			}
 			
