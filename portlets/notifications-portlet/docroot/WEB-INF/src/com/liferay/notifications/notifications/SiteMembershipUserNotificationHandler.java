@@ -198,7 +198,7 @@ public class SiteMembershipUserNotificationHandler extends
 				},
 				new String[] {
 					serviceContext.translate("confirm"), confirmURL.toString(),
-					serviceContext.translate("ignore"), ignoreURL.toString(), title
+					serviceContext.translate("deny"), ignoreURL.toString(), title
 				});
 		
 	}
