@@ -268,12 +268,10 @@ AUI().use(
     	    label: '<%= LanguageUtil.get(pageContext, "custompages-feedback-column")%>',
     	    key: 'feedback',
     	    nodeFormatter: function(o) {
-    	        if (o.data.isGlobal) {
-    	            o.cell.setHTML(
-    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
-    	                '<%= LanguageUtil.get(pageContext, "custompages-request-feedback")%>' +
-    	                '</a>');
-    	        }
+   	            o.cell.setHTML(
+   	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
+   	                '<%= LanguageUtil.get(pageContext, "custompages-request-feedback")%>' +
+   	                '</a>');
     	        return false;
     	    }
     	}, {
