@@ -91,7 +91,18 @@
 	        if (b)
 	        	b.on("click", c);
 	        f.on("key", c, "down:38,40")
+	        
+	        // close filter when the is a click somewhere but not on the filter menu
+	        var body = a.one('body');
+		 	body.on('click',function(e){
+		 		if (!b.contains(e.target) && i().render().get("visible") && !g.contains(e.target))
+		 			c(e);
+		 		}
+		 	);
 	    })()
+	    
+	    
+	    
 	});
 
 </script> 
