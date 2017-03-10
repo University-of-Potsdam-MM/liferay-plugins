@@ -32,6 +32,12 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 
 /**
+ * This class handles all website notifications for site membership requests.
+ * Including:
+ * 	- workspace was deleted
+ *  - user was added to a workspace
+ *  - user wants to join a workspace
+ *  - membership request to join a workspace was approved or denied
  * 
  * @author Patrick Wolfien
  *
@@ -152,41 +158,41 @@ public class SiteMembershipUserNotificationHandler extends
 		LiferayPortletResponse liferayPortletResponse =
 			serviceContext.getLiferayPortletResponse();
 
-		// confirm button: nutzer darf beitreten
+		// confirm button: user is free to enter
 		PortletURL confirmURL = liferayPortletResponse.createActionURL(
-				"1_WAR_notificationsportlet");	// Portlet dessen Methode verwendet wird
+				"1_WAR_notificationsportlet");	// Portlet whose method is called
 
 		confirmURL.setParameter(
-			ActionRequest.ACTION_NAME, "updateMembershipRequest");	// Methode die aufgerufen wird
+			ActionRequest.ACTION_NAME, "updateMembershipRequest");	// the called method
 		confirmURL.setParameter(
-			"membershipRequestId", String.valueOf(membershipRequestId)); // Parameter der Methode
+			"membershipRequestId", String.valueOf(membershipRequestId)); // method parameter
 		confirmURL.setParameter(
 			"statusId",
-			String.valueOf(MembershipRequestConstants.STATUS_APPROVED)); // Parameter der Methode
+			String.valueOf(MembershipRequestConstants.STATUS_APPROVED)); // method parameter
 		confirmURL.setParameter(
 			"userNotificationEventId",
-			String.valueOf(userNotificationEvent.getUserNotificationEventId())); // Parameter der Methode
+			String.valueOf(userNotificationEvent.getUserNotificationEventId())); // method parameter
 		confirmURL.setParameter(
 				"replyComments",
-				"YES");
+				"");
 		confirmURL.setWindowState(WindowState.NORMAL);
 
-		// ignore button: nutzer darf nicht beitreten
+		// ignore button: user is not allowed to enter
 		PortletURL ignoreURL = liferayPortletResponse.createActionURL(
 				"1_WAR_notificationsportlet");
 
 		ignoreURL.setParameter(
-			ActionRequest.ACTION_NAME, "updateMembershipRequest");	// Methode die aufgerufen wird
+			ActionRequest.ACTION_NAME, "updateMembershipRequest");	// the called method
 		ignoreURL.setParameter(
-			"membershipRequestId", String.valueOf(membershipRequestId));	// Parameter der Methode
+			"membershipRequestId", String.valueOf(membershipRequestId));	// method parameter
 		ignoreURL.setParameter(
-			"statusId", String.valueOf(MembershipRequestConstants.STATUS_DENIED));	// Parameter der Methode
+			"statusId", String.valueOf(MembershipRequestConstants.STATUS_DENIED));	// method parameter
 		ignoreURL.setParameter(
 			"userNotificationEventId",
-			String.valueOf(userNotificationEvent.getUserNotificationEventId()));	// Parameter der Methode
+			String.valueOf(userNotificationEvent.getUserNotificationEventId()));	// method parameter
 		ignoreURL.setParameter(
 				"replyComments",
-				"NO");
+				"");
 		ignoreURL.setWindowState(WindowState.NORMAL);
 		
 		
