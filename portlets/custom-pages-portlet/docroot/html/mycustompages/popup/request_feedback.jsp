@@ -52,6 +52,7 @@ String finished = renderRequest.getParameter("finished");
 			<portlet:renderURL var="redirectHereURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
 				<portlet:param name="mvcPath" value="/html/mycustompages/popup/request_feedback.jsp" />
 				<portlet:param name="customPagePlid" value="<%= customPagePlid %>" />
+				<portlet:param name="isPrivate" value="<%= String.valueOf(isPrivate) %>" />
 				<portlet:param name="finished" value="true" />
 			</portlet:renderURL>
 
