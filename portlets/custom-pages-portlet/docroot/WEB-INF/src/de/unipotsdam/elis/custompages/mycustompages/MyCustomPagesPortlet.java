@@ -612,7 +612,6 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		Layout customPage = LayoutLocalServiceUtil.getLayout(customPagePlid);
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE)) {
-			System.out.println("jo");
 			List<Long> newUserIds = ListUtil.toList(getLongArray(actionRequest, "receiverUserIds"));
 			List<CustomPageFeedback> publishments = CustomPageFeedbackLocalServiceUtil
 					.getCustomPageFeedbackByPlid(customPagePlid);
@@ -623,7 +622,6 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 
 			for (Long userId : oldUserIds) {
 				if (!newUserIds.contains(userId)){
-					System.out.println(CustomPageUtil.isPublishedGlobal(customPagePlid));
 					if (CustomPageUtil.isPublishedGlobal(customPagePlid))
 						CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPagePlid, userId);
 					else
@@ -645,8 +643,6 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				}
 			}
 		}
-		else
-			System.out.println("no");
 		
 		movePageToPrivateAreaIfNecessary(actionRequest, customPage, themeDisplay.getUserId());
 		if ((CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0 || CustomPageUtil
