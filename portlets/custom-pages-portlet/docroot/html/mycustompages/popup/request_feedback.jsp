@@ -177,7 +177,6 @@ String finished = renderRequest.getParameter("finished");
 							'</div>';
 
 						var invited = invitedList || invitedMembersList.one('[data-userId="' + result.userId + '"]');
-						console.log(result.userFullName + ' ' + invited);
 						
 						if (invitedList){
 							var inviteUser = searchList.one('[data-userId="' + result.userId + '"]');

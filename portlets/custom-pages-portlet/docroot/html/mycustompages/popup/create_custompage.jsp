@@ -84,7 +84,6 @@ function setTemplateDescription(){
 	AUI().use('aui-base',function(A){
 	var inputs = A.one('div#templateChoice').all('input');
 	for (var i = 0; i < inputs.size(); i++){
-		console.log("jo1");
 		var item = inputs.item(i);
 		if (item.get("type") === 'radio' && item.get("checked") === true){
 			var descriptionDiv = A.one('#descriptionContent');
@@ -95,13 +94,11 @@ function setTemplateDescription(){
 }
 
 function setPageTypeDescription(){
-	console.log("test");
 	AUI().use('aui-base',function(A){
 	var inputs = A.one('div#customPageTypeChoice').all('input');
 	for (var i = 0; i < inputs.size(); i++){
-		console.log("jo2");
 		var item = inputs.item(i);
-		if (item.get("type") === 'radio' && item.get("checked") === true){console.log(item.get("value"));
+		if (item.get("type") === 'radio' && item.get("checked") === true){
 			var pageTypeDescriptionContent = A.one('#pageTypeDescriptionContent');
 			if (item.get("value") == "<%= CustomPageStatics.CUSTOM_PAGE_TYPE_NORMAL_PAGE%>"){
 				pageTypeDescriptionContent.set('innerHTML','<%= LanguageUtil.get(pageContext, "custompages-normal-pages-description") %>');
