@@ -5,6 +5,7 @@
 
 <%
 String customPagePlid = renderRequest.getParameter("customPagePlid"); 
+boolean isPrivate = renderRequest.getParameter("isPrivate").equals("1");
 String finished = renderRequest.getParameter("finished");
 %>
 
@@ -15,9 +16,12 @@ String finished = renderRequest.getParameter("finished");
 </c:if>
 
 <div id="<portlet:namespace />inviteMembersContainer">
+	<% if (isPrivate) { %>
+		<span class="alert alert-info"><%= LanguageUtil.get(pageContext, "custompages-page-will-be-moved-to-public-area-message-when-submitted") %></span>
+	<% } %>
 	<div class="user-search-wrapper">
 		<h2>
-			<liferay-ui:message key="find-members" />
+			<liferay-ui:message key="custompages-find-members-for-submission" />
 		</h2>
 
 		<input class="invite-user-search" id="<portlet:namespace />inviteUserSearch" name="<portlet:namespace />userName" type="text" />
@@ -33,7 +37,7 @@ String finished = renderRequest.getParameter("finished");
 				<liferay-ui:message key="custompages-manage-feedback-requests" />
 
 				<span>
-					<liferay-ui:message key="to-add,-click-members-on-the-left" />
+					<liferay-ui:message key="custompages-add-users-from-list" />
 				</span>
 			</h2>
 
@@ -98,7 +102,7 @@ String finished = renderRequest.getParameter("finished");
 	}
 	var fillInvitedList = function(){
 		A.io.request(
-				'<portlet:resourceURL id="getUsersCustomPagePublishedTo" ><portlet:param name="<%=Constants.CMD%>" value="getUsersCustomPagePublishedTo" /></portlet:resourceURL>',
+				'<portlet:resourceURL id="getUsersCustomPageSubmittedTo" ><portlet:param name="<%=Constants.CMD%>" value="getUsersCustomPageSubmittedTo" /></portlet:resourceURL>',
 				{
 					after: {
 						success: function(event, id, obj) {
@@ -172,6 +176,16 @@ String finished = renderRequest.getParameter("finished");
 							'</div>';
 
 						var invited = invitedList || invitedMembersList.one('[data-userId="' + result.userId + '"]');
+						console.log(result.userFullName + ' ' + invited);
+						
+						if (invitedList){
+							var inviteUser = searchList.one('[data-userId="' + result.userId + '"]');
+							if (inviteUser ){
+								if (!inviteUser.hasClass('invited')){
+									inviteUser.addClass('invited');
+								}
+							}
+						}
 
 						return A.Lang.sub(
 							userTemplate,
