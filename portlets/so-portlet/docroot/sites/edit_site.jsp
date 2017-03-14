@@ -389,8 +389,41 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 	Liferay.Util.focusFormField(document.<portlet:namespace />dialogFm.<portlet:namespace />name);
 </aui:script>
-
-<aui:script use="aui-base,aui-io-deprecated">
+<aui:script use="aui-base,aui-io-deprecated,aui-tooltip">
+	// BEGIN CHANGE
+	// init tooltip informing the user that at least one page has to be selected
+	var tooltip = new A.Tooltip(
+			{
+				cssClass: 'tooltip-help',
+				html: true,
+				opacity: 1,
+				stickDuration: 300,
+				visible: false,
+				zIndex: 10000,
+				bodyContent: Liferay.Language.get('at-least-on-page-has-to-be-selected'),
+				triggerShowEvent: 'click'
+			}
+		).render();
+	
+	var pageCheckboxes = A.all('.page input');
+	pageCheckboxes.on('click', function(e){
+		var checkedArray = pageCheckboxes.get('checked');
+		var checkedCount = 0;
+		for (var i = 0; i < checkedArray.length; i++){
+			if (checkedArray[i])
+				checkedCount ++;
+		}
+		// show tooltip and set current checkbox to checked when no other page is selected
+		if (checkedCount == 0){
+			e.currentTarget.set('checked',true);
+			tooltip.set('trigger', e.currentTarget);
+			tooltip.show();
+			// set trigger null after to avoid that the tooltip is shown whenever the checkbox is clicked
+			tooltip.set('trigger', null);
+		}
+	});
+	// END CHANGE
+	
 	var form = A.one(document.<portlet:namespace />dialogFm);
 
 	form.on(
