@@ -14,6 +14,9 @@
 
 package com.liferay.notifications.notifications;
 
+import javax.portlet.PortletConfig;
+import javax.servlet.ServletContext;
+
 import com.liferay.compat.portal.kernel.notifications.BaseModelUserNotificationHandler;
 import com.liferay.compat.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.notifications.util.NotificationsConstants;
@@ -23,10 +26,14 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 
 /**
  * @author Lin Cui
@@ -74,10 +81,10 @@ public class DocumentLibraryUserNotificationHandler
 		// check notification type to display correct message
 		switch (notificationType) {
 		case UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY:
-			message = "x-added-a-new-file";
+			message = "x-added-a-new-file-in-workspace-x";
 			break;
 		case UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY:
-			message = "x-updated-a-file";
+			message = "x-updated-a-file-in-workspace-x";
 			break;	
 		case NotificationsConstants.NOTIFICATION_TYPE_ADD_COMMENT:
 			message = "x-added-a-comment-on-your-post";
@@ -87,12 +94,22 @@ public class DocumentLibraryUserNotificationHandler
 			break;	
 		}
 		
-		return LanguageUtil.format(
-				serviceContext.getLocale(), message,
-				HtmlUtil.escape(
-					PortalUtil.getUserName(
-						jsonObject.getLong("userId"), StringPool.BLANK)),
-				false);
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				com.liferay.notifications.util.PortletKeys.NOTIFICATIONS);
+		ServletContext servletContext =
+				(ServletContext)serviceContext.getAttribute(WebKeys.CTX);
+		PortletConfig portletConfig =  PortletConfigFactoryUtil
+				.create(portlet, servletContext);
+		
+		return LanguageUtil
+				.format(portletConfig, serviceContext.getLocale(),
+						message,
+						new String[] {
+								HtmlUtil.escape(PortalUtil.getUserName(
+										jsonObject.getLong("userId"), StringPool.BLANK)), 
+								serviceContext.getScopeGroup().getDescriptiveName(serviceContext.getLocale()) 
+						}, 
+						false);
 	}
 	
 }

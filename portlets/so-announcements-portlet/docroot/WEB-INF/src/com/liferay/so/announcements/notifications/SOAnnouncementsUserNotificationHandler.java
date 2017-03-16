@@ -17,29 +17,36 @@
 
 package com.liferay.so.announcements.notifications;
 
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.servlet.ServletContext;
+
 import com.liferay.compat.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsEntry;
 import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceUtil;
 import com.liferay.so.announcements.util.PortletKeys;
-
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowState;
 
 /**
  * @author Jonathan Lee
@@ -73,12 +80,30 @@ public class SOAnnouncementsUserNotificationHandler
 			return null;
 		}
 
-		String title = serviceContext.translate(
-			"x-sent-a-new-announcement",
-			HtmlUtil.escape(
-				PortalUtil.getUserName(
-					announcementEntry.getUserId(), StringPool.BLANK)));
-
+// BEGIN CHANGE
+//		String title = serviceContext.translate(
+//			"x-sent-a-new-announcement",
+//			HtmlUtil.escape(
+//				PortalUtil.getUserName(
+//					announcementEntry.getUserId(), StringPool.BLANK)));
+	
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				PortletKeys.SO_ANNOUNCEMENTS);
+		ServletContext servletContext =
+				(ServletContext)serviceContext.getAttribute(WebKeys.CTX);
+		PortletConfig portletConfig =  PortletConfigFactoryUtil
+				.create(portlet, servletContext);
+		
+		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+				"x-sent-a-new-announcement-in-workspace-x",
+				new Object[]{HtmlUtil.escape(
+					PortalUtil.getUserName(
+						announcementEntry.getUserId(), StringPool.BLANK)),
+						serviceContext.getScopeGroup().getDescriptiveName(serviceContext.getLocale())
+				});
+				
+// END CHANGE
+		
 		return StringUtil.replace(
 			getBodyTemplate(), new String[] {"[$BODY$]", "[$TITLE$]"},
 			new String[] {

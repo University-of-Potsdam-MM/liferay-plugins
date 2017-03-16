@@ -3,8 +3,10 @@ package com.liferay.notifications.notifications;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowState;
+import javax.servlet.ServletContext;
 
 import com.liferay.compat.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -16,20 +18,24 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.MembershipRequest;
 import com.liferay.portal.model.MembershipRequestConstants;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 
 /**
  * This class handles all website notifications for site membership requests.
@@ -54,6 +60,13 @@ public class SiteMembershipUserNotificationHandler extends
 	protected String getBody(UserNotificationEvent userNotificationEvent,
 			ServiceContext serviceContext) throws Exception {
 		
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				com.liferay.notifications.util.PortletKeys.NOTIFICATIONS);
+		ServletContext servletContext =
+				(ServletContext)serviceContext.getAttribute(WebKeys.CTX);
+		PortletConfig portletConfig =  PortletConfigFactoryUtil
+				.create(portlet, servletContext);
+		
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
 				userNotificationEvent.getPayload());
 		
@@ -67,7 +80,7 @@ public class SiteMembershipUserNotificationHandler extends
 			if (isWorkspaceDeletion) {
 				String workspaceName = jsonObject.getString("workspaceName"); // get workspacename form request
 				
-				String message = LanguageUtil.format(serviceContext.getLocale(), "workspace-x-was-deleted", 
+				String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "workspace-x-was-deleted", 
 						new String[] { 
 							workspaceName 
 						});
@@ -82,13 +95,9 @@ public class SiteMembershipUserNotificationHandler extends
 				
 				String workspaceName = jsonObject.getString("workspaceName"); //get workspacename form request
 				
-				String linkedWorkspaceName = "<a href=\""
-						+ getLink(userNotificationEvent, serviceContext)
-						+ "\">" + workspaceName + "</a>";
-				
-				String message = LanguageUtil.format(serviceContext.getLocale(), "you-were-added-to-workspace-x", 
+				String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "you-were-added-to-workspace-x", 
 						new String[] { 
-							linkedWorkspaceName 
+							workspaceName
 						});
 				
 				return StringUtil.replace(
@@ -123,7 +132,7 @@ public class SiteMembershipUserNotificationHandler extends
 		if (membershipRequest.getStatusId() ==
 				MembershipRequestConstants.STATUS_PENDING) {
 			
-			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-wants-to-join-x", 
+			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "notification-request-x-wants-to-join-x", 
 					new Object[] { 
 						getUserNameLink(membershipRequest.getUserId(), serviceContext),
 						getWorkspaceNameLink(membershipRequest.getGroupId(), serviceContext) 
@@ -131,7 +140,7 @@ public class SiteMembershipUserNotificationHandler extends
 		} 
 		else if (membershipRequest.getStatusId() ==
 				MembershipRequestConstants.STATUS_APPROVED) {
-			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-approved-your-request-to-join-x", 
+			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "notification-request-x-approved-your-request-to-join-x", 
 					new Object[] { 
 						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
 						getWorkspaceNameLink(membershipRequest.getGroupId(), serviceContext) 
@@ -143,7 +152,7 @@ public class SiteMembershipUserNotificationHandler extends
 		}
 		else if (membershipRequest.getStatusId() ==
 				MembershipRequestConstants.STATUS_DENIED) {
-			title = LanguageUtil.format(serviceContext.getLocale(), "notification-request-x-denied-your-request-to-join-x", 
+			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "notification-request-x-denied-your-request-to-join-x", 
 					new Object[] { 
 						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
 						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
@@ -228,9 +237,29 @@ public class SiteMembershipUserNotificationHandler extends
 		boolean isWorkspaceDeletion = jsonObject.getBoolean("workspaceDeletion");
 		boolean isMembershipRequest = jsonObject.getBoolean("membershipRequest");
 		
-		if (!isMembershipRequest && !isWorkspaceDeletion) {
-			// notificationEvent: user added to workspace
+		if (!isWorkspaceDeletion) {
+
 			String workspaceURL = jsonObject.getString("workspaceURL");
+			
+			if (!isMembershipRequest) {
+				// notificationEvent: user added to workspace
+				return workspaceURL;
+			}
+			
+			long membershipRequestId = jsonObject.getLong("classPK");
+			MembershipRequest membershipRequest = MembershipRequestLocalServiceUtil.fetchMembershipRequest(membershipRequestId);
+			
+			if (membershipRequest.getStatusId() == MembershipRequestConstants.STATUS_DENIED) {
+				
+				// request was denied, so get public layout
+				workspaceURL = getWorkspaceURL(membershipRequest.getGroupId(), serviceContext, false);
+				
+			} else {
+				
+				// get workspaceURL if not done yet
+				if (StringPool.BLANK.equals(workspaceURL) || workspaceURL == null) 
+					workspaceURL = getWorkspaceURL(membershipRequest.getGroupId(), serviceContext);
+			}
 			
 			// use workspaceURL as link
 			return workspaceURL;
@@ -306,9 +335,29 @@ public class SiteMembershipUserNotificationHandler extends
 	private String getWorkspaceURL (long groupId, ServiceContext serviceContext) 
 			throws PortalException, SystemException {
 		
+//		String portalURL = serviceContext.getPortalURL();
+//		
+//		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(groupId, true);
+//		
+//		Layout layout = null;
+//		
+//		if (!layouts.isEmpty())
+//			layout = layouts.get(0);
+//		
+//		if (layout != null)
+//			return portalURL + PortalUtil.getLayoutActualURL(layout);
+//		
+//		return "";
+		
+		return getWorkspaceURL(groupId, serviceContext, true);
+	}
+	
+	private String getWorkspaceURL (long groupId, ServiceContext serviceContext, boolean privateLayout) 
+			throws PortalException, SystemException {
+		
 		String portalURL = serviceContext.getPortalURL();
 		
-		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(groupId, true);
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(groupId, privateLayout);
 		
 		Layout layout = null;
 		

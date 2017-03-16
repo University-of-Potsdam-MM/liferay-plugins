@@ -17,29 +17,37 @@
 
 package com.liferay.so.invitemembers.notifications;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.PortletConfig;
+import javax.portlet.PortletURL;
+import javax.portlet.WindowState;
+import javax.servlet.ServletContext;
+
 import com.liferay.compat.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.MembershipRequestConstants;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 import com.liferay.so.model.MemberRequest;
 import com.liferay.so.service.MemberRequestLocalServiceUtil;
 import com.liferay.so.util.PortletKeys;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowState;
 
 /**
  * @author Jonathan Lee
@@ -82,10 +90,17 @@ public class InviteMembersUserNotificationHandler
 
 		String title = StringPool.BLANK;
 
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				PortletKeys.SO_INVITE_MEMBERS);
+		ServletContext servletContext =
+				(ServletContext)serviceContext.getAttribute(WebKeys.CTX);
+		PortletConfig portletConfig =  PortletConfigFactoryUtil
+				.create(portlet, servletContext);
+		
 		if (memberRequest.getStatus() ==
 				MembershipRequestConstants.STATUS_PENDING) {
 
-			title = serviceContext.translate(
+			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 				"x-invited-you-to-join-x",
 				new Object[] {
 					getUserNameLink(memberRequest.getUserId(), serviceContext),
@@ -93,12 +108,16 @@ public class InviteMembersUserNotificationHandler
 						memberRequest.getGroupId(), serviceContext)});
 		}
 		else {
-			String message = serviceContext.translate(
+			
+			User receiver = UserLocalServiceUtil.getUser(memberRequest.getReceiverUserId());
+			Group _group = GroupLocalServiceUtil.getGroup(memberRequest.getGroupId());
+			
+			String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"x-accepted-your-invitation-to-join-x",
 					new Object[] {
-						getUserNameLink(memberRequest.getReceiverUserId(), serviceContext),
-						getSiteDescriptiveName(
-							memberRequest.getGroupId(), serviceContext)});
+						receiver.getFullName(),
+						_group.getDescriptiveName(serviceContext.getLocale())
+					});
 			return StringUtil.replace("<div class=\"title\">[$TITLE$]</div>", new String[] { "[$TITLE$]" }, new String[] { message });
 		}
 
@@ -152,7 +171,37 @@ public class InviteMembersUserNotificationHandler
 			ServiceContext serviceContext)
 		throws Exception {
 
-		return StringPool.BLANK;
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+				userNotificationEvent.getPayload());
+
+		long memberRequestId = jsonObject.getLong("classPK");
+
+		MemberRequest memberRequest =
+			MemberRequestLocalServiceUtil.fetchMemberRequest(memberRequestId);
+		
+		// status Pending return no link, else return link to workspace
+		if (memberRequest.getStatus() ==
+				MembershipRequestConstants.STATUS_PENDING) {
+		
+			return StringPool.BLANK;
+		} else {
+			
+			LiferayPortletResponse liferayPortletResponse =
+				serviceContext.getLiferayPortletResponse();
+
+			PortletURL portletURL = liferayPortletResponse.createActionURL(
+				PortletKeys.SITE_REDIRECTOR);
+
+			portletURL.setWindowState(WindowState.NORMAL);
+
+			portletURL.setParameter("struts_action", "/my_sites/view");
+			portletURL.setParameter("groupId", String.valueOf(memberRequest.getGroupId()));
+			portletURL.setParameter("privateLayout", Boolean.TRUE.toString());
+			
+			return portletURL.toString();
+		}
+		
+		
 	}
 
 	protected String getSiteDescriptiveName(
