@@ -64,7 +64,9 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 //			return doAsRequest(jsonObject, userNotificationEvent, serviceContext);
 //		}
 		
-		message = getTitle(serviceContext, socialActivityType, plid);
+		long userId = jsonObject.getLong("userId");
+		
+		message = getTitle(serviceContext, socialActivityType, plid, userId);
 		
 		String body = StringUtil.replace(getBodyTemplate(), new String[] { "[$TITLE$]" }, new String[] { message });
 
@@ -162,7 +164,7 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 			});
 	}
 	
-	private String getTitle(ServiceContext serviceContext, int activityType, long plid) 
+	private String getTitle(ServiceContext serviceContext, int activityType, long plid, long userId) 
 			throws PortalException, SystemException {
 		
 		// getting portletConfig from serviceContext does not return correct portlet Property. So create it manually...
@@ -173,7 +175,7 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 		PortletConfig portletConfig =  PortletConfigFactoryUtil
 				.create(portlet, servletContext);
 		
-		User user = UserLocalServiceUtil.getUser((serviceContext.getUserId()));
+		User user = UserLocalServiceUtil.getUser(userId);
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
 				
 		String notificationMessage = StringPool.BLANK;
