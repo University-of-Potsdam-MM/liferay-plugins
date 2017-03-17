@@ -61,7 +61,7 @@
 					<tr>
 						<td class="span8">
 							<%-- <liferay-ui:message key="<%= userNotificationDefinition.getDescription() %>" /> --%>
-							<liferay-ui:message key="<%= LanguageUtil.get(locale, \"receive-a-notification-when-someone\") + \" \" + LanguageUtil.get(locale, userNotificationDefinition.getDescription()) %>" />
+							<liferay-ui:message key="<%= LanguageUtil.get(locale, userNotificationDefinition.getDescription()) %>" />
 						</td>
 						<td class="span1">
 
