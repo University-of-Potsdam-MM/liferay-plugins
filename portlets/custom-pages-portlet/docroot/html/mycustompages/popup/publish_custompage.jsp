@@ -25,11 +25,12 @@ String published = renderRequest.getParameter("published");
 	<% } %>
 	
 	<div class="choose-publishment-type">
+		
+		<div class="user-search-wrapper">
 		<div class="portalwide-publishment-div">
 			<aui:button name="portalwide-publishment-button" type="submit" value="<%=LanguageUtil.get(portletConfig, locale, \"custompages-portalwide-publishment\")%>" onClick="<%= globalPubllishmentMethod %>" />
 			<label class="or-label"><%= LanguageUtil.get(pageContext, "custompages-or") %></label>
 		</div>
-		<div class="user-search-wrapper">
 			<h2>
 				<liferay-ui:message key="custompages-find-members-for-sharing" />
 			</h2>
