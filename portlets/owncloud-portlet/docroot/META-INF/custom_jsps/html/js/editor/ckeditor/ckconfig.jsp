@@ -63,6 +63,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 			{name: 'Heading 2', element: 'h2', attributes: {'class':'editor-h2'}},
 			{name: 'Heading 3', element: 'h3', attributes: {'class':'editor-h3'}},
 			{name: 'Heading 4', element: 'h4', attributes: {'class':'editor-h4'}},
+			{name: 'Heading 5', element: 'h5', attributes: {'class':'editor-h5'}},
 
 			// Special classes
 
@@ -77,7 +78,8 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 			{name: 'Blue text', element: 'span', attributes: {'class':'editor-darkblue'}},
 			{name: 'Grey box', element: 'div', attributes: {'class':'editor-greydiv'}},
 			{name: 'Large link', element: 'div', attributes: {'class':'editor-arrow'}},
-			{name: 'Bue box', element: 'div', attributes: {'class':'editor-lightblue'}},
+			{name: 'Blue box', element: 'div', attributes: {'class':'editor-lightblue'}},
+			
 			// END HOOK CHANGE
 			
 			]
