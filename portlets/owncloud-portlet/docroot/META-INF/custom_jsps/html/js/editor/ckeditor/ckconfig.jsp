@@ -109,8 +109,10 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 	<%-- BEGIN HOOK CHANGE --%>
 	// ajaxsave needs to be removed to avoid error message after the update of the ckeditor to version 4.5
 	// added uploadimage to allow the upload of images with drag and drop
+	// added mathjax to allow the usage of math equations
 	//config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc';
-	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage,oembed';
+	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage,oembed,mathjax';
+	config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
 	<%-- END HOOK CHANGE --%>
 
 	config.height = 265;
@@ -194,7 +196,7 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 		</c:if>
 		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Outdent', 'Indent'],
 		'/',
-		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar']
+		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar', 'Mathjax']
 
 		<c:if test="<%= !inlineEdit %>">
 			,['Source']
@@ -207,7 +209,7 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 		'/',
 		['Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Outdent', 'Indent'],
 		'/',
-		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar']
+		['Image', 'oembed', 'Link', 'Unlink', '-', 'Table', 'SpecialChar', 'Mathjax']
 
 		<c:if test="<%= !inlineEdit %>">
 			,['Source']
