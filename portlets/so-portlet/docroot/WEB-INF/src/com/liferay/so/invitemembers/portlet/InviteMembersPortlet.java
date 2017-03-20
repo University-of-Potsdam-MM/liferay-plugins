@@ -431,6 +431,10 @@ public class InviteMembersPortlet extends MVCPortlet {
 			"classPK", memberRequest.getMemberRequestId());
 		notificationEventJSONObject.put(
 			"userId", memberRequest.getReceiverUserId());
+		// put status in jsonObject. status is used during interpretation in notificationsportelt,
+		// to check whether event shall be rendered as notification or request.
+		notificationEventJSONObject.put(
+				"status", memberRequest.getStatus());
 
 		NotificationEvent notificationEvent =
 			NotificationEventFactoryUtil.createNotificationEvent(

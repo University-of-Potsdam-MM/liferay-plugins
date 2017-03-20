@@ -48,6 +48,11 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.TeamLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
+import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
+import com.liferay.portlet.asset.model.AssetRenderer;
+import com.liferay.portlet.asset.model.AssetRendererFactory;
+
+import de.unipotsdam.elis.custompages.permission.PermissionHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -469,6 +474,38 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 		long companyId, String name, String primKey, long ownerId,
 		String actionId) {
 
+		// BEGIN EXT-PLUGIN CHANGE
+		/*
+		 * Check if custompage is submitted. Therefore a groupId is needed.
+		 * Get groupId of given modelresource via AssetRenderer and check permission.
+		 * FYI: PrimKey CAN BE EntryID of BlogsEntry, BookmarksEntry, ...
+		 * 		and name is corresponding classname 
+		 */
+		try {
+			AssetRendererFactory _assetRendererFactory =
+					AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
+						name);
+			
+			AssetRenderer assetRenderer = _assetRendererFactory.getAssetRenderer(
+					Long.valueOf(primKey));
+			
+			long groupId = assetRenderer.getGroupId();
+			
+			// layouts have id greater zero
+			if (groupId > 0) {
+				if (!PermissionHelper.checkCustomPagePermission(groupId, actionId))
+					return false;
+			}
+			
+		} catch (Exception e) {
+			/*
+			 *  do nothing here, just continue
+			 *  Exceptions occur if name and primKey does not match the expected value.
+			 *  So no resource is found. No resource, no permission needed.
+			 */
+		}
+		// END EXT-PLUGIN CHANGE
+		
 		if (ownerId != getUserId()) {
 			return false;
 		}
@@ -520,6 +557,14 @@ public class AdvancedPermissionChecker extends BasePermissionChecker {
 	public boolean hasPermission(
 		long groupId, String name, String primKey, String actionId) {
 
+		// BEGIN EXT-PLUGIN CHANGE
+		// check if CustomPage is submitted and allow only read permission. Layouts always have id greater zero.
+		if (groupId > 0) {
+			if (!PermissionHelper.checkCustomPagePermission(groupId, actionId))
+				return false;
+		}
+		// END EXT-PLUGIN CHANGE
+		
 		StopWatch stopWatch = new StopWatch();
 
 		stopWatch.start();

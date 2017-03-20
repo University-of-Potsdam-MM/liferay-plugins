@@ -140,6 +140,7 @@ public class SitesPortlet extends MVCPortlet {
 				}
 				else {
 					message = "your-request-failed-to-complete";
+					e.printStackTrace();
 				}
 
 				ThemeDisplay themeDisplay =
@@ -629,16 +630,44 @@ public class SitesPortlet extends MVCPortlet {
 
 		List<Layout> layouts = new ArrayList<Layout>(deleteLayoutIds.length);
 
+		// BEGIN CHANGE
+		// get group of the layoutSetPrototype to get all layouts
+		Group layoutSetPrototypeIdGroup = GroupLocalServiceUtil.getLayoutSetPrototypeGroup(PortalUtil.getDefaultCompanyId(), layoutSetPrototypeId);
+		// END CHANGE
+		 
 		for (long deleteLayoutId : deleteLayoutIds) {
+			// BEGIN CHANGE
+			// get prototype layouts instead of created layouts
+			/*
 			Layout layout = LayoutLocalServiceUtil.getLayout(
 				group.getGroupId(), privateLayout, deleteLayoutId);
+			*/
+			Layout layout = LayoutLocalServiceUtil.getLayout(
+					layoutSetPrototypeIdGroup.getGroupId(), privateLayout, deleteLayoutId);
+			// END CHANGE
 
 			layouts.add(layout);
 		}
+		
 
-		for (Layout layout : layouts) {
-			LayoutLocalServiceUtil.deleteLayout(layout, true, serviceContext);
+		// BEGIN CHANGE
+		// remove layouts by name
+		// solves bug where prototype layout id does not correspond to the id of the created layout
+		//for (Layout layout : layouts) {
+		// 		LayoutLocalServiceUtil.deleteLayout(layout, true, serviceContext);
+		//}
+		
+		List<Layout> currentLayouts = LayoutLocalServiceUtil.getLayouts(group.getGroupId(), privateLayout,0);
+
+		for (Layout currentLayout : currentLayouts) {
+			for (Layout layout : layouts){
+				if (layout.getName().equals(currentLayout.getName())){
+					LayoutLocalServiceUtil.deleteLayout(currentLayout, true, serviceContext);
+				}
+			}
 		}
+		// END CHANGE
+		
 
 		setCustomJspServletContextName(group);
 		

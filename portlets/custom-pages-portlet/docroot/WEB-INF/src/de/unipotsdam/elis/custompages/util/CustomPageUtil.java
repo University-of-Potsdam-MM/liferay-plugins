@@ -120,10 +120,14 @@ public class CustomPageUtil {
 		CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId, feedbackStatus);
 	}
 
-	public static void publishCustomPageToUserAndRequestFeedback(long plid, long userId) throws SystemException {
+	public static void publishCustomPageToUserAndRequestFeedback(long plid, long userId) throws SystemException, NoSuchCustomPageFeedbackException {
 		// TODO: verhindern, dass man sich selbst hinzufügen kann
 		// TODO: doppelte einträge verhindern
-		CustomPageFeedbackLocalServiceUtil.addCustomPageFeedback(plid, userId, CustomPageStatics.FEEDBACK_REQUESTED);
+		CustomPageFeedback customPageFeedback = CustomPageFeedbackLocalServiceUtil.fetchCustomPageFeedback(plid, userId);
+		if (customPageFeedback != null)
+			CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId, CustomPageStatics.FEEDBACK_REQUESTED);
+		else
+			CustomPageFeedbackLocalServiceUtil.addCustomPageFeedback(plid, userId, CustomPageStatics.FEEDBACK_REQUESTED);
 	}
 
 	public static boolean feedbackRequested(long plid, long userId) throws SystemException {

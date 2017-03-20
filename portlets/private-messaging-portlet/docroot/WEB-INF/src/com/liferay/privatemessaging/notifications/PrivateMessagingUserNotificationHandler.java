@@ -20,18 +20,23 @@ package com.liferay.privatemessaging.notifications;
 import com.liferay.compat.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.PortletConfigFactoryUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBThread;
@@ -41,9 +46,11 @@ import com.liferay.privatemessaging.model.UserThread;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
 import com.liferay.privatemessaging.util.PortletKeys;
 
+import javax.portlet.PortletConfig;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletURL;
 import javax.portlet.WindowState;
+import javax.servlet.ServletContext;
 
 /**
  * @author Jonathan Lee
@@ -100,10 +107,24 @@ public class PrivateMessagingUserNotificationHandler
 			userId = mbMessage.getUserId();
 		}
 
-		String title = serviceContext.translate(
-			"x-sent-you-a-message",
-			HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK)));
+		// BEGIN CHANGE
+		// changed from serviceContext to LanguageUtil + portletConfig to force use of Language Property of Private Messaging Portlet.
+//		String title = serviceContext.translate(
+//			"x-sent-you-a-message",
+//			HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK)));
 
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(PortalUtil.getDefaultCompanyId(),
+				PortletKeys.PRIVATE_MESSAGING);
+		ServletContext servletContext =
+				(ServletContext)serviceContext.getAttribute(WebKeys.CTX);
+		PortletConfig portletConfig =  PortletConfigFactoryUtil
+				.create(portlet, servletContext);
+		
+		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+				"x-sent-you-a-message",
+				HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK)));
+		// END CHANGE
+		
 		return StringUtil.replace(
 			getBodyTemplate(), new String[] {"[$BODY$]", "[$TITLE$]"},
 			new String[] {

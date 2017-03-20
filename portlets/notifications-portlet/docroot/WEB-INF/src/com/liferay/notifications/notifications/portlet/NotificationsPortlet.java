@@ -24,6 +24,7 @@ import com.liferay.notifications.util.NotificationsConstants;
 import com.liferay.notifications.util.NotificationsUtil;
 import com.liferay.notifications.util.PortletKeys;
 import com.liferay.notifications.util.PortletPropsValues;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -41,6 +42,7 @@ import com.liferay.portal.model.MembershipRequest;
 import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
 import com.liferay.portal.service.MembershipRequestServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -466,9 +468,19 @@ public class NotificationsPortlet extends MVCPortlet {
 				});
 		}
 
+		// BEGIN CHANGE
+		// some portlet can have both kinds of notifications, 
+		// so an additional check is necessary
+//		boolean actionable = ArrayUtil.contains(
+//			NotificationsConstants.ACTIONABLE_TYPES,
+//			userNotificationFeedEntry.getPortletId());
+		
 		boolean actionable = ArrayUtil.contains(
-			NotificationsConstants.ACTIONABLE_TYPES,
-			userNotificationFeedEntry.getPortletId());
+				NotificationsConstants.ACTIONABLE_TYPES,
+				userNotificationFeedEntry.getPortletId())
+				&& isActionableOperation(userNotificationFeedEntry,
+						userNotificationEventJSONObject);
+		// END CHANGE
 
 		LiferayPortletResponse liferayPortletResponse =
 			(LiferayPortletResponse)resourceResponse;
@@ -587,6 +599,83 @@ public class NotificationsPortlet extends MVCPortlet {
 		SessionMessages.add(actionRequest, "membershipReplySent");
 
 		sendRedirect(actionRequest, actionResponse);
+	}
+	
+	/**
+	 * This method is used to check whether the operation is really actionable. 
+	 * In the NotificationsConstants, actionable-cases are identified by portletId. 
+	 * But in some cases portlets support both types of notifications. 
+	 * @param userNotificationFeedEntry
+	 * @param userNotificationEventJSONObject
+	 * @return - true per default, if no routine for given portlet id is defined
+	 * @throws SystemException
+	 */
+	private boolean isActionableOperation(UserNotificationFeedEntry userNotificationFeedEntry, JSONObject userNotificationEventJSONObject) 
+			throws SystemException{
+		
+		/*
+		 * SITE_MEMBERSHIPS_ADMIN has notifications for:
+		 * 	- user is added to workspace
+		 *  - worksapce is deleted
+		 *  - membershiprequest response (deny, agree)
+		 *  and request for:
+		 *  - membershiprequests (user wants to join a workspace)
+		 */
+		if (PortletKeys.SITE_MEMBERSHIPS_ADMIN.equals(userNotificationFeedEntry.getPortletId())) {
+			
+			boolean isMembershipRequest = userNotificationEventJSONObject.getBoolean("membershipRequest");
+			
+			// membershipRequest is not true, so it's not a request (not actionable)
+			if (!isMembershipRequest)
+				return false;
+			
+			long membershipRequestId = userNotificationEventJSONObject.getLong("classPK");
+			
+			MembershipRequest membershipRequest = 
+				MembershipRequestLocalServiceUtil.fetchMembershipRequest(membershipRequestId);
+			
+			if (membershipRequest == null)
+				return true;
+			
+			// only actionable case for requests is a pending status
+			if (membershipRequest.getStatusId() ==
+					MembershipRequestConstants.STATUS_PENDING)
+				return true;
+			else
+				return false;
+		}
+		
+		/*
+		 *  SO_INVITE_MEMBERS has notification for: user approved invitation
+		 *  and request for workspace-invitations
+		 */
+		if (PortletKeys.SO_INVITE_MEMBERS.equals(userNotificationFeedEntry.getPortletId())) {
+			
+			// status flag was added later, so some events might not have it
+			// Moreover STATUS_PENDING is 0, which is the default value for getInt(), that could lead to miss-interpretations 
+			if (!userNotificationEventJSONObject.has("status"))
+				return true;
+			
+			int status = userNotificationEventJSONObject.getInt("status");
+			
+			// getting memberRequest would be a better solution, but methods can not be resolved.
+//			long memberRequestId = userNotificationEventJSONObject.getLong("classPK");
+//			MemberRequest memberRequest =
+//					MemberRequestLocalServiceUtil.fetchMemberRequest(memberRequestId);
+			if (status == MembershipRequestConstants.STATUS_PENDING)
+				return true;
+			else
+				return false;
+		}
+		
+		if ("mycustompages_WAR_custompagesportlet".equals(userNotificationFeedEntry.getPortletId())) {
+
+			// requests for custompagesportlet are not available atm due to #747
+			return false;
+		}			
+		
+		// return true if none of the above cases can be applied
+		return true; 
 	}
 
 	private static final String _ACTION_DIV_DEFAULT =

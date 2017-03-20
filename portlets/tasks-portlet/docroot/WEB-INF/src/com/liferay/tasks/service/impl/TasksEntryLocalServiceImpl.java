@@ -650,14 +650,14 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			String title = StringPool.BLANK;
 
 			if (oldStatus == TasksEntryConstants.STATUS_ALL) {
-				title = "x-assigned-you-a-task";
+				title = "x-assigned-you-a-task-in-workspace-x";
 			}
 			else if (tasksEntry.getAssigneeUserId() != oldAssigneeUserId) {
 				if (receiverUserId == oldAssigneeUserId) {
 					title = "x-reassigned-your-task";
 				}
 				else {
-					title = "x-assigned-you-a-task";
+					title = "x-assigned-you-a-task-in-workspace-x";
 				}
 			}
 			else if (tasksEntry.getStatus() != oldStatus) {
@@ -674,10 +674,10 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 				String statusLabel = TasksEntryConstants.getStatusLabel(
 					tasksEntry.getStatus());
 
-				title = "x-" + statusLabel + "-the-task";
+				title = "x-" + statusLabel + "-the-task-in-workspace-x";
 			}
 			else {
-				title = "x-modified-the-task";
+				title = "x-modified-the-task-in-workspace-x";
 			}
 
 			notificationEventJSONObject.put("title", title);

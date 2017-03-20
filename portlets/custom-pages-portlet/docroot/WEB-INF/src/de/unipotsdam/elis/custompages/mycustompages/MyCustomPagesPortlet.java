@@ -115,6 +115,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 				getAvailableUsers(resourceRequest, resourceResponse);
 			else if (cmd.equals("getUsersCustomPagePublishedTo"))
 				getUsersCustomPagePublishedTo(resourceRequest, resourceResponse);
+			else if (cmd.equals("getUsersCustomPageSubmittedTo"))
+				getUsersCustomPageSubmittedTo(resourceRequest, resourceResponse);
 			else if (cmd.equals("changeCustomPageType"))
 				changeCustomPageType(resourceRequest, resourceResponse);
 			else
@@ -401,7 +403,10 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
 		if (LayoutPermissionUtil.contains(PermissionCheckerFactoryUtil.create(themeDisplay.getUser()), customPage,
 				ActionKeys.CUSTOMIZE)) {
-			CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId,
+			if (CustomPageUtil.isPublishedGlobal(plid))
+				CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(plid, userId);
+			else
+				CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(plid, userId,
 					CustomPageStatics.FEEDBACK_UNREQUESTED);
 		}
 		
@@ -591,7 +596,8 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		}
 		return null;
 	}
-
+	
+	
 	/**
 	 * Requests feedback from the given user
 	 * 
@@ -600,6 +606,7 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 	 * @throws Exception
 	 */
 	public void requestFeedbackFromUsers(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+		// TODO: a lot of duplicated code from the method publishCustomPages -> should be merged
 		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		long customPagePlid = ParamUtil.getLong(actionRequest, "customPagePlid");
 		Layout customPage = LayoutLocalServiceUtil.getLayout(customPagePlid);
@@ -610,11 +617,16 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					.getCustomPageFeedbackByPlid(customPagePlid);
 			List<Long> oldUserIds = new ArrayList<Long>();
 			for (CustomPageFeedback publishment : publishments)
-				oldUserIds.add(publishment.getUserId());
+				if (publishment.getFeedbackStatus() != CustomPageStatics.FEEDBACK_UNREQUESTED)
+					oldUserIds.add(publishment.getUserId());
 
 			for (Long userId : oldUserIds) {
-				if (!newUserIds.contains(userId))
-					CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPage.getPlid(), userId);
+				if (!newUserIds.contains(userId)){
+					if (CustomPageUtil.isPublishedGlobal(customPagePlid))
+						CustomPageFeedbackLocalServiceUtil.deleteCustomPageFeedback(customPagePlid, userId);
+					else
+						CustomPageFeedbackLocalServiceUtil.updateCustomPageFeedbackStatus(customPage.getPlid(), userId, CustomPageStatics.FEEDBACK_UNREQUESTED);
+				}
 			}
 
 			for (Long userId : newUserIds) {
@@ -622,12 +634,24 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 					User user = UserLocalServiceUtil.fetchUser(userId);
 					if (user != null) {
 						CustomPageUtil.publishCustomPageToUserAndRequestFeedback(customPagePlid, userId);
+						if (customPage.isHidden())
+							customPage.getExpandoBridge().setAttribute(
+									CustomPageStatics.PERSONAL_AREA_SECTION_CUSTOM_FIELD_NAME, "20");
 						JspHelper.handleSocialActivities(customPage, actionRequest, user,
 								CustomPageStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED);
 					}
 				}
 			}
 		}
+		
+		movePageToPrivateAreaIfNecessary(actionRequest, customPage, themeDisplay.getUserId());
+		if ((CustomPageFeedbackLocalServiceUtil.getCustomPageFeedbackByPlid(customPage.getPlid()).size() != 0 || CustomPageUtil
+				.isPublishedGlobal(customPagePlid)) && customPage.isPrivateLayout())
+			movePageToParentPage(
+					customPage,
+					actionRequest,
+					(Integer) customPage.getExpandoBridge().getAttribute(
+							CustomPageStatics.PAGE_TYPE_CUSTOM_FIELD_NAME), themeDisplay.getUser());
 	}
 
 	@Override
@@ -709,6 +733,34 @@ public class MyCustomPagesPortlet extends MVCPortlet {
 		for (CustomPageFeedback customPageFeedback : CustomPageFeedbackLocalServiceUtil
 				.getCustomPageFeedbackByPlid(customPagePlid)) {
 			if (UserLocalServiceUtil.fetchUser(customPageFeedback.getUserId()) != null) {
+				JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
+				userJSONObject.put("userEmailAddress", customPageFeedback.getUser().getEmailAddress());
+				userJSONObject.put("userFullName", customPageFeedback.getUser().getFullName());
+				userJSONObject.put("userId", customPageFeedback.getUser().getUserId());
+				userJSONObject.put("feedbackRequested",
+						customPageFeedback.getFeedbackStatus() == CustomPageStatics.FEEDBACK_REQUESTED);
+
+				jsonArray.put(userJSONObject);
+			}
+		}
+
+		jsonObject.put("users", jsonArray);
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+	
+	private void getUsersCustomPageSubmittedTo(ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+
+		long customPagePlid = ParamUtil.getLong(resourceRequest, "customPagePlid");
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (CustomPageFeedback customPageFeedback : CustomPageFeedbackLocalServiceUtil
+				.getCustomPageFeedbackByPlid(customPagePlid)) {
+			if (UserLocalServiceUtil.fetchUser(customPageFeedback.getUserId()) != null && customPageFeedback.getFeedbackStatus() != CustomPageStatics.FEEDBACK_UNREQUESTED) {
 				JSONObject userJSONObject = JSONFactoryUtil.createJSONObject();
 				userJSONObject.put("userEmailAddress", customPageFeedback.getUser().getEmailAddress());
 				userJSONObject.put("userFullName", customPageFeedback.getUser().getFullName());

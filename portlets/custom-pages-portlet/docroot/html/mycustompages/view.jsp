@@ -268,12 +268,10 @@ AUI().use(
     	    label: '<%= LanguageUtil.get(pageContext, "custompages-feedback-column")%>',
     	    key: 'feedback',
     	    nodeFormatter: function(o) {
-    	        if (o.data.isGlobal) {
-    	            o.cell.setHTML(
-    	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ');">' +
-    	                '<%= LanguageUtil.get(pageContext, "custompages-request-feedback")%>' +
-    	                '</a>');
-    	        }
+   	            o.cell.setHTML(
+   	                '<a href="javascript:void(0);" class="popUpLink" onClick="<portlet:namespace />openRequestFeedbackPopup(' + o.data.plid + ',' + o.data.isPrivate + ');">' +
+   	                '<%= LanguageUtil.get(pageContext, "custompages-request-feedback")%>' +
+   	                '</a>');
     	        return false;
     	    }
     	}, {
@@ -529,11 +527,12 @@ Liferay.provide(window, '<portlet:namespace />openPublishCustomPagePopup',
 );
 
 Liferay.provide(window, '<portlet:namespace />openRequestFeedbackPopup',
-    function(plid) {
+    function(plid,isPrivate) {
         var renderURL = Liferay.PortletURL.createRenderURL();
         renderURL.setWindowState("<%=LiferayWindowState.EXCLUSIVE.toString() %>");
         renderURL.setParameter("mvcPath", "/html/mycustompages/popup/request_feedback.jsp");
         renderURL.setParameter("customPagePlid", plid);
+        renderURL.setParameter("isPrivate", isPrivate);
         renderURL.setPortletId("<%=themeDisplay.getPortletDisplay().getId() %>");
         openInvitePopUp(renderURL, "<%=LanguageUtil.get(portletConfig, locale, "custompages-request-feedback") %>", false);
     }

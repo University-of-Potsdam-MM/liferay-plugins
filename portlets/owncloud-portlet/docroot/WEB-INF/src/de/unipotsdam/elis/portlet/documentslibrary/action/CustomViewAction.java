@@ -59,8 +59,9 @@ public class CustomViewAction implements StrutsPortletAction {
 			PortletConfig portletConfig, ActionRequest actionRequest,
 			ActionResponse actionResponse) throws Exception {
 		_log.debug("processAction called");
-
-		createRepositoryIfNotExistent(actionRequest, actionResponse);
+		
+		// ADD WHEN BOX.UP IS CONNECTED
+		// createRepositoryIfNotExistent(actionRequest, actionResponse);
 		OwncloudRepositoryUtil.setProperties(actionRequest, actionResponse);
 
 		// cache the user password
@@ -87,7 +88,8 @@ public class CustomViewAction implements StrutsPortletAction {
 			RenderResponse renderResponse) throws Exception {
 		_log.debug("render called");
 		
-		createRepositoryIfNotExistent(renderRequest, renderResponse);
+		// ADD WHEN BOX.UP IS CONNECTED
+		// createRepositoryIfNotExistent(renderRequest, renderResponse);
 		OwncloudRepositoryUtil.setProperties(renderRequest, renderResponse);
 
 		return originalStrutsPortletAction.render(portletConfig, renderRequest,
@@ -107,7 +109,8 @@ public class CustomViewAction implements StrutsPortletAction {
 			ResourceResponse resourceResponse) throws Exception {
 		_log.debug("serveResource called");
 
-		createRepositoryIfNotExistent(resourceRequest, resourceResponse);
+		// ADD WHEN BOX.UP IS CONNECTED
+		// createRepositoryIfNotExistent(resourceRequest, resourceResponse);
 		OwncloudRepositoryUtil.setProperties(resourceRequest, resourceResponse);
 
 		originalStrutsPortletAction.serveResource(portletConfig,
