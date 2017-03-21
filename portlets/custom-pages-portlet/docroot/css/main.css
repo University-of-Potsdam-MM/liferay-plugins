@@ -436,19 +436,20 @@ input#_mycustompages_WAR_custompagesportlet_filterInput, input#_othercustompages
 	height: 300px;
 	width: 205px;
 	overflow-x: hidden;
-	overflow-y: auto; . more-results a { display : block;
+	overflow-y: auto; 
+	}
+	
+.more-results a { display : block;
 	margin: 5px;
 	padding: 2px;
 	text-align: center;
-	&:
-	hover
-	{
-	background-color
-	:
-	#CCE6F7;
-}
+	
+	
 
 }
+
+.more-results a:hover {
+	background-color:#CCE6F7;
 }
 .aui .invite-members:hover, .aui .invite-members:focus {
 	background-image: none !important;
@@ -1042,7 +1043,7 @@ table *:focus {
 	.yui3-datatable-paginator .yui3-datatable-paginator-control-disabled:hover
 	{
 	color: #E8E8E8;
-	background-color: #ff;
+	background-color: #fff;
 }
 
 @media ( max-width : 979px) {
