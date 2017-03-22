@@ -14,6 +14,9 @@
 
 package com.liferay.so.activities.hook.social;
 
+import java.util.Date;
+import java.util.List;
+
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -30,8 +33,6 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.so.activities.util.SocialActivityKeyConstants;
-
-import java.util.Date;
 
 /**
  * @author Evan Thibodeau
@@ -265,6 +266,49 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 		}
 
 		return true;
+	}
+	
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivity socialActivity, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+		
+		String blogsEntryLink = createBlogsEntryLink(socialActivity.getClassPK(), serviceContext);
+		
+		return new Object[] {blogsEntryLink};
+	}
+	
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivitySet activitySet, String link,
+			String title, ServiceContext serviceContext)
+		throws Exception {
+	
+		List<SocialActivity> viewableActivities = getViewableActivities(
+			activitySet, serviceContext);
+
+		String blogsEntryLink = createBlogsEntryLink(activitySet.getClassPK(), serviceContext);
+		
+		if (activitySet.getType() != SocialActivityKeyConstants.BLOGS_UPDATE_ENTRY)
+			return new Object[] {viewableActivities.size(), blogsEntryLink};
+		
+		
+		return new Object[] {viewableActivities.size(), blogsEntryLink};
+	}
+	
+	private String createBlogsEntryLink(long blogsEntryId,
+			ServiceContext serviceContext) throws Exception {
+		
+		BlogsEntry blogsEntry = BlogsEntryLocalServiceUtil.fetchBlogsEntry(blogsEntryId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(BlogsEntry.class.getName(), blogsEntryId, serviceContext));
+		sb.append("\" >");
+		sb.append(blogsEntry.getTitle());
+		sb.append("</a>");
+		
+		return sb.toString();
 	}
 
 	private static final String[] _CLASS_NAMES = {BlogsEntry.class.getName()};

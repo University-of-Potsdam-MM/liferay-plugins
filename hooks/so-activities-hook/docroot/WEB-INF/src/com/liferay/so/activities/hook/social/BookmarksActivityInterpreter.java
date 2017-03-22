@@ -14,6 +14,12 @@
 
 package com.liferay.so.activities.hook.social;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.servlet.http.HttpServletResponse;
+
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
@@ -31,13 +37,6 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.so.activities.util.SocialActivityKeyConstants;
-
-import java.io.IOException;
-
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Evan Thibodeau
@@ -231,6 +230,47 @@ public class BookmarksActivityInterpreter extends SOSocialActivityInterpreter {
 		return false;
 	}
 
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivity socialActivity, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+		
+		String bookmarksEntryLink = createBookmarksEntryLink(socialActivity.getClassPK(), serviceContext);
+		
+		return new Object[] {bookmarksEntryLink};
+	}
+	
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivitySet activitySet, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+		
+		Object[] obj = super.getTitleArguments(groupName, activitySet, link, title,
+				serviceContext);
+		
+		if (activitySet.getType() == SocialActivityKeyConstants.BOOKMARKS_ADD_ENTRY)
+			return obj;
+				
+		String bookmarksEntryLink = createBookmarksEntryLink(activitySet.getClassPK(), serviceContext);
+		
+		return new Object[] {obj[0], bookmarksEntryLink};
+	}
+	
+	private String createBookmarksEntryLink(long bookmarksEntryId, ServiceContext serviceContext) throws Exception {
+		BookmarksEntry bookmarksEntry = BookmarksEntryLocalServiceUtil.fetchBookmarksEntry(bookmarksEntryId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(BookmarksEntry.class.getName(), bookmarksEntryId,
+				serviceContext));
+		sb.append("\" >");
+		sb.append(bookmarksEntry.getName());
+		sb.append("</a>");
+		
+		return sb.toString();
+	}
+	
 	private static final String[] _CLASS_NAMES =
 		{BookmarksEntry.class.getName()};
 

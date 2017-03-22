@@ -199,10 +199,11 @@ public class DLActivityInterpreter extends SOSocialActivityInterpreter {
 			activity.getClassPK(), serviceContext);
 
 		if (Validator.isNull(folderLink)) {
-			return null;
+//			return null;
+			return new Object[] {"", createFileEntryLink(activity.getClassPK(), serviceContext)};
 		}
 
-		return new Object[] {folderLink};
+		return new Object[] {folderLink, createFileEntryLink(activity.getClassPK(), serviceContext)};
 	}
 
 	@Override
@@ -219,7 +220,9 @@ public class DLActivityInterpreter extends SOSocialActivityInterpreter {
 
 			if (Validator.isNotNull(folderLink)) {
 				return new Object[] {
-					activitySet.getActivityCount(), folderLink};
+					activitySet.getActivityCount(), folderLink, createFileEntryLink(activitySet.getClassPK(), serviceContext)};
+			} else {
+				return new Object [] {activitySet.getActivityCount(), "", createFileEntryLink(activitySet.getClassPK(), serviceContext)};
 			}
 		}
 
@@ -298,6 +301,35 @@ public class DLActivityInterpreter extends SOSocialActivityInterpreter {
 		sb.append(text);
 		sb.append("</a>");
 
+		return sb.toString();
+	}
+	
+	private String createFileEntryLink(long fileEntryId,
+			ServiceContext serviceContext) throws Exception {
+		
+		FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(
+				fileEntryId);
+		
+		StringBundler sb = new StringBundler(12);
+
+		sb.append("<a href=\"");
+		
+		sb.append(serviceContext.getPortalURL());
+		sb.append(serviceContext.getPathMain());
+		sb.append("/document_library/get_file?groupId=");
+
+		sb.append(fileEntry.getRepositoryId());
+
+		sb.append("&folderId=");
+		sb.append(fileEntry.getFolderId());
+		sb.append("&title=");
+		sb.append(HttpUtil.encodeURL(fileEntry.getTitle()));
+
+		sb.append("\" >");
+		
+		sb.append(fileEntry.getTitle());
+		sb.append("</a>");
+		
 		return sb.toString();
 	}
 

@@ -53,7 +53,6 @@ import com.liferay.so.activities.util.PortletPropsValues;
 
 import java.text.DateFormat;
 import java.text.Format;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -307,7 +306,11 @@ public abstract class SOSocialActivityInterpreter
 			else {
 				sb.append(
 					serviceContext.translate(
-						"x-in-x", new Object[] {userName, groupName}));
+						// BEGIN CHANGE
+						// added "workspace" to activity title 	
+						// "x-in-x", new Object[] {userName, groupName}));
+						"x-in-workspace-x", new Object[] {userName, groupName}));
+						// END CHANGE
 			}
 		}
 		else if (otherUsersCount > 0) {
@@ -332,16 +335,24 @@ public abstract class SOSocialActivityInterpreter
 
 		sb.append("\">");
 
-		Format dateFormat = FastDateFormatFactoryUtil.getDate(
-			DateFormat.FULL, serviceContext.getLocale(),
-			serviceContext.getTimeZone());
-
-		String relativeTimeDescription = Time.getRelativeTimeDescription(
-			displayDate, serviceContext.getLocale(),
-			serviceContext.getTimeZone(), dateFormat);
-
-		sb.append(relativeTimeDescription);
-
+//		BEGIN CHANGE
+//		Only show time in activity, relativeDescription not needed for times 
+//		Format dateFormat = FastDateFormatFactoryUtil.getDate(
+//			DateFormat.FULL, serviceContext.getLocale(),
+//			serviceContext.getTimeZone());
+//		
+//		String relativeTimeDescription = Time.getRelativeTimeDescription(
+//			displayDate, serviceContext.getLocale(),
+//			serviceContext.getTimeZone(), dateFormat);
+//
+//		sb.append(relativeTimeDescription);
+		
+		Format dateFormat = FastDateFormatFactoryUtil.getTime(serviceContext.getLocale(),
+				serviceContext.getTimeZone());
+		
+		sb.append(dateFormat.format(activityDate));
+		// END CHANGE
+		
 		sb.append("</div></div>");
 
 		return sb.toString();

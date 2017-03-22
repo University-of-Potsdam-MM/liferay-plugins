@@ -205,16 +205,21 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 			}
 
 			if (message.getCategoryId() > 0) {
-				return new Object[] {receiverUserName, categoryLink};
+				return new Object[] {receiverUserName, categoryLink, createMBMessageReplyLink(message.getMessageId(),
+						parentMessage.getMessageId(), serviceContext)};
 			}
 
-			return new Object[] {receiverUserName};
+			return new Object[] {receiverUserName, "", createMBMessageReplyLink(message.getMessageId(), 
+					parentMessage.getMessageId(), serviceContext)};
 		}
 		else if (activity.getType() ==
 					SocialActivityKeyConstants.MB_ADD_MESSAGE) {
 
 			if (message.getCategoryId() > 0) {
-				return new Object[] {categoryLink};
+				return new Object[] {categoryLink, "", createMBMessageLink(message.getMessageId(), serviceContext)};
+			}
+			else {
+				return new Object[] {"", "", createMBMessageLink(message.getMessageId(), serviceContext)};
 			}
 		}
 
@@ -294,6 +299,38 @@ public class MBActivityInterpreter extends SOSocialActivityInterpreter {
 		return StringPool.BLANK;
 	}
 
+	private String createMBMessageLink(long messageId,
+			ServiceContext serviceContext) throws Exception {
+		
+		MBMessage message = MBMessageLocalServiceUtil.fetchMBMessage(messageId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(MBMessage.class.getName(), messageId, serviceContext));
+		sb.append("\" >");
+		sb.append(message.getSubject());
+		sb.append("</a>");
+		
+		return sb.toString();
+	}
+	
+	private String createMBMessageReplyLink(long messageId, long parentMessageId,
+			ServiceContext serviceContext) throws Exception {
+		
+		MBMessage parent = MBMessageLocalServiceUtil.fetchMBMessage(parentMessageId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(MBMessage.class.getName(), messageId, serviceContext));
+		sb.append("\" >");
+		sb.append(parent.getSubject());
+		sb.append("</a>");
+		
+		return sb.toString();
+	}
+	
 	private static final String[] _CLASS_NAMES = {MBMessage.class.getName()};
 
 }

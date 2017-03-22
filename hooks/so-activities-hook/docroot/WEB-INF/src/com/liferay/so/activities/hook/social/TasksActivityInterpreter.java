@@ -34,7 +34,6 @@ import com.liferay.tasks.service.TasksEntryLocalServiceUtil;
 import com.liferay.tasks.service.permission.TasksEntryPermission;
 
 import java.text.Format;
-
 import java.util.List;
 
 /**
@@ -182,18 +181,35 @@ public class TasksActivityInterpreter extends SOSocialActivityInterpreter {
 			String title, ServiceContext serviceContext)
 		throws Exception {
 
+		String tasksEntryLink = createTaksEntryLink(activity.getClassPK(), serviceContext);
+		
 		if ((activity.getReceiverUserId() <= 0) ||
 			(activity.getUserId() == activity.getReceiverUserId())) {
 
-			return null;
+//			return null;
+			return new Object[] {tasksEntryLink};
 		}
 
 		String receiverUserName = getUserName(
 			activity.getReceiverUserId(), serviceContext);
 
-		return new Object[] {receiverUserName};
+		return new Object[] {tasksEntryLink, receiverUserName};
 	}
 
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivitySet activitySet, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+	
+		Object[] obj = super.getTitleArguments(groupName, activitySet, link, title,
+				serviceContext);
+		
+		if (activitySet.getType() != SocialActivityKeyConstants.TASKS_UPDATE_ENTRY)
+			return obj;
+		
+		return new Object[] {obj[0], createTaksEntryLink(activitySet.getClassPK(), serviceContext)};
+	}
+	
 	@Override
 	protected String getTitlePattern(
 		String groupName, SocialActivity activity) {
@@ -282,6 +298,21 @@ public class TasksActivityInterpreter extends SOSocialActivityInterpreter {
 			permissionChecker, tasksEntry, ActionKeys.VIEW);
 	}
 
+	private String createTaksEntryLink(long tasksEntryId, ServiceContext serviceContext) throws Exception {
+		TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(tasksEntryId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(TasksEntry.class.getName(), tasksEntryId,
+				serviceContext));
+		sb.append("\" >");
+		sb.append(tasksEntry.getTitle());
+		sb.append("</a>");
+		
+		return sb.toString();
+	}
+	
 	private static final String[] _CLASS_NAMES = {TasksEntry.class.getName()};
 
 }

@@ -14,6 +14,13 @@
 
 package com.liferay.so.activities.hook.social;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.util.TimeZone;
+
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletURL;
+
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 import com.liferay.calendar.service.permission.CalendarPermission;
@@ -32,14 +39,6 @@ import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.so.activities.util.SocialActivityKeyConstants;
-
-import java.text.DateFormat;
-import java.text.Format;
-
-import java.util.TimeZone;
-
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
 
 /**
  * @author Evan Thibodeau
@@ -238,6 +237,47 @@ public class CalendarActivityInterpreter extends SOSocialActivityInterpreter {
 
 		return CalendarPermission.contains(
 			permissionChecker, calendarBooking.getCalendarId(), actionId);
+	}
+	
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivity socialActivity, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+
+		return new Object [] {createCalenderEventLink(socialActivity.getClassPK(), serviceContext)};
+	}
+	
+	@Override
+	protected Object[] getTitleArguments(String groupName,
+			SocialActivitySet activitySet, String link, String title,
+			ServiceContext serviceContext) throws Exception {
+
+		if (activitySet.getType() ==
+				SocialActivityKeyConstants.
+					CALENDAR_UPDATE_CALENDAR_BOOKING) {
+			
+			return new Object[] {createCalenderEventLink(activitySet.getClassPK(), serviceContext)};
+		}
+
+		return super.getTitleArguments(groupName, activitySet, link, title,
+				serviceContext);
+	}
+	
+	private String createCalenderEventLink(long classPK,
+			ServiceContext serviceContext) throws Exception {
+		
+		CalendarBooking calendarBooking =
+				CalendarBookingLocalServiceUtil.fetchCalendarBooking(classPK);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(CalendarBooking.class.getName(), classPK, serviceContext));
+		sb.append("\" >");
+		sb.append(calendarBooking.getTitle());
+		sb.append("</a>");
+		
+		return sb.toString();
 	}
 
 	private static final String[] _CLASS_NAMES =

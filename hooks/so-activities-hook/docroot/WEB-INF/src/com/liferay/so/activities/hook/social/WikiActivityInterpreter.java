@@ -463,7 +463,8 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 
 		return new Object[] {
 			nodeTitle,
-			getAttachmentTitle(activity, pageResource, serviceContext)};
+			getAttachmentTitle(activity, pageResource, serviceContext),
+			createWikiPageLink(activity.getClassPK(), serviceContext)};
 	}
 
 	@Override
@@ -480,12 +481,17 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 			(activitySet.getType() ==
 				SocialActivityConstants.TYPE_ADD_COMMENT)) {
 
-			return new Object[] {nodeTitle};
+			return new Object[] {nodeTitle, null,
+					createWikiPageLink(activitySet.getClassPK(), serviceContext)};
 		}
 
 		int activityCount = activitySet.getActivityCount();
 
-		return new Object[] {activityCount, nodeTitle};
+		if (activitySet.getType() == SocialActivityKeyConstants.WIKI_ADD_PAGE)
+			return new Object[] {activityCount, nodeTitle}; 
+		
+		return new Object[] {activityCount, nodeTitle, 
+				createWikiPageLink(activitySet.getClassPK(), serviceContext)};
 	}
 
 	@Override
@@ -578,6 +584,21 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 		}
 
 		return appendNodeTitlePattern(titlePattern, activitySet.getClassPK());
+	}
+	
+	private String createWikiPageLink(long wikiPageId, ServiceContext serviceContext) throws Exception {
+		WikiPageResource wikiPage = WikiPageResourceLocalServiceUtil.fetchWikiPageResource(wikiPageId);
+		
+		StringBundler sb = new StringBundler(5);
+		
+		sb.append("<a href=\"");
+		sb.append(getLinkURL(WikiPage.class.getName(), wikiPageId,
+				serviceContext));
+		sb.append("\" >");
+		sb.append(wikiPage.getTitle());
+		sb.append("</a>");
+		
+		return sb.toString();
 	}
 
 	private static final String[] _CLASS_NAMES = {WikiPage.class.getName()};
