@@ -53,6 +53,12 @@
 	var loading = false;
 
 	<portlet:namespace />start = 0;
+	 /* oldDateLong is used to store date of last entry. 
+	  * A certain amount of activities is display, if the user scrolls down more entries are loaded and 
+	  * the portlet is rendered again.
+	  * But the date shall only be displayed, if it differs. So the date needs to be saved in renderURL.
+	  */
+	<portlet:namespace />oldDateLong = 0;
 
 	var loadNewContent = function() {
 		loadingBar.removeClass('loaded');
@@ -77,6 +83,7 @@
 				var uri = '<%= viewActivitySetsURL %>';
 
 				uri = Liferay.Util.addParams('<portlet:namespace />start=' + <portlet:namespace />start, uri) || uri;
+				uri = Liferay.Util.addParams('<portlet:namespace />oldDateLong=' + <portlet:namespace />oldDateLong, uri) || uri;
 
 				A.io.request(
 					uri,

@@ -25,6 +25,8 @@
 <%@ include file="/html/init.jsp"%>
 
 <%
+// get oldDateLong from request, it going to be used in view_activity_sets_fedd.jspf to display date
+long oldDateLong = ParamUtil.getLong(request, "oldDateLong");
 List<SocialActivitySet> results = null; 
 //ExtSocialActivityUtil.requestNewMoodleActivities(user.getUserId(), user.getScreenName(), PrincipalThreadLocal.getPassword());
 
@@ -77,7 +79,6 @@ while ((count < _DELTA) && ((results == null) || !results.isEmpty())) {
 <aui:script>
 	<portlet:namespace />start = <%= start %>;
 </aui:script>
-	
 
 
 <c:if test="<%=(results.isEmpty())%>">

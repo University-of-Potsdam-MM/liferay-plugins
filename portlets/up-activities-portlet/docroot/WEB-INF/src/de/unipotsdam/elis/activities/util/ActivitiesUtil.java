@@ -17,6 +17,7 @@
 
 package de.unipotsdam.elis.activities.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
@@ -118,11 +119,14 @@ public class ActivitiesUtil {
 	 */
 	public static String getMoodleSocialActivityCssClass (String moodleSocialActivityType) {
 		
+		// moodle resources are all interpreted the same way
+		String [] moodleResources = new String[] {"url", "book", "lti", "resource", "label"};
+		
 		// some replacements to group or rename moodle activities
 		if (moodleSocialActivityType.equals("assign"))
 			moodleSocialActivityType = "task";
 		if (moodleSocialActivityType.equals("scheduler"))
-			moodleSocialActivityType = "calender";
+			moodleSocialActivityType = "calendar";
 		if ((moodleSocialActivityType.equals("survey")) || (moodleSocialActivityType.equals("choice")))
 			moodleSocialActivityType = "poll";
 		if (moodleSocialActivityType.equals("workshop"))
@@ -135,7 +139,7 @@ public class ActivitiesUtil {
 			moodleSocialActivityType = "lecture";
 		if (moodleSocialActivityType.equals("quiz"))
 			moodleSocialActivityType = "test";
-		if (moodleSocialActivityType.equals("url"))
+		if (Arrays.asList(moodleResources).contains(moodleSocialActivityType))
 			moodleSocialActivityType = "resource";
 		
 		return moodleSocialActivityType;

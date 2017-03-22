@@ -17,8 +17,15 @@
  */
 --%>
 
+<%@page import="javax.xml.datatype.DatatypeFactory"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.text.Format"%>
+<%@page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil"%>
+<%@page import="java.text.DateFormat"%>
 <%@page import="de.unipotsdam.elis.activities.util.ActivitiesUtil"%>
 <%
+
+String oldDate = StringPool.BLANK;
 
 for (SocialActivitySet activitySet : results) {
 	SocialActivityFeedEntry activityFeedEntry = SocialActivityInterpreterLocalServiceUtil.interpret("SO", activitySet, ServiceContextFactory.getInstance(request));
@@ -82,6 +89,38 @@ for (SocialActivitySet activitySet : results) {
 	
 %>
 
+	<!-- BEGIN #767 CHANGE -->	
+	<%
+		// format date in day, dd.month.yyy
+		Format dateFormat = FastDateFormatFactoryUtil.getDate(
+			DateFormat.FULL, themeDisplay.getLocale(),
+			themeDisplay.getTimeZone());
+		
+		// create Date out of Unix Timestamp
+		Date activityDate = new Date(activitySet.getCreateDate());
+
+		// format date
+		String currentDate = dateFormat.format(activityDate);
+		oldDate = dateFormat.format(oldDateLong);
+		
+		// show date only if it differs from previous date
+		if (!oldDate.equals(currentDate)) {
+			oldDate = currentDate; // save date, only changes shall be displayed
+			oldDateLong = activitySet.getCreateDate();
+	%>
+			<div class="activity-item clearfix activity-date" align="center">
+				<%=currentDate%>
+			</div>
+	<%
+		} 
+	%>
+	
+	<aui:script>
+		<portlet:namespace />oldDateLong = <%= oldDateLong %>;
+	</aui:script>
+	
+	<!-- CHANGE #767 END -->
+	
 	<div class="activity-item clearfix <%= portlet.getCssClassWrapper() %>-activity <%= originCssClass %> <%= socialActivityCssClass %>" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
 
 		<%
@@ -107,7 +146,9 @@ for (SocialActivitySet activitySet : results) {
 		</div>
 
 		<%= activityFeedEntry.getTitle()  %>
-
+		
+		<!-- The following code is not used due to  #767 -->
+ <!--  
 		<div class="activity-block">
 
 			<%= activityFeedEntry.getBody() %>
@@ -165,6 +206,7 @@ for (SocialActivitySet activitySet : results) {
 				</c:if>
 			</div>		
 		</div>
+-->
 	</div>
 
 	<aui:script use="aui-base">
