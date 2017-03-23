@@ -122,91 +122,33 @@ for (SocialActivitySet activitySet : results) {
 	<!-- CHANGE #767 END -->
 	
 	<div class="activity-item clearfix <%= portlet.getCssClassWrapper() %>-activity <%= originCssClass %> <%= socialActivityCssClass %>" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
-
-		<%
-		User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
-
-		String userDisplayURL = StringPool.BLANK;
-		String userFullName = StringPool.BLANK;
-
-		if (activitySetUser != null) {
-			userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
-			userFullName = activitySetUser.getFullName();
-			/* check if userPortraitURL is already set */
-			userPortraitURL = userPortraitURL.equals(StringPool.BLANK) ? activitySetUser.getPortraitURL(themeDisplay) : userPortraitURL;
-		 }
-		%>
-
-		<div class="user-portrait">
-			<span class="avatar">
-				<a href="<%= userDisplayURL %>">
-					<img alt="<%= HtmlUtil.escape(userFullName) %>" src="<%= userPortraitURL %>" />
-				</a>
-			</span>
+		<div class="inner-wrapper">
+			<%
+			User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
+	
+			String userDisplayURL = StringPool.BLANK;
+			String userFullName = StringPool.BLANK;
+	
+			if (activitySetUser != null) {
+				userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
+				userFullName = activitySetUser.getFullName();
+				/* check if userPortraitURL is already set */
+				userPortraitURL = userPortraitURL.equals(StringPool.BLANK) ? activitySetUser.getPortraitURL(themeDisplay) : userPortraitURL;
+			 }
+			%>
+	
+			<div class="user-portrait">
+				<span class="avatar">
+					<a href="<%= userDisplayURL %>">
+						<img alt="<%= HtmlUtil.escape(userFullName) %>" src="<%= userPortraitURL %>" />
+					</a>
+				</span>
+			</div>
+	
+			<%= activityFeedEntry.getTitle()  %>
+			
+	
 		</div>
-
-		<%= activityFeedEntry.getTitle()  %>
-		
-		<!-- The following code is not used due to  #767 -->
- <!--  
-		<div class="activity-block">
-
-			<%= activityFeedEntry.getBody() %>
-			<div class="activity-footer">
-				<c:if test="<%=!Validator.equals(activitySet.getClassName(), Layout.class.getName()) &&
-						!Validator.equals(activitySet.getClassName(), MBMessage.class.getName()) %>">
-					<div class="activity-footer-toolbar">
-						<c:if test="<%= Validator.isNotNull(activityFeedEntry.getLink()) %>">
-							<span class="action"><%= activityFeedEntry.getLink() %></span>
-						</c:if>
-
-						<%
-						int commentsCount = 0;
-
-						Object[] commentsClassNameAndClassPK = ActivitiesUtil.getCommentsClassNameAndClassPK(activitySet);
-
-						String className = (String)commentsClassNameAndClassPK[0];
-						long classPK = (Long)commentsClassNameAndClassPK[1];
-
-						if (className.equals(MicroblogsEntry.class.getName())) {
-							commentsCount = MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntriesCount(MicroblogsEntryConstants.TYPE_REPLY, classPK);
-						}
-						else {
-							commentsCount = MBMessageLocalServiceUtil.getDiscussionMessagesCount(className, classPK, WorkflowConstants.STATUS_APPROVED);
-						}
-						%>
-
-						<c:if test="<%= className.equals(MicroblogsEntry.class.getName()) && (activitySet.getUserId() != user.getUserId()) %>">
-
-							<%
-							MicroblogsEntry microblogsEntry = MicroblogsEntryLocalServiceUtil.fetchMicroblogsEntry(classPK);
-							%>
-
-							<c:if test="<%= (microblogsEntry != null) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) %>">
-								<span class="repost action">
-									<a data-microblogsEntryId="<%= classPK %>" href="javascript:;"><liferay-ui:message key="repost" /></a>
-								</span>
-							</c:if>
-						</c:if>
-
-						<span class="action view-comments">
-							<a data-activitySetId="<%= activitySet.getActivitySetId() %>" href="javascript:;"><%= commentsCount > 0 ? commentsCount : StringPool.BLANK %> <liferay-ui:message key='<%= commentsCount > 1 ? "comments" : "comment" %>' /></a>
-						</span>
-
-						<span class="action hide toggle">
-							<a class="toggle-entry" data-entryId="<%= activitySet.getActivitySetId() %>" href="javascript:;">
-								<i class="icon-expand-alt"></i>
-
-								<span><liferay-ui:message key="view-more" /></span>
-							</a>
-						</span>
-					</div>
-
-					<%@ include file="/html/view_comments.jspf" %>
-				</c:if>
-			</div>		
-		</div>
--->
 	</div>
 
 	<aui:script use="aui-base">
