@@ -142,7 +142,7 @@ public class JspHelper {
 		// BEGIN CHANGE
 		// add socialActivityType parameter to check if user wants to be notified
 //		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId);
-		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId, socialActivityType);
+		createCustomPageNotification(themeDisplay.getUser(), receiver, notificationMessage, customPage, portletId, socialActivityType, themeDisplay.getLocale());
 		// END CHANGE
 		
 		// BEGIN CHANGE
@@ -172,12 +172,13 @@ public class JspHelper {
 	// Nahricht kodiert werden, sondern dynamisch abgefragt werden, wenn die
 	// Nachricht angezeigt wird
 	private static void createCustomPageNotification(User sender, User receiver, String message, Layout customPage,
-			String portletId, int socialActivityType) throws PortalException, SystemException {
+			String portletId, int socialActivityType, Locale locale) throws PortalException, SystemException {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 		jsonObject.put("userId", sender.getUserId());
 		jsonObject.put("plid", customPage.getPlid());
 		jsonObject.put("message", message);
 		jsonObject.put("socialActivityType", socialActivityType);
+		jsonObject.put("pageName", customPage.getName(locale));	// added pageName to display it in notification for deleted pages.
 		// removed due to #747
 //		if (socialActivityType == 2)
 //			jsonObject.put("actionRequired", true);

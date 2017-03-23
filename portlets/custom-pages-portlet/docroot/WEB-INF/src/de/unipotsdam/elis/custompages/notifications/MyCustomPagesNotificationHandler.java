@@ -65,8 +65,9 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 //		}
 		
 		long userId = jsonObject.getLong("userId");
+		String pageName = jsonObject.getString("pageName");
 		
-		message = getTitle(serviceContext, socialActivityType, plid, userId);
+		message = getTitle(serviceContext, socialActivityType, plid, userId, pageName);
 		
 		String body = StringUtil.replace(getBodyTemplate(), new String[] { "[$TITLE$]" }, new String[] { message });
 
@@ -164,7 +165,7 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 			});
 	}
 	
-	private String getTitle(ServiceContext serviceContext, int activityType, long plid, long userId) 
+	private String getTitle(ServiceContext serviceContext, int activityType, long plid, long userId, String pageName)
 			throws PortalException, SystemException {
 		
 		// getting portletConfig from serviceContext does not return correct portlet Property. So create it manually...
@@ -176,39 +177,44 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 				.create(portlet, servletContext);
 		
 		User user = UserLocalServiceUtil.getUser(userId);
-		Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
-				
+		
+		// for older NotificationEvents pageName might not be set
+		if (StringPool.BLANK.equals(pageName) || pageName == null) {
+			Layout customPage = LayoutLocalServiceUtil.getLayout(plid);
+			pageName = customPage.getName(serviceContext.getLocale());
+		}
+		
 		String notificationMessage = StringPool.BLANK;
 		
 		if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-published-message", new Object[] { user.getFullName(),
-							customPage.getName(serviceContext.getLocale()) });
+							pageName });
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-feedback-requested-message", new Object[] {
-							user.getFullName(), customPage.getName(serviceContext.getLocale()) });
+							user.getFullName(), pageName });
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_DELIVERED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-feedback-delivered", new Object[] { user.getFullName(),
-							customPage.getName(serviceContext.getLocale()) });
+							pageName });
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED){
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-deleted", new Object[] { user.getFullName(),
-							customPage.getName(serviceContext.getLocale()) });
+							pageName });
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE){
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-deleted-share", new Object[] { user.getFullName(),
-							customPage.getName(serviceContext.getLocale()) });
+							pageName });
 
 		} else /*if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION)*/{
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-deleted-publish", new Object[] { user.getFullName(),
-							customPage.getName(serviceContext.getLocale()) });
+							pageName });
 
 		}
 		
