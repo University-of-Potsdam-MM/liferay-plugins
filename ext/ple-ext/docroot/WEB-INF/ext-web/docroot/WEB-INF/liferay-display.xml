@@ -7,6 +7,7 @@
 		<portlet id="107" />
 		<portlet id="1_WAR_privatemessagingportlet" />
 		<portlet id="1_WAR_microblogsportlet" />
+		<portlet id="1_WAR_mailportlet" />
 	</category>
 	<category name="category.workspaces">
 		<portlet id="workspacegrid_WAR_workspacegridportlet" />
