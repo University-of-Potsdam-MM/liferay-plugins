@@ -22,7 +22,8 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 
 import de.unipotsdam.elis.language.service.ClpSerializer;
-import de.unipotsdam.elis.language.service.LanguageKeyLocalServiceUtil;
+import de.unipotsdam.elis.language.service.LanguageKeyJournalArticleLocalServiceUtil;
+import de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK;
 
 import java.io.Serializable;
 
@@ -34,39 +35,40 @@ import java.util.Map;
 /**
  * @author Matthias
  */
-public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
-	implements LanguageKey {
-	public LanguageKeyClp() {
+public class LanguageKeyJournalArticleClp extends BaseModelImpl<LanguageKeyJournalArticle>
+	implements LanguageKeyJournalArticle {
+	public LanguageKeyJournalArticleClp() {
 	}
 
 	@Override
 	public Class<?> getModelClass() {
-		return LanguageKey.class;
+		return LanguageKeyJournalArticle.class;
 	}
 
 	@Override
 	public String getModelClassName() {
-		return LanguageKey.class.getName();
+		return LanguageKeyJournalArticle.class.getName();
 	}
 
 	@Override
-	public String getPrimaryKey() {
-		return _key;
+	public LanguageKeyJournalArticlePK getPrimaryKey() {
+		return new LanguageKeyJournalArticlePK(_key, _articleId);
 	}
 
 	@Override
-	public void setPrimaryKey(String primaryKey) {
-		setKey(primaryKey);
+	public void setPrimaryKey(LanguageKeyJournalArticlePK primaryKey) {
+		setKey(primaryKey.key);
+		setArticleId(primaryKey.articleId);
 	}
 
 	@Override
 	public Serializable getPrimaryKeyObj() {
-		return _key;
+		return new LanguageKeyJournalArticlePK(_key, _articleId);
 	}
 
 	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
-		setPrimaryKey((String)primaryKeyObj);
+		setPrimaryKey((LanguageKeyJournalArticlePK)primaryKeyObj);
 	}
 
 	@Override
@@ -74,8 +76,7 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("key", getKey());
-		attributes.put("value", getValue());
-		attributes.put("tooltipContent", getTooltipContent());
+		attributes.put("articleId", getArticleId());
 
 		return attributes;
 	}
@@ -88,16 +89,10 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 			setKey(key);
 		}
 
-		String value = (String)attributes.get("value");
+		String articleId = (String)attributes.get("articleId");
 
-		if (value != null) {
-			setValue(value);
-		}
-
-		String tooltipContent = (String)attributes.get("tooltipContent");
-
-		if (tooltipContent != null) {
-			setTooltipContent(tooltipContent);
+		if (articleId != null) {
+			setArticleId(articleId);
 		}
 	}
 
@@ -110,13 +105,13 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 	public void setKey(String key) {
 		_key = key;
 
-		if (_languageKeyRemoteModel != null) {
+		if (_languageKeyJournalArticleRemoteModel != null) {
 			try {
-				Class<?> clazz = _languageKeyRemoteModel.getClass();
+				Class<?> clazz = _languageKeyJournalArticleRemoteModel.getClass();
 
 				Method method = clazz.getMethod("setKey", String.class);
 
-				method.invoke(_languageKeyRemoteModel, key);
+				method.invoke(_languageKeyJournalArticleRemoteModel, key);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -125,21 +120,21 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 	}
 
 	@Override
-	public String getValue() {
-		return _value;
+	public String getArticleId() {
+		return _articleId;
 	}
 
 	@Override
-	public void setValue(String value) {
-		_value = value;
+	public void setArticleId(String articleId) {
+		_articleId = articleId;
 
-		if (_languageKeyRemoteModel != null) {
+		if (_languageKeyJournalArticleRemoteModel != null) {
 			try {
-				Class<?> clazz = _languageKeyRemoteModel.getClass();
+				Class<?> clazz = _languageKeyJournalArticleRemoteModel.getClass();
 
-				Method method = clazz.getMethod("setValue", String.class);
+				Method method = clazz.getMethod("setArticleId", String.class);
 
-				method.invoke(_languageKeyRemoteModel, value);
+				method.invoke(_languageKeyJournalArticleRemoteModel, articleId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -147,36 +142,13 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 		}
 	}
 
-	@Override
-	public String getTooltipContent() {
-		return _tooltipContent;
+	public BaseModel<?> getLanguageKeyJournalArticleRemoteModel() {
+		return _languageKeyJournalArticleRemoteModel;
 	}
 
-	@Override
-	public void setTooltipContent(String tooltipContent) {
-		_tooltipContent = tooltipContent;
-
-		if (_languageKeyRemoteModel != null) {
-			try {
-				Class<?> clazz = _languageKeyRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setTooltipContent",
-						String.class);
-
-				method.invoke(_languageKeyRemoteModel, tooltipContent);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	public BaseModel<?> getLanguageKeyRemoteModel() {
-		return _languageKeyRemoteModel;
-	}
-
-	public void setLanguageKeyRemoteModel(BaseModel<?> languageKeyRemoteModel) {
-		_languageKeyRemoteModel = languageKeyRemoteModel;
+	public void setLanguageKeyJournalArticleRemoteModel(
+		BaseModel<?> languageKeyJournalArticleRemoteModel) {
+		_languageKeyJournalArticleRemoteModel = languageKeyJournalArticleRemoteModel;
 	}
 
 	public Object invokeOnRemoteModel(String methodName,
@@ -190,7 +162,7 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 			}
 		}
 
-		Class<?> remoteModelClass = _languageKeyRemoteModel.getClass();
+		Class<?> remoteModelClass = _languageKeyJournalArticleRemoteModel.getClass();
 
 		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
 
@@ -210,7 +182,7 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 		Method method = remoteModelClass.getMethod(methodName,
 				remoteParameterTypes);
 
-		Object returnValue = method.invoke(_languageKeyRemoteModel,
+		Object returnValue = method.invoke(_languageKeyJournalArticleRemoteModel,
 				remoteParameterValues);
 
 		if (returnValue != null) {
@@ -223,33 +195,33 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
-			LanguageKeyLocalServiceUtil.addLanguageKey(this);
+			LanguageKeyJournalArticleLocalServiceUtil.addLanguageKeyJournalArticle(this);
 		}
 		else {
-			LanguageKeyLocalServiceUtil.updateLanguageKey(this);
+			LanguageKeyJournalArticleLocalServiceUtil.updateLanguageKeyJournalArticle(this);
 		}
 	}
 
 	@Override
-	public LanguageKey toEscapedModel() {
-		return (LanguageKey)ProxyUtil.newProxyInstance(LanguageKey.class.getClassLoader(),
-			new Class[] { LanguageKey.class }, new AutoEscapeBeanHandler(this));
+	public LanguageKeyJournalArticle toEscapedModel() {
+		return (LanguageKeyJournalArticle)ProxyUtil.newProxyInstance(LanguageKeyJournalArticle.class.getClassLoader(),
+			new Class[] { LanguageKeyJournalArticle.class },
+			new AutoEscapeBeanHandler(this));
 	}
 
 	@Override
 	public Object clone() {
-		LanguageKeyClp clone = new LanguageKeyClp();
+		LanguageKeyJournalArticleClp clone = new LanguageKeyJournalArticleClp();
 
 		clone.setKey(getKey());
-		clone.setValue(getValue());
-		clone.setTooltipContent(getTooltipContent());
+		clone.setArticleId(getArticleId());
 
 		return clone;
 	}
 
 	@Override
-	public int compareTo(LanguageKey languageKey) {
-		String primaryKey = languageKey.getPrimaryKey();
+	public int compareTo(LanguageKeyJournalArticle languageKeyJournalArticle) {
+		LanguageKeyJournalArticlePK primaryKey = languageKeyJournalArticle.getPrimaryKey();
 
 		return getPrimaryKey().compareTo(primaryKey);
 	}
@@ -260,13 +232,13 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 			return true;
 		}
 
-		if (!(obj instanceof LanguageKeyClp)) {
+		if (!(obj instanceof LanguageKeyJournalArticleClp)) {
 			return false;
 		}
 
-		LanguageKeyClp languageKey = (LanguageKeyClp)obj;
+		LanguageKeyJournalArticleClp languageKeyJournalArticle = (LanguageKeyJournalArticleClp)obj;
 
-		String primaryKey = languageKey.getPrimaryKey();
+		LanguageKeyJournalArticlePK primaryKey = languageKeyJournalArticle.getPrimaryKey();
 
 		if (getPrimaryKey().equals(primaryKey)) {
 			return true;
@@ -287,14 +259,12 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(5);
 
 		sb.append("{key=");
 		sb.append(getKey());
-		sb.append(", value=");
-		sb.append(getValue());
-		sb.append(", tooltipContent=");
-		sb.append(getTooltipContent());
+		sb.append(", articleId=");
+		sb.append(getArticleId());
 		sb.append("}");
 
 		return sb.toString();
@@ -302,10 +272,10 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(13);
+		StringBundler sb = new StringBundler(10);
 
 		sb.append("<model><model-name>");
-		sb.append("de.unipotsdam.elis.language.model.LanguageKey");
+		sb.append("de.unipotsdam.elis.language.model.LanguageKeyJournalArticle");
 		sb.append("</model-name>");
 
 		sb.append(
@@ -313,12 +283,8 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 		sb.append(getKey());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>value</column-name><column-value><![CDATA[");
-		sb.append(getValue());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>tooltipContent</column-name><column-value><![CDATA[");
-		sb.append(getTooltipContent());
+			"<column><column-name>articleId</column-name><column-value><![CDATA[");
+		sb.append(getArticleId());
 		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
@@ -327,8 +293,7 @@ public class LanguageKeyClp extends BaseModelImpl<LanguageKey>
 	}
 
 	private String _key;
-	private String _value;
-	private String _tooltipContent;
-	private BaseModel<?> _languageKeyRemoteModel;
+	private String _articleId;
+	private BaseModel<?> _languageKeyJournalArticleRemoteModel;
 	private Class<?> _clpSerializerClass = de.unipotsdam.elis.language.service.ClpSerializer.class;
 }

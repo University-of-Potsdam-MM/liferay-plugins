@@ -289,9 +289,11 @@ public class LanguageKeyLocalServiceWrapper implements LanguageKeyLocalService,
 
 	@Override
 	public de.unipotsdam.elis.language.model.LanguageKey addLanguageKey(
-		java.lang.String key, java.lang.String value)
+		java.lang.String key, java.lang.String value,
+		java.lang.String tooltipContent)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _languageKeyLocalService.addLanguageKey(key, value);
+		return _languageKeyLocalService.addLanguageKey(key, value,
+			tooltipContent);
 	}
 
 	@Override

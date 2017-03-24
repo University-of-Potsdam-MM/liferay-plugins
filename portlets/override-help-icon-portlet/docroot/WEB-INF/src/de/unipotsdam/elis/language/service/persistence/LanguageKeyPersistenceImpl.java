@@ -323,6 +323,7 @@ public class LanguageKeyPersistenceImpl extends BasePersistenceImpl<LanguageKey>
 
 		languageKeyImpl.setKey(languageKey.getKey());
 		languageKeyImpl.setValue(languageKey.getValue());
+		languageKeyImpl.setTooltipContent(languageKey.getTooltipContent());
 
 		return languageKeyImpl;
 	}

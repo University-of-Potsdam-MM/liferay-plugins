@@ -103,9 +103,18 @@ public class OverrideHelpIconPortlet extends MVCPortlet {
 				.fetchLanguageKey(key);
 
 		if (languageKey == null) {
-			LanguageKeyLocalServiceUtil.addLanguageKey(key, LocalizationUtil
-					.updateLocalization(valueMap, "", "Name",
-							LocaleUtil.toLanguageId(Locale.GERMAN)));
+			try {
+				String value = LocalizationUtil.updateLocalization(valueMap,
+						"", "Name", LocaleUtil.toLanguageId(Locale.GERMAN));
+				String tooltipContent = HelperUtil.generateTooltipContent(key,
+						value);
+				languageKey = LanguageKeyLocalServiceUtil.addLanguageKey(key,
+						value, tooltipContent);
+			} catch (Exception e) {
+				jsonObject.put("success", Boolean.FALSE);
+				jsonObject.put("error", e.getMessage());
+				writeJSON(actionRequest, actionResponse, jsonObject);
+			}
 			jsonObject.put("success", Boolean.TRUE);
 		} else {
 			jsonObject.put("success", Boolean.FALSE);
@@ -131,9 +140,19 @@ public class OverrideHelpIconPortlet extends MVCPortlet {
 		LanguageKey languageKey = LanguageKeyLocalServiceUtil
 				.fetchLanguageKey(key);
 		if (languageKey != null) {
-			languageKey.setValue(LocalizationUtil.updateLocalization(valueMap,
-					"", "Name", LocaleUtil.toLanguageId(Locale.GERMAN)));
-			LanguageKeyLocalServiceUtil.updateLanguageKey(languageKey);
+			try {
+				String value = LocalizationUtil.updateLocalization(valueMap,
+						"", "Name", LocaleUtil.toLanguageId(Locale.GERMAN));
+				String tooltipContent = HelperUtil.generateTooltipContent(key,
+						value);
+				languageKey.setValue(value);
+				languageKey.setTooltipContent(tooltipContent);
+				LanguageKeyLocalServiceUtil.updateLanguageKey(languageKey);
+			} catch (Exception e) {
+				jsonObject.put("success", Boolean.FALSE);
+				jsonObject.put("error", e.getMessage());
+				writeJSON(actionRequest, actionResponse, jsonObject);
+			}
 			jsonObject.put("success", Boolean.TRUE);
 		} else {
 			jsonObject.put("success", Boolean.FALSE);
@@ -167,6 +186,8 @@ public class OverrideHelpIconPortlet extends MVCPortlet {
 			JSONObject languageKeyJSON = JSONFactoryUtil.createJSONObject();
 			languageKeyJSON.put("key", languageKey.getKey());
 			languageKeyJSON.put("value", languageKey.getValue());
+			languageKeyJSON.put("tooltipContent",
+					languageKey.getTooltipContent());
 			result.put(languageKeyJSON);
 		}
 
@@ -205,11 +226,14 @@ public class OverrideHelpIconPortlet extends MVCPortlet {
 				if (languageKey != null) {
 					languageKey.setValue(languageKeyJSONObject
 							.getString("value"));
+					languageKey.setTooltipContent(languageKeyJSONObject
+							.getString("tooltipContent"));
 					LanguageKeyLocalServiceUtil.updateLanguageKey(languageKey);
 				} else {
 					LanguageKeyLocalServiceUtil.addLanguageKey(
 							languageKeyJSONObject.getString("key"),
-							languageKeyJSONObject.getString("value"));
+							languageKeyJSONObject.getString("value"),
+							languageKeyJSONObject.getString("tooltipContent"));
 				}
 			}
 		} catch (Exception e) {

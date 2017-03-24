@@ -18,7 +18,7 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 
-import de.unipotsdam.elis.language.model.LanguageKey;
+import de.unipotsdam.elis.language.model.LanguageKeyJournalArticle;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -26,64 +26,54 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 /**
- * The cache model class for representing LanguageKey in entity cache.
+ * The cache model class for representing LanguageKeyJournalArticle in entity cache.
  *
  * @author Matthias
- * @see LanguageKey
+ * @see LanguageKeyJournalArticle
  * @generated
  */
-public class LanguageKeyCacheModel implements CacheModel<LanguageKey>,
+public class LanguageKeyJournalArticleCacheModel implements CacheModel<LanguageKeyJournalArticle>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(7);
+		StringBundler sb = new StringBundler(5);
 
 		sb.append("{key=");
 		sb.append(key);
-		sb.append(", value=");
-		sb.append(value);
-		sb.append(", tooltipContent=");
-		sb.append(tooltipContent);
+		sb.append(", articleId=");
+		sb.append(articleId);
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	@Override
-	public LanguageKey toEntityModel() {
-		LanguageKeyImpl languageKeyImpl = new LanguageKeyImpl();
+	public LanguageKeyJournalArticle toEntityModel() {
+		LanguageKeyJournalArticleImpl languageKeyJournalArticleImpl = new LanguageKeyJournalArticleImpl();
 
 		if (key == null) {
-			languageKeyImpl.setKey(StringPool.BLANK);
+			languageKeyJournalArticleImpl.setKey(StringPool.BLANK);
 		}
 		else {
-			languageKeyImpl.setKey(key);
+			languageKeyJournalArticleImpl.setKey(key);
 		}
 
-		if (value == null) {
-			languageKeyImpl.setValue(StringPool.BLANK);
+		if (articleId == null) {
+			languageKeyJournalArticleImpl.setArticleId(StringPool.BLANK);
 		}
 		else {
-			languageKeyImpl.setValue(value);
+			languageKeyJournalArticleImpl.setArticleId(articleId);
 		}
 
-		if (tooltipContent == null) {
-			languageKeyImpl.setTooltipContent(StringPool.BLANK);
-		}
-		else {
-			languageKeyImpl.setTooltipContent(tooltipContent);
-		}
+		languageKeyJournalArticleImpl.resetOriginalValues();
 
-		languageKeyImpl.resetOriginalValues();
-
-		return languageKeyImpl;
+		return languageKeyJournalArticleImpl;
 	}
 
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		key = objectInput.readUTF();
-		value = objectInput.readUTF();
-		tooltipContent = objectInput.readUTF();
+		articleId = objectInput.readUTF();
 	}
 
 	@Override
@@ -96,22 +86,14 @@ public class LanguageKeyCacheModel implements CacheModel<LanguageKey>,
 			objectOutput.writeUTF(key);
 		}
 
-		if (value == null) {
+		if (articleId == null) {
 			objectOutput.writeUTF(StringPool.BLANK);
 		}
 		else {
-			objectOutput.writeUTF(value);
-		}
-
-		if (tooltipContent == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
-		}
-		else {
-			objectOutput.writeUTF(tooltipContent);
+			objectOutput.writeUTF(articleId);
 		}
 	}
 
 	public String key;
-	public String value;
-	public String tooltipContent;
+	public String articleId;
 }

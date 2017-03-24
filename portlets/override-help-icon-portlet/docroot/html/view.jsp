@@ -1,3 +1,4 @@
+<%@page import="com.liferay.portal.kernel.util.HtmlUtil"%>
 <%@ include file="/html/init.jsp"%>
 
 <div>
@@ -59,7 +60,7 @@ AUI().use('aui-base',
 
 		<liferay-ui:search-container-column-text
 			name="value"
-			value="<%= LocalizationUtil.getLocalization(languageKey.getValue(), LocaleUtil.toLanguageId(themeDisplay.getLocale()))  %>"
+			value="<%= HtmlUtil.escape(LocalizationUtil.getLocalization(languageKey.getValue(), LocaleUtil.toLanguageId(themeDisplay.getLocale())))  %>"
 		/>
 		
 		<liferay-ui:search-container-column-jsp

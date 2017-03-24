@@ -55,9 +55,10 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 	public static final String TABLE_NAME = "Language_LanguageKey";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "key_", Types.VARCHAR },
-			{ "value", Types.CLOB }
+			{ "value", Types.CLOB },
+			{ "tooltipContent", Types.CLOB }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Language_LanguageKey (key_ VARCHAR(75) not null primary key,value TEXT null)";
+	public static final String TABLE_SQL_CREATE = "create table Language_LanguageKey (key_ VARCHAR(75) not null primary key,value TEXT null,tooltipContent TEXT null)";
 	public static final String TABLE_SQL_DROP = "drop table Language_LanguageKey";
 	public static final String ORDER_BY_JPQL = " ORDER BY languageKey.key ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Language_LanguageKey.key_ ASC";
@@ -113,6 +114,7 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 
 		attributes.put("key", getKey());
 		attributes.put("value", getValue());
+		attributes.put("tooltipContent", getTooltipContent());
 
 		return attributes;
 	}
@@ -129,6 +131,12 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 
 		if (value != null) {
 			setValue(value);
+		}
+
+		String tooltipContent = (String)attributes.get("tooltipContent");
+
+		if (tooltipContent != null) {
+			setTooltipContent(tooltipContent);
 		}
 	}
 
@@ -163,6 +171,21 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 	}
 
 	@Override
+	public String getTooltipContent() {
+		if (_tooltipContent == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _tooltipContent;
+		}
+	}
+
+	@Override
+	public void setTooltipContent(String tooltipContent) {
+		_tooltipContent = tooltipContent;
+	}
+
+	@Override
 	public LanguageKey toEscapedModel() {
 		if (_escapedModel == null) {
 			_escapedModel = (LanguageKey)ProxyUtil.newProxyInstance(_classLoader,
@@ -178,6 +201,7 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 
 		languageKeyImpl.setKey(getKey());
 		languageKeyImpl.setValue(getValue());
+		languageKeyImpl.setTooltipContent(getTooltipContent());
 
 		languageKeyImpl.resetOriginalValues();
 
@@ -242,17 +266,27 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 			languageKeyCacheModel.value = null;
 		}
 
+		languageKeyCacheModel.tooltipContent = getTooltipContent();
+
+		String tooltipContent = languageKeyCacheModel.tooltipContent;
+
+		if ((tooltipContent != null) && (tooltipContent.length() == 0)) {
+			languageKeyCacheModel.tooltipContent = null;
+		}
+
 		return languageKeyCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(5);
+		StringBundler sb = new StringBundler(7);
 
 		sb.append("{key=");
 		sb.append(getKey());
 		sb.append(", value=");
 		sb.append(getValue());
+		sb.append(", tooltipContent=");
+		sb.append(getTooltipContent());
 		sb.append("}");
 
 		return sb.toString();
@@ -260,7 +294,7 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(10);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("<model><model-name>");
 		sb.append("de.unipotsdam.elis.language.model.LanguageKey");
@@ -274,6 +308,10 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 			"<column><column-name>value</column-name><column-value><![CDATA[");
 		sb.append(getValue());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>tooltipContent</column-name><column-value><![CDATA[");
+		sb.append(getTooltipContent());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -286,5 +324,6 @@ public class LanguageKeyModelImpl extends BaseModelImpl<LanguageKey>
 		};
 	private String _key;
 	private String _value;
+	private String _tooltipContent;
 	private LanguageKey _escapedModel;
 }

@@ -13,6 +13,19 @@
 				<column name="KEY_" />
 			</id>
 			<basic name="value" />
+			<basic name="tooltipContent" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="de.unipotsdam.elis.language.model.impl.LanguageKeyJournalArticleModelImpl">
+		<id-class class="de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK" />
+		<attributes>
+			<id name="key">
+				<column name="KEY_" />
+			</id>
+			<id name="articleId" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -20,6 +33,10 @@
 	</mapped-superclass>
 	<entity class="de.unipotsdam.elis.language.model.impl.LanguageKeyImpl" name="LanguageKey">
 		<table name="Language_LanguageKey" />
+		<attributes />
+	</entity>
+	<entity class="de.unipotsdam.elis.language.model.impl.LanguageKeyJournalArticleImpl" name="LanguageKeyJournalArticle">
+		<table name="Language_LanguageKeyJournalArticle" />
 		<attributes />
 	</entity>
 </entity-mappings>

@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import de.unipotsdam.elis.language.service.ClpSerializer;
+import de.unipotsdam.elis.language.service.LanguageKeyJournalArticleLocalServiceUtil;
 import de.unipotsdam.elis.language.service.LanguageKeyLocalServiceUtil;
 
 /**
@@ -36,6 +37,8 @@ public class ClpMessageListener extends BaseMessageListener {
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
 			LanguageKeyLocalServiceUtil.clearService();
+
+			LanguageKeyJournalArticleLocalServiceUtil.clearService();
 		}
 	}
 }

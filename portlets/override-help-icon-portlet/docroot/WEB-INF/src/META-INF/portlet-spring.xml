@@ -3,4 +3,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<bean id="de.unipotsdam.elis.language.service.LanguageKeyLocalService" class="de.unipotsdam.elis.language.service.impl.LanguageKeyLocalServiceImpl" />
 	<bean id="de.unipotsdam.elis.language.service.persistence.LanguageKeyPersistence" class="de.unipotsdam.elis.language.service.persistence.LanguageKeyPersistenceImpl" parent="basePersistence" />
+	<bean id="de.unipotsdam.elis.language.service.LanguageKeyJournalArticleLocalService" class="de.unipotsdam.elis.language.service.impl.LanguageKeyJournalArticleLocalServiceImpl" />
+	<bean id="de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePersistence" class="de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePersistenceImpl" parent="basePersistence" />
 </beans>

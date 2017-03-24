@@ -276,9 +276,10 @@ public class LanguageKeyLocalServiceUtil {
 	}
 
 	public static de.unipotsdam.elis.language.model.LanguageKey addLanguageKey(
-		java.lang.String key, java.lang.String value)
+		java.lang.String key, java.lang.String value,
+		java.lang.String tooltipContent)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().addLanguageKey(key, value);
+		return getService().addLanguageKey(key, value, tooltipContent);
 	}
 
 	public static java.util.List<de.unipotsdam.elis.language.model.LanguageKey> search(

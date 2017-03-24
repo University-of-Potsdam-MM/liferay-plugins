@@ -45,11 +45,12 @@ public class LanguageKeyLocalServiceImpl extends LanguageKeyLocalServiceBaseImpl
 	 * Never reference this interface directly. Always use {@link de.unipotsdam.elis.language.service.LanguageKeyLocalServiceUtil} to access the language key local service.
 	 */
 	
-	public LanguageKey addLanguageKey(String key, String value) throws SystemException{
+	public LanguageKey addLanguageKey(String key, String value, String tooltipContent) throws SystemException{
 
 		LanguageKey languageKey = languageKeyPersistence.create(key);
 		
 		languageKey.setValue(value);
+		languageKey.setTooltipContent(tooltipContent);
 
 		super.addLanguageKey(languageKey);
 

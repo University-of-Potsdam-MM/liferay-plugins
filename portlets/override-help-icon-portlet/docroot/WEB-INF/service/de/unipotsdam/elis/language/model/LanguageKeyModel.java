@@ -87,6 +87,21 @@ public interface LanguageKeyModel extends BaseModel<LanguageKey> {
 	 */
 	public void setValue(String value);
 
+	/**
+	 * Returns the tooltip content of this language key.
+	 *
+	 * @return the tooltip content of this language key
+	 */
+	@AutoEscape
+	public String getTooltipContent();
+
+	/**
+	 * Sets the tooltip content of this language key.
+	 *
+	 * @param tooltipContent the tooltip content of this language key
+	 */
+	public void setTooltipContent(String tooltipContent);
+
 	@Override
 	public boolean isNew();
 

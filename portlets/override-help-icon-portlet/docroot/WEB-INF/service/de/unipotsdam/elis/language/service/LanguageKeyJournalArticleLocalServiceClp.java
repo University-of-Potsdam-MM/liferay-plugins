@@ -20,29 +20,34 @@ import com.liferay.portal.service.InvokableLocalService;
  * @author Matthias
  * @generated
  */
-public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
-	public LanguageKeyLocalServiceClp(
+public class LanguageKeyJournalArticleLocalServiceClp
+	implements LanguageKeyJournalArticleLocalService {
+	public LanguageKeyJournalArticleLocalServiceClp(
 		InvokableLocalService invokableLocalService) {
 		_invokableLocalService = invokableLocalService;
 
-		_methodName0 = "addLanguageKey";
+		_methodName0 = "addLanguageKeyJournalArticle";
 
 		_methodParameterTypes0 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
-		_methodName1 = "createLanguageKey";
+		_methodName1 = "createLanguageKeyJournalArticle";
 
-		_methodParameterTypes1 = new String[] { "java.lang.String" };
+		_methodParameterTypes1 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName2 = "deleteLanguageKey";
+		_methodName2 = "deleteLanguageKeyJournalArticle";
 
-		_methodParameterTypes2 = new String[] { "java.lang.String" };
+		_methodParameterTypes2 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName3 = "deleteLanguageKey";
+		_methodName3 = "deleteLanguageKeyJournalArticle";
 
 		_methodParameterTypes3 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
 		_methodName4 = "dynamicQuery";
@@ -81,30 +86,34 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName10 = "fetchLanguageKey";
+		_methodName10 = "fetchLanguageKeyJournalArticle";
 
-		_methodParameterTypes10 = new String[] { "java.lang.String" };
+		_methodParameterTypes10 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName11 = "getLanguageKey";
+		_methodName11 = "getLanguageKeyJournalArticle";
 
-		_methodParameterTypes11 = new String[] { "java.lang.String" };
+		_methodParameterTypes11 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
 		_methodName12 = "getPersistedModel";
 
 		_methodParameterTypes12 = new String[] { "java.io.Serializable" };
 
-		_methodName13 = "getLanguageKeies";
+		_methodName13 = "getLanguageKeyJournalArticles";
 
 		_methodParameterTypes13 = new String[] { "int", "int" };
 
-		_methodName14 = "getLanguageKeiesCount";
+		_methodName14 = "getLanguageKeyJournalArticlesCount";
 
 		_methodParameterTypes14 = new String[] {  };
 
-		_methodName15 = "updateLanguageKey";
+		_methodName15 = "updateLanguageKeyJournalArticle";
 
 		_methodParameterTypes15 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
 		_methodName16 = "getBeanIdentifier";
@@ -115,27 +124,33 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
 
-		_methodName19 = "addLanguageKey";
+		_methodName19 = "removeLanguageKeyJournalArticleByKey";
 
-		_methodParameterTypes19 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+		_methodParameterTypes19 = new String[] { "java.lang.String" };
+
+		_methodName20 = "addLanguageKeyJournalArticle";
+
+		_methodParameterTypes20 = new String[] {
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName20 = "search";
+		_methodName21 = "getLanguageKeyJournalArticlesByArticleId";
 
-		_methodParameterTypes20 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes21 = new String[] { "java.lang.String" };
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey addLanguageKey(
-		de.unipotsdam.elis.language.model.LanguageKey languageKey)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle addLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.model.LanguageKeyJournalArticle languageKeyJournalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName0,
 					_methodParameterTypes0,
-					new Object[] { ClpSerializer.translateInput(languageKey) });
+					new Object[] {
+						ClpSerializer.translateInput(languageKeyJournalArticle)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -153,18 +168,21 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey createLanguageKey(
-		java.lang.String key) {
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle createLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK languageKeyJournalArticlePK) {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName1,
 					_methodParameterTypes1,
-					new Object[] { ClpSerializer.translateInput(key) });
+					new Object[] {
+						ClpSerializer.translateInput(
+							languageKeyJournalArticlePK)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -178,12 +196,12 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey deleteLanguageKey(
-		java.lang.String key)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle deleteLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK languageKeyJournalArticlePK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -191,7 +209,10 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName2,
 					_methodParameterTypes2,
-					new Object[] { ClpSerializer.translateInput(key) });
+					new Object[] {
+						ClpSerializer.translateInput(
+							languageKeyJournalArticlePK)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -213,19 +234,21 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey deleteLanguageKey(
-		de.unipotsdam.elis.language.model.LanguageKey languageKey)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle deleteLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.model.LanguageKeyJournalArticle languageKeyJournalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName3,
 					_methodParameterTypes3,
-					new Object[] { ClpSerializer.translateInput(languageKey) });
+					new Object[] {
+						ClpSerializer.translateInput(languageKeyJournalArticle)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -243,7 +266,7 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -444,15 +467,18 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey fetchLanguageKey(
-		java.lang.String key)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle fetchLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK languageKeyJournalArticlePK)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName10,
 					_methodParameterTypes10,
-					new Object[] { ClpSerializer.translateInput(key) });
+					new Object[] {
+						ClpSerializer.translateInput(
+							languageKeyJournalArticlePK)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -470,12 +496,12 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey getLanguageKey(
-		java.lang.String key)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle getLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK languageKeyJournalArticlePK)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -483,7 +509,10 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName11,
 					_methodParameterTypes11,
-					new Object[] { ClpSerializer.translateInput(key) });
+					new Object[] {
+						ClpSerializer.translateInput(
+							languageKeyJournalArticlePK)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -505,7 +534,7 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -544,7 +573,7 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 	}
 
 	@Override
-	public java.util.List<de.unipotsdam.elis.language.model.LanguageKey> getLanguageKeies(
+	public java.util.List<de.unipotsdam.elis.language.model.LanguageKeyJournalArticle> getLanguageKeyJournalArticles(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -569,11 +598,11 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (java.util.List<de.unipotsdam.elis.language.model.LanguageKey>)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<de.unipotsdam.elis.language.model.LanguageKeyJournalArticle>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public int getLanguageKeiesCount()
+	public int getLanguageKeyJournalArticlesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
@@ -601,15 +630,17 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey updateLanguageKey(
-		de.unipotsdam.elis.language.model.LanguageKey languageKey)
+	public de.unipotsdam.elis.language.model.LanguageKeyJournalArticle updateLanguageKeyJournalArticle(
+		de.unipotsdam.elis.language.model.LanguageKeyJournalArticle languageKeyJournalArticle)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName15,
 					_methodParameterTypes15,
-					new Object[] { ClpSerializer.translateInput(languageKey) });
+					new Object[] {
+						ClpSerializer.translateInput(languageKeyJournalArticle)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -627,7 +658,7 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
+		return (de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -681,22 +712,12 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 	}
 
 	@Override
-	public de.unipotsdam.elis.language.model.LanguageKey addLanguageKey(
-		java.lang.String key, java.lang.String value,
-		java.lang.String tooltipContent)
+	public void removeLanguageKeyJournalArticleByKey(java.lang.String key)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName19,
-					_methodParameterTypes19,
-					new Object[] {
-						ClpSerializer.translateInput(key),
-						
-					ClpSerializer.translateInput(value),
-						
-					ClpSerializer.translateInput(tooltipContent)
-					});
+			_invokableLocalService.invokeMethod(_methodName19,
+				_methodParameterTypes19,
+				new Object[] { ClpSerializer.translateInput(key) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -713,20 +734,48 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 					" is not a valid exception");
 			}
 		}
-
-		return (de.unipotsdam.elis.language.model.LanguageKey)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public java.util.List<de.unipotsdam.elis.language.model.LanguageKey> search(
-		java.lang.String key, int start, int end)
+	public void addLanguageKeyJournalArticle(java.lang.String key,
+		java.lang.String articleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20,
+				new Object[] {
+					ClpSerializer.translateInput(key),
+					
+				ClpSerializer.translateInput(articleId)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public java.util.List<de.unipotsdam.elis.language.model.LanguageKeyJournalArticle> getLanguageKeyJournalArticlesByArticleId(
+		java.lang.String articleId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
-					new Object[] { ClpSerializer.translateInput(key), start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
+					new Object[] { ClpSerializer.translateInput(articleId) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -744,7 +793,7 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 			}
 		}
 
-		return (java.util.List<de.unipotsdam.elis.language.model.LanguageKey>)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<de.unipotsdam.elis.language.model.LanguageKeyJournalArticle>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -788,4 +837,6 @@ public class LanguageKeyLocalServiceClp implements LanguageKeyLocalService {
 	private String[] _methodParameterTypes19;
 	private String _methodName20;
 	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
 }

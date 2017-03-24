@@ -255,7 +255,8 @@ public interface LanguageKeyLocalService extends BaseLocalService,
 		throws java.lang.Throwable;
 
 	public de.unipotsdam.elis.language.model.LanguageKey addLanguageKey(
-		java.lang.String key, java.lang.String value)
+		java.lang.String key, java.lang.String value,
+		java.lang.String tooltipContent)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

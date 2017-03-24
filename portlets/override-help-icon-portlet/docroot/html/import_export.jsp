@@ -7,7 +7,7 @@
 	<aui:button onClick="<%= exportLanguageKeysURL.toString() %>" value="export" />
 	<br><br><br>
 	<aui:form name="form" class="form" method="post" onSubmit="importLanguageKeys(event)">
-		<aui:input id="importContent" name="importContent" title="import-content" type="text" helpMessage="import-export-help">
+		<aui:input style="width: 100%; height: 300px;" id="importContent" name="importContent" title="import-content" type="textarea" helpMessage="import-export-help">
 	      	<aui:validator name="required" />
 	    </aui:input>
 		<aui:button type="submit" value="import"/>
@@ -53,7 +53,6 @@ function callActionURL(loadingString, actionURL,failureMessage) {
                             var messageContainer = A.one('#<portlet:namespace />messageContainer');
 
                             if (messageContainer) {
-                            	console.log("EWtw");
                                 messageContainer.html('<span class="portlet-msg-error">' + failureMessage + '</span>');
                             }
 

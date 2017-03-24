@@ -13,5 +13,23 @@
 		<!-- Audit fields -->
         <column name="key" type="String" primary="true"></column>
         <column name="value" type="String"></column>
+        <column name="tooltipContent" type="String"></column>
+	</entity>
+	<entity name="LanguageKeyJournalArticle" local-service="true"
+		remote-service="false">
+
+		<!-- PK fields -->
+
+		<!-- Group instance -->
+
+		<!-- Audit fields -->
+        <column name="key" type="String" primary="true"></column>
+        <column name="articleId" type="String" primary="true"></column>
+        <finder name="Key" return-type="Collection">
+            <finder-column name="key"></finder-column>
+        </finder>
+        <finder name="ArticleId" return-type="Collection">
+            <finder-column name="articleId"></finder-column>
+        </finder>
 	</entity>
 </service-builder>

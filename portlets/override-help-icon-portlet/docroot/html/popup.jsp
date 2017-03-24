@@ -17,6 +17,7 @@
 
 <aui:layout cssClass="popup-layout">
 
+	<liferay-ui:error key="error"  translateMessage="false"/>
 	<div class="message-container" id="<portlet:namespace />messageContainer"></div>
 	
 	<aui:form name="form" class="form" method="post" onSubmit="<%= submitMethod %>">
@@ -25,7 +26,7 @@
 	    </aui:input>
 	    
 	    <% for (Locale availableLocale : LanguageUtil.getAvailableLocales()) { %>
-		<aui:input id="<%= availableLocale.getLanguage() %>" name="<%= availableLocale.getLanguage() %>" label="<%= availableLocale.getDisplayLanguage(themeDisplay.getLocale())%>" type="text">
+		<aui:input style="width: 100%; height: 100px;" id="<%= availableLocale.getLanguage() %>" name="<%= availableLocale.getLanguage() %>" label="<%= availableLocale.getDisplayLanguage(themeDisplay.getLocale())%>" type="textarea">
 	    </aui:input>
 	    
 	    <% } %>
@@ -92,6 +93,8 @@ function callActionURL(loadingString, actionURL, failureMessage) {
                             Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
                         } else {
                             var messageContainer = A.one('#<portlet:namespace />messageContainer');
+                            
+                            failureMessage = (responseData.error) ? responseData.error : failureMessage;
 
                             if (messageContainer) {
                                 messageContainer.html('<span class="portlet-msg-error">' + failureMessage + '</span>');

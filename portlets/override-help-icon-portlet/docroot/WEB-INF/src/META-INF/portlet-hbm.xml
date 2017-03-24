@@ -3,11 +3,20 @@
 
 <hibernate-mapping default-lazy="false" auto-import="false">
 	<import class="de.unipotsdam.elis.language.model.LanguageKey" />
+	<import class="de.unipotsdam.elis.language.model.LanguageKeyJournalArticle" />
 	<class name="de.unipotsdam.elis.language.model.impl.LanguageKeyImpl" table="Language_LanguageKey">
 		<cache usage="read-write" />
 		<id name="key" column="key_" type="java.lang.String">
 			<generator class="assigned" />
 		</id>
 		<property name="value" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="tooltipContent" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+	</class>
+	<class name="de.unipotsdam.elis.language.model.impl.LanguageKeyJournalArticleImpl" table="Language_LanguageKeyJournalArticle">
+		<cache usage="read-write" />
+		<composite-id name="primaryKey" class="de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK">
+			<key-property name="key" column="key_" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+			<key-property name="articleId" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		</composite-id>
 	</class>
 </hibernate-mapping>

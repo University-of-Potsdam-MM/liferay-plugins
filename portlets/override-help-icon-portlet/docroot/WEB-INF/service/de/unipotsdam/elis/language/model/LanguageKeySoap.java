@@ -31,6 +31,7 @@ public class LanguageKeySoap implements Serializable {
 
 		soapModel.setKey(model.getKey());
 		soapModel.setValue(model.getValue());
+		soapModel.setTooltipContent(model.getTooltipContent());
 
 		return soapModel;
 	}
@@ -99,6 +100,15 @@ public class LanguageKeySoap implements Serializable {
 		_value = value;
 	}
 
+	public String getTooltipContent() {
+		return _tooltipContent;
+	}
+
+	public void setTooltipContent(String tooltipContent) {
+		_tooltipContent = tooltipContent;
+	}
+
 	private String _key;
 	private String _value;
+	private String _tooltipContent;
 }

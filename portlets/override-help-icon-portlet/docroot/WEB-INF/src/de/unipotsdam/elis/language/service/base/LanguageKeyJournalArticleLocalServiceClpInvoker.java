@@ -14,7 +14,7 @@
 
 package de.unipotsdam.elis.language.service.base;
 
-import de.unipotsdam.elis.language.service.LanguageKeyLocalServiceUtil;
+import de.unipotsdam.elis.language.service.LanguageKeyJournalArticleLocalServiceUtil;
 
 import java.util.Arrays;
 
@@ -22,26 +22,30 @@ import java.util.Arrays;
  * @author Matthias
  * @generated
  */
-public class LanguageKeyLocalServiceClpInvoker {
-	public LanguageKeyLocalServiceClpInvoker() {
-		_methodName0 = "addLanguageKey";
+public class LanguageKeyJournalArticleLocalServiceClpInvoker {
+	public LanguageKeyJournalArticleLocalServiceClpInvoker() {
+		_methodName0 = "addLanguageKeyJournalArticle";
 
 		_methodParameterTypes0 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
-		_methodName1 = "createLanguageKey";
+		_methodName1 = "createLanguageKeyJournalArticle";
 
-		_methodParameterTypes1 = new String[] { "java.lang.String" };
+		_methodParameterTypes1 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName2 = "deleteLanguageKey";
+		_methodName2 = "deleteLanguageKeyJournalArticle";
 
-		_methodParameterTypes2 = new String[] { "java.lang.String" };
+		_methodParameterTypes2 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName3 = "deleteLanguageKey";
+		_methodName3 = "deleteLanguageKeyJournalArticle";
 
 		_methodParameterTypes3 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
 		_methodName4 = "dynamicQuery";
@@ -80,30 +84,34 @@ public class LanguageKeyLocalServiceClpInvoker {
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName10 = "fetchLanguageKey";
+		_methodName10 = "fetchLanguageKeyJournalArticle";
 
-		_methodParameterTypes10 = new String[] { "java.lang.String" };
+		_methodParameterTypes10 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
-		_methodName11 = "getLanguageKey";
+		_methodName11 = "getLanguageKeyJournalArticle";
 
-		_methodParameterTypes11 = new String[] { "java.lang.String" };
+		_methodParameterTypes11 = new String[] {
+				"de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK"
+			};
 
 		_methodName12 = "getPersistedModel";
 
 		_methodParameterTypes12 = new String[] { "java.io.Serializable" };
 
-		_methodName13 = "getLanguageKeies";
+		_methodName13 = "getLanguageKeyJournalArticles";
 
 		_methodParameterTypes13 = new String[] { "int", "int" };
 
-		_methodName14 = "getLanguageKeiesCount";
+		_methodName14 = "getLanguageKeyJournalArticlesCount";
 
 		_methodParameterTypes14 = new String[] {  };
 
-		_methodName15 = "updateLanguageKey";
+		_methodName15 = "updateLanguageKeyJournalArticle";
 
 		_methodParameterTypes15 = new String[] {
-				"de.unipotsdam.elis.language.model.LanguageKey"
+				"de.unipotsdam.elis.language.model.LanguageKeyJournalArticle"
 			};
 
 		_methodName36 = "getBeanIdentifier";
@@ -114,59 +122,63 @@ public class LanguageKeyLocalServiceClpInvoker {
 
 		_methodParameterTypes37 = new String[] { "java.lang.String" };
 
-		_methodName42 = "addLanguageKey";
+		_methodName42 = "removeLanguageKeyJournalArticleByKey";
 
-		_methodParameterTypes42 = new String[] {
-				"java.lang.String", "java.lang.String", "java.lang.String"
+		_methodParameterTypes42 = new String[] { "java.lang.String" };
+
+		_methodName43 = "addLanguageKeyJournalArticle";
+
+		_methodParameterTypes43 = new String[] {
+				"java.lang.String", "java.lang.String"
 			};
 
-		_methodName43 = "search";
+		_methodName44 = "getLanguageKeyJournalArticlesByArticleId";
 
-		_methodParameterTypes43 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes44 = new String[] { "java.lang.String" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
 		Object[] arguments) throws Throwable {
 		if (_methodName0.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes0, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.addLanguageKey((de.unipotsdam.elis.language.model.LanguageKey)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.addLanguageKeyJournalArticle((de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)arguments[0]);
 		}
 
 		if (_methodName1.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes1, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.createLanguageKey((java.lang.String)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.createLanguageKeyJournalArticle((de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK)arguments[0]);
 		}
 
 		if (_methodName2.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes2, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.deleteLanguageKey((java.lang.String)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.deleteLanguageKeyJournalArticle((de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK)arguments[0]);
 		}
 
 		if (_methodName3.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes3, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.deleteLanguageKey((de.unipotsdam.elis.language.model.LanguageKey)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.deleteLanguageKeyJournalArticle((de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)arguments[0]);
 		}
 
 		if (_methodName4.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes4, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQuery();
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQuery();
 		}
 
 		if (_methodName5.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes5, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
 		}
 
 		if (_methodName6.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes6, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
 		if (_methodName7.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes7, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQuery((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				(com.liferay.portal.kernel.util.OrderByComparator)arguments[3]);
@@ -174,69 +186,76 @@ public class LanguageKeyLocalServiceClpInvoker {
 
 		if (_methodName8.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes8, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0]);
 		}
 
 		if (_methodName9.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes9, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
+			return LanguageKeyJournalArticleLocalServiceUtil.dynamicQueryCount((com.liferay.portal.kernel.dao.orm.DynamicQuery)arguments[0],
 				(com.liferay.portal.kernel.dao.orm.Projection)arguments[1]);
 		}
 
 		if (_methodName10.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes10, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.fetchLanguageKey((java.lang.String)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.fetchLanguageKeyJournalArticle((de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK)arguments[0]);
 		}
 
 		if (_methodName11.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes11, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.getLanguageKey((java.lang.String)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.getLanguageKeyJournalArticle((de.unipotsdam.elis.language.service.persistence.LanguageKeyJournalArticlePK)arguments[0]);
 		}
 
 		if (_methodName12.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes12, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.getPersistedModel((java.io.Serializable)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.getPersistedModel((java.io.Serializable)arguments[0]);
 		}
 
 		if (_methodName13.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes13, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.getLanguageKeies(((Integer)arguments[0]).intValue(),
+			return LanguageKeyJournalArticleLocalServiceUtil.getLanguageKeyJournalArticles(((Integer)arguments[0]).intValue(),
 				((Integer)arguments[1]).intValue());
 		}
 
 		if (_methodName14.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes14, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.getLanguageKeiesCount();
+			return LanguageKeyJournalArticleLocalServiceUtil.getLanguageKeyJournalArticlesCount();
 		}
 
 		if (_methodName15.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes15, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.updateLanguageKey((de.unipotsdam.elis.language.model.LanguageKey)arguments[0]);
+			return LanguageKeyJournalArticleLocalServiceUtil.updateLanguageKeyJournalArticle((de.unipotsdam.elis.language.model.LanguageKeyJournalArticle)arguments[0]);
 		}
 
 		if (_methodName36.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.getBeanIdentifier();
+			return LanguageKeyJournalArticleLocalServiceUtil.getBeanIdentifier();
 		}
 
 		if (_methodName37.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes37, parameterTypes)) {
-			LanguageKeyLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+			LanguageKeyJournalArticleLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
 		if (_methodName42.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.addLanguageKey((java.lang.String)arguments[0],
-				(java.lang.String)arguments[1], (java.lang.String)arguments[2]);
+			LanguageKeyJournalArticleLocalServiceUtil.removeLanguageKeyJournalArticleByKey((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
 		if (_methodName43.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
-			return LanguageKeyLocalServiceUtil.search((java.lang.String)arguments[0],
-				((Integer)arguments[1]).intValue(),
-				((Integer)arguments[2]).intValue());
+			LanguageKeyJournalArticleLocalServiceUtil.addLanguageKeyJournalArticle((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+
+			return null;
+		}
+
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+			return LanguageKeyJournalArticleLocalServiceUtil.getLanguageKeyJournalArticlesByArticleId((java.lang.String)arguments[0]);
 		}
 
 		throw new UnsupportedOperationException();
@@ -282,4 +301,6 @@ public class LanguageKeyLocalServiceClpInvoker {
 	private String[] _methodParameterTypes42;
 	private String _methodName43;
 	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
 }

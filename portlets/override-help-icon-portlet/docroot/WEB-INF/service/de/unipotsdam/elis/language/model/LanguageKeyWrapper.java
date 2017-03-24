@@ -51,6 +51,7 @@ public class LanguageKeyWrapper implements LanguageKey,
 
 		attributes.put("key", getKey());
 		attributes.put("value", getValue());
+		attributes.put("tooltipContent", getTooltipContent());
 
 		return attributes;
 	}
@@ -67,6 +68,12 @@ public class LanguageKeyWrapper implements LanguageKey,
 
 		if (value != null) {
 			setValue(value);
+		}
+
+		String tooltipContent = (String)attributes.get("tooltipContent");
+
+		if (tooltipContent != null) {
+			setTooltipContent(tooltipContent);
 		}
 	}
 
@@ -128,6 +135,26 @@ public class LanguageKeyWrapper implements LanguageKey,
 	@Override
 	public void setValue(java.lang.String value) {
 		_languageKey.setValue(value);
+	}
+
+	/**
+	* Returns the tooltip content of this language key.
+	*
+	* @return the tooltip content of this language key
+	*/
+	@Override
+	public java.lang.String getTooltipContent() {
+		return _languageKey.getTooltipContent();
+	}
+
+	/**
+	* Sets the tooltip content of this language key.
+	*
+	* @param tooltipContent the tooltip content of this language key
+	*/
+	@Override
+	public void setTooltipContent(java.lang.String tooltipContent) {
+		_languageKey.setTooltipContent(tooltipContent);
 	}
 
 	@Override
