@@ -18,7 +18,7 @@
 --%>
 
 <%@page import="de.unipotsdam.elis.activities.ExtendedSocialActivityKeyConstants"%>
-<%@page import="de.unipotsdam.elis.activities.ExtendedSocialRelationConstants"%>
+
 <%
 Date now = new Date();
 
