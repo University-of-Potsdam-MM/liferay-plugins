@@ -243,12 +243,15 @@ else {
 						var leaveURLOnly = !result.joinURL && !result.membershipRequested && !result.requestUrl;
 
 						if (leaveURLOnly) {
-							if (result.leaveURL) {
+							/* BEGIN CHANGE #794 */
+							/* removed if statement, so that leave button cannot be disabled */
+							/* if (result.leaveURL) { */
 								leaveHTML = getSiteActionHtml('action leave', 'leave-site', '<liferay-ui:message key="leave-site" />', result.leaveURL)
-							}
+							/* }
 							else {
 								leaveHTML = getSiteActionHtml('action leave', 'disabled', '<liferay-ui:message key="you-cannot-leave-the-site-as-a-user-group-member-or-organization-member" />', '#');
-							}
+							} */
+							/* END CHANGE */
 						}
 
 						return Lang.sub(
