@@ -72,6 +72,9 @@ if (!roles.isEmpty()) {
 			</aui:fieldset>
 		</liferay-ui:panel>
 
+		<%-- BEGIN CHANGE #805 --%>
+		<%-- added div to hide panel, but preserve settings --%>
+		<div hidden="true">
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="announcementsDisplayedPanel" persistState="<%= true %>" title="announcements-displayed">
 			<aui:input cssClass="customize-announcements-displayed" id="customizeAnnouncementsDisplayed" name="preferences--customizeAnnouncementsDisplayed--" title="customize-announcements-displayed" type="checkbox" value="<%= customizeAnnouncementsDisplayed %>" />
 
@@ -251,6 +254,8 @@ if (!roles.isEmpty()) {
 				</liferay-ui:tabs>
 			</div>
 		</liferay-ui:panel>
+		</div>
+		<%-- END CHANGE --%>
 	</liferay-ui:panel-container>
 
 	<aui:button-row>

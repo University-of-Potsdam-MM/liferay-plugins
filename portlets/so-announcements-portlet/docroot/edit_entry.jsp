@@ -79,13 +79,20 @@ if (entry == null) {
 
 				boolean submitOnChange = false;
 				%>
-
-				<div class="distribution-scope-container">
+				
+				<%-- BEGIN CHANGE --%>
+				<%-- set scope container to hidden due to #805 --%>
+				<%-- <div class="distribution-scope-container"> --%>
+				<div class="distribution-scope-container" hidden="true">
+				<%-- END CHANGE --%>
 					<%@ include file="/entry_select_scope.jspf" %>
 				</div>
 			</c:otherwise>
 		</c:choose>
 
+		<%-- BEGIN CHANGE #805 --%>
+		<%-- add div to hide type selection --%>
+		<div hidden="true">
 		<aui:select cssClass="type" name="type">
 
 			<%
@@ -99,7 +106,9 @@ if (entry == null) {
 			%>
 
 		</aui:select>
-
+		</div>
+		<%-- END CHANGE --%>
+		
 		<aui:select cssClass="priority" name="priority">
 			<aui:option label="normal" selected="<%= (entry != null) && (entry.getPriority() == 0) %>" value="0" />
 			<aui:option label="important" selected="<%= (entry != null) && (entry.getPriority() == 1) %>" value="1" />

@@ -63,6 +63,9 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 	<div id="<portlet:namespace />errorMessage"></div>
 
+	<%-- BEGIN CHANGE #805 --%>
+	<%-- added div to hide fieldset --%>
+	<div hidden="true">
 	<aui:fieldset cssClass="distribution-scope-container">
 
 		<%
@@ -72,7 +75,9 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 		<%@ include file="/entry_select_scope.jspf" %>
 
 	</aui:fieldset>
-
+	</div>
+	<%-- END CHANGE --%>
+	
 	<aui:button onClick='<%= renderResponse.getNamespace() + "manageAddEntry();" %>' value="add-entry" />
 
 	<c:if test="<%= Validator.isNotNull(distributionScope) %>">
