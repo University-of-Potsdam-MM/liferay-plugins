@@ -114,7 +114,7 @@ String contentsLanguageDir = LanguageUtil.get(contentsLocale, "lang.dir");
 	// added mathjax to allow the usage of math equations
 	//config.extraPlugins = 'ajaxsave,media,restore,scayt,wsc';
 	config.extraPlugins = 'media,restore,scayt,wsc,uploadimage,oembed,mathjax';
-	config.mathJaxLib = '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML';
+	config.mathJaxLib = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML';
 	<%-- END HOOK CHANGE --%>
 
 	config.height = 265;
