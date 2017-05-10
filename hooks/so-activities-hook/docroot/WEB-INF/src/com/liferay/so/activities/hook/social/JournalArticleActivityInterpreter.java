@@ -63,7 +63,7 @@ public class JournalArticleActivityInterpreter extends SOSocialActivityInterpret
 			ServiceContext serviceContext) throws Exception {
 		
 		String articleLink = createJournalArtcileLink(socialActivity.getClassPK(), serviceContext);
-		System.out.println(articleLink);
+		
 		return new Object[] {articleLink};
 	}
 	
@@ -72,7 +72,6 @@ public class JournalArticleActivityInterpreter extends SOSocialActivityInterpret
 		String groupName, SocialActivity activity) {
 
 		int activityType = activity.getType();
-		System.out.println("ActivityType: "+activityType);
 		
 		if (activityType == 1 || activityType == 2) {
 			return "updated-an-image-text-editor-entry";
@@ -113,13 +112,13 @@ public class JournalArticleActivityInterpreter extends SOSocialActivityInterpret
 			// get first layout where content is on, if there are more journal articles they all have same content
 			Layout layout = LayoutLocalServiceUtil.getLayout(workspace.getGroupId(), true, layoutIds.get(0));
 			url = serviceContext.getPortalURL()+PortalUtil.getLayoutActualURL(layout);
-			System.out.println(url);
+
 		} else {
 			// no layout founds, try again with public layout
 			layoutIds = JournalContentSearchLocalServiceUtil.getLayoutIds(workspace.getGroupId(), false, journalArticle.getArticleId());
 			if (!layoutIds.isEmpty()) {
 				// get first layout where content is on, if there are more journal articles they all have same content
-				Layout layout = LayoutLocalServiceUtil.getLayout(workspace.getGroupId(), true, layoutIds.get(0));
+				Layout layout = LayoutLocalServiceUtil.getLayout(workspace.getGroupId(), false, layoutIds.get(0));
 				url = serviceContext.getPortalURL()+PortalUtil.getLayoutActualURL(layout);
 			} 
 		}
