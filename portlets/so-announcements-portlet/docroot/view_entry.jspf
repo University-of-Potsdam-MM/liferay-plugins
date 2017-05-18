@@ -70,10 +70,14 @@ if (entry.getPriority() > 0) {
 		<div class="entry-action">
 			<c:choose>
 				<c:when test="<%= entryUser == null %>">
-					<%= LanguageUtil.format(pageContext, "x-to-x", new Object[] {HtmlUtil.escape(entry.getUserName()), "<span class=\"scope\">" + scopeName + "</span>"}, false) %>
+					<%-- BEGIN CHANGE wording from x-to-x to x-in-x #831 --%>
+					<%= LanguageUtil.format(pageContext, "x-in-x", new Object[] {HtmlUtil.escape(entry.getUserName()), "<span class=\"scope\">" + scopeName + "</span>"}, false) %>
+					<%-- END CHANGE --%>
 				</c:when>
 				<c:otherwise>
-					<%= LanguageUtil.format(pageContext, "x-to-x", new Object[] {"<a href=\"" + entryUser.getDisplayURL(themeDisplay) + "\">" + HtmlUtil.escape(entryUser.getFullName()) + "</a>", "<span class=\"scope\">" + scopeName + "</span>"}, false) %>
+					<%-- BEGIN CHANGE wording from x-to-x to x-in-x #831 --%>
+					<%= LanguageUtil.format(pageContext, "x-in-x", new Object[] {"<a href=\"" + entryUser.getDisplayURL(themeDisplay) + "\">" + HtmlUtil.escape(entryUser.getFullName()) + "</a>", "<span class=\"scope\">" + scopeName + "</span>"}, false) %>
+					<%-- END CHANGE --%>
 				</c:otherwise>
 			</c:choose>
 		</div>
