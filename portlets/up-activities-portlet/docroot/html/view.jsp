@@ -99,10 +99,13 @@
 								loading = false;
 
 								if (!activities.one('.no-activities')) {
-									if (body.height() < win.height()) {
-										loadNewContent();
-									}
-									else if (win.width() < 768) {
+									// BEGIN CHANGE #832
+									// removed new content load depending on height
+//									if (body.height() < win.height()) {
+//										loadNewContent();
+//									}
+//									else if (win.width() < 768) {
+									// STOP CHANGE #832	
 										loading = true;
 
 										var manualLoaderTemplate =
@@ -111,7 +114,9 @@
 											'</div>';
 
 										socialActivities.append(manualLoaderTemplate);
-									}
+									// CONTINUE CHANGE #832	
+//									}
+									// END CHANGE #832
 								}
 							}
 						}
