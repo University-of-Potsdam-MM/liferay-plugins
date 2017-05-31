@@ -116,9 +116,10 @@ public class AnnouncementsEntryLocalServiceImpl
 
 	@Override
 	public void checkEntries() throws PortalException, SystemException {
-		super.checkEntries();
-
-		sendNotificationEvent();
+		// do nothing here, check entries caused "bug" #806 and #838
+//		super.checkEntries();
+//
+//		sendNotificationEvent();
 	}
 
 	protected void sendNotificationEvent()
