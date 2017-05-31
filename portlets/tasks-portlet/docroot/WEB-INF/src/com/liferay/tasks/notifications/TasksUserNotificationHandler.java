@@ -28,8 +28,10 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -86,12 +88,18 @@ public class TasksUserNotificationHandler extends BaseUserNotificationHandler {
 		PortletConfig portletConfig =  PortletConfigFactoryUtil
 				.create(portlet, servletContext);
 		
+		Group group = GroupLocalServiceUtil.getGroup(tasksEntry.getGroupId());
+		// group is a workspace if id of parentgroup is equal zero
+		while (group.getParentGroupId() != 0){
+			group = group.getParentGroup();
+		}
+		
 		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 				jsonObject.getString("title"),
 				new Object[] {
 					HtmlUtil.escape(PortalUtil.getUserName(
 						jsonObject.getLong("userId"), StringPool.BLANK)),
-					serviceContext.getScopeGroup().getDescriptiveName(
+					group.getDescriptiveName(
 						serviceContext.getLocale())
 				}
 			);

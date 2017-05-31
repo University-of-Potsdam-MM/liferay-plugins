@@ -23,17 +23,22 @@ import com.liferay.notifications.util.NotificationsConstants;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Portlet;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.PortletConfigFactoryUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppHelperLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLAppLocalServiceUtil;
 
 /**
  * @author Lin Cui
@@ -77,6 +82,7 @@ public class DocumentLibraryUserNotificationHandler
 		String message = StringPool.BLANK;
 		
 		int notificationType = jsonObject.getInt("notificationType");
+		long groupId = jsonObject.getLong("groupId");
 		
 		// check notification type to display correct message
 		switch (notificationType) {
@@ -101,13 +107,22 @@ public class DocumentLibraryUserNotificationHandler
 		PortletConfig portletConfig =  PortletConfigFactoryUtil
 				.create(portlet, servletContext);
 		
+		FileEntry entry = DLAppLocalServiceUtil.getFileEntry(jsonObject.getLong("classPK"));
+		
+		Group group = GroupLocalServiceUtil.getGroup(entry.getGroupId());
+		
+		// Parent of workspace has id 0, so check it to get workspace
+		while (group.getParentGroupId() != 0) {
+			group = group.getParentGroup();
+		}
+		
 		return LanguageUtil
 				.format(portletConfig, serviceContext.getLocale(),
 						message,
 						new String[] {
 								HtmlUtil.escape(PortalUtil.getUserName(
 										jsonObject.getLong("userId"), StringPool.BLANK)), 
-								serviceContext.getScopeGroup().getDescriptiveName(serviceContext.getLocale()) 
+										group.getDescriptiveName(serviceContext.getLocale()) 
 						}, 
 						false);
 	}

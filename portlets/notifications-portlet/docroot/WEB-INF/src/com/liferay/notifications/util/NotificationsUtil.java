@@ -277,8 +277,6 @@ public class NotificationsUtil {
 				JSONObject notificationEventJSONObject,
 				List<ObjectValuePair<String, Long>> subscribersOVPs)
 			throws PortalException, SystemException {
-
-			System.out.println("***** Notification: "+notificationEventJSONObject);
 			
 			int notificationType = notificationEventJSONObject.getInt(
 				"notificationType");

@@ -94,12 +94,18 @@ public class SOAnnouncementsUserNotificationHandler
 		PortletConfig portletConfig =  PortletConfigFactoryUtil
 				.create(portlet, servletContext);
 		
+		Group group = GroupLocalServiceUtil.fetchGroup(announcementEntry.getGroupId());
+		// group is a workspace if id of parentgroup is equal zero
+		while (group.getParentGroupId() != 0){
+			group = group.getParentGroup();
+		}
+		
 		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 				"x-sent-a-new-announcement-in-workspace-x",
 				new Object[]{HtmlUtil.escape(
 					PortalUtil.getUserName(
 						announcementEntry.getUserId(), StringPool.BLANK)),
-						serviceContext.getScopeGroup().getDescriptiveName(serviceContext.getLocale())
+						group.getDescriptiveName(serviceContext.getLocale())
 				});
 				
 // END CHANGE
