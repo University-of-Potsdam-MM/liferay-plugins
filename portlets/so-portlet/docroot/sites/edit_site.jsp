@@ -147,8 +147,17 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 									%>
 	
 										<div class="page">
-											<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
-	
+										
+											<%-- BEGIN HOOK CHANGE --%>
+											<%-- Pages Overview and Members cannot be unselected anymore --%>
+											<%-- <input checked  data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" /> --%>
+											<% if (prototypeLayout.getName(Locale.US).equals("Overview") || prototypeLayout.getName(Locale.US).equals("Members")){ %>
+												<input disabled checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
+											<% }else { %>
+												<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
+											<% } %>
+											<%-- END HOOK CHANGE --%>
+											
 											<label for="layout<%= prototypeLayout.getLayoutId() %>"><%= prototypeLayout.getName(locale) %></label>
 										</div>
 	
@@ -468,12 +477,22 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 
 							for (var i in layouts) {
 								var layout = layouts[i];
-
-								inputBuffer.push(
-									'<div class="page">' +
-										'<input checked data-layoutId="' + layout.layoutId + '" id="layout' + layout.layoutId + '" type="checkbox" />' +
-										'<label for="layout' + layout.layoutId + '">' + layout.name + '</label>' +
-									'</div>');
+								
+								// BEGIN HOOK CHANGE
+								// Pages Overview and Members cannot be unselected anymore
+								if (layout.name == "Overview" || layout.name == "Members" || layout.name == "Übersicht" || layout.name == "Mitglieder")
+									inputBuffer.push(
+										'<div class="page">' +
+											'<input checked disabled data-layoutId="' + layout.layoutId + '" id="layout' + layout.layoutId + '" type="checkbox" />' +
+											'<label for="layout' + layout.layoutId + '">' + layout.name + '</label>' +
+										'</div>');
+								else
+									inputBuffer.push(
+										'<div class="page">' +
+											'<input checked data-layoutId="' + layout.layoutId + '" id="layout' + layout.layoutId + '" type="checkbox" />' +
+											'<label for="layout' + layout.layoutId + '">' + layout.name + '</label>' +
+										'</div>');
+								// END HOOK CHANGE
 							}
 							
 							if (layouts.length == 0){
