@@ -670,6 +670,16 @@ public class SitesPortlet extends MVCPortlet {
 		
 
 		setCustomJspServletContextName(group);
+
+		// BEGIN CHANGE
+		// enable/disable template propagation for the public/private pages
+		LayoutSet privateLayoutSet = group.getPrivateLayoutSet();
+		privateLayoutSet.setLayoutSetPrototypeLinkEnabled(false);
+		LayoutSetLocalServiceUtil.updateLayoutSet(privateLayoutSet);
+		LayoutSet publicLayoutSet = group.getPublicLayoutSet();
+		publicLayoutSet.setLayoutSetPrototypeLinkEnabled(true);
+		LayoutSetLocalServiceUtil.updateLayoutSet(publicLayoutSet);
+		// END CHANGE
 		
 		// BEGIN CHANGE
 		// group is returned to create group url after site is created
