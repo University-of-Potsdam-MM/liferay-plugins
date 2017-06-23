@@ -188,33 +188,39 @@ public class MyCustomPagesNotificationHandler extends BaseUserNotificationHandle
 		
 		if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_PUBLISHED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"custompages-custom-page-published-message", new Object[] { user.getFullName(),
-							pageName });
+					"custompages-custom-page-published-message", new Object[] { 
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_REQUESTED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 					"custompages-custom-page-feedback-requested-message", new Object[] {
-							user.getFullName(), pageName });
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_FEEDBACK_DELIVERED) {
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"custompages-custom-page-feedback-delivered", new Object[] { user.getFullName(),
-							pageName });
+					"custompages-custom-page-feedback-delivered", new Object[] { 
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED){
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"custompages-custom-page-deleted", new Object[] { user.getFullName(),
-							pageName });
+					"custompages-custom-page-deleted", new Object[] { 
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		} else if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SHARE){
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"custompages-custom-page-deleted-share", new Object[] { user.getFullName(),
-							pageName });
+					"custompages-custom-page-deleted-share", new Object[] { 
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		} else /*if (activityType == CustomPageStatics.MESSAGE_TYPE_CUSTOM_PAGE_DELETED_SUBMISSION)*/{
 			notificationMessage = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
-					"custompages-custom-page-deleted-publish", new Object[] { user.getFullName(),
-							pageName });
+					"custompages-custom-page-deleted-publish", new Object[] { 
+						"<span class=\"user-notification-username\">" + user.getFullName() + "</span>", 
+						"<span class=\"user-notification-workspacename\">" + pageName + "</span>"});
 
 		}
 		

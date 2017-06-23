@@ -82,7 +82,7 @@ public class SiteMembershipUserNotificationHandler extends
 				
 				String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "workspace-x-was-deleted", 
 						new String[] { 
-							workspaceName 
+							"<span class=\"user-notification-workspacename\">"+workspaceName+"</span>" 
 						});
 				
 				return StringUtil.replace(
@@ -97,7 +97,7 @@ public class SiteMembershipUserNotificationHandler extends
 				
 				String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "you-were-added-to-workspace-x", 
 						new String[] { 
-							workspaceName
+							"<span class=\"user-notification-workspacename\">"+workspaceName+"</span>"
 						});
 				
 				return StringUtil.replace(
@@ -142,8 +142,8 @@ public class SiteMembershipUserNotificationHandler extends
 				MembershipRequestConstants.STATUS_APPROVED) {
 			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "notification-request-x-approved-your-request-to-join-x", 
 					new Object[] { 
-						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
-						getWorkspaceNameLink(membershipRequest.getGroupId(), serviceContext) 
+						getUserName(membershipRequest.getReplierUserId(), serviceContext),
+						getWorkspaceName(membershipRequest.getGroupId(), serviceContext) 
 					});
 			return StringUtil.replace(
 					"<div class=\"title\">[$TITLE$]</div>", 
@@ -154,8 +154,8 @@ public class SiteMembershipUserNotificationHandler extends
 				MembershipRequestConstants.STATUS_DENIED) {
 			title = LanguageUtil.format(portletConfig, serviceContext.getLocale(), "notification-request-x-denied-your-request-to-join-x", 
 					new Object[] { 
-						getUserNameLink(membershipRequest.getReplierUserId(), serviceContext),
-						getWorkspaceDescriptiveName(membershipRequest.getGroupId(), serviceContext) 
+						getUserName(membershipRequest.getReplierUserId(), serviceContext),
+						getWorkspaceName(membershipRequest.getGroupId(), serviceContext) 
 					});
 			
 			return StringUtil.replace(
@@ -326,6 +326,48 @@ public class SiteMembershipUserNotificationHandler extends
 		}
 		
 	}
+	
+	protected String getUserName(
+			long userId, ServiceContext serviceContext) {
+
+			try {
+				if (userId <= 0) {
+					return StringPool.BLANK;
+				}
+
+				User user = UserLocalServiceUtil.getUserById(userId);
+
+				String userName = user.getFullName();
+
+				return "<span class=\"user-notification-username\">"
+					+ HtmlUtil.escape(userName) + "</span>";
+			}
+			catch (Exception e) {
+				return StringPool.BLANK;
+			}
+		}
+		
+		/**
+		 * Get workspaceName.
+		 * @param groupId
+		 * @param serviceContext
+		 * @return BLANK if an exception occurs.
+		 */
+		protected String getWorkspaceName(long groupId,
+				ServiceContext serviceContext) {
+
+			try {
+				String descriptiveName = getWorkspaceDescriptiveName(groupId,
+						serviceContext);
+				
+				return "<span class=\"user-notification-workspacename\">"
+					+ HtmlUtil.escape(descriptiveName) + "</span>";
+				
+			} catch (Exception e) {
+				return StringPool.BLANK;
+			}
+			
+		}
 	
 	/**
 	 * This method returns the link to the workspace

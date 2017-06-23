@@ -80,8 +80,9 @@ public class ContactsCenterUserNotificationHandler
 				socialRequest.getUserId(), serviceContext);
 
 			title = serviceContext.translate(
-				"request-social-networking-summary-add-connection",
-				creatorUserName);
+					"request-social-networking-summary-add-connection",
+					"<span class=\"user-notification-username\">"
+							+ creatorUserName + "</span>");
 		}
 
 		LiferayPortletResponse liferayPortletResponse =

@@ -81,7 +81,6 @@ public class MessageBoardsUserNotificationHandler
 		String message = StringPool.BLANK;
 		
 		int notificationType = jsonObject.getInt("notificationType");
-		long groupId = jsonObject.getLong("groupId");
 		
 		// check notification type to display correct message
 		switch (notificationType) {
@@ -115,15 +114,18 @@ public class MessageBoardsUserNotificationHandler
 			group = group.getParentGroup();
 		}
 		
-		return LanguageUtil
-				.format(portletConfig, serviceContext.getLocale(),
-						message,
-						new String[] {
-								HtmlUtil.escape(PortalUtil.getUserName(
-										jsonObject.getLong("userId"), StringPool.BLANK)), 
-										group.getDescriptiveName(serviceContext.getLocale()) 
-						}, 
-						false);
+		return LanguageUtil.format(
+				portletConfig,
+				serviceContext.getLocale(),
+				message,
+				new String[] {
+						"<span class=\"user-notification-username\">"
+								+ HtmlUtil.escape(PortalUtil.getUserName(
+										jsonObject.getLong("userId"),
+										StringPool.BLANK)) + "</span>",
+						"<span class=\"user-notification-workspacename\">"
+								+ group.getDescriptiveName(serviceContext
+										.getLocale()) + "</span>" }, false);
 	}
 	
 }

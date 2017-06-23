@@ -114,62 +114,17 @@ public class BookmarksUserNotificationHandler
 			group = group.getParentGroup();
 		}
 		
-		return LanguageUtil
-				.format(portletConfig, serviceContext.getLocale(),
-						message,
-						new String[] {
-								HtmlUtil.escape(PortalUtil.getUserName(
-										jsonObject.getLong("userId"), StringPool.BLANK)), 
-										group.getDescriptiveName(serviceContext.getLocale()) 
-						}, 
-						false);
+		return LanguageUtil.format(
+				portletConfig,
+				serviceContext.getLocale(),
+				message,
+				new String[] {
+						"<span class=\"user-notification-username\">"
+								+ HtmlUtil.escape(PortalUtil.getUserName(
+										jsonObject.getLong("userId"),
+										StringPool.BLANK)) + "</span>",
+						"<span class=\"user-notification-workspacename\">"
+								+ group.getDescriptiveName(serviceContext
+										.getLocale()) + "</span>" }, false);
 	}
-	
-//	@Override
-//	protected String getTitle(
-//			JSONObject jsonObject, AssetRenderer assetRenderer,
-//			ServiceContext serviceContext)
-//		throws Exception {
-//
-//		String message = StringPool.BLANK;
-//
-//		String typeName = ResourceActionsUtil.getModelResource(
-//			serviceContext.getLocale(), assetRenderer.getClassName());
-//
-//		int notificationType = jsonObject.getInt("notificationType");
-//
-//		if (notificationType ==
-//				UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY) {
-//
-//			message = "x-added-a-new-bookmarks-in-folder-x";
-//
-//			long folderId = jsonObject.getLong("classPK");
-//
-//			BookmarksFolder bookmarksFolder =
-//				BookmarksFolderLocalServiceUtil.getBookmarksFolder(folderId);
-//
-//			typeName = bookmarksFolder.getName();
-//		}
-//		else if (notificationType ==
-//					UserNotificationDefinition.
-//						NOTIFICATION_TYPE_UPDATE_ENTRY) {
-//
-//			message = "x-updated-a-x";
-//		}
-//
-//		String userName = assetRenderer.getUserName();
-//
-//		long userId = jsonObject.getLong("userId");
-//
-//		if (userId > 0) {
-//			User user = UserLocalServiceUtil.getUser(userId);
-//
-//			userName = user.getFullName();
-//		}
-//
-//		return serviceContext.translate(
-//			message, HtmlUtil.escape(userName),
-//			StringUtil.toLowerCase(HtmlUtil.escape(typeName)));
-//	}
-
 }

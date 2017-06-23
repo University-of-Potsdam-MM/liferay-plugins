@@ -100,13 +100,18 @@ public class SOAnnouncementsUserNotificationHandler
 			group = group.getParentGroup();
 		}
 		
-		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+		String title = LanguageUtil.format(
+				portletConfig,
+				serviceContext.getLocale(),
 				"x-sent-a-new-announcement-in-workspace-x",
-				new Object[]{HtmlUtil.escape(
-					PortalUtil.getUserName(
-						announcementEntry.getUserId(), StringPool.BLANK)),
-						group.getDescriptiveName(serviceContext.getLocale())
-				});
+				new Object[] {
+						"<span class=\"user-notification-username\">"
+								+ HtmlUtil.escape(PortalUtil.getUserName(
+										announcementEntry.getUserId(),
+										StringPool.BLANK)) + "</span>",
+						"<span class=\"user-notification-workspacename\">"
+								+ group.getDescriptiveName(serviceContext
+										.getLocale()) + "</span>" });
 				
 // END CHANGE
 		

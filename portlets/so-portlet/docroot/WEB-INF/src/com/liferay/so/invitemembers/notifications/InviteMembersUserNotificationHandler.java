@@ -112,12 +112,16 @@ public class InviteMembersUserNotificationHandler
 			User receiver = UserLocalServiceUtil.getUser(memberRequest.getReceiverUserId());
 			Group _group = GroupLocalServiceUtil.getGroup(memberRequest.getGroupId());
 			
-			String message = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+			String message = LanguageUtil.format(
+					portletConfig,
+					serviceContext.getLocale(),
 					"x-accepted-your-invitation-to-join-x",
 					new Object[] {
-						receiver.getFullName(),
-						_group.getDescriptiveName(serviceContext.getLocale())
-					});
+							"<span class=\"user-notification-username\">"
+									+ receiver.getFullName() + "</span>",
+							"<span class=\"user-notification-workspacename\">"
+									+ _group.getDescriptiveName(serviceContext
+											.getLocale()) + "</span>" });
 			return StringUtil.replace("<div class=\"title\">[$TITLE$]</div>", new String[] { "[$TITLE$]" }, new String[] { message });
 		}
 

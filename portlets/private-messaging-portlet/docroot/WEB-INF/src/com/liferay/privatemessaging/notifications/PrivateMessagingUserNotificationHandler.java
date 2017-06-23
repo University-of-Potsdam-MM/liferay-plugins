@@ -120,9 +120,13 @@ public class PrivateMessagingUserNotificationHandler
 		PortletConfig portletConfig =  PortletConfigFactoryUtil
 				.create(portlet, servletContext);
 		
-		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
+		String title = LanguageUtil.format(
+				portletConfig,
+				serviceContext.getLocale(),
 				"x-sent-you-a-message",
-				HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK)));
+				"<span class=\"user-notification-username\">"
+						+ HtmlUtil.escape(PortalUtil.getUserName(userId,
+								StringPool.BLANK)) + "</span>");
 		// END CHANGE
 		
 		return StringUtil.replace(

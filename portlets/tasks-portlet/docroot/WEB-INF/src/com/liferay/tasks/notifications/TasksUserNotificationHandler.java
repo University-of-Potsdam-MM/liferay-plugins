@@ -97,10 +97,10 @@ public class TasksUserNotificationHandler extends BaseUserNotificationHandler {
 		String title = LanguageUtil.format(portletConfig, serviceContext.getLocale(),
 				jsonObject.getString("title"),
 				new Object[] {
-					HtmlUtil.escape(PortalUtil.getUserName(
-						jsonObject.getLong("userId"), StringPool.BLANK)),
-					group.getDescriptiveName(
-						serviceContext.getLocale())
+					"<span class=\"user-notification-username\">" + HtmlUtil.escape(PortalUtil.getUserName(
+						jsonObject.getLong("userId"), StringPool.BLANK))+ "</span>",
+					"<span class=\"user-notification-workspacename\">" + group.getDescriptiveName(
+						serviceContext.getLocale()) + "</span>"
 				}
 			);
 		// END CHANGE
