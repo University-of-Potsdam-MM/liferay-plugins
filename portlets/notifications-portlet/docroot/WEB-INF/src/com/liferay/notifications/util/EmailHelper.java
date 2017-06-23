@@ -17,6 +17,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
@@ -192,7 +193,7 @@ public class EmailHelper {
 		if (serviceContext.isCommandUpdate())			
 			notificationType = "updated";
 		
-		System.out.println("notificationType "+notificationType);
+//		System.out.println("notificationType "+notificationType);
 		
 		String contentURL = (String)serviceContext.getAttribute("contentURL");
 		
@@ -221,7 +222,7 @@ public class EmailHelper {
 							"[$CONFIG_URL$]"
 						}, new String[] {  
 							recipient.getFullName(), commentator.getFullName(),
-							mbMessage.getBody(), // translation needed? 
+							StringUtil.shorten(HtmlUtil.stripHtml(mbMessage.getBody()), 500), // translation needed? 
 							contentURL,
 							UserNotificationHelper.getConfigURL(serviceContext, recipient)
 						});
@@ -388,13 +389,12 @@ public class EmailHelper {
 		
 		String blogContent = "n/a";
 		if (blogsEntry != null) {
-			blogContent = blogsEntry.getContent();
+			blogContent = StringUtil.shorten(HtmlUtil.stripHtml(blogsEntry.getContent()), 500);
 		}
 		
 		// check if workspace realy is workspace
 		String blogname = "";
 		if (workspace.getParentGroupId() != 0) {
-			System.out.println("workspace != 0");
 			Group blog = workspace; 
 			
 			workspace = GroupLocalServiceUtil.getGroup(blog.getParentGroupId());
@@ -449,7 +449,7 @@ public class EmailHelper {
 		
 		String wikiPageContent = "";
 		if (wikiPage != null) {
-			wikiPageContent = wikiPage.getContent();
+			wikiPageContent = StringUtil.shorten(HtmlUtil.stripHtml(wikiPage.getContent()), 500);
 		}
 		
 		String wikiName ="";
@@ -500,7 +500,7 @@ public class EmailHelper {
 		
 		String messageBody = "";
 		if (mbMessage != null) 
-			messageBody = mbMessage.getBody();
+			messageBody = StringUtil.shorten(HtmlUtil.stripHtml(mbMessage.getBody()), 500);
 		
 		String messageBoardName = "";
 		if (workspace.getParentGroupId() != 0) {
