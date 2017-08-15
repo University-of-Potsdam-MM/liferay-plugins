@@ -115,6 +115,11 @@ public class CustomPageFeedbackLocalServiceImpl extends CustomPageFeedbackLocalS
 				.findByPrimaryKey(new CustomPageFeedbackPK(plid, userId));
 
 		customPageFeedback.setFeedbackStatus(feedbackStatus);
+		// BEGIN CHANGE - fix for issue #867
+		// if FeedbackStatus is updated, ModifiedDate needs to be updated as well
+		Date now = new Date();
+		customPageFeedback.setModifiedDate(now);
+		// END CHANGE
 
 		return super.updateCustomPageFeedback(customPageFeedback);
 	}
