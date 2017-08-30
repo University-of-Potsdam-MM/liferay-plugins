@@ -46,7 +46,6 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
@@ -65,12 +64,6 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.mail.internet.InternetAddress;
-import javax.portlet.PortletMode;
-import javax.portlet.PortletModeException;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowState;
-import javax.portlet.WindowStateException;
 
 /**
  * @author Ryan Park
@@ -153,7 +146,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		try {
 			sendEmail(
 					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
-					serviceContext);
+					serviceContext,0);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -393,7 +386,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		try {
 			sendEmail(
 					tasksEntry, TasksEntryConstants.STATUS_ALL, assigneeUserId,
-					serviceContext);
+					serviceContext, 0);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -447,7 +440,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		try {
 			sendEmail(
 					tasksEntry, TasksEntryConstants.STATUS_ALL, tasksEntry.getAssigneeUserId(),
-					serviceContext);
+					serviceContext, resolverUserId);
 		}
 		catch (Exception e) {
 			throw new SystemException(e);
@@ -482,7 +475,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 	protected void sendEmail(
 			TasksEntry tasksEntry, int oldStatus, long oldAssigneeUserId,
-			ServiceContext serviceContext
+			ServiceContext serviceContext, long editorUserId
 			) throws Exception {
 		
 		HashSet<Long> receiverUserIds = new HashSet<Long>(3);
@@ -515,7 +508,11 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 				}
 			}
 			
-			User sender = UserLocalServiceUtil.getUser(tasksEntry.getUserId());
+			User sender;
+			if (editorUserId > 0) // editorUser is the user, who changed the tasks status
+				sender = UserLocalServiceUtil.getUser(editorUserId);
+			else
+				sender = UserLocalServiceUtil.getUser(tasksEntry.getUserId());
 			
 			Company company = CompanyLocalServiceUtil.getCompany(
 					sender.getCompanyId());
@@ -563,7 +560,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 						"[$WORKSPACE_NAME$]", "[$TASKS_ENTRY_NAME$]"
 					},
 					new String [] {
-						tasksEntry.getReporterFullName(),
+						sender.getFullName(),	
 						workspace.getDescriptiveName(), tasksEntry.getTitle()	
 					});
 			
@@ -581,7 +578,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 						"[$CONFIG_URL$]"
 					},
 					new String [] {
-						tasksEntry.getAssigneeFullName(), tasksEntry.getReporterFullName(),
+						recipient.getFullName(), sender.getFullName(),
 						tasksEntry.getTitle(),
 						getTasksPortletURL(workspace.getGroupId(), company, serviceContext), //company.getPortalURL(recipient.getGroupId())+"/user/"+recipient.getLogin()+"/so/tasks",
 						UserNotificationHelper.getConfigURL(serviceContext, recipient)
