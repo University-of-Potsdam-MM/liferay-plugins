@@ -28,6 +28,7 @@
 	
 }
 
+
 .workspaceslide.globalWorkspace .workspaceName {
     top: 78%;
     left: 25%;
@@ -85,20 +86,22 @@ li.workspaceslide:hover .mouseover-actions {
     top: 0;
 }
 
-li.workspaceslide:hover .mouseover-actions .move-workspaceslide {
-	width: 45%;
-	height: 60px;
-	
+li.workspaceslide:hover  {
 	opacity: .5;
 	/* vertical-align: middle; */
-	margin-top: 20px; 
-	float: left;
 	cursor: move;
-	background-image: url('/so-up-theme/css/../images/up/move.png');
-	border: 1px dashed #949494;
-	
+	background-image: url('/so-up-theme/css/../images/up/move.png') !important;
+	border-style:dashed;
+	font-size: 0;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+li.workspaceslide:hover  .activity-icon  {
+	display:none;
+}
+li.workspaceslide:hover .workspaceName {
+
 }
 
 ul#_workspacegrid_WAR_workspacegridportlet_workspacegridlist .loading-animation {
@@ -123,18 +126,7 @@ li.workspaceslide:hover div.workspaceName {
 	opacity:.5;
 }
 
-li.workspaceslide:hover .mouseover-actions .visit-workspace {
-	width: 45%;
-	height: 60px;
-	
-	opacity: .5;
-	float: right;
-	border: 1px dashed #949494;
-	background-image: url('/so-up-theme/css/../images/up/link.png');
-	margin-top: 20px;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+
 
 li.workspaceslide:hover .mouseover-actions .visit-workspace:hover, li.workspaceslide:hover .mouseover-actions .move-workspaceslide:hover {
 		opacity: 1;
@@ -152,26 +144,4 @@ li.workspaceslide:hover .mouseover-actions .visit-workspace:hover, li.workspaces
 	-webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
 	box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
 	cursor: move;
-}
-
-/* temporär mal */
-
-li.workspaceslide:hover .mouseover-actions .move-workspaceslide:hover:after {
-    content: "Move";
-    z-index: 300;
-    vertical-align: sub;
-    margin-top: 1.2em;
-    display: inline-block;
-    background-color: #fff;
-    font-size: 1.2em;
-}
-
-li.workspaceslide:hover .mouseover-actions .visit-workspace:hover:after {
-    content: "Go to";
-    z-index: 300;
-    vertical-align: sub;
-    margin-top: 1.2em;
-    display: inline-block;
-    background-color: #fff;
-    font-size: 1.2em;
 }
